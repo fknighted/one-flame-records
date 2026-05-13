@@ -7,12 +7,12 @@ This is the living state of the build. Update at the end of every session.
 ## Current state
 
 - **Phase:** 1 — Admin foundation
-- **Status:** In progress — Task 1 complete, Task 2 next
+- **Status:** In progress — Tasks 1 & 2 complete, Task 3 next
 - **Last updated:** 2026-05-13
 
 ## Active focus
 
-Task 2 — Connect Supabase (create project, install CLI, wire server/client/middleware helpers, add env vars).
+Task 3 — Initial schema migration: write SQL for all 8 tables, updated_at triggers, auth.users insert trigger, apply locally (needs Docker), generate TypeScript types.
 
 ## Blockers
 
@@ -37,6 +37,14 @@ None.
 ## Session log
 
 Append a new entry at the top of this section after every session. Date, summary, files touched, what's next. Keep it tight — full reasoning belongs in `DECISIONS.md`.
+
+### 2026-05-13 (session 2)
+
+**Did:** Connected Supabase. Installed @supabase/supabase-js + @supabase/ssr. Created server/client/middleware lib helpers. Initialized supabase CLI, linked to remote project (us-east-1). Wrote .env.example and .env.local. Confirmed live auth health check.
+**Touched:** `src/lib/supabase/`, `src/types/supabase.ts`, `supabase/`, `.env.example`, `.gitignore`, `package.json`
+**Decided:** Used SUPABASE_ACCESS_TOKEN env var instead of browser login flow (session expired). Token stored in .env.local only.
+**Blocked on:** Docker needed for Task 3 local Supabase start. Can write migration SQL now; apply when Docker is up.
+**Next:** Task 3 — write initial_schema migration, apply to remote (--linked), generate types.
 
 ### 2026-05-13
 
