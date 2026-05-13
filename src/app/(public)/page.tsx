@@ -46,7 +46,7 @@ export default async function HomePage() {
     <>
       {/* ── Hero ── */}
       <section className="mx-auto max-w-6xl px-4 sm:px-6 pt-20 pb-16 md:pt-28 md:pb-24">
-        <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-oxblood/60 mb-4">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-oxblood mb-4">
           Montego Bay · Jamaica
         </p>
         <h1 className="font-display font-bold text-oxblood text-[clamp(2.75rem,6vw,4.5rem)] leading-[1.05] tracking-tight max-w-3xl">
@@ -166,7 +166,7 @@ export default async function HomePage() {
             <h2 className="font-display font-bold text-bone text-3xl leading-tight">
               Sign with One Flame.
             </h2>
-            <p className="mt-2 text-bone/70 max-w-md">
+            <p className="mt-2 text-bone/90 max-w-md">
               We work with artists who have something real to say. If that&apos;s you,
               we want to hear it.
             </p>

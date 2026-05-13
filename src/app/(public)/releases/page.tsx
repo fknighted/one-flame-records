@@ -41,7 +41,7 @@ export default async function ReleasesPage({ searchParams }: { searchParams: Sea
     <div className="mx-auto max-w-6xl px-4 sm:px-6 py-16">
       {/* Header */}
       <div className="mb-8">
-        <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-ochre mb-2">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-forest mb-2">
           Discography
         </p>
         <h1 className="font-display font-bold text-oxblood text-[2.5rem] leading-[1.05] tracking-tight">
@@ -75,7 +75,7 @@ export default async function ReleasesPage({ searchParams }: { searchParams: Sea
           ))}
         </div>
       ) : (
-        <p className="text-ink/50">
+        <p className="text-ink/60">
           {artist || type ? "No releases match those filters." : "Releases coming soon."}
         </p>
       )}

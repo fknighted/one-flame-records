@@ -57,7 +57,7 @@ export default function AboutPage() {
 
       {/* Opening statement */}
       <div className="mb-16">
-        <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-ochre mb-4">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-forest mb-4">
           Montego Bay · Jamaica
         </p>
         <h1 className="font-display font-bold text-oxblood text-[clamp(2.25rem,5vw,3.5rem)] leading-[1.05] tracking-tight">

@@ -11,7 +11,7 @@ export default function ContactPage() {
   return (
     <div className="mx-auto max-w-2xl px-4 sm:px-6 py-16">
       <div className="mb-10">
-        <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-ochre mb-2">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-forest mb-2">
           Reach out
         </p>
         <h1 className="font-display font-bold text-oxblood text-[2.5rem] leading-[1.05] tracking-tight">

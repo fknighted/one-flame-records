@@ -9,7 +9,7 @@ export default function SectionHeader({ title, eyebrow, action }: Props) {
     <div className="flex items-end justify-between gap-4 mb-8">
       <div>
         {eyebrow && (
-          <p className="text-[11px] font-semibold uppercase tracking-[0.15em] text-ochre mb-1">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.15em] text-forest mb-1">
             {eyebrow}
           </p>
         )}

@@ -21,16 +21,16 @@ export default function PublicFooter() {
             <p className="font-display font-bold text-oxblood text-base leading-tight">
               One Flame Records
             </p>
-            <p className="mt-1 text-[11px] uppercase tracking-[0.15em] text-ink/40">
+            <p className="mt-1 text-[11px] uppercase tracking-[0.15em] text-ink/60">
               Montego Bay · Jamaica
             </p>
           </div>
 
           {/* Label */}
           <div>
-            <h3 className="text-[10px] font-semibold uppercase tracking-[0.12em] text-ink/40 mb-3">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-ink/60 mb-3">
               Label
-            </h3>
+            </p>
             <ul className="space-y-2">
               {LABEL_LINKS.map(({ href, label }) => (
                 <li key={href}>
@@ -47,9 +47,9 @@ export default function PublicFooter() {
 
           {/* Music */}
           <div>
-            <h3 className="text-[10px] font-semibold uppercase tracking-[0.12em] text-ink/40 mb-3">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-ink/60 mb-3">
               Music
-            </h3>
+            </p>
             <ul className="space-y-2">
               {MUSIC_LINKS.map(({ href, label }) => (
                 <li key={href}>
@@ -66,9 +66,9 @@ export default function PublicFooter() {
 
           {/* Legal */}
           <div>
-            <h3 className="text-[10px] font-semibold uppercase tracking-[0.12em] text-ink/40 mb-3">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-ink/60 mb-3">
               Legal
-            </h3>
+            </p>
             <ul className="space-y-2">
               <li><span className="text-sm text-ink/30">Privacy</span></li>
               <li><span className="text-sm text-ink/30">Terms</span></li>
