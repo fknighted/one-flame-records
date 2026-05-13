@@ -12,7 +12,7 @@ This is the living state of the build. Update at the end of every session.
 
 ## Active focus
 
-Phase 2, Task 8 — SEO & metadata pass (generateMetadata, OG images, sitemap, robots.txt).
+Phase 2, Task 9 — Performance pass (Lighthouse audit on homepage, artist detail, releases list).
 
 ## Blockers
 
@@ -20,8 +20,8 @@ None.
 
 ## Next session
 
-1. Phase 2 Task 8 — SEO & metadata
-2. Phase 2 Task 9 — Performance pass (Lighthouse audit)
+1. Phase 2 Task 9 — Lighthouse audit + fixes
+2. Phase 2 wrap-up — tag phase-2-complete, push tags
 
 ## Phase progress
 

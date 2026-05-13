@@ -2,7 +2,7 @@ import { createClient } from "@/lib/supabase/server";
 import ArtistCard from "@/components/ArtistCard";
 
 export const metadata = {
-  title: "Artists — One Flame Records",
+  title: "Artists",
   description: "The full One Flame Records roster — reggae and dancehall artists from Montego Bay, Jamaica.",
 };
 

@@ -140,8 +140,32 @@ export default async function ReleaseDetailPage({ params }: Props) {
   const activeStreaming = STREAMING_SERVICES.filter(({ key }) => streaming[key]);
   const pillStyle = TYPE_STYLES[release.type] ?? "bg-ink/10 text-ink";
 
+  const siteUrl =
+    process.env.NEXT_PUBLIC_SITE_URL ?? "https://oneflamerecords.com";
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "MusicAlbum",
+    name: release.title,
+    description: release.description || undefined,
+    image: release.cover_url || undefined,
+    datePublished: release.release_date,
+    url: `${siteUrl}/releases/${release.slug}`,
+    ...(artist && {
+      byArtist: {
+        "@type": "MusicGroup",
+        name: artist.stage_name,
+        url: `${siteUrl}/artists/${artist.slug}`,
+      },
+    }),
+  };
+
   return (
     <div className="mx-auto max-w-6xl px-4 sm:px-6 py-12 sm:py-16">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       {/* Cover + metadata */}
       <div className="grid grid-cols-1 md:grid-cols-[auto_1fr] gap-8 md:gap-12 items-start">
         {/* Cover */}

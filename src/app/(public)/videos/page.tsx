@@ -5,7 +5,7 @@ import VideosFilter from "@/components/VideosFilter";
 import type { Tables } from "@/types/supabase";
 
 export const metadata = {
-  title: "Videos — One Flame Records",
+  title: "Videos",
   description: "Music videos, live performances, and more from One Flame Records artists.",
 };
 

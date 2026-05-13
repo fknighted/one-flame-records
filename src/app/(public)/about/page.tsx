@@ -1,14 +1,9 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "About — One Flame Records",
+  title: "About",
   description:
     "One Flame Records is an independent reggae and dancehall label pressed in Montego Bay, Jamaica. The story, the philosophy, and the people behind it.",
-  openGraph: {
-    title: "About One Flame Records",
-    description:
-      "An independent label out of Montego Bay — the story behind One Flame Records.",
-  },
 };
 
 const TIMELINE = [

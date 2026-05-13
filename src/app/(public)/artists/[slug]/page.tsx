@@ -126,8 +126,26 @@ export default async function ArtistDetailPage({ params }: Props) {
   const activeStreaming = STREAMING_SERVICES.filter(({ key }) => streaming[key]);
   const activeSocials = SOCIAL_SERVICES.filter(({ key }) => socials[key]);
 
+  const siteUrl =
+    process.env.NEXT_PUBLIC_SITE_URL ?? "https://oneflamerecords.com";
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "MusicGroup",
+    name: artist.stage_name,
+    description: artist.bio || undefined,
+    image: artist.photo_url || undefined,
+    url: `${siteUrl}/artists/${artist.slug}`,
+    genre: artist.genres,
+    foundingLocation: { "@type": "Place", name: artist.hometown ?? "Jamaica" },
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       {/* ── Hero ── */}
       <div className="relative w-full aspect-[2/1] sm:aspect-[3/1] bg-ink overflow-hidden">
         {artist.photo_url ? (

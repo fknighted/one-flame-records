@@ -1,28 +1,13 @@
-"use client";
+import type { Metadata } from "next";
+import ContactForm from "@/components/ContactForm";
 
-import { useActionState } from "react";
-import { submitContact, type ContactState } from "./actions";
+export const metadata: Metadata = {
+  title: "Contact",
+  description:
+    "Get in touch with One Flame Records — press, sync licensing, artist submissions, and general enquiries.",
+};
 
 export default function ContactPage() {
-  const [state, action, pending] = useActionState<ContactState, FormData>(
-    submitContact,
-    null
-  );
-
-  if (state?.status === "success") {
-    return (
-      <div className="mx-auto max-w-2xl px-4 sm:px-6 py-24 text-center">
-        <h1 className="font-display font-bold text-oxblood text-3xl mb-4">
-          Message received.
-        </h1>
-        <p className="text-ink/70 leading-relaxed">
-          Thanks for reaching out. We read every message and get back to the ones
-          that are a good fit — usually within a few days.
-        </p>
-      </div>
-    );
-  }
-
   return (
     <div className="mx-auto max-w-2xl px-4 sm:px-6 py-16">
       <div className="mb-10">
@@ -39,94 +24,7 @@ export default function ContactPage() {
         </p>
       </div>
 
-      <form action={action} className="space-y-5">
-        {/* Honeypot — hidden from real users, bots fill it */}
-        <input
-          type="text"
-          name="website"
-          tabIndex={-1}
-          autoComplete="off"
-          aria-hidden="true"
-          className="sr-only"
-        />
-
-        {/* Name */}
-        <div>
-          <label htmlFor="name" className="block text-sm font-medium text-ink mb-1.5">
-            Name <span className="text-oxblood">*</span>
-          </label>
-          <input
-            id="name"
-            name="name"
-            type="text"
-            required
-            autoComplete="name"
-            className="w-full rounded border border-ink/20 bg-bone px-3 py-2.5 text-sm text-ink placeholder-ink/40 focus:border-oxblood focus:outline-none focus:ring-1 focus:ring-oxblood"
-            placeholder="Your name"
-          />
-        </div>
-
-        {/* Email */}
-        <div>
-          <label htmlFor="email" className="block text-sm font-medium text-ink mb-1.5">
-            Email <span className="text-oxblood">*</span>
-          </label>
-          <input
-            id="email"
-            name="email"
-            type="email"
-            required
-            autoComplete="email"
-            className="w-full rounded border border-ink/20 bg-bone px-3 py-2.5 text-sm text-ink placeholder-ink/40 focus:border-oxblood focus:outline-none focus:ring-1 focus:ring-oxblood"
-            placeholder="you@example.com"
-          />
-        </div>
-
-        {/* Reason */}
-        <div>
-          <label htmlFor="reason" className="block text-sm font-medium text-ink mb-1.5">
-            Reason
-          </label>
-          <select
-            id="reason"
-            name="reason"
-            defaultValue="general"
-            className="w-full rounded border border-ink/20 bg-bone px-3 py-2.5 text-sm text-ink focus:border-oxblood focus:outline-none focus:ring-1 focus:ring-oxblood"
-          >
-            <option value="general">General enquiry</option>
-            <option value="press">Press &amp; media</option>
-            <option value="sync">Sync licensing</option>
-            <option value="artist_submission">Artist submission</option>
-          </select>
-        </div>
-
-        {/* Message */}
-        <div>
-          <label htmlFor="message" className="block text-sm font-medium text-ink mb-1.5">
-            Message <span className="text-oxblood">*</span>
-          </label>
-          <textarea
-            id="message"
-            name="message"
-            required
-            rows={6}
-            className="w-full rounded border border-ink/20 bg-bone px-3 py-2.5 text-sm text-ink placeholder-ink/40 focus:border-oxblood focus:outline-none focus:ring-1 focus:ring-oxblood resize-none"
-            placeholder="Tell us what's on your mind."
-          />
-        </div>
-
-        {state?.status === "error" && (
-          <p className="text-sm text-oxblood">{state.message}</p>
-        )}
-
-        <button
-          type="submit"
-          disabled={pending}
-          className="w-full rounded bg-oxblood px-6 py-3 text-sm font-semibold text-bone hover:bg-ochre disabled:opacity-50 transition-colors"
-        >
-          {pending ? "Sending…" : "Send message"}
-        </button>
-      </form>
+      <ContactForm />
     </div>
   );
 }

@@ -15,8 +15,21 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "One Flame Records",
-  description: "A Jamaican record label based in Montego Bay.",
+  title: {
+    template: "%s — One Flame Records",
+    default: "One Flame Records",
+  },
+  description:
+    "An independent reggae and dancehall label out of Montego Bay, Jamaica.",
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL ?? "https://oneflamerecords.com"
+  ),
+  openGraph: {
+    siteName: "One Flame Records",
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: { card: "summary_large_image" },
 };
 
 export default function RootLayout({

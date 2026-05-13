@@ -5,7 +5,7 @@ import ReleasesFilter from "@/components/ReleasesFilter";
 import type { Tables } from "@/types/supabase";
 
 export const metadata = {
-  title: "Releases — One Flame Records",
+  title: "Releases",
   description: "Albums, EPs, and singles from the One Flame Records roster.",
 };
 
