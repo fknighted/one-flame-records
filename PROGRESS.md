@@ -12,7 +12,7 @@ This is the living state of the build. Update at the end of every session.
 
 ## Active focus
 
-Phase 2, Task 7 — Contact page (`/contact`) with Resend form.
+Phase 2, Task 8 — SEO & metadata pass (generateMetadata, OG images, sitemap, robots.txt).
 
 ## Blockers
 
@@ -20,8 +20,8 @@ None.
 
 ## Next session
 
-1. Phase 2 Task 7 — Contact form (Server Action, Resend email, honeypot)
-2. Phase 2 Task 8 — SEO & metadata pass
+1. Phase 2 Task 8 — SEO & metadata
+2. Phase 2 Task 9 — Performance pass (Lighthouse audit)
 
 ## Phase progress
 
