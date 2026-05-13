@@ -12,7 +12,7 @@ This is the living state of the build. Update at the end of every session.
 
 ## Active focus
 
-Phase 2, Task 4 — Releases list (`/releases`) and detail (`/releases/[slug]`) pages.
+Phase 2, Task 5 — Videos page (`/videos`).
 
 ## Blockers
 
@@ -20,8 +20,8 @@ None.
 
 ## Next session
 
-1. Phase 2 Task 4 — Releases list + detail pages
-2. Phase 2 Task 5 — Videos page
+1. Phase 2 Task 5 — Videos page with filter by artist and kind
+2. Phase 2 Task 6 — About page
 
 ## Phase progress
 
