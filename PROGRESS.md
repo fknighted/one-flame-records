@@ -7,12 +7,12 @@ This is the living state of the build. Update at the end of every session.
 ## Current state
 
 - **Phase:** 1 — Admin foundation
-- **Status:** In progress — Tasks 1–3 complete, Task 4 next
+- **Status:** In progress — Tasks 1–4 complete, Task 5 next
 - **Last updated:** 2026-05-13
 
 ## Active focus
 
-Task 4 — Row-Level Security policies: enable RLS on all 8 tables, write policies per architecture.md.
+Task 5 — Auth & login page: `/login` form, Server Action, role-based redirect, middleware protecting `/admin/*`.
 
 ## Blockers
 
@@ -37,6 +37,14 @@ None.
 ## Session log
 
 Append a new entry at the top of this section after every session. Date, summary, files touched, what's next. Keep it tight — full reasoning belongs in `DECISIONS.md`.
+
+### 2026-05-13 (session 4)
+
+**Did:** Wrote RLS migration — `is_admin()` + `current_artist_id()` helpers, enabled RLS on all 8 tables, wrote all policies per architecture.md. Applied via SQL editor, repaired migration history.
+**Touched:** `supabase/migrations/20260513154209_add_rls_policies.sql`, `src/types/supabase.ts`, `PROGRESS.md`
+**Decided:** Column-level restriction on artist self-edit of `artists` enforced at app layer (not RLS), since RLS can't restrict individual columns natively.
+**Blocked on:** Nothing.
+**Next:** Task 5 — login page, Server Action, middleware.
 
 ### 2026-05-13 (session 3)
 
