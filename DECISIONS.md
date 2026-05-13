@@ -14,6 +14,23 @@ Format for each entry:
 
 ---
 
+## 2026-05-13 — Client-side auth + proxy role check (not Server Action redirect)
+
+**Context:** Next.js 16 + `@supabase/ssr` — cookies set via `cookies()` from `next/headers` inside a Server Action are not reliably forwarded when the action calls `redirect()`. The proxy received the subsequent request with no session, bouncing the user back to login indefinitely.
+
+**Decision:** Sign-in happens client-side using `createBrowserClient` from `@supabase/ssr`. After login the browser navigates to `/admin` via `window.location.href`. The proxy (`src/proxy.ts`) reads the session from request cookies using `updateSession`, then checks the admin role using an inline `@supabase/supabase-js` service-role client (not imported from `server.ts`, which would pull `next/headers` into Edge Runtime). Non-admin authenticated users are redirected to `/portal` by the proxy.
+
+**Alternatives considered:**
+- _Server Action + `redirect()`_: broken in Next.js 16 for this cookie pattern.
+- _Route Handler for sign-in_: would work but adds a roundtrip; client-side is simpler for a form flow.
+
+**Consequences:**
+- Login is a pure client component — no Server Action for auth. Fine for Phase 1.
+- `createServiceClient` in `server.ts` now uses raw `supabase-js` (not `@supabase/ssr`) so it truly bypasses RLS regardless of session cookies.
+- Proxy must not import from `src/lib/supabase/server.ts` (it imports `next/headers`).
+
+---
+
 ## 2026-05-13 — Tailwind v4 CSS-first config (no tailwind.config.ts)
 
 **Context:** `create-next-app` installed Tailwind v4, which dropped the JS config file in favour of CSS-first configuration via `@theme` blocks in `globals.css`.

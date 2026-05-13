@@ -7,12 +7,12 @@ This is the living state of the build. Update at the end of every session.
 ## Current state
 
 - **Phase:** 1 — Admin foundation
-- **Status:** In progress — Tasks 1–4 complete, Task 5 next
+- **Status:** In progress — Tasks 1–5 complete, Task 6 next
 - **Last updated:** 2026-05-13
 
 ## Active focus
 
-Task 5 — Auth & login page: `/login` form, Server Action, role-based redirect, middleware protecting `/admin/*`.
+Task 6 — Admin layout: ink-theme shell, sidebar nav, top bar with logout, placeholder `/admin` stats page.
 
 ## Blockers
 
@@ -37,6 +37,14 @@ None.
 ## Session log
 
 Append a new entry at the top of this section after every session. Date, summary, files touched, what's next. Keep it tight — full reasoning belongs in `DECISIONS.md`.
+
+### 2026-05-13 (session 5)
+
+**Did:** Built login page (client-side auth via createBrowserClient), proxy route protecting /admin and /portal, stub admin and portal pages. Fixed several issues: middleware→proxy rename for Next.js 16, createServiceClient using raw supabase-js instead of @supabase/ssr (so service role actually bypasses RLS), login page always navigating to /admin (proxy handles role redirect with service role). Re-applied RLS policies via SQL editor (first run silently failed). Confirmed full flow: login → /admin → ink dashboard.
+**Touched:** `src/app/login/page.tsx`, `src/proxy.ts`, `src/lib/supabase/server.ts`, `src/app/admin/page.tsx`, `src/app/portal/page.tsx`, `PROGRESS.md`
+**Decided:** Client-side signInWithPassword (not Server Action) required for Next.js 16 — cookies from Server Action redirects don't survive the response reliably. Proxy uses inline service client (not imported from server.ts) to avoid next/headers in Edge Runtime. See DECISIONS.md.
+**Blocked on:** Nothing.
+**Next:** Task 6 — admin layout shell.
 
 ### 2026-05-13 (session 4)
 
