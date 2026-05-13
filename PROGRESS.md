@@ -7,21 +7,21 @@ This is the living state of the build. Update at the end of every session.
 ## Current state
 
 - **Phase:** 1 — Admin foundation
-- **Status:** In progress — Tasks 1–9 complete, Task 10 next
+- **Status:** In progress — Tasks 1–10 complete, Task 11 next
 - **Last updated:** 2026-05-13
 
 ## Active focus
 
-Task 10 — Deploy to Vercel, connect oneflamerecords.com domain.
+Task 11 — Enter real data for the 5 existing artists via the admin CRUD.
 
 ## Blockers
 
-- `public-media` storage bucket must be created in Supabase before photo/cover uploads will work. Run in SQL Editor: `insert into storage.buckets (id, name, public) values ('public-media', 'public-media', true) on conflict (id) do nothing;`
+None.
 
 ## Next session
 
-1. Task 10 — Create Vercel project, set env vars, trigger first deploy, connect oneflamerecords.com domain
-2. Task 11 — Enter real data for the 5 existing artists via the admin CRUD built in Tasks 7–9
+1. Task 11 — For each of the 5 artists: stage name, bio, photo, hometown, genres, socials, streaming links, `status = active`. At least one release each. Existing YouTube videos linked. Set `featured_order` on 2–3 headline artists.
+2. Phase 1 wrap-up — tag `phase-1-complete`, push tags.
 
 ## Phase progress
 
