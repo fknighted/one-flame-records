@@ -7,23 +7,21 @@ This is the living state of the build. Update at the end of every session.
 ## Current state
 
 - **Phase:** 1 — Admin foundation
-- **Status:** In progress — Tasks 1–5 complete, Task 6 next
+- **Status:** In progress — Tasks 1–9 complete, Task 10 next
 - **Last updated:** 2026-05-13
 
 ## Active focus
 
-Task 6 — Admin layout: ink-theme shell, sidebar nav, top bar with logout, placeholder `/admin` stats page.
+Task 10 — Deploy to Vercel, connect oneflamerecords.com domain.
 
 ## Blockers
 
-None.
+- `public-media` storage bucket must be created in Supabase before photo/cover uploads will work. Run in SQL Editor: `insert into storage.buckets (id, name, public) values ('public-media', 'public-media', true) on conflict (id) do nothing;`
 
 ## Next session
 
-1. Initialize Next.js 15 with App Router, TypeScript, Tailwind (`phase-1` Task 1)
-2. Create the Supabase project and link via CLI (`phase-1` Task 2)
-3. Write the initial migration for `artists`, `releases`, `videos` (`phase-1` Task 3)
-4. Push to GitHub, connect Vercel, deploy a "hello world" to oneflamerecords.com
+1. Task 10 — Create Vercel project, set env vars, trigger first deploy, connect oneflamerecords.com domain
+2. Task 11 — Enter real data for the 5 existing artists via the admin CRUD built in Tasks 7–9
 
 ## Phase progress
 
@@ -37,6 +35,22 @@ None.
 ## Session log
 
 Append a new entry at the top of this section after every session. Date, summary, files touched, what's next. Keep it tight — full reasoning belongs in `DECISIONS.md`.
+
+### 2026-05-13 (session 7)
+
+**Did:** Built Artists CRUD (Task 7), Releases CRUD (Task 8), and Videos CRUD (Task 9). Each section has a list page, new form, and edit form. Shared client components — ArtistForm, ReleaseForm, VideoForm — use `useActionState` for inline error display. Photo/cover uploads go to `public-media` bucket via service role. YouTube ID extraction in VideoForm accepts bare IDs or any youtube.com/youtu.be URL and previews the thumbnail live. Fixed a TypeScript error where `Record<string, unknown>` conflicted with Supabase's strict `.update()` type.
+**Touched:** `next.config.ts`, `src/app/admin/artists/`, `src/app/admin/releases/`, `src/app/admin/videos/`, `src/components/ArtistForm.tsx`, `src/components/ReleaseForm.tsx`, `src/components/VideoForm.tsx`, `PROGRESS.md`
+**Decided:** No new architectural decisions — followed the Server Action + useActionState pattern established in prior sessions.
+**Blocked on:** `public-media` storage bucket not yet created (SQL editor one-liner in blockers above).
+**Next:** Task 10 — Vercel deploy + domain.
+
+### 2026-05-13 (session 6)
+
+**Did:** Rebuilt admin layout shell (Task 6): ink-theme wrapper, sidebar nav, top bar with user email and logout button. Overview page with 4 live stat cards (artists, releases, videos, pending applications) using service client. Stub pages for all 7 nav sections. Typecheck clean.
+**Touched:** `src/app/admin/layout.tsx`, `src/app/admin/page.tsx`, `src/components/LogoutButton.tsx`, `src/app/admin/artists/page.tsx`, `src/app/admin/releases/page.tsx`, `src/app/admin/videos/page.tsx`, `src/app/admin/applications/page.tsx`, `src/app/admin/codes/page.tsx`, `src/app/admin/jobs/page.tsx`, `PROGRESS.md`
+**Decided:** Nothing new.
+**Blocked on:** Nothing.
+**Next:** Task 7 — Artists CRUD.
 
 ### 2026-05-13 (session 5)
 
