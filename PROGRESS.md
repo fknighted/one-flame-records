@@ -12,7 +12,7 @@ This is the living state of the build. Update at the end of every session.
 
 ## Active focus
 
-Phase 2, Task 2 — Homepage (hero, featured artists, latest releases, latest videos, sign-with-us band).
+Phase 2, Task 3 — Artists list (`/artists`) and detail (`/artists/[slug]`) pages.
 
 ## Blockers
 
@@ -20,8 +20,8 @@ None.
 
 ## Next session
 
-1. Phase 2 Task 2 — Homepage sections
-2. Phase 2 Task 3 — Artists list + detail pages
+1. Phase 2 Task 3 — Artists list + detail pages
+2. Phase 2 Task 4 — Releases list + detail pages
 
 ## Phase progress
 
