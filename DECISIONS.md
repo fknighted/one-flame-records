@@ -14,6 +14,75 @@ Format for each entry:
 
 ---
 
+## 2026-05-13 — Ochre eyebrows swapped to forest for WCAG contrast
+
+**Context:** Phase 2 Lighthouse audit flagged contrast failures on eyebrow labels (e.g. "The Roster", "Watch") that used `text-ochre` (`#B8893B`) against cream `#ECE2C8` — ratio ~2.2:1, well below WCAG AA (4.5:1 for small text).
+
+**Decision:** All eyebrow/label elements switched from `text-ochre` to `text-forest` (`#3F5A3A`), which gives 7.3:1 (WCAG AAA). Hover states (`hover:text-ochre`) and CTA buttons that use ochre on oxblood/ink are unaffected — hover states are exempt from contrast requirements.
+
+**Alternatives considered:**
+- _Darken ochre._ Rejected: breaks brand palette cohesion.
+- _Use ink instead of forest._ Rejected: too heavy against cream, loses the green accent character.
+
+**Consequences:** Ochre is now strictly a hover, badge, and CTA color. Do not use it as foreground text against cream.
+
+---
+
+## 2026-05-13 — Server component wrapper for pages that need both metadata and a client form
+
+**Context:** Next.js cannot export `metadata` from a `"use client"` module. The contact page needed both — `metadata` for SEO, and an interactive form with `useActionState`.
+
+**Decision:** `contact/page.tsx` is a Server Component that exports `metadata` and renders `<ContactForm />`. The form is extracted to `src/components/ContactForm.tsx` marked `"use client"`. This pattern applies to any page that needs both.
+
+**Alternatives considered:**
+- _Generate metadata in a separate route segment._ Rejected: overkill for a single page.
+- _Move metadata to layout._ Rejected: would apply to all pages in the group.
+
+**Consequences:** Any page with a client-interactive form must follow this split: server page exports metadata, client component owns state/effects.
+
+---
+
+## 2026-05-13 — sitemap.ts uses createServiceClient, not createClient
+
+**Context:** `sitemap.ts` is a special Next.js route that runs at build time. `createClient()` from `@supabase/ssr` calls `cookies()` from `next/headers`, which requires a live request context. At build time there is no request, so `cookies()` throws.
+
+**Decision:** `sitemap.ts` uses `createServiceClient()` (raw `supabase-js`, no cookie dependency) to fetch active artist and release slugs.
+
+**Alternatives considered:**
+- _Static slug list._ Rejected: would go stale immediately after any data change.
+
+**Consequences:** `sitemap.ts` effectively runs with service-role access. All entities fetched there are already public (active artists, published releases), so no data leak risk.
+
+---
+
+## 2026-05-13 — Click-to-play VideoEmbed (no iframe on initial render)
+
+**Context:** Embedding YouTube iframes directly causes each card to load YouTube's JS bundle on page load, significantly degrading Lighthouse performance scores and LCP, especially with 3–6 videos on a page.
+
+**Decision:** `VideoEmbed` is a client component that initially renders the YouTube thumbnail (`img.youtube.com/vi/{id}/hqdefault.jpg`) with a play overlay. On click it replaces itself with the `<iframe>` with `autoplay=1`. YouTube scripts only load for videos the user actually wants to watch.
+
+**Alternatives considered:**
+- _`loading="lazy"` on iframes._ Rejected: still loads the iframe subtree and JS bundle for all iframes, just deferred.
+- _`lite-youtube-embed` third-party package._ Rejected: adds a dependency for something we can implement in ~30 lines.
+
+**Consequences:** Videos don't autoplay on page load. Thumbnails must be available at `img.youtube.com/vi/{id}/hqdefault.jpg` — this is standard for all YouTube videos.
+
+---
+
+## 2026-05-13 — URL-based filtering for Releases and Videos pages
+
+**Context:** Releases and Videos pages support artist and type/kind filtering. The filter state needs to be bookmarkable, shareable, and compatible with SSR (so the Supabase query runs server-side with the filter applied).
+
+**Decision:** Filter state lives in URL search params (`?artist=uuid&type=single`). The Server Component reads `searchParams` and passes them to the Supabase query. The filter UI (`ReleasesFilter`, `VideosFilter`) are client components that push URL changes via `useRouter`. They must be wrapped in `<Suspense>` because `useSearchParams()` requires it in Next.js App Router.
+
+**Alternatives considered:**
+- _Client-side filtering with `useState`._ Rejected: filtering happens in JS after full data load; no SSR benefit.
+- _Server form with GET method._ Rejected: loses the ability to do pill-based multi-select without a full page reload.
+
+**Consequences:** Filter components always need a `<Suspense fallback={null}>` wrapper. Adding new filter dimensions just means adding a new URL param and an extra `.eq()` on the query.
+
+---
+
 ## 2026-05-13 — Client-side auth + proxy role check (not Server Action redirect)
 
 **Context:** Next.js 16 + `@supabase/ssr` — cookies set via `cookies()` from `next/headers` inside a Server Action are not reliably forwarded when the action calls `redirect()`. The proxy received the subsequent request with no session, bouncing the user back to login indefinitely.

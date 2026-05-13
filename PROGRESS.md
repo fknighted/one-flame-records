@@ -6,27 +6,32 @@ This is the living state of the build. Update at the end of every session.
 
 ## Current state
 
-- **Phase:** 2 — Public site
-- **Status:** In progress — Phase 1 complete (Task 11 / real data deferred). Phase 2 Task 1 done.
+- **Phase:** 3 — QR onboarding + artist portal
+- **Status:** Phase 2 complete. Phase 3 not started.
 - **Last updated:** 2026-05-13
 
 ## Active focus
 
-Phase 2 wrap-up — tag phase-2-complete, push tags, then begin Phase 3.
+Phase 3, Task 1 — QR signup landing page (`/signup/[code]`) and application form.
 
 ## Blockers
 
-None.
+- `public-media` storage bucket not yet created. Run in Supabase SQL Editor:
+  ```sql
+  insert into storage.buckets (id, name, public) values ('public-media', 'public-media', true) on conflict (id) do nothing;
+  ```
+- Resend domain DNS verification still pending for `oneflamerecords.com`. Check Resend dashboard before testing contact form in production.
 
 ## Next session
 
-1. Phase 2 wrap-up — tag and push
-2. Phase 3, Task 1 — QR signup landing page and application form
+1. Confirm `phase-2-complete` tag is pushed
+2. Create `public-media` storage bucket (see blocker above)
+3. Phase 3, Task 1 — QR signup landing page and application form
 
 ## Phase progress
 
-- [ ] **Phase 1** — Admin foundation _(in progress / not started / done)_
-- [ ] **Phase 2** — Public site
+- [x] **Phase 1** — Admin foundation _(complete — Task 11 / real data deferred to after Phase 2)_
+- [x] **Phase 2** — Public site _(complete)_
 - [ ] **Phase 3** — QR onboarding + artist portal
 - [ ] **Phase 4** — Video automation
 
@@ -35,6 +40,14 @@ None.
 ## Session log
 
 Append a new entry at the top of this section after every session. Date, summary, files touched, what's next. Keep it tight — full reasoning belongs in `DECISIONS.md`.
+
+### 2026-05-13 (session 8)
+
+**Did:** Built all 9 Phase 2 tasks — public layout shell (Task 1), homepage with live Supabase data (Task 2), artists list + detail pages (Task 3), releases list + detail pages (Task 4), videos page with filters (Task 5), about page with editorial timeline (Task 6), contact form with Resend + honeypot spam protection (Task 7), SEO/metadata pass — `robots.ts`, `sitemap.ts`, `opengraph-image.tsx`, JSON-LD, `metadataBase` (Task 8), Lighthouse audit + accessibility fixes — ochre→forest eyebrow contrast, footer `<h3>` → `<p>`, image alt text (Task 9).
+**Touched:** `src/app/(public)/layout.tsx`, `src/app/(public)/page.tsx`, `src/app/(public)/artists/`, `src/app/(public)/releases/`, `src/app/(public)/videos/page.tsx`, `src/app/(public)/about/page.tsx`, `src/app/(public)/contact/`, `src/app/opengraph-image.tsx`, `src/app/robots.ts`, `src/app/sitemap.ts`, `src/app/layout.tsx`, `src/components/PublicHeader.tsx`, `src/components/PublicFooter.tsx`, `src/components/ArtistCard.tsx`, `src/components/ReleaseCard.tsx`, `src/components/VideoEmbed.tsx`, `src/components/ReleasesFilter.tsx`, `src/components/VideosFilter.tsx`, `src/components/ContactForm.tsx`, `src/components/SectionHeader.tsx`, `next.config.ts`, `PROGRESS.md`, `DECISIONS.md`
+**Decided:** Ochre→forest for eyebrow text (contrast); server-component wrapper for pages needing metadata + client form; `createServiceClient` in sitemap.ts; click-to-play VideoEmbed; URL-based filtering for Releases/Videos. All logged in DECISIONS.md.
+**Blocked on:** `public-media` bucket not yet created. Resend domain DNS pending verification.
+**Next:** Phase 3 Task 1 — QR signup landing page (`/signup/[code]`) and application form.
 
 ### 2026-05-13 (session 7)
 
