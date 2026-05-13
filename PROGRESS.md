@@ -7,12 +7,12 @@ This is the living state of the build. Update at the end of every session.
 ## Current state
 
 - **Phase:** 3 — QR onboarding + artist portal
-- **Status:** Phase 2 complete. Phase 3 not started.
+- **Status:** In progress — Tasks 1 and 2 complete.
 - **Last updated:** 2026-05-13
 
 ## Active focus
 
-Phase 3, Task 1 — QR signup landing page (`/signup/[code]`) and application form.
+Phase 3, Task 3 — Applications review in admin (`/admin/applications`): list pending applications, approve (creates Supabase auth user + artist record) or reject.
 
 ## Blockers
 
@@ -20,13 +20,12 @@ Phase 3, Task 1 — QR signup landing page (`/signup/[code]`) and application fo
   ```sql
   insert into storage.buckets (id, name, public) values ('public-media', 'public-media', true) on conflict (id) do nothing;
   ```
-- Resend domain DNS verification still pending for `oneflamerecords.com`. Check Resend dashboard before testing contact form in production.
+- Resend domain DNS verification still pending for `oneflamerecords.com`. Check Resend dashboard before testing contact/email flows.
 
 ## Next session
 
-1. Confirm `phase-2-complete` tag is pushed
-2. Create `public-media` storage bucket (see blocker above)
-3. Phase 3, Task 1 — QR signup landing page and application form
+1. Create `public-media` bucket if not yet done (see blocker above)
+2. Phase 3, Task 3 — Applications review (`/admin/applications`)
 
 ## Phase progress
 
@@ -40,6 +39,14 @@ Phase 3, Task 1 — QR signup landing page (`/signup/[code]`) and application fo
 ## Session log
 
 Append a new entry at the top of this section after every session. Date, summary, files touched, what's next. Keep it tight — full reasoning belongs in `DECISIONS.md`.
+
+### 2026-05-13 (session 9)
+
+**Did:** Phase 3 Tasks 1 and 2. Task 1 — `/admin/codes` signup codes manager: generate codes (12-char hex slug), QR image (ink/bone, server-side via `qrcode` package), copy-to-clipboard, PNG download, rotate button, rotated history table. Task 2 — `/signup/[code]` public application form: validates code server-side, shows "link expired" for inactive codes, full form (stage name, legal name, email, phone, genres, socials, message), honeypot, inserts into `signup_applications`. `robots: noindex` on the signup page.
+**Touched:** `src/app/admin/codes/page.tsx`, `src/app/admin/codes/actions.ts`, `src/app/(public)/signup/[code]/page.tsx`, `src/app/(public)/signup/[code]/actions.ts`, `src/components/CopyButton.tsx`, `src/components/GenerateCodeForm.tsx`, `src/components/SignupForm.tsx`, `package.json`
+**Decided:** No new architectural calls — followed established patterns (server action + useActionState, service client, cream theme for public signup page).
+**Blocked on:** `public-media` bucket not created. Resend DNS still pending.
+**Next:** Task 3 — Applications review in `/admin/applications`.
 
 ### 2026-05-13 (session 8)
 
