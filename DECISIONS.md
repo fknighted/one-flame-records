@@ -14,6 +14,35 @@ Format for each entry:
 
 ---
 
+## 2026-05-13 — Tailwind v4 CSS-first config (no tailwind.config.ts)
+
+**Context:** `create-next-app` installed Tailwind v4, which dropped the JS config file in favour of CSS-first configuration via `@theme` blocks in `globals.css`.
+
+**Decision:** Keep Tailwind v4 and define all brand tokens (`--color-oxblood`, `--color-cream`, etc.) in `@theme inline` inside `src/app/globals.css`. References in the codebase still use standard Tailwind utilities (`bg-oxblood`, `text-cream`) — nothing changes at the usage site.
+
+**Alternatives considered:**
+- _Downgrade to Tailwind v3_ to match the original plan's `tailwind.config.ts` example. Rejected: v4 is the current release and the CSS-first approach is simpler, not harder.
+
+**Consequences:**
+- `docs/brand.md` shows a `tailwind.config.ts` excerpt — that excerpt is illustrative only; the real source of truth is `globals.css`.
+- Any future custom plugins or `theme.extend` patterns need to use v4 syntax.
+
+---
+
+## 2026-05-13 — Next.js 16 installed (plan said 15)
+
+**Context:** `create-next-app` resolved to `next@16.2.6` when scaffolding on 2026-05-13. The original plan referenced Next.js 15.
+
+**Decision:** Accept Next.js 16. App Router, Server Components, `@/` alias, and all other conventions are unchanged. Update references to "Next.js 15" in docs as they come up naturally — no mass find-replace needed.
+
+**Alternatives considered:**
+- _Pin to next@15._ Rejected: no known incompatibilities and we'd be immediately behind.
+
+**Consequences:**
+- None anticipated. If a 16→15 breaking change surfaces, log it here and adapt.
+
+---
+
 ## 2026-05-XX — Initial stack: Next.js + Supabase + Vercel + Inngest
 
 **Context:** Greenfield record label platform with public site, gated artist portal, and an automated video pipeline. Need a stack that handles auth, file storage, durable async workflows, and ships fast with a single developer using Claude Code.
