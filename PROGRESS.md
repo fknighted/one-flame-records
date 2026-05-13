@@ -7,12 +7,12 @@ This is the living state of the build. Update at the end of every session.
 ## Current state
 
 - **Phase:** 1 — Admin foundation
-- **Status:** In progress — Tasks 1 & 2 complete, Task 3 next
+- **Status:** In progress — Tasks 1–3 complete, Task 4 next
 - **Last updated:** 2026-05-13
 
 ## Active focus
 
-Task 3 — Initial schema migration: write SQL for all 8 tables, updated_at triggers, auth.users insert trigger, apply locally (needs Docker), generate TypeScript types.
+Task 4 — Row-Level Security policies: enable RLS on all 8 tables, write policies per architecture.md.
 
 ## Blockers
 
@@ -37,6 +37,14 @@ None.
 ## Session log
 
 Append a new entry at the top of this section after every session. Date, summary, files touched, what's next. Keep it tight — full reasoning belongs in `DECISIONS.md`.
+
+### 2026-05-13 (session 3)
+
+**Did:** Wrote initial schema migration (all 8 tables, updated_at triggers, handle_new_user trigger). Applied to remote via SQL editor (direct DB port blocked — workaround). Repaired migration history with `migration repair`. Regenerated TypeScript types from correct project. Discovered old env was pointing at wrong Supabase project — corrected to `blfdkhefsjjnsfdmenxn`.
+**Touched:** `supabase/migrations/20260513140946_initial_schema.sql`, `src/types/supabase.ts`, `.env.local`, `PROGRESS.md`
+**Decided:** Applied migration manually via SQL editor due to port 5432 being blocked; used `supabase migration repair --status applied` to sync history. See DECISIONS.md if this becomes a pattern.
+**Blocked on:** Nothing.
+**Next:** Task 4 — RLS policies migration.
 
 ### 2026-05-13 (session 2)
 
