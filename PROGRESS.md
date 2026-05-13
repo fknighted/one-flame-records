@@ -6,13 +6,13 @@ This is the living state of the build. Update at the end of every session.
 
 ## Current state
 
-- **Phase:** 1 — Admin foundation
-- **Status:** In progress — Tasks 1–10 complete, Task 11 next
+- **Phase:** 2 — Public site
+- **Status:** In progress — Phase 1 complete (Task 11 / real data deferred). Phase 2 Task 1 done.
 - **Last updated:** 2026-05-13
 
 ## Active focus
 
-Task 11 — Enter real data for the 5 existing artists via the admin CRUD.
+Phase 2, Task 2 — Homepage (hero, featured artists, latest releases, latest videos, sign-with-us band).
 
 ## Blockers
 
@@ -20,8 +20,8 @@ None.
 
 ## Next session
 
-1. Task 11 — For each of the 5 artists: stage name, bio, photo, hometown, genres, socials, streaming links, `status = active`. At least one release each. Existing YouTube videos linked. Set `featured_order` on 2–3 headline artists.
-2. Phase 1 wrap-up — tag `phase-1-complete`, push tags.
+1. Phase 2 Task 2 — Homepage sections
+2. Phase 2 Task 3 — Artists list + detail pages
 
 ## Phase progress
 
