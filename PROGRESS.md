@@ -7,25 +7,22 @@ This is the living state of the build. Update at the end of every session.
 ## Current state
 
 - **Phase:** 3 — QR onboarding + artist portal
-- **Status:** In progress — Tasks 1 and 2 complete.
+- **Status:** In progress — Tasks 1–5 complete.
 - **Last updated:** 2026-05-13
 
 ## Active focus
 
-Phase 3, Task 3 — Applications review in admin (`/admin/applications`): list pending applications, approve (creates Supabase auth user + artist record) or reject.
+Phase 3, Task 6 — Asset upload (`/portal/assets`).
 
 ## Blockers
 
-- `public-media` storage bucket not yet created. Run in Supabase SQL Editor:
-  ```sql
-  insert into storage.buckets (id, name, public) values ('public-media', 'public-media', true) on conflict (id) do nothing;
-  ```
-- Resend domain DNS verification still pending for `oneflamerecords.com`. Check Resend dashboard before testing contact/email flows.
+- Resend domain DNS verification still pending for `oneflamerecords.com`.
+- End-to-end approve flow not yet tested.
+- `private-assets` storage bucket not yet created (needed for Task 6).
 
 ## Next session
 
-1. Create `public-media` bucket if not yet done (see blocker above)
-2. Phase 3, Task 3 — Applications review (`/admin/applications`)
+Phase 3, Task 6 — Asset upload (`/portal/assets` list + `/portal/assets/new` upload form).
 
 ## Phase progress
 
@@ -39,6 +36,30 @@ Phase 3, Task 3 — Applications review in admin (`/admin/applications`): list p
 ## Session log
 
 Append a new entry at the top of this section after every session. Date, summary, files touched, what's next. Keep it tight — full reasoning belongs in `DECISIONS.md`.
+
+### 2026-05-13 (session 12)
+
+**Did:** Phase 3 Task 5 — Artist profile self-edit. `PortalProfileForm` client component (bio, photo, socials, streaming editable; stage_name/hometown/genres read-only with "contact label" note; `useEffect`-based "Saved." toast on success). `updateProfile` server action resolves `artist_id` from session (never trusts a hidden input), uses `createClient()` for the row update so `artists_update_self` RLS applies, uses service client only for storage upload. `/portal/profile` page fetches artist data server-side and handles the "no artist linked" edge case. `oneflamerecords.com` is now live on Vercel (DNS propagated during this session). 
+**Touched:** `src/app/portal/profile/page.tsx`, `src/app/portal/profile/actions.ts`, `src/components/PortalProfileForm.tsx`, `PROGRESS.md`
+**Decided:** Separate `PortalProfileForm` rather than adapting `ArtistForm` — keeps portal-specific field restrictions clean without adding conditionals to the admin component. Success state returned from action (`{ success: true }`) rather than redirect, so the artist stays on the page and sees the toast.
+**Blocked on:** Resend DNS. End-to-end test still pending.
+**Next:** Task 6 — Asset upload.
+
+### 2026-05-13 (session 11)
+
+**Did:** Phase 3 Task 4 — Portal layout & dashboard. Added `artists_select_self` RLS policy (migration + applied via CLI) so artists can read their own row when status is `pending`. Updated `src/proxy.ts` to redirect admins away from `/portal` → `/admin` (fetches profile once, covers both admin and portal role checks). Built `src/app/portal/layout.tsx` (ink theme, sidebar nav: Dashboard/Profile/Assets/Videos, top bar shows stage name via profiles→artists join with email fallback). Built `src/app/portal/page.tsx` (welcome header, three action tiles, recent uploads list with empty state, Phase 4 video jobs placeholder). Stub pages for profile/assets/videos.
+**Touched:** `supabase/migrations/20260513200000_portal_artist_select.sql`, `src/proxy.ts`, `src/app/portal/layout.tsx`, `src/app/portal/page.tsx`, `src/app/portal/profile/page.tsx`, `src/app/portal/assets/page.tsx`, `src/app/portal/videos/page.tsx`
+**Decided:** No `(portal)` route group — all portal routes share the `/portal` prefix so a plain layout.tsx suffices; avoids extra nesting. Portal uses `createClient()` (session-scoped, respects RLS) rather than service client.
+**Blocked on:** Resend DNS. End-to-end approve+login flow not yet tested.
+**Next:** Task 5 — Artist profile self-edit.
+
+### 2026-05-13 (session 10)
+
+**Did:** Phase 3 Task 3 — Applications review. List page (`/admin/applications`) shows all applications newest-first with pending/approved/rejected status badges and a count of pending items. Detail page (`/admin/applications/[id]`) shows all fields, clickable social links, and Approve/Reject buttons (only while pending). Approve action: invites artist via Supabase Admin `inviteUserByEmail` (sends invite email, triggers profiles row creation), creates `artists` row, links `profiles.artist_id`, marks application approved. Reject action: marks rejected. Both redirect back to list on success, show inline errors on failure.
+**Touched:** `src/app/admin/applications/page.tsx`, `src/app/admin/applications/[id]/page.tsx`, `src/app/admin/applications/actions.ts`, `src/components/ApplicationActions.tsx`
+**Decided:** Used `inviteUserByEmail` (not `createUser`) so the artist automatically receives a Supabase invite email to set their password — no Resend dependency for this step. Artist status set to `pending` (not `active`) until they complete onboarding.
+**Blocked on:** `public-media` bucket. Resend DNS. End-to-end approve flow not yet tested (needs email delivery working).
+**Next:** Task 4 — Portal layout & dashboard.
 
 ### 2026-05-13 (session 9)
 

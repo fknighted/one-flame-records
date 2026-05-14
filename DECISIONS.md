@@ -14,6 +14,20 @@ Format for each entry:
 
 ---
 
+## 2026-05-13 — Separate PortalProfileForm (not ArtistForm) for portal self-edit
+
+**Context:** Artists can only edit `bio`, `photo_url`, `socials`, and `streaming` — not `stage_name`, `slug`, `genres`, or `status`. `ArtistForm` (admin component) owns all fields and has slug auto-generation logic tied to stage name input.
+
+**Decision:** Build a dedicated `PortalProfileForm` client component that renders the editable fields only and displays the read-only fields as locked inputs with a "contact the label" note. The `updateProfile` server action resolves `artist_id` from the session rather than a hidden form input, and uses `createClient()` (session-scoped) for the DB update so `artists_update_self` RLS enforces the scope at the database level. Service client is used only for the Storage upload (unavoidable server-side need). On success the action returns `{ success: true }` instead of calling `redirect()`, so the artist stays on the page and sees a timed "Saved." confirmation.
+
+**Alternatives considered:**
+- _Adapt ArtistForm with conditional props._ Rejected: adds branching complexity to a shared component; portal restrictions would be easy to accidentally remove.
+- _Redirect to `/portal` on save._ Rejected: navigating away on every save is annoying for iterative editing.
+
+**Consequences:** Admin edit path and portal self-edit path are fully independent. Any future changes to portal-editable fields only touch `PortalProfileForm` and `updateProfile`.
+
+---
+
 ## 2026-05-13 — Ochre eyebrows swapped to forest for WCAG contrast
 
 **Context:** Phase 2 Lighthouse audit flagged contrast failures on eyebrow labels (e.g. "The Roster", "Watch") that used `text-ochre` (`#B8893B`) against cream `#ECE2C8` — ratio ~2.2:1, well below WCAG AA (4.5:1 for small text).

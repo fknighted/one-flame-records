@@ -29,19 +29,26 @@ export async function proxy(request: NextRequest) {
     return NextResponse.redirect(loginUrl);
   }
 
-  if (isAdminRoute) {
-    const { data: profile } = await serviceClient()
-      .from("profiles")
-      .select("role")
-      .eq("id", user.id)
-      .single();
+  // Fetch role once — used by both admin and portal checks
+  const { data: profile } = await serviceClient()
+    .from("profiles")
+    .select("role")
+    .eq("id", user.id)
+    .single();
+  const role = profile?.role;
 
-    if (profile?.role !== "admin") {
-      const portalUrl = request.nextUrl.clone();
-      portalUrl.pathname = "/portal";
-      portalUrl.search = "";
-      return NextResponse.redirect(portalUrl);
-    }
+  if (isAdminRoute && role !== "admin") {
+    const portalUrl = request.nextUrl.clone();
+    portalUrl.pathname = "/portal";
+    portalUrl.search = "";
+    return NextResponse.redirect(portalUrl);
+  }
+
+  if (isPortalRoute && role === "admin") {
+    const adminUrl = request.nextUrl.clone();
+    adminUrl.pathname = "/admin";
+    adminUrl.search = "";
+    return NextResponse.redirect(adminUrl);
   }
 
   return supabaseResponse;
