@@ -132,13 +132,13 @@ export async function resendInvite(
 
   const siteUrl =
     process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.oneflamerecords.com";
-  const { error: inviteError } = await supabase.auth.admin.inviteUserByEmail(
+  const { error: resetError } = await supabase.auth.resetPasswordForEmail(
     app.email,
     { redirectTo: `${siteUrl}/auth/callback` }
   );
 
-  if (inviteError)
-    return { error: `Failed to resend invite: ${inviteError.message}` };
+  if (resetError)
+    return { error: `Failed to resend invite: ${resetError.message}` };
 
   return { success: true };
 }
