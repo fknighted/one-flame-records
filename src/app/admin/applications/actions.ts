@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient, createServiceClient } from "@/lib/supabase/server";
 
-export type ActionState = { error: string } | { success: true } | null;
+export type ActionState = { error: string } | { success: true } | { link: string } | null;
 
 function toSlug(name: string): string {
   return name
@@ -132,15 +132,16 @@ export async function resendInvite(
 
   const siteUrl =
     process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.oneflamerecords.com";
-  const { error: resetError } = await supabase.auth.resetPasswordForEmail(
-    app.email,
-    { redirectTo: `${siteUrl}/auth/callback` }
-  );
+  const { data, error: linkError } = await supabase.auth.admin.generateLink({
+    type: "recovery",
+    email: app.email,
+    options: { redirectTo: `${siteUrl}/auth/callback` },
+  });
 
-  if (resetError)
-    return { error: `Failed to resend invite: ${resetError.message}` };
+  if (linkError || !data?.properties?.action_link)
+    return { error: `Failed to generate link: ${linkError?.message ?? "unknown error"}` };
 
-  return { success: true };
+  return { link: data.properties.action_link };
 }
 
 export async function rejectApplication(
