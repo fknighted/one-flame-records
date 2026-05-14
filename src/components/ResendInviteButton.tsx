@@ -1,13 +1,20 @@
 "use client";
 
-import { useActionState, useRef } from "react";
+import { useActionState } from "react";
 import { resendInvite, type ActionState } from "@/app/admin/applications/actions";
+
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.oneflamerecords.com";
 
 export default function ResendInviteButton({ id }: { id: string }) {
   const [state, action, pending] = useActionState<ActionState, FormData>(
     resendInvite,
     null
   );
+
+  const portalLink =
+    state && "link" in state
+      ? `${SITE_URL}/auth/portal-invite?to=${encodeURIComponent(state.link)}`
+      : null;
 
   return (
     <form action={action} className="mt-6 space-y-3">
@@ -25,17 +32,17 @@ export default function ResendInviteButton({ id }: { id: string }) {
         )}
       </div>
 
-      {state && "link" in state && (
-        <div className="rounded border border-bone/10 bg-bone/5 p-4 space-y-2">
+      {portalLink && (
+        <div className="rounded border border-bone/10 bg-bone/5 p-4 space-y-3">
           <p className="text-xs text-bone/40 uppercase tracking-wider">
-            Send this link to the artist — expires in 24 hours
+            Send this link to the artist — safe to share via iMessage or WhatsApp
           </p>
           <p className="text-xs text-bone/70 break-all font-mono leading-relaxed">
-            {state.link}
+            {portalLink}
           </p>
           <button
             type="button"
-            onClick={() => navigator.clipboard.writeText((state as { link: string }).link)}
+            onClick={() => navigator.clipboard.writeText(portalLink)}
             className="text-xs text-ochre hover:text-ochre/80 transition-colors"
           >
             Copy to clipboard
