@@ -6,21 +6,26 @@ This is the living state of the build. Update at the end of every session.
 
 ## Current state
 
-- **Phase:** 3 — QR onboarding + artist portal
-- **Status:** Complete — all 8 tasks done, end-to-end test passed.
+- **Phase:** 4 — Video automation
+- **Status:** Tasks 1–6 complete (Inngest + provider factory + pipeline). Tasks 7–11 remain.
 - **Last updated:** 2026-05-14
 
 ## Active focus
 
-Phase 4 — Video automation (Inngest pipeline).
+Phase 4, Tasks 7–9 — artist video request UI, results view, admin jobs observability.
 
 ## Blockers
 
-None.
+- **`generated-videos` Supabase bucket** not created yet — run in SQL editor:
+  ```sql
+  insert into storage.buckets (id, name, public) values ('generated-videos', 'generated-videos', false);
+  ```
+- **Kling API keys** — add `KLING_ACCESS_KEY` + `KLING_SECRET_KEY` to `.env.local` and Vercel once Kling account is set up.
+- **`ANTHROPIC_API_KEY`** — add to Vercel env vars.
 
 ## Next session
 
-Phase 4, Task 1 — Inngest setup + video job request flow.
+Phase 4, Task 7 — `/portal/videos/new` (artist video request form, triggers `video/generate.requested` Inngest event).
 
 ## Phase progress
 
@@ -34,6 +39,14 @@ Phase 4, Task 1 — Inngest setup + video job request flow.
 ## Session log
 
 Append a new entry at the top of this section after every session. Date, summary, files touched, what's next. Keep it tight — full reasoning belongs in `DECISIONS.md`.
+
+### 2026-05-14 (session 14)
+
+**Did:** Phase 4 Tasks 3–6. Task 3 — `src/lib/audio/analyze.ts`: `analyzeAudio` uses `music-metadata` to parse audio from a signed URL; extracts duration + BPM (falls back to 90); divides track into 4 equal sections (low→mid→high→mid energy). Task 4 — `src/lib/video/prompt-scenes.ts`: calls `claude-opus-4-7` with `generate_scenes` tool use; system prompt establishes Jamaican roots/dancehall visual aesthetic; Zod-validates output; retries once on validation failure. Task 5 — `src/lib/video/assemble.ts`: downloads clips + audio to `/tmp`, runs `fluent-ffmpeg` with xfade crossfades between clips (0.5s), uploads MP4 to `generated-videos` Supabase Storage, returns 7-day signed URL, cleans up temp files. Task 6 — `src/lib/inngest/functions/generate-video.ts`: 11-step durable Inngest pipeline (load job → analyze → prompt → generate clips in parallel → assemble → mark complete → notify artist via email). Registered in API route. `next.config.ts` updated with `fluent-ffmpeg` + `@ffmpeg-installer/ffmpeg` in `serverExternalPackages`. Typecheck clean.
+**Touched:** `src/lib/audio/analyze.ts` (new), `src/lib/video/prompt-scenes.ts` (new), `src/lib/video/assemble.ts` (new), `src/lib/inngest/functions/generate-video.ts` (new), `src/app/api/inngest/route.ts`, `next.config.ts`, `.env.example`, `package.json`
+**Decided:** Claude tool use for structured scene prompts (Zod-validated) over raw text parsing — more reliable JSON output. `fluent-ffmpeg` + `@ffmpeg-installer/ffmpeg` for serverless ffmpeg (no system binary needed).
+**Blocked on:** `generated-videos` bucket (SQL one-liner), Kling API keys, `ANTHROPIC_API_KEY` in Vercel.
+**Next:** Task 7 — `/portal/videos/new` artist video request UI.
 
 ### 2026-05-14 (session 13)
 
