@@ -1,6 +1,8 @@
 "use server";
 
 import { createServiceClient } from "@/lib/supabase/server";
+import { sendEmail } from "@/lib/email/send";
+import { renderApplicationReceived } from "@/lib/email/templates/applicationReceived";
 
 export type SignupState =
   | { status: "success" }
@@ -58,6 +60,35 @@ export async function submitApplication(
   if (error) {
     console.error("Application insert error:", error);
     return { status: "error", message: "Something went wrong. Please try again." };
+  }
+
+  // Notify admin — fire and forget (don't fail the submission if email fails)
+  const adminEmail = process.env.ADMIN_EMAIL;
+  if (adminEmail) {
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.oneflamerecords.com";
+    const { data: inserted } = await supabase
+      .from("signup_applications")
+      .select("id")
+      .eq("email", email)
+      .order("created_at", { ascending: false })
+      .limit(1)
+      .single();
+
+    const adminUrl = inserted
+      ? `${siteUrl}/admin/applications/${inserted.id}`
+      : `${siteUrl}/admin/applications`;
+
+    const template = renderApplicationReceived({
+      stageName: stage_name,
+      legalName: legal_name,
+      email,
+      phone,
+      genres,
+      message,
+      adminUrl,
+    });
+
+    await sendEmail({ to: adminEmail, ...template });
   }
 
   return { status: "success" };
