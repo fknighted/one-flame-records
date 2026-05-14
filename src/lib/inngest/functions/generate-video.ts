@@ -96,11 +96,14 @@ export const generateVideo = inngest.createFunction(
       assembleVideo(clips, job.audioUrl, jobId)
     );
 
-    // Step 6: Mark complete and notify artist
+    // Step 6: Mark complete — store output URL, timing, and actual cost
+    const totalCostUsd = clips.reduce((sum, c) => sum + c.costEstimateUsd, 0);
+
     await step.run("mark-complete", () =>
       updateJobStatus(jobId, "complete", {
         output_url: outputUrl,
         completed_at: new Date().toISOString(),
+        cost_estimate_usd: totalCostUsd,
       })
     );
 

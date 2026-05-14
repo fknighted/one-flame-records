@@ -225,6 +225,24 @@ export type Database = {
           },
         ]
       }
+      settings: {
+        Row: {
+          key: string
+          updated_at: string
+          value: Json
+        }
+        Insert: {
+          key: string
+          updated_at?: string
+          value: Json
+        }
+        Update: {
+          key?: string
+          updated_at?: string
+          value?: Json
+        }
+        Relationships: []
+      }
       signup_applications: {
         Row: {
           code_id: string
@@ -325,6 +343,7 @@ export type Database = {
         Row: {
           artist_id: string
           completed_at: string | null
+          cost_estimate_usd: number | null
           created_at: string
           error: string | null
           id: string
@@ -339,6 +358,7 @@ export type Database = {
         Insert: {
           artist_id: string
           completed_at?: string | null
+          cost_estimate_usd?: number | null
           created_at?: string
           error?: string | null
           id?: string
@@ -353,6 +373,7 @@ export type Database = {
         Update: {
           artist_id?: string
           completed_at?: string | null
+          cost_estimate_usd?: number | null
           created_at?: string
           error?: string | null
           id?: string
@@ -440,7 +461,8 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      current_artist_id: { Args: never; Returns: string }
+      is_admin: { Args: never; Returns: boolean }
     }
     Enums: {
       [_ in never]: never

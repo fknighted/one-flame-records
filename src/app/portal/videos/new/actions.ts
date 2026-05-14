@@ -6,6 +6,40 @@ import { inngest } from "@/lib/inngest/client";
 
 export type VideoRequestState = { error: string } | null;
 
+// Conservative per-job cost estimate used for budget checks before generation.
+// Actual cost is written back to video_jobs.cost_estimate_usd after assembly.
+const PER_JOB_ESTIMATE_USD = 5;
+
+async function checkBudget(): Promise<boolean> {
+  const service = createServiceClient();
+
+  // Fetch the configured monthly budget
+  const { data: setting } = await service
+    .from("settings")
+    .select("value")
+    .eq("key", "monthly_video_budget_usd")
+    .single();
+
+  const budgetUsd = Number(setting?.value ?? 100);
+
+  // Sum cost_estimate_usd for jobs created this calendar month
+  const monthStart = new Date();
+  monthStart.setDate(1);
+  monthStart.setHours(0, 0, 0, 0);
+
+  const { data: jobs } = await service
+    .from("video_jobs")
+    .select("cost_estimate_usd")
+    .gte("created_at", monthStart.toISOString());
+
+  const spentUsd = (jobs ?? []).reduce(
+    (sum, j) => sum + (Number(j.cost_estimate_usd) || PER_JOB_ESTIMATE_USD),
+    0
+  );
+
+  return spentUsd + PER_JOB_ESTIMATE_USD <= budgetUsd;
+}
+
 export async function requestVideo(
   _prev: VideoRequestState,
   formData: FormData
@@ -18,7 +52,7 @@ export async function requestVideo(
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("artist_id")
+    .select("artist_id, role")
     .eq("id", user.id)
     .single();
 
@@ -28,8 +62,21 @@ export async function requestVideo(
   const stylePreset = formData.get("style_preset") as string;
   const aspectRatio = formData.get("aspect_ratio") as string;
   const model = formData.get("model") as string;
+  const bypassBudget = formData.get("bypass_budget") === "1";
 
   if (!assetId) return { error: "Please select an asset." };
+
+  // Budget check — admins can bypass
+  const isAdmin = profile.role === "admin";
+  if (!isAdmin && !bypassBudget) {
+    const withinBudget = await checkBudget();
+    if (!withinBudget) {
+      return {
+        error:
+          "Video generation is paused this month — the label's budget has been reached. Contact the label to request more.",
+      };
+    }
+  }
 
   // Verify asset belongs to this artist
   const { data: asset } = await supabase
@@ -41,7 +88,6 @@ export async function requestVideo(
 
   if (!asset) return { error: "Asset not found." };
 
-  // Create the job row via service client (pipeline steps use service client, so artist insert via session client is fine under RLS)
   const { data: job, error: jobError } = await supabase
     .from("video_jobs")
     .insert({
@@ -59,7 +105,6 @@ export async function requestVideo(
 
   if (jobError || !job) return { error: "Could not create video job." };
 
-  // Fire the Inngest event
   await inngest.send({
     name: "video/generate.requested",
     data: { jobId: job.id },
