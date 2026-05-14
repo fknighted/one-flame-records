@@ -177,7 +177,7 @@ export default async function ApplicationDetailPage({
             <span className="capitalize">{app.status}</span>.
           </p>
           {app.status === "approved" && (
-            <ResendInviteButton id={app.id} />
+            <ResendInviteButton id={app.id} email={app.email} />
           )}
         </div>
       )}
