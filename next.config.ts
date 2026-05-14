@@ -1,7 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  serverExternalPackages: ["music-metadata"],
+  serverExternalPackages: ["music-metadata", "fluent-ffmpeg", "@ffmpeg-installer/ffmpeg"],
   experimental: {
     serverActions: {
       bodySizeLimit: "10mb",
