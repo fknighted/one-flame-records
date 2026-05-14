@@ -42,7 +42,7 @@ export async function approveApplication(
     process.env.NEXT_PUBLIC_SITE_URL ?? "https://oneflamerecords.com";
   const { data: inviteData, error: inviteError } =
     await supabase.auth.admin.inviteUserByEmail(app.email, {
-      redirectTo: `${siteUrl}/portal`,
+      redirectTo: `${siteUrl}/auth/callback`,
     });
 
   if (inviteError || !inviteData?.user) {
