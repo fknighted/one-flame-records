@@ -1,6 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  serverExternalPackages: ["music-metadata"],
   experimental: {
     serverActions: {
       bodySizeLimit: "10mb",
