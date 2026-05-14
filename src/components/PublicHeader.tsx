@@ -25,11 +25,11 @@ export default function PublicHeader() {
           onClick={() => setOpen(false)}
         >
           <Image
-            src="/logo.png"
+            src="/logo-2.png"
             alt="One Flame Records"
-            width={44}
-            height={44}
-            className="h-11 w-auto"
+            width={160}
+            height={88}
+            className="h-10 w-auto"
             priority
           />
         </Link>

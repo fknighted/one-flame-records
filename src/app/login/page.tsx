@@ -40,11 +40,11 @@ export default function LoginPage() {
       <div className="w-full max-w-sm">
         <div className="mb-8 text-center">
           <Image
-            src="/logo.png"
+            src="/logo-1.png"
             alt="One Flame Records"
-            width={120}
-            height={120}
-            className="h-28 w-auto mx-auto mb-4"
+            width={320}
+            height={175}
+            className="h-20 w-auto mx-auto mb-4"
             priority
           />
           <p className="text-sm text-ink/60">Sign in to continue</p>
