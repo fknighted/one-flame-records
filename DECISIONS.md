@@ -14,6 +14,20 @@ Format for each entry:
 
 ---
 
+## 2026-05-14 — Auth callback must be a Client Component (not a Route Handler)
+
+**Context:** `resendInvite` uses `supabase.auth.admin.generateLink({ type: 'recovery' })` to generate a portal invite link without triggering Supabase's email rate limits. When the user opens this link, Supabase processes the OTP server-side and redirects to `/auth/callback`. The redirect uses implicit flow (hash fragment: `#access_token=...&refresh_token=...`), not PKCE (`?code=`). Hash fragments are stripped by the browser before the request reaches the server, so a Route Handler at `/auth/callback` never sees the tokens — it always falls through to the error redirect.
+
+**Decision:** Replace `src/app/auth/callback/route.ts` with a Client Component page (`src/app/auth/callback/page.tsx`). On mount it checks for both flows: `?code=` (PKCE — calls `exchangeCodeForSession`) and `#access_token=` (implicit — calls `setSession`). Uses `createBrowserClient` so session cookies are written client-side and picked up by the middleware on subsequent navigation.
+
+**Alternatives considered:**
+- _Keep Route Handler, disable PKCE in Supabase dashboard._ Would still require client-side hash handling since the Route Handler can never see hash fragments regardless of PKCE setting.
+- _Switch from `generateLink` back to `inviteUserByEmail`._ Rejected: hits Supabase rate limits on resend and fails for existing users.
+
+**Consequences:** The callback page shows a brief "Signing you in…" flash while JS runs. Any future auth callback flows (OAuth, magic link) should also be handled here by checking the appropriate URL parameter or hash key.
+
+---
+
 ## 2026-05-13 — Separate PortalProfileForm (not ArtistForm) for portal self-edit
 
 **Context:** Artists can only edit `bio`, `photo_url`, `socials`, and `streaming` — not `stage_name`, `slug`, `genres`, or `status`. `ArtistForm` (admin component) owns all fields and has slug auto-generation logic tied to stage name input.

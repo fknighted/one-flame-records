@@ -7,28 +7,26 @@ This is the living state of the build. Update at the end of every session.
 ## Current state
 
 - **Phase:** 3 — QR onboarding + artist portal
-- **Status:** In progress — Tasks 1–5 complete.
-- **Last updated:** 2026-05-13
+- **Status:** Complete — all 8 tasks done, end-to-end test passed.
+- **Last updated:** 2026-05-14
 
 ## Active focus
 
-Phase 3, Task 6 — Asset upload (`/portal/assets`).
+Phase 4 — Video automation (Inngest pipeline).
 
 ## Blockers
 
-- Resend domain DNS verification still pending for `oneflamerecords.com`.
-- End-to-end approve flow not yet tested.
-- `private-assets` storage bucket not yet created (needed for Task 6).
+None.
 
 ## Next session
 
-Phase 3, Task 6 — Asset upload (`/portal/assets` list + `/portal/assets/new` upload form).
+Phase 4, Task 1 — Inngest setup + video job request flow.
 
 ## Phase progress
 
-- [x] **Phase 1** — Admin foundation _(complete — Task 11 / real data deferred to after Phase 2)_
+- [x] **Phase 1** — Admin foundation _(complete)_
 - [x] **Phase 2** — Public site _(complete)_
-- [ ] **Phase 3** — QR onboarding + artist portal
+- [x] **Phase 3** — QR onboarding + artist portal _(complete)_
 - [ ] **Phase 4** — Video automation
 
 ---
@@ -36,6 +34,14 @@ Phase 3, Task 6 — Asset upload (`/portal/assets` list + `/portal/assets/new` u
 ## Session log
 
 Append a new entry at the top of this section after every session. Date, summary, files touched, what's next. Keep it tight — full reasoning belongs in `DECISIONS.md`.
+
+### 2026-05-14 (session 13)
+
+**Did:** Phase 3 Tasks 6–8 complete. Task 6 — asset upload (`/portal/assets` list + `/portal/assets/new` form): private-assets storage bucket, `uploadAsset` server action with `music-metadata` duration extraction, signed download URLs (60-min expiry), RLS scoped to artist's own assets. Task 7 — email templates: `src/lib/email/send.ts` Resend helper, 4 branded HTML templates (`applicationReceived`, `applicationApproved`, `applicationRejected`, `welcome`); wired into `submitApplication` (admin notification), `resendInvite` (portal invite to artist), `rejectApplication` (rejection notice to artist). Resend DNS verified for oneflamerecords.com; GoDaddy records added (`resend._domainkey` DKIM + SPF TXT). Task 8 — end-to-end test passed: submit → approve → invite email → set-password → portal → profile edit → asset upload → logout → login. Fixed critical auth callback bug: `generateLink({ type: 'recovery' })` returns tokens in hash fragment (implicit flow), not `?code=` (PKCE), so the Route Handler never saw the session. Replaced `src/app/auth/callback/route.ts` with a Client Component page that handles both PKCE and implicit flows. Updated `NEXT_PUBLIC_SITE_URL` in Vercel to production URL.
+**Touched:** `src/app/portal/assets/`, `src/app/portal/assets/new/`, `src/components/AssetUploadForm.tsx`, `src/lib/email/send.ts`, `src/lib/email/templates/`, `src/app/(public)/signup/[code]/actions.ts`, `src/app/admin/applications/actions.ts`, `src/app/auth/callback/page.tsx` (replaced route.ts), `next.config.ts`, `.env.example`, `PROGRESS.md`
+**Decided:** Auth callback must be a Client Component to handle implicit-flow hash fragments from admin-generated links. See DECISIONS.md.
+**Blocked on:** Nothing.
+**Next:** Phase 4 — Video automation.
 
 ### 2026-05-13 (session 12)
 
