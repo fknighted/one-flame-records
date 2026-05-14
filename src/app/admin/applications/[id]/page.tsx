@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { createServiceClient } from "@/lib/supabase/server";
 import ApplicationActions from "@/components/ApplicationActions";
+import ResendInviteButton from "@/components/ResendInviteButton";
 import type { Tables } from "@/types/supabase";
 
 type AppRow = Tables<"signup_applications">;
@@ -170,10 +171,15 @@ export default async function ApplicationDetailPage({
       )}
 
       {app.status !== "pending" && (
-        <p className="mt-6 text-sm text-bone/40">
-          This application has been{" "}
-          <span className="capitalize">{app.status}</span>.
-        </p>
+        <div className="mt-6">
+          <p className="text-sm text-bone/40">
+            This application has been{" "}
+            <span className="capitalize">{app.status}</span>.
+          </p>
+          {app.status === "approved" && (
+            <ResendInviteButton id={app.id} />
+          )}
+        </div>
       )}
     </div>
   );

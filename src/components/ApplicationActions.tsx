@@ -21,7 +21,7 @@ export default function ApplicationActions({ id }: { id: string }) {
     <div className="flex flex-col sm:flex-row gap-3">
       <form action={approveAction} className="flex flex-col gap-2">
         <input type="hidden" name="id" value={id} />
-        {approveState?.error && (
+        {approveState && "error" in approveState && (
           <p className="text-sm text-red-400">{approveState.error}</p>
         )}
         <button
@@ -35,7 +35,7 @@ export default function ApplicationActions({ id }: { id: string }) {
 
       <form action={rejectAction} className="flex flex-col gap-2">
         <input type="hidden" name="id" value={id} />
-        {rejectState?.error && (
+        {rejectState && "error" in rejectState && (
           <p className="text-sm text-red-400">{rejectState.error}</p>
         )}
         <button

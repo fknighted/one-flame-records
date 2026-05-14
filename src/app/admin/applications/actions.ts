@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient, createServiceClient } from "@/lib/supabase/server";
 
-export type ActionState = { error: string } | null;
+export type ActionState = { error: string } | { success: true } | null;
 
 function toSlug(name: string): string {
   return name
@@ -110,6 +110,37 @@ export async function approveApplication(
 
   revalidatePath("/admin/applications");
   redirect("/admin/applications");
+}
+
+export async function resendInvite(
+  _prev: ActionState,
+  formData: FormData
+): Promise<ActionState> {
+  const id = (formData.get("id") as string)?.trim();
+  if (!id) return { error: "Missing application ID." };
+
+  const supabase = createServiceClient();
+  const { data: app, error: fetchError } = await supabase
+    .from("signup_applications")
+    .select("email, status")
+    .eq("id", id)
+    .single();
+
+  if (fetchError || !app) return { error: "Application not found." };
+  if (app.status !== "approved")
+    return { error: "Can only resend invite for approved applications." };
+
+  const siteUrl =
+    process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.oneflamerecords.com";
+  const { error: inviteError } = await supabase.auth.admin.inviteUserByEmail(
+    app.email,
+    { redirectTo: `${siteUrl}/auth/callback` }
+  );
+
+  if (inviteError)
+    return { error: `Failed to resend invite: ${inviteError.message}` };
+
+  return { success: true };
 }
 
 export async function rejectApplication(
