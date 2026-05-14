@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { createClient } from "@/lib/supabase/client";
 
 export default function LoginPage() {
@@ -38,10 +39,15 @@ export default function LoginPage() {
     <main className="min-h-screen bg-cream flex items-center justify-center px-4">
       <div className="w-full max-w-sm">
         <div className="mb-8 text-center">
-          <h1 className="font-display text-3xl text-oxblood tracking-tight">
-            One Flame Records
-          </h1>
-          <p className="mt-1 text-sm text-ink/60">Sign in to continue</p>
+          <Image
+            src="/logo.png"
+            alt="One Flame Records"
+            width={120}
+            height={120}
+            className="h-28 w-auto mx-auto mb-4"
+            priority
+          />
+          <p className="text-sm text-ink/60">Sign in to continue</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">

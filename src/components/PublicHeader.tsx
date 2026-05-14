@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useState } from "react";
 
 const NAV = [
@@ -11,43 +12,26 @@ const NAV = [
   { href: "/contact",  label: "Contact" },
 ];
 
-function FlameMark({ className }: { className?: string }) {
-  return (
-    <svg
-      viewBox="0 0 20 28"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      aria-hidden="true"
-      className={className}
-    >
-      <path
-        d="M10 1C10 1 4 9 4 16C4 19.8 6.3 23.1 10 25C13.7 23.1 16 19.8 16 16C16 9 10 1 10 1Z"
-        fill="#8B2A1F"
-      />
-      <path
-        d="M10 14C10 14 7.5 17.5 7.5 19.5C7.5 21.4 8.6 23 10 24C11.4 23 12.5 21.4 12.5 19.5C12.5 17.5 10 14 10 14Z"
-        fill="#3F5A3A"
-      />
-    </svg>
-  );
-}
-
 export default function PublicHeader() {
   const [open, setOpen] = useState(false);
 
   return (
     <header className="sticky top-0 z-40 bg-cream/95 backdrop-blur-sm border-b border-oxblood/10">
       <div className="mx-auto max-w-6xl px-4 sm:px-6 flex items-center justify-between h-16">
-        {/* Wordmark */}
+        {/* Logo */}
         <Link
           href="/"
-          className="flex items-center gap-2.5 group"
+          className="flex items-center"
           onClick={() => setOpen(false)}
         >
-          <FlameMark className="h-7 w-auto" />
-          <span className="font-display font-bold text-oxblood text-lg tracking-tight leading-none">
-            One Flame Records
-          </span>
+          <Image
+            src="/logo.png"
+            alt="One Flame Records"
+            width={44}
+            height={44}
+            className="h-11 w-auto"
+            priority
+          />
         </Link>
 
         {/* Desktop nav */}

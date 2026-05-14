@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 
 const LABEL_LINKS = [
   { href: "/about",   label: "About" },
@@ -18,12 +19,15 @@ export default function PublicFooter() {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-10">
           {/* Brand */}
           <div className="col-span-2 md:col-span-1">
-            <p className="font-display font-bold text-oxblood text-base leading-tight">
-              One Flame Records
-            </p>
-            <p className="mt-1 text-[11px] uppercase tracking-[0.15em] text-ink/60">
-              Montego Bay · Jamaica
-            </p>
+            <Link href="/">
+              <Image
+                src="/logo.png"
+                alt="One Flame Records"
+                width={80}
+                height={80}
+                className="h-20 w-auto"
+              />
+            </Link>
           </div>
 
           {/* Label */}

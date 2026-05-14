@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { createClient } from "@/lib/supabase/server";
 import LogoutButton from "@/components/LogoutButton";
 
@@ -27,9 +28,15 @@ export default async function AdminLayout({
     <div className="min-h-screen bg-ink text-bone flex flex-col">
       {/* Top bar */}
       <header className="h-14 border-b border-bone/10 flex items-center justify-between px-6 shrink-0">
-        <span className="font-display text-lg text-oxblood tracking-tight">
-          One Flame
-        </span>
+        <Link href="/admin">
+          <Image
+            src="/logo.png"
+            alt="One Flame Records"
+            width={36}
+            height={36}
+            className="h-9 w-auto"
+          />
+        </Link>
         <div className="flex items-center gap-4">
           <span className="text-sm text-bone/50">{user?.email}</span>
           <LogoutButton />
