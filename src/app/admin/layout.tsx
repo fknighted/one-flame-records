@@ -27,14 +27,14 @@ export default async function AdminLayout({
   return (
     <div className="min-h-screen bg-ink text-bone flex flex-col">
       {/* Top bar */}
-      <header className="h-14 border-b border-bone/10 flex items-center justify-between px-6 shrink-0">
+      <header className="h-20 border-b border-bone/10 flex items-center justify-between px-6 shrink-0">
         <Link href="/admin">
           <Image
             src="/logo-4.png"
             alt="One Flame Records"
             width={140}
             height={77}
-            className="h-8 w-auto"
+            className="h-14 w-auto"
           />
         </Link>
         <div className="flex items-center gap-4">

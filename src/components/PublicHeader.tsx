@@ -17,7 +17,7 @@ export default function PublicHeader() {
 
   return (
     <header className="sticky top-0 z-40 bg-cream/95 backdrop-blur-sm border-b border-oxblood/10">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 flex items-center justify-between h-16">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 flex items-center justify-between h-24">
         {/* Logo */}
         <Link
           href="/"
@@ -29,7 +29,7 @@ export default function PublicHeader() {
             alt="One Flame Records"
             width={160}
             height={88}
-            className="h-10 w-auto"
+            className="h-20 w-auto"
             priority
           />
         </Link>

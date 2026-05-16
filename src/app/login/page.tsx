@@ -44,7 +44,7 @@ export default function LoginPage() {
             alt="One Flame Records"
             width={320}
             height={175}
-            className="h-20 w-auto mx-auto mb-4"
+            className="h-40 w-auto mx-auto mb-4"
             priority
           />
           <p className="text-sm text-ink/60">Sign in to continue</p>
