@@ -71,14 +71,14 @@ export default function PublicHeader() {
       {open && (
         <nav
           id="mobile-menu"
-          className="md:hidden fixed inset-0 top-16 z-30 bg-cream flex flex-col px-8 pt-10 gap-1"
+          className="md:hidden fixed inset-0 top-24 z-30 bg-cream flex flex-col px-8 pt-6 gap-0"
           aria-label="Mobile"
         >
           {NAV.map(({ href, label }) => (
             <Link
               key={href}
               href={href}
-              className="font-display text-4xl font-bold text-oxblood py-2 border-b border-oxblood/10 last:border-0"
+              className="font-display text-xl font-bold text-oxblood py-3 border-b border-oxblood/10 last:border-0"
               onClick={() => setOpen(false)}
             >
               {label}
