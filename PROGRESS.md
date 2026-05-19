@@ -7,25 +7,23 @@ This is the living state of the build. Update at the end of every session.
 ## Current state
 
 - **Phase:** 4 — Video automation
-- **Status:** Tasks 1–6 complete (Inngest + provider factory + pipeline). Tasks 7–11 remain.
-- **Last updated:** 2026-05-14
+- **Status:** Tasks 1–9 complete. Awaiting end-to-end test (Task 11) with live keys.
+- **Last updated:** 2026-05-16
 
 ## Active focus
 
-Phase 4, Tasks 7–9 — artist video request UI, results view, admin jobs observability.
+Phase 4, Task 11 — end-to-end test with a real instrumental.
 
 ## Blockers
 
-- **`generated-videos` Supabase bucket** not created yet — run in SQL editor:
-  ```sql
-  insert into storage.buckets (id, name, public) values ('generated-videos', 'generated-videos', false);
-  ```
-- **Kling API keys** — add `KLING_ACCESS_KEY` + `KLING_SECRET_KEY` to `.env.local` and Vercel once Kling account is set up.
-- **`ANTHROPIC_API_KEY`** — add to Vercel env vars.
+None — all API keys (Anthropic, Kling, Inngest) are in place. `generated-videos` bucket must be created in Supabase SQL editor:
+```sql
+insert into storage.buckets (id, name, public) values ('generated-videos', 'generated-videos', false);
+```
 
 ## Next session
 
-Phase 4, Task 7 — `/portal/videos/new` (artist video request form, triggers `video/generate.requested` Inngest event).
+Run end-to-end test: upload instrumental → request video in portal → watch Inngest dashboard → verify output URL and artist email.
 
 ## Phase progress
 
