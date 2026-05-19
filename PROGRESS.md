@@ -6,24 +6,25 @@ This is the living state of the build. Update at the end of every session.
 
 ## Current state
 
-- **Phase:** 4 — Video automation
-- **Status:** Tasks 1–9 complete. Awaiting end-to-end test (Task 11) with live keys.
-- **Last updated:** 2026-05-16
+- **Phase:** 4 — Video automation + visual polish
+- **Status:** All pipeline tasks complete (1–9). Visual redesign complete. End-to-end test pending.
+- **Last updated:** 2026-05-19
 
 ## Active focus
 
-Phase 4, Task 11 — end-to-end test with a real instrumental.
+Phase 4 sign-off — end-to-end test with a real instrumental. Then artist/release detail pages.
 
 ## Blockers
 
-None — all API keys (Anthropic, Kling, Inngest) are in place. `generated-videos` bucket must be created in Supabase SQL editor:
-```sql
-insert into storage.buckets (id, name, public) values ('generated-videos', 'generated-videos', false);
-```
+- **`generated-videos` Supabase bucket** — user has been shown the SQL. Needs to be created before video pipeline can upload output.
+- **Homepage hero image** — user is generating an abstract image (vinyl + Jamaican flag motifs). Once dropped into repo, wire as hero background with dark overlay.
 
 ## Next session
 
-Run end-to-end test: upload instrumental → request video in portal → watch Inngest dashboard → verify output URL and artist email.
+1. Confirm `generated-videos` bucket exists
+2. End-to-end test: upload instrumental → request video → watch Inngest → verify email + output URL
+3. Wire homepage hero image once generated
+4. Begin artist detail page (`/artists/[slug]`) — currently a stub
 
 ## Phase progress
 
@@ -37,6 +38,14 @@ Run end-to-end test: upload instrumental → request video in portal → watch I
 ## Session log
 
 Append a new entry at the top of this section after every session. Date, summary, files touched, what's next. Keep it tight — full reasoning belongs in `DECISIONS.md`.
+
+### 2026-05-19 (session 15)
+
+**Did:** Phase 4 Tasks 7–9 + full visual redesign. Task 7 — `/portal/videos/new`: `VideoRequestForm` client component (style presets, aspect ratio radio, asset selector), `requestVideo` server action with month-to-date budget check (`settings` table, `PER_JOB_ESTIMATE_USD = 5`; admin bypasses limit), fires Inngest event on success. Task 8 — `/portal/videos` job list: color-coded status badges, Watch link on complete, error text on failed. `/admin/jobs` stats row + full table with artist name, asset, status, duration, Watch + Inngest Logs links. Task 9 — cost limiter: `20260514000000_cost_limiter.sql` migration (`settings` table + `cost_estimate_usd` column on `video_jobs`); `/admin/settings` spend meter with color-coded progress bar; `BudgetForm` client component. Inngest `mark-complete` step now writes `cost_estimate_usd`. Visual redesign: dark/cinematic homepage hero (ink bg, radial oxblood glow, `clamp` headline); artist cards with full gradient overlay + name pinned inside frame; section rhythm (Hero→Artists→Releases→Videos→CTA alternating ink/cream/oxblood); ink footer with oxblood top border. Real logo integrated: logo-2 in public header (h-20), logo-4 in admin/portal sidebars (h-14), original square in footer (h-40), logo-4 in OG image. Mobile menu: `z-[60]` + inline hex `#1A1612` (bypasses Tailwind token resolution issue with backdrop-blur stacking context). Admin overview: "View public site" link with arrow icon.
+**Touched:** `src/app/portal/videos/new/page.tsx`, `src/app/portal/videos/new/actions.ts`, `src/components/VideoRequestForm.tsx`, `src/app/portal/videos/page.tsx`, `src/app/admin/jobs/page.tsx`, `src/app/admin/settings/page.tsx`, `src/app/admin/settings/BudgetForm.tsx`, `src/app/admin/settings/actions.ts`, `src/app/admin/layout.tsx`, `src/app/portal/layout.tsx`, `src/lib/inngest/functions/generate-video.ts`, `supabase/migrations/20260514000000_cost_limiter.sql`, `src/types/supabase.ts`, `src/app/(public)/page.tsx`, `src/components/ArtistCard.tsx`, `src/components/SectionHeader.tsx`, `src/components/PublicHeader.tsx`, `src/components/PublicFooter.tsx`, `src/app/admin/page.tsx`, `src/app/opengraph-image.tsx`, `public/logo-1.png` through `public/logo-4.png`
+**Decided:** Mobile menu requires inline `style` hex (not Tailwind token) because `backdrop-blur` on the header creates a stacking context that breaks CSS variable resolution for sibling/child elements. Inline hex bypasses this cleanly. Logged in DECISIONS.md.
+**Blocked on:** `generated-videos` Supabase bucket (SQL one-liner, needs manual creation). Homepage hero image (user generating abstract vinyl/flag motif — once dropped in, wire as hero background).
+**Next:** Create `generated-videos` bucket → end-to-end video pipeline test → homepage hero image → artist/release detail pages.
 
 ### 2026-05-14 (session 14)
 
