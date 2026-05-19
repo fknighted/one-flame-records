@@ -18,6 +18,7 @@ type Props = {
   artist_name: string;
   artist_slug: string;
   streaming_links: StreamingLinks;
+  dark?: boolean;
 };
 
 const TYPE_STYLES: Record<string, string> = {
@@ -97,6 +98,7 @@ export default function ReleaseCard({
   artist_name,
   artist_slug,
   streaming_links,
+  dark = false,
 }: Props) {
   const pillStyle = TYPE_STYLES[type] ?? "bg-ink/10 text-ink";
   const activeLinks = STREAMING_ICONS.filter(({ key }) => streaming_links[key]);
@@ -104,18 +106,18 @@ export default function ReleaseCard({
   return (
     <div className="group flex flex-col">
       {/* Cover */}
-      <Link href={`/releases/${slug}`} className="block relative aspect-square bg-oxblood/5 overflow-hidden">
+      <Link href={`/releases/${slug}`} className="block relative aspect-square overflow-hidden ring-1 ring-white/5">
         {cover_url ? (
           <Image
             src={cover_url}
             alt={`${title} cover`}
             fill
             className="object-cover transition-transform duration-500 group-hover:scale-105"
-            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
           />
         ) : (
-          <div className="absolute inset-0 flex items-center justify-center">
-            <svg viewBox="0 0 20 28" className="w-10 h-auto opacity-20" aria-hidden="true">
+          <div className="absolute inset-0 bg-ink flex items-center justify-center">
+            <svg viewBox="0 0 20 28" className="w-10 h-auto opacity-15" aria-hidden="true">
               <path d="M10 1C10 1 4 9 4 16C4 19.8 6.3 23.1 10 25C13.7 23.1 16 19.8 16 16C16 9 10 1 10 1Z" fill="#8B2A1F" />
             </svg>
           </div>
@@ -123,21 +125,32 @@ export default function ReleaseCard({
       </Link>
 
       {/* Info */}
-      <div className="mt-3 flex flex-col flex-1 px-0.5">
+      <div className="mt-2.5 flex flex-col flex-1 px-0.5">
         <div className="flex items-start justify-between gap-2">
-          <Link href={`/releases/${slug}`} className="font-display font-bold text-oxblood leading-tight hover:text-ochre transition-colors">
+          <Link
+            href={`/releases/${slug}`}
+            className={`font-display font-bold text-base leading-tight transition-colors ${
+              dark ? "text-bone hover:text-ochre" : "text-oxblood hover:text-ochre"
+            }`}
+          >
             {title}
           </Link>
           <span className={`shrink-0 text-[10px] font-semibold uppercase tracking-wide px-1.5 py-0.5 rounded-sm ${pillStyle}`}>
             {type}
           </span>
         </div>
-        <Link href={`/artists/${artist_slug}`} className="mt-0.5 text-sm text-ink/60 hover:text-oxblood transition-colors">
+        <Link
+          href={`/artists/${artist_slug}`}
+          className={`mt-0.5 text-sm transition-colors ${
+            dark ? "text-bone/50 hover:text-ochre" : "text-ink/60 hover:text-oxblood"
+          }`}
+        >
           {artist_name}
         </Link>
-        <p className="mt-0.5 text-xs text-ink/40">{formatDate(release_date)}</p>
+        <p className={`mt-0.5 text-xs ${dark ? "text-bone/30" : "text-ink/40"}`}>
+          {formatDate(release_date)}
+        </p>
 
-        {/* Streaming icons */}
         {activeLinks.length > 0 && (
           <div className="mt-2.5 flex items-center gap-3">
             {activeLinks.map(({ key, label, icon }) => (
@@ -147,7 +160,9 @@ export default function ReleaseCard({
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={label}
-                className="text-ink/40 hover:text-oxblood transition-colors"
+                className={`transition-colors ${
+                  dark ? "text-bone/40 hover:text-ochre" : "text-ink/40 hover:text-oxblood"
+                }`}
               >
                 {icon}
               </a>

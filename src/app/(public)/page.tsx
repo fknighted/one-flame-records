@@ -44,136 +44,158 @@ export default async function HomePage() {
 
   return (
     <>
-      {/* ── Hero ── */}
-      <section className="mx-auto max-w-6xl px-4 sm:px-6 pt-20 pb-16 md:pt-28 md:pb-24">
-        <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-oxblood mb-4">
-          Montego Bay · Jamaica
-        </p>
-        <h1 className="font-display font-bold text-oxblood text-[clamp(2.75rem,6vw,4.5rem)] leading-[1.05] tracking-tight max-w-3xl">
-          Pressed in Montego Bay.
-        </h1>
-        <div className="mt-5 h-px w-24 bg-oxblood" />
-        <p className="mt-5 text-lg text-ink/70 max-w-xl leading-relaxed">
-          One Flame Records is an independent reggae and dancehall label rooted in
-          the tradition of Jamaican music — artists, releases, and the culture they carry.
-        </p>
-        <div className="mt-8 flex items-center gap-4">
-          <Link
-            href="/artists"
-            className="inline-block rounded bg-oxblood px-6 py-2.5 text-sm font-semibold text-bone hover:bg-ochre transition-colors"
-          >
-            Our Artists
-          </Link>
-          <Link
-            href="/releases"
-            className="inline-block rounded border border-oxblood px-6 py-2.5 text-sm font-semibold text-oxblood hover:bg-oxblood hover:text-bone transition-colors"
-          >
-            New Releases
-          </Link>
+      {/* ── Hero — full-bleed dark ── */}
+      <section className="relative bg-ink overflow-hidden">
+        {/* Radial oxblood glow */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0"
+          style={{
+            background:
+              "radial-gradient(ellipse 70% 60% at 30% 60%, rgba(139,42,31,0.22) 0%, transparent 70%)",
+          }}
+        />
+
+        <div className="relative mx-auto max-w-6xl px-4 sm:px-6 pt-24 pb-28 md:pt-32 md:pb-36 min-h-[75vh] flex flex-col justify-center">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-forest mb-5">
+            Montego Bay · Jamaica
+          </p>
+          <h1 className="font-display font-bold text-bone text-[clamp(3rem,7vw,5.5rem)] leading-[1.02] tracking-tight max-w-3xl">
+            Pressed in<br />Montego Bay.
+          </h1>
+          <div className="mt-6 h-px w-24 bg-oxblood" />
+          <p className="mt-6 text-lg text-bone/60 max-w-lg leading-relaxed">
+            One Flame Records is an independent reggae and dancehall label rooted in
+            the tradition of Jamaican music — artists, releases, and the culture they carry.
+          </p>
+          <div className="mt-10 flex items-center gap-4">
+            <Link
+              href="/artists"
+              className="inline-block rounded bg-ochre px-7 py-3 text-sm font-semibold text-ink hover:bg-bone transition-colors"
+            >
+              Our Artists
+            </Link>
+            <Link
+              href="/releases"
+              className="inline-block rounded border border-bone/30 px-7 py-3 text-sm font-semibold text-bone hover:border-bone hover:bg-bone/5 transition-colors"
+            >
+              New Releases
+            </Link>
+          </div>
         </div>
       </section>
 
-      {/* ── Featured Artists ── */}
+      {/* ── Featured Artists — ink ── */}
       {featuredArtists && featuredArtists.length > 0 && (
-        <section className="mx-auto max-w-6xl px-4 sm:px-6 py-16 border-t border-oxblood/10">
-          <SectionHeader
-            eyebrow="The Roster"
-            title="Featured Artists"
-            action={
-              <Link href="/artists" className="text-sm text-oxblood underline underline-offset-4 hover:text-ochre transition-colors">
-                Full roster
-              </Link>
-            }
-          />
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6 sm:gap-8">
-            {featuredArtists.map((artist) => (
-              <ArtistCard
-                key={artist.id}
-                slug={artist.slug}
-                stage_name={artist.stage_name}
-                photo_url={artist.photo_url}
-                hometown={artist.hometown}
-              />
-            ))}
-          </div>
-        </section>
-      )}
-
-      {/* ── Latest Releases ── */}
-      {releases && releases.length > 0 && (
-        <section className="mx-auto max-w-6xl px-4 sm:px-6 py-16 border-t border-oxblood/10">
-          <SectionHeader
-            eyebrow="Discography"
-            title="Latest Releases"
-            action={
-              <Link href="/releases" className="text-sm text-oxblood underline underline-offset-4 hover:text-ochre transition-colors">
-                All releases
-              </Link>
-            }
-          />
-          {/* Horizontal scroll on mobile, grid on sm+ */}
-          <div className="-mx-4 sm:mx-0 px-4 sm:px-0 overflow-x-auto pb-4 sm:pb-0">
-            <div className="grid grid-flow-col sm:grid-flow-row sm:grid-cols-3 lg:grid-cols-6 gap-5 w-max sm:w-auto">
-              {releases.map((release) => (
-                <div key={release.id} className="w-44 sm:w-auto">
-                  <ReleaseCard
-                    slug={release.slug}
-                    title={release.title}
-                    cover_url={release.cover_url}
-                    release_date={release.release_date}
-                    type={release.type}
-                    artist_name={release.artists?.stage_name ?? ""}
-                    artist_slug={release.artists?.slug ?? ""}
-                    streaming_links={(release.streaming_links as Record<string, string>) ?? {}}
-                  />
-                </div>
+        <section className="bg-ink">
+          <div className="mx-auto max-w-6xl px-4 sm:px-6 py-20">
+            <SectionHeader
+              dark
+              eyebrow="The Roster"
+              title="Featured Artists"
+              action={
+                <Link href="/artists" className="text-sm text-bone/40 hover:text-ochre transition-colors">
+                  Full roster →
+                </Link>
+              }
+            />
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-1 sm:gap-1.5">
+              {featuredArtists.map((artist) => (
+                <ArtistCard
+                  key={artist.id}
+                  slug={artist.slug}
+                  stage_name={artist.stage_name}
+                  photo_url={artist.photo_url}
+                  hometown={artist.hometown}
+                />
               ))}
             </div>
           </div>
         </section>
       )}
 
-      {/* ── Videos ── */}
+      {/* ── Latest Releases — cream ── */}
+      {releases && releases.length > 0 && (
+        <section className="bg-cream">
+          <div className="mx-auto max-w-6xl px-4 sm:px-6 py-20">
+            <SectionHeader
+              eyebrow="Discography"
+              title="Latest Releases"
+              action={
+                <Link href="/releases" className="text-sm text-oxblood/60 hover:text-ochre transition-colors">
+                  All releases →
+                </Link>
+              }
+            />
+            <div className="-mx-4 sm:mx-0 px-4 sm:px-0 overflow-x-auto pb-4 sm:pb-0">
+              <div className="grid grid-flow-col sm:grid-flow-row sm:grid-cols-3 lg:grid-cols-6 gap-5 w-max sm:w-auto">
+                {releases.map((release) => (
+                  <div key={release.id} className="w-44 sm:w-auto">
+                    <ReleaseCard
+                      slug={release.slug}
+                      title={release.title}
+                      cover_url={release.cover_url}
+                      release_date={release.release_date}
+                      type={release.type}
+                      artist_name={release.artists?.stage_name ?? ""}
+                      artist_slug={release.artists?.slug ?? ""}
+                      streaming_links={(release.streaming_links as Record<string, string>) ?? {}}
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* ── Videos — ink ── */}
       {videos && videos.length > 0 && (
-        <section className="mx-auto max-w-6xl px-4 sm:px-6 py-16 border-t border-oxblood/10">
-          <SectionHeader
-            eyebrow="Watch"
-            title="Latest Videos"
-            action={
-              <Link href="/videos" className="text-sm text-oxblood underline underline-offset-4 hover:text-ochre transition-colors">
-                All videos
-              </Link>
-            }
-          />
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {videos.map((video, i) => (
-              <VideoEmbed
-                key={video.id}
-                youtube_id={video.youtube_id}
-                title={video.title}
-                artist_name={video.artists?.stage_name ?? ""}
-                priority={i === 0}
-              />
-            ))}
+        <section className="bg-ink">
+          <div className="mx-auto max-w-6xl px-4 sm:px-6 py-20">
+            <SectionHeader
+              dark
+              eyebrow="Watch"
+              title="Latest Videos"
+              action={
+                <Link href="/videos" className="text-sm text-bone/40 hover:text-ochre transition-colors">
+                  All videos →
+                </Link>
+              }
+            />
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {videos.map((video, i) => (
+                <VideoEmbed
+                  key={video.id}
+                  youtube_id={video.youtube_id}
+                  title={video.title}
+                  artist_name={video.artists?.stage_name ?? ""}
+                  priority={i === 0}
+                />
+              ))}
+            </div>
           </div>
         </section>
       )}
 
       {/* ── Sign with One Flame CTA ── */}
-      <section className="bg-oxblood mt-8">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 py-16 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+      <section className="bg-oxblood">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 py-20 flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
           <div>
-            <h2 className="font-display font-bold text-bone text-3xl leading-tight">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-bone/50 mb-3">
+              Montego Bay · Jamaica
+            </p>
+            <h2 className="font-display font-bold text-bone text-[clamp(2rem,4vw,3rem)] leading-tight">
               Sign with One Flame.
             </h2>
-            <p className="mt-2 text-bone/90 max-w-md">
-              We work with artists who have something real to say. If that&apos;s you,
+            <p className="mt-3 text-bone/70 max-w-md leading-relaxed">
+              We work with artists who have something real to say. If that's you,
               we want to hear it.
             </p>
           </div>
           <Link
             href="/contact"
-            className="shrink-0 inline-block rounded bg-ochre px-7 py-3 text-sm font-semibold text-ink hover:bg-bone transition-colors"
+            className="shrink-0 inline-block rounded bg-bone px-8 py-3.5 text-sm font-semibold text-ink hover:bg-ochre transition-colors"
           >
             Get in touch
           </Link>
