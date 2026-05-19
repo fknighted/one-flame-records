@@ -29,9 +29,24 @@ export default async function AdminOverviewPage() {
     { label: "Pending applications", value: stats.pendingApplications },
   ];
 
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.oneflamerecords.com";
+
   return (
     <div>
-      <h1 className="font-display text-2xl text-bone mb-6">Overview</h1>
+      <div className="mb-6 flex items-center justify-between">
+        <h1 className="font-display text-2xl text-bone">Overview</h1>
+        <a
+          href={siteUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center gap-1.5 text-xs text-bone/40 hover:text-ochre transition-colors"
+        >
+          View public site
+          <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M2 10L10 2M5 2h5v5" />
+          </svg>
+        </a>
+      </div>
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
         {cards.map(({ label, value }) => (
           <div
