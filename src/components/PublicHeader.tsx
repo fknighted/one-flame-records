@@ -67,18 +67,19 @@ export default function PublicHeader() {
         </button>
       </div>
 
-      {/* Mobile overlay */}
+      {/* Mobile overlay — z-[60] sits above grain overlay (z-50) and header (z-40) */}
       {open && (
         <nav
           id="mobile-menu"
-          className="md:hidden fixed inset-0 top-24 z-30 bg-cream flex flex-col px-8 pt-6 gap-0"
+          className="md:hidden fixed inset-0 top-24 z-[60] flex flex-col px-8 pt-6 gap-0"
+          style={{ backgroundColor: "#1A1612" }}
           aria-label="Mobile"
         >
           {NAV.map(({ href, label }) => (
             <Link
               key={href}
               href={href}
-              className="font-display text-xl font-bold text-oxblood py-3 border-b border-oxblood/10 last:border-0"
+              className="font-display text-xl font-bold text-bone py-3 border-b border-bone/10 last:border-0 hover:text-ochre transition-colors"
               onClick={() => setOpen(false)}
             >
               {label}
