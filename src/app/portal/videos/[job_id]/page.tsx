@@ -74,10 +74,9 @@ function formatParams(params: unknown): Record<string, string> {
   if (!params || typeof params !== "object") return {};
   const p = params as Record<string, unknown>;
   const out: Record<string, string> = {};
-  if (p.style) out["Look"] = String(p.style);
-  if (p.mood) out["Mood"] = String(p.mood);
-  if (p.aspect_ratio) out["Aspect ratio"] = String(p.aspect_ratio);
-  if (p.duration_seconds) out["Duration"] = `${p.duration_seconds}s`;
+  if (p.stylePreset) out["Visual style"] = String(p.stylePreset);
+  if (p.aspectRatio) out["Format"] = String(p.aspectRatio);
+  if (p.model) out["Model"] = String(p.model);
   return out;
 }
 
@@ -110,8 +109,11 @@ export default async function VideoJobDetailPage({ params }: Props) {
   const vid = shortId(job.id);
   const stepIdx = currentStepIndex(job.status);
   const paramDetails = formatParams(job.params);
+  const isDev = process.env.NODE_ENV === "development";
   const inngestUrl = job.inngest_run_id
-    ? `http://localhost:8288/runs/${job.inngest_run_id}`
+    ? isDev
+      ? `http://localhost:8288/runs/${job.inngest_run_id}`
+      : `https://app.inngest.com/env/production/runs/${job.inngest_run_id}`
     : null;
 
   return (
@@ -313,10 +315,6 @@ export default async function VideoJobDetailPage({ params }: Props) {
                   </span>
                 </div>
               ))}
-              <div className="flex items-center justify-between border-b border-bone/10 pb-2 last:border-0">
-                <span className="text-[11px] font-semibold uppercase tracking-[0.14em] text-bone/50">Reviewer</span>
-                <span className="text-[12.5px] text-bone/70">Carlton</span>
-              </div>
             </div>
           </div>
 

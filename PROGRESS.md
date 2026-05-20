@@ -37,6 +37,14 @@ Phase 4 sign-off — end-to-end test with a real instrumental.
 
 Append a new entry at the top of this section after every session. Date, summary, files touched, what's next. Keep it tight — full reasoning belongs in `DECISIONS.md`.
 
+### 2026-05-20 (session 18 cont. 3)
+
+**Did:** Bug fixes + production polish. (1) Fixed portal video detail page `formatParams` — it was reading `p.style`, `p.mood`, `p.aspect_ratio` (design mockup keys) but `requestVideo` stores `stylePreset`, `aspectRatio`, `model`. Settings panel now shows "Visual style", "Format", "Model" correctly. (2) Removed hardcoded "Reviewer: Carlton" from video detail settings panel. (3) Fixed Inngest run URL in portal video detail — now uses localhost:8288 in dev and `app.inngest.com` in production. (4) Custom 404 page `src/app/not-found.tsx` — ink background, flame glyph, "Page not found." in display font, "Go home" + "Releases" CTAs.
+**Touched:** `src/app/portal/videos/[job_id]/page.tsx`, `src/app/not-found.tsx` (new)
+**Decided:** Nothing new.
+**Blocked on:** End-to-end video pipeline test.
+**Next:** E2E test is the last remaining build item before Phase 4 is complete.
+
 ### 2026-05-20 (session 18 cont. 2)
 
 **Did:** Design consistency pass on the last two public catalog pages. `/artists` list — ink banner header with roster count and eyebrow, artist grid moved to cream section below. `/videos` — ink banner header, sticky cream filter bar (same pattern as `/releases`), clear-filters link on empty state. All public catalog pages (artists, releases, videos) now follow the same ink-banner + cream-grid structure.
