@@ -37,6 +37,14 @@ Phase 4 sign-off — end-to-end test with a real instrumental.
 
 Append a new entry at the top of this section after every session. Date, summary, files touched, what's next. Keep it tight — full reasoning belongs in `DECISIONS.md`.
 
+### 2026-05-20 (session 18 cont.)
+
+**Did:** Two more pages. (1) Portal dashboard refresh — removed "coming in Phase 4" placeholder, all three action tiles now active (Upload / Request Video / Edit Profile with icons), 2-stat counter row (assets, video jobs — both live counts from Supabase), recent video jobs table with status pills (same colors as the jobs library), recent assets table, both tables have "View all →" links to the respective portal sections. (2) Release detail page redesign — ink header band with back arrow, cover thumbnail + title block (pill, title, artist link, date); cream body with description + video embed in left column, streaming service buttons in right sidebar; JSON-LD preserved; streaming services icons resized to 18px for tighter buttons.
+**Touched:** `src/app/portal/page.tsx`, `src/app/(public)/releases/[slug]/page.tsx`
+**Decided:** Nothing new — follows existing ink/cream split pattern.
+**Blocked on:** End-to-end video pipeline test.
+**Next:** E2E test.
+
 ### 2026-05-20 (session 18)
 
 **Did:** Three deliverables. (1) Homepage hero image — DJI performance shot (outdoor Montego Bay venue, string lights, drums, audience) resized to 1920px, copied to `public/hero-bg.jpg`; homepage hero section now uses `next/image` with `fill` + `object-cover`, ink dark overlay at 72% opacity, oxblood radial glow on top. (2) `/sign` A&R intake page — new public page at `src/app/(public)/sign/page.tsx`; ink hero with "We're looking for artists who have something real to say" headline + CTAs; cream "What we look for" section with genre list and editorial copy; ink "How it works" 3-step process; oxblood final CTA. "Sign with us" added to public header (outlined oxblood button) and footer (Label section). (3) Public `/releases` redesign — ink banner header section with live catalog count; sticky cream filter bar; sort chips (Newest / Oldest / A–Z) added to `ReleasesFilter`; clear-filters link on empty state.
