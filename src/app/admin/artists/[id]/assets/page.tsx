@@ -123,15 +123,25 @@ export default async function AdminArtistAssetsPage({
                         {formatDate(asset.created_at)}
                       </td>
                       <td className="px-4 py-3 text-right">
-                        <form action={deleteWithId}>
-                          <button
-                            type="submit"
-                            className="text-xs text-bone/30 hover:text-red-400 transition-colors"
-                            title="Delete asset"
-                          >
-                            ×
-                          </button>
-                        </form>
+                        <div className="flex items-center justify-end gap-3">
+                          {(asset.kind === "instrumental" || asset.kind === "demo") && (
+                            <Link
+                              href={`/admin/artists/${id}/videos/new?asset_id=${asset.id}`}
+                              className="text-xs text-ochre/70 hover:text-ochre transition-colors whitespace-nowrap"
+                            >
+                              Request video
+                            </Link>
+                          )}
+                          <form action={deleteWithId}>
+                            <button
+                              type="submit"
+                              className="text-xs text-bone/30 hover:text-red-400 transition-colors"
+                              title="Delete asset"
+                            >
+                              ×
+                            </button>
+                          </form>
+                        </div>
                       </td>
                     </tr>
                   );
