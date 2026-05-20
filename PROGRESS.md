@@ -7,24 +7,25 @@ This is the living state of the build. Update at the end of every session.
 ## Current state
 
 - **Phase:** 4 — Video automation + visual polish
-- **Status:** All pipeline tasks complete (1–9). Visual redesign complete. End-to-end test pending.
-- **Last updated:** 2026-05-19
+- **Status:** All pipeline tasks complete (1–9). Visual redesign complete. Admin asset upload complete. Mobile-responsive. End-to-end test pending.
+- **Last updated:** 2026-05-20
 
 ## Active focus
 
-Phase 4 sign-off — end-to-end test with a real instrumental. Then artist/release detail pages.
+Phase 4 sign-off — end-to-end test with a real instrumental. Then deferred design handoff pages.
 
 ## Blockers
 
-- **`generated-videos` Supabase bucket** — user has been shown the SQL. Needs to be created before video pipeline can upload output.
+- **`generated-videos` Supabase bucket** — confirmed created by user this session.
+- **End-to-end video pipeline** — never run with a real file. Need: upload MP3 via admin assets → request video → watch Inngest → verify `output_url` and email.
 - **Homepage hero image** — user is generating an abstract image (vinyl + Jamaican flag motifs). Once dropped into repo, wire as hero background with dark overlay.
 
 ## Next session
 
-1. Confirm `generated-videos` bucket exists
-2. End-to-end test: upload instrumental → request video → watch Inngest → verify email + output URL
-3. Wire homepage hero image once generated
-4. Begin artist detail page (`/artists/[slug]`) — currently a stub
+1. End-to-end test: upload instrumental via `/admin/artists/[id]/assets` → request video at `/portal/videos/new` → watch Inngest dev server → verify `output_url` + artist email
+2. Wire homepage hero image once generated
+3. Deferred design handoff pages (see design_handoff_one_flame_pages/): `/releases` public catalog redesign, `/sign` A&R intake
+4. Portal dashboard (`/portal`) — currently a minimal stub from session 11; consider refreshing with session 16 design language
 
 ## Phase progress
 
@@ -38,6 +39,22 @@ Phase 4 sign-off — end-to-end test with a real instrumental. Then artist/relea
 ## Session log
 
 Append a new entry at the top of this section after every session. Date, summary, files touched, what's next. Keep it tight — full reasoning belongs in `DECISIONS.md`.
+
+### 2026-05-20 (session 17)
+
+**Did:** Two features. (1) Admin asset upload — new route `/admin/artists/[id]/assets` where admin can upload MP3s, demos, reference videos/images on behalf of any artist. `uploadAssetForArtist` server action uses `createServiceClient()` for both storage and DB (bypasses RLS), accepts explicit `artistId`. `deleteAsset` removes from `private-assets` storage and `assets` table. `AdminAssetUploadForm` client component uses `.bind()` to curry `artistId` into the `useActionState` action, shows a dismissible success banner without redirecting so admin can upload multiple files. "Assets" link added to admin artists list and artist edit page header. (2) Mobile responsiveness — `InkShell` client component replaces the inline shell in both admin and portal layouts; handles hamburger nav, slide-in sidebar overlay with backdrop, `usePathname`-based active link highlighting, responsive header height and padding. Portal releases + videos pages now render a compact mobile card per row (cover/title/status pill stacked) on `< sm` and the existing multi-column grid on `≥ sm`. Status tile strip on releases scrolls horizontally on mobile. Admin assets table wrapped in `overflow-x-auto`. Filter chips get `flex-wrap` so they reflow instead of overflow. Typecheck clean. All committed and pushed.
+**Touched:** `src/app/admin/artists/[id]/assets/actions.ts` (new), `src/app/admin/artists/[id]/assets/page.tsx` (new), `src/components/AdminAssetUploadForm.tsx` (new), `src/app/admin/artists/page.tsx`, `src/app/admin/artists/[id]/edit/page.tsx`, `src/components/InkShell.tsx` (new), `src/app/admin/layout.tsx`, `src/app/portal/layout.tsx`, `src/app/portal/releases/page.tsx`, `src/app/portal/videos/page.tsx`, `src/components/ReleasesManagerFilter.tsx`, `src/components/VideoLibraryFilter.tsx`
+**Decided:** Admin asset upload uses service client for DB insert (not session client) — artists' RLS restricts `assets` inserts to their own `artist_id`, so admin cannot write on their behalf through the session client. Logged implicitly; no new DECISIONS.md entry needed (follows existing pattern). `InkShell` is a single shared component for both admin and portal shells — avoids duplicating hamburger logic. Active-link logic uses path depth to distinguish root items (exact match) from deeper items (prefix match).
+**Blocked on:** End-to-end video pipeline test (never run with a real file). Homepage hero image.
+**Next:** End-to-end test → homepage hero → deferred design handoff pages.
+
+### 2026-05-19 (session 16)
+
+**Did:** Design handoff session. Imported `design_handoff_one_flame_pages/` bundle. Scope agreed with user: (1) New `/portal/releases` Roster Table — status tile strip (7 statuses), format filter chips, sortable column table, streaming icon links, admin sees all releases + Artist column via service client, artist sees own via RLS. `ReleasesManagerFilter` client component (URL-based chips). (2) Redesigned `/portal/videos` Job Library — hero "Start a job" card with oxblood/ochre gradient + radial glow, 4 video-type SVG buttons linking to `/portal/videos/new?type=X`, `VideoLibraryFilter` client component, 6-column job row grid with 3-state status pills (Done/Rendering/Failed) from CSS tokens. (3) New `/portal/videos/[job_id]` detail — breadcrumb, status-colored header, 16:9 preview surface, 6-step pipeline progress bar, source asset panel, settings panel (from `job.params` jsonb), timeline with timestamps and cost estimate. DB migration: `catalog_no text` + `production_status text DEFAULT 'live'` on releases table. Types regenerated. JetBrains Mono added to layout, status color tokens added to globals.css. Portal nav updated: Dashboard → Releases → Assets → Videos → Profile.
+**Touched:** `src/app/layout.tsx`, `src/app/globals.css`, `src/app/portal/layout.tsx`, `src/app/portal/releases/page.tsx` (new), `src/components/ReleasesManagerFilter.tsx` (new), `src/app/portal/videos/page.tsx` (full replacement), `src/components/VideoLibraryFilter.tsx` (new), `src/app/portal/videos/[job_id]/page.tsx` (new), `supabase/migrations/20260519000000_releases_catalog_status.sql` (new), `src/types/supabase.ts`
+**Decided:** `production_status` column name (not `status`) to avoid ambiguity with `artists.status`. Video jobs display asset title where spec showed release title — schema is asset-based, not release-based. Skip `/portal/royalties` (no data), skip artist detail / about / public releases redesign (deferred).
+**Blocked on:** `generated-videos` bucket (confirmed created by user), Homepage hero image.
+**Next:** Admin asset upload (completed session 17). Then end-to-end video test.
 
 ### 2026-05-19 (session 15)
 
