@@ -6,23 +6,39 @@ This is the living state of the build. Update at the end of every session.
 
 ## Current state
 
-- **Phase:** 4 — Video automation + visual polish
-- **Status:** All pipeline tasks complete (1–9). Visual redesign complete. Admin asset upload complete. Mobile-responsive. Design handoff pages shipped. End-to-end test pending.
+- **Phase:** 4 — Video automation (pipeline + UI complete; E2E test is the final gate)
+- **Status:** Every page built and visually consistent. Bug fixes landed. E2E test is the only thing between here and Phase 4 sign-off.
 - **Last updated:** 2026-05-20
 
 ## Active focus
 
-Phase 4 sign-off — end-to-end test with a real instrumental.
+Phase 4 sign-off via the E2E test. After that, plan Phase 5.
 
 ## Blockers
 
-- **End-to-end video pipeline** — never run with a real file. Need: upload MP3 via admin assets → request video → watch Inngest → verify `output_url` and email. See E2E test guide in session 18 notes below.
+- **End-to-end video pipeline test** — pipeline code is complete and correct; never run against a real file. Needs both servers running + an artist account.
+- **`INNGEST_EVENT_KEY` / `INNGEST_SIGNING_KEY`** — not yet in `.env.local` or Vercel. Required for the production Inngest integration; dev mode works without them (`NODE_ENV=development` + no key = auto-routes to localhost:8288).
 
-## Next session
+## Next session (19)
 
-1. End-to-end test: upload instrumental via `/admin/artists/[id]/assets` → request video at `/portal/videos/new` → watch Inngest dev server → verify `output_url` + artist email
-2. Portal dashboard (`/portal`) — currently a minimal stub from session 11; consider refreshing with session 16 design language
-3. Release detail page (`/releases/[slug]`) — currently minimal; could use the same editorial treatment as the `/sign` page
+### Priority 1 — E2E test (Phase 4 completion gate)
+1. `npm run dev` (port 3000)
+2. `npx inngest-cli dev -u http://localhost:3000/api/inngest` (port 8288)
+3. Open http://localhost:8288 — Inngest dev UI
+4. Admin: upload a short MP3 (< 3 min) via `/admin/artists/[id]/assets`
+5. Artist: log in → `/portal/videos/new` → select the MP3 → Generate video
+6. Watch 11 steps in the Inngest UI; verify `output_url` in Supabase and email in artist inbox
+7. Cost: ~$1–2 in Kling API credits
+
+### Priority 2 — Production Inngest keys
+Once the E2E test passes locally, add `INNGEST_EVENT_KEY` and `INNGEST_SIGNING_KEY` to Vercel so the production pipeline works. Get keys from the Inngest dashboard.
+
+### Priority 3 — Phase 5 planning
+Phase 4 done-when: "a real test instrumental produces a watchable video end-to-end." Once that check is ticked, plan Phase 5. Candidates:
+- Royalties / payout tracking for artists
+- Blog / label news section
+- Enhanced streaming embeds (Spotify iframe) on release detail pages
+- Analytics (Vercel Analytics or Plausible)
 
 ## Phase progress
 
