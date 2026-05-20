@@ -7,25 +7,22 @@ This is the living state of the build. Update at the end of every session.
 ## Current state
 
 - **Phase:** 4 — Video automation + visual polish
-- **Status:** All pipeline tasks complete (1–9). Visual redesign complete. Admin asset upload complete. Mobile-responsive. End-to-end test pending.
+- **Status:** All pipeline tasks complete (1–9). Visual redesign complete. Admin asset upload complete. Mobile-responsive. Design handoff pages shipped. End-to-end test pending.
 - **Last updated:** 2026-05-20
 
 ## Active focus
 
-Phase 4 sign-off — end-to-end test with a real instrumental. Then deferred design handoff pages.
+Phase 4 sign-off — end-to-end test with a real instrumental.
 
 ## Blockers
 
-- **`generated-videos` Supabase bucket** — confirmed created by user this session.
-- **End-to-end video pipeline** — never run with a real file. Need: upload MP3 via admin assets → request video → watch Inngest → verify `output_url` and email.
-- **Homepage hero image** — user is generating an abstract image (vinyl + Jamaican flag motifs). Once dropped into repo, wire as hero background with dark overlay.
+- **End-to-end video pipeline** — never run with a real file. Need: upload MP3 via admin assets → request video → watch Inngest → verify `output_url` and email. See E2E test guide in session 18 notes below.
 
 ## Next session
 
 1. End-to-end test: upload instrumental via `/admin/artists/[id]/assets` → request video at `/portal/videos/new` → watch Inngest dev server → verify `output_url` + artist email
-2. Wire homepage hero image once generated
-3. Deferred design handoff pages (see design_handoff_one_flame_pages/): `/releases` public catalog redesign, `/sign` A&R intake
-4. Portal dashboard (`/portal`) — currently a minimal stub from session 11; consider refreshing with session 16 design language
+2. Portal dashboard (`/portal`) — currently a minimal stub from session 11; consider refreshing with session 16 design language
+3. Release detail page (`/releases/[slug]`) — currently minimal; could use the same editorial treatment as the `/sign` page
 
 ## Phase progress
 
@@ -39,6 +36,14 @@ Phase 4 sign-off — end-to-end test with a real instrumental. Then deferred des
 ## Session log
 
 Append a new entry at the top of this section after every session. Date, summary, files touched, what's next. Keep it tight — full reasoning belongs in `DECISIONS.md`.
+
+### 2026-05-20 (session 18)
+
+**Did:** Three deliverables. (1) Homepage hero image — DJI performance shot (outdoor Montego Bay venue, string lights, drums, audience) resized to 1920px, copied to `public/hero-bg.jpg`; homepage hero section now uses `next/image` with `fill` + `object-cover`, ink dark overlay at 72% opacity, oxblood radial glow on top. (2) `/sign` A&R intake page — new public page at `src/app/(public)/sign/page.tsx`; ink hero with "We're looking for artists who have something real to say" headline + CTAs; cream "What we look for" section with genre list and editorial copy; ink "How it works" 3-step process; oxblood final CTA. "Sign with us" added to public header (outlined oxblood button) and footer (Label section). (3) Public `/releases` redesign — ink banner header section with live catalog count; sticky cream filter bar; sort chips (Newest / Oldest / A–Z) added to `ReleasesFilter`; clear-filters link on empty state.
+**Touched:** `src/app/(public)/page.tsx`, `public/hero-bg.jpg` (new), `src/app/(public)/sign/page.tsx` (new), `src/components/PublicHeader.tsx`, `src/components/PublicFooter.tsx`, `src/app/(public)/releases/page.tsx`, `src/components/ReleasesFilter.tsx`
+**Decided:** DJI night performance photo used for hero (abstract vinyl/flag image not yet available). Sorting done client-side in the server component after fetching (not a DB ORDER BY) — keeps the filter logic in one place and the catalog is small enough that this is fine.
+**Blocked on:** End-to-end video pipeline test (still never run with a real file).
+**Next:** E2E test → portal dashboard refresh → release detail page editorial treatment.
 
 ### 2026-05-20 (session 17)
 

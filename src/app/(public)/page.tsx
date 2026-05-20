@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { createClient } from "@/lib/supabase/server";
 import ArtistCard from "@/components/ArtistCard";
 import ReleaseCard from "@/components/ReleaseCard";
@@ -44,15 +45,26 @@ export default async function HomePage() {
 
   return (
     <>
-      {/* ── Hero — full-bleed dark ── */}
-      <section className="relative bg-ink overflow-hidden">
-        {/* Radial oxblood glow */}
+      {/* ── Hero — full-bleed photo ── */}
+      <section className="relative overflow-hidden bg-ink">
+        {/* Full-bleed hero photo */}
+        <Image
+          src="/hero-bg.jpg"
+          alt=""
+          fill
+          priority
+          className="object-cover object-center"
+          sizes="100vw"
+        />
+        {/* Dark overlay — ink at 72% opacity for legibility */}
+        <div aria-hidden="true" className="absolute inset-0" style={{ backgroundColor: "rgba(26,22,18,0.72)" }} />
+        {/* Radial oxblood glow on top of overlay */}
         <div
           aria-hidden="true"
           className="pointer-events-none absolute inset-0"
           style={{
             background:
-              "radial-gradient(ellipse 70% 60% at 30% 60%, rgba(139,42,31,0.22) 0%, transparent 70%)",
+              "radial-gradient(ellipse 70% 60% at 30% 60%, rgba(139,42,31,0.28) 0%, transparent 70%)",
           }}
         />
 

@@ -12,6 +12,8 @@ const NAV = [
   { href: "/contact",  label: "Contact" },
 ];
 
+const NAV_CTA = { href: "/sign", label: "Sign with us" };
+
 export default function PublicHeader() {
   const [open, setOpen] = useState(false);
 
@@ -45,6 +47,12 @@ export default function PublicHeader() {
               {label}
             </Link>
           ))}
+          <Link
+            href={NAV_CTA.href}
+            className="text-sm font-semibold text-oxblood border border-oxblood/40 rounded px-3.5 py-1.5 hover:bg-oxblood hover:text-bone transition-colors"
+          >
+            {NAV_CTA.label}
+          </Link>
         </nav>
 
         {/* Hamburger */}
@@ -79,12 +87,19 @@ export default function PublicHeader() {
             <Link
               key={href}
               href={href}
-              className="font-display text-xl font-bold text-bone py-3 border-b border-bone/10 last:border-0 hover:text-ochre transition-colors"
+              className="font-display text-xl font-bold text-bone py-3 border-b border-bone/10 hover:text-ochre transition-colors"
               onClick={() => setOpen(false)}
             >
               {label}
             </Link>
           ))}
+          <Link
+            href={NAV_CTA.href}
+            className="font-display text-xl font-bold text-ochre py-3 border-b border-bone/10 last:border-0 hover:text-bone transition-colors"
+            onClick={() => setOpen(false)}
+          >
+            {NAV_CTA.label}
+          </Link>
         </nav>
       )}
     </header>

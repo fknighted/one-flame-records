@@ -3,6 +3,7 @@ import Image from "next/image";
 
 const LABEL_LINKS = [
   { href: "/about",   label: "About" },
+  { href: "/sign",    label: "Sign with us" },
   { href: "/contact", label: "Contact" },
 ];
 
