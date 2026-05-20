@@ -95,12 +95,20 @@ export default async function AdminArtistsPage() {
                     {artist.featured_order ?? "—"}
                   </td>
                   <td className="px-4 py-3 text-right">
-                    <Link
-                      href={`/admin/artists/${artist.id}/edit`}
-                      className="text-xs text-bone/40 hover:text-ochre transition-colors"
-                    >
-                      Edit
-                    </Link>
+                    <div className="flex items-center gap-3 justify-end">
+                      <Link
+                        href={`/admin/artists/${artist.id}/assets`}
+                        className="text-xs text-bone/40 hover:text-ochre transition-colors"
+                      >
+                        Assets
+                      </Link>
+                      <Link
+                        href={`/admin/artists/${artist.id}/edit`}
+                        className="text-xs text-bone/40 hover:text-ochre transition-colors"
+                      >
+                        Edit
+                      </Link>
+                    </div>
                   </td>
                 </tr>
               ))}

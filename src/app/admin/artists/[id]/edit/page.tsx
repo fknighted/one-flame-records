@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import ArtistForm from "@/components/ArtistForm";
 import { updateArtist } from "@/app/admin/artists/actions";
@@ -36,7 +37,15 @@ export default async function EditArtistPage({
 
   return (
     <div className="space-y-6">
-      <h1 className="font-display text-2xl text-bone">{artist.stage_name}</h1>
+      <div className="flex items-center justify-between">
+        <h1 className="font-display text-2xl text-bone">{artist.stage_name}</h1>
+        <Link
+          href={`/admin/artists/${id}/assets`}
+          className="text-sm text-bone/40 hover:text-ochre transition-colors"
+        >
+          Assets →
+        </Link>
+      </div>
       <ArtistForm action={updateArtist} initialValues={initialValues} mode="edit" />
     </div>
   );
