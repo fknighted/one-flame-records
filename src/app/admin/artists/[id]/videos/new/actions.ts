@@ -47,10 +47,15 @@ export async function requestVideoAsAdmin(
 
   if (jobError || !job) return { error: jobError?.message ?? "Could not create video job." };
 
-  await inngest.send({
-    name: "video/generate.requested",
-    data: { jobId: job.id },
-  });
+  try {
+    await inngest.send({
+      name: "video/generate.requested",
+      data: { jobId: job.id },
+    });
+  } catch {
+    // Job row exists; event send failed (e.g. missing INNGEST_EVENT_KEY in prod).
+    // Redirect anyway — the job can be triggered manually once keys are set.
+  }
 
   redirect("/admin/jobs");
 }
