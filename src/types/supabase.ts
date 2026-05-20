@@ -175,11 +175,13 @@ export type Database = {
       releases: {
         Row: {
           artist_id: string
+          catalog_no: string | null
           cover_url: string
           created_at: string
           description: string | null
           featured: boolean
           id: string
+          production_status: string
           release_date: string
           slug: string
           streaming_links: Json
@@ -189,11 +191,13 @@ export type Database = {
         }
         Insert: {
           artist_id: string
+          catalog_no?: string | null
           cover_url?: string
           created_at?: string
           description?: string | null
           featured?: boolean
           id?: string
+          production_status?: string
           release_date: string
           slug: string
           streaming_links?: Json
@@ -203,11 +207,13 @@ export type Database = {
         }
         Update: {
           artist_id?: string
+          catalog_no?: string | null
           cover_url?: string
           created_at?: string
           description?: string | null
           featured?: boolean
           id?: string
+          production_status?: string
           release_date?: string
           slug?: string
           streaming_links?: Json

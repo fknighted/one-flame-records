@@ -12,6 +12,31 @@
   /* Font stack */
   --font-display: var(--font-fraunces);
   --font-sans:    var(--font-inter);
+  --font-mono:    var(--font-jetbrains-mono);
+
+  /* Production status tokens — portal releases manager */
+  --color-status-idea-bg:      rgba(245,237,216,0.10);
+  --color-status-idea-fg:      rgba(245,237,216,0.70);
+  --color-status-preprod-bg:   rgba(63,90,58,0.25);
+  --color-status-preprod-fg:   #9BB694;
+  --color-status-tracking-bg:  rgba(184,137,59,0.20);
+  --color-status-tracking-fg:  #B8893B;
+  --color-status-mixing-bg:    rgba(184,137,59,0.35);
+  --color-status-mixing-fg:    #E0B66B;
+  --color-status-mastering-bg: rgba(199,114,74,0.30);
+  --color-status-mastering-fg: #E5946F;
+  --color-status-scheduled-bg: rgba(139,42,31,0.30);
+  --color-status-scheduled-fg: #E0907F;
+  --color-status-live-bg:      rgba(63,90,58,0.30);
+  --color-status-live-fg:      #82A57A;
+
+  /* Video job status tokens */
+  --color-status-done-bg:      rgba(63,90,58,0.30);
+  --color-status-done-fg:      #82A57A;
+  --color-status-rendering-bg: rgba(184,137,59,0.35);
+  --color-status-rendering-fg: #E0B66B;
+  --color-status-failed-bg:    rgba(139,42,31,0.40);
+  --color-status-failed-fg:    #E0907F;
 }
 
 body {

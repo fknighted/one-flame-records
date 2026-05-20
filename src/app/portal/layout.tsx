@@ -4,10 +4,11 @@ import { createClient } from "@/lib/supabase/server";
 import LogoutButton from "@/components/LogoutButton";
 
 const NAV = [
-  { href: "/portal",         label: "Dashboard" },
-  { href: "/portal/profile", label: "Profile" },
-  { href: "/portal/assets",  label: "Assets" },
-  { href: "/portal/videos",  label: "Videos" },
+  { href: "/portal",          label: "Dashboard" },
+  { href: "/portal/releases", label: "Releases" },
+  { href: "/portal/assets",   label: "Assets" },
+  { href: "/portal/videos",   label: "Videos" },
+  { href: "/portal/profile",  label: "Profile" },
 ];
 
 export default async function PortalLayout({
