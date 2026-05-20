@@ -35,7 +35,7 @@ function StatusPill({ status }: { status: string }) {
   const cfg = STATUS_CONFIG[status as StatusKey] ?? STATUS_CONFIG["live"];
   return (
     <span
-      className="inline-flex items-center gap-1.5 px-[10px] py-1 rounded-sm text-[10px] font-bold uppercase tracking-[0.12em] whitespace-nowrap"
+      className="inline-flex items-center gap-1.5 px-[10px] py-1 rounded-sm text-[10px] font-bold uppercase tracking-[0.12em] whitespace-nowrap shrink-0"
       style={{ backgroundColor: `var(${cfg.bgVar})`, color: `var(${cfg.fgVar})` }}
     >
       <span
@@ -47,7 +47,7 @@ function StatusPill({ status }: { status: string }) {
   );
 }
 
-// ── Type pill (ink-theme variant) ───────────────────────────────────────────
+// ── Type pill ────────────────────────────────────────────────────────────────
 
 const TYPE_STYLES: Record<string, string> = {
   single:  "bg-ochre text-ink",
@@ -68,7 +68,7 @@ function TypePill({ type }: { type: string }) {
   );
 }
 
-// ── Streaming icons (compact, 13×13) ────────────────────────────────────────
+// ── Streaming icons ──────────────────────────────────────────────────────────
 
 type StreamingLinks = {
   spotify?: string;
@@ -166,10 +166,6 @@ export default async function PortalReleasesPage({
     .single();
 
   const isAdmin = profile?.role === "admin";
-
-  // Fetch all accessible releases for tile counts + filtered rows.
-  // Artist role: RLS auto-scopes to their artist_id.
-  // Admin role: use service client to see everything.
   const client = isAdmin ? createServiceClient() : supabase;
 
   const { data: allReleases } = await client
@@ -180,13 +176,11 @@ export default async function PortalReleasesPage({
 
   const releases = allReleases ?? [];
 
-  // Counts per production_status for the tile strip
   const tileCounts = STATUS_ORDER.reduce<Record<string, number>>((acc, s) => {
     acc[s] = releases.filter((r) => r.production_status === s).length;
     return acc;
   }, {});
 
-  // Apply filters
   const filtered = releases.filter((r) => {
     if (type && r.type !== type) return false;
     if (status && r.production_status !== status) return false;
@@ -194,14 +188,14 @@ export default async function PortalReleasesPage({
   });
 
   return (
-    <div className="px-8 py-8">
+    <div className="px-4 py-4 sm:px-8 sm:py-8">
       {/* ── Header ── */}
       <div className="flex items-end justify-between mb-6 pb-5 border-b border-bone/10">
         <div>
           <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-forest mb-1">
             {isAdmin ? "Label catalog" : "Your releases"}
           </p>
-          <h1 className="font-display font-bold text-bone text-[2.5rem] leading-none tracking-[-0.018em]">
+          <h1 className="font-display font-bold text-bone text-[2rem] sm:text-[2.5rem] leading-none tracking-[-0.018em]">
             Releases.
           </h1>
           <div className="mt-3 h-px w-16 bg-bone/30" />
@@ -210,48 +204,50 @@ export default async function PortalReleasesPage({
           {isAdmin && (
             <Link
               href="/admin/releases/new"
-              className="rounded px-4 py-2 bg-ochre text-ink text-sm font-semibold hover:bg-bone transition-colors"
+              className="rounded px-3 py-1.5 sm:px-4 sm:py-2 bg-ochre text-ink text-xs sm:text-sm font-semibold hover:bg-bone transition-colors"
             >
-              + New release
+              + New
             </Link>
           )}
         </div>
       </div>
 
-      {/* ── Status tile strip ── */}
-      <div className="flex border border-bone/10 rounded-sm mb-6 overflow-hidden">
-        {STATUS_ORDER.map((s, i) => {
-          const cfg = STATUS_CONFIG[s];
-          const isActive = status === s;
-          const href = isActive
-            ? `/portal/releases${type ? `?type=${type}` : ""}`
-            : `/portal/releases?status=${s}${type ? `&type=${type}` : ""}`;
-          return (
-            <Link
-              key={s}
-              href={href}
-              className={`flex-1 px-4 py-3 text-center transition-colors ${
-                i > 0 ? "border-l border-bone/10" : ""
-              } ${isActive ? "bg-bone/10" : "hover:bg-bone/5"}`}
-            >
-              <div className="flex items-center justify-center gap-1.5 mb-1">
-                <span
-                  className="w-[7px] h-[7px] rounded-full shrink-0"
-                  style={{ backgroundColor: `var(${cfg.fgVar})` }}
-                />
-                <span
-                  className="text-[10px] font-semibold uppercase tracking-[0.14em]"
-                  style={{ color: `var(${cfg.fgVar})` }}
-                >
-                  {cfg.label}
-                </span>
-              </div>
-              <p className="font-display font-bold text-bone text-2xl leading-none tracking-[-0.01em]">
-                {tileCounts[s] ?? 0}
-              </p>
-            </Link>
-          );
-        })}
+      {/* ── Status tile strip — scrolls on mobile ── */}
+      <div className="overflow-x-auto mb-6 -mx-4 sm:mx-0 px-4 sm:px-0">
+        <div className="flex border border-bone/10 rounded-sm overflow-hidden min-w-[480px] sm:min-w-0">
+          {STATUS_ORDER.map((s, i) => {
+            const cfg = STATUS_CONFIG[s];
+            const isActive = status === s;
+            const href = isActive
+              ? `/portal/releases${type ? `?type=${type}` : ""}`
+              : `/portal/releases?status=${s}${type ? `&type=${type}` : ""}`;
+            return (
+              <Link
+                key={s}
+                href={href}
+                className={`flex-1 px-3 sm:px-4 py-3 text-center transition-colors ${
+                  i > 0 ? "border-l border-bone/10" : ""
+                } ${isActive ? "bg-bone/10" : "hover:bg-bone/5"}`}
+              >
+                <div className="flex items-center justify-center gap-1 sm:gap-1.5 mb-1">
+                  <span
+                    className="w-[6px] sm:w-[7px] h-[6px] sm:h-[7px] rounded-full shrink-0"
+                    style={{ backgroundColor: `var(${cfg.fgVar})` }}
+                  />
+                  <span
+                    className="text-[9px] sm:text-[10px] font-semibold uppercase tracking-[0.14em]"
+                    style={{ color: `var(${cfg.fgVar})` }}
+                  >
+                    {cfg.label}
+                  </span>
+                </div>
+                <p className="font-display font-bold text-bone text-lg sm:text-2xl leading-none tracking-[-0.01em]">
+                  {tileCounts[s] ?? 0}
+                </p>
+              </Link>
+            );
+          })}
+        </div>
       </div>
 
       {/* ── Filter row ── */}
@@ -259,14 +255,14 @@ export default async function PortalReleasesPage({
         <Suspense fallback={null}>
           <ReleasesManagerFilter basePath="/portal/releases" />
         </Suspense>
-        <span className="font-mono text-[11px] text-bone/40 tracking-[0.04em]">
+        <span className="font-mono text-[11px] text-bone/40 tracking-[0.04em] shrink-0 ml-3">
           {filtered.length} of {releases.length}
         </span>
       </div>
 
-      {/* ── Column headers ── */}
+      {/* ── Column headers — desktop only ── */}
       <div
-        className={`grid gap-4 px-0 py-3 border-b border-bone/10 ${
+        className={`hidden sm:grid gap-4 px-0 py-3 border-b border-bone/10 ${
           isAdmin
             ? "grid-cols-[80px_44px_1fr_160px_100px_130px_110px_110px]"
             : "grid-cols-[80px_44px_1fr_100px_130px_110px_110px]"
@@ -310,73 +306,105 @@ export default async function PortalReleasesPage({
           {filtered.map((release) => {
             const artist = release.artists as { stage_name: string; slug: string } | null;
             const streaming = (release.streaming_links as StreamingLinks) ?? {};
+
             return (
               <Link
                 key={release.id}
                 href={`/releases/${release.slug}`}
-                className={`grid gap-4 py-3 border-b border-bone/10 items-center hover:bg-bone/5 transition-colors group ${
-                  isAdmin
-                    ? "grid-cols-[80px_44px_1fr_160px_100px_130px_110px_110px]"
-                    : "grid-cols-[80px_44px_1fr_100px_130px_110px_110px]"
-                }`}
+                className="block group border-b border-bone/10 hover:bg-bone/5 transition-colors"
               >
-                {/* Cat # */}
-                <span className="font-mono text-xs text-forest tracking-[0.06em] font-medium">
-                  {release.catalog_no ?? "—"}
-                </span>
-
-                {/* Cover */}
-                <div className="relative w-[40px] h-[40px] shrink-0 bg-oxblood/10 border border-white/5">
-                  {release.cover_url && (
-                    <Image
-                      src={release.cover_url}
-                      alt=""
-                      fill
-                      className="object-cover"
-                      sizes="40px"
-                    />
-                  )}
+                {/* ── Mobile card ── */}
+                <div className="sm:hidden flex items-start gap-3 py-3">
+                  <div className="relative w-10 h-10 shrink-0 bg-oxblood/10 border border-white/5">
+                    {release.cover_url && (
+                      <Image
+                        src={release.cover_url}
+                        alt=""
+                        fill
+                        className="object-cover"
+                        sizes="40px"
+                      />
+                    )}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-start justify-between gap-2 mb-1">
+                      <p className="font-display font-bold text-bone text-sm leading-snug tracking-[-0.005em] group-hover:text-ochre transition-colors truncate">
+                        {release.title}
+                      </p>
+                      <StatusPill status={release.production_status} />
+                    </div>
+                    <p className="text-[11px] text-bone/40 mb-1.5">
+                      {release.catalog_no && (
+                        <span className="font-mono">{release.catalog_no} · </span>
+                      )}
+                      <span className="uppercase">{release.type}</span>
+                      {" · "}{shortDate(release.release_date)}
+                      {isAdmin && artist && (
+                        <span className="text-bone/50"> · {artist.stage_name}</span>
+                      )}
+                    </p>
+                    <StreamingIcons links={streaming} />
+                  </div>
                 </div>
 
-                {/* Title */}
-                <div className="min-w-0">
-                  <p className="font-display font-bold text-bone text-base leading-snug tracking-[-0.005em] group-hover:text-ochre transition-colors truncate">
-                    {release.title}
-                  </p>
-                  <p className="text-[11px] text-bone/30 mt-0.5">—</p>
-                </div>
-
-                {/* Artist (admin only) */}
-                {isAdmin && (
-                  <span
-                    className="text-[13px] text-bone/70 hover:text-ochre transition-colors truncate"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      if (artist) window.location.href = `/artists/${artist.slug}`;
-                    }}
-                  >
-                    {artist?.stage_name ?? "—"}
+                {/* ── Desktop grid row ── */}
+                <div
+                  className={`hidden sm:grid gap-4 py-3 items-center ${
+                    isAdmin
+                      ? "grid-cols-[80px_44px_1fr_160px_100px_130px_110px_110px]"
+                      : "grid-cols-[80px_44px_1fr_100px_130px_110px_110px]"
+                  }`}
+                >
+                  <span className="font-mono text-xs text-forest tracking-[0.06em] font-medium">
+                    {release.catalog_no ?? "—"}
                   </span>
-                )}
 
-                {/* Format */}
-                <div>
-                  <TypePill type={release.type} />
-                </div>
+                  <div className="relative w-[40px] h-[40px] shrink-0 bg-oxblood/10 border border-white/5">
+                    {release.cover_url && (
+                      <Image
+                        src={release.cover_url}
+                        alt=""
+                        fill
+                        className="object-cover"
+                        sizes="40px"
+                      />
+                    )}
+                  </div>
 
-                {/* Status */}
-                <div>
-                  <StatusPill status={release.production_status} />
-                </div>
+                  <div className="min-w-0">
+                    <p className="font-display font-bold text-bone text-base leading-snug tracking-[-0.005em] group-hover:text-ochre transition-colors truncate">
+                      {release.title}
+                    </p>
+                    <p className="text-[11px] text-bone/30 mt-0.5">—</p>
+                  </div>
 
-                {/* Released */}
-                <span className="font-mono text-xs text-bone/70">
-                  {shortDate(release.release_date)}
-                </span>
+                  {isAdmin && (
+                    <span
+                      className="text-[13px] text-bone/70 hover:text-ochre transition-colors truncate"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        if (artist) window.location.href = `/artists/${artist.slug}`;
+                      }}
+                    >
+                      {artist?.stage_name ?? "—"}
+                    </span>
+                  )}
 
-                {/* Listen */}
-                <div>
-                  <StreamingIcons links={streaming} />
+                  <div>
+                    <TypePill type={release.type} />
+                  </div>
+
+                  <div>
+                    <StatusPill status={release.production_status} />
+                  </div>
+
+                  <span className="font-mono text-xs text-bone/70">
+                    {shortDate(release.release_date)}
+                  </span>
+
+                  <div>
+                    <StreamingIcons links={streaming} />
+                  </div>
                 </div>
               </Link>
             );

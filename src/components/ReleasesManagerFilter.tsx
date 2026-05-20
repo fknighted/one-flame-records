@@ -32,7 +32,7 @@ export default function ReleasesManagerFilter({ basePath }: Props) {
   );
 
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex flex-wrap items-center gap-2">
       <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-bone/50 mr-1">
         Format
       </span>

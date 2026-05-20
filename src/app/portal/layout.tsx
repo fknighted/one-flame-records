@@ -1,7 +1,5 @@
-import Link from "next/link";
-import Image from "next/image";
 import { createClient } from "@/lib/supabase/server";
-import LogoutButton from "@/components/LogoutButton";
+import InkShell from "@/components/InkShell";
 
 const NAV = [
   { href: "/portal",          label: "Dashboard" },
@@ -21,7 +19,6 @@ export default async function PortalLayout({
     data: { user },
   } = await supabase.auth.getUser();
 
-  // Resolve stage name: profile → artist
   let displayName = user?.email ?? "";
   if (user) {
     const { data: profile } = await supabase
@@ -41,44 +38,8 @@ export default async function PortalLayout({
   }
 
   return (
-    <div className="min-h-screen bg-ink text-bone flex flex-col">
-      {/* Top bar */}
-      <header className="h-20 border-b border-bone/10 flex items-center justify-between px-6 shrink-0">
-        <Link href="/portal">
-          <Image
-            src="/logo-4.png"
-            alt="One Flame Records"
-            width={140}
-            height={77}
-            className="h-14 w-auto"
-          />
-        </Link>
-        <div className="flex items-center gap-4">
-          <span className="text-sm text-bone/50">{displayName}</span>
-          <LogoutButton />
-        </div>
-      </header>
-
-      <div className="flex flex-1 overflow-hidden">
-        {/* Sidebar */}
-        <nav className="w-52 border-r border-bone/10 py-6 px-3 shrink-0">
-          <ul className="space-y-1">
-            {NAV.map(({ href, label }) => (
-              <li key={href}>
-                <Link
-                  href={href}
-                  className="block rounded px-3 py-2 text-sm text-bone/70 hover:bg-bone/5 hover:text-bone transition-colors"
-                >
-                  {label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </nav>
-
-        {/* Main content */}
-        <main className="flex-1 overflow-auto p-8">{children}</main>
-      </div>
-    </div>
+    <InkShell nav={NAV} displayName={displayName}>
+      {children}
+    </InkShell>
   );
 }

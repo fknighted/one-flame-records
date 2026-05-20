@@ -29,8 +29,8 @@ export default function VideoLibraryFilter({ jobCount }: { jobCount: number }) {
   );
 
   return (
-    <div className="flex items-center justify-between">
-      <div className="flex items-center gap-2">
+    <div className="flex flex-wrap items-center justify-between gap-y-2">
+      <div className="flex flex-wrap items-center gap-2">
         <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-bone/50 mr-1">
           Library
         </span>

@@ -12,7 +12,6 @@ type VideoJob = Tables<"video_jobs"> & {
 
 type Params = { params?: unknown; searchParams: Promise<{ status?: string }> };
 
-// Maps Phase 4 pipeline statuses → 3-state display model
 function displayStatus(status: string): "rendering" | "done" | "failed" {
   if (status === "complete") return "done";
   if (status === "failed") return "failed";
@@ -40,7 +39,7 @@ function StatusPill({ status }: { status: string }) {
   const cfg = DISPLAY_STATUS_CONFIG[ds];
   return (
     <span
-      className="inline-flex items-center gap-1.5 px-[10px] py-1 rounded-sm text-[10px] font-bold uppercase tracking-[0.12em] whitespace-nowrap"
+      className="inline-flex items-center gap-1.5 px-[10px] py-1 rounded-sm text-[10px] font-bold uppercase tracking-[0.12em] whitespace-nowrap shrink-0"
       style={{ backgroundColor: `var(${cfg.bgVar})`, color: `var(${cfg.fgVar})` }}
     >
       <span
@@ -67,7 +66,7 @@ function relativeDate(iso: string | null) {
   return `${weeks} week${weeks === 1 ? "" : "s"} ago`;
 }
 
-// ── Video type button glyphs (inline SVGs, 1.75 stroke) ─────────────────────
+// ── Video type button glyphs ─────────────────────────────────────────────────
 
 function CanvasGlyph() {
   return (
@@ -106,30 +105,10 @@ function LoopGlyph() {
 }
 
 const VIDEO_TYPES = [
-  {
-    type: "canvas",
-    label: "Canvas",
-    sub: "Spotify loop · 8s",
-    Glyph: CanvasGlyph,
-  },
-  {
-    type: "visualizer",
-    label: "Visualizer",
-    sub: "Waveform · full track",
-    Glyph: VisualizerGlyph,
-  },
-  {
-    type: "lyric",
-    label: "Lyric video",
-    sub: "Full lyrics · timed",
-    Glyph: LyricGlyph,
-  },
-  {
-    type: "loop",
-    label: "Loop pack",
-    sub: "3 × 15s clips",
-    Glyph: LoopGlyph,
-  },
+  { type: "canvas",     label: "Canvas",      sub: "Spotify loop · 8s",     Glyph: CanvasGlyph },
+  { type: "visualizer", label: "Visualizer",  sub: "Waveform · full track",  Glyph: VisualizerGlyph },
+  { type: "lyric",      label: "Lyric video", sub: "Full lyrics · timed",    Glyph: LyricGlyph },
+  { type: "loop",       label: "Loop pack",   sub: "3 × 15s clips",          Glyph: LoopGlyph },
 ] as const;
 
 // ── Page ─────────────────────────────────────────────────────────────────────
@@ -150,7 +129,6 @@ export default async function PortalVideosPage({ searchParams }: Params) {
     .single();
 
   const isAdmin = profile?.role === "admin";
-
   const client = isAdmin ? createServiceClient() : supabase;
 
   const { data: allJobs } = await client
@@ -161,7 +139,6 @@ export default async function PortalVideosPage({ searchParams }: Params) {
 
   const jobs = allJobs ?? [];
 
-  // Apply display-status filter
   const filtered = statusFilter
     ? jobs.filter((j) => displayStatus(j.status) === statusFilter)
     : jobs;
@@ -169,14 +146,14 @@ export default async function PortalVideosPage({ searchParams }: Params) {
   const renderingCount = jobs.filter((j) => displayStatus(j.status) === "rendering").length;
 
   return (
-    <div className="px-8 py-8">
+    <div className="px-4 py-4 sm:px-8 sm:py-8">
       {/* ── Header ── */}
       <div className="flex items-end justify-between mb-8 pb-5 border-b border-bone/10">
         <div>
           <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-ochre mb-1">
             An automated rhythm room
           </p>
-          <h1 className="font-display font-bold text-bone text-[2.5rem] leading-none tracking-[-0.018em]">
+          <h1 className="font-display font-bold text-bone text-[2rem] sm:text-[2.5rem] leading-none tracking-[-0.018em]">
             Videos.
           </h1>
           <p className="mt-3 text-[13px] text-bone/50 max-w-[52ch] leading-relaxed">
@@ -186,21 +163,20 @@ export default async function PortalVideosPage({ searchParams }: Params) {
         <div className="flex items-center gap-3 shrink-0">
           <Link
             href="/portal/videos/new"
-            className="rounded px-4 py-2 bg-ochre text-ink text-sm font-semibold hover:bg-bone transition-colors"
+            className="rounded px-3 py-1.5 sm:px-4 sm:py-2 bg-ochre text-ink text-xs sm:text-sm font-semibold hover:bg-bone transition-colors"
           >
-            + New video job
+            + New
           </Link>
         </div>
       </div>
 
       {/* ── Start-a-job hero card ── */}
       <div
-        className="relative rounded-lg border border-bone/10 p-8 mb-8 overflow-hidden"
+        className="relative rounded-lg border border-bone/10 p-5 sm:p-8 mb-8 overflow-hidden"
         style={{
           background: "linear-gradient(135deg, rgba(139,42,31,0.18) 0%, rgba(26,22,18,0.95) 60%)",
         }}
       >
-        {/* Glow circle */}
         <div
           aria-hidden="true"
           className="pointer-events-none absolute -right-20 -top-20 w-80 h-80 rounded-full"
@@ -208,34 +184,32 @@ export default async function PortalVideosPage({ searchParams }: Params) {
             background: "radial-gradient(circle, rgba(184,137,59,0.20) 0%, transparent 70%)",
           }}
         />
-        <div className="relative grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] gap-10 items-center">
-          {/* Left */}
+        <div className="relative grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] gap-6 sm:gap-10 items-center">
           <div>
             <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-ochre mb-2">
               Start a job
             </p>
-            <h2 className="font-display font-bold text-bone text-[1.875rem] leading-[1.15] tracking-[-0.012em] mb-3">
+            <h2 className="font-display font-bold text-bone text-[1.5rem] sm:text-[1.875rem] leading-[1.15] tracking-[-0.012em] mb-3">
               Generate a video<br />from a release.
             </h2>
             <p className="text-[13.5px] text-bone/70 leading-relaxed max-w-[44ch]">
-              Pick a release, choose a video type, and the studio renders a draft within fifteen minutes. You'll be able to review and tweak before it ships.
+              Pick a release, choose a video type, and the studio renders a draft within fifteen minutes.
             </p>
           </div>
 
-          {/* Right — 2×2 video type buttons */}
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-2 gap-2 sm:gap-3">
             {VIDEO_TYPES.map(({ type, label, sub, Glyph }) => (
               <Link
                 key={type}
                 href={`/portal/videos/new?type=${type}`}
-                className="flex items-start gap-3 p-3.5 rounded-md border border-bone/10 bg-ink/65 hover:border-bone/30 transition-colors"
+                className="flex items-start gap-2 sm:gap-3 p-3 sm:p-3.5 rounded-md border border-bone/10 bg-ink/65 hover:border-bone/30 transition-colors"
               >
-                <div className="w-8 h-8 shrink-0 rounded-sm bg-ochre/20 flex items-center justify-center text-ochre">
+                <div className="w-7 h-7 sm:w-8 sm:h-8 shrink-0 rounded-sm bg-ochre/20 flex items-center justify-center text-ochre">
                   <Glyph />
                 </div>
                 <div>
-                  <p className="text-[13px] text-bone font-semibold leading-snug">{label}</p>
-                  <p className="text-[11px] text-bone/50 leading-snug mt-0.5">{sub}</p>
+                  <p className="text-[12px] sm:text-[13px] text-bone font-semibold leading-snug">{label}</p>
+                  <p className="text-[10px] sm:text-[11px] text-bone/50 leading-snug mt-0.5">{sub}</p>
                 </div>
               </Link>
             ))}
@@ -250,8 +224,8 @@ export default async function PortalVideosPage({ searchParams }: Params) {
         </Suspense>
       </div>
 
-      {/* ── Column headers ── */}
-      <div className="grid grid-cols-[100px_1fr_130px_1fr_110px_32px] gap-4 py-3 border-b border-bone/10">
+      {/* ── Column headers — desktop only ── */}
+      <div className="hidden sm:grid grid-cols-[100px_1fr_130px_1fr_110px_32px] gap-4 py-3 border-b border-bone/10">
         {["Thumb", "Job", "Status", "Progress", "Actions", ""].map((col) => (
           <span key={col} className="font-mono text-[10px] text-bone/30 uppercase tracking-[0.16em]">
             {col}
@@ -285,100 +259,146 @@ export default async function PortalVideosPage({ searchParams }: Params) {
               ? `http://localhost:8288/runs/${job.inngest_run_id}`
               : null;
 
+            const thumbBg =
+              ds === "done"
+                ? "linear-gradient(135deg, rgba(63,90,58,0.4), rgba(26,22,18,0.9))"
+                : ds === "failed"
+                ? "linear-gradient(135deg, rgba(139,42,31,0.4), rgba(26,22,18,0.9))"
+                : "linear-gradient(135deg, rgba(184,137,59,0.25), rgba(26,22,18,0.9))";
+
             return (
               <Link
                 key={job.id}
                 href={`/portal/videos/${job.id}`}
-                className="grid grid-cols-[100px_1fr_130px_1fr_110px_32px] gap-4 py-3.5 border-b border-bone/10 items-center hover:bg-bone/5 transition-colors group"
+                className="block border-b border-bone/10 hover:bg-bone/5 transition-colors group"
               >
-                {/* Thumbnail */}
-                <div
-                  className="w-[100px] h-[56px] shrink-0 rounded-sm flex items-center justify-center relative overflow-hidden"
-                  style={{
-                    background: ds === "done"
-                      ? "linear-gradient(135deg, rgba(63,90,58,0.4), rgba(26,22,18,0.9))"
-                      : ds === "failed"
-                      ? "linear-gradient(135deg, rgba(139,42,31,0.4), rgba(26,22,18,0.9))"
-                      : "linear-gradient(135deg, rgba(184,137,59,0.25), rgba(26,22,18,0.9))",
-                  }}
-                >
+                {/* ── Mobile card ── */}
+                <div className="sm:hidden flex items-start gap-3 py-3">
                   <div
-                    className="w-7 h-7 rounded-full flex items-center justify-center"
-                    style={{ backgroundColor: "rgba(139,42,31,0.92)" }}
+                    className="w-16 h-9 shrink-0 rounded-sm flex items-center justify-center relative overflow-hidden"
+                    style={{ background: thumbBg }}
                   >
-                    {/* Play triangle */}
-                    <svg width="9" height="10" viewBox="0 0 9 10" fill="#F5EDD8" aria-hidden="true">
-                      <path d="M0 0l9 5-9 5z" />
-                    </svg>
+                    <div
+                      className="w-5 h-5 rounded-full flex items-center justify-center"
+                      style={{ backgroundColor: "rgba(139,42,31,0.92)" }}
+                    >
+                      <svg width="7" height="8" viewBox="0 0 9 10" fill="#F5EDD8" aria-hidden="true">
+                        <path d="M0 0l9 5-9 5z" />
+                      </svg>
+                    </div>
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-start justify-between gap-2 mb-0.5">
+                      <p className="font-display font-bold text-bone text-sm leading-snug tracking-[-0.005em] group-hover:text-ochre transition-colors truncate">
+                        {assetTitle}
+                      </p>
+                      <StatusPill status={job.status} />
+                    </div>
+                    <p className="font-mono text-[10px] text-bone/30 uppercase tracking-[0.10em] mb-1">
+                      VJ-{vid}{assetKind && ` · ${assetKind}`}
+                    </p>
+                    {ds === "rendering" && (
+                      <p className="text-[11px] text-bone/50 truncate">
+                        {STATUS_LABELS[job.status] ?? "In progress"}
+                      </p>
+                    )}
+                    {ds === "done" && (
+                      <p className="font-mono text-[11px] text-bone/30">
+                        {relativeDate(job.completed_at)}
+                      </p>
+                    )}
+                    {ds === "failed" && (
+                      <p className="text-[11px] truncate" style={{ color: `var(${cfg.fgVar})` }}>
+                        {job.error ?? "An error occurred"}
+                      </p>
+                    )}
                   </div>
                 </div>
 
-                {/* Title cell */}
-                <div className="min-w-0">
-                  <p className="font-mono text-[10px] text-bone/30 uppercase tracking-[0.10em] mb-0.5">
-                    VJ-{vid} · {assetKind}
-                  </p>
-                  <p className="font-display font-bold text-bone text-base leading-snug tracking-[-0.005em] truncate group-hover:text-ochre transition-colors">
-                    {assetTitle}
-                  </p>
-                </div>
-
-                {/* Status pill */}
-                <div>
-                  <StatusPill status={job.status} />
-                </div>
-
-                {/* Progress / ETA */}
-                <div className="min-w-0">
-                  {ds === "rendering" && (
-                    <p className="text-[11.5px] text-bone/50 truncate">
-                      {STATUS_LABELS[job.status] ?? "In progress"}
-                    </p>
-                  )}
-                  {ds === "done" && (
-                    <p className="font-mono text-[11px] text-bone/30">
-                      {relativeDate(job.completed_at)}
-                    </p>
-                  )}
-                  {ds === "failed" && (
-                    <p className="text-[11.5px] truncate" style={{ color: "var(--color-status-failed-fg)" }}>
-                      {job.error ?? "An error occurred"}
-                    </p>
-                  )}
-                </div>
-
-                {/* Actions */}
-                <div
-                  className="flex items-center gap-3 justify-end"
-                  onClick={(e) => e.preventDefault()}
-                >
-                  {ds === "done" && job.output_url && (
-                    <a
-                      href={job.output_url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-xs font-medium text-ochre hover:text-ochre/80 transition-colors"
+                {/* ── Desktop grid row ── */}
+                <div className="hidden sm:grid grid-cols-[100px_1fr_130px_1fr_110px_32px] gap-4 py-3.5 items-center">
+                  {/* Thumbnail */}
+                  <div
+                    className="w-[100px] h-[56px] shrink-0 rounded-sm flex items-center justify-center relative overflow-hidden"
+                    style={{ background: thumbBg }}
+                  >
+                    <div
+                      className="w-7 h-7 rounded-full flex items-center justify-center"
+                      style={{ backgroundColor: "rgba(139,42,31,0.92)" }}
                     >
-                      Watch →
-                    </a>
-                  )}
-                  {ds === "failed" && inngestUrl && (
-                    <a
-                      href={inngestUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-xs font-medium text-ochre hover:text-ochre/80 transition-colors"
-                    >
-                      Logs →
-                    </a>
-                  )}
-                  {ds === "rendering" && (
-                    <span className="text-xs text-bone/30">In progress</span>
-                  )}
-                </div>
+                      <svg width="9" height="10" viewBox="0 0 9 10" fill="#F5EDD8" aria-hidden="true">
+                        <path d="M0 0l9 5-9 5z" />
+                      </svg>
+                    </div>
+                  </div>
 
-                {/* Kebab */}
-                <span className="text-bone/30 text-sm text-right">⋯</span>
+                  {/* Title */}
+                  <div className="min-w-0">
+                    <p className="font-mono text-[10px] text-bone/30 uppercase tracking-[0.10em] mb-0.5">
+                      VJ-{vid} · {assetKind}
+                    </p>
+                    <p className="font-display font-bold text-bone text-base leading-snug tracking-[-0.005em] truncate group-hover:text-ochre transition-colors">
+                      {assetTitle}
+                    </p>
+                  </div>
+
+                  {/* Status pill */}
+                  <div>
+                    <StatusPill status={job.status} />
+                  </div>
+
+                  {/* Progress / ETA */}
+                  <div className="min-w-0">
+                    {ds === "rendering" && (
+                      <p className="text-[11.5px] text-bone/50 truncate">
+                        {STATUS_LABELS[job.status] ?? "In progress"}
+                      </p>
+                    )}
+                    {ds === "done" && (
+                      <p className="font-mono text-[11px] text-bone/30">
+                        {relativeDate(job.completed_at)}
+                      </p>
+                    )}
+                    {ds === "failed" && (
+                      <p className="text-[11.5px] truncate" style={{ color: `var(${cfg.fgVar})` }}>
+                        {job.error ?? "An error occurred"}
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Actions */}
+                  <div
+                    className="flex items-center gap-3 justify-end"
+                    onClick={(e) => e.preventDefault()}
+                  >
+                    {ds === "done" && job.output_url && (
+                      <a
+                        href={job.output_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-xs font-medium text-ochre hover:text-ochre/80 transition-colors"
+                      >
+                        Watch →
+                      </a>
+                    )}
+                    {ds === "failed" && inngestUrl && (
+                      <a
+                        href={inngestUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-xs font-medium text-ochre hover:text-ochre/80 transition-colors"
+                      >
+                        Logs →
+                      </a>
+                    )}
+                    {ds === "rendering" && (
+                      <span className="text-xs text-bone/30">In progress</span>
+                    )}
+                  </div>
+
+                  {/* Kebab */}
+                  <span className="text-bone/30 text-sm text-right">⋯</span>
+                </div>
               </Link>
             );
           })}
