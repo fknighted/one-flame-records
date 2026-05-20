@@ -35,7 +35,7 @@ export async function requestVideoAsAdmin(
     .insert({
       artist_id: artistId,
       source_asset_id: assetId,
-      status: "pending",
+      status: "queued",
       params: {
         stylePreset: stylePreset || "Vintage roots reggae performance",
         aspectRatio: aspectRatio || "16:9",
