@@ -45,7 +45,7 @@ export async function requestVideoAsAdmin(
     .select("id")
     .single();
 
-  if (jobError || !job) return { error: "Could not create video job." };
+  if (jobError || !job) return { error: jobError?.message ?? "Could not create video job." };
 
   await inngest.send({
     name: "video/generate.requested",
