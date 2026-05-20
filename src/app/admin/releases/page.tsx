@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { createServiceClient } from "@/lib/supabase/server";
+import { deleteRelease } from "./actions";
 
 const TYPE_LABELS: Record<string, string> = {
   single: "Single",
@@ -65,6 +66,7 @@ export default async function AdminReleasesPage() {
                 const artist = Array.isArray(release.artists)
                   ? release.artists[0]
                   : release.artists;
+                const deleteWithId = deleteRelease.bind(null, release.id);
                 return (
                   <tr key={release.id} className="hover:bg-bone/5 transition-colors">
                     <td className="px-4 py-3">
@@ -101,12 +103,23 @@ export default async function AdminReleasesPage() {
                       )}
                     </td>
                     <td className="px-4 py-3 text-right">
-                      <Link
-                        href={`/admin/releases/${release.id}/edit`}
-                        className="text-xs text-bone/40 hover:text-ochre transition-colors"
-                      >
-                        Edit
-                      </Link>
+                      <div className="flex items-center gap-3 justify-end">
+                        <Link
+                          href={`/admin/releases/${release.id}/edit`}
+                          className="text-xs text-bone/40 hover:text-ochre transition-colors"
+                        >
+                          Edit
+                        </Link>
+                        <form action={deleteWithId}>
+                          <button
+                            type="submit"
+                            className="text-xs text-bone/30 hover:text-red-400 transition-colors"
+                            title="Delete release"
+                          >
+                            ×
+                          </button>
+                        </form>
+                      </div>
                     </td>
                   </tr>
                 );

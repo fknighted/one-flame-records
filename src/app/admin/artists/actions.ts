@@ -104,6 +104,12 @@ export async function createArtist(
   redirect("/admin/artists");
 }
 
+export async function deleteArtist(artistId: string): Promise<void> {
+  const supabase = createServiceClient();
+  await supabase.from("artists").delete().eq("id", artistId);
+  revalidatePath("/admin/artists");
+}
+
 export async function updateArtist(
   _prevState: ActionState,
   formData: FormData

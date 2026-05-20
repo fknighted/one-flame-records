@@ -1,4 +1,5 @@
 import { createServiceClient } from "@/lib/supabase/server";
+import { deleteJob } from "./actions";
 
 const STATUS_STYLES: Record<string, string> = {
   pending:    "bg-bone/10 text-bone/40",
@@ -122,7 +123,9 @@ export default async function AdminJobsPage() {
               </tr>
             </thead>
             <tbody>
-              {(jobs as unknown as JobRow[]).map((job, i) => (
+              {(jobs as unknown as JobRow[]).map((job, i) => {
+                const deleteWithId = deleteJob.bind(null, job.id);
+                return (
                 <tr
                   key={job.id}
                   className={`border-b border-bone/10 last:border-0 ${
@@ -176,9 +179,19 @@ export default async function AdminJobsPage() {
                         Logs ↗
                       </a>
                     )}
+                    <form action={deleteWithId} className="inline">
+                      <button
+                        type="submit"
+                        className="text-xs text-bone/30 hover:text-red-400 transition-colors"
+                        title="Delete job"
+                      >
+                        ×
+                      </button>
+                    </form>
                   </td>
                 </tr>
-              ))}
+                );
+              })}
             </tbody>
           </table>
         </div>

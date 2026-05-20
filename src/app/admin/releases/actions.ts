@@ -90,6 +90,12 @@ export async function createRelease(
   redirect("/admin/releases");
 }
 
+export async function deleteRelease(releaseId: string): Promise<void> {
+  const supabase = createServiceClient();
+  await supabase.from("releases").delete().eq("id", releaseId);
+  revalidatePath("/admin/releases");
+}
+
 export async function updateRelease(
   _prevState: ActionState,
   formData: FormData

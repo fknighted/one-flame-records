@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { createServiceClient } from "@/lib/supabase/server";
+import { deleteArtist } from "./actions";
 
 const STATUS_STYLES: Record<string, string> = {
   active: "bg-forest/30 text-forest border border-forest/30",
@@ -60,7 +61,9 @@ export default async function AdminArtistsPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-bone/5">
-              {artists.map((artist) => (
+              {artists.map((artist) => {
+                const deleteWithId = deleteArtist.bind(null, artist.id);
+                return (
                 <tr key={artist.id} className="hover:bg-bone/5 transition-colors">
                   <td className="px-4 py-3">
                     {artist.photo_url ? (
@@ -108,10 +111,20 @@ export default async function AdminArtistsPage() {
                       >
                         Edit
                       </Link>
+                      <form action={deleteWithId}>
+                        <button
+                          type="submit"
+                          className="text-xs text-bone/30 hover:text-red-400 transition-colors"
+                          title="Delete artist"
+                        >
+                          ×
+                        </button>
+                      </form>
                     </div>
                   </td>
                 </tr>
-              ))}
+                );
+              })}
             </tbody>
           </table>
         </div>
