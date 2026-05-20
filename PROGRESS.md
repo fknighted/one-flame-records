@@ -37,6 +37,14 @@ Phase 4 sign-off — end-to-end test with a real instrumental.
 
 Append a new entry at the top of this section after every session. Date, summary, files touched, what's next. Keep it tight — full reasoning belongs in `DECISIONS.md`.
 
+### 2026-05-20 (session 18 cont. 2)
+
+**Did:** Design consistency pass on the last two public catalog pages. `/artists` list — ink banner header with roster count and eyebrow, artist grid moved to cream section below. `/videos` — ink banner header, sticky cream filter bar (same pattern as `/releases`), clear-filters link on empty state. All public catalog pages (artists, releases, videos) now follow the same ink-banner + cream-grid structure.
+**Touched:** `src/app/(public)/artists/page.tsx`, `src/app/(public)/videos/page.tsx`
+**Decided:** No new decisions — pattern established by /releases redesign applied uniformly.
+**Blocked on:** End-to-end video pipeline test.
+**Next:** E2E test. Public site design is now fully consistent — all catalog pages match.
+
 ### 2026-05-20 (session 18 cont.)
 
 **Did:** Two more pages. (1) Portal dashboard refresh — removed "coming in Phase 4" placeholder, all three action tiles now active (Upload / Request Video / Edit Profile with icons), 2-stat counter row (assets, video jobs — both live counts from Supabase), recent video jobs table with status pills (same colors as the jobs library), recent assets table, both tables have "View all →" links to the respective portal sections. (2) Release detail page redesign — ink header band with back arrow, cover thumbnail + title block (pill, title, artist link, date); cream body with description + video embed in left column, streaming service buttons in right sidebar; JSON-LD preserved; streaming services icons resized to 18px for tighter buttons.
