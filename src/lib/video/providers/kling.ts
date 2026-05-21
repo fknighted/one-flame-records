@@ -1,7 +1,8 @@
 import type { ClipGenerator, ClipOptions, ClipPollResult, ClipResult } from "@/lib/video/types";
 
 const KLING_API_BASE = "https://api.klingai.com";
-const MODEL = "kling-v1-5";
+const MODEL = "kling-v1";
+const MODE = "std"; // kling-v1 supports std/pro; kling-v1-5 only supports pro
 
 // Cost estimate: ~$0.14 per 5-second standard clip
 const COST_PER_SECOND_USD = 0.028;
@@ -51,7 +52,7 @@ async function submitTask(opts: ClipOptions): Promise<string> {
       prompt: opts.prompt,
       negative_prompt: "blurry, low quality, watermark, text overlay",
       cfg_scale: 0.5,
-      mode: "std",
+      mode: MODE,
       duration: toKlingDuration(opts.durationSeconds),
       aspect_ratio: toKlingAspectRatio(opts.aspectRatio),
     }),
