@@ -1,7 +1,7 @@
 import type { ClipGenerator, ClipOptions, ClipPollResult, ClipResult } from "@/lib/video/types";
 
 const KLING_API_BASE = "https://api.klingai.com";
-const MODEL = "kling-v2";
+const MODEL = "kling-v1-5";
 
 // Cost estimate: ~$0.14 per 5-second standard clip
 const COST_PER_SECOND_USD = 0.028;
