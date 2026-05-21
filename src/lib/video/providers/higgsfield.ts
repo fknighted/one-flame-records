@@ -1,4 +1,4 @@
-import type { ClipGenerator, ClipOptions, ClipResult } from "@/lib/video/types";
+import type { ClipGenerator, ClipOptions, ClipPollResult, ClipResult } from "@/lib/video/types";
 
 // Rough estimate for DoP-turbo per clip
 const COST_PER_CLIP_USD = 0.08;
@@ -13,6 +13,14 @@ function getClient() {
 
 export class HiggsFieldGenerator implements ClipGenerator {
   name = "higgsfield";
+
+  async submitClip(_opts: ClipOptions): Promise<string> {
+    throw new Error("HiggsFieldGenerator: use generateClip directly (SDK handles polling)");
+  }
+
+  async checkClip(_taskId: string, _opts: ClipOptions): Promise<ClipPollResult> {
+    throw new Error("HiggsFieldGenerator: use generateClip directly (SDK handles polling)");
+  }
 
   async generateClip(opts: ClipOptions): Promise<ClipResult> {
     if (!opts.referenceImage) {

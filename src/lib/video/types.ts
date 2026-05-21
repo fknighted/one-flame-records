@@ -1,6 +1,10 @@
+export type ClipPollResult = { done: false } | { done: true; result: ClipResult };
+
 export interface ClipGenerator {
   name: string;
   generateClip(opts: ClipOptions): Promise<ClipResult>;
+  submitClip(opts: ClipOptions): Promise<string>;
+  checkClip(taskId: string, opts: ClipOptions): Promise<ClipPollResult>;
 }
 
 export interface ClipOptions {

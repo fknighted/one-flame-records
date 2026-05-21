@@ -1,4 +1,4 @@
-import type { ClipGenerator, ClipOptions, ClipResult } from "@/lib/video/types";
+import type { ClipGenerator, ClipOptions, ClipPollResult, ClipResult } from "@/lib/video/types";
 
 const KLING_API_BASE = "https://api.klingai.com";
 const MODEL = "kling-v2";
@@ -68,48 +68,59 @@ async function submitTask(opts: ClipOptions): Promise<string> {
   return taskId;
 }
 
-async function pollTask(taskId: string): Promise<string> {
-  const maxAttempts = 60; // 5 min at 5s intervals
-  for (let i = 0; i < maxAttempts; i++) {
-    await new Promise((r) => setTimeout(r, 5000));
+async function checkTask(taskId: string, opts: ClipOptions): Promise<ClipPollResult> {
+  const res = await fetch(`${KLING_API_BASE}/v1/videos/text2video/${taskId}`, {
+    headers: { Authorization: `Bearer ${getAuth()}` },
+  });
 
-    const res = await fetch(`${KLING_API_BASE}/v1/videos/text2video/${taskId}`, {
-      headers: { Authorization: `Bearer ${getAuth()}` },
-    });
-
-    if (!res.ok) {
-      const body = await res.text();
-      throw new Error(`Kling poll failed (${res.status}): ${body}`);
-    }
-
-    const json = await res.json();
-    const status: string = json?.data?.task_status;
-    if (status === "succeed") {
-      const url: string = json?.data?.task_result?.videos?.[0]?.url;
-      if (!url) throw new Error("Kling: task succeeded but no video URL");
-      return url;
-    }
-    if (status === "failed") {
-      throw new Error(`Kling: task failed — ${json?.data?.task_status_msg ?? "unknown"}`);
-    }
-    // status === "processing" or "submitted" — keep polling
+  if (!res.ok) {
+    const body = await res.text();
+    throw new Error(`Kling poll failed (${res.status}): ${body}`);
   }
-  throw new Error("Kling: timed out waiting for video");
+
+  const json = await res.json();
+  const status: string = json?.data?.task_status;
+
+  if (status === "succeed") {
+    const url: string = json?.data?.task_result?.videos?.[0]?.url;
+    if (!url) throw new Error("Kling: task succeeded but no video URL");
+    const actualDuration = parseInt(toKlingDuration(opts.durationSeconds), 10);
+    return {
+      done: true,
+      result: {
+        videoUrl: url,
+        durationSeconds: actualDuration,
+        model: MODEL,
+        costEstimateUsd: actualDuration * COST_PER_SECOND_USD,
+      },
+    };
+  }
+
+  if (status === "failed") {
+    throw new Error(`Kling: task failed — ${json?.data?.task_status_msg ?? "unknown"}`);
+  }
+
+  return { done: false };
 }
 
 export class KlingGenerator implements ClipGenerator {
   name = "kling";
 
+  async submitClip(opts: ClipOptions): Promise<string> {
+    return submitTask(opts);
+  }
+
+  async checkClip(taskId: string, opts: ClipOptions): Promise<ClipPollResult> {
+    return checkTask(taskId, opts);
+  }
+
   async generateClip(opts: ClipOptions): Promise<ClipResult> {
     const taskId = await submitTask(opts);
-    const videoUrl = await pollTask(taskId);
-    const actualDuration = parseInt(toKlingDuration(opts.durationSeconds), 10);
-
-    return {
-      videoUrl,
-      durationSeconds: actualDuration,
-      model: MODEL,
-      costEstimateUsd: actualDuration * COST_PER_SECOND_USD,
-    };
+    for (let i = 0; i < 60; i++) {
+      await new Promise((r) => setTimeout(r, 5000));
+      const result = await checkTask(taskId, opts);
+      if (result.done) return result.result;
+    }
+    throw new Error("Kling: timed out waiting for video");
   }
 }

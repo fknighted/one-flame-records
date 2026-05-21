@@ -5,6 +5,7 @@ import { generateScenePrompts } from "@/lib/video/prompt-scenes";
 import { getClipGenerator } from "@/lib/video";
 import { assembleVideo } from "@/lib/video/assemble";
 import { sendEmail } from "@/lib/email/send";
+import type { ClipResult } from "@/lib/video/types";
 
 type Status = "analyzing" | "prompting" | "generating" | "assembling" | "complete" | "failed";
 
@@ -79,12 +80,12 @@ export const generateVideo = inngest.createFunction(
 
     await step.run("mark-generating", () => updateJobStatus(jobId, "generating"));
 
-    // Step 4: Generate clips in parallel (one step per scene)
-    const clips = await Promise.all(
+    // Step 4a: Submit all clips to the provider in parallel (fast — just an API call each)
+    const taskIds = await Promise.all(
       scenes.map((scene, i) =>
-        step.run(`generate-clip-${i}`, async () => {
+        step.run(`submit-clip-${i}`, async () => {
           const generator = getClipGenerator(params.model);
-          return generator.generateClip({
+          return generator.submitClip({
             prompt: scene.prompt,
             durationSeconds: scene.end - scene.start,
             aspectRatio: scene.aspectRatio,
@@ -92,6 +93,31 @@ export const generateVideo = inngest.createFunction(
         })
       )
     );
+
+    // Step 4b: Poll each clip to completion using step.sleep so each wait is a
+    // short-lived checkpoint rather than a blocked function invocation.
+    const clips: ClipResult[] = [];
+    for (let i = 0; i < taskIds.length; i++) {
+      const opts = {
+        prompt: scenes[i].prompt,
+        durationSeconds: scenes[i].end - scenes[i].start,
+        aspectRatio: scenes[i].aspectRatio,
+      };
+      let clipResult: ClipResult | null = null;
+      for (let attempt = 0; attempt < 60; attempt++) {
+        await step.sleep(`poll-wait-${i}-${attempt}`, "5s");
+        const poll = await step.run(`poll-clip-${i}-${attempt}`, async () => {
+          const generator = getClipGenerator(params.model);
+          return generator.checkClip(taskIds[i], opts);
+        });
+        if (poll.done) {
+          clipResult = poll.result;
+          break;
+        }
+      }
+      if (!clipResult) throw new Error(`Clip ${i} timed out`);
+      clips.push(clipResult);
+    }
 
     await step.run("mark-assembling", () => updateJobStatus(jobId, "assembling"));
 
