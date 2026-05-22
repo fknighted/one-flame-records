@@ -35,23 +35,16 @@ async function runFfmpeg(
     // Add audio input last
     cmd.input(audioPath);
 
-    const totalInputs = clipPaths.length;
+    const n = clipPaths.length;
 
-    // Build xfade filter chain for crossfades
-    let filterStr = "";
-    let lastOutput = "[0:v]";
-    for (let i = 1; i < totalInputs; i++) {
-      const outLabel = i === totalInputs - 1 ? "[vout]" : `[v${i}]`;
-      filterStr += `${lastOutput}[${i}:v]xfade=transition=fade:duration=0.5:offset=${(i - 1) * 5 + 4.5}${outLabel};`;
-      lastOutput = `[v${i}]`;
-    }
-    // If single clip, just pass through
-    if (totalInputs === 1) {
-      filterStr = "[0:v]null[vout];";
-    }
-
-    // Mix: use original audio track (last input), discard clip audio
-    filterStr += `[${totalInputs}:a]aformat=sample_rates=44100:channel_layouts=stereo[aout]`;
+    // Normalize each clip to consistent fps + pixel format, then concat.
+    // Simpler and more reliable than xfade, which requires identical stream
+    // properties and precise offset calculations.
+    let filterStr = clipPaths
+      .map((_, i) => `[${i}:v]fps=24,format=yuv420p[v${i}];`)
+      .join("");
+    filterStr += clipPaths.map((_, i) => `[v${i}]`).join("") + `concat=n=${n}:v=1:a=0[vout];`;
+    filterStr += `[${n}:a]aformat=sample_rates=44100:channel_layouts=stereo[aout]`;
 
     cmd
       .complexFilter(filterStr)
