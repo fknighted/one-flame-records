@@ -23,13 +23,20 @@ interface AssetOption {
   duration_seconds: number | null;
 }
 
+interface ReferenceImage {
+  id: string;
+  title: string;
+  thumbUrl: string | null;
+}
+
 interface Props {
   assets: AssetOption[];
   defaultAssetId?: string;
+  referenceImages: ReferenceImage[];
   action: (prev: AdminVideoRequestState, formData: FormData) => Promise<AdminVideoRequestState>;
 }
 
-export function AdminVideoRequestForm({ assets, defaultAssetId, action }: Props) {
+export function AdminVideoRequestForm({ assets, defaultAssetId, referenceImages, action }: Props) {
   const [state, formAction, pending] = useActionState(action, null);
 
   return (
@@ -97,6 +104,68 @@ export function AdminVideoRequestForm({ assets, defaultAssetId, action }: Props)
             </label>
           ))}
         </div>
+      </div>
+
+      {/* Reference images */}
+      {referenceImages.length > 0 && (
+        <div>
+          <label className="block text-sm font-medium text-bone/70 mb-2">
+            Reference images
+            <span className="ml-2 text-bone/40 font-normal text-xs">optional — anchors visual style</span>
+          </label>
+          <div className="flex flex-col gap-2">
+            {referenceImages.map((img) => (
+              <label key={img.id} className="flex items-center gap-3 cursor-pointer group">
+                <input
+                  type="checkbox"
+                  name="reference_image_ids"
+                  value={img.id}
+                  className="accent-ochre flex-shrink-0"
+                />
+                {img.thumbUrl ? (
+                  <img
+                    src={img.thumbUrl}
+                    alt={img.title}
+                    className="w-10 h-10 rounded object-cover flex-shrink-0"
+                  />
+                ) : (
+                  <div className="w-10 h-10 rounded bg-bone/10 flex-shrink-0" />
+                )}
+                <span className="text-sm text-bone group-hover:text-ochre transition-colors truncate">
+                  {img.title}
+                </span>
+              </label>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Creative brief */}
+      <div>
+        <label className="block text-sm font-medium text-bone/70 mb-2">
+          Director&apos;s notes
+          <span className="ml-2 text-bone/40 font-normal text-xs">optional</span>
+        </label>
+        <textarea
+          name="creative_brief"
+          rows={4}
+          placeholder="Mood, story arc, locations, visual references, anything you want Claude to factor in…"
+          className="w-full rounded border border-bone/20 bg-bone/5 px-3 py-2 text-bone text-sm placeholder:text-bone/25 focus:outline-none focus:border-ochre resize-y"
+        />
+      </div>
+
+      {/* Lyrics override */}
+      <div>
+        <label className="block text-sm font-medium text-bone/70 mb-2">
+          Lyrics
+          <span className="ml-2 text-bone/40 font-normal text-xs">auto-transcribed — paste here to override</span>
+        </label>
+        <textarea
+          name="lyrics"
+          rows={6}
+          placeholder="Leave blank to auto-transcribe from the audio…"
+          className="w-full rounded border border-bone/20 bg-bone/5 px-3 py-2 text-bone text-sm placeholder:text-bone/25 focus:outline-none focus:border-ochre resize-y font-mono"
+        />
       </div>
 
       <input type="hidden" name="model" value="" />

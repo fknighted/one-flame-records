@@ -6,6 +6,9 @@ export interface SceneParams {
   stylePreset: string;
   aspectRatio: "16:9" | "9:16" | "1:1";
   genres: string[];
+  lyrics?: string;
+  creativeBrief?: string;
+  referenceImageUrls?: string[];
 }
 
 const SceneSchema = z.object({
@@ -21,7 +24,8 @@ const ScenesSchema = z.object({
   scenes: z.array(SceneSchema).min(1),
 });
 
-const SYSTEM_PROMPT = `You are a creative director for One Flame Records, a Jamaican record label based in Montego Bay.
+function buildSystemPrompt(hasLyrics: boolean): string {
+  return `You are a creative director for One Flame Records, a Jamaican record label based in Montego Bay.
 You write cinematic scene descriptions for AI-generated music videos.
 
 Visual style guidelines:
@@ -38,11 +42,15 @@ Energy mapping:
 - mid energy → moderate movement, character-driven, transitional scenes
 - high energy → dynamic movement, crowd energy, peak performance moments
 
-Each scene prompt should be 2–3 sentences, specific and visual, referencing concrete imagery.
-Do NOT mention lyrics, specific song titles, or artist names in the prompts.`;
+Each scene prompt should be 2–3 sentences, specific and visual, referencing concrete imagery.${
+    hasLyrics
+      ? "\nWhen lyrics are provided, let them guide the imagery — reflect the meaning and mood of the words in each scene."
+      : "\nDo NOT mention lyrics, specific song titles, or artist names in the prompts."
+  }`;
+}
 
 function buildUserPrompt(audio: AudioFeatures, params: SceneParams): string {
-  return `Generate scene descriptions for a music video with these characteristics:
+  let prompt = `Generate scene descriptions for a music video with these characteristics:
 
 Audio analysis:
 - Duration: ${audio.durationSeconds.toFixed(1)} seconds
@@ -50,12 +58,22 @@ Audio analysis:
 - Sections: ${JSON.stringify(audio.sections)}
 
 Artist style:
-- Genres: ${params.genres.join(", ")}
+- Genres: ${params.genres.join(", ") || "reggae"}
 - Visual direction: ${params.stylePreset}
-- Aspect ratio: ${params.aspectRatio}
+- Aspect ratio: ${params.aspectRatio}`;
 
-Generate one scene per section. Each scene should match the energy level of its section.
+  if (params.lyrics) {
+    prompt += `\n\nSong lyrics (use these to match visual scenes to the song's story and structure):\n${params.lyrics}`;
+  }
+
+  if (params.creativeBrief) {
+    prompt += `\n\nDirector's notes:\n${params.creativeBrief}`;
+  }
+
+  prompt += `\n\nGenerate one scene per section. Each scene should match the energy level of its section.
 Return the scenes array using the generate_scenes tool.`;
+
+  return prompt;
 }
 
 async function callClaude(
@@ -65,13 +83,23 @@ async function callClaude(
 ): Promise<Scene[]> {
   const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
-  const userContent = buildUserPrompt(audio, params) +
+  const textPrompt = buildUserPrompt(audio, params) +
     (previousError ? `\n\nPrevious output failed validation: ${previousError}. Please fix it.` : "");
+
+  // Build user message content — text first, then reference images if provided
+  type UserContent = Anthropic.TextBlockParam | Anthropic.ImageBlockParam;
+  const userContent: UserContent[] = [{ type: "text", text: textPrompt }];
+
+  if (params.referenceImageUrls?.length) {
+    for (const url of params.referenceImageUrls) {
+      userContent.push({ type: "image", source: { type: "url", url } });
+    }
+  }
 
   const response = await client.messages.create({
     model: "claude-opus-4-7",
-    max_tokens: 2048,
-    system: SYSTEM_PROMPT,
+    max_tokens: 4096,
+    system: buildSystemPrompt(!!params.lyrics),
     tools: [
       {
         name: "generate_scenes",
@@ -116,7 +144,6 @@ export async function generateScenePrompts(
   try {
     return await callClaude(audio, params);
   } catch (err) {
-    // Retry once with the validation error included
     const errorMsg = err instanceof Error ? err.message : String(err);
     return callClaude(audio, params, errorMsg);
   }

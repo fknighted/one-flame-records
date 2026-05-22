@@ -1,6 +1,7 @@
 import { inngest } from "@/lib/inngest/client";
 import { createServiceClient } from "@/lib/supabase/server";
 import { analyzeAudio } from "@/lib/audio/analyze";
+import { transcribeAudio } from "@/lib/audio/transcribe";
 import { generateScenePrompts } from "@/lib/video/prompt-scenes";
 import { getClipGenerator } from "@/lib/video";
 import { assembleVideo } from "@/lib/video/assemble";
@@ -56,10 +57,11 @@ export const generateVideo = inngest.createFunction(
       updateJobStatus(jobId, "analyzing", { started_at: new Date().toISOString() })
     );
 
-    // Step 2: Analyze audio
-    const audioFeatures = await step.run("analyze-audio", () =>
-      analyzeAudio(job.audioUrl)
-    );
+    // Step 2: Analyze audio + transcribe in parallel
+    const [audioFeatures, transcript] = await Promise.all([
+      step.run("analyze-audio", () => analyzeAudio(job.audioUrl)),
+      step.run("transcribe-audio", () => transcribeAudio(job.audioUrl)),
+    ]);
 
     await step.run("mark-prompting", () => updateJobStatus(jobId, "prompting"));
 
@@ -68,13 +70,44 @@ export const generateVideo = inngest.createFunction(
       stylePreset?: string;
       aspectRatio?: "16:9" | "9:16" | "1:1";
       model?: string;
+      lyrics?: string;
+      creativeBrief?: string;
+      referenceImageIds?: string[];
     };
+
+    // Load signed URLs for reference images (if any)
+    const referenceImageUrls: string[] = [];
+    if (params.referenceImageIds?.length) {
+      const refUrls = await step.run("load-reference-images", async () => {
+        const supabase = createServiceClient();
+        const { data: refAssets } = await supabase
+          .from("assets")
+          .select("id, storage_path")
+          .in("id", params.referenceImageIds!);
+
+        const urls: string[] = [];
+        for (const asset of refAssets ?? []) {
+          const { data: signed } = await supabase.storage
+            .from("private-assets")
+            .createSignedUrl(asset.storage_path, 3600);
+          if (signed?.signedUrl) urls.push(signed.signedUrl);
+        }
+        return urls;
+      });
+      referenceImageUrls.push(...refUrls);
+    }
+
+    // Manual lyrics override auto-transcript
+    const lyrics = params.lyrics || transcript || undefined;
 
     const scenes = await step.run("write-prompts", () =>
       generateScenePrompts(audioFeatures, {
         stylePreset: params.stylePreset ?? "Vintage roots reggae performance",
         aspectRatio: params.aspectRatio ?? "16:9",
-        genres: [], // artist genres — could be joined from profiles if needed
+        genres: [],
+        lyrics,
+        creativeBrief: params.creativeBrief,
+        referenceImageUrls: referenceImageUrls.length ? referenceImageUrls : undefined,
       })
     );
 

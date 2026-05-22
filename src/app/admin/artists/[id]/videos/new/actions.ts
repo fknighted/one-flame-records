@@ -15,6 +15,10 @@ export async function requestVideoAsAdmin(
   const stylePreset = formData.get("style_preset") as string;
   const aspectRatio = formData.get("aspect_ratio") as string;
   const model = (formData.get("model") as string) || undefined;
+  const lyrics = (formData.get("lyrics") as string)?.trim() || undefined;
+  const creativeBrief = (formData.get("creative_brief") as string)?.trim() || undefined;
+  const refImageIdsRaw = formData.getAll("reference_image_ids") as string[];
+  const referenceImageIds = refImageIdsRaw.filter(Boolean).length ? refImageIdsRaw.filter(Boolean) : undefined;
 
   if (!assetId) return { error: "Please select an asset." };
 
@@ -40,6 +44,9 @@ export async function requestVideoAsAdmin(
         stylePreset: stylePreset || "Vintage roots reggae performance",
         aspectRatio: aspectRatio || "16:9",
         ...(model ? { model } : {}),
+        ...(lyrics ? { lyrics } : {}),
+        ...(creativeBrief ? { creativeBrief } : {}),
+        ...(referenceImageIds ? { referenceImageIds } : {}),
       },
     })
     .select("id")

@@ -6,14 +6,18 @@ export interface AudioFeatures {
   sections: Array<{ start: number; end: number; energy: "low" | "mid" | "high" }>;
 }
 
-// Divide track into 4 structural parts with a typical song energy curve
+const SECONDS_PER_CLIP = 10;
+const MIN_CLIPS = 4;
+const MAX_CLIPS = 20;
+const ENERGY_CYCLE: Array<"low" | "mid" | "high"> = ["low", "mid", "high", "mid"];
+
 function buildSections(duration: number): AudioFeatures["sections"] {
-  const energyMap: Array<"low" | "mid" | "high"> = ["low", "mid", "high", "mid"];
-  const partSize = duration / 4;
-  return energyMap.map((energy, i) => ({
+  const count = Math.min(MAX_CLIPS, Math.max(MIN_CLIPS, Math.round(duration / SECONDS_PER_CLIP)));
+  const partSize = duration / count;
+  return Array.from({ length: count }, (_, i) => ({
     start: Math.round(i * partSize * 10) / 10,
     end: Math.round((i + 1) * partSize * 10) / 10,
-    energy,
+    energy: ENERGY_CYCLE[i % ENERGY_CYCLE.length],
   }));
 }
 

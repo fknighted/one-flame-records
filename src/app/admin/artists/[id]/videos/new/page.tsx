@@ -23,13 +23,31 @@ export default async function AdminRequestVideoPage({ params, searchParams }: Pr
 
   if (!artist) notFound();
 
-  // Only audio assets can be used for video generation
-  const { data: assets } = await supabase
-    .from("assets")
-    .select("id, title, duration_seconds")
-    .eq("artist_id", id)
-    .in("kind", ["instrumental", "demo"])
-    .order("created_at", { ascending: false });
+  // Fetch audio assets and reference images in parallel
+  const [{ data: assets }, { data: refAssets }] = await Promise.all([
+    supabase
+      .from("assets")
+      .select("id, title, duration_seconds")
+      .eq("artist_id", id)
+      .in("kind", ["instrumental", "demo"])
+      .order("created_at", { ascending: false }),
+    supabase
+      .from("assets")
+      .select("id, title, storage_path")
+      .eq("artist_id", id)
+      .eq("kind", "reference_image")
+      .order("created_at", { ascending: false }),
+  ]);
+
+  // Generate short-lived signed URLs for reference image thumbnails
+  const referenceImages = await Promise.all(
+    (refAssets ?? []).map(async (asset) => {
+      const { data: signed } = await supabase.storage
+        .from("private-assets")
+        .createSignedUrl(asset.storage_path, 1800);
+      return { id: asset.id, title: asset.title, thumbUrl: signed?.signedUrl ?? null };
+    })
+  );
 
   const action = requestVideoAsAdmin.bind(null, id);
 
@@ -56,6 +74,7 @@ export default async function AdminRequestVideoPage({ params, searchParams }: Pr
         <AdminVideoRequestForm
           assets={assets}
           defaultAssetId={asset_id}
+          referenceImages={referenceImages}
           action={action}
         />
       ) : (
