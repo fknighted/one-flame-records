@@ -1,7 +1,20 @@
 "use client";
 
+import { useState } from "react";
 import { useActionState } from "react";
 import type { AdminVideoRequestState } from "@/app/admin/artists/[id]/videos/new/actions";
+
+const SECONDS_PER_CLIP = 10;
+const MIN_CLIPS = 4;
+const MAX_CLIPS = 20;
+const COST_PER_CLIP_USD = 0.28; // 10s × $0.028/s, Kling v1 std
+
+function estimateCost(durationSeconds: number | null): { clips: number; cost: string } | null {
+  if (!durationSeconds) return null;
+  const clips = Math.min(MAX_CLIPS, Math.max(MIN_CLIPS, Math.round(durationSeconds / SECONDS_PER_CLIP)));
+  const cost = (clips * COST_PER_CLIP_USD).toFixed(2);
+  return { clips, cost };
+}
 
 const STYLE_PRESETS = [
   "Vintage roots reggae performance",
@@ -38,6 +51,10 @@ interface Props {
 
 export function AdminVideoRequestForm({ assets, defaultAssetId, referenceImages, action }: Props) {
   const [state, formAction, pending] = useActionState(action, null);
+  const [selectedAssetId, setSelectedAssetId] = useState(defaultAssetId ?? "");
+
+  const selectedAsset = assets.find((a) => a.id === selectedAssetId);
+  const estimate = estimateCost(selectedAsset?.duration_seconds ?? null);
 
   return (
     <form action={formAction} className="space-y-6 max-w-xl">
@@ -56,6 +73,7 @@ export function AdminVideoRequestForm({ assets, defaultAssetId, referenceImages,
           name="asset_id"
           required
           defaultValue={defaultAssetId ?? ""}
+          onChange={(e) => setSelectedAssetId(e.target.value)}
           className="w-full rounded border border-bone/20 bg-bone/5 px-3 py-2 text-bone text-sm focus:outline-none focus:border-ochre"
         >
           <option value="">Select an asset…</option>
@@ -68,6 +86,11 @@ export function AdminVideoRequestForm({ assets, defaultAssetId, referenceImages,
             </option>
           ))}
         </select>
+        {estimate && (
+          <p className="mt-2 text-xs text-bone/40">
+            ~{estimate.clips} clips · estimated Kling cost <span className="text-bone/60">${estimate.cost}</span>
+          </p>
+        )}
       </div>
 
       {/* Style preset */}
