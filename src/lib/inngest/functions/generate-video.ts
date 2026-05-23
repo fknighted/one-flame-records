@@ -146,8 +146,8 @@ export const generateVideo = inngest.createFunction(
           aspectRatio: scenes[i].aspectRatio,
         };
         let clipResult: ClipResult | null = null;
-        for (let attempt = 0; attempt < 60; attempt++) {
-          await step.sleep(`poll-wait-${i}-${attempt}`, "5s");
+        for (let attempt = 0; attempt < 80; attempt++) {
+          await step.sleep(`poll-wait-${i}-${attempt}`, "15s");
           const poll = await step.run(`poll-clip-${i}-${attempt}`, async () => {
             const generator = getClipGenerator(params.model);
             return generator.checkClip(batchTaskIds[k], opts);
