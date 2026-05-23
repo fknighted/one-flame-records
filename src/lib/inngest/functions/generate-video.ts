@@ -113,35 +113,50 @@ export const generateVideo = inngest.createFunction(
 
     await step.run("mark-generating", () => updateJobStatus(jobId, "generating"));
 
-    // Submit and poll each clip sequentially — Kling's starter plan limits
-    // concurrent tasks, so we keep at most one active at a time.
+    // Submit in batches of 5 (Kling plan limit), poll each batch to completion
+    // before submitting the next batch.
+    const BATCH_SIZE = 5;
     const clips: ClipResult[] = [];
-    for (let i = 0; i < scenes.length; i++) {
-      const opts = {
-        prompt: scenes[i].prompt,
-        durationSeconds: scenes[i].end - scenes[i].start,
-        aspectRatio: scenes[i].aspectRatio,
-      };
 
-      const taskId = await step.run(`submit-clip-${i}`, async () => {
-        const generator = getClipGenerator(params.model);
-        return generator.submitClip(opts);
-      });
+    for (let batchStart = 0; batchStart < scenes.length; batchStart += BATCH_SIZE) {
+      const batchEnd = Math.min(batchStart + BATCH_SIZE, scenes.length);
+      const batchSize = batchEnd - batchStart;
 
-      let clipResult: ClipResult | null = null;
-      for (let attempt = 0; attempt < 60; attempt++) {
-        await step.sleep(`poll-wait-${i}-${attempt}`, "5s");
-        const poll = await step.run(`poll-clip-${i}-${attempt}`, async () => {
-          const generator = getClipGenerator(params.model);
-          return generator.checkClip(taskId, opts);
-        });
-        if (poll.done) {
-          clipResult = poll.result;
-          break;
+      // Submit all clips in this batch in parallel
+      const batchTaskIds = await Promise.all(
+        Array.from({ length: batchSize }, (_, k) => {
+          const i = batchStart + k;
+          return step.run(`submit-clip-${i}`, async () => {
+            const generator = getClipGenerator(params.model);
+            return generator.submitClip({
+              prompt: scenes[i].prompt,
+              durationSeconds: scenes[i].end - scenes[i].start,
+              aspectRatio: scenes[i].aspectRatio,
+            });
+          });
+        })
+      );
+
+      // Poll each clip in this batch to completion before starting the next batch
+      for (let k = 0; k < batchSize; k++) {
+        const i = batchStart + k;
+        const opts = {
+          prompt: scenes[i].prompt,
+          durationSeconds: scenes[i].end - scenes[i].start,
+          aspectRatio: scenes[i].aspectRatio,
+        };
+        let clipResult: ClipResult | null = null;
+        for (let attempt = 0; attempt < 60; attempt++) {
+          await step.sleep(`poll-wait-${i}-${attempt}`, "5s");
+          const poll = await step.run(`poll-clip-${i}-${attempt}`, async () => {
+            const generator = getClipGenerator(params.model);
+            return generator.checkClip(batchTaskIds[k], opts);
+          });
+          if (poll.done) { clipResult = poll.result; break; }
         }
+        if (!clipResult) throw new Error(`Clip ${i} timed out`);
+        clips.push(clipResult);
       }
-      if (!clipResult) throw new Error(`Clip ${i} timed out`);
-      clips.push(clipResult);
     }
 
     await step.run("mark-assembling", () => updateJobStatus(jobId, "assembling"));
