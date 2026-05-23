@@ -137,7 +137,10 @@ export const generateVideo = inngest.createFunction(
         })
       );
 
-      // Poll each clip in this batch to completion before starting the next batch
+      // Poll each clip in this batch to completion before starting the next batch.
+      // Strategy: 5-min initial wait (Kling rarely finishes faster), then every 30s
+      // for up to 25 min. Total ceiling = 30 min, ~12 steps per clip in the typical
+      // case vs. 160 steps with the old 15s×80 approach.
       for (let k = 0; k < batchSize; k++) {
         const i = batchStart + k;
         const opts = {
@@ -146,15 +149,18 @@ export const generateVideo = inngest.createFunction(
           aspectRatio: scenes[i].aspectRatio,
         };
         let clipResult: ClipResult | null = null;
-        for (let attempt = 0; attempt < 80; attempt++) {
-          await step.sleep(`poll-wait-${i}-${attempt}`, "15s");
-          const poll = await step.run(`poll-clip-${i}-${attempt}`, async () => {
+
+        await step.sleep(`clip-${i}-initial`, "5m");
+
+        for (let attempt = 0; attempt < 50; attempt++) {
+          const poll = await step.run(`clip-${i}-poll-${attempt}`, async () => {
             const generator = getClipGenerator(params.model);
             return generator.checkClip(batchTaskIds[k], opts);
           });
           if (poll.done) { clipResult = poll.result; break; }
+          await step.sleep(`clip-${i}-gap-${attempt}`, "30s");
         }
-        if (!clipResult) throw new Error(`Clip ${i} timed out`);
+        if (!clipResult) throw new Error(`Clip ${i} timed out after 30 min`);
         clips.push(clipResult);
       }
     }
