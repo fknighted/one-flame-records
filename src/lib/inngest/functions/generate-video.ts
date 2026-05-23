@@ -113,35 +113,27 @@ export const generateVideo = inngest.createFunction(
 
     await step.run("mark-generating", () => updateJobStatus(jobId, "generating"));
 
-    // Step 4a: Submit all clips to the provider in parallel (fast — just an API call each)
-    const taskIds = await Promise.all(
-      scenes.map((scene, i) =>
-        step.run(`submit-clip-${i}`, async () => {
-          const generator = getClipGenerator(params.model);
-          return generator.submitClip({
-            prompt: scene.prompt,
-            durationSeconds: scene.end - scene.start,
-            aspectRatio: scene.aspectRatio,
-          });
-        })
-      )
-    );
-
-    // Step 4b: Poll each clip to completion using step.sleep so each wait is a
-    // short-lived checkpoint rather than a blocked function invocation.
+    // Submit and poll each clip sequentially — Kling's starter plan limits
+    // concurrent tasks, so we keep at most one active at a time.
     const clips: ClipResult[] = [];
-    for (let i = 0; i < taskIds.length; i++) {
+    for (let i = 0; i < scenes.length; i++) {
       const opts = {
         prompt: scenes[i].prompt,
         durationSeconds: scenes[i].end - scenes[i].start,
         aspectRatio: scenes[i].aspectRatio,
       };
+
+      const taskId = await step.run(`submit-clip-${i}`, async () => {
+        const generator = getClipGenerator(params.model);
+        return generator.submitClip(opts);
+      });
+
       let clipResult: ClipResult | null = null;
       for (let attempt = 0; attempt < 60; attempt++) {
         await step.sleep(`poll-wait-${i}-${attempt}`, "5s");
         const poll = await step.run(`poll-clip-${i}-${attempt}`, async () => {
           const generator = getClipGenerator(params.model);
-          return generator.checkClip(taskIds[i], opts);
+          return generator.checkClip(taskId, opts);
         });
         if (poll.done) {
           clipResult = poll.result;
