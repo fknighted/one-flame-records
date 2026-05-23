@@ -48,7 +48,7 @@ async function runFfmpeg(
 
     cmd
       .complexFilter(filterStr)
-      .outputOptions(["-map [vout]", "-map [aout]", "-c:v libx264", "-preset fast", "-crf 22", "-c:a aac", "-b:a 192k", "-movflags +faststart"])
+      .outputOptions(["-map [vout]", "-map [aout]", "-c:v libx264", "-preset fast", "-crf 28", "-maxrate 2M", "-bufsize 4M", "-c:a aac", "-b:a 128k", "-movflags +faststart"])
       .output(outputPath)
       .on("end", () => resolve())
       .on("error", (err: Error) => reject(err))
