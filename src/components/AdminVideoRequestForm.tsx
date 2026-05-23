@@ -16,6 +16,12 @@ function estimateCost(durationSeconds: number | null): { clips: number; cost: st
   return { clips, cost };
 }
 
+function formatTime(s: number) {
+  const m = Math.floor(s / 60);
+  const sec = Math.round(s % 60);
+  return `${m}:${String(sec).padStart(2, "0")}`;
+}
+
 const STYLE_PRESETS = [
   "Vintage roots reggae performance",
   "Modern dancehall energy",
@@ -29,6 +35,8 @@ const ASPECT_RATIOS = [
   { value: "9:16", label: "9:16 — Vertical (Reels / TikTok)" },
   { value: "1:1",  label: "1:1 — Square (Instagram)" },
 ];
+
+type ScenePreview = { start: number; end: number; prompt: string; aspectRatio: string };
 
 interface AssetOption {
   id: string;
@@ -47,14 +55,62 @@ interface Props {
   defaultAssetId?: string;
   referenceImages: ReferenceImage[];
   action: (prev: AdminVideoRequestState, formData: FormData) => Promise<AdminVideoRequestState>;
+  onTranscribe: (assetId: string) => Promise<{ transcript: string } | { error: string }>;
+  onGenerateScript: (
+    assetId: string,
+    params: { stylePreset: string; aspectRatio: "16:9" | "9:16" | "1:1"; lyrics?: string; creativeBrief?: string }
+  ) => Promise<{ scenes: ScenePreview[] } | { error: string }>;
 }
 
-export function AdminVideoRequestForm({ assets, defaultAssetId, referenceImages, action }: Props) {
+export function AdminVideoRequestForm({ assets, defaultAssetId, referenceImages, action, onTranscribe, onGenerateScript }: Props) {
   const [state, formAction, pending] = useActionState(action, null);
   const [selectedAssetId, setSelectedAssetId] = useState(defaultAssetId ?? "");
+  const [selectedStylePreset, setSelectedStylePreset] = useState(STYLE_PRESETS[0]);
+  const [selectedAspectRatio, setSelectedAspectRatio] = useState<"16:9" | "9:16" | "1:1">("16:9");
+  const [lyrics, setLyrics] = useState("");
+  const [creativeBrief, setCreativeBrief] = useState("");
+
+  const [transcribing, setTranscribing] = useState(false);
+  const [transcribeError, setTranscribeError] = useState<string | null>(null);
+
+  const [scripting, setScripting] = useState(false);
+  const [scriptError, setScriptError] = useState<string | null>(null);
+  const [scriptScenes, setScriptScenes] = useState<ScenePreview[] | null>(null);
 
   const selectedAsset = assets.find((a) => a.id === selectedAssetId);
   const estimate = estimateCost(selectedAsset?.duration_seconds ?? null);
+
+  async function handleTranscribe() {
+    if (!selectedAssetId) return;
+    setTranscribing(true);
+    setTranscribeError(null);
+    const result = await onTranscribe(selectedAssetId);
+    if ("error" in result) {
+      setTranscribeError(result.error);
+    } else {
+      setLyrics(result.transcript);
+    }
+    setTranscribing(false);
+  }
+
+  async function handleGenerateScript() {
+    if (!selectedAssetId) return;
+    setScripting(true);
+    setScriptError(null);
+    setScriptScenes(null);
+    const result = await onGenerateScript(selectedAssetId, {
+      stylePreset: selectedStylePreset,
+      aspectRatio: selectedAspectRatio,
+      lyrics: lyrics.trim() || undefined,
+      creativeBrief: creativeBrief.trim() || undefined,
+    });
+    if ("error" in result) {
+      setScriptError(result.error);
+    } else {
+      setScriptScenes(result.scenes);
+    }
+    setScripting(false);
+  }
 
   return (
     <form action={formAction} className="space-y-6 max-w-xl">
@@ -73,7 +129,7 @@ export function AdminVideoRequestForm({ assets, defaultAssetId, referenceImages,
           name="asset_id"
           required
           defaultValue={defaultAssetId ?? ""}
-          onChange={(e) => setSelectedAssetId(e.target.value)}
+          onChange={(e) => { setSelectedAssetId(e.target.value); setScriptScenes(null); }}
           className="w-full rounded border border-bone/20 bg-bone/5 px-3 py-2 text-bone text-sm focus:outline-none focus:border-ochre"
         >
           <option value="">Select an asset…</option>
@@ -100,6 +156,8 @@ export function AdminVideoRequestForm({ assets, defaultAssetId, referenceImages,
         </label>
         <select
           name="style_preset"
+          defaultValue={STYLE_PRESETS[0]}
+          onChange={(e) => { setSelectedStylePreset(e.target.value); setScriptScenes(null); }}
           className="w-full rounded border border-bone/20 bg-bone/5 px-3 py-2 text-bone text-sm focus:outline-none focus:border-ochre"
         >
           {STYLE_PRESETS.map((s) => (
@@ -121,6 +179,7 @@ export function AdminVideoRequestForm({ assets, defaultAssetId, referenceImages,
                 name="aspect_ratio"
                 value={value}
                 defaultChecked={value === "16:9"}
+                onChange={() => { setSelectedAspectRatio(value as "16:9" | "9:16" | "1:1"); setScriptScenes(null); }}
                 className="accent-ochre"
               />
               <span className="text-sm text-bone">{label}</span>
@@ -172,23 +231,86 @@ export function AdminVideoRequestForm({ assets, defaultAssetId, referenceImages,
         <textarea
           name="creative_brief"
           rows={4}
+          value={creativeBrief}
+          onChange={(e) => { setCreativeBrief(e.target.value); setScriptScenes(null); }}
           placeholder="Mood, story arc, locations, visual references, anything you want Claude to factor in…"
           className="w-full rounded border border-bone/20 bg-bone/5 px-3 py-2 text-bone text-sm placeholder:text-bone/25 focus:outline-none focus:border-ochre resize-y"
         />
       </div>
 
-      {/* Lyrics override */}
+      {/* Lyrics */}
       <div>
-        <label className="block text-sm font-medium text-bone/70 mb-2">
-          Lyrics
-          <span className="ml-2 text-bone/40 font-normal text-xs">auto-transcribed — paste here to override</span>
-        </label>
+        <div className="flex items-center justify-between mb-2">
+          <label className="text-sm font-medium text-bone/70">
+            Lyrics
+            <span className="ml-2 text-bone/40 font-normal text-xs">auto-transcribed — paste here to override</span>
+          </label>
+          <button
+            type="button"
+            onClick={handleTranscribe}
+            disabled={!selectedAssetId || transcribing}
+            className="text-xs px-3 py-1 rounded border border-bone/20 text-bone/60 hover:text-ochre hover:border-ochre transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+          >
+            {transcribing ? "Transcribing…" : "Transcribe audio"}
+          </button>
+        </div>
+        {transcribeError && (
+          <p className="mb-2 text-xs text-oxblood">{transcribeError}</p>
+        )}
         <textarea
           name="lyrics"
           rows={6}
+          value={lyrics}
+          onChange={(e) => { setLyrics(e.target.value); setScriptScenes(null); }}
           placeholder="Leave blank to auto-transcribe from the audio…"
           className="w-full rounded border border-bone/20 bg-bone/5 px-3 py-2 text-bone text-sm placeholder:text-bone/25 focus:outline-none focus:border-ochre resize-y font-mono"
         />
+      </div>
+
+      {/* Scene plan preview */}
+      <div className="rounded border border-bone/10 bg-bone/3 p-4">
+        <div className="flex items-center justify-between mb-3">
+          <div>
+            <p className="text-sm font-medium text-bone/70">Scene plan preview</p>
+            <p className="text-xs text-bone/30 mt-0.5">Run Claude before submitting to review the video script</p>
+          </div>
+          <button
+            type="button"
+            onClick={handleGenerateScript}
+            disabled={!selectedAssetId || scripting}
+            className="text-xs px-3 py-1.5 rounded border border-ochre/40 text-ochre hover:bg-ochre/10 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+          >
+            {scripting ? "Generating…" : scriptScenes ? "Regenerate" : "Generate preview"}
+          </button>
+        </div>
+
+        {scriptError && (
+          <p className="text-xs text-oxblood">{scriptError}</p>
+        )}
+
+        {scripting && (
+          <p className="text-xs text-bone/30 animate-pulse">Analyzing audio and writing scene prompts…</p>
+        )}
+
+        {scriptScenes && !scripting && (
+          <div className="space-y-2 max-h-96 overflow-y-auto pr-1">
+            {scriptScenes.map((scene, i) => (
+              <div key={i} className="rounded border border-bone/10 bg-bone/5 p-3">
+                <div className="flex items-center gap-2 mb-1.5">
+                  <span className="text-xs font-mono text-bone/30">
+                    {formatTime(scene.start)} – {formatTime(scene.end)}
+                  </span>
+                  <span className="text-xs text-bone/60">Scene {i + 1}</span>
+                </div>
+                <p className="text-xs text-bone/80 leading-relaxed">{scene.prompt}</p>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {!scriptScenes && !scripting && !scriptError && (
+          <p className="text-xs text-bone/20">No preview yet — select an asset and click Generate preview.</p>
+        )}
       </div>
 
       <input type="hidden" name="model" value="" />

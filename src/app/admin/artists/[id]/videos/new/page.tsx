@@ -2,7 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { createServiceClient } from "@/lib/supabase/server";
 import { AdminVideoRequestForm } from "@/components/AdminVideoRequestForm";
-import { requestVideoAsAdmin } from "./actions";
+import { requestVideoAsAdmin, transcribeAssetAction, generateScriptAction } from "./actions";
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -76,6 +76,8 @@ export default async function AdminRequestVideoPage({ params, searchParams }: Pr
           defaultAssetId={asset_id}
           referenceImages={referenceImages}
           action={action}
+          onTranscribe={transcribeAssetAction}
+          onGenerateScript={generateScriptAction}
         />
       ) : (
         <div className="rounded-lg border border-bone/10 p-10 text-center">
