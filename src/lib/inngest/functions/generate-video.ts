@@ -47,7 +47,7 @@ export const generateVideo = inngest.createFunction(
 
       const { data: signed } = await supabase.storage
         .from("private-assets")
-        .createSignedUrl(asset.storage_path, 3600);
+        .createSignedUrl(asset.storage_path, 86400); // 24h — pipeline can run 2+ hours
       if (!signed?.signedUrl) throw new Error("Could not sign asset URL");
 
       return { ...data, audioUrl: signed.signedUrl, assetTitle: asset.title };
@@ -89,7 +89,7 @@ export const generateVideo = inngest.createFunction(
         for (const asset of refAssets ?? []) {
           const { data: signed } = await supabase.storage
             .from("private-assets")
-            .createSignedUrl(asset.storage_path, 3600);
+            .createSignedUrl(asset.storage_path, 86400); // 24h — pipeline can run 2+ hours
           if (signed?.signedUrl) urls.push(signed.signedUrl);
         }
         return urls;
