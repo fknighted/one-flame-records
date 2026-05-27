@@ -39,12 +39,20 @@ export default async function EditArtistPage({
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="font-display text-2xl text-bone">{artist.stage_name}</h1>
-        <Link
-          href={`/admin/artists/${id}/assets`}
-          className="text-sm text-bone/40 hover:text-ochre transition-colors"
-        >
-          Assets →
-        </Link>
+        <div className="flex items-center gap-5">
+          <Link
+            href={`/admin/artists/${id}/assets`}
+            className="text-sm text-bone/40 hover:text-ochre transition-colors"
+          >
+            Assets →
+          </Link>
+          <Link
+            href={`/admin/artists/${id}/videos`}
+            className="text-sm text-bone/40 hover:text-ochre transition-colors"
+          >
+            Videos →
+          </Link>
+        </div>
       </div>
       <ArtistForm action={updateArtist} initialValues={initialValues} mode="edit" />
     </div>

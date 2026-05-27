@@ -14,6 +14,63 @@ Format for each entry:
 
 ---
 
+## 2026-05-27 — Public assets use server-side signed URLs, not a public bucket
+
+**Context:** Artist assets (instrumentals, demos, reference images) live in the `private-assets` bucket with no public access. When `is_public = true` we want them visible on the public artist page without moving them to a public bucket or changing their storage path.
+
+**Decision:** The artist detail Server Component calls `createServiceClient()` at render time and generates fresh 1-hour signed URLs for every public asset. These are rendered into `<img>`, `<audio>`, and download `<a>` tags. The bucket stays private; the signed URL is the access mechanism.
+
+**Alternatives considered:**
+- _Copy to `public-media` on publish._ Rejected: requires a copy operation on every toggle and leaves orphan files if the artist unpublishes.
+- _Add a public policy to `private-assets`._ Rejected: would expose all assets, not just flagged ones.
+
+**Consequences:** Every page load of the artist detail page calls Supabase Storage once per public asset. For a typical artist with <20 public assets this is trivially fast. If an artist accumulates 100+ public assets we can cache the signed URLs in the DB for a few hours.
+
+---
+
+## 2026-05-27 — Inngest polling: 5-min initial sleep + 50×30s (not tight loop)
+
+**Context:** Initial Kling clip polling used 80×15s intervals (160 steps/clip). For a 15-clip job this approached the Inngest free-tier step limit (~1000/run) and caused "Clip 10 timed out" errors.
+
+**Decision:** Restructured to: `step.sleep("initial", "5m")` then a loop of up to 50 `step.run` + `step.sleep("gap", "30s")` cycles. A typical clip completes in 5–12 minutes total. This reduces step count from ~160/clip to ~12–20/clip in the typical case, and caps the worst case at 30 minutes per clip.
+
+**Alternatives considered:**
+- _Longer initial sleep only._ Rejected: clips still sometimes run long, so we need the polling loop.
+- _Webhook callback instead of polling._ Rejected: Kling API doesn't offer webhooks.
+
+**Consequences:** Pipeline can handle 15-clip jobs within Inngest's step budget. If clip generation consistently takes > 30 minutes (not expected), increase the loop bound or initial sleep.
+
+---
+
+## 2026-05-27 — 24h signed URL TTL for pipeline-internal audio/image URLs
+
+**Context:** The Inngest pipeline signs audio and reference image URLs at job start and passes them to Kling clip generation. Pipeline runs for 15 clips × up to 30 min each = potentially 2+ hours. With a 1h TTL the URL expired mid-job, causing "Download failed (400)" errors on clips 10–15.
+
+**Decision:** All URLs generated for pipeline-internal use (audio file, reference images) use a 24-hour TTL: `.createSignedUrl(path, 86400)`. Portal download links shown to artists still use 1h.
+
+**Alternatives considered:**
+- _Re-sign on each clip attempt._ Rejected: adds complexity and requires storing the path in job params (it is stored, but re-signing in a loop step increases coupling).
+- _Move audio to a public bucket temporarily._ Rejected: demos and instrumentals are private by design.
+
+**Consequences:** A signed URL with 24h TTL is valid for the full pipeline window with headroom. If a job is abandoned the URL expires naturally.
+
+---
+
+## 2026-05-27 — `marked` (not `@tailwindcss/typography` prose) for news post rendering
+
+**Context:** News post bodies are stored as Markdown. The public post detail page needs to render them as HTML.
+
+**Decision:** Install `marked` (v18, zero-config) to convert Markdown → HTML at render time in the Server Component. Inline Tailwind utility classes on the prose container handle all styling (headings, links, lists, blockquotes, code, hr). No `@tailwindcss/typography` plugin installed.
+
+**Alternatives considered:**
+- _`@tailwindcss/typography` + `prose` class._ Rejected: requires a Tailwind plugin that doesn't exist in v4 CSS-first form yet.
+- _`react-markdown`._ Rejected: adds a client component boundary and heavier bundle.
+- _Store HTML in DB._ Rejected: harder to edit, XSS risk.
+
+**Consequences:** Markdown rendered server-side via `dangerouslySetInnerHTML` — safe because only admin-authored content reaches the DB (no user-submitted bodies). Styling is maintained via explicit Tailwind selector utilities on the wrapper div.
+
+---
+
 ## 2026-05-14 — Auth callback must be a Client Component (not a Route Handler)
 
 **Context:** `resendInvite` uses `supabase.auth.admin.generateLink({ type: 'recovery' })` to generate a portal invite link without triggering Supabase's email rate limits. When the user opens this link, Supabase processes the OTP server-side and redirects to `/auth/callback`. The redirect uses implicit flow (hash fragment: `#access_token=...&refresh_token=...`), not PKCE (`?code=`). Hash fragments are stripped by the browser before the request reaches the server, so a Route Handler at `/auth/callback` never sees the tokens — it always falls through to the error redirect.

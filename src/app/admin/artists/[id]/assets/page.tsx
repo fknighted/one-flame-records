@@ -64,12 +64,20 @@ export default async function AdminArtistAssetsPage({
     <div className="space-y-8">
       {/* Header */}
       <div>
-        <Link
-          href={`/admin/artists/${id}/edit`}
-          className="text-xs text-bone/40 hover:text-ochre transition-colors"
-        >
-          ← {artist.stage_name}
-        </Link>
+        <div className="flex items-center justify-between">
+          <Link
+            href={`/admin/artists/${id}/edit`}
+            className="text-xs text-bone/40 hover:text-ochre transition-colors"
+          >
+            ← {artist.stage_name}
+          </Link>
+          <Link
+            href={`/admin/artists/${id}/videos`}
+            className="text-xs text-bone/40 hover:text-ochre transition-colors"
+          >
+            Generated Videos →
+          </Link>
+        </div>
         <h1 className="font-display text-2xl text-bone mt-1">
           Assets — {artist.stage_name}
         </h1>

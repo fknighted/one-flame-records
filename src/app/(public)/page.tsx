@@ -15,10 +15,34 @@ type VideoRow = Tables<"videos"> & {
   artists: { stage_name: string } | null;
 };
 
+type NewsPost = {
+  id: string;
+  slug: string;
+  title: string;
+  excerpt: string | null;
+  cover_url: string | null;
+  category: string;
+  published_at: string | null;
+};
+
+const NEWS_CATEGORY_PILL: Record<string, string> = {
+  label:   "bg-oxblood/10 text-oxblood",
+  release: "bg-forest/10 text-forest",
+  event:   "bg-ochre/10 text-ochre",
+};
+
+function formatDate(dateStr: string) {
+  return new Date(dateStr).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
+}
+
 export default async function HomePage() {
   const supabase = await createClient();
 
-  const [{ data: featuredArtists }, { data: releases }, { data: videos }] =
+  const [{ data: featuredArtists }, { data: releases }, { data: videos }, { data: newsPosts }] =
     await Promise.all([
       supabase
         .from("artists")
@@ -41,6 +65,13 @@ export default async function HomePage() {
         .order("published_at", { ascending: false })
         .limit(3)
         .returns<VideoRow[]>(),
+
+      supabase
+        .from("news_posts")
+        .select("id, slug, title, excerpt, cover_url, category, published_at")
+        .order("published_at", { ascending: false })
+        .limit(3)
+        .returns<NewsPost[]>(),
     ]);
 
   return (
@@ -184,6 +215,69 @@ export default async function HomePage() {
                   artist_name={video.artists?.stage_name ?? ""}
                   priority={i === 0}
                 />
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* ── Latest News — cream ── */}
+      {newsPosts && newsPosts.length > 0 && (
+        <section className="bg-cream">
+          <div className="mx-auto max-w-6xl px-4 sm:px-6 py-20">
+            <SectionHeader
+              eyebrow="From the Label"
+              title="Latest News"
+              action={
+                <Link href="/news" className="text-sm text-oxblood/60 hover:text-ochre transition-colors">
+                  All posts →
+                </Link>
+              }
+            />
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+              {newsPosts.map((post) => (
+                <Link
+                  key={post.id}
+                  href={`/news/${post.slug}`}
+                  className="group flex flex-col rounded-lg overflow-hidden border border-oxblood/10 hover:border-oxblood/30 transition-colors bg-white/50"
+                >
+                  <div className="relative aspect-video bg-ink/5 overflow-hidden">
+                    {post.cover_url ? (
+                      <Image
+                        src={post.cover_url}
+                        alt={post.title}
+                        fill
+                        className="object-cover group-hover:scale-105 transition-transform duration-300"
+                        sizes="(max-width: 640px) 100vw, 33vw"
+                      />
+                    ) : (
+                      <div className="absolute inset-0 flex items-center justify-center opacity-10">
+                        <svg viewBox="0 0 20 28" className="w-8 h-auto" aria-hidden="true">
+                          <path d="M10 1C10 1 4 9 4 16C4 19.8 6.3 23.1 10 25C13.7 23.1 16 19.8 16 16C16 9 10 1 10 1Z" fill="#8B2A1F" />
+                        </svg>
+                      </div>
+                    )}
+                  </div>
+                  <div className="flex flex-col flex-1 p-4 gap-2">
+                    <div className="flex items-center gap-2">
+                      <span className={`inline-block rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider capitalize ${NEWS_CATEGORY_PILL[post.category] ?? "bg-ink/10 text-ink"}`}>
+                        {post.category}
+                      </span>
+                      {post.published_at && (
+                        <span className="text-[11px] text-ink/40">{formatDate(post.published_at)}</span>
+                      )}
+                    </div>
+                    <h3 className="font-display font-semibold text-ink text-base leading-snug group-hover:text-oxblood transition-colors line-clamp-2">
+                      {post.title}
+                    </h3>
+                    {post.excerpt && (
+                      <p className="text-ink/60 text-sm leading-relaxed line-clamp-2 flex-1">{post.excerpt}</p>
+                    )}
+                    <span className="mt-1 text-xs font-medium text-oxblood group-hover:text-ochre transition-colors">
+                      Read more →
+                    </span>
+                  </div>
+                </Link>
               ))}
             </div>
           </div>

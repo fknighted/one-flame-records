@@ -90,6 +90,48 @@ export type Database = {
         }
         Relationships: []
       }
+      news_posts: {
+        Row: {
+          id: string
+          slug: string
+          title: string
+          excerpt: string | null
+          body: string
+          cover_url: string | null
+          category: string
+          published_at: string | null
+          is_published: boolean
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          slug: string
+          title: string
+          excerpt?: string | null
+          body?: string
+          cover_url?: string | null
+          category?: string
+          published_at?: string | null
+          is_published?: boolean
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          slug?: string
+          title?: string
+          excerpt?: string | null
+          body?: string
+          cover_url?: string | null
+          category?: string
+          published_at?: string | null
+          is_published?: boolean
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       assets: {
         Row: {
           artist_id: string

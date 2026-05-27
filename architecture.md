@@ -82,6 +82,7 @@ Artist uploads — instrumentals, demos, reference clips. Private storage, signe
 | `size_bytes` | `bigint` | |
 | `duration_seconds` | `int` nullable | For audio/video |
 | `notes` | `text` nullable | Artist-provided notes |
+| `is_public` | `boolean` | Default false. When true, asset appears on the public artist page (admin/artist can toggle). Signed URL generated at render time via service client. |
 
 ### `signup_codes`
 The QR signup tokens. Admin-only access.
@@ -122,10 +123,28 @@ Phase 4 — state machine for an automated video request.
 | `source_asset_id` | `uuid` | FK → `assets.id` (the instrumental) |
 | `inngest_run_id` | `text` nullable | For looking up in Inngest dashboard |
 | `status` | `text` | `'queued'`, `'analyzing'`, `'prompting'`, `'generating'`, `'assembling'`, `'complete'`, `'failed'` |
-| `params` | `jsonb` | Style, mood, target duration, model preference |
+| `params` | `jsonb` | `{ stylePreset, aspectRatio, model }` |
 | `output_url` | `text` nullable | Final video URL once complete |
 | `error` | `text` nullable | If failed |
+| `cost_estimate_usd` | `numeric` nullable | Written by pipeline on complete |
+| `is_public` | `boolean` | Default false. When true, video appears on public artist page and `/videos` page (admin/artist can toggle). |
 | `started_at`, `completed_at` | `timestamptz` | |
+
+### `news_posts`
+Label news and announcements. Public can read published posts; admin full access.
+
+| Column | Type | Notes |
+|---|---|---|
+| `id` | `uuid` PK | |
+| `slug` | `text` unique | URL-safe identifier |
+| `title` | `text` | |
+| `excerpt` | `text` nullable | Short summary for cards/listings |
+| `body` | `text` | Full post in Markdown |
+| `cover_url` | `text` nullable | Supabase Storage public URL (`public-media` bucket, `news/{id}/...`) |
+| `category` | `text` | `'label'`, `'release'`, `'event'` — default `'label'` |
+| `published_at` | `timestamptz` nullable | When to show publicly |
+| `is_published` | `boolean` | Default false. Must be true AND `published_at <= now()` for public access. |
+| `created_at`, `updated_at` | `timestamptz` | |
 
 ## Row-Level Security
 
@@ -133,6 +152,12 @@ RLS is **on** for every table. Default-deny, then grant explicit policies.
 
 ### Public read tables
 `artists` (where `status = 'active'`), `releases`, `videos` — anyone can `SELECT`. No public `INSERT/UPDATE/DELETE`.
+
+`news_posts` — public can `SELECT` where `is_published = true AND published_at <= now()`.
+
+`assets` — public can `SELECT` where `is_public = true`. Signed URLs are generated server-side at render time via `createServiceClient()` so the underlying `private-assets` bucket stays inaccessible.
+
+`video_jobs` — public can `SELECT` where `is_public = true AND status = 'complete'`.
 
 ### Admin-only tables
 `signup_codes`, `signup_applications`, `profiles` — only users where `profiles.role = 'admin'` can read or write.
@@ -147,9 +172,9 @@ All policies are defined in numbered SQL migrations in `supabase/migrations/`. N
 
 ## Storage buckets
 
-- **`public-media`** — artist photos, release covers, generated video thumbnails. Public reads. Admin writes; artists can write to their own `photos/{artist_id}/...` path.
-- **`private-assets`** — instrumentals, demos, reference clips. No public access. Signed URLs only, 60-minute expiry. Path: `{artist_id}/{asset_id}.{ext}`.
-- **`generated-videos`** — final outputs from the video pipeline. Public reads (so they can be embedded), admin writes via service role from Inngest function.
+- **`public-media`** — artist photos, release covers, news covers. Public reads. Paths: `photos/{artist_id}/...`, `covers/{release_id}/...`, `news/{post_id}/...`.
+- **`private-assets`** — instrumentals, demos, reference clips. No public access. Signed URLs only, **24h expiry when passed into the Inngest pipeline** (pipeline can run 2+ hours); 1h expiry for portal download links. Path: `{artist_id}/{asset_id}.{ext}`.
+- **`generated-videos`** — final outputs from the video pipeline. Stored at `videos/{job_id}.mp4`. Signed URLs generated at render time (1h TTL). Admin/artist can mark `is_public` to surface on the public site.
 
 ## Routes
 
@@ -158,34 +183,47 @@ App Router structure. Route groups in parentheses don't appear in URLs.
 ```
 src/app/
 ├── (public)/                          ← cream theme layout
-│   ├── page.tsx                       /
+│   ├── page.tsx                       / (hero, artists, releases, videos, news, CTA)
 │   ├── artists/
 │   │   ├── page.tsx                   /artists
-│   │   └── [slug]/page.tsx            /artists/<slug>
+│   │   └── [slug]/page.tsx            /artists/<slug> (Spotify embed, releases, generated videos, photos, music)
 │   ├── releases/
 │   │   ├── page.tsx                   /releases
-│   │   └── [slug]/page.tsx            /releases/<slug>
-│   ├── videos/page.tsx                /videos
+│   │   └── [slug]/page.tsx            /releases/<slug> (Spotify album embed)
+│   ├── videos/page.tsx                /videos (music videos + generated videos)
+│   ├── news/
+│   │   ├── page.tsx                   /news (published post cards)
+│   │   └── [slug]/page.tsx            /news/<slug> (markdown body via marked)
+│   ├── sign/page.tsx                  /sign (A&R intake)
 │   ├── about/page.tsx                 /about
 │   └── contact/page.tsx               /contact
-├── (portal)/                          ← ink theme layout, requires artist auth
-│   └── portal/
-│       ├── page.tsx                   /portal (dashboard)
-│       ├── profile/page.tsx           /portal/profile
-│       ├── assets/page.tsx            /portal/assets
-│       ├── assets/new/page.tsx        /portal/assets/new
-│       └── videos/
-│           ├── page.tsx               /portal/videos
-│           └── new/page.tsx           /portal/videos/new
+├── portal/                            ← ink theme, requires artist auth
+│   ├── page.tsx                       /portal (dashboard)
+│   ├── profile/page.tsx               /portal/profile
+│   ├── assets/page.tsx                /portal/assets (public/private toggle)
+│   ├── assets/new/page.tsx            /portal/assets/new
+│   └── videos/
+│       ├── page.tsx                   /portal/videos (job library, public/private toggle)
+│       ├── [job_id]/page.tsx          /portal/videos/<id> (detail, pipeline progress)
+│       └── new/page.tsx               /portal/videos/new
 ├── admin/                             ← ink theme, requires admin auth
 │   ├── layout.tsx
 │   ├── page.tsx                       /admin (overview)
-│   ├── artists/                       /admin/artists ...
-│   ├── releases/
-│   ├── videos/
+│   ├── artists/
+│   │   ├── page.tsx                   /admin/artists
+│   │   ├── [id]/edit/page.tsx         /admin/artists/<id>/edit
+│   │   ├── [id]/assets/page.tsx       /admin/artists/<id>/assets (upload, public/private toggle)
+│   │   └── [id]/videos/page.tsx       /admin/artists/<id>/videos (generated jobs, public/private toggle)
+│   ├── releases/                      /admin/releases (CRUD)
+│   ├── videos/                        /admin/videos (CRUD — YouTube videos)
+│   ├── news/
+│   │   ├── page.tsx                   /admin/news (post list)
+│   │   ├── new/page.tsx               /admin/news/new
+│   │   └── [id]/edit/page.tsx         /admin/news/<id>/edit
 │   ├── applications/                  /admin/applications (review pending)
 │   ├── codes/                         /admin/codes (manage QR codes)
-│   └── jobs/                          /admin/jobs (video pipeline observability)
+│   ├── jobs/                          /admin/jobs (video pipeline observability)
+│   └── settings/                      /admin/settings (monthly budget)
 ├── signup/[code]/page.tsx             /signup/<code> (QR landing)
 ├── login/page.tsx                     /login (shared admin + artist)
 └── api/

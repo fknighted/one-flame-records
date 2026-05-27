@@ -6,39 +6,33 @@ This is the living state of the build. Update at the end of every session.
 
 ## Current state
 
-- **Phase:** 4 — Video automation (pipeline + UI complete; E2E test is the final gate)
-- **Status:** Every page built and visually consistent. Bug fixes landed. E2E test is the only thing between here and Phase 4 sign-off.
-- **Last updated:** 2026-05-20
+- **Phase:** 4 — Video automation (pipeline complete; E2E test pending); Phase 5 public site richness partially shipped
+- **Status:** News/blog, Spotify embeds, generated-videos on public site, and public asset visibility all shipped. E2E video pipeline test is the remaining Phase 4 gate.
+- **Last updated:** 2026-05-27
 
 ## Active focus
 
-Phase 4 sign-off via the E2E test. After that, plan Phase 5.
+E2E video pipeline test to close Phase 4. Public site richness (Phase 5) mostly complete.
 
 ## Blockers
 
-- **End-to-end video pipeline test** — pipeline code is complete and correct; never run against a real file. Needs both servers running + an artist account.
-- **`INNGEST_EVENT_KEY` / `INNGEST_SIGNING_KEY`** — not yet in `.env.local` or Vercel. Required for the production Inngest integration; dev mode works without them (`NODE_ENV=development` + no key = auto-routes to localhost:8288).
+- **End-to-end video pipeline test** — never run against a real file. Needs both servers running + Kling credits.
+- **`INNGEST_EVENT_KEY` / `INNGEST_SIGNING_KEY`** — not yet in `.env.local` or Vercel for production Inngest integration.
+- **Kling credits** — balance was empty; top up at klingai.com before testing.
 
-## Next session (19)
+## Next session
 
-### Priority 1 — E2E test (Phase 4 completion gate)
-1. `npm run dev` (port 3000)
-2. `npx inngest-cli dev -u http://localhost:3000/api/inngest` (port 8288)
-3. Open http://localhost:8288 — Inngest dev UI
-4. Admin: upload a short MP3 (< 3 min) via `/admin/artists/[id]/assets`
-5. Artist: log in → `/portal/videos/new` → select the MP3 → Generate video
-6. Watch 11 steps in the Inngest UI; verify `output_url` in Supabase and email in artist inbox
-7. Cost: ~$1–2 in Kling API credits
+### Priority 1 — E2E video pipeline test (Phase 4 gate)
+1. Top up Kling credits at klingai.com
+2. `npm run dev` (port 3000) + `npx inngest-cli dev -u http://localhost:3000/api/inngest` (port 8288)
+3. Artist portal → upload short MP3 → generate video → watch Inngest steps
+4. Verify `output_url` written to Supabase and video appears on artist page
 
-### Priority 2 — Production Inngest keys
-Once the E2E test passes locally, add `INNGEST_EVENT_KEY` and `INNGEST_SIGNING_KEY` to Vercel so the production pipeline works. Get keys from the Inngest dashboard.
+### Priority 2 — News posts
+Create first real news post via `/admin/news/new` to verify the admin CRUD and public page render end-to-end.
 
-### Priority 3 — Phase 5 planning
-Phase 4 done-when: "a real test instrumental produces a watchable video end-to-end." Once that check is ticked, plan Phase 5. Candidates:
-- Royalties / payout tracking for artists
-- Blog / label news section
-- Enhanced streaming embeds (Spotify iframe) on release detail pages
-- Analytics (Vercel Analytics or Plausible)
+### Priority 3 — Production Inngest keys
+Once E2E test passes, add keys to Vercel.
 
 ## Phase progress
 
@@ -52,6 +46,18 @@ Phase 4 done-when: "a real test instrumental produces a watchable video end-to-e
 ## Session log
 
 Append a new entry at the top of this section after every session. Date, summary, files touched, what's next. Keep it tight — full reasoning belongs in `DECISIONS.md`.
+
+### 2026-05-27 (session 19 cont.)
+
+**Did:** Admin artist generated-videos list. Created `src/app/admin/artists/[id]/videos/page.tsx` — shows all `video_jobs` for an artist with style preset, status (color-coded pill), dates, and a Public/Private toggle on complete jobs. `toggleJobPublic` server action in co-located `actions.ts` uses service client (admin, no ownership check needed). Added "Videos →" link to artist edit page header alongside "Assets →". Added "Generated Videos →" crosslink to assets page.
+**Touched:** `src/app/admin/artists/[id]/videos/page.tsx` (new), `src/app/admin/artists/[id]/videos/actions.ts` (new), `src/app/admin/artists/[id]/edit/page.tsx`, `src/app/admin/artists/[id]/assets/page.tsx`
+**Decided:** Nothing new.
+
+### 2026-05-27 (session 19)
+
+**Did:** "Public site richness" pass. (1) Spotify embeds — `src/lib/spotify.ts` `buildSpotifyEmbedUrl()` helper; album embed (352px) added to release detail page below description; compact artist embed (152px) added to artist page sidebar. (2) News/blog — `news_posts` Supabase table + RLS migration applied; admin CRUD at `/admin/news` (list, new, edit/delete); public pages `/news` (card grid) and `/news/[slug]` (markdown body via `marked`); "News" added to both PublicHeader and admin nav. (3) Generated videos — public `/videos` page now shows a "Generated Videos" section alongside music videos (signed URLs via service client). (4) Homepage — "Latest News" card row added (3 most-recent published posts). (5) Previously: public asset visibility toggles on admin + portal (is_public flag), Generated Videos / Photos / Music sections on artist detail page, transcript + scene-plan preview in admin video form, 24h signed URLs for pipeline audio, restructured Inngest polling (5-min initial sleep + 50×30s).
+**Touched:** `src/lib/spotify.ts` (new), `src/app/(public)/releases/[slug]/page.tsx`, `src/app/(public)/artists/[slug]/page.tsx`, `src/app/(public)/videos/page.tsx`, `src/app/(public)/page.tsx`, `src/app/(public)/news/page.tsx` (new), `src/app/(public)/news/[slug]/page.tsx` (new), `src/app/admin/news/` (all new), `src/components/NewsForm.tsx` (new), `src/components/PublicHeader.tsx`, `src/app/admin/layout.tsx`, `supabase/migrations/20260527000001_news_posts.sql` (new, applied), `src/types/supabase.ts`
+**Decided:** Used `marked` v18 for markdown → HTML. Chose `set_updated_at()` (not `handle_updated_at`) for news_posts trigger — consistent with initial schema.
 
 ### 2026-05-20 (session 18 cont. 3)
 

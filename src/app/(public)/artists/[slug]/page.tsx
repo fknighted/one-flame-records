@@ -7,6 +7,7 @@ import ReleaseCard from "@/components/ReleaseCard";
 import VideoEmbed from "@/components/VideoEmbed";
 import SectionHeader from "@/components/SectionHeader";
 import type { Tables } from "@/types/supabase";
+import { buildSpotifyEmbedUrl } from "@/lib/spotify";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -172,6 +173,7 @@ export default async function ArtistDetailPage({ params }: Props) {
   const socials = (artist.socials as SocialData) ?? {};
   const activeStreaming = STREAMING_SERVICES.filter(({ key }) => streaming[key]);
   const activeSocials = SOCIAL_SERVICES.filter(({ key }) => socials[key]);
+  const spotifyArtistEmbedUrl = streaming.spotify ? buildSpotifyEmbedUrl(streaming.spotify, "artist") : null;
 
   const siteUrl =
     process.env.NEXT_PUBLIC_SITE_URL ?? "https://oneflamerecords.com";
@@ -235,6 +237,19 @@ export default async function ArtistDetailPage({ params }: Props) {
           </div>
 
           <div className="space-y-6">
+            {/* Spotify compact embed */}
+            {spotifyArtistEmbedUrl && (
+              <iframe
+                src={spotifyArtistEmbedUrl}
+                width="100%"
+                height="152"
+                frameBorder="0"
+                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                loading="lazy"
+                className="rounded-lg"
+              />
+            )}
+
             {/* Streaming */}
             {activeStreaming.length > 0 && (
               <div>

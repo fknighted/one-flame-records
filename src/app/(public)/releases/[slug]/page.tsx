@@ -5,6 +5,7 @@ import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
 import VideoEmbed from "@/components/VideoEmbed";
 import type { Tables } from "@/types/supabase";
+import { buildSpotifyEmbedUrl } from "@/lib/spotify";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -145,6 +146,7 @@ export default async function ReleaseDetailPage({ params }: Props) {
 
   const streaming = (release.streaming_links as StreamingLinks) ?? {};
   const activeStreaming = STREAMING_SERVICES.filter(({ key }) => streaming[key]);
+  const spotifyEmbedUrl = streaming.spotify ? buildSpotifyEmbedUrl(streaming.spotify, "album") : null;
   const pillStyle = TYPE_PILL[release.type] ?? "bg-ink/10 text-ink";
 
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://oneflamerecords.com";
@@ -243,6 +245,20 @@ export default async function ReleaseDetailPage({ params }: Props) {
                 <p className="text-ink/70 leading-relaxed max-w-prose mb-10">
                   {release.description}
                 </p>
+              )}
+
+              {spotifyEmbedUrl && (
+                <div className="mb-10 max-w-2xl">
+                  <iframe
+                    src={spotifyEmbedUrl}
+                    width="100%"
+                    height="352"
+                    frameBorder="0"
+                    allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                    loading="lazy"
+                    className="rounded-lg"
+                  />
+                </div>
               )}
 
               {video && (
