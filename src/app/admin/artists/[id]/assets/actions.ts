@@ -66,6 +66,24 @@ export async function uploadAssetForArtist(
   return null;
 }
 
+export async function toggleAssetPublic(assetId: string, _formData: FormData): Promise<void> {
+  const supabase = createServiceClient();
+  const { data: asset } = await supabase
+    .from("assets")
+    .select("is_public, artist_id")
+    .eq("id", assetId)
+    .single();
+
+  if (!asset) return;
+
+  await supabase
+    .from("assets")
+    .update({ is_public: !asset.is_public })
+    .eq("id", assetId);
+
+  revalidatePath(`/admin/artists/${asset.artist_id}/assets`);
+}
+
 export async function deleteAsset(assetId: string, _formData: FormData): Promise<void> {
   const supabase = createServiceClient();
   const { data: asset } = await supabase

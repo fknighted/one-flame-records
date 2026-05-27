@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient, createServiceClient } from "@/lib/supabase/server";
+import { toggleAssetPublic } from "./actions";
 import type { Tables } from "@/types/supabase";
 
 type AssetRow = Tables<"assets">;
@@ -112,6 +113,9 @@ export default async function PortalAssetsPage() {
                 <th className="text-left px-4 py-3 text-bone/40 font-medium text-xs uppercase tracking-wider">
                   Uploaded
                 </th>
+                <th className="text-left px-4 py-3 text-bone/40 font-medium text-xs uppercase tracking-wider">
+                  Visibility
+                </th>
                 <th className="px-4 py-3" />
               </tr>
             </thead>
@@ -134,6 +138,21 @@ export default async function PortalAssetsPage() {
                   </td>
                   <td className="px-4 py-3 text-bone/50">
                     {formatDate(asset.created_at)}
+                  </td>
+                  <td className="px-4 py-3">
+                    <form action={toggleAssetPublic.bind(null, asset.id)}>
+                      <button
+                        type="submit"
+                        title={asset.is_public ? "Visible on your public page — click to hide" : "Click to show on your public page"}
+                        className={`text-xs font-medium px-2 py-0.5 rounded transition-colors ${
+                          asset.is_public
+                            ? "bg-forest/20 text-forest hover:bg-forest/30"
+                            : "bg-bone/10 text-bone/30 hover:bg-bone/20 hover:text-bone/60"
+                        }`}
+                      >
+                        {asset.is_public ? "Public" : "Private"}
+                      </button>
+                    </form>
                   </td>
                   <td className="px-4 py-3 text-right">
                     {asset.signedUrl ? (

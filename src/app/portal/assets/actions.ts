@@ -80,3 +80,34 @@ export async function uploadAsset(
   revalidatePath("/portal/assets");
   redirect("/portal/assets");
 }
+
+export async function toggleAssetPublic(assetId: string, _formData: FormData): Promise<void> {
+  const sessionClient = await createClient();
+  const { data: { user } } = await sessionClient.auth.getUser();
+  if (!user) redirect("/login");
+
+  const { data: profile } = await sessionClient
+    .from("profiles")
+    .select("artist_id")
+    .eq("id", user.id)
+    .single();
+
+  if (!profile?.artist_id) return;
+
+  const service = createServiceClient();
+  const { data: asset } = await service
+    .from("assets")
+    .select("is_public")
+    .eq("id", assetId)
+    .eq("artist_id", profile.artist_id)
+    .single();
+
+  if (!asset) return;
+
+  await service
+    .from("assets")
+    .update({ is_public: !asset.is_public })
+    .eq("id", assetId);
+
+  revalidatePath("/portal/assets");
+}

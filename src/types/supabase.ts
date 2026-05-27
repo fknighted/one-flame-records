@@ -96,6 +96,7 @@ export type Database = {
           created_at: string
           duration_seconds: number | null
           id: string
+          is_public: boolean
           kind: string
           mime_type: string
           notes: string | null
@@ -109,6 +110,7 @@ export type Database = {
           created_at?: string
           duration_seconds?: number | null
           id?: string
+          is_public?: boolean
           kind: string
           mime_type: string
           notes?: string | null
@@ -122,6 +124,7 @@ export type Database = {
           created_at?: string
           duration_seconds?: number | null
           id?: string
+          is_public?: boolean
           kind?: string
           mime_type?: string
           notes?: string | null
@@ -354,6 +357,7 @@ export type Database = {
           error: string | null
           id: string
           inngest_run_id: string | null
+          is_public: boolean
           output_url: string | null
           params: Json
           source_asset_id: string
@@ -369,6 +373,7 @@ export type Database = {
           error?: string | null
           id?: string
           inngest_run_id?: string | null
+          is_public?: boolean
           output_url?: string | null
           params?: Json
           source_asset_id: string
@@ -384,6 +389,7 @@ export type Database = {
           error?: string | null
           id?: string
           inngest_run_id?: string | null
+          is_public?: boolean
           output_url?: string | null
           params?: Json
           source_asset_id?: string

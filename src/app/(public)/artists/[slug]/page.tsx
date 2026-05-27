@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { createClient } from "@/lib/supabase/server";
+import { createClient, createServiceClient } from "@/lib/supabase/server";
 import ReleaseCard from "@/components/ReleaseCard";
 import VideoEmbed from "@/components/VideoEmbed";
 import SectionHeader from "@/components/SectionHeader";
@@ -30,6 +30,9 @@ type ReleaseRow = Tables<"releases"> & {
 type VideoRow = Tables<"videos"> & {
   artists: { stage_name: string } | null;
 };
+
+type AssetRow = Tables<"assets">;
+type VideoJobRow = Tables<"video_jobs">;
 
 async function getArtist(slug: string) {
   const supabase = await createClient();
@@ -104,7 +107,9 @@ export default async function ArtistDetailPage({ params }: Props) {
   const artist = await getArtist(slug);
   if (!artist) notFound();
 
-  const [{ data: releases }, { data: videos }] = await Promise.all([
+  const service = createServiceClient();
+
+  const [{ data: releases }, { data: videos }, { data: publicAssets }, { data: publicJobs }] = await Promise.all([
     supabase
       .from("releases")
       .select("*, artists(stage_name, slug)")
@@ -119,7 +124,49 @@ export default async function ArtistDetailPage({ params }: Props) {
       .order("featured", { ascending: false })
       .order("published_at", { ascending: false })
       .returns<VideoRow[]>(),
+
+    // Public assets — metadata readable via RLS; signed URLs generated server-side
+    service
+      .from("assets")
+      .select("*")
+      .eq("artist_id", artist.id)
+      .eq("is_public", true)
+      .order("created_at", { ascending: false })
+      .returns<AssetRow[]>(),
+
+    // Completed public video jobs
+    service
+      .from("video_jobs")
+      .select("*")
+      .eq("artist_id", artist.id)
+      .eq("is_public", true)
+      .eq("status", "complete")
+      .order("completed_at", { ascending: false })
+      .returns<VideoJobRow[]>(),
   ]);
+
+  // Generate signed URLs for public assets (files live in private-assets bucket)
+  const assetsWithUrls = await Promise.all(
+    (publicAssets ?? []).map(async (asset) => {
+      const { data } = await service.storage
+        .from("private-assets")
+        .createSignedUrl(asset.storage_path, 3600);
+      return { ...asset, signedUrl: data?.signedUrl ?? null };
+    })
+  );
+
+  // Generate fresh signed URLs for generated videos (path is always videos/{id}.mp4)
+  const jobsWithUrls = await Promise.all(
+    (publicJobs ?? []).map(async (job) => {
+      const { data } = await service.storage
+        .from("generated-videos")
+        .createSignedUrl(`videos/${job.id}.mp4`, 3600);
+      return { ...job, videoUrl: data?.signedUrl ?? null };
+    })
+  );
+
+  const publicPhotos = assetsWithUrls.filter((a) => a.kind === "reference_image");
+  const publicMusic = assetsWithUrls.filter((a) => a.kind === "instrumental" || a.kind === "demo");
 
   const streaming = (artist.streaming as StreamingData) ?? {};
   const socials = (artist.socials as SocialData) ?? {};
@@ -269,6 +316,98 @@ export default async function ArtistDetailPage({ params }: Props) {
                   artist_name={v.artists?.stage_name ?? artist.stage_name}
                   priority={i === 0}
                 />
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* Generated Videos */}
+        {jobsWithUrls.length > 0 && (
+          <section>
+            <SectionHeader title="Generated Videos" />
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {jobsWithUrls.map((job) =>
+                job.videoUrl ? (
+                  <div key={job.id} className="rounded-lg overflow-hidden border border-oxblood/10 bg-ink/5">
+                    <video
+                      src={job.videoUrl}
+                      controls
+                      preload="metadata"
+                      className="w-full aspect-video bg-ink/20"
+                    />
+                    {job.params && typeof job.params === "object" && "stylePreset" in job.params && (
+                      <p className="px-3 py-2 text-xs text-ink/50 truncate">
+                        {(job.params as Record<string, string>).stylePreset}
+                      </p>
+                    )}
+                  </div>
+                ) : null
+              )}
+            </div>
+          </section>
+        )}
+
+        {/* Photos */}
+        {publicPhotos.length > 0 && (
+          <section>
+            <SectionHeader title="Photos" />
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+              {publicPhotos.map((photo) =>
+                photo.signedUrl ? (
+                  <a
+                    key={photo.id}
+                    href={photo.signedUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block aspect-square rounded overflow-hidden bg-ink/10 hover:opacity-90 transition-opacity"
+                  >
+                    <img
+                      src={photo.signedUrl}
+                      alt={photo.title}
+                      className="w-full h-full object-cover"
+                      loading="lazy"
+                    />
+                  </a>
+                ) : null
+              )}
+            </div>
+          </section>
+        )}
+
+        {/* Music */}
+        {publicMusic.length > 0 && (
+          <section>
+            <SectionHeader title="Music" />
+            <div className="flex flex-col divide-y divide-oxblood/10 border border-oxblood/10 rounded-lg overflow-hidden">
+              {publicMusic.map((track) => (
+                <div key={track.id} className="flex items-center gap-4 px-4 py-3 hover:bg-oxblood/5 transition-colors">
+                  <div className="flex-1 min-w-0">
+                    <p className="text-ink font-medium text-sm truncate">{track.title}</p>
+                    <p className="text-ink/40 text-xs mt-0.5">
+                      {track.kind === "demo" ? "Demo" : "Instrumental"}
+                      {track.duration_seconds != null && (
+                        <> · {Math.floor(track.duration_seconds / 60)}:{String(track.duration_seconds % 60).padStart(2, "0")}</>
+                      )}
+                    </p>
+                  </div>
+                  {track.signedUrl && (
+                    <div className="flex items-center gap-3 shrink-0">
+                      <audio
+                        src={track.signedUrl}
+                        controls
+                        preload="none"
+                        className="h-8 w-44 sm:w-56"
+                      />
+                      <a
+                        href={track.signedUrl}
+                        download
+                        className="text-xs text-oxblood hover:text-ochre transition-colors font-medium"
+                      >
+                        ↓
+                      </a>
+                    </div>
+                  )}
+                </div>
               ))}
             </div>
           </section>

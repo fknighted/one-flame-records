@@ -2,7 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { createServiceClient } from "@/lib/supabase/server";
 import AdminAssetUploadForm from "@/components/AdminAssetUploadForm";
-import { deleteAsset } from "./actions";
+import { deleteAsset, toggleAssetPublic } from "./actions";
 import type { Tables } from "@/types/supabase";
 
 type Asset = Tables<"assets">;
@@ -94,6 +94,7 @@ export default async function AdminArtistAssetsPage({
                   <th className="text-left px-4 py-3 text-xs font-medium text-bone/40 uppercase tracking-wider">Size</th>
                   <th className="text-left px-4 py-3 text-xs font-medium text-bone/40 uppercase tracking-wider">Duration</th>
                   <th className="text-left px-4 py-3 text-xs font-medium text-bone/40 uppercase tracking-wider">Uploaded</th>
+                  <th className="text-left px-4 py-3 text-xs font-medium text-bone/40 uppercase tracking-wider">Public</th>
                   <th className="px-4 py-3 w-10" />
                 </tr>
               </thead>
@@ -121,6 +122,21 @@ export default async function AdminArtistAssetsPage({
                       </td>
                       <td className="px-4 py-3 text-xs text-bone/50">
                         {formatDate(asset.created_at)}
+                      </td>
+                      <td className="px-4 py-3">
+                        <form action={toggleAssetPublic.bind(null, asset.id)}>
+                          <button
+                            type="submit"
+                            title={asset.is_public ? "Click to make private" : "Click to make public"}
+                            className={`text-xs font-medium px-2 py-0.5 rounded transition-colors ${
+                              asset.is_public
+                                ? "bg-forest/20 text-forest hover:bg-forest/30"
+                                : "bg-bone/10 text-bone/30 hover:bg-bone/20 hover:text-bone/60"
+                            }`}
+                          >
+                            {asset.is_public ? "Public" : "Private"}
+                          </button>
+                        </form>
                       </td>
                       <td className="px-4 py-3 text-right">
                         <div className="flex items-center justify-end gap-3">

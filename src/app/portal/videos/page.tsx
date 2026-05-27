@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { createServiceClient } from "@/lib/supabase/server";
 import VideoLibraryFilter from "@/components/VideoLibraryFilter";
+import { toggleVideoPublic } from "./actions";
 import type { Tables } from "@/types/supabase";
 
 type VideoJob = Tables<"video_jobs"> & {
@@ -371,6 +372,21 @@ export default async function PortalVideosPage({ searchParams }: Params) {
                     className="flex items-center gap-3 justify-end"
                     onClick={(e) => e.preventDefault()}
                   >
+                    {ds === "done" && (
+                      <form action={toggleVideoPublic.bind(null, job.id)}>
+                        <button
+                          type="submit"
+                          title={job.is_public ? "Visible on your public page — click to hide" : "Click to publish on your artist page"}
+                          className={`text-[10px] font-semibold px-2 py-0.5 rounded transition-colors ${
+                            job.is_public
+                              ? "bg-forest/20 text-forest hover:bg-forest/30"
+                              : "bg-bone/10 text-bone/30 hover:bg-bone/20 hover:text-bone/60"
+                          }`}
+                        >
+                          {job.is_public ? "Public" : "Private"}
+                        </button>
+                      </form>
+                    )}
                     {ds === "done" && job.output_url && (
                       <a
                         href={job.output_url}
