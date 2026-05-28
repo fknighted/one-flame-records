@@ -1,5 +1,8 @@
 import { createServiceClient } from "@/lib/supabase/server";
 import { deleteJob } from "./actions";
+import { JobsAutoRefresh } from "@/components/JobsAutoRefresh";
+import { RetryButton } from "@/components/RetryButton";
+import { ArtistPickerDropdown } from "@/components/ArtistPickerDropdown";
 
 const STATUS_STYLES: Record<string, string> = {
   pending:    "bg-bone/10 text-bone/40",
@@ -20,6 +23,8 @@ const STATUS_LABELS: Record<string, string> = {
   complete:   "Complete",
   failed:     "Failed",
 };
+
+const ACTIVE_STATUSES = ["pending", "analyzing", "prompting", "generating", "assembling"];
 
 function formatDate(iso: string | null) {
   if (!iso) return "—";
@@ -59,23 +64,33 @@ type JobRow = {
 export default async function AdminJobsPage() {
   const supabase = createServiceClient();
 
-  const [{ data: jobs }, { count: total }, { count: active }, { count: failed }] =
-    await Promise.all([
-      supabase
-        .from("video_jobs")
-        .select("id, status, created_at, started_at, completed_at, output_url, error, inngest_run_id, params, assets(title), artists(stage_name)")
-        .order("created_at", { ascending: false })
-        .limit(100),
-      supabase.from("video_jobs").select("id", { count: "exact", head: true }),
-      supabase
-        .from("video_jobs")
-        .select("id", { count: "exact", head: true })
-        .in("status", ["analyzing", "prompting", "generating", "assembling"]),
-      supabase
-        .from("video_jobs")
-        .select("id", { count: "exact", head: true })
-        .eq("status", "failed"),
-    ]);
+  const [
+    { data: jobs },
+    { count: total },
+    { count: active },
+    { count: failed },
+    { data: artists },
+  ] = await Promise.all([
+    supabase
+      .from("video_jobs")
+      .select("id, status, created_at, started_at, completed_at, output_url, error, inngest_run_id, params, assets(title), artists(stage_name)")
+      .order("created_at", { ascending: false })
+      .limit(100),
+    supabase.from("video_jobs").select("id", { count: "exact", head: true }),
+    supabase
+      .from("video_jobs")
+      .select("id", { count: "exact", head: true })
+      .in("status", ACTIVE_STATUSES),
+    supabase
+      .from("video_jobs")
+      .select("id", { count: "exact", head: true })
+      .eq("status", "failed"),
+    supabase
+      .from("artists")
+      .select("id, stage_name")
+      .eq("status", "active")
+      .order("stage_name"),
+  ]);
 
   const stats = [
     { label: "Total jobs", value: total ?? 0 },
@@ -84,14 +99,31 @@ export default async function AdminJobsPage() {
     { label: "Complete", value: (total ?? 0) - (active ?? 0) - (failed ?? 0) - ((jobs?.filter(j => j.status === "pending").length) ?? 0) },
   ];
 
+  const hasActiveJobs = (jobs as unknown as JobRow[])?.some((j) =>
+    ACTIVE_STATUSES.includes(j.status)
+  ) ?? false;
+
   return (
     <div className="max-w-5xl">
-      <div className="mb-8">
-        <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-forest mb-2">
-          Label Admin
-        </p>
-        <h1 className="font-display font-bold text-bone text-3xl">Video jobs</h1>
-        <div className="mt-3 h-px w-16 bg-bone/20" />
+      <JobsAutoRefresh hasActiveJobs={hasActiveJobs} />
+
+      <div className="mb-8 flex items-start justify-between gap-4">
+        <div>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-forest mb-2">
+            Label Admin
+          </p>
+          <div className="flex items-center gap-3">
+            <h1 className="font-display font-bold text-bone text-3xl">Video jobs</h1>
+            {hasActiveJobs && (
+              <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-forest/20 text-forest text-xs font-medium">
+                <span className="w-1.5 h-1.5 rounded-full bg-forest animate-pulse" />
+                Live
+              </span>
+            )}
+          </div>
+          <div className="mt-3 h-px w-16 bg-bone/20" />
+        </div>
+        <ArtistPickerDropdown artists={artists ?? []} />
       </div>
 
       {/* Stats row */}
@@ -126,70 +158,68 @@ export default async function AdminJobsPage() {
               {(jobs as unknown as JobRow[]).map((job, i) => {
                 const deleteWithId = deleteJob.bind(null, job.id);
                 return (
-                <tr
-                  key={job.id}
-                  className={`border-b border-bone/10 last:border-0 ${
-                    i % 2 !== 0 ? "bg-bone/[0.02]" : ""
-                  }`}
-                >
-                  <td className="px-4 py-3 text-bone">
-                    {job.artists?.stage_name ?? "—"}
-                  </td>
-                  <td className="px-4 py-3 text-bone/70 max-w-[180px] truncate">
-                    {job.assets?.title ?? "—"}
-                  </td>
-                  <td className="px-4 py-3">
-                    <span
-                      className={`rounded-full px-2 py-0.5 text-xs font-medium ${
-                        STATUS_STYLES[job.status] ?? "bg-bone/10 text-bone/40"
-                      }`}
-                    >
-                      {STATUS_LABELS[job.status] ?? job.status}
-                    </span>
-                  </td>
-                  <td className="px-4 py-3 text-bone/50 text-xs">
-                    {formatDate(job.created_at)}
-                  </td>
-                  <td className="px-4 py-3 text-bone/50 font-mono text-xs">
-                    {formatDuration(job.started_at, job.completed_at)}
-                  </td>
-                  <td className="px-4 py-3 text-right space-x-3 whitespace-nowrap">
-                    {job.status === "complete" && job.output_url && (
-                      <a
-                        href={job.output_url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-ochre hover:text-ochre/80 text-xs font-medium transition-colors"
+                  <tr
+                    key={job.id}
+                    className={`border-b border-bone/10 last:border-0 ${
+                      i % 2 !== 0 ? "bg-bone/[0.02]" : ""
+                    }`}
+                  >
+                    <td className="px-4 py-3 text-bone">
+                      {job.artists?.stage_name ?? "—"}
+                    </td>
+                    <td className="px-4 py-3 text-bone/70 max-w-[180px] truncate">
+                      {job.assets?.title ?? "—"}
+                    </td>
+                    <td className="px-4 py-3">
+                      <span
+                        className={`rounded-full px-2 py-0.5 text-xs font-medium ${
+                          STATUS_STYLES[job.status] ?? "bg-bone/10 text-bone/40"
+                        }`}
                       >
-                        Watch
-                      </a>
-                    )}
-                    {job.status === "failed" && job.error && (
-                      <span className="text-oxblood/60 text-xs truncate max-w-[140px] inline-block align-middle" title={job.error}>
-                        {job.error.length > 40 ? job.error.slice(0, 40) + "…" : job.error}
+                        {STATUS_LABELS[job.status] ?? job.status}
                       </span>
-                    )}
-                    {job.inngest_run_id && (
-                      <a
-                        href={`https://app.inngest.com/env/production/runs/${job.inngest_run_id}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-bone/30 hover:text-bone/60 text-xs transition-colors"
-                      >
-                        Logs ↗
-                      </a>
-                    )}
-                    <form action={deleteWithId} className="inline">
-                      <button
-                        type="submit"
-                        className="text-xs text-bone/30 hover:text-red-400 transition-colors"
-                        title="Delete job"
-                      >
-                        ×
-                      </button>
-                    </form>
-                  </td>
-                </tr>
+                    </td>
+                    <td className="px-4 py-3 text-bone/50 text-xs">
+                      {formatDate(job.created_at)}
+                    </td>
+                    <td className="px-4 py-3 text-bone/50 font-mono text-xs">
+                      {formatDuration(job.started_at, job.completed_at)}
+                    </td>
+                    <td className="px-4 py-3 text-right space-x-3 whitespace-nowrap">
+                      {job.status === "complete" && job.output_url && (
+                        <a
+                          href={job.output_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-ochre hover:text-ochre/80 text-xs font-medium transition-colors"
+                        >
+                          Watch
+                        </a>
+                      )}
+                      {job.status === "failed" && (
+                        <RetryButton jobId={job.id} errorText={job.error} />
+                      )}
+                      {job.inngest_run_id && (
+                        <a
+                          href={`https://app.inngest.com/env/production/runs/${job.inngest_run_id}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-bone/30 hover:text-bone/60 text-xs transition-colors"
+                        >
+                          Logs ↗
+                        </a>
+                      )}
+                      <form action={deleteWithId} className="inline">
+                        <button
+                          type="submit"
+                          className="text-xs text-bone/30 hover:text-red-400 transition-colors"
+                          title="Delete job"
+                        >
+                          ×
+                        </button>
+                      </form>
+                    </td>
+                  </tr>
                 );
               })}
             </tbody>

@@ -7,7 +7,7 @@ import type { AdminVideoRequestState } from "@/app/admin/artists/[id]/videos/new
 const SECONDS_PER_CLIP = 10;
 const MIN_CLIPS = 4;
 const MAX_CLIPS = 20;
-const COST_PER_CLIP_USD = 0.28; // 10s × $0.028/s, Kling v1 std
+const COST_PER_CLIP_USD = 0.25; // 10s × $0.025/s, kie.ai Kling 2.1 Standard
 
 function estimateCost(durationSeconds: number | null): { clips: number; cost: string } | null {
   if (!durationSeconds) return null;
@@ -144,7 +144,7 @@ export function AdminVideoRequestForm({ assets, defaultAssetId, referenceImages,
         </select>
         {estimate && (
           <p className="mt-2 text-xs text-bone/40">
-            ~{estimate.clips} clips · estimated Kling cost <span className="text-bone/60">${estimate.cost}</span>
+            ~{estimate.clips} clips · estimated cost <span className="text-bone/60">${estimate.cost}</span>
           </p>
         )}
       </div>
