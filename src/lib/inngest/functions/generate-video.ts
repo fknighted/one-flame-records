@@ -12,10 +12,11 @@ type Status = "analyzing" | "prompting" | "generating" | "assembling" | "complet
 
 async function updateJobStatus(jobId: string, status: Status, extra?: Record<string, unknown>) {
   const supabase = createServiceClient();
-  await supabase
+  const { error } = await supabase
     .from("video_jobs")
     .update({ status, ...extra })
     .eq("id", jobId);
+  if (error) throw new Error(`DB update failed (${status}): ${error.message}`);
 }
 
 export const generateVideo = inngest.createFunction(
