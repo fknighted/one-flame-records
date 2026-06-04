@@ -67,8 +67,10 @@ export class KieGenerator implements ClipGenerator {
     const state: string = data.state ?? data.status ?? "";
 
     if (state === "success") {
-      // Unified market API returns video_url directly on the data object
-      const videoUrl: string = data.video_url ?? data.videoUrl;
+      // resultJson is a JSON string containing { resultUrls: [url, ...] }
+      const resultJson = data.resultJson;
+      const parsed = typeof resultJson === "string" ? JSON.parse(resultJson) : resultJson;
+      const videoUrl: string = parsed?.resultUrls?.[0] ?? parsed?.video_url ?? data.video_url;
       if (!videoUrl) throw new Error(`kie.ai: success but no video_url: ${JSON.stringify(json)}`);
       const actualDuration = parseInt(toDuration(opts.durationSeconds), 10);
       return {
