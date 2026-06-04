@@ -194,7 +194,7 @@ export const generateVideo = inngest.createFunction(
 
     // Step 5: Assemble final video
     const outputUrl = await step.run("assemble", () =>
-      assembleVideo(clips, job.audioUrl, jobId)
+      assembleVideo(clips, job.audioUrl, jobId, scenes.map(s => s.end - s.start))
     );
 
     // Step 6: Mark complete — store output URL, timing, and actual cost

@@ -11,12 +11,16 @@ const MIN_CLIPS = 4;
 const MAX_CLIPS = 20;
 const ENERGY_CYCLE: Array<"low" | "mid" | "high"> = ["low", "mid", "high", "mid"];
 
-function buildSections(duration: number): AudioFeatures["sections"] {
-  const count = Math.min(MAX_CLIPS, Math.max(MIN_CLIPS, Math.round(duration / SECONDS_PER_CLIP)));
-  const partSize = duration / count;
+function buildSections(duration: number, bpm: number): AudioFeatures["sections"] {
+  const beatInterval = 60 / bpm;
+  // Largest 4-beat multiple that fits in a 10s clip (e.g. 12 beats @ 90 BPM = 8.0s)
+  const beatsPerClip = (Math.floor(10 / beatInterval / 4) * 4) || 4;
+  const sectionDuration = beatsPerClip * beatInterval;
+
+  const count = Math.min(MAX_CLIPS, Math.max(MIN_CLIPS, Math.round(duration / sectionDuration)));
   return Array.from({ length: count }, (_, i) => ({
-    start: Math.round(i * partSize * 10) / 10,
-    end: Math.round((i + 1) * partSize * 10) / 10,
+    start: Math.round(i * sectionDuration * 100) / 100,
+    end:   Math.round(Math.min((i + 1) * sectionDuration, duration) * 100) / 100,
     energy: ENERGY_CYCLE[i % ENERGY_CYCLE.length],
   }));
 }
@@ -41,6 +45,6 @@ export async function analyzeAudio(audioUrl: string): Promise<AudioFeatures> {
   return {
     bpm,
     durationSeconds,
-    sections: buildSections(durationSeconds),
+    sections: buildSections(durationSeconds, bpm),
   };
 }

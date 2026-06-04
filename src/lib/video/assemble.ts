@@ -17,7 +17,8 @@ async function downloadToTmp(url: string, filename: string): Promise<string> {
 async function runFfmpeg(
   clipPaths: string[],
   audioPath: string,
-  outputPath: string
+  outputPath: string,
+  trimDurations?: number[]
 ): Promise<void> {
   const ffmpegInstaller = await import("@ffmpeg-installer/ffmpeg");
   const ffmpeg = (await import("fluent-ffmpeg")).default;
@@ -41,7 +42,11 @@ async function runFfmpeg(
     // Simpler and more reliable than xfade, which requires identical stream
     // properties and precise offset calculations.
     let filterStr = clipPaths
-      .map((_, i) => `[${i}:v]fps=24,format=yuv420p[v${i}];`)
+      .map((_, i) => {
+        const dur = trimDurations?.[i];
+        const trimPart = dur ? `,trim=duration=${dur},setpts=PTS-STARTPTS` : "";
+        return `[${i}:v]fps=24,format=yuv420p${trimPart}[v${i}];`;
+      })
       .join("");
     filterStr += clipPaths.map((_, i) => `[v${i}]`).join("") + `concat=n=${n}:v=1:a=0[vout];`;
     filterStr += `[${n}:a]aformat=sample_rates=44100:channel_layouts=stereo[aout]`;
@@ -59,7 +64,8 @@ async function runFfmpeg(
 export async function assembleVideo(
   clips: ClipResult[],
   audioUrl: string,
-  jobId: string
+  jobId: string,
+  sceneDurations?: number[]
 ): Promise<string> {
   const tmpDir = os.tmpdir();
   const clipPaths: string[] = [];
@@ -75,7 +81,7 @@ export async function assembleVideo(
   const audioPath = await downloadToTmp(audioUrl, `audio-${jobId}.mp3`);
   const outputPath = path.join(tmpDir, `output-${jobId}.mp4`);
 
-  await runFfmpeg(clipPaths, audioPath, outputPath);
+  await runFfmpeg(clipPaths, audioPath, outputPath, sceneDurations);
 
   // Upload to Supabase Storage
   const supabase = createServiceClient();
