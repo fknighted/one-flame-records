@@ -43,9 +43,9 @@ export default function InkShell({ nav, displayName, children }: Props) {
           <Image
             src="/logo-4.png"
             alt="One Flame Records"
-            width={140}
-            height={77}
-            className="h-10 sm:h-14 w-auto"
+            width={200}
+            height={110}
+            className="h-14 sm:h-20 w-auto"
           />
         </Link>
 
@@ -68,22 +68,35 @@ export default function InkShell({ nav, displayName, children }: Props) {
         <nav
           className={[
             "fixed sm:static inset-y-0 left-0 z-50",
-            "w-64 sm:w-52 shrink-0",
+            "w-64 sm:w-60 shrink-0",
             "bg-ink border-r border-bone/10",
             "py-6 px-3",
             "transform transition-transform duration-200 ease-in-out",
             open ? "translate-x-0" : "-translate-x-full sm:translate-x-0",
           ].join(" ")}
         >
+          {/* Desktop sidebar logo */}
+          <div className="hidden sm:flex justify-center px-4 mb-8">
+            <Link href={nav[0].href}>
+              <Image
+                src="/logo.png"
+                alt="One Flame Records"
+                width={160}
+                height={160}
+                className="w-36 h-auto"
+              />
+            </Link>
+          </div>
+
           {/* Mobile header inside sidebar */}
           <div className="sm:hidden flex items-center justify-between px-3 mb-6">
             <Link href={nav[0].href} onClick={() => setOpen(false)}>
               <Image
                 src="/logo-4.png"
                 alt="One Flame Records"
-                width={120}
-                height={66}
-                className="h-10 w-auto"
+                width={160}
+                height={88}
+                className="h-14 w-auto"
               />
             </Link>
             <button
