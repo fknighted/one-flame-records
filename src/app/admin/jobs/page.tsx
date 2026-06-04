@@ -56,6 +56,7 @@ type JobRow = {
   output_url: string | null;
   error: string | null;
   inngest_run_id: string | null;
+  cost_estimate_usd: number | null;
   params: Record<string, unknown>;
   assets: { title: string } | null;
   artists: { stage_name: string } | null;
@@ -73,7 +74,7 @@ export default async function AdminJobsPage() {
   ] = await Promise.all([
     supabase
       .from("video_jobs")
-      .select("id, status, created_at, started_at, completed_at, output_url, error, inngest_run_id, params, assets(title), artists(stage_name)")
+      .select("id, status, created_at, started_at, completed_at, output_url, error, inngest_run_id, cost_estimate_usd, params, assets(title), artists(stage_name)")
       .order("created_at", { ascending: false })
       .limit(100),
     supabase.from("video_jobs").select("id", { count: "exact", head: true }),
@@ -150,7 +151,8 @@ export default async function AdminJobsPage() {
                 <th className="text-left px-4 py-3 text-bone/40 font-medium text-xs uppercase tracking-wider">Asset</th>
                 <th className="text-left px-4 py-3 text-bone/40 font-medium text-xs uppercase tracking-wider">Status</th>
                 <th className="text-left px-4 py-3 text-bone/40 font-medium text-xs uppercase tracking-wider">Requested</th>
-                <th className="text-left px-4 py-3 text-bone/40 font-medium text-xs uppercase tracking-wider">Duration</th>
+                <th className="text-left px-4 py-3 text-bone/40 font-medium text-xs uppercase tracking-wider">Cost</th>
+                <th className="text-left px-4 py-3 text-bone/40 font-medium text-xs uppercase tracking-wider">Process time</th>
                 <th className="px-4 py-3" />
               </tr>
             </thead>
@@ -181,6 +183,11 @@ export default async function AdminJobsPage() {
                     </td>
                     <td className="px-4 py-3 text-bone/50 text-xs">
                       {formatDate(job.created_at)}
+                    </td>
+                    <td className="px-4 py-3 text-bone/50 font-mono text-xs">
+                      {job.cost_estimate_usd != null
+                        ? `$${Number(job.cost_estimate_usd).toFixed(2)}`
+                        : "—"}
                     </td>
                     <td className="px-4 py-3 text-bone/50 font-mono text-xs">
                       {formatDuration(job.started_at, job.completed_at)}

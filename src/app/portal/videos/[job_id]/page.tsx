@@ -338,7 +338,7 @@ export default async function VideoJobDetailPage({ params }: Props) {
                   </span>
                 </div>
               ))}
-              {job.cost_estimate_usd && (
+              {job.cost_estimate_usd != null && (
                 <div className="flex items-center justify-between pt-2 border-t border-bone/10">
                   <span className="text-[11px] font-semibold uppercase tracking-[0.14em] text-bone/50">
                     Est. cost
