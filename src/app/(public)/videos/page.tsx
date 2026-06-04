@@ -102,6 +102,7 @@ export default async function VideosPage({
                   <VideoEmbed
                     key={video.id}
                     youtube_id={video.youtube_id}
+                    storage_url={video.storage_url}
                     title={video.title}
                     artist_name={video.artists?.stage_name ?? ""}
                     priority={i < 3}

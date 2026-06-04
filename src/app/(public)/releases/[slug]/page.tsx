@@ -268,6 +268,7 @@ export default async function ReleaseDetailPage({ params }: Props) {
                   <div className="max-w-2xl">
                     <VideoEmbed
                       youtube_id={video.youtube_id}
+                      storage_url={video.storage_url}
                       title={video.title}
                       artist_name={video.artists?.stage_name ?? artist?.stage_name ?? ""}
                       priority

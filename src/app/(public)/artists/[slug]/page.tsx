@@ -327,6 +327,7 @@ export default async function ArtistDetailPage({ params }: Props) {
                 <VideoEmbed
                   key={v.id}
                   youtube_id={v.youtube_id}
+                  storage_url={v.storage_url}
                   title={v.title}
                   artist_name={v.artists?.stage_name ?? artist.stage_name}
                   priority={i === 0}

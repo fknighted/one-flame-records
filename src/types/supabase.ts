@@ -90,48 +90,6 @@ export type Database = {
         }
         Relationships: []
       }
-      news_posts: {
-        Row: {
-          id: string
-          slug: string
-          title: string
-          excerpt: string | null
-          body: string
-          cover_url: string | null
-          category: string
-          published_at: string | null
-          is_published: boolean
-          created_at: string
-          updated_at: string
-        }
-        Insert: {
-          id?: string
-          slug: string
-          title: string
-          excerpt?: string | null
-          body?: string
-          cover_url?: string | null
-          category?: string
-          published_at?: string | null
-          is_published?: boolean
-          created_at?: string
-          updated_at?: string
-        }
-        Update: {
-          id?: string
-          slug?: string
-          title?: string
-          excerpt?: string | null
-          body?: string
-          cover_url?: string | null
-          category?: string
-          published_at?: string | null
-          is_published?: boolean
-          created_at?: string
-          updated_at?: string
-        }
-        Relationships: []
-      }
       assets: {
         Row: {
           artist_id: string
@@ -184,6 +142,48 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      news_posts: {
+        Row: {
+          body: string
+          category: string
+          cover_url: string | null
+          created_at: string
+          excerpt: string | null
+          id: string
+          is_published: boolean
+          published_at: string | null
+          slug: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          body?: string
+          category?: string
+          cover_url?: string | null
+          created_at?: string
+          excerpt?: string | null
+          id?: string
+          is_published?: boolean
+          published_at?: string | null
+          slug: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          body?: string
+          category?: string
+          cover_url?: string | null
+          created_at?: string
+          excerpt?: string | null
+          id?: string
+          is_published?: boolean
+          published_at?: string | null
+          slug?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
       }
       profiles: {
         Row: {
@@ -465,9 +465,10 @@ export type Database = {
           kind: string
           published_at: string
           release_id: string | null
+          storage_url: string | null
           title: string
           updated_at: string
-          youtube_id: string
+          youtube_id: string | null
         }
         Insert: {
           artist_id: string
@@ -477,9 +478,10 @@ export type Database = {
           kind: string
           published_at?: string
           release_id?: string | null
+          storage_url?: string | null
           title: string
           updated_at?: string
-          youtube_id: string
+          youtube_id?: string | null
         }
         Update: {
           artist_id?: string
@@ -489,9 +491,10 @@ export type Database = {
           kind?: string
           published_at?: string
           release_id?: string | null
+          storage_url?: string | null
           title?: string
           updated_at?: string
-          youtube_id?: string
+          youtube_id?: string | null
         }
         Relationships: [
           {

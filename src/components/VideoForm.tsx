@@ -10,7 +10,8 @@ type Release = { id: string; title: string };
 type InitialValues = {
   id?: string;
   title?: string;
-  youtube_id?: string;
+  youtube_id?: string | null;
+  storage_url?: string | null;
   artist_id?: string;
   release_id?: string | null;
   kind?: string;
@@ -55,12 +56,13 @@ export default function VideoForm({
   releases: Release[];
 }) {
   const [state, formAction, pending] = useActionState(action, null);
-  const [youtubeInput, setYoutubeInput] = useState(
-    initialValues.youtube_id ?? ""
-  );
-  const [previewId, setPreviewId] = useState<string | null>(
-    initialValues.youtube_id ?? null
-  );
+
+  // Determine initial source based on what's saved
+  const hasUpload = !!initialValues.storage_url && !initialValues.youtube_id;
+  const [source, setSource] = useState<"youtube" | "upload">(hasUpload ? "upload" : "youtube");
+
+  const [youtubeInput, setYoutubeInput] = useState(initialValues.youtube_id ?? "");
+  const [previewId, setPreviewId] = useState<string | null>(initialValues.youtube_id ?? null);
 
   useEffect(() => {
     const id = extractYouTubeId(youtubeInput);
@@ -68,7 +70,7 @@ export default function VideoForm({
   }, [youtubeInput]);
 
   return (
-    <form action={formAction} className="space-y-8 max-w-2xl">
+    <form action={formAction} className="space-y-8 max-w-2xl" encType="multipart/form-data">
       {initialValues.id && (
         <input type="hidden" name="id" value={initialValues.id} />
       )}
@@ -94,29 +96,72 @@ export default function VideoForm({
           />
         </div>
 
+        {/* Source toggle */}
         <div>
-          <label className={LABEL}>YouTube URL or Video ID *</label>
-          <input
-            name="youtube_id"
-            type="text"
-            required
-            value={youtubeInput}
-            onChange={(e) => setYoutubeInput(e.target.value)}
-            placeholder="https://youtu.be/… or 11-char ID"
-            className={INPUT}
-          />
-        </div>
-
-        {/* YouTube thumbnail preview */}
-        {previewId && (
-          <div className="rounded overflow-hidden border border-bone/15 w-64">
-            <img
-              src={`https://img.youtube.com/vi/${previewId}/mqdefault.jpg`}
-              alt="YouTube thumbnail preview"
-              className="w-full"
-            />
+          <label className={LABEL}>Video source *</label>
+          <div className="flex rounded overflow-hidden border border-bone/15 w-fit mb-4">
+            <button
+              type="button"
+              onClick={() => setSource("youtube")}
+              className={`px-4 py-1.5 text-sm transition-colors ${
+                source === "youtube"
+                  ? "bg-ochre text-ink font-medium"
+                  : "text-bone/50 hover:text-bone"
+              }`}
+            >
+              YouTube link
+            </button>
+            <button
+              type="button"
+              onClick={() => setSource("upload")}
+              className={`px-4 py-1.5 text-sm transition-colors ${
+                source === "upload"
+                  ? "bg-ochre text-ink font-medium"
+                  : "text-bone/50 hover:text-bone"
+              }`}
+            >
+              Upload file
+            </button>
           </div>
-        )}
+
+          {source === "youtube" && (
+            <div className="space-y-3">
+              <input
+                name="youtube_id"
+                type="text"
+                value={youtubeInput}
+                onChange={(e) => setYoutubeInput(e.target.value)}
+                placeholder="https://youtu.be/… or 11-char ID"
+                className={INPUT}
+              />
+              {previewId && (
+                <div className="rounded overflow-hidden border border-bone/15 w-64">
+                  <img
+                    src={`https://img.youtube.com/vi/${previewId}/mqdefault.jpg`}
+                    alt="YouTube thumbnail preview"
+                    className="w-full"
+                  />
+                </div>
+              )}
+            </div>
+          )}
+
+          {source === "upload" && (
+            <div className="space-y-2">
+              <input
+                name="video_file"
+                type="file"
+                accept="video/*"
+                className="block w-full text-sm text-bone/60 file:mr-3 file:py-1.5 file:px-3 file:rounded file:border-0 file:bg-bone/10 file:text-bone file:text-sm hover:file:bg-bone/20 file:cursor-pointer"
+              />
+              {initialValues.storage_url && (
+                <p className="text-xs text-bone/40">
+                  Current file saved — upload a new file to replace it.
+                </p>
+              )}
+            </div>
+          )}
+        </div>
       </section>
 
       {/* Metadata */}
