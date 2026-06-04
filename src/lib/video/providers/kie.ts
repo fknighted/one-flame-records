@@ -2,8 +2,8 @@ import type { ClipGenerator, ClipOptions, ClipPollResult, ClipResult } from "@/l
 
 const KIE_API_BASE = "https://api.kie.ai";
 
-// Default to Kling 2.1 Standard — ~$0.125/5s clip vs $0.14 direct
-const DEFAULT_KIE_MODEL = "kling-v2-1-standard";
+// Kling 2.6 via kie.ai unified market API — ~$0.125/5s clip
+const DEFAULT_KIE_MODEL = "kling-2.6/text-to-video";
 const COST_PER_SECOND_USD = 0.025;
 
 function getAuthHeader(): string {
@@ -20,19 +20,22 @@ export class KieGenerator implements ClipGenerator {
   name = "kie";
 
   async submitClip(opts: ClipOptions): Promise<string> {
-    const res = await fetch(`${KIE_API_BASE}/api/v1/kling/generate`, {
+    const res = await fetch(`${KIE_API_BASE}/api/v1/jobs/createTask`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: getAuthHeader(),
       },
       body: JSON.stringify({
-        prompt: opts.prompt,
-        negativePrompt: "blurry, low quality, watermark, text overlay",
-        duration: toDuration(opts.durationSeconds),
-        aspectRatio: opts.aspectRatio,
         model: DEFAULT_KIE_MODEL,
-        ...(opts.referenceImage ? { imageUrl: opts.referenceImage } : {}),
+        input: {
+          prompt: opts.prompt,
+          negative_prompt: "blurry, low quality, watermark, text overlay",
+          duration: toDuration(opts.durationSeconds),
+          aspect_ratio: opts.aspectRatio,
+          sound: false,
+          ...(opts.referenceImage ? { image_url: opts.referenceImage } : {}),
+        },
       }),
     });
 
@@ -42,8 +45,9 @@ export class KieGenerator implements ClipGenerator {
     }
 
     const json = await res.json();
-    const taskId: string = json?.data?.taskId;
-    if (!taskId) throw new Error(`kie.ai: no taskId in response: ${JSON.stringify(json)}`);
+    // kie.ai returns task_id (snake_case) in the unified market API
+    const taskId: string = json?.data?.task_id ?? json?.data?.taskId;
+    if (!taskId) throw new Error(`kie.ai: no task_id in response: ${JSON.stringify(json)}`);
     return taskId;
   }
 
@@ -59,15 +63,13 @@ export class KieGenerator implements ClipGenerator {
     }
 
     const json = await res.json();
-    const state: string = json?.data?.state ?? json?.data?.status ?? "";
+    const data = json?.data ?? {};
+    const state: string = data.state ?? data.status ?? "";
 
     if (state === "success") {
-      const resultJson = json?.data?.resultJson;
-      const parsed = typeof resultJson === "string" ? JSON.parse(resultJson) : resultJson;
-      // kie.ai may return { videos: [{ url }] } or { url } or [{ url }]
-      const videoUrl: string =
-        parsed?.videos?.[0]?.url ?? parsed?.url ?? parsed?.[0]?.url;
-      if (!videoUrl) throw new Error(`kie.ai: success but no video URL: ${JSON.stringify(json)}`);
+      // Unified market API returns video_url directly on the data object
+      const videoUrl: string = data.video_url ?? data.videoUrl;
+      if (!videoUrl) throw new Error(`kie.ai: success but no video_url: ${JSON.stringify(json)}`);
       const actualDuration = parseInt(toDuration(opts.durationSeconds), 10);
       return {
         done: true,
@@ -81,7 +83,7 @@ export class KieGenerator implements ClipGenerator {
     }
 
     if (state === "fail" || state === "failed") {
-      const reason = json?.data?.failReason ?? json?.data?.message ?? "unknown";
+      const reason = data.failReason ?? data.fail_reason ?? data.message ?? "unknown";
       throw new Error(`kie.ai: task failed — ${reason}`);
     }
 
