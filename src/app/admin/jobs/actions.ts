@@ -10,6 +10,15 @@ export async function deleteJob(jobId: string): Promise<void> {
   revalidatePath("/admin/jobs");
 }
 
+export async function resetJob(jobId: string): Promise<void> {
+  const supabase = createServiceClient();
+  await supabase
+    .from("video_jobs")
+    .update({ status: "failed", error: "Manually reset by admin" })
+    .eq("id", jobId);
+  revalidatePath("/admin/jobs");
+}
+
 export async function retryJob(jobId: string): Promise<void> {
   const supabase = createServiceClient();
 

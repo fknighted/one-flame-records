@@ -1,7 +1,7 @@
 import { createServiceClient } from "@/lib/supabase/server";
 import { deleteJob } from "./actions";
 import { JobsAutoRefresh } from "@/components/JobsAutoRefresh";
-import { RetryButton } from "@/components/RetryButton";
+import { JobActions } from "@/components/RetryButton";
 import { ArtistPickerDropdown } from "@/components/ArtistPickerDropdown";
 
 const STATUS_STYLES: Record<string, string> = {
@@ -196,9 +196,7 @@ export default async function AdminJobsPage() {
                           Watch
                         </a>
                       )}
-                      {job.status === "failed" && (
-                        <RetryButton jobId={job.id} errorText={job.error} />
-                      )}
+                      <JobActions jobId={job.id} status={job.status} errorText={job.error} />
                       {job.inngest_run_id && (
                         <a
                           href={`https://app.inngest.com/env/production/runs/${job.inngest_run_id}`}
