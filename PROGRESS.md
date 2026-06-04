@@ -6,33 +6,32 @@ This is the living state of the build. Update at the end of every session.
 
 ## Current state
 
-- **Phase:** 4 — Video automation (pipeline complete; E2E test pending); Phase 5 public site richness partially shipped
-- **Status:** News/blog, Spotify embeds, generated-videos on public site, and public asset visibility all shipped. E2E video pipeline test is the remaining Phase 4 gate.
-- **Last updated:** 2026-05-27
+- **Phase:** 4 — Video automation (pipeline complete; E2E test pending)
+- **Status:** kie.ai provider live, all Inngest/Kling/Anthropic keys confirmed in Vercel, admin jobs UX overhauled. E2E pipeline test is the only remaining Phase 4 gate.
+- **Last updated:** 2026-06-01
 
 ## Active focus
 
-E2E video pipeline test to close Phase 4. Public site richness (Phase 5) mostly complete.
+E2E video pipeline test to close Phase 4.
 
 ## Blockers
 
-- **End-to-end video pipeline test** — never run against a real file. Needs both servers running + Kling credits.
-- **`INNGEST_EVENT_KEY` / `INNGEST_SIGNING_KEY`** — not yet in `.env.local` or Vercel for production Inngest integration.
-- **Kling credits** — balance was empty; top up at klingai.com before testing.
+- **End-to-end video pipeline test** — never run against a real file. All keys are set; just needs both servers running and a test MP3.
 
 ## Next session
 
 ### Priority 1 — E2E video pipeline test (Phase 4 gate)
-1. Top up Kling credits at klingai.com
-2. `npm run dev` (port 3000) + `npx inngest-cli dev -u http://localhost:3000/api/inngest` (port 8288)
-3. Artist portal → upload short MP3 → generate video → watch Inngest steps
-4. Verify `output_url` written to Supabase and video appears on artist page
+1. `npm run dev` (port 3000) + `npx inngest-cli dev -u http://localhost:3000/api/inngest` (port 8288)
+2. Upload a short MP3 via `/admin/artists/{id}/assets`
+3. `/admin/jobs` → "+ Request video" → pick artist → fill form → submit
+4. Watch Inngest dashboard (localhost:8288) step through: load-job → analyze → prompts → submit-clip → poll → assemble → complete
+5. Confirm `output_url` written to Supabase and video appears in `/portal/videos` and `/admin/artists/{id}/videos`
 
 ### Priority 2 — News posts
-Create first real news post via `/admin/news/new` to verify the admin CRUD and public page render end-to-end.
+Create first real news post via `/admin/news/new` to verify admin CRUD and public `/news` page end-to-end.
 
-### Priority 3 — Production Inngest keys
-Once E2E test passes, add keys to Vercel.
+### Priority 3 — Phase 4 close
+Once E2E test passes, mark Phase 4 complete and plan Phase 5 scope.
 
 ## Phase progress
 
@@ -46,6 +45,14 @@ Once E2E test passes, add keys to Vercel.
 ## Session log
 
 Append a new entry at the top of this section after every session. Date, summary, files touched, what's next. Keep it tight — full reasoning belongs in `DECISIONS.md`.
+
+### 2026-06-01 (session 20)
+
+**Did:** Three improvements. (1) kie.ai video provider — `src/lib/video/providers/kie.ts` implements `ClipGenerator` against kie.ai's unified API (Kling 2.1 Standard, ~$0.125/5s vs $0.14 direct); plain Bearer token auth replaces hand-rolled JWT; `DEFAULT_VIDEO_MODEL=kie` in `.env.example`; all prod keys confirmed in Vercel. (2) Admin jobs UX — auto-refresh every 30s while jobs active (`JobsAutoRefresh`), one-click ↺ Retry on failed jobs (`RetryButton` + `retryJob` action clones job + re-fires Inngest), "+ Request video" artist picker dropdown in header (`ArtistPickerDropdown`), cost estimate updated to kie.ai pricing. (3) Flame-only favicon — cropped flame mark from `public/logo.png` using sharp (512×512 transparent PNG), saved as `src/app/icon.png`, removed old `favicon.ico`.
+**Touched:** `src/lib/video/providers/kie.ts` (new), `src/lib/video/index.ts`, `.env.example`, `src/app/admin/jobs/actions.ts`, `src/app/admin/jobs/page.tsx`, `src/components/JobsAutoRefresh.tsx` (new), `src/components/RetryButton.tsx` (new), `src/components/ArtistPickerDropdown.tsx` (new), `src/components/AdminVideoRequestForm.tsx`, `src/app/icon.png`, `src/app/favicon.ico` (deleted)
+**Decided:** kie.ai over Higgsfield — Higgsfield is image-to-video only and incompatible with pipeline's submit/check pattern. kie.ai uses identical async API, simpler auth, and proxies multiple models.
+**Blocked on:** E2E pipeline test.
+**Next:** E2E test → Phase 4 complete.
 
 ### 2026-05-27 (session 19 cont.)
 
