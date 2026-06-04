@@ -37,7 +37,7 @@ export const generateVideo = inngest.createFunction(
       const supabase = createServiceClient();
       const { data, error } = await supabase
         .from("video_jobs")
-        .select("*, assets(storage_path, title)")
+        .select("*, assets(storage_path, title), artists(stage_name)")
         .eq("id", jobId)
         .single();
       if (error || !data) throw new Error(`Job not found: ${jobId}`);
@@ -51,7 +51,10 @@ export const generateVideo = inngest.createFunction(
         .createSignedUrl(asset.storage_path, 86400); // 24h — pipeline can run 2+ hours
       if (!signed?.signedUrl) throw new Error("Could not sign asset URL");
 
-      return { ...data, audioUrl: signed.signedUrl, assetTitle: asset.title };
+      const artistName =
+        (data.artists as { stage_name: string } | null)?.stage_name ?? "One Flame Records";
+
+      return { ...data, audioUrl: signed.signedUrl, assetTitle: asset.title, artistName };
     });
 
     await step.run("mark-analyzing", () =>
@@ -194,7 +197,14 @@ export const generateVideo = inngest.createFunction(
 
     // Step 5: Assemble final video
     const outputUrl = await step.run("assemble", () =>
-      assembleVideo(clips, job.audioUrl, jobId, scenes.map(s => s.end - s.start))
+      assembleVideo(
+        clips,
+        job.audioUrl,
+        jobId,
+        scenes.map(s => s.end - s.start),
+        { artistName: job.artistName as string, trackTitle: job.assetTitle },
+        (params.aspectRatio as string) ?? "16:9"
+      )
     );
 
     // Step 6: Mark complete — store output URL, timing, and actual cost
