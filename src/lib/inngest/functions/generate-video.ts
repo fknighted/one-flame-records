@@ -114,8 +114,11 @@ export const generateVideo = inngest.createFunction(
 
     await step.run("mark-generating", () => updateJobStatus(jobId, "generating"));
 
-    // Submit in batches of 5 (Kling plan limit), poll each batch to completion
-    // before submitting the next batch.
+    // Clips saved from a previous run (e.g. ran out of credits mid-way).
+    // retryJob copies params wholesale, so these carry forward automatically.
+    const savedClips = ((params as Record<string, unknown>).generatedClips ?? []) as (ClipResult | null)[];
+
+    // Submit in batches of 5, poll each batch to completion before the next.
     const BATCH_SIZE = 5;
     const clips: ClipResult[] = [];
 
@@ -123,10 +126,11 @@ export const generateVideo = inngest.createFunction(
       const batchEnd = Math.min(batchStart + BATCH_SIZE, scenes.length);
       const batchSize = batchEnd - batchStart;
 
-      // Submit all clips in this batch in parallel
+      // Submit only clips that weren't saved from a previous run
       const batchTaskIds = await Promise.all(
         Array.from({ length: batchSize }, (_, k) => {
           const i = batchStart + k;
+          if (savedClips[i]) return Promise.resolve(null); // already done — skip API call
           return step.run(`submit-clip-${i}`, async () => {
             const generator = getClipGenerator(params.model);
             return generator.submitClip({
@@ -138,12 +142,16 @@ export const generateVideo = inngest.createFunction(
         })
       );
 
-      // Poll each clip in this batch to completion before starting the next batch.
-      // Strategy: 5-min initial wait (Kling rarely finishes faster), then every 30s
-      // for up to 25 min. Total ceiling = 30 min, ~12 steps per clip in the typical
-      // case vs. 160 steps with the old 15s×80 approach.
+      // Poll each clip (or reuse saved result)
       for (let k = 0; k < batchSize; k++) {
         const i = batchStart + k;
+
+        // Reuse clip from a previous run — no credits spent
+        if (savedClips[i]) {
+          clips.push(savedClips[i]!);
+          continue;
+        }
+
         const opts = {
           prompt: scenes[i].prompt,
           durationSeconds: scenes[i].end - scenes[i].start,
@@ -156,12 +164,28 @@ export const generateVideo = inngest.createFunction(
         for (let attempt = 0; attempt < 50; attempt++) {
           const poll = await step.run(`clip-${i}-poll-${attempt}`, async () => {
             const generator = getClipGenerator(params.model);
-            return generator.checkClip(batchTaskIds[k], opts);
+            return generator.checkClip(batchTaskIds[k]!, opts);
           });
           if (poll.done) { clipResult = poll.result; break; }
           await step.sleep(`clip-${i}-gap-${attempt}`, "30s");
         }
         if (!clipResult) throw new Error(`Clip ${i} timed out after 30 min`);
+
+        // Persist result into params so retries skip this clip
+        await step.run(`save-clip-${i}`, async () => {
+          const supabase = createServiceClient();
+          const { data } = await supabase
+            .from("video_jobs").select("params").eq("id", jobId).single();
+          const cur = (data?.params ?? {}) as Record<string, unknown>;
+          const updated = [...((cur.generatedClips as (ClipResult | null)[]) ?? [])];
+          updated[i] = clipResult!;
+          const { error } = await supabase
+            .from("video_jobs")
+            .update({ params: JSON.parse(JSON.stringify({ ...cur, generatedClips: updated })) })
+            .eq("id", jobId);
+          if (error) throw new Error(`Failed to save clip ${i}: ${error.message}`);
+        });
+
         clips.push(clipResult);
       }
     }
