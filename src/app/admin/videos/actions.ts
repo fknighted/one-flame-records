@@ -15,20 +15,24 @@ function extractYouTubeId(input: string): string | null {
   return match?.[1] ?? null;
 }
 
-async function uploadVideoFile(file: File, videoId: string): Promise<string> {
+// Returns a presigned upload URL + the resulting public URL.
+// The browser uploads directly to Supabase — no file passes through the server.
+export async function getVideoUploadUrl(
+  filename: string,
+  contentType: string
+): Promise<{ signedUrl: string; publicUrl: string }> {
   const supabase = createServiceClient();
-  const ext = file.name.split(".").pop() ?? "mp4";
-  const storagePath = `videos/${videoId}.${ext}`;
-  const buffer = Buffer.from(await file.arrayBuffer());
+  const ext = filename.split(".").pop() ?? "mp4";
+  const storagePath = `videos/${crypto.randomUUID()}.${ext}`;
 
-  const { error } = await supabase.storage
+  const { data, error } = await supabase.storage
     .from("public-media")
-    .upload(storagePath, buffer, { contentType: file.type, upsert: true });
+    .createSignedUploadUrl(storagePath);
 
-  if (error) throw new Error(`Video upload failed: ${error.message}`);
+  if (error || !data) throw new Error(`Could not create upload URL: ${error?.message}`);
 
-  const { data } = supabase.storage.from("public-media").getPublicUrl(storagePath);
-  return data.publicUrl;
+  const { data: pub } = supabase.storage.from("public-media").getPublicUrl(storagePath);
+  return { signedUrl: data.signedUrl, publicUrl: pub.publicUrl };
 }
 
 export async function createVideo(
@@ -40,11 +44,9 @@ export async function createVideo(
 
   const rawYouTube = (formData.get("youtube_id") as string)?.trim();
   const youtube_id = rawYouTube ? extractYouTubeId(rawYouTube) : null;
+  const storage_url = (formData.get("storage_url") as string)?.trim() || null;
 
-  const videoFile = formData.get("video_file") as File | null;
-  const hasFile = videoFile && videoFile.size > 0;
-
-  if (!youtube_id && !hasFile) {
+  if (!youtube_id && !storage_url) {
     return { error: "Provide a YouTube URL or upload a video file." };
   }
 
@@ -59,26 +61,11 @@ export async function createVideo(
     new Date().toISOString().slice(0, 10);
 
   const supabase = createServiceClient();
+  const { error } = await supabase.from("videos").insert({
+    title, youtube_id, storage_url, artist_id, release_id, kind, featured, published_at,
+  });
 
-  // Insert first to get the ID (needed for storage path)
-  const { data: video, error } = await supabase
-    .from("videos")
-    .insert({ title, youtube_id, artist_id, release_id, kind, featured, published_at })
-    .select("id")
-    .single();
-
-  if (error || !video) return { error: `Failed to create video: ${error?.message}` };
-
-  // Upload file and update storage_url if provided
-  if (hasFile) {
-    try {
-      const storage_url = await uploadVideoFile(videoFile, video.id);
-      await supabase.from("videos").update({ storage_url }).eq("id", video.id);
-    } catch (e) {
-      await supabase.from("videos").delete().eq("id", video.id);
-      return { error: (e as Error).message };
-    }
-  }
+  if (error) return { error: `Failed to create video: ${error.message}` };
 
   revalidatePath("/admin/videos");
   redirect("/admin/videos");
@@ -96,9 +83,7 @@ export async function updateVideo(
 
   const rawYouTube = (formData.get("youtube_id") as string)?.trim();
   const youtube_id = rawYouTube ? extractYouTubeId(rawYouTube) : null;
-
-  const videoFile = formData.get("video_file") as File | null;
-  const hasFile = videoFile && videoFile.size > 0;
+  const storage_url = (formData.get("storage_url") as string)?.trim() || null;
 
   const artist_id = (formData.get("artist_id") as string)?.trim();
   if (!artist_id) return { error: "Artist is required." };
@@ -109,24 +94,11 @@ export async function updateVideo(
   const published_at = (formData.get("published_at") as string)?.trim();
 
   const supabase = createServiceClient();
-
-  let storage_url: string | undefined;
-  if (hasFile) {
-    try {
-      storage_url = await uploadVideoFile(videoFile, id);
-    } catch (e) {
-      return { error: (e as Error).message };
-    }
-  }
-
   const { error } = await supabase
     .from("videos")
-    .update({
-      title, artist_id, release_id, kind, featured, published_at,
-      youtube_id: youtube_id ?? null,
-      ...(storage_url ? { storage_url } : {}),
-    })
+    .update({ title, youtube_id, storage_url, artist_id, release_id, kind, featured, published_at })
     .eq("id", id);
+
   if (error) return { error: `Failed to update video: ${error.message}` };
 
   revalidatePath("/admin/videos");

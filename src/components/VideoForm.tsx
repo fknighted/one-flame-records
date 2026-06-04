@@ -3,6 +3,7 @@
 import { useActionState, useState, useEffect } from "react";
 import Link from "next/link";
 import type { ActionState } from "@/app/admin/videos/actions";
+import { getVideoUploadUrl } from "@/app/admin/videos/actions";
 
 type Artist = { id: string; stage_name: string };
 type Release = { id: string; title: string };
@@ -57,20 +58,60 @@ export default function VideoForm({
 }) {
   const [state, formAction, pending] = useActionState(action, null);
 
-  // Determine initial source based on what's saved
   const hasUpload = !!initialValues.storage_url && !initialValues.youtube_id;
   const [source, setSource] = useState<"youtube" | "upload">(hasUpload ? "upload" : "youtube");
 
   const [youtubeInput, setYoutubeInput] = useState(initialValues.youtube_id ?? "");
   const [previewId, setPreviewId] = useState<string | null>(initialValues.youtube_id ?? null);
 
+  // Upload state
+  const [uploadedUrl, setUploadedUrl] = useState<string>(initialValues.storage_url ?? "");
+  const [uploading, setUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [uploadError, setUploadError] = useState<string | null>(null);
+
   useEffect(() => {
     const id = extractYouTubeId(youtubeInput);
     setPreviewId(id);
   }, [youtubeInput]);
 
+  async function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploading(true);
+    setUploadProgress(0);
+    setUploadError(null);
+    setUploadedUrl("");
+
+    try {
+      const { signedUrl, publicUrl } = await getVideoUploadUrl(file.name, file.type);
+
+      // Upload directly to Supabase Storage — no file passes through the server
+      await new Promise<void>((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        xhr.open("PUT", signedUrl);
+        xhr.setRequestHeader("Content-Type", file.type);
+        xhr.upload.onprogress = (ev) => {
+          if (ev.lengthComputable) {
+            setUploadProgress(Math.round((ev.loaded / ev.total) * 100));
+          }
+        };
+        xhr.onload = () => (xhr.status < 300 ? resolve() : reject(new Error(`Upload failed (${xhr.status})`)));
+        xhr.onerror = () => reject(new Error("Network error during upload"));
+        xhr.send(file);
+      });
+
+      setUploadedUrl(publicUrl);
+    } catch (err) {
+      setUploadError((err as Error).message);
+    } finally {
+      setUploading(false);
+    }
+  }
+
   return (
-    <form action={formAction} className="space-y-8 max-w-2xl" encType="multipart/form-data">
+    <form action={formAction} className="space-y-8 max-w-2xl">
       {initialValues.id && (
         <input type="hidden" name="id" value={initialValues.id} />
       )}
@@ -147,18 +188,44 @@ export default function VideoForm({
           )}
 
           {source === "upload" && (
-            <div className="space-y-2">
+            <div className="space-y-3">
               <input
-                name="video_file"
                 type="file"
                 accept="video/*"
-                className="block w-full text-sm text-bone/60 file:mr-3 file:py-1.5 file:px-3 file:rounded file:border-0 file:bg-bone/10 file:text-bone file:text-sm hover:file:bg-bone/20 file:cursor-pointer"
+                onChange={handleFileChange}
+                disabled={uploading}
+                className="block w-full text-sm text-bone/60 file:mr-3 file:py-1.5 file:px-3 file:rounded file:border-0 file:bg-bone/10 file:text-bone file:text-sm hover:file:bg-bone/20 file:cursor-pointer disabled:opacity-50"
               />
-              {initialValues.storage_url && (
+
+              {/* Progress bar */}
+              {uploading && (
+                <div className="space-y-1">
+                  <div className="h-1.5 w-full rounded-full bg-bone/10 overflow-hidden">
+                    <div
+                      className="h-full bg-ochre transition-all duration-200"
+                      style={{ width: `${uploadProgress}%` }}
+                    />
+                  </div>
+                  <p className="text-xs text-bone/40">Uploading… {uploadProgress}%</p>
+                </div>
+              )}
+
+              {uploadError && (
+                <p className="text-xs text-oxblood">{uploadError}</p>
+              )}
+
+              {uploadedUrl && !uploading && (
+                <p className="text-xs text-forest">✓ Video uploaded successfully</p>
+              )}
+
+              {initialValues.storage_url && !uploadedUrl && (
                 <p className="text-xs text-bone/40">
-                  Current file saved — upload a new file to replace it.
+                  File already saved — upload a new one to replace it.
                 </p>
               )}
+
+              {/* Hidden field — the presigned upload stores the URL here */}
+              <input type="hidden" name="storage_url" value={uploadedUrl || initialValues.storage_url || ""} />
             </div>
           )}
         </div>
@@ -177,13 +244,9 @@ export default function VideoForm({
               defaultValue={initialValues.artist_id ?? ""}
               className={INPUT + " bg-ink"}
             >
-              <option value="" disabled>
-                Select artist…
-              </option>
+              <option value="" disabled>Select artist…</option>
               {artists.map((a) => (
-                <option key={a.id} value={a.id}>
-                  {a.stage_name}
-                </option>
+                <option key={a.id} value={a.id}>{a.stage_name}</option>
               ))}
             </select>
           </div>
@@ -195,9 +258,7 @@ export default function VideoForm({
               className={INPUT + " bg-ink"}
             >
               {KIND_OPTIONS.map(({ value, label }) => (
-                <option key={value} value={value}>
-                  {label}
-                </option>
+                <option key={value} value={value}>{label}</option>
               ))}
             </select>
           </div>
@@ -213,9 +274,7 @@ export default function VideoForm({
             >
               <option value="">None</option>
               {releases.map((r) => (
-                <option key={r.id} value={r.id}>
-                  {r.title}
-                </option>
+                <option key={r.id} value={r.id}>{r.title}</option>
               ))}
             </select>
           </div>
@@ -252,19 +311,12 @@ export default function VideoForm({
       <div className="flex items-center gap-4 pt-2">
         <button
           type="submit"
-          disabled={pending}
+          disabled={pending || uploading}
           className="bg-ochre text-ink text-sm font-medium px-5 py-2 rounded hover:bg-ochre/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
         >
-          {pending
-            ? "Saving…"
-            : mode === "create"
-              ? "Add Video"
-              : "Save Changes"}
+          {pending ? "Saving…" : uploading ? "Uploading…" : mode === "create" ? "Add Video" : "Save Changes"}
         </button>
-        <Link
-          href="/admin/videos"
-          className="text-sm text-bone/40 hover:text-bone transition-colors"
-        >
+        <Link href="/admin/videos" className="text-sm text-bone/40 hover:text-bone transition-colors">
           Cancel
         </Link>
       </div>
