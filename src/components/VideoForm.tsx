@@ -21,11 +21,11 @@ type InitialValues = {
 };
 
 const KIND_OPTIONS = [
-  { value: "official", label: "Official Video" },
+  { value: "music_video", label: "Official Video" },
   { value: "lyric", label: "Lyric Video" },
   { value: "live", label: "Live Performance" },
-  { value: "bts", label: "Behind the Scenes" },
-  { value: "other", label: "Other" },
+  { value: "behind_scenes", label: "Behind the Scenes" },
+  { value: "generated", label: "Generated Video" },
 ];
 
 const INPUT =
