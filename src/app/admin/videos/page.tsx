@@ -107,7 +107,27 @@ export default async function AdminVideosPage() {
                         </span>
                       )}
                     </td>
-                    <td className="px-4 py-3 text-right">
+                    <td className="px-4 py-3 text-right space-x-3 whitespace-nowrap">
+                      {video.youtube_id && (
+                        <a
+                          href={`https://www.youtube.com/watch?v=${video.youtube_id}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-xs text-ochre hover:text-ochre/70 transition-colors"
+                        >
+                          Watch ↗
+                        </a>
+                      )}
+                      {!video.youtube_id && video.storage_url && (
+                        <a
+                          href={video.storage_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-xs text-ochre hover:text-ochre/70 transition-colors"
+                        >
+                          Watch ↗
+                        </a>
+                      )}
                       <Link
                         href={`/admin/videos/${video.id}/edit`}
                         className="text-xs text-bone/40 hover:text-ochre transition-colors"

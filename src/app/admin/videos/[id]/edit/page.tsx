@@ -24,6 +24,7 @@ export default async function EditVideoPage({
     id: video.id,
     title: video.title,
     youtube_id: video.youtube_id,
+    storage_url: video.storage_url,
     artist_id: video.artist_id,
     release_id: video.release_id,
     kind: video.kind,
@@ -34,6 +35,30 @@ export default async function EditVideoPage({
   return (
     <div className="space-y-6">
       <h1 className="font-display text-2xl text-bone">{video.title}</h1>
+
+      {/* Video preview */}
+      {video.youtube_id && (
+        <div className="max-w-2xl rounded overflow-hidden border border-bone/10">
+          <iframe
+            src={`https://www.youtube.com/embed/${video.youtube_id}?rel=0`}
+            title={video.title}
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+            className="w-full aspect-video"
+          />
+        </div>
+      )}
+      {!video.youtube_id && video.storage_url && (
+        <div className="max-w-2xl rounded overflow-hidden border border-bone/10 bg-ink">
+          <video
+            src={video.storage_url}
+            controls
+            preload="metadata"
+            className="w-full aspect-video"
+          />
+        </div>
+      )}
+
       <VideoForm
         action={updateVideo}
         initialValues={initialValues}

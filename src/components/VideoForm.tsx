@@ -219,9 +219,17 @@ export default function VideoForm({
               )}
 
               {initialValues.storage_url && !uploadedUrl && (
-                <p className="text-xs text-bone/40">
-                  File already saved — upload a new one to replace it.
-                </p>
+                <div className="space-y-2">
+                  <video
+                    src={initialValues.storage_url}
+                    controls
+                    preload="metadata"
+                    className="w-full rounded border border-bone/10 bg-ink aspect-video"
+                  />
+                  <p className="text-xs text-bone/40">
+                    Upload a new file to replace this video.
+                  </p>
+                </div>
               )}
 
               {/* Hidden field — the presigned upload stores the URL here */}
