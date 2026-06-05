@@ -8,48 +8,134 @@ export type GenerateImageResult =
   | { url: string; error?: never }
   | { error: string; url?: never };
 
-// gpt-image-1 sizes (replaced dall-e-3 in 2025)
+export type ReferenceImage = {
+  id: string;
+  title: string;
+  storage_path: string;
+  signed_url: string;
+};
+
+// gpt-image-1 sizes
 const IMAGE_SIZES = {
   square:    "1024x1024",
   landscape: "1536x1024",
   portrait:  "1024x1536",
 } as const;
 
+export async function getArtistReferenceImages(artistId: string): Promise<ReferenceImage[]> {
+  const supabase = createServiceClient();
+
+  const { data: assets } = await supabase
+    .from("assets")
+    .select("id, title, storage_path")
+    .eq("artist_id", artistId)
+    .eq("kind", "reference_image")
+    .order("created_at", { ascending: false });
+
+  if (!assets?.length) return [];
+
+  // Generate signed URLs for display (10-minute expiry — just for browsing)
+  const withUrls = await Promise.all(
+    assets.map(async (a) => {
+      const { data } = await supabase.storage
+        .from("private-assets")
+        .createSignedUrl(a.storage_path, 600);
+      return {
+        id: a.id,
+        title: a.title,
+        storage_path: a.storage_path,
+        signed_url: data?.signedUrl ?? "",
+      };
+    })
+  );
+
+  return withUrls.filter((r) => r.signed_url);
+}
+
 export async function generateImage(formData: FormData): Promise<GenerateImageResult> {
-  const prompt = (formData.get("prompt") as string)?.trim();
-  const size = (formData.get("size") as string) ?? "square";
+  const prompt        = (formData.get("prompt") as string)?.trim();
+  const size          = (formData.get("size") as string) ?? "square";
+  const referenceMode = (formData.get("reference_mode") as string) ?? "none";
+  const assetPath     = (formData.get("reference_asset_path") as string) ?? "";
+  const uploadedFile  = formData.get("reference_image") as File | null;
 
   if (!prompt) return { error: "Prompt is required." };
   if (!process.env.OPENAI_API_KEY) return { error: "OPENAI_API_KEY is not configured." };
 
-  // Initialize inside the function so the env var is always current
   const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-
   const imageSize = IMAGE_SIZES[size as keyof typeof IMAGE_SIZES] ?? "1024x1024";
 
-  let buffer: Buffer;
-  try {
-    const response = await openai.images.generate({
-      model: "gpt-image-1",
-      prompt,
-      size: imageSize as "1024x1024" | "1536x1024" | "1024x1536",
-      quality: "high",
-      n: 1,
-    });
-    // gpt-image-1 returns base64 directly — no temporary URL to fetch
-    const b64 = response.data?.[0]?.b64_json;
-    if (!b64) return { error: "No image data returned from OpenAI." };
-    buffer = Buffer.from(b64, "base64");
-  } catch (err) {
-    const msg = err instanceof Error ? err.message : String(err);
-    return { error: `Image generation failed: ${msg}` };
+  let outputBuffer: Buffer;
+
+  // ── With reference image — use images.edit() ──────────────────────────────
+  if (referenceMode !== "none") {
+    let refBuffer: Buffer;
+
+    if (referenceMode === "asset" && assetPath) {
+      // Fetch reference image from private-assets storage
+      const supabase = createServiceClient();
+      const { data: signed } = await supabase.storage
+        .from("private-assets")
+        .createSignedUrl(assetPath, 120);
+
+      if (!signed?.signedUrl) return { error: "Could not access reference image." };
+
+      try {
+        const res = await fetch(signed.signedUrl);
+        refBuffer = Buffer.from(await res.arrayBuffer());
+      } catch {
+        return { error: "Failed to download reference image." };
+      }
+    } else if (referenceMode === "upload" && uploadedFile && uploadedFile.size > 0) {
+      refBuffer = Buffer.from(await uploadedFile.arrayBuffer());
+    } else {
+      return { error: "No reference image provided." };
+    }
+
+    try {
+      const ab = refBuffer.buffer.slice(refBuffer.byteOffset, refBuffer.byteOffset + refBuffer.byteLength) as ArrayBuffer;
+      const refFile = new File([ab], "reference.png", { type: "image/png" });
+      const response = await openai.images.edit({
+        model: "gpt-image-1",
+        image: refFile,
+        prompt,
+        size: imageSize as "1024x1024" | "1536x1024" | "1024x1536",
+        quality: "high",
+        n: 1,
+      });
+      const b64 = response.data?.[0]?.b64_json;
+      if (!b64) return { error: "No image data returned from OpenAI." };
+      outputBuffer = Buffer.from(b64, "base64");
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : String(err);
+      return { error: `Image generation failed: ${msg}` };
+    }
+
+  // ── No reference — use images.generate() ──────────────────────────────────
+  } else {
+    try {
+      const response = await openai.images.generate({
+        model: "gpt-image-1",
+        prompt,
+        size: imageSize as "1024x1024" | "1536x1024" | "1024x1536",
+        quality: "high",
+        n: 1,
+      });
+      const b64 = response.data?.[0]?.b64_json;
+      if (!b64) return { error: "No image data returned from OpenAI." };
+      outputBuffer = Buffer.from(b64, "base64");
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : String(err);
+      return { error: `Image generation failed: ${msg}` };
+    }
   }
 
+  // ── Upload result to Supabase ──────────────────────────────────────────────
   const supabase = createServiceClient();
   const path = `ai-generated/${crypto.randomUUID()}.png`;
   const { error: uploadErr } = await supabase.storage
     .from("public-media")
-    .upload(path, buffer, { contentType: "image/png", upsert: false });
+    .upload(path, outputBuffer, { contentType: "image/png", upsert: false });
 
   if (uploadErr) return { error: `Storage upload failed: ${uploadErr.message}` };
 
