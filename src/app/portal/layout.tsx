@@ -1,23 +1,9 @@
 import { createClient } from "@/lib/supabase/server";
 import InkShell from "@/components/InkShell";
 
-const NAV = [
-  { href: "/portal",          label: "Dashboard" },
-  { href: "/portal/releases", label: "Releases" },
-  { href: "/portal/assets",   label: "Assets" },
-  { href: "/portal/videos",   label: "Videos" },
-  { href: "/portal/profile",  label: "Profile" },
-];
-
-export default async function PortalLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default async function PortalLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const { data: { user } } = await supabase.auth.getUser();
 
   let displayName = user?.email ?? "";
   if (user) {
@@ -38,7 +24,7 @@ export default async function PortalLayout({
   }
 
   return (
-    <InkShell nav={NAV} displayName={displayName}>
+    <InkShell displayName={displayName} mode="portal">
       {children}
     </InkShell>
   );

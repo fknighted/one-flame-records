@@ -191,13 +191,23 @@ export default function ReleaseForm({
           ) : (
             <div className="w-20 h-20 rounded bg-bone/5 border border-bone/15 shrink-0" />
           )}
-          <input
-            name="cover"
-            type="file"
-            accept="image/jpeg,image/png,image/webp"
-            onChange={handleCoverChange}
-            className="text-sm text-bone/50 file:mr-3 file:py-1.5 file:px-3 file:rounded file:border-0 file:bg-bone/10 file:text-bone/70 file:text-xs hover:file:bg-bone/15 cursor-pointer"
-          />
+          <div className="space-y-1.5">
+            <input
+              name="cover"
+              type="file"
+              accept="image/jpeg,image/png,image/webp"
+              onChange={handleCoverChange}
+              className="text-sm text-bone/50 file:mr-3 file:py-1.5 file:px-3 file:rounded file:border-0 file:bg-bone/10 file:text-bone/70 file:text-xs hover:file:bg-bone/15 cursor-pointer"
+            />
+            {mode === "edit" && initialValues.id && (
+              <Link
+                href={`/admin/ai-studio/images?purpose=release_cover&name=${encodeURIComponent(title)}&return=/admin/releases/${initialValues.id}/edit`}
+                className="inline-block text-xs text-ochre/60 hover:text-ochre transition-colors"
+              >
+                Generate with AI →
+              </Link>
+            )}
+          </div>
         </div>
       </section>
 

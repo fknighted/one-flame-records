@@ -71,6 +71,12 @@ export async function createVideo(
   redirect("/admin/videos");
 }
 
+export async function deleteVideo(videoId: string): Promise<void> {
+  const supabase = createServiceClient();
+  await supabase.from("videos").delete().eq("id", videoId);
+  revalidatePath("/admin/videos");
+}
+
 export async function updateVideo(
   _prevState: ActionState,
   formData: FormData

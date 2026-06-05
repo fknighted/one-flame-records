@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { createServiceClient } from "@/lib/supabase/server";
+import { deleteNewsPost } from "./[id]/edit/actions";
 
 export default async function AdminNewsPage() {
   const supabase = createServiceClient();
@@ -57,13 +58,22 @@ export default async function AdminNewsPage() {
                         })
                       : "—"}
                   </td>
-                  <td className="px-4 py-3 text-right">
+                  <td className="px-4 py-3 text-right space-x-3">
                     <Link
                       href={`/admin/news/${post.id}/edit`}
                       className="text-xs text-oxblood hover:text-ochre transition-colors"
                     >
                       Edit
                     </Link>
+                    <form action={deleteNewsPost.bind(null, post.id)} className="inline">
+                      <button
+                        type="submit"
+                        className="text-xs text-bone/25 hover:text-red-400 transition-colors"
+                        title="Delete post"
+                      >
+                        ×
+                      </button>
+                    </form>
                   </td>
                 </tr>
               ))}

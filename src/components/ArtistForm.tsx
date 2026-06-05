@@ -165,7 +165,17 @@ export default function ArtistForm({
         <h2 className={SECTION_HEADING}>Profile</h2>
 
         <div>
-          <label className={LABEL}>Bio</label>
+          <div className="flex items-center justify-between mb-1">
+            <label className={LABEL} style={{ marginBottom: 0 }}>Bio</label>
+            {mode === "edit" && initialValues.id && (
+              <Link
+                href={`/admin/ai-studio/copy?purpose=artist_bio&return=/admin/artists/${initialValues.id}/edit`}
+                className="text-xs text-ochre/60 hover:text-ochre transition-colors"
+              >
+                Draft with Claude →
+              </Link>
+            )}
+          </div>
           <textarea
             name="bio"
             rows={4}
@@ -197,13 +207,23 @@ export default function ArtistForm({
             ) : (
               <div className="w-16 h-16 rounded-full bg-bone/5 border border-bone/15 shrink-0" />
             )}
-            <input
-              name="photo"
-              type="file"
-              accept="image/jpeg,image/png,image/webp"
-              onChange={handlePhotoChange}
-              className="text-sm text-bone/50 file:mr-3 file:py-1.5 file:px-3 file:rounded file:border-0 file:bg-bone/10 file:text-bone/70 file:text-xs hover:file:bg-bone/15 cursor-pointer"
-            />
+            <div className="space-y-1.5">
+              <input
+                name="photo"
+                type="file"
+                accept="image/jpeg,image/png,image/webp"
+                onChange={handlePhotoChange}
+                className="text-sm text-bone/50 file:mr-3 file:py-1.5 file:px-3 file:rounded file:border-0 file:bg-bone/10 file:text-bone/70 file:text-xs hover:file:bg-bone/15 cursor-pointer"
+              />
+              {mode === "edit" && initialValues.id && (
+                <Link
+                  href={`/admin/ai-studio/images?purpose=artist_photo&name=${encodeURIComponent(stageName)}&return=/admin/artists/${initialValues.id}/edit`}
+                  className="inline-block text-xs text-ochre/60 hover:text-ochre transition-colors"
+                >
+                  Generate with AI →
+                </Link>
+              )}
+            </div>
           </div>
         </div>
       </section>

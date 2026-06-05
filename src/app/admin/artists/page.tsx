@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { createServiceClient } from "@/lib/supabase/server";
-import { deleteArtist } from "./actions";
+import { deleteArtist, activateArtist } from "./actions";
 
 const STATUS_STYLES: Record<string, string> = {
   active: "bg-forest/30 text-forest border border-forest/30",
@@ -62,7 +62,8 @@ export default async function AdminArtistsPage() {
             </thead>
             <tbody className="divide-y divide-bone/5">
               {artists.map((artist) => {
-                const deleteWithId = deleteArtist.bind(null, artist.id);
+                const deleteWithId   = deleteArtist.bind(null, artist.id);
+                const activateWithId = activateArtist.bind(null, artist.id);
                 return (
                 <tr key={artist.id} className="hover:bg-bone/5 transition-colors">
                   <td className="px-4 py-3">
@@ -99,6 +100,17 @@ export default async function AdminArtistsPage() {
                   </td>
                   <td className="px-4 py-3 text-right">
                     <div className="flex items-center gap-3 justify-end">
+                      {artist.status === "pending" && (
+                        <form action={activateWithId} className="inline">
+                          <button
+                            type="submit"
+                            className="text-xs text-forest hover:text-forest/70 transition-colors"
+                            title="Set status to active"
+                          >
+                            Activate
+                          </button>
+                        </form>
+                      )}
                       <Link
                         href={`/admin/artists/${artist.id}/assets`}
                         className="text-xs text-bone/40 hover:text-ochre transition-colors"
@@ -111,7 +123,7 @@ export default async function AdminArtistsPage() {
                       >
                         Edit
                       </Link>
-                      <form action={deleteWithId}>
+                      <form action={deleteWithId} className="inline">
                         <button
                           type="submit"
                           className="text-xs text-bone/30 hover:text-red-400 transition-colors"
