@@ -6,43 +6,50 @@ This is the living state of the build. Update at the end of every session.
 
 ## Current state
 
-- **Phase:** 4 — Video automation (pipeline live and tested end-to-end)
-- **Status:** Full pipeline running in production via kie.ai. Generated videos appear in portal and public site. Music video upload (direct-to-Supabase presigned URL) live in admin. Beat-aligned cuts and opening title card added to assembly. Phase 4 is functionally complete — cleanup items remain.
+- **Phase:** 5 — Polish, hardening & content
+- **Status:** Phase 4 complete. Phase 5 begun — admin videos list polished (file-upload thumbnail fallback, "Uploaded" label). Phase 5 plan written at `phase-5-polish-hardening.md`.
 - **Last updated:** 2026-06-04
 
 ## Active focus
 
-Phase 4 cleanup + polish, then Phase 5 planning.
+Phase 5: news content, portal download button, Sentry, mobile QA, content pass.
 
 ## Blockers
 
-None blocking. Known cleanup items:
-- Admin videos list shows broken thumbnail for uploaded (non-YouTube) videos — needs fallback
-- Admin videos list shows raw `youtube_id` beneath title; should show "Uploaded" for storage_url videos
+None.
 
 ## Next session
 
-### Priority 1 — Admin videos list polish
-Fix thumbnail and subtitle display for uploaded videos (no youtube_id) in `/admin/videos`.
+### Priority 1 — News post verification (manual)
+Log into `/admin/news/new`, create the first real news post (label category, published). Verify it appears on `/news`, the homepage Latest News row, and the post detail page.
 
-### Priority 2 — News posts
-Create first real news post via `/admin/news/new` to verify admin CRUD and public `/news` page end-to-end.
+### Priority 2 — Generated video download in portal
+Add a Download MP4 button to `/portal/videos/[job_id]` for completed jobs (Phase 5 Task 3).
 
-### Priority 3 — Phase 4 sign-off + Phase 5 planning
-Review what's complete, mark Phase 4 done, scope Phase 5.
+### Priority 3 — Sentry setup
+Install `@sentry/nextjs` and configure error tracking in production (Phase 5 Task 5).
 
 ## Phase progress
 
 - [x] **Phase 1** — Admin foundation _(complete)_
 - [x] **Phase 2** — Public site _(complete)_
 - [x] **Phase 3** — QR onboarding + artist portal _(complete)_
-- [ ] **Phase 4** — Video automation
+- [x] **Phase 4** — Video automation _(complete)_
+- [ ] **Phase 5** — Polish, hardening & content
 
 ---
 
 ## Session log
 
 Append a new entry at the top of this section after every session. Date, summary, files touched, what's next. Keep it tight — full reasoning belongs in `DECISIONS.md`.
+
+### 2026-06-04 (session 22)
+
+**Did:** Phase 4 sign-off + Phase 5 start. (1) Admin videos list polish — added `storage_url` to the select query; replaced broken YouTube thumbnail URL with a film-icon placeholder for uploaded (non-YouTube) videos; subtitle now shows "Uploaded" instead of null `youtube_id`. Typecheck clean. (2) Phase 4 marked complete (all 11 tasks done, pipeline live end-to-end in production). (3) Phase 5 scoped and documented at `phase-5-polish-hardening.md` — 10 tasks covering news content, portal download button, public share toggle, Sentry, image domain audit, sitemap freshness, content pass, and mobile QA.
+**Touched:** `src/app/admin/videos/page.tsx`, `PROGRESS.md`, `phase-5-polish-hardening.md` (new)
+**Decided:** Phase 4 complete. Phase 5 is polish + hardening, not new features.
+**Blocked on:** Nothing.
+**Next:** Create first real news post (manual, admin UI). Portal generated-video download button. Sentry setup.
 
 ### 2026-06-04 (session 21)
 

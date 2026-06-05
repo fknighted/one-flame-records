@@ -14,7 +14,7 @@ export default async function AdminVideosPage() {
   const { data: videos, error } = await supabase
     .from("videos")
     .select(
-      "id, title, youtube_id, kind, featured, published_at, artists(stage_name)"
+      "id, title, youtube_id, storage_url, kind, featured, published_at, artists(stage_name)"
     )
     .order("published_at", { ascending: false });
 
@@ -71,16 +71,24 @@ export default async function AdminVideosPage() {
                 return (
                   <tr key={video.id} className="hover:bg-bone/5 transition-colors">
                     <td className="px-4 py-3">
-                      <img
-                        src={`https://img.youtube.com/vi/${video.youtube_id}/mqdefault.jpg`}
-                        alt=""
-                        className="w-16 h-10 object-cover rounded"
-                      />
+                      {video.youtube_id ? (
+                        <img
+                          src={`https://img.youtube.com/vi/${video.youtube_id}/mqdefault.jpg`}
+                          alt=""
+                          className="w-16 h-10 object-cover rounded"
+                        />
+                      ) : (
+                        <div className="w-16 h-10 rounded bg-bone/10 flex items-center justify-center text-bone/30">
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
+                            <path d="M4 4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8.414A2 2 0 0 0 21.414 7L17 2.586A2 2 0 0 0 15.586 2H6a2 2 0 0 0-2 2Zm10 7a1 1 0 0 1 1.447-.894l4 2a1 1 0 0 1 0 1.788l-4 2A1 1 0 0 1 14 15V11Z" />
+                          </svg>
+                        </div>
+                      )}
                     </td>
                     <td className="px-4 py-3">
                       <span className="text-bone font-medium">{video.title}</span>
                       <span className="block text-bone/35 text-xs mt-0.5 font-mono">
-                        {video.youtube_id}
+                        {video.youtube_id ?? "Uploaded"}
                       </span>
                     </td>
                     <td className="px-4 py-3 text-bone/60">
