@@ -18,12 +18,12 @@ export default function VideoEmbed({ youtube_id, storage_url, title, artist_name
   if (storage_url && !youtube_id) {
     return (
       <div className="group flex flex-col">
-        <div className="relative aspect-video bg-ink overflow-hidden rounded">
+        <div className="aspect-video bg-ink rounded overflow-hidden">
           <video
             src={storage_url}
             controls
-            className="absolute inset-0 w-full h-full object-cover"
-            title={title}
+            preload="metadata"
+            className="w-full h-full"
           />
         </div>
         <div className="mt-2.5 px-0.5">
