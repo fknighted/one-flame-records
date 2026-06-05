@@ -6,28 +6,37 @@ This is the living state of the build. Update at the end of every session.
 
 ## Current state
 
-- **Phase:** 5 — Polish, hardening & content
-- **Status:** Phase 4 complete. Phase 5 begun — admin videos list polished (file-upload thumbnail fallback, "Uploaded" label). Phase 5 plan written at `phase-5-polish-hardening.md`.
-- **Last updated:** 2026-06-04
+- **Phase:** 5 / 6 — Polish + AI content pipeline (both active)
+- **Status:** Phases 1–4 complete. Phase 5 partially done. Phase 6 (image library, content campaigns, ideas, security hardening, Flames Lounge) fully built and live.
+- **Last updated:** 2026-06-05
 
 ## Active focus
 
-Phase 5: news content, portal download button, Sentry, mobile QA, content pass.
+Phase 5 remaining items + wiring up social API keys for auto-posting.
 
 ## Blockers
 
-None.
+- **Meta API keys** — `FACEBOOK_PAGE_ACCESS_TOKEN`, `FACEBOOK_PAGE_ID`, `INSTAGRAM_BUSINESS_ACCOUNT_ID` not yet in Vercel. Campaign publish to Instagram/Facebook will error until these are set. Setup: create a Facebook Developer App at developers.facebook.com, add Instagram Graph API + Pages products, generate a long-lived Page Access Token.
+- **TikTok API keys** — `TIKTOK_ACCESS_TOKEN`, `TIKTOK_OPEN_ID` not yet set. Apply for TikTok Content Posting API access at developers.tiktok.com.
+- **Flames Lounge photos** — Hero and gallery are placeholders. Real photos needed from the space; drop into `public/` and wire in.
+- **Flames Lounge hero image** — Searching for a royalty-free placeholder from Unsplash. Best candidate so far: `https://unsplash.com/photos/IFB0DU4mhxk` (outdoor bar at dusk by Daesun Kim).
 
 ## Next session
 
-### Priority 1 — News post verification (manual)
-Log into `/admin/news/new`, create the first real news post (label category, published). Verify it appears on `/news`, the homepage Latest News row, and the post detail page.
+### Priority 1 — Flames Lounge hero photo
+User to confirm or find a hero image. Download full-res from Unsplash (or own photo), save as `public/flames-lounge-hero.jpg`, wire into `/flames-lounge` page hero section and photo gallery placeholders.
 
-### Priority 2 — Generated video download in portal
+### Priority 2 — Portal generated-video download button
 Add a Download MP4 button to `/portal/videos/[job_id]` for completed jobs (Phase 5 Task 3).
 
-### Priority 3 — Sentry setup
-Install `@sentry/nextjs` and configure error tracking in production (Phase 5 Task 5).
+### Priority 3 — Sentry error tracking
+Install `@sentry/nextjs`, add `SENTRY_DSN` to Vercel, verify errors surface in dashboard (Phase 5 Task 5).
+
+### Priority 4 — Meta + TikTok API keys
+Walk through setting up the Facebook Developer App and generating the required tokens so campaign auto-posting works end-to-end.
+
+### Priority 5 — First real news post
+Create a news post in `/admin/news/new` and verify it appears on the public `/news` page and homepage Latest News row.
 
 ## Phase progress
 
@@ -42,6 +51,14 @@ Install `@sentry/nextjs` and configure error tracking in production (Phase 5 Tas
 ## Session log
 
 Append a new entry at the top of this section after every session. Date, summary, files touched, what's next. Keep it tight — full reasoning belongs in `DECISIONS.md`.
+
+### 2026-06-05 (session 23)
+
+**Did:** Major build session — admin overhaul, AI content pipeline, security hardening, and the Flames Lounge page. (1) **Admin videos** — Watch links, video player on edit page, storage_url passed to VideoForm. (2) **Admin artist section revamp** — card grid with photo strips, status filter chips, asset/job counts, genre pills; edit page gets breadcrumb, live photo, counts, and public profile link. (3) **Admin redesign** — InkShell nav grouped into Catalog / AI Studio / Onboarding; overview rebuilt as operational dashboard (stats, quick actions, spend bar, active jobs, pending apps). (4) **AI Studio** — hub page, Image Generator (gpt-image-1, replaces dall-e-3 which is deprecated), Copy Generator (Claude), reference image support (from artist assets or upload), image library table + gallery page. (5) **Content campaigns** — `content_campaigns` + `content_pieces` tables; `/admin/campaigns` list and new form; Inngest `generate-campaign` pipeline (Claude plan → parallel piece generation with captions + images + video scripts); campaign detail page with per-piece approve/reject/regenerate; `publishApproved` action posts to Instagram, Facebook, TikTok via their APIs. (6) **Campaign ideas** — `campaign_ideas` table; `/admin/campaigns/ideas` gallery grouped by 6 content pillars; `generateIdeas` reads roster/releases/news for context; "Start Campaign" pre-fills the form. (7) **Security hardening** — `src/lib/auth.ts` `requireAdmin()` applied to all admin server actions; `<source>` delimiters around user content in AI prompts; Facebook token moved to Authorization header; file type/size validation on uploaded reference images; HTTPS-only validation on social posting URLs; lazy SDK init to fix build failure. (8) **Flames Lounge** — `/flames-lounge` public page: atmospheric dark hero, about section, four-pillar grid, outdoor studio feature card, Jamaican fritters menu, events grid, photo gallery placeholder, oxblood CTA band; `@flamesmobay` Instagram + TikTok links; added to PublicHeader nav and sitemap. (9) **Sitemap** — extended with `/news`, `/news/[slug]`, `/flames-lounge`, `/sign`.
+**Touched:** `src/app/admin/videos/page.tsx`, `src/app/admin/videos/[id]/edit/page.tsx`, `src/components/VideoForm.tsx`, `src/app/admin/artists/page.tsx`, `src/app/admin/artists/[id]/edit/page.tsx`, `src/app/admin/artists/actions.ts`, `src/components/InkShell.tsx`, `src/app/admin/layout.tsx`, `src/app/portal/layout.tsx`, `src/app/admin/page.tsx`, `src/app/admin/news/page.tsx`, `src/app/admin/videos/actions.ts`, `src/components/ArtistForm.tsx`, `src/components/ReleaseForm.tsx`, `src/components/NewsForm.tsx`, `src/app/admin/ai-studio/` (all new), `src/app/admin/campaigns/` (all new), `src/lib/inngest/functions/generate-campaign.ts`, `src/lib/social/meta.ts`, `src/lib/social/tiktok.ts`, `src/lib/auth.ts`, `src/app/(public)/flames-lounge/page.tsx`, `src/components/PublicHeader.tsx`, `src/app/sitemap.ts`, `supabase/migrations/20260604000001_campaigns_and_image_library.sql`, `supabase/migrations/20260604000002_campaign_ideas.sql`, `src/types/supabase.ts`
+**Decided:** gpt-image-1 over dall-e-3 (deprecated for most accounts). `requireAdmin()` for defense-in-depth on server actions (middleware alone insufficient). `<source>` XML delimiters for prompt injection mitigation. Inngest for campaign generation pipeline (same pattern as video pipeline). See DECISIONS.md.
+**Blocked on:** Meta + TikTok API keys not yet in Vercel. Flames Lounge hero photo still placeholder.
+**Next:** Flames Lounge hero photo → portal download button → Sentry → social API keys.
 
 ### 2026-06-04 (session 22)
 

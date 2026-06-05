@@ -270,3 +270,62 @@ Format for each entry:
 - `signup_codes` table needed, with active/inactive state and rotation timestamp.
 - Approval workflow lives in admin — Resend sends "application received" and "approved" emails.
 - If the QR card gets posted publicly, admin rotates the code from the dashboard.
+
+## 2026-06-05 — gpt-image-1 replaces dall-e-3 for image generation
+
+**Context:** The DALL-E 3 model (`dall-e-3`) returned "model does not exist" errors for the user's OpenAI subscription despite being a paid account. OpenAI deprecated direct DALL-E 3 access for most accounts in 2025.
+
+**Decision:** Switch to `gpt-image-1`, the current OpenAI image generation model. It uses the same `openai.images.generate()` call but returns base64 data directly (no temporary URL to fetch), simplifying the code. For reference-image generation, `openai.images.edit()` accepts a `File` object alongside the prompt.
+
+**Alternatives considered:**
+- _Replicate/fal.ai_ — would work but adds a new vendor for a feature already covered by the existing OpenAI subscription.
+
+**Consequences:** `quality: "high"` and sizes `1024x1024`, `1536x1024`, `1024x1536` replace DALL-E 3's `quality: "hd"` and `1024x1024`, `1792x1024`, `1024x1792`. All SDK clients initialized lazily inside functions, not at module level, to prevent build-time failures when env vars are absent.
+
+---
+
+## 2026-06-05 — requireAdmin() for defense-in-depth on server actions
+
+**Context:** Next.js middleware (`src/proxy.ts`) checks admin role before rendering `/admin/*` pages, but server actions can be called directly via HTTP POST from any authenticated session. Using `createServiceClient()` (service role key) inside actions bypasses RLS entirely, so a non-admin authenticated user who discovers an action endpoint could make arbitrary DB writes.
+
+**Decision:** Add `src/lib/auth.ts` with a `requireAdmin()` async helper that reads the session via `createClient()`, checks `profiles.role === 'admin'`, and throws on failure. Called at the top of every server action that modifies data or calls external APIs. This is defense-in-depth — the middleware remains the primary gate.
+
+**Alternatives considered:**
+- _Rely on RLS only_ — rejected because actions use service client which bypasses RLS.
+- _Move all mutations behind API routes with explicit auth_ — more correct but significantly more boilerplate for every action; the helper achieves the same protection with two lines.
+
+**Consequences:** Every new admin server action must call `await requireAdmin()` first. Unauthenticated or non-admin callers get an unhandled throw that Next.js converts to a 500 — acceptable for an internal admin tool.
+
+---
+
+## 2026-06-05 — Content campaign pipeline via Inngest
+
+**Context:** Generating 5–10 pieces of social content per campaign requires: Claude for planning + copy, gpt-image-1 for images, and potentially the video pipeline for clips. These are independent tasks that can run in parallel and each takes 5–30s. Running them serially in a single server action would hit the 60s Vercel function timeout.
+
+**Decision:** The campaign pipeline is an Inngest function (`generate-campaign`) with the same step pattern as the video pipeline. `plan-content` calls Claude for a Zod-validated content plan; `generate-pieces` runs one `step.run` per piece in parallel. The function tolerates partial failure — pieces that error are marked `failed`, others proceed to `ready`.
+
+**Consequences:** Campaign creation fires an Inngest event and returns immediately. The admin campaign detail page shows live progress and must be refreshed manually (no websocket push yet). Retry on individual pieces is supported via `regeneratePiece()`.
+
+---
+
+## 2026-06-05 — Prompt injection mitigation: XML delimiters around user content
+
+**Context:** User-supplied `source_content` is passed into Claude prompts to generate captions and video scripts. A malicious or careless input like "Ignore all previous instructions…" could hijack the model's output.
+
+**Decision:** Wrap all user-supplied text in `<source>...</source>` XML delimiters in every Claude prompt. Claude treats tagged content as data rather than instructions, significantly reducing prompt injection risk. This is consistent with Anthropic's recommended mitigation pattern.
+
+**Consequences:** Prompts are slightly longer. Residual risk remains (a sufficiently crafted payload can still influence output) — acceptable for an admin-only tool where all users are trusted label staff.
+
+---
+
+## 2026-06-05 — Flames Lounge as a distinct sub-brand on the same domain
+
+**Context:** The Flames Lounge is a physical venue connected to One Flame Records but serves a broader audience (walk-in public, event attendees, not just music fans). It needs its own page with its own atmosphere, but the label wanted it under oneflamerecords.com, not a separate domain.
+
+**Decision:** Single route `/flames-lounge` on the main site, using the same Fraunces/Inter fonts and oxblood/ochre colour tokens but with a distinct dark palette (`#0A0806`, `#111009`, `#0D0B09`) that's richer and more atmospheric than the label's standard ink (`#1A1612`). The page sits in the `(public)` route group and is linked from the main header.
+
+**Alternatives considered:**
+- _Separate domain (flamesmobay.com)_ — rejected by user, wanted everything under one roof.
+- _Match the label's exact ink theme_ — rejected; the lounge needs to feel like its own destination.
+
+**Consequences:** The public header now has 7 nav items. If the nav becomes crowded on mobile, consider grouping or a mega-menu later.
