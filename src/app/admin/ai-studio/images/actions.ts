@@ -3,6 +3,10 @@
 import OpenAI from "openai";
 import { createServiceClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
+import { requireAdmin } from "@/lib/auth";
+
+const ALLOWED_IMAGE_TYPES = ["image/png", "image/jpeg", "image/webp", "image/gif"];
+const MAX_UPLOAD_BYTES     = 5 * 1024 * 1024; // 5 MB
 
 export type GenerateImageResult =
   | { url: string; error?: never }
@@ -53,6 +57,8 @@ export async function getArtistReferenceImages(artistId: string): Promise<Refere
 }
 
 export async function generateImage(formData: FormData): Promise<GenerateImageResult> {
+  await requireAdmin();
+
   const prompt        = (formData.get("prompt") as string)?.trim();
   const size          = (formData.get("size") as string) ?? "square";
   const referenceMode = (formData.get("reference_mode") as string) ?? "none";
@@ -61,6 +67,12 @@ export async function generateImage(formData: FormData): Promise<GenerateImageRe
 
   if (!prompt) return { error: "Prompt is required." };
   if (!process.env.OPENAI_API_KEY) return { error: "OPENAI_API_KEY is not configured." };
+
+  // Validate uploaded reference image
+  if (uploadedFile && uploadedFile.size > 0) {
+    if (uploadedFile.size > MAX_UPLOAD_BYTES) return { error: "Reference image must be under 5 MB." };
+    if (!ALLOWED_IMAGE_TYPES.includes(uploadedFile.type)) return { error: "Reference image must be PNG, JPEG, WebP, or GIF." };
+  }
 
   const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
   const imageSize = IMAGE_SIZES[size as keyof typeof IMAGE_SIZES] ?? "1024x1024";
@@ -152,6 +164,7 @@ export async function generateImage(formData: FormData): Promise<GenerateImageRe
 }
 
 export async function applyImageToArtist(imageUrl: string, artistId: string): Promise<{ error?: string }> {
+  await requireAdmin();
   const supabase = createServiceClient();
   const { error } = await supabase.from("artists").update({ photo_url: imageUrl }).eq("id", artistId);
   if (error) return { error: error.message };
@@ -161,6 +174,7 @@ export async function applyImageToArtist(imageUrl: string, artistId: string): Pr
 }
 
 export async function applyImageToRelease(imageUrl: string, releaseId: string): Promise<{ error?: string }> {
+  await requireAdmin();
   const supabase = createServiceClient();
   const { error } = await supabase.from("releases").update({ cover_url: imageUrl }).eq("id", releaseId);
   if (error) return { error: error.message };
@@ -170,6 +184,7 @@ export async function applyImageToRelease(imageUrl: string, releaseId: string): 
 }
 
 export async function applyImageToNews(imageUrl: string, postId: string): Promise<{ error?: string }> {
+  await requireAdmin();
   const supabase = createServiceClient();
   const { error } = await supabase.from("news_posts").update({ cover_url: imageUrl }).eq("id", postId);
   if (error) return { error: error.message };

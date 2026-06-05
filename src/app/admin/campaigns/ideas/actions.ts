@@ -3,8 +3,7 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { revalidatePath } from "next/cache";
 import { createServiceClient } from "@/lib/supabase/server";
-
-const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+import { requireAdmin } from "@/lib/auth";
 
 export const PILLARS = [
   { value: "artist_spotlight",  label: "Artist Spotlight",        description: "Feature an individual artist — their story, sound, and vision" },
@@ -29,6 +28,7 @@ export type Idea = {
 };
 
 export async function generateIdeas(): Promise<{ error?: string }> {
+  await requireAdmin();
   if (!process.env.ANTHROPIC_API_KEY) return { error: "ANTHROPIC_API_KEY is not configured." };
 
   const supabase = createServiceClient();
@@ -46,6 +46,7 @@ export async function generateIdeas(): Promise<{ error?: string }> {
 
   const pillarsDesc = PILLARS.map(p => `- ${p.label}: ${p.description}`).join("\n");
 
+  const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
   const msg = await anthropic.messages.create({
     model: "claude-sonnet-4-6",
     max_tokens: 2048,
@@ -112,12 +113,14 @@ Return ONLY a valid JSON array of 8 objects. No explanation or markdown.`,
 }
 
 export async function dismissIdea(id: string): Promise<void> {
+  await requireAdmin();
   const supabase = createServiceClient();
   await supabase.from("campaign_ideas").update({ status: "dismissed" }).eq("id", id);
   revalidatePath("/admin/campaigns/ideas");
 }
 
 export async function markExpanded(id: string): Promise<void> {
+  await requireAdmin();
   const supabase = createServiceClient();
   await supabase.from("campaign_ideas").update({ status: "expanded" }).eq("id", id);
   revalidatePath("/admin/campaigns/ideas");

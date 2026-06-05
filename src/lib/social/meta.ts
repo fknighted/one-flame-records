@@ -1,5 +1,13 @@
 // Meta Graph API — Instagram + Facebook posting
 
+function validateMediaUrl(url: string | null, label: string): string {
+  if (!url) throw new Error(`${label} is required.`);
+  let parsed: URL;
+  try { parsed = new URL(url); } catch { throw new Error(`Invalid ${label} URL.`); }
+  if (parsed.protocol !== "https:") throw new Error(`${label} must be an HTTPS URL.`);
+  return url;
+}
+
 type Piece = {
   id: string;
   platform: string;
@@ -41,11 +49,11 @@ export async function postToInstagram(piece: Piece): Promise<void> {
   const caption = buildCaption(piece);
 
   if (piece.content_type === "video_post" || piece.content_type === "reel") {
-    if (!piece.video_url) throw new Error("Video URL required for Instagram Reel.");
+    const videoUrl = validateMediaUrl(piece.video_url, "Video URL");
     // Step 1: create container
     const { id: containerId } = await graphPost(`/${igAccountId}/media`, {
       media_type: "REELS",
-      video_url: piece.video_url,
+      video_url: videoUrl,
       caption,
     });
     // Step 2: poll until ready (up to 60s)
@@ -54,9 +62,9 @@ export async function postToInstagram(piece: Piece): Promise<void> {
     await graphPost(`/${igAccountId}/media_publish`, { creation_id: containerId });
   } else {
     // Image post or text post (text-only not supported on IG — use image)
-    if (!piece.image_url) throw new Error("Image URL required for Instagram image post.");
+    const imageUrl = validateMediaUrl(piece.image_url, "Image URL");
     const { id: containerId } = await graphPost(`/${igAccountId}/media`, {
-      image_url: piece.image_url,
+      image_url: imageUrl,
       caption,
     });
     await graphPost(`/${igAccountId}/media_publish`, { creation_id: containerId });
@@ -68,7 +76,8 @@ async function waitForIgContainer(igAccountId: string, containerId: string): Pro
   for (let i = 0; i < 12; i++) {
     await new Promise((r) => setTimeout(r, 5000));
     const res = await fetch(
-      `https://graph.facebook.com/v21.0/${containerId}?fields=status_code&access_token=${token}`
+      `https://graph.facebook.com/v21.0/${containerId}?fields=status_code`,
+      { headers: { Authorization: `Bearer ${token}` } }
     );
     const data = await res.json() as { status_code?: string };
     if (data.status_code === "FINISHED") return;
@@ -86,10 +95,11 @@ export async function postToFacebook(piece: Piece): Promise<void> {
   const caption = buildCaption(piece);
 
   if (piece.content_type === "video_post") {
-    if (!piece.video_url) throw new Error("Video URL required for Facebook video post.");
-    await graphPost(`/${pageId}/videos`, { file_url: piece.video_url, description: caption });
+    const videoUrl = validateMediaUrl(piece.video_url, "Video URL");
+    await graphPost(`/${pageId}/videos`, { file_url: videoUrl, description: caption });
   } else if (piece.image_url) {
-    await graphPost(`/${pageId}/photos`, { url: piece.image_url, caption });
+    const imageUrl = validateMediaUrl(piece.image_url, "Image URL");
+    await graphPost(`/${pageId}/photos`, { url: imageUrl, caption });
   } else {
     await graphPost(`/${pageId}/feed`, { message: caption });
   }

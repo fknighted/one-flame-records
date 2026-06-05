@@ -5,8 +5,10 @@ import { createServiceClient } from "@/lib/supabase/server";
 import { inngest } from "@/lib/inngest/client";
 import { postToInstagram, postToFacebook } from "@/lib/social/meta";
 import { postToTikTok } from "@/lib/social/tiktok";
+import { requireAdmin } from "@/lib/auth";
 
 export async function approvePiece(pieceId: string): Promise<void> {
+  await requireAdmin();
   const supabase = createServiceClient();
   const { data: piece } = await supabase.from("content_pieces").select("campaign_id").eq("id", pieceId).single();
   await supabase.from("content_pieces").update({ status: "approved" }).eq("id", pieceId);
@@ -14,6 +16,7 @@ export async function approvePiece(pieceId: string): Promise<void> {
 }
 
 export async function rejectPiece(pieceId: string): Promise<void> {
+  await requireAdmin();
   const supabase = createServiceClient();
   const { data: piece } = await supabase.from("content_pieces").select("campaign_id").eq("id", pieceId).single();
   await supabase.from("content_pieces").update({ status: "rejected" }).eq("id", pieceId);
@@ -21,6 +24,7 @@ export async function rejectPiece(pieceId: string): Promise<void> {
 }
 
 export async function regeneratePiece(pieceId: string): Promise<void> {
+  await requireAdmin();
   const supabase = createServiceClient();
   const { data: piece } = await supabase
     .from("content_pieces")
@@ -35,6 +39,7 @@ export async function regeneratePiece(pieceId: string): Promise<void> {
 }
 
 export async function publishApproved(campaignId: string): Promise<{ published: number; skipped: number; errors: string[] }> {
+  await requireAdmin();
   const supabase = createServiceClient();
   const { data: pieces } = await supabase
     .from("content_pieces")

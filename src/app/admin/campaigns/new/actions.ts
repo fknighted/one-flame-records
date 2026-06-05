@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { createServiceClient } from "@/lib/supabase/server";
 import { inngest } from "@/lib/inngest/client";
+import { requireAdmin } from "@/lib/auth";
 
 export type ActionState = { error: string } | null;
 
@@ -11,6 +12,7 @@ export async function createCampaign(
   _prev: ActionState,
   formData: FormData
 ): Promise<ActionState> {
+  await requireAdmin();
   const title          = (formData.get("title") as string)?.trim();
   const source_type    = (formData.get("source_type") as string) ?? "text";
   const source_content = (formData.get("source_content") as string)?.trim();

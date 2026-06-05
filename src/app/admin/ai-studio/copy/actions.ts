@@ -2,8 +2,7 @@
 
 import Anthropic from "@anthropic-ai/sdk";
 import { createServiceClient } from "@/lib/supabase/server";
-
-const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+import { requireAdmin } from "@/lib/auth";
 
 export type CopyResult =
   | { text: string; error?: never }
@@ -43,11 +42,15 @@ const PURPOSE_PROMPTS: Record<string, (ctx: string) => string> = {
 };
 
 export async function generateCopy(formData: FormData): Promise<CopyResult> {
+  await requireAdmin();
+
   const purpose  = (formData.get("purpose") as string) ?? "artist_bio";
   const artistId = (formData.get("artist_id") as string) ?? "";
   const extraCtx = (formData.get("notes") as string)?.trim() ?? "";
 
   if (!process.env.ANTHROPIC_API_KEY) return { error: "ANTHROPIC_API_KEY is not configured." };
+
+  const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
   // Fetch artist / release context from DB if provided
   let contextLabel = extraCtx;

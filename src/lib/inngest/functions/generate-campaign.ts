@@ -4,8 +4,9 @@ import OpenAI from "openai";
 import { createServiceClient } from "@/lib/supabase/server";
 import { z } from "zod";
 
-const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
-const openai    = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+// Initialize lazily inside steps so module-level eval doesn't fail at build time
+function getAnthropic() { return new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY }); }
+function getOpenAI()    { return new OpenAI({ apiKey: process.env.OPENAI_API_KEY }); }
 
 // ── Schema for the content plan Claude produces ───────────────────────────────
 
@@ -67,7 +68,9 @@ export const generateCampaign = inngest.createFunction(
 
       const userPrompt = `Source type: ${campaign.source_type}
 Source content:
+<source>
 ${campaign.source_content}
+</source>
 
 Target platforms and guidelines:
 ${platformContext}
@@ -83,7 +86,7 @@ For each piece, decide:
 
 Return ONLY a valid JSON array of objects. No explanation, no markdown.`;
 
-      const msg = await anthropic.messages.create({
+      const msg = await getAnthropic().messages.create({
         model: "claude-sonnet-4-6",
         max_tokens: 2048,
         system: systemPrompt,
@@ -132,7 +135,7 @@ Return ONLY a valid JSON array of objects. No explanation, no markdown.`;
             const platformGuide = PLATFORM_GUIDELINES[piece.platform] ?? piece.platform;
 
             // ── Caption + hashtags ──
-            const captionMsg = await anthropic.messages.create({
+            const captionMsg = await getAnthropic().messages.create({
               model: "claude-sonnet-4-6",
               max_tokens: 512,
               system: "You are a social media copywriter for One Flame Records, a Jamaican reggae/dancehall label. Write authentic, culturally grounded content. Never corporate or generic.",
@@ -142,7 +145,10 @@ Return ONLY a valid JSON array of objects. No explanation, no markdown.`;
 
 Platform guide: ${platformGuide}
 Creative angle: ${piece.angle}
-Source material summary: ${campaign.source_content.slice(0, 800)}
+Source material summary:
+<source>
+${campaign.source_content.slice(0, 800)}
+</source>
 
 Return JSON with two keys: "caption" (the post text, no hashtags) and "hashtags" (array of 3–5 strings without # symbol). Nothing else.`,
               }],
@@ -156,7 +162,7 @@ Return JSON with two keys: "caption" (the post text, no hashtags) and "hashtags"
             // ── Video script (if needed) ──
             let video_script: string | null = null;
             if (piece.video_mode === "script") {
-              const scriptMsg = await anthropic.messages.create({
+              const scriptMsg = await getAnthropic().messages.create({
                 model: "claude-sonnet-4-6",
                 max_tokens: 512,
                 system: "You write short-form video scripts for One Flame Records social content. Scripts should feel authentic, energetic, and culturally rooted in Jamaican music.",
@@ -164,7 +170,10 @@ Return JSON with two keys: "caption" (the post text, no hashtags) and "hashtags"
                   role: "user",
                   content: `Write a 30–60 second ${piece.platform} video script.
 Creative angle: ${piece.angle}
-Source: ${campaign.source_content.slice(0, 600)}
+Source:
+<source>
+${campaign.source_content.slice(0, 600)}
+</source>
 
 Format: Hook (first 3 seconds) / Body / CTA. Plain text, no JSON.`,
                 }],
@@ -178,7 +187,7 @@ Format: Hook (first 3 seconds) / Body / CTA. Plain text, no JSON.`,
               const imgPrompt = `${piece.angle}. Reggae/dancehall aesthetic, One Flame Records label from Montego Bay Jamaica. ${piece.platform === "instagram" || piece.platform === "facebook" ? "Square composition." : "Vertical composition."}`;
               const imgSize = (piece.platform === "tiktok") ? "1024x1536" : "1024x1024";
               try {
-                const response = await openai.images.generate({
+                const response = await getOpenAI().images.generate({
                   model: "gpt-image-1",
                   prompt: imgPrompt,
                   size: imgSize as "1024x1024" | "1024x1536",
