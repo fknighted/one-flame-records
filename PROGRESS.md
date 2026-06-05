@@ -6,32 +6,30 @@ This is the living state of the build. Update at the end of every session.
 
 ## Current state
 
-- **Phase:** 4 — Video automation (pipeline complete; E2E test pending)
-- **Status:** kie.ai provider live, all Inngest/Kling/Anthropic keys confirmed in Vercel, admin jobs UX overhauled. E2E pipeline test is the only remaining Phase 4 gate.
-- **Last updated:** 2026-06-01
+- **Phase:** 4 — Video automation (pipeline live and tested end-to-end)
+- **Status:** Full pipeline running in production via kie.ai. Generated videos appear in portal and public site. Music video upload (direct-to-Supabase presigned URL) live in admin. Beat-aligned cuts and opening title card added to assembly. Phase 4 is functionally complete — cleanup items remain.
+- **Last updated:** 2026-06-04
 
 ## Active focus
 
-E2E video pipeline test to close Phase 4.
+Phase 4 cleanup + polish, then Phase 5 planning.
 
 ## Blockers
 
-- **End-to-end video pipeline test** — never run against a real file. All keys are set; just needs both servers running and a test MP3.
+None blocking. Known cleanup items:
+- Admin videos list shows broken thumbnail for uploaded (non-YouTube) videos — needs fallback
+- Admin videos list shows raw `youtube_id` beneath title; should show "Uploaded" for storage_url videos
 
 ## Next session
 
-### Priority 1 — E2E video pipeline test (Phase 4 gate)
-1. `npm run dev` (port 3000) + `npx inngest-cli dev -u http://localhost:3000/api/inngest` (port 8288)
-2. Upload a short MP3 via `/admin/artists/{id}/assets`
-3. `/admin/jobs` → "+ Request video" → pick artist → fill form → submit
-4. Watch Inngest dashboard (localhost:8288) step through: load-job → analyze → prompts → submit-clip → poll → assemble → complete
-5. Confirm `output_url` written to Supabase and video appears in `/portal/videos` and `/admin/artists/{id}/videos`
+### Priority 1 — Admin videos list polish
+Fix thumbnail and subtitle display for uploaded videos (no youtube_id) in `/admin/videos`.
 
 ### Priority 2 — News posts
 Create first real news post via `/admin/news/new` to verify admin CRUD and public `/news` page end-to-end.
 
-### Priority 3 — Phase 4 close
-Once E2E test passes, mark Phase 4 complete and plan Phase 5 scope.
+### Priority 3 — Phase 4 sign-off + Phase 5 planning
+Review what's complete, mark Phase 4 done, scope Phase 5.
 
 ## Phase progress
 
@@ -45,6 +43,14 @@ Once E2E test passes, mark Phase 4 complete and plan Phase 5 scope.
 ## Session log
 
 Append a new entry at the top of this section after every session. Date, summary, files touched, what's next. Keep it tight — full reasoning belongs in `DECISIONS.md`.
+
+### 2026-06-04 (session 21)
+
+**Did:** Major pipeline and UI session. (1) kie.ai endpoint bugs fixed — correct path `/api/v1/jobs/createTask`, body wrapped in `input` object, `task_id`/`resultJson.resultUrls[0]` response fields. (2) `updateJobStatus` now throws on Supabase error so Inngest surfaces failures instead of silently completing. (3) Retry resilience — each generated clip saved to `video_jobs.params.generatedClips[i]`; retries skip already-done clips. (4) Reset button for stuck jobs — marks active-state jobs as failed so Retry becomes available. (5) Beat-aligned scene cuts — `buildSections` snaps to 4-beat multiples of BPM; ffmpeg `trim+setpts` per clip. (6) Opening title card — artist name (oxblood, 72pt) + track title (bone, 40pt) prepended via ffmpeg lavfi + drawtext; Inter Bold downloaded to /tmp. (7) Admin jobs UX — Cost column, Duration renamed to Process time, falsy-zero cost fix in portal detail. (8) Logos enlarged — square logo.png (w-36) added to desktop sidebar above nav; header logo bumped to h-14/h-20. (9) Video file upload — presigned URL flow (browser → Supabase direct), source toggle in VideoForm, VideoEmbed handles storage_url with native `<video controls>`. Bug fixes: kind constraint values aligned, VideoEmbed controls fix (removed object-cover).
+**Touched:** `src/lib/video/providers/kie.ts`, `src/lib/inngest/functions/generate-video.ts`, `src/app/admin/jobs/actions.ts`, `src/app/admin/jobs/page.tsx`, `src/components/RetryButton.tsx`, `src/components/JobsAutoRefresh.tsx`, `src/components/ArtistPickerDropdown.tsx`, `src/lib/audio/analyze.ts`, `src/lib/video/assemble.ts`, `src/components/InkShell.tsx`, `src/components/VideoForm.tsx`, `src/components/VideoEmbed.tsx`, `src/app/admin/videos/actions.ts`, `src/app/(public)/videos/page.tsx`, `src/app/(public)/page.tsx`, `src/app/(public)/releases/[slug]/page.tsx`, `src/app/(public)/artists/[slug]/page.tsx`, `supabase/migrations/20260604000000_videos_storage_url.sql`, `src/app/icon.png` (favicon)
+**Decided:** kie.ai over Higgsfield (image-to-video only, incompatible pipeline). Presigned upload URL pattern for video files (no large body through Vercel). Beat-grid section alignment via BPM metadata.
+**Blocked on:** Nothing critical.
+**Next:** Admin videos list thumbnail fallback for uploaded videos. News post test. Phase 4 sign-off.
 
 ### 2026-06-01 (session 20)
 
