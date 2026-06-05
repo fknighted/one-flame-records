@@ -35,6 +35,7 @@ const ADMIN_NAV: NavGroup[] = [
     items: [
       { href: "/admin/ai-studio/images", label: "Images" },
       { href: "/admin/ai-studio/copy", label: "Copy" },
+      { href: "/admin/campaigns", label: "Campaigns" },
       { href: "/admin/jobs", label: "Video Jobs" },
     ],
   },

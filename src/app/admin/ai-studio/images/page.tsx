@@ -27,6 +27,9 @@ export default async function AIImagesPage() {
         <p className="mt-1 text-sm text-bone/50">
           Generate artist photos, release covers, and promotional images. Images are saved to your media library.
         </p>
+        <Link href="/admin/ai-studio/images/library" className="inline-block mt-2 text-xs text-ochre/60 hover:text-ochre transition-colors">
+          View library →
+        </Link>
       </div>
 
       <Suspense>

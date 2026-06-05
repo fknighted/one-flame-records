@@ -140,7 +140,15 @@ export async function generateImage(formData: FormData): Promise<GenerateImageRe
   if (uploadErr) return { error: `Storage upload failed: ${uploadErr.message}` };
 
   const { data } = supabase.storage.from("public-media").getPublicUrl(path);
-  return { url: data.publicUrl };
+  const publicUrl = data.publicUrl;
+
+  // Record in library (fire-and-forget — don't fail generation if this errors)
+  const purposeField = (formData.get("purpose") as string) || "standalone";
+  try {
+    await supabase.from("ai_generated_images").insert({ url: publicUrl, prompt, purpose: purposeField });
+  } catch { /* non-critical */ }
+
+  return { url: publicUrl };
 }
 
 export async function applyImageToArtist(imageUrl: string, artistId: string): Promise<{ error?: string }> {

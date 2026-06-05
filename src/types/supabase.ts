@@ -39,6 +39,30 @@ export type Database = {
   }
   public: {
     Tables: {
+      ai_generated_images: {
+        Row: {
+          created_at: string
+          id: string
+          prompt: string | null
+          purpose: string | null
+          url: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          prompt?: string | null
+          purpose?: string | null
+          url: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          prompt?: string | null
+          purpose?: string | null
+          url?: string
+        }
+        Relationships: []
+      }
       artists: {
         Row: {
           bio: string
@@ -139,6 +163,101 @@ export type Database = {
             columns: ["artist_id"]
             isOneToOne: false
             referencedRelation: "artists"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      content_campaigns: {
+        Row: {
+          created_at: string
+          id: string
+          source_content: string
+          source_type: string
+          status: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          source_content: string
+          source_type: string
+          status?: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          source_content?: string
+          source_type?: string
+          status?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      content_pieces: {
+        Row: {
+          campaign_id: string
+          caption: string | null
+          content_type: string
+          created_at: string
+          error: string | null
+          hashtags: string[] | null
+          id: string
+          image_url: string | null
+          platform: string
+          published_at: string | null
+          sort_order: number
+          status: string
+          updated_at: string
+          video_mode: string | null
+          video_script: string | null
+          video_url: string | null
+        }
+        Insert: {
+          campaign_id: string
+          caption?: string | null
+          content_type: string
+          created_at?: string
+          error?: string | null
+          hashtags?: string[] | null
+          id?: string
+          image_url?: string | null
+          platform: string
+          published_at?: string | null
+          sort_order?: number
+          status?: string
+          updated_at?: string
+          video_mode?: string | null
+          video_script?: string | null
+          video_url?: string | null
+        }
+        Update: {
+          campaign_id?: string
+          caption?: string | null
+          content_type?: string
+          created_at?: string
+          error?: string | null
+          hashtags?: string[] | null
+          id?: string
+          image_url?: string | null
+          platform?: string
+          published_at?: string | null
+          sort_order?: number
+          status?: string
+          updated_at?: string
+          video_mode?: string | null
+          video_script?: string | null
+          video_url?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "content_pieces_campaign_id_fkey"
+            columns: ["campaign_id"]
+            isOneToOne: false
+            referencedRelation: "content_campaigns"
             referencedColumns: ["id"]
           },
         ]
