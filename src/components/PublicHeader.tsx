@@ -5,12 +5,13 @@ import Image from "next/image";
 import { useState } from "react";
 
 const NAV = [
-  { href: "/artists",  label: "Artists" },
-  { href: "/releases", label: "Releases" },
-  { href: "/videos",   label: "Videos" },
-  { href: "/news",     label: "News" },
-  { href: "/about",    label: "About" },
-  { href: "/contact",  label: "Contact" },
+  { href: "/artists",       label: "Artists" },
+  { href: "/releases",      label: "Releases" },
+  { href: "/videos",        label: "Videos" },
+  { href: "/news",          label: "News" },
+  { href: "/flames-lounge", label: "Flames Lounge" },
+  { href: "/about",         label: "About" },
+  { href: "/contact",       label: "Contact" },
 ];
 
 const NAV_CTA = { href: "/sign", label: "Sign with us" };
