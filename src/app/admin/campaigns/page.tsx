@@ -62,12 +62,20 @@ export default async function CampaignsPage() {
           <h1 className="font-display font-bold text-bone text-3xl">Campaigns</h1>
           <div className="mt-3 h-px w-16 bg-bone/20" />
         </div>
-        <Link
-          href="/admin/campaigns/new"
-          className="shrink-0 bg-ochre text-ink text-sm font-medium px-4 py-2 rounded hover:bg-ochre/90 transition-colors"
-        >
-          + New Campaign
-        </Link>
+        <div className="flex items-center gap-3">
+          <Link
+            href="/admin/campaigns/ideas"
+            className="text-sm text-bone/40 hover:text-ochre transition-colors"
+          >
+            Ideas →
+          </Link>
+          <Link
+            href="/admin/campaigns/new"
+            className="shrink-0 bg-ochre text-ink text-sm font-medium px-4 py-2 rounded hover:bg-ochre/90 transition-colors"
+          >
+            + New Campaign
+          </Link>
+        </div>
       </div>
 
       {!campaigns?.length ? (

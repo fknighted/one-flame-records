@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import Link from "next/link";
 import CampaignForm from "./CampaignForm";
 
@@ -17,7 +18,9 @@ export default function NewCampaignPage() {
           Paste your source content and the AI will generate platform-ready posts for Instagram, TikTok, and Facebook.
         </p>
       </div>
-      <CampaignForm />
+      <Suspense>
+        <CampaignForm />
+      </Suspense>
     </div>
   );
 }

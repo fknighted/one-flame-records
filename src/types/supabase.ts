@@ -167,6 +167,39 @@ export type Database = {
           },
         ]
       }
+      campaign_ideas: {
+        Row: {
+          angle: string | null
+          created_at: string
+          id: string
+          pillar: string | null
+          source_type: string
+          status: string
+          suggested_platforms: string[]
+          title: string
+        }
+        Insert: {
+          angle?: string | null
+          created_at?: string
+          id?: string
+          pillar?: string | null
+          source_type?: string
+          status?: string
+          suggested_platforms?: string[]
+          title: string
+        }
+        Update: {
+          angle?: string | null
+          created_at?: string
+          id?: string
+          pillar?: string | null
+          source_type?: string
+          status?: string
+          suggested_platforms?: string[]
+          title?: string
+        }
+        Relationships: []
+      }
       content_campaigns: {
         Row: {
           created_at: string

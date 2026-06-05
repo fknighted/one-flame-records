@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState } from "react";
+import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { createCampaign, type ActionState } from "./actions";
 
@@ -22,6 +23,13 @@ const LABEL  = "block text-xs text-bone/50 mb-1.5";
 
 export default function CampaignForm() {
   const [state, formAction, pending] = useActionState<ActionState, FormData>(createCampaign, null);
+  const params = useSearchParams();
+
+  // Pre-fill from idea query params (?title=...&angle=...&source_type=...&platforms=...)
+  const prefillTitle      = params.get("title") ?? "";
+  const prefillAngle      = params.get("angle") ?? "";
+  const prefillSourceType = params.get("source_type") ?? "text";
+  const prefillPlatforms  = (params.get("platforms") ?? "instagram,tiktok,facebook").split(",").filter(Boolean);
 
   return (
     <form action={formAction} className="space-y-8 max-w-2xl">
@@ -32,8 +40,15 @@ export default function CampaignForm() {
       {/* Title */}
       <div>
         <label className={LABEL}>Campaign title *</label>
-        <input name="title" type="text" required className={INPUT} placeholder="e.g. Summer Riddim release push" />
+        <input name="title" type="text" required className={INPUT} placeholder="e.g. Summer Riddim release push" defaultValue={prefillTitle} />
       </div>
+
+      {/* Pre-filled angle note */}
+      {prefillAngle && (
+        <div className="rounded border border-ochre/20 bg-ochre/5 px-4 py-3 text-sm text-bone/60">
+          <span className="text-ochre/70 font-medium">Idea angle: </span>{prefillAngle}
+        </div>
+      )}
 
       {/* Source type */}
       <div>
@@ -41,7 +56,7 @@ export default function CampaignForm() {
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
           {SOURCE_TYPES.map(({ value, label }) => (
             <label key={value} className="cursor-pointer">
-              <input type="radio" name="source_type" value={value} defaultChecked={value === "text"} className="sr-only peer" />
+              <input type="radio" name="source_type" value={value} defaultChecked={value === prefillSourceType} className="sr-only peer" />
               <span className="block text-center rounded px-3 py-2 text-sm border border-bone/15 text-bone/60 peer-checked:bg-ochre peer-checked:text-ink peer-checked:border-ochre peer-checked:font-medium hover:border-bone/30 transition-colors">
                 {label}
               </span>
@@ -72,7 +87,7 @@ export default function CampaignForm() {
                 type="checkbox"
                 name="platforms"
                 value={value}
-                defaultChecked
+                defaultChecked={prefillPlatforms.includes(value)}
                 className="w-4 h-4 rounded border-bone/30 bg-bone/5 accent-ochre"
               />
               <span className="text-sm text-bone/70">{label}</span>
