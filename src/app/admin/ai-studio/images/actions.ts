@@ -4,51 +4,45 @@ import OpenAI from "openai";
 import { createServiceClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-
 export type GenerateImageResult =
   | { url: string; error?: never }
   | { error: string; url?: never };
 
-const DALL_E_SIZES = {
+// gpt-image-1 sizes (replaced dall-e-3 in 2025)
+const IMAGE_SIZES = {
   square:    "1024x1024",
-  landscape: "1792x1024",
-  portrait:  "1024x1792",
+  landscape: "1536x1024",
+  portrait:  "1024x1536",
 } as const;
 
 export async function generateImage(formData: FormData): Promise<GenerateImageResult> {
   const prompt = (formData.get("prompt") as string)?.trim();
   const size = (formData.get("size") as string) ?? "square";
-  const quality = "hd";
 
   if (!prompt) return { error: "Prompt is required." };
   if (!process.env.OPENAI_API_KEY) return { error: "OPENAI_API_KEY is not configured." };
 
-  const dalleSize = DALL_E_SIZES[size as keyof typeof DALL_E_SIZES] ?? "1024x1024";
+  // Initialize inside the function so the env var is always current
+  const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
-  let tempUrl: string;
+  const imageSize = IMAGE_SIZES[size as keyof typeof IMAGE_SIZES] ?? "1024x1024";
+
+  let buffer: Buffer;
   try {
     const response = await openai.images.generate({
-      model: "dall-e-3",
+      model: "gpt-image-1",
       prompt,
-      size: dalleSize as "1024x1024" | "1792x1024" | "1024x1792",
-      quality,
+      size: imageSize as "1024x1024" | "1536x1024" | "1024x1536",
+      quality: "high",
       n: 1,
     });
-    tempUrl = response.data?.[0]?.url ?? "";
-    if (!tempUrl) return { error: "DALL-E returned no image URL." };
+    // gpt-image-1 returns base64 directly — no temporary URL to fetch
+    const b64 = response.data?.[0]?.b64_json;
+    if (!b64) return { error: "No image data returned from OpenAI." };
+    buffer = Buffer.from(b64, "base64");
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);
     return { error: `Image generation failed: ${msg}` };
-  }
-
-  // Download and re-upload to Supabase so we have a permanent URL
-  let buffer: Buffer;
-  try {
-    const res = await fetch(tempUrl);
-    buffer = Buffer.from(await res.arrayBuffer());
-  } catch {
-    return { error: "Failed to download generated image from OpenAI." };
   }
 
   const supabase = createServiceClient();
