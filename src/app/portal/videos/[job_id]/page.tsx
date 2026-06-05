@@ -182,7 +182,7 @@ export default async function VideoJobDetailPage({ params }: Props) {
             }}
           >
             {ds === "done" && job.output_url ? (
-              <div className="text-center">
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
                 <a
                   href={job.output_url}
                   target="_blank"
@@ -190,6 +190,13 @@ export default async function VideoJobDetailPage({ params }: Props) {
                   className="inline-flex items-center gap-2 rounded bg-ochre px-6 py-3 text-sm font-semibold text-ink hover:bg-bone transition-colors"
                 >
                   Watch video →
+                </a>
+                <a
+                  href={job.output_url}
+                  download={`${job.assets?.title ?? "video"}.mp4`}
+                  className="inline-flex items-center gap-2 rounded border border-bone/30 px-6 py-3 text-sm font-semibold text-bone/80 hover:border-bone/60 hover:text-bone transition-colors"
+                >
+                  Download MP4 ↓
                 </a>
               </div>
             ) : (

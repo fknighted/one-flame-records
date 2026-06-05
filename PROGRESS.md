@@ -12,31 +12,25 @@ This is the living state of the build. Update at the end of every session.
 
 ## Active focus
 
-Phase 5 remaining items + wiring up social API keys for auto-posting.
+Social API keys (Meta + TikTok) + first real news post.
 
 ## Blockers
 
-- **Meta API keys** — `FACEBOOK_PAGE_ACCESS_TOKEN`, `FACEBOOK_PAGE_ID`, `INSTAGRAM_BUSINESS_ACCOUNT_ID` not yet in Vercel. Campaign publish to Instagram/Facebook will error until these are set. Setup: create a Facebook Developer App at developers.facebook.com, add Instagram Graph API + Pages products, generate a long-lived Page Access Token.
+- **Meta API keys** — `FACEBOOK_PAGE_ACCESS_TOKEN`, `FACEBOOK_PAGE_ID`, `INSTAGRAM_BUSINESS_ACCOUNT_ID` not yet in Vercel. Campaign publish to Instagram/Facebook will error until these are set. See setup walkthrough in session 24 notes below.
 - **TikTok API keys** — `TIKTOK_ACCESS_TOKEN`, `TIKTOK_OPEN_ID` not yet set. Apply for TikTok Content Posting API access at developers.tiktok.com.
-- **Flames Lounge photos** — Hero and gallery are placeholders. Real photos needed from the space; drop into `public/` and wire in.
-- **Flames Lounge hero image** — Searching for a royalty-free placeholder from Unsplash. Best candidate so far: `https://unsplash.com/photos/IFB0DU4mhxk` (outdoor bar at dusk by Daesun Kim).
+- **Sentry DSN** — Code is wired. Add `NEXT_PUBLIC_SENTRY_DSN` (and optionally `SENTRY_AUTH_TOKEN`, `SENTRY_ORG`, `SENTRY_PROJECT`) to Vercel env vars to activate error tracking.
+- **Flames Lounge gallery** — Hero is now live (Unsplash outdoor bar photo). Gallery grid still placeholder; swap with real photos when available.
 
 ## Next session
 
-### Priority 1 — Flames Lounge hero photo
-User to confirm or find a hero image. Download full-res from Unsplash (or own photo), save as `public/flames-lounge-hero.jpg`, wire into `/flames-lounge` page hero section and photo gallery placeholders.
+### Priority 1 — Add Meta + TikTok API keys to Vercel
+See the walkthrough in the session 24 notes below. Keys go into Vercel → Project → Settings → Environment Variables.
 
-### Priority 2 — Portal generated-video download button
-Add a Download MP4 button to `/portal/videos/[job_id]` for completed jobs (Phase 5 Task 3).
+### Priority 2 — Verify Sentry
+Once `NEXT_PUBLIC_SENTRY_DSN` is in Vercel, trigger a test error (add a temporary `throw new Error("Sentry test")` to any server component, deploy, visit the page, then check sentry.io).
 
-### Priority 3 — Sentry error tracking
-Install `@sentry/nextjs`, add `SENTRY_DSN` to Vercel, verify errors surface in dashboard (Phase 5 Task 5).
-
-### Priority 4 — Meta + TikTok API keys
-Walk through setting up the Facebook Developer App and generating the required tokens so campaign auto-posting works end-to-end.
-
-### Priority 5 — First real news post
-Create a news post in `/admin/news/new` and verify it appears on the public `/news` page and homepage Latest News row.
+### Priority 3 — First real news post
+Log into `/admin/news/new`, fill in the post, publish it, verify it appears on `/news` and the homepage Latest News row.
 
 ## Phase progress
 
@@ -51,6 +45,14 @@ Create a news post in `/admin/news/new` and verify it appears on the public `/ne
 ## Session log
 
 Append a new entry at the top of this section after every session. Date, summary, files touched, what's next. Keep it tight — full reasoning belongs in `DECISIONS.md`.
+
+### 2026-06-05 (session 24)
+
+**Did:** Three items. (1) **Flames Lounge hero** — Downloaded full-res Unsplash outdoor bar at dusk photo (Daesun Kim, `photo-1763872625791`), saved as `public/flames-lounge-hero.jpg` (1.2 MB). Replaced placeholder gradient in the hero section with `next/image fill + object-cover` + a 65% dark overlay + the existing flame glow on top. Removed the flame watermark placeholder. (2) **Portal download button** — Added "Download MP4 ↓" anchor with `download` attribute alongside the existing "Watch video →" button on `/portal/videos/[job_id]` for complete jobs. Button styled as ghost/outlined vs. the filled ochre Watch button. (3) **Sentry** — Installed `@sentry/nextjs@10.56.0`. Created `sentry.client.config.ts`, `sentry.server.config.ts`, `sentry.edge.config.ts` at project root. Created `src/instrumentation.ts` (Next.js App Router hook that imports Sentry for nodejs/edge runtimes). Created `src/app/global-error.tsx` (root error boundary that calls `Sentry.captureException`). Wrapped `next.config.ts` with `withSentryConfig`. Added `NEXT_PUBLIC_SENTRY_DSN`, `SENTRY_ORG`, `SENTRY_PROJECT`, `SENTRY_AUTH_TOKEN` to `.env.example`. **Sentry will not activate until `NEXT_PUBLIC_SENTRY_DSN` is added to Vercel env vars.** Typecheck clean throughout.
+**Touched:** `public/flames-lounge-hero.jpg` (new), `src/app/(public)/flames-lounge/page.tsx`, `src/app/portal/videos/[job_id]/page.tsx`, `sentry.client.config.ts` (new), `sentry.server.config.ts` (new), `sentry.edge.config.ts` (new), `src/instrumentation.ts` (new), `src/app/global-error.tsx` (new), `next.config.ts`, `.env.example`
+**Decided:** Used Unsplash CDN URL directly (q=85, w=3000) — royalty-free under Unsplash License. `NEXT_PUBLIC_SENTRY_DSN` prefix so it's available both server-side and in client bundle (required for `sentry.client.config.ts`). `tracesSampleRate: 0.1` in production to avoid trace quota burn.
+**Blocked on:** Sentry DSN not in Vercel yet. Meta + TikTok API keys not set. Gallery photos still placeholder.
+**Next:** Add Sentry DSN to Vercel → verify. Add Meta/TikTok keys. Create first real news post.
 
 ### 2026-06-05 (session 23)
 

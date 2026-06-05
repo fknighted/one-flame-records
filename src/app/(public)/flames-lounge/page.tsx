@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 
 export const metadata: Metadata = {
   title: "Flames Lounge — Montego Bay's Creative Space",
@@ -139,8 +140,18 @@ export default function FlamesLoungePage() {
     <>
       {/* ── Hero ── */}
       <section className="relative overflow-hidden bg-[#0A0806] min-h-[85vh] flex flex-col justify-end">
-        {/* Placeholder image area */}
-        <div className="absolute inset-0 bg-gradient-to-br from-[#1A0F08] via-[#0A0806] to-[#0D0B09]" />
+        {/* Hero photo */}
+        <Image
+          src="/flames-lounge-hero.jpg"
+          alt="Outdoor bar at dusk — the mood of Flames Lounge"
+          fill
+          priority
+          className="object-cover object-center"
+          sizes="100vw"
+        />
+
+        {/* Dark overlay */}
+        <div className="absolute inset-0 bg-[#0A0806]/65" />
 
         {/* Flame glow */}
         <div
@@ -151,11 +162,6 @@ export default function FlamesLoungePage() {
               "radial-gradient(ellipse 60% 50% at 20% 70%, rgba(139,42,31,0.35) 0%, transparent 65%), radial-gradient(ellipse 40% 40% at 80% 30%, rgba(184,137,59,0.10) 0%, transparent 60%)",
           }}
         />
-
-        {/* Placeholder flame watermark */}
-        <div className="absolute inset-0 flex items-center justify-center opacity-[0.04]">
-          <FlameGlyph className="w-96 h-auto" />
-        </div>
 
         <div className="relative mx-auto max-w-6xl px-4 sm:px-6 pb-20 pt-32 w-full">
           <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#B8893B] mb-5">

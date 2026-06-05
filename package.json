@@ -13,6 +13,7 @@
     "@anthropic-ai/sdk": "^0.96.0",
     "@ffmpeg-installer/ffmpeg": "^1.1.0",
     "@higgsfield/client": "^0.2.1",
+    "@sentry/nextjs": "^10.56.0",
     "@supabase/ssr": "^0.10.3",
     "@supabase/supabase-js": "^2.105.4",
     "@types/marked": "^5.0.2",
