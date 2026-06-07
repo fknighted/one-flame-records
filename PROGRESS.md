@@ -8,24 +8,24 @@ This is the living state of the build. Update at the end of every session.
 
 - **Phase:** 5 / 6 — Polish + AI content pipeline (both active)
 - **Status:** Phases 1–4 complete. Phase 5 partially done. Phase 6 (image library, content campaigns, ideas, security hardening, Flames Lounge) fully built and live.
-- **Last updated:** 2026-06-05
+- **Last updated:** 2026-06-06
 
 ## Active focus
 
-First real news post + any remaining Phase 5 polish.
+Phase 5 wrap-up + real content pass.
 
 ## Blockers
 
-- **Flames Lounge gallery** — Hero is live. Gallery grid still placeholder; swap with real photos of the space when available.
-- **TikTok auto-posting** — Make.com has no TikTok video upload module. Posting to TikTok is manual for now (Publer evaluated as best option if automation needed later).
+- **TikTok auto-posting** — Make.com has no TikTok video upload module. Manual for now (Publer evaluated as best option if needed later).
+- **Flames Lounge gallery** — Hero live. Gallery grid still placeholder; swap with real photos when available.
+- **Campaign video generation gap** — Pieces with `video_mode = "generated"` produce a script but no `video_url`. kie.ai pipeline not triggered from campaigns yet.
 
 ## Next session
 
-### Priority 1 — First real news post
-Log into `/admin/news/new`, fill in a post, publish it, verify it appears on `/news` and the homepage Latest News row.
-
-### Priority 2 — Phase 5 wrap-up
-Review remaining Phase 5 tasks and close them out or defer to Phase 7.
+### Priority 1 — Phase 5 remaining tasks
+- Task 4: Portal video public share toggle (still to code)
+- Task 8: Content pass — real copy on `/about`, fill out roster, cover art on releases
+- Task 9: Mobile spot-check at 375px on a real device
 
 ## Phase progress
 
@@ -40,6 +40,14 @@ Review remaining Phase 5 tasks and close them out or defer to Phase 7.
 ## Session log
 
 Append a new entry at the top of this section after every session. Date, summary, files touched, what's next. Keep it tight — full reasoning belongs in `DECISIONS.md`.
+
+### 2026-06-06 (session 26)
+
+**Did:** Major bug-fix + feature session. (1) **Campaign ideas** — fixed `PILLARS` exported from `"use server"` file (production crash); moved to `constants.ts`. Fixed markdown code fences in Claude JSON responses. Fixed `suggested_platforms.join` null crash in IdeaCard. Replaced `window.location.reload()` with `router.refresh()`. Added `→ News post` button — creates a draft `news_posts` from an idea and redirects to edit. Pre-select all platforms when starting campaign from idea. (2) **Campaign pipeline** — added `"news"` as a platform: `news_post` content type; Inngest generates article (title + markdown body via Claude); DB migrations to allow `news_post` in content_type and platform check constraints (applied via SQL editor). News pieces render as article cards in campaign review; platform picker hidden for news pieces; publish action creates draft `news_posts`. (3) **News edit page** — fixed `onClick` in Server Component (production crash); extracted `DeletePostButton` Client Component. (4) **Draft news leak** — public news queries now have explicit `.eq("is_published", true)` + `.or("published_at.is.null,published_at.lte.${now}")` filters so admin session doesn't leak drafts. (5) **Admin logo** — top bar and sidebar logos now link to `/` (public homepage). (6) **Sentry + Make.com** — `NEXT_PUBLIC_SENTRY_DSN` added to Vercel (active). `SOCIAL_WEBHOOK_URL` added to Vercel. Meta credentials obtained (`FACEBOOK_PAGE_ID`, `FACEBOOK_PAGE_ACCESS_TOKEN`, `INSTAGRAM_BUSINESS_ACCOUNT_ID`). All social posting routed through Make.com webhook. Inngest synced, `generate-campaign` function now runs in production.
+**Touched:** `src/app/admin/campaigns/ideas/constants.ts` (new), `src/app/admin/campaigns/ideas/actions.ts`, `src/app/admin/campaigns/ideas/IdeasClient.tsx`, `src/app/admin/campaigns/ideas/page.tsx`, `src/app/admin/campaigns/new/CampaignForm.tsx`, `src/lib/inngest/functions/generate-campaign.ts`, `src/app/admin/campaigns/[id]/actions.ts`, `src/app/admin/campaigns/[id]/CampaignPiecesClient.tsx`, `src/app/admin/news/[id]/edit/DeletePostButton.tsx` (new), `src/app/admin/news/[id]/edit/page.tsx`, `src/app/(public)/news/page.tsx`, `src/app/(public)/news/[slug]/page.tsx`, `src/app/(public)/page.tsx`, `src/components/InkShell.tsx`, `src/lib/social/meta.ts`, `src/lib/social/tiktok.ts`, `supabase/migrations/20260606000001_content_pieces_news_type.sql` (new, applied), `src/app/admin/error.tsx` (new)
+**Decided:** Make.com over direct social APIs (no TikTok module, avoids FB auth complexity). `router.refresh()` over `window.location.reload()` after server actions. News posts from campaigns store title in `caption`, body in `video_script`. Null `published_at` treated as immediately visible.
+**Blocked on:** TikTok auto-post. Flames Lounge gallery. Campaign video generation gap.
+**Next:** Phase 5 remaining — portal share toggle, content pass, mobile QA.
 
 ### 2026-06-06 (session 25)
 
