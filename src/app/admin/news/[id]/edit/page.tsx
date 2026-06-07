@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { createServiceClient } from "@/lib/supabase/server";
 import NewsForm from "@/components/NewsForm";
+import DeletePostButton from "./DeletePostButton";
 import { updateNewsPost, deleteNewsPost } from "./actions";
 
 type Props = { params: Promise<{ id: string }> };
@@ -23,17 +24,7 @@ export default async function EditNewsPostPage({ params }: Props) {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="font-display text-2xl text-bone">Edit Post</h1>
-        <form action={deleteAction}>
-          <button
-            type="submit"
-            className="text-sm text-red-400 hover:text-red-300 transition-colors"
-            onClick={(e) => {
-              if (!confirm("Delete this post? This cannot be undone.")) e.preventDefault();
-            }}
-          >
-            Delete
-          </button>
-        </form>
+        <DeletePostButton action={deleteAction} />
       </div>
       <NewsForm action={updateNewsPost} mode="edit" post={post} />
     </div>
