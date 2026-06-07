@@ -38,7 +38,7 @@ export default function ArtistCard({ slug, stage_name, photo_url, hometown }: Pr
           {stage_name}
         </p>
         {hometown && (
-          <p className="mt-0.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-bone/55">
+          <p className="mt-0.5 text-xs font-semibold uppercase tracking-[0.14em] text-bone/55">
             {hometown}
           </p>
         )}

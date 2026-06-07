@@ -52,7 +52,7 @@ export default function SignPage() {
             based in Montego Bay, Jamaica. We sign artists, not sounds — if
             the music is rooted, honest, and built to last, we want to hear it.
           </p>
-          <div className="mt-10 flex items-center gap-4">
+          <div className="mt-10 flex flex-wrap items-center gap-4">
             <Link
               href="/contact"
               className="inline-block rounded bg-ochre px-7 py-3 text-sm font-semibold text-ink hover:bg-bone transition-colors"

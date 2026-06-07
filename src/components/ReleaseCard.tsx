@@ -152,7 +152,7 @@ export default function ReleaseCard({
         </p>
 
         {activeLinks.length > 0 && (
-          <div className="mt-2.5 flex items-center gap-3">
+          <div className="mt-2.5 flex items-center gap-1.5">
             {activeLinks.map(({ key, label, icon }) => (
               <a
                 key={key}
@@ -160,7 +160,7 @@ export default function ReleaseCard({
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={label}
-                className={`transition-colors ${
+                className={`p-1.5 -m-1.5 transition-colors ${
                   dark ? "text-bone/40 hover:text-ochre" : "text-ink/40 hover:text-oxblood"
                 }`}
               >

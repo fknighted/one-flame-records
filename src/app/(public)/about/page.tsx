@@ -145,7 +145,7 @@ export default function AboutPage() {
         </p>
         <a
           href="/contact"
-          className="inline-block rounded bg-oxblood px-6 py-2.5 text-sm font-semibold text-bone hover:bg-ochre transition-colors"
+          className="inline-block rounded bg-oxblood px-6 py-3 text-sm font-semibold text-bone hover:bg-ochre transition-colors"
         >
           Get in touch
         </a>

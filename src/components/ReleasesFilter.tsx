@@ -84,8 +84,8 @@ export default function ReleasesFilter({ artists }: Props) {
         </select>
       )}
 
-      {/* Sort chips — pushed to the right on larger screens */}
-      <div className="ml-auto flex gap-1.5" role="group" aria-label="Sort releases">
+      {/* Sort chips */}
+      <div className="sm:ml-auto flex gap-1.5" role="group" aria-label="Sort releases">
         {SORTS.map(({ value, label }) => (
           <button
             key={value}

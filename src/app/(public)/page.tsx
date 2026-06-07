@@ -113,7 +113,7 @@ export default async function HomePage() {
             One Flame Records is an independent reggae and dancehall label rooted in
             the tradition of Jamaican music — artists, releases, and the culture they carry.
           </p>
-          <div className="mt-10 flex items-center gap-4">
+          <div className="mt-10 flex flex-wrap items-center gap-4">
             <Link
               href="/artists"
               className="inline-block rounded bg-ochre px-7 py-3 text-sm font-semibold text-ink hover:bg-bone transition-colors"
