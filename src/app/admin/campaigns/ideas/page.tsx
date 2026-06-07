@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { createServiceClient } from "@/lib/supabase/server";
 import IdeasClient from "./IdeasClient";
-import type { Idea } from "./actions";
+import type { Idea } from "./constants";
 
 export default async function IdeasPage() {
   const supabase = createServiceClient();

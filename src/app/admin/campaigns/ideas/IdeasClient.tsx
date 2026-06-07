@@ -3,7 +3,8 @@
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { generateIdeas, dismissIdea, markExpanded, PILLARS, type Idea } from "./actions";
+import { generateIdeas, dismissIdea, markExpanded } from "./actions";
+import { PILLARS, type Idea } from "./constants";
 
 const PILLAR_COLORS: Record<string, string> = {
   artist_spotlight:  "bg-oxblood/15 text-oxblood border border-oxblood/20",
