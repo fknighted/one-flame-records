@@ -28,32 +28,33 @@ export type Idea = {
 };
 
 export async function generateIdeas(): Promise<{ error?: string }> {
-  await requireAdmin();
-  if (!process.env.ANTHROPIC_API_KEY) return { error: "ANTHROPIC_API_KEY is not configured." };
+  try {
+    await requireAdmin();
+    if (!process.env.ANTHROPIC_API_KEY) return { error: "ANTHROPIC_API_KEY is not configured." };
 
-  const supabase = createServiceClient();
+    const supabase = createServiceClient();
 
-  // Pull label context for richer ideas
-  const [{ data: artists }, { data: releases }, { data: news }] = await Promise.all([
-    supabase.from("artists").select("stage_name, genres, hometown").eq("status", "active").limit(10),
-    supabase.from("releases").select("title, type, release_date").order("release_date", { ascending: false }).limit(5),
-    supabase.from("news_posts").select("title, category").eq("is_published", true).order("published_at", { ascending: false }).limit(5),
-  ]);
+    // Pull label context for richer ideas
+    const [{ data: artists }, { data: releases }, { data: news }] = await Promise.all([
+      supabase.from("artists").select("stage_name, genres, hometown").eq("status", "active").limit(10),
+      supabase.from("releases").select("title, type, release_date").order("release_date", { ascending: false }).limit(5),
+      supabase.from("news_posts").select("title, category").eq("is_published", true).order("published_at", { ascending: false }).limit(5),
+    ]);
 
-  const artistList = (artists ?? []).map(a => `${a.stage_name} (${(a.genres as string[] | null)?.join(", ") ?? "unknown genre"})`).join(", ");
-  const releaseList = (releases ?? []).map(r => `"${r.title}" (${r.type})`).join(", ");
-  const newsList = (news ?? []).map(n => `"${n.title}"`).join(", ");
+    const artistList = (artists ?? []).map(a => `${a.stage_name} (${(a.genres as string[] | null)?.join(", ") ?? "unknown genre"})`).join(", ");
+    const releaseList = (releases ?? []).map(r => `"${r.title}" (${r.type})`).join(", ");
+    const newsList = (news ?? []).map(n => `"${n.title}"`).join(", ");
 
-  const pillarsDesc = PILLARS.map(p => `- ${p.label}: ${p.description}`).join("\n");
+    const pillarsDesc = PILLARS.map(p => `- ${p.label}: ${p.description}`).join("\n");
 
-  const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
-  const msg = await anthropic.messages.create({
-    model: "claude-sonnet-4-6",
-    max_tokens: 2048,
-    system: `You are a content strategist for One Flame Records, an independent reggae and dancehall label from Montego Bay, Jamaica. Generate specific, actionable campaign ideas that feel authentic to the label's voice — rooted in Jamaican culture, not generic music marketing.`,
-    messages: [{
-      role: "user",
-      content: `Generate 8 campaign ideas for One Flame Records.
+    const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+    const msg = await anthropic.messages.create({
+      model: "claude-sonnet-4-6",
+      max_tokens: 2048,
+      system: `You are a content strategist for One Flame Records, an independent reggae and dancehall label from Montego Bay, Jamaica. Generate specific, actionable campaign ideas that feel authentic to the label's voice — rooted in Jamaican culture, not generic music marketing.`,
+      messages: [{
+        role: "user",
+        content: `Generate 8 campaign ideas for One Flame Records.
 
 Label context:
 - Artists: ${artistList || "roster not yet populated"}
@@ -71,57 +72,65 @@ For each idea, return a JSON object with:
 - "suggested_platforms": array from ["instagram", "tiktok", "facebook"] — pick the best fit for this idea
 
 Return ONLY a valid JSON array of 8 objects. No explanation or markdown.`,
-    }],
-  });
+      }],
+    });
 
-  const raw = msg.content
-    .filter(b => b.type === "text")
-    .map(b => (b as { type: "text"; text: string }).text)
-    .join("")
-    .trim();
+    const raw = msg.content
+      .filter(b => b.type === "text")
+      .map(b => (b as { type: "text"; text: string }).text)
+      .join("")
+      .trim();
 
-  const jsonStr = raw.startsWith("[") ? raw : raw.slice(raw.indexOf("["));
+    const jsonStr = raw.startsWith("[") ? raw : raw.slice(raw.indexOf("["));
 
-  let ideas: {
-    title: string;
-    angle: string;
-    pillar: string;
-    source_type: string;
-    suggested_platforms: string[];
-  }[];
+    let ideas: {
+      title: string;
+      angle: string;
+      pillar: string;
+      source_type: string;
+      suggested_platforms: string[];
+    }[];
 
-  try {
-    ideas = JSON.parse(jsonStr);
-  } catch {
-    return { error: `Claude returned invalid JSON: ${raw.slice(0, 200)}` };
+    try {
+      ideas = JSON.parse(jsonStr);
+    } catch {
+      return { error: `Claude returned invalid JSON: ${raw.slice(0, 200)}` };
+    }
+
+    const rows = ideas.map(idea => ({
+      title:               idea.title,
+      angle:               idea.angle ?? null,
+      pillar:              idea.pillar ?? null,
+      source_type:         idea.source_type ?? "text",
+      suggested_platforms: idea.suggested_platforms ?? [],
+      status:              "draft",
+    }));
+
+    const { error } = await supabase.from("campaign_ideas").insert(rows);
+    if (error) return { error: error.message };
+
+    revalidatePath("/admin/campaigns/ideas");
+    return {};
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err);
+    return { error: `Generation failed: ${msg}` };
   }
-
-  const rows = ideas.map(idea => ({
-    title:               idea.title,
-    angle:               idea.angle ?? null,
-    pillar:              idea.pillar ?? null,
-    source_type:         idea.source_type ?? "text",
-    suggested_platforms: idea.suggested_platforms ?? [],
-    status:              "draft",
-  }));
-
-  const { error } = await supabase.from("campaign_ideas").insert(rows);
-  if (error) return { error: error.message };
-
-  revalidatePath("/admin/campaigns/ideas");
-  return {};
 }
 
 export async function dismissIdea(id: string): Promise<void> {
-  await requireAdmin();
-  const supabase = createServiceClient();
-  await supabase.from("campaign_ideas").update({ status: "dismissed" }).eq("id", id);
-  revalidatePath("/admin/campaigns/ideas");
+  try {
+    await requireAdmin();
+    const supabase = createServiceClient();
+    await supabase.from("campaign_ideas").update({ status: "dismissed" }).eq("id", id);
+    revalidatePath("/admin/campaigns/ideas");
+  } catch { /* non-critical — UI already optimistically hides the card */ }
 }
 
 export async function markExpanded(id: string): Promise<void> {
-  await requireAdmin();
-  const supabase = createServiceClient();
-  await supabase.from("campaign_ideas").update({ status: "expanded" }).eq("id", id);
-  revalidatePath("/admin/campaigns/ideas");
+  try {
+    await requireAdmin();
+    const supabase = createServiceClient();
+    await supabase.from("campaign_ideas").update({ status: "expanded" }).eq("id", id);
+    revalidatePath("/admin/campaigns/ideas");
+  } catch { /* non-critical — navigation proceeds regardless */ }
 }
