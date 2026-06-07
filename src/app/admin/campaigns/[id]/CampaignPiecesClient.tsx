@@ -18,6 +18,8 @@ type Piece = {
   published_at: string | null;
 };
 
+const ALL_PLATFORMS = ["instagram", "facebook", "tiktok"] as const;
+
 const PLATFORM_COLORS: Record<string, string> = {
   instagram: "bg-[#E1306C]/15 text-[#E1306C] border border-[#E1306C]/25",
   tiktok:    "bg-bone/10 text-bone border border-bone/20",
@@ -46,13 +48,22 @@ const STATUS_LABEL: Record<string, string> = {
   failed:     "Failed",
 };
 
-function PieceCard({ piece }: { piece: Piece }) {
+function PieceCard({
+  piece,
+  publishPlatforms,
+  onPlatformsChange,
+}: {
+  piece: Piece;
+  publishPlatforms: string[];
+  onPlatformsChange: (platforms: string[]) => void;
+}) {
   const [expanded, setExpanded] = useState(false);
   const [pending, startTransition] = useTransition();
 
   const canApprove  = piece.status === "ready";
   const canReject   = piece.status === "ready" || piece.status === "approved";
   const canRegen    = piece.status === "ready" || piece.status === "rejected" || piece.status === "failed";
+  const showPlatformPicker = piece.status === "ready" || piece.status === "approved";
 
   return (
     <div className={`rounded-lg border overflow-hidden transition-colors ${
@@ -126,6 +137,31 @@ function PieceCard({ piece }: { piece: Piece }) {
           </p>
         )}
 
+        {/* Platform picker */}
+        {showPlatformPicker && (
+          <div className="pt-2 border-t border-bone/8">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-bone/35 mb-1.5">Post to</p>
+            <div className="flex gap-3 flex-wrap">
+              {ALL_PLATFORMS.map((p) => (
+                <label key={p} className="flex items-center gap-1.5 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={publishPlatforms.includes(p)}
+                    onChange={(e) => {
+                      const next = e.target.checked
+                        ? [...publishPlatforms, p]
+                        : publishPlatforms.filter((x) => x !== p);
+                      onPlatformsChange(next);
+                    }}
+                    className="w-3.5 h-3.5 rounded accent-ochre"
+                  />
+                  <span className="text-xs text-bone/60 capitalize">{p}</span>
+                </label>
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* Actions */}
         {(canApprove || canReject || canRegen) && (
           <div className="flex gap-2 pt-1 border-t border-bone/8">
@@ -167,6 +203,11 @@ export default function CampaignPiecesClient({
   const [publishResult, setPublishResult] = useState<{ published: number; skipped: number; errors: string[] } | null>(null);
   const [publishing, startPublishing] = useTransition();
 
+  // platform overrides: pieceId → string[]. defaults to each piece's native platform.
+  const [platformOverrides, setPlatformOverrides] = useState<Record<string, string[]>>(
+    () => Object.fromEntries(pieces.map((p) => [p.id, [p.platform]]))
+  );
+
   const approvedCount  = pieces.filter((p) => p.status === "approved").length;
   const readyCount     = pieces.filter((p) => p.status === "ready").length;
   const publishedCount = pieces.filter((p) => p.status === "published").length;
@@ -178,7 +219,7 @@ export default function CampaignPiecesClient({
   function handlePublish() {
     setPublishResult(null);
     startPublishing(async () => {
-      const result = await publishApproved(campaignId);
+      const result = await publishApproved(campaignId, platformOverrides);
       setPublishResult(result);
     });
   }
@@ -215,7 +256,7 @@ export default function CampaignPiecesClient({
           >
             {publishing ? "Publishing…" : `Publish ${approvedCount} approved piece${approvedCount !== 1 ? "s" : ""}`}
           </button>
-          <p className="text-xs text-bone/35">Posts to Instagram, TikTok, and Facebook via their APIs.</p>
+          <p className="text-xs text-bone/35">Posts to selected platforms via Make.com.</p>
         </div>
       )}
 
@@ -233,7 +274,14 @@ export default function CampaignPiecesClient({
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-bone/35 mb-3 capitalize">{platform}</p>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {platformPieces.map((piece) => (
-              <PieceCard key={piece.id} piece={piece} />
+              <PieceCard
+                key={piece.id}
+                piece={piece}
+                publishPlatforms={platformOverrides[piece.id] ?? [piece.platform]}
+                onPlatformsChange={(platforms) =>
+                  setPlatformOverrides((prev) => ({ ...prev, [piece.id]: platforms }))
+                }
+              />
             ))}
           </div>
         </div>

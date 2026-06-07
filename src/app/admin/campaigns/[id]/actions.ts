@@ -38,7 +38,10 @@ export async function regeneratePiece(pieceId: string): Promise<void> {
   revalidatePath(`/admin/campaigns/${piece.campaign_id}`);
 }
 
-export async function publishApproved(campaignId: string): Promise<{ published: number; skipped: number; errors: string[] }> {
+export async function publishApproved(
+  campaignId: string,
+  platformOverrides: Record<string, string[]> = {}
+): Promise<{ published: number; skipped: number; errors: string[] }> {
   await requireAdmin();
   const supabase = createServiceClient();
   const { data: pieces } = await supabase
@@ -56,26 +59,27 @@ export async function publishApproved(campaignId: string): Promise<{ published: 
   await supabase.from("content_campaigns").update({ status: "publishing" }).eq("id", campaignId);
 
   for (const piece of pieces) {
+    const platforms = platformOverrides[piece.id]?.length
+      ? platformOverrides[piece.id]
+      : [piece.platform];
+
     await supabase.from("content_pieces").update({ status: "publishing" }).eq("id", piece.id);
     try {
-      if (piece.platform === "instagram") {
-        await postToInstagram(piece);
-      } else if (piece.platform === "facebook") {
-        await postToFacebook(piece);
-      } else if (piece.platform === "tiktok") {
-        if (!piece.video_url && !piece.image_url) {
-          await supabase.from("content_pieces").update({ status: "approved", error: "TikTok requires a video or image URL — manual post required." }).eq("id", piece.id);
-          skipped++;
-          continue;
+      for (const platform of platforms) {
+        if (platform === "instagram") {
+          await postToInstagram(piece);
+        } else if (platform === "facebook") {
+          await postToFacebook(piece);
+        } else if (platform === "tiktok") {
+          await postToTikTok(piece);
         }
-        await postToTikTok(piece);
       }
       await supabase.from("content_pieces").update({ status: "published", published_at: new Date().toISOString() }).eq("id", piece.id);
       published++;
     } catch (err) {
       const msg = err instanceof Error ? err.message : String(err);
       await supabase.from("content_pieces").update({ status: "approved", error: msg }).eq("id", piece.id);
-      errors.push(`${piece.platform}: ${msg}`);
+      errors.push(`${platforms.join("+")}: ${msg}`);
     }
   }
 
