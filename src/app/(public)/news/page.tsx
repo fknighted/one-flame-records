@@ -28,6 +28,8 @@ export default async function NewsPage() {
   const { data: posts } = await supabase
     .from("news_posts")
     .select("id, slug, title, excerpt, cover_url, category, published_at")
+    .eq("is_published", true)
+    .lte("published_at", new Date().toISOString())
     .order("published_at", { ascending: false });
 
   return (
