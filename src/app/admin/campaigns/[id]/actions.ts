@@ -59,19 +59,28 @@ export async function publishApproved(
   await supabase.from("content_campaigns").update({ status: "publishing" }).eq("id", campaignId);
 
   for (const piece of pieces) {
-    const platforms = platformOverrides[piece.id]?.length
-      ? platformOverrides[piece.id]
-      : [piece.platform];
-
     await supabase.from("content_pieces").update({ status: "publishing" }).eq("id", piece.id);
     try {
-      for (const platform of platforms) {
-        if (platform === "instagram") {
-          await postToInstagram(piece);
-        } else if (platform === "facebook") {
-          await postToFacebook(piece);
-        } else if (platform === "tiktok") {
-          await postToTikTok(piece);
+      if (piece.platform === "news") {
+        // Create a draft news post from the generated article
+        const title = piece.caption ?? "Untitled";
+        const body  = piece.video_script ?? "";
+        const slug  = `${title.toLowerCase().replace(/[^a-z0-9\s-]/g, "").replace(/\s+/g, "-").slice(0, 70)}-${Date.now()}`;
+        const { error: newsErr } = await supabase.from("news_posts").insert({
+          title, slug, body,
+          excerpt:      body.slice(0, 200).replace(/\n/g, " "),
+          category:     "label",
+          is_published: false,
+        });
+        if (newsErr) throw new Error(newsErr.message);
+      } else {
+        const platforms = platformOverrides[piece.id]?.length
+          ? platformOverrides[piece.id]
+          : [piece.platform];
+        for (const platform of platforms) {
+          if (platform === "instagram")  await postToInstagram(piece);
+          else if (platform === "facebook") await postToFacebook(piece);
+          else if (platform === "tiktok")   await postToTikTok(piece);
         }
       }
       await supabase.from("content_pieces").update({ status: "published", published_at: new Date().toISOString() }).eq("id", piece.id);
@@ -79,7 +88,7 @@ export async function publishApproved(
     } catch (err) {
       const msg = err instanceof Error ? err.message : String(err);
       await supabase.from("content_pieces").update({ status: "approved", error: msg }).eq("id", piece.id);
-      errors.push(`${platforms.join("+")}: ${msg}`);
+      errors.push(`${piece.platform}: ${msg}`);
     }
   }
 

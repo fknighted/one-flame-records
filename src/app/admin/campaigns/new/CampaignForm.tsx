@@ -16,6 +16,7 @@ const PLATFORMS = [
   { value: "instagram", label: "Instagram" },
   { value: "tiktok",    label: "TikTok" },
   { value: "facebook",  label: "Facebook" },
+  { value: "news",      label: "Website News" },
 ];
 
 const INPUT  = "w-full bg-bone/5 border border-bone/15 rounded px-3 py-2 text-sm text-bone placeholder:text-bone/30 focus:outline-none focus:border-ochre/60";

@@ -11,9 +11,9 @@ function getOpenAI()    { return new OpenAI({ apiKey: process.env.OPENAI_API_KEY
 // ── Schema for the content plan Claude produces ───────────────────────────────
 
 const PieceSchema = z.object({
-  platform:     z.enum(["instagram", "tiktok", "facebook"]),
-  content_type: z.enum(["image_post", "video_post", "reel", "story", "text_post"]),
-  angle:        z.string(),           // brief creative direction for this piece
+  platform:     z.enum(["instagram", "tiktok", "facebook", "news"]),
+  content_type: z.enum(["image_post", "video_post", "reel", "story", "text_post", "news_post"]),
+  angle:        z.string(),
   image_needed: z.boolean(),
   video_mode:   z.enum(["script", "generated", "none"]).optional(),
 });
@@ -25,6 +25,7 @@ const PLATFORM_GUIDELINES: Record<string, string> = {
   instagram: "Instagram: visual-first, 2200 char caption max, 3–5 relevant hashtags, strong first line hooks the scroll. Reels perform best.",
   tiktok:    "TikTok: hook in first 3 seconds, conversational caption under 150 chars, 3 trending hashtags, vertical video. Script should feel spontaneous.",
   facebook:  "Facebook: longer copy works (up to 500 chars), storytelling tone, one clear CTA, image or video with emotional pull.",
+  news:      "Website news post: editorial article for the label's website. Well-structured, informative, 400–700 words. Use markdown. No hashtags.",
 };
 
 // ── Main Inngest function ─────────────────────────────────────────────────────
@@ -78,11 +79,11 @@ ${platformContext}
 Create a content plan with exactly ${piecesPerPlatform} piece(s) per platform (${piecesPerPlatform * platforms.length} total pieces).
 
 Return a raw JSON array (no markdown, no code fences). Each object must use EXACTLY these field names and values:
-- "platform": one of: "instagram", "tiktok", "facebook" (lowercase, no capitals)
-- "content_type": one of: "image_post", "video_post", "reel", "story", "text_post"
+- "platform": one of: "instagram", "tiktok", "facebook", "news" (lowercase, no capitals)
+- "content_type": one of: "image_post", "video_post", "reel", "story", "text_post", "news_post" (use "news_post" for news platform pieces)
 - "angle": one sentence of creative direction (use exactly this key name, not "creative_angle")
-- "image_needed": true or false
-- "video_mode": "${video_mode}" (use this value for all video pieces, "none" for non-video)
+- "image_needed": true or false (false for news pieces)
+- "video_mode": "${video_mode}" for video pieces, "none" for all others including news
 
 Output only the JSON array. No explanation, no markdown, no code fences.`;
 
@@ -141,6 +142,46 @@ Output only the JSON array. No explanation, no markdown, no code fences.`;
 
           try {
             const platformGuide = PLATFORM_GUIDELINES[piece.platform] ?? piece.platform;
+
+            // ── News post piece ──────────────────────────────────────────────
+            if (piece.platform === "news") {
+              const articleMsg = await getAnthropic().messages.create({
+                model: "claude-sonnet-4-6",
+                max_tokens: 1500,
+                system: "You write editorial articles for One Flame Records, a Jamaican reggae/dancehall label based in Montego Bay. Voice: authentic, culturally grounded, engaging. Not corporate.",
+                messages: [{
+                  role: "user",
+                  content: `Write a news article for the One Flame Records website.
+
+Creative angle: ${piece.angle}
+Source material:
+<source>
+${campaign.source_content.slice(0, 1000)}
+</source>
+
+Return JSON with two keys:
+- "title": a compelling article headline (max 80 chars)
+- "body": the full article in markdown (400–700 words, use ## subheadings where appropriate)
+
+Raw JSON only. No code fences.`,
+                }],
+              });
+
+              const artRaw = articleMsg.content.filter((b) => b.type === "text").map((b) => (b as { type: "text"; text: string }).text).join("").trim();
+              const artStripped = artRaw.replace(/```(?:json)?/g, "").trim();
+              const artJson = JSON.parse(artStripped.startsWith("{") ? artStripped : artStripped.slice(artStripped.indexOf("{")));
+
+              await supabase.from("content_pieces").update({
+                caption:      artJson.title ?? piece.angle,
+                video_script: artJson.body ?? "",
+                hashtags:     [],
+                image_url:    null,
+                status:       "ready",
+              }).eq("id", pieceId);
+              return;
+            }
+
+            // ── Social piece ─────────────────────────────────────────────────
 
             // ── Caption + hashtags ──
             const captionMsg = await getAnthropic().messages.create({
@@ -211,7 +252,6 @@ Format: Hook (first 3 seconds) / Body / CTA. Plain text, no JSON.`,
                   if (!upErr) {
                     const { data: pub } = supabase.storage.from("public-media").getPublicUrl(path);
                     image_url = pub.publicUrl;
-                    // Save to image library (non-critical)
                     try { await supabase.from("ai_generated_images").insert({ url: image_url, prompt: imgPrompt, purpose: "campaign" }); } catch { /* ignore */ }
                   }
                 }

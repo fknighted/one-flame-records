@@ -24,6 +24,7 @@ const PLATFORM_COLORS: Record<string, string> = {
   instagram: "bg-[#E1306C]/15 text-[#E1306C] border border-[#E1306C]/25",
   tiktok:    "bg-bone/10 text-bone border border-bone/20",
   facebook:  "bg-[#1877F2]/15 text-[#1877F2] border border-[#1877F2]/25",
+  news:      "bg-forest/15 text-forest border border-forest/25",
 };
 
 const STATUS_STYLES: Record<string, string> = {
@@ -93,36 +94,63 @@ function PieceCard({
           </span>
         </div>
 
-        {/* Caption */}
-        {piece.caption && (
-          <p className="text-sm text-bone/70 leading-relaxed line-clamp-3">{piece.caption}</p>
-        )}
-
-        {/* Hashtags */}
-        {(piece.hashtags ?? []).length > 0 && (
-          <div className="flex flex-wrap gap-1">
-            {(piece.hashtags ?? []).map((h) => (
-              <span key={h} className="text-[11px] text-ochre/60">#{h}</span>
-            ))}
-          </div>
-        )}
-
-        {/* Video script toggle */}
-        {piece.video_script && (
-          <div>
-            <button
-              type="button"
-              onClick={() => setExpanded(!expanded)}
-              className="text-xs text-bone/40 hover:text-ochre transition-colors"
-            >
-              {expanded ? "Hide script ↑" : "View script ↓"}
-            </button>
-            {expanded && (
-              <pre className="mt-2 text-xs text-bone/60 leading-relaxed whitespace-pre-wrap font-sans bg-bone/5 rounded p-3">
-                {piece.video_script}
-              </pre>
+        {/* News piece: title + article preview */}
+        {piece.platform === "news" ? (
+          <div className="space-y-2">
+            {piece.caption && (
+              <p className="text-sm font-semibold text-bone leading-snug">{piece.caption}</p>
+            )}
+            {piece.video_script && (
+              <div>
+                <button
+                  type="button"
+                  onClick={() => setExpanded(!expanded)}
+                  className="text-xs text-bone/40 hover:text-ochre transition-colors"
+                >
+                  {expanded ? "Hide article ↑" : "Preview article ↓"}
+                </button>
+                {expanded && (
+                  <pre className="mt-2 text-xs text-bone/60 leading-relaxed whitespace-pre-wrap font-sans bg-bone/5 rounded p-3 max-h-48 overflow-y-auto">
+                    {piece.video_script}
+                  </pre>
+                )}
+              </div>
             )}
           </div>
+        ) : (
+          <>
+            {/* Caption */}
+            {piece.caption && (
+              <p className="text-sm text-bone/70 leading-relaxed line-clamp-3">{piece.caption}</p>
+            )}
+
+            {/* Hashtags */}
+            {(piece.hashtags ?? []).length > 0 && (
+              <div className="flex flex-wrap gap-1">
+                {(piece.hashtags ?? []).map((h) => (
+                  <span key={h} className="text-[11px] text-ochre/60">#{h}</span>
+                ))}
+              </div>
+            )}
+
+            {/* Video script toggle */}
+            {piece.video_script && (
+              <div>
+                <button
+                  type="button"
+                  onClick={() => setExpanded(!expanded)}
+                  className="text-xs text-bone/40 hover:text-ochre transition-colors"
+                >
+                  {expanded ? "Hide script ↑" : "View script ↓"}
+                </button>
+                {expanded && (
+                  <pre className="mt-2 text-xs text-bone/60 leading-relaxed whitespace-pre-wrap font-sans bg-bone/5 rounded p-3">
+                    {piece.video_script}
+                  </pre>
+                )}
+              </div>
+            )}
+          </>
         )}
 
         {/* Error */}
@@ -137,8 +165,8 @@ function PieceCard({
           </p>
         )}
 
-        {/* Platform picker */}
-        {showPlatformPicker && (
+        {/* Platform picker — social pieces only */}
+        {showPlatformPicker && piece.platform !== "news" && (
           <div className="pt-2 border-t border-bone/8">
             <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-bone/35 mb-1.5">Post to</p>
             <div className="flex gap-3 flex-wrap">
@@ -256,7 +284,7 @@ export default function CampaignPiecesClient({
           >
             {publishing ? "Publishing…" : `Publish ${approvedCount} approved piece${approvedCount !== 1 ? "s" : ""}`}
           </button>
-          <p className="text-xs text-bone/35">Posts to selected platforms via Make.com.</p>
+          <p className="text-xs text-bone/35">Social pieces post via Make.com. News pieces create a draft in /admin/news.</p>
         </div>
       )}
 
