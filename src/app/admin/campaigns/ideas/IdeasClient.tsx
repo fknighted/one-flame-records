@@ -27,7 +27,7 @@ function IdeaCard({ idea, onDismiss }: { idea: Idea; onDismiss: (id: string) => 
   const [dismissing, startDismiss] = useTransition();
   const [expanding, startExpand]   = useTransition();
 
-  const campaignUrl = `/admin/campaigns/new?title=${encodeURIComponent(idea.title)}&angle=${encodeURIComponent(idea.angle ?? "")}&source_type=${idea.source_type}&platforms=${(idea.suggested_platforms).join(",")}`;
+  const campaignUrl = `/admin/campaigns/new?title=${encodeURIComponent(idea.title)}&angle=${encodeURIComponent(idea.angle ?? "")}&source_type=${idea.source_type}&platforms=${(idea.suggested_platforms ?? []).join(",")}`;
 
   return (
     <div className={`rounded-lg border overflow-hidden transition-opacity ${idea.status === "expanded" ? "opacity-50" : "hover:border-bone/20"} border-bone/10`}>
