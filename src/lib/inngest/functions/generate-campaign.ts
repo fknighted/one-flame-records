@@ -94,7 +94,8 @@ Return ONLY a valid JSON array of objects. No explanation, no markdown.`;
       });
 
       const raw = msg.content.filter((b) => b.type === "text").map((b) => (b as { type: "text"; text: string }).text).join("").trim();
-      const jsonStr = raw.startsWith("[") ? raw : raw.slice(raw.indexOf("["));
+      const stripped = raw.replace(/```(?:json)?/g, "").trim();
+      const jsonStr = stripped.startsWith("[") ? stripped : stripped.slice(stripped.indexOf("["));
 
       try {
         const parsed = JSON.parse(jsonStr);
@@ -155,7 +156,8 @@ Return JSON with two keys: "caption" (the post text, no hashtags) and "hashtags"
             });
 
             const captionRaw = captionMsg.content.filter((b) => b.type === "text").map((b) => (b as { type: "text"; text: string }).text).join("").trim();
-            const captionJson = JSON.parse(captionRaw.startsWith("{") ? captionRaw : captionRaw.slice(captionRaw.indexOf("{")));
+            const captionStripped = captionRaw.replace(/```(?:json)?/g, "").trim();
+            const captionJson = JSON.parse(captionStripped.startsWith("{") ? captionStripped : captionStripped.slice(captionStripped.indexOf("{")));
             const caption: string  = captionJson.caption ?? "";
             const hashtags: string[] = captionJson.hashtags ?? [];
 

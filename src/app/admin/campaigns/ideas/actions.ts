@@ -60,7 +60,9 @@ Return ONLY a valid JSON array of 8 objects. No explanation or markdown.`,
       .join("")
       .trim();
 
-    const jsonStr = raw.startsWith("[") ? raw : raw.slice(raw.indexOf("["));
+    // Strip markdown code fences Claude sometimes adds despite instructions
+    const stripped = raw.replace(/```(?:json)?/g, "").trim();
+    const jsonStr = stripped.startsWith("[") ? stripped : stripped.slice(stripped.indexOf("["));
 
     let ideas: {
       title: string;
