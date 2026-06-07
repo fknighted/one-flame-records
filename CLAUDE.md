@@ -8,34 +8,33 @@ A web platform for One Flame Records, a Jamaican record label based in Montego B
 
 1. **The public** — discover the label, artists, releases, and videos via the public site (oneflamerecords.com).
 2. **Signed artists** — log in to a portal to manage their profile, upload demos and instrumentals, and request automated music videos.
-3. **The label (admin)** — manage artists, releases, videos, and approve new signups via QR application.
+3. **The label (admin)** — manage artists, releases, videos, campaigns, news, and approve new signups via QR application.
 
 ## Stack
 
 - **Next.js 16** (App Router, TypeScript, Server Components by default)
 - **Tailwind CSS v4** — CSS-first config, brand tokens defined in `src/app/globals.css` `@theme inline` block (no `tailwind.config.ts`)
 - **Supabase** — Postgres, Auth, Storage, Row-Level Security
-- **Resend** — transactional email (Phase 3)
-- **Inngest** — durable workflow orchestration for the video automation pipeline (Phase 4)
+- **Resend** — transactional email
+- **Inngest** — durable workflow orchestration for the video and campaign pipelines
+- **Anthropic SDK + OpenAI** — campaign copy and image generation inside Inngest functions
+- **Make.com** — social posting webhook (Instagram, Facebook, TikTok) — not direct API calls
+- **Sentry** — error tracking (active in production)
 - **Vercel** — hosting; push to `main` triggers deploy
 
-> **Note:** AGENTS.md says this Next.js version has breaking changes from prior releases. Read `node_modules/next/dist/docs/` before writing new routing or middleware code.
+> **Note:** This Next.js version has breaking changes from prior releases. Read `node_modules/next/dist/docs/` before writing new routing or middleware code.
 
 Side stack used elsewhere in the business (do not pull into this repo): Make.com for ops glue, Airtable for the chef-service scenario.
 
 ## Repo layout
 
-All documentation lives at the **repo root** (not in a `docs/` subfolder):
+All documentation lives at the **repo root**:
 
 ```
 architecture.md        ← data model, RLS, routes, env vars
 brand.md               ← palette, typography, voice, components
-video-pipeline.md      ← Inngest design, model interface (Phase 4)
+video-pipeline.md      ← Inngest design, model interface
 operations.md          ← runbook for common admin tasks
-phase-1-admin-foundation.md
-phase-2-public-site.md
-phase-3-qr-onboarding.md
-phase-4-video-automation.md
 PROGRESS.md            ← living status, update at end of every session
 DECISIONS.md           ← append-only architectural decision log
 ```
@@ -45,12 +44,22 @@ Source:
 ```
 src/
 ├── app/
-│   ├── admin/         ← ink-theme label admin dashboard (built — Phase 1)
-│   ├── portal/        ← ink-theme artist portal (stub — Phase 3)
+│   ├── (public)/      ← cream-theme public site (home, artists, releases, videos, news, about, contact, signup)
+│   ├── admin/         ← ink-theme label admin (artists, releases, videos, news, campaigns, applications, jobs, AI studio)
+│   ├── portal/        ← ink-theme artist portal (profile, assets, releases, videos)
 │   ├── login/         ← shared login page
-│   └── api/           ← route handlers (Inngest webhook goes here in Phase 4)
-├── components/        ← ArtistForm, ReleaseForm, VideoForm, LogoutButton
-├── lib/supabase/      ← client.ts, server.ts, middleware.ts (session helper)
+│   ├── auth/          ← callback, portal-invite, set-password pages
+│   └── api/inngest/   ← Inngest webhook route handler
+├── components/        ← shared UI components (PascalCase)
+├── lib/
+│   ├── supabase/      ← client.ts, server.ts, middleware.ts
+│   ├── inngest/       ← client.ts + functions/ (generate-video, generate-campaign, generate-campaign-video)
+│   ├── video/         ← provider adapters (kie, kling, higgsfield, runway, pika) + assemble + types
+│   ├── social/        ← meta.ts, tiktok.ts (fire Make.com webhook, do not call platform APIs directly)
+│   ├── audio/         ← analyze.ts, transcribe.ts
+│   ├── email/         ← send.ts + templates/
+│   ├── auth.ts        ← server-side role helper
+│   └── spotify.ts
 ├── proxy.ts           ← Next.js middleware — route protection + role check
 └── types/supabase.ts  ← generated DB types
 supabase/
@@ -58,15 +67,13 @@ supabase/
 └── seed.sql
 ```
 
-Route groups `(public)` and `(portal)` from the architecture plan are **not yet created** — public pages are planned for Phase 2, the portal for Phase 3.
-
 ## Common commands
 
 ```bash
 # Development
 npm run dev                    # Next.js dev server with Turbopack
 npx supabase start             # local Supabase (requires Docker)
-npx inngest-cli dev            # local Inngest dev server (Phase 4 only)
+npx inngest-cli dev            # local Inngest dev server
 
 # Database
 npx supabase migration new <name>     # create a new migration
@@ -79,7 +86,7 @@ npm run lint
 npm run typecheck              # tsc --noEmit
 ```
 
-There are no automated tests yet. Type checking (`npm run typecheck`) is the primary correctness gate before shipping.
+There are no automated tests. Type checking (`npm run typecheck`) is the primary correctness gate before shipping.
 
 ## Architecture: non-obvious decisions
 
@@ -89,12 +96,12 @@ The Next.js route-protection middleware lives at `src/proxy.ts` (exports `proxy`
 
 ### Auth is client-side only
 
-Login uses `createBrowserClient` (from `@supabase/ssr`) and navigates via `window.location.href = "/admin"` after success. Do not use a Server Action for sign-in: in Next.js 16, cookies set inside a Server Action are not reliably forwarded when `redirect()` is called, causing a session loop. The proxy (`src/proxy.ts`) then reads the session from cookies and checks the role using a service-role client.
+Login uses `createBrowserClient` (from `@supabase/ssr`) and navigates via `window.location.href = "/admin"` after success. Do not use a Server Action for sign-in: in Next.js 16, cookies set inside a Server Action are not reliably forwarded when `redirect()` is called, causing a session loop. The proxy reads the session from cookies and checks the role using a service-role client.
 
 ### Two Supabase clients
 
 - **`createClient()`** (`src/lib/supabase/server.ts`) — uses `@supabase/ssr`, respects the user's session cookies, subject to RLS. Use in Server Components and Route Handlers.
-- **`createServiceClient()`** (`src/lib/supabase/server.ts`) — raw `supabase-js` with the service role key, bypasses RLS entirely. Use only in Server Actions and admin-side logic. Never import into a Client Component or the proxy file.
+- **`createServiceClient()`** (`src/lib/supabase/server.ts`) — raw `supabase-js` with the service role key, bypasses RLS entirely. Use only in Server Actions, Inngest functions, and admin-side logic. Never import into a Client Component or the proxy file.
 
 ### Server Action pattern
 
@@ -106,9 +113,27 @@ export type ActionState = { error: string } | null;
 
 Forms use `useActionState` for inline error display. Server Actions have a 10 MB body size limit (set in `next.config.ts`) to support photo/cover uploads.
 
+### Inngest pipeline
+
+- **`generate-video`** — artist or admin requests an AI music video; triggers `video/generate.requested`
+- **`generate-campaign`** — creates all content pieces for a campaign using Claude (plan) + Claude (copy/articles) + OpenAI `gpt-image-1` (images); triggers `campaign/generate.requested`
+- **`generate-campaign-video`** — generates video for a specific piece; triggers `campaign/video.requested`
+
+Inngest functions always use `createServiceClient()` and initialize Anthropic/OpenAI clients lazily inside `step.run()` to avoid build-time failures.
+
+Claude responses in Inngest: always strip markdown code fences before `JSON.parse`. Normalize field names defensively (e.g. `angle ?? creative_angle ?? description`).
+
+### Social posting via Make.com
+
+Never call Instagram, Facebook, or TikTok APIs directly. All social posting fires a JSON payload to `SOCIAL_WEBHOOK_URL` (Make.com webhook) with fields: `platform`, `piece_id`, `content_type`, `caption`, `image_url`, `video_url`. Make.com routes by `platform` to the appropriate native module. TikTok video upload has no Make.com module — manual posting only.
+
 ### Tailwind v4 — CSS-first
 
 Brand tokens (`--color-oxblood`, `--color-cream`, etc.) are defined in `src/app/globals.css` inside an `@theme inline` block. There is no `tailwind.config.ts`. The `brand.md` doc shows a `tailwind.config.ts` excerpt that is illustrative only — ignore it.
+
+### Video provider abstraction
+
+`src/lib/video/` wraps multiple providers (kie, kling, higgsfield, runway, pika). The active provider is set by `DEFAULT_VIDEO_MODEL` env var. `kie` is the default — it proxies to Kling, Veo 3, Seedance, etc. via kie.ai.
 
 ## Conventions
 
@@ -124,6 +149,10 @@ Brand tokens (`--color-oxblood`, `--color-cream`, etc.) are defined in `src/app/
 
 **Themes.** Two visual worlds: `cream` (public site, `#ECE2C8` bg) and `ink` (portal + admin, `#1A1612` bg). Theme is a wrapper class on the route group layout, not a context or runtime toggle.
 
+**After server actions.** Use `router.refresh()` to re-fetch server data after a mutation — not `window.location.reload()`.
+
+**Client Components in Server pages.** When an interactive element (button with `onClick`, form with state) is needed inside a page that is otherwise a Server Component, extract it into its own `PascalCaseButton.tsx` or `PascalCaseClient.tsx` and import it. Never put `onClick` directly on a JSX element in a Server Component file.
+
 ## Things to never do
 
 - Never bypass Row-Level Security with the service role key in client-reachable code.
@@ -132,6 +161,7 @@ Brand tokens (`--color-oxblood`, `--color-cream`, etc.) are defined in `src/app/
 - Never deploy a destructive migration to production without backing up first.
 - Never use a real artist's email or PII in seed data or test fixtures.
 - Never modify `CLAUDE.md`, `PROGRESS.md`, or `DECISIONS.md` silently — these are the project memory.
+- Never call platform social APIs directly — route through the Make.com webhook.
 
 ## Brand quick reference
 
@@ -148,19 +178,25 @@ Fonts loaded via `next/font`: **Fraunces** (display/headlines), **Inter** (body)
 
 ## Environment variables
 
-Full list in `.env.example`. Phase 1 minimums:
+Full list in `.env.example`.
 
 - `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`
 - `SUPABASE_SERVICE_ROLE_KEY` — server-only, never expose
 - `NEXT_PUBLIC_SITE_URL`
-- Phase 3: `RESEND_API_KEY`, `RESEND_FROM_EMAIL`
-- Phase 4: `INNGEST_EVENT_KEY`, `INNGEST_SIGNING_KEY`, `KLING_API_KEY`
+- `RESEND_API_KEY`, `RESEND_FROM_EMAIL`, `ADMIN_EMAIL`
+- `INNGEST_EVENT_KEY`, `INNGEST_SIGNING_KEY`
+- `ANTHROPIC_API_KEY` — campaign copy generation
+- `OPENAI_API_KEY` — `gpt-image-1` image generation in campaign pipeline
+- `SOCIAL_WEBHOOK_URL` — Make.com webhook for all social posting
+- `NEXT_PUBLIC_SENTRY_DSN`, `SENTRY_ORG`, `SENTRY_PROJECT`, `SENTRY_AUTH_TOKEN`
+- `KIE_API_KEY` — default video model provider (kie.ai)
+- `DEFAULT_VIDEO_MODEL` — `kie` | `kling` | `higgsfield` | `runway` | `pika`
 
 ## Current phase
 
-Phase 1 (admin foundation) is in progress — Tasks 1–9 complete. Task 10 is Vercel deploy + domain. See `PROGRESS.md` for live status and blockers.
+Phases 1–4 and 6 are complete. Phase 5 (polish + hardening) is in progress — remaining tasks are portal video share toggle, content pass, and mobile QA. See `PROGRESS.md` for live status and blockers.
 
-Do not start work on a later phase before the current one's acceptance criteria are met. Phase plans with concrete tasks live in the root-level `phase-*.md` files.
+Do not start work on a later phase before the current one's acceptance criteria are met.
 
 ## End of session checklist
 

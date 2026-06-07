@@ -295,6 +295,72 @@ export type Database = {
           },
         ]
       }
+      events: {
+        Row: {
+          created_at: string
+          description: string | null
+          end_date: string | null
+          event_date: string
+          id: string
+          is_public: boolean
+          location: string
+          tickets_url: string | null
+          title: string
+          type: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          end_date?: string | null
+          event_date: string
+          id?: string
+          is_public?: boolean
+          location?: string
+          tickets_url?: string | null
+          title: string
+          type?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          end_date?: string | null
+          event_date?: string
+          id?: string
+          is_public?: boolean
+          location?: string
+          tickets_url?: string | null
+          title?: string
+          type?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      fan_subscribers: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          source: string
+          status: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          source?: string
+          status?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          source?: string
+          status?: string
+        }
+        Relationships: []
+      }
       news_posts: {
         Row: {
           body: string

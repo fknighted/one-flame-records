@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import SubscribeForm from "@/components/SubscribeForm";
 
 const LABEL_LINKS = [
   { href: "/about",   label: "About" },
@@ -17,6 +18,19 @@ export default function PublicFooter() {
   return (
     <footer className="bg-ink border-t-2 border-oxblood mt-auto">
       <div className="mx-auto max-w-6xl px-4 sm:px-6 py-14">
+        {/* Newsletter */}
+        <div className="mb-10 pb-10 border-b border-bone/10">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.15em] text-bone/40 mb-2">
+            Stay in the loop
+          </p>
+          <p className="text-sm text-bone/50 mb-3 max-w-sm">
+            New releases, events, and label news — straight to your inbox.
+          </p>
+          <div className="max-w-sm">
+            <SubscribeForm />
+          </div>
+        </div>
+
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-10">
           {/* Brand */}
           <div className="col-span-2 md:col-span-1">

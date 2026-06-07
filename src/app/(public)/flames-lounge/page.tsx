@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
+import { createServiceClient } from "@/lib/supabase/server";
 
 export const metadata: Metadata = {
   title: "Flames Lounge — Montego Bay's Creative Space",
@@ -124,7 +125,17 @@ const MENU = [
   },
 ];
 
-const EVENTS = [
+const EVENT_TYPE_LABELS: Record<string, string> = {
+  open_mic:          "Open Mic Night",
+  showcase:          "Artist Showcase",
+  dj_night:          "DJ Night",
+  listening_session: "Listening Session",
+  watch_party:       "Watch Party",
+  private_hire:      "Private Hire",
+  other:             "Event",
+};
+
+const EVENT_TYPES_LIST = [
   "Open Mic Nights",
   "Artist Showcases",
   "DJ Nights",
@@ -135,7 +146,27 @@ const EVENTS = [
 
 // ── Page ──────────────────────────────────────────────────────────────────────
 
-export default function FlamesLoungePage() {
+export default async function FlamesLoungePage() {
+  const supabase = createServiceClient();
+  const now = new Date().toISOString();
+  const { data: upcomingEvents } = await supabase
+    .from("events")
+    .select("id, title, type, event_date, tickets_url")
+    .eq("is_public", true)
+    .gte("event_date", now)
+    .order("event_date", { ascending: true })
+    .limit(6);
+
+  function formatEventDate(iso: string) {
+    return new Date(iso).toLocaleDateString("en-US", {
+      weekday: "long", month: "long", day: "numeric",
+    });
+  }
+  function formatEventTime(iso: string) {
+    return new Date(iso).toLocaleTimeString("en-US", {
+      hour: "numeric", minute: "2-digit", hour12: true,
+    });
+  }
   return (
     <>
       {/* ── Hero ── */}
@@ -344,16 +375,51 @@ export default function FlamesLoungePage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
-            {EVENTS.map((event) => (
-              <div
-                key={event}
-                className="rounded-lg border border-[#F5EDD8]/[0.07] bg-[#F5EDD8]/[0.02] px-5 py-4 text-center hover:border-[#8B2A1F]/40 hover:bg-[#8B2A1F]/[0.04] transition-colors"
-              >
-                <p className="font-display font-semibold text-[#F5EDD8] text-sm sm:text-base">{event}</p>
-              </div>
-            ))}
-          </div>
+          {(upcomingEvents ?? []).length > 0 ? (
+            <div className="space-y-3 max-w-2xl mx-auto">
+              {(upcomingEvents ?? []).map((event) => (
+                <div
+                  key={event.id}
+                  className="rounded-lg border border-[#F5EDD8]/[0.09] bg-[#F5EDD8]/[0.02] px-6 py-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4"
+                >
+                  <div>
+                    <p className="font-display font-semibold text-[#F5EDD8] text-base leading-snug">
+                      {event.title}
+                    </p>
+                    <p className="text-sm text-[#F5EDD8]/45 mt-1">
+                      {formatEventDate(event.event_date)}
+                      {" · "}
+                      {formatEventTime(event.event_date)}
+                    </p>
+                    <span className="inline-block mt-2 text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#8B2A1F]/20 text-[#B8893B]">
+                      {EVENT_TYPE_LABELS[event.type] ?? event.type}
+                    </span>
+                  </div>
+                  {event.tickets_url && (
+                    <a
+                      href={event.tickets_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="shrink-0 rounded border border-[#B8893B]/50 px-5 py-2 text-sm font-semibold text-[#B8893B] hover:border-[#B8893B] hover:bg-[#B8893B]/10 transition-colors"
+                    >
+                      Get tickets
+                    </a>
+                  )}
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+              {EVENT_TYPES_LIST.map((label) => (
+                <div
+                  key={label}
+                  className="rounded-lg border border-[#F5EDD8]/[0.07] bg-[#F5EDD8]/[0.02] px-5 py-4 text-center hover:border-[#8B2A1F]/40 hover:bg-[#8B2A1F]/[0.04] transition-colors"
+                >
+                  <p className="font-display font-semibold text-[#F5EDD8] text-sm sm:text-base">{label}</p>
+                </div>
+              ))}
+            </div>
+          )}
 
           <div className="mt-10 text-center">
             <p className="text-[#F5EDD8]/40 text-sm mb-4">

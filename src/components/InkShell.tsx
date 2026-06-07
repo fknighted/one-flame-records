@@ -41,6 +41,13 @@ const ADMIN_NAV: NavGroup[] = [
     ],
   },
   {
+    label: "Community",
+    items: [
+      { href: "/admin/events",      label: "Events" },
+      { href: "/admin/subscribers", label: "Subscribers" },
+    ],
+  },
+  {
     label: "Onboarding",
     items: [
       { href: "/admin/applications", label: "Applications" },
