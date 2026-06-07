@@ -12,25 +12,20 @@ This is the living state of the build. Update at the end of every session.
 
 ## Active focus
 
-Social API keys (Meta + TikTok) + first real news post.
+First real news post + any remaining Phase 5 polish.
 
 ## Blockers
 
-- **Meta API keys** — `FACEBOOK_PAGE_ACCESS_TOKEN`, `FACEBOOK_PAGE_ID`, `INSTAGRAM_BUSINESS_ACCOUNT_ID` not yet in Vercel. Campaign publish to Instagram/Facebook will error until these are set. See setup walkthrough in session 24 notes below.
-- **TikTok API keys** — `TIKTOK_ACCESS_TOKEN`, `TIKTOK_OPEN_ID` not yet set. Apply for TikTok Content Posting API access at developers.tiktok.com.
-- **Sentry DSN** — Code is wired. Add `NEXT_PUBLIC_SENTRY_DSN` (and optionally `SENTRY_AUTH_TOKEN`, `SENTRY_ORG`, `SENTRY_PROJECT`) to Vercel env vars to activate error tracking.
-- **Flames Lounge gallery** — Hero is now live (Unsplash outdoor bar photo). Gallery grid still placeholder; swap with real photos when available.
+- **Flames Lounge gallery** — Hero is live. Gallery grid still placeholder; swap with real photos of the space when available.
+- **TikTok auto-posting** — Make.com has no TikTok video upload module. Posting to TikTok is manual for now (Publer evaluated as best option if automation needed later).
 
 ## Next session
 
-### Priority 1 — Add Meta + TikTok API keys to Vercel
-See the walkthrough in the session 24 notes below. Keys go into Vercel → Project → Settings → Environment Variables.
+### Priority 1 — First real news post
+Log into `/admin/news/new`, fill in a post, publish it, verify it appears on `/news` and the homepage Latest News row.
 
-### Priority 2 — Verify Sentry
-Once `NEXT_PUBLIC_SENTRY_DSN` is in Vercel, trigger a test error (add a temporary `throw new Error("Sentry test")` to any server component, deploy, visit the page, then check sentry.io).
-
-### Priority 3 — First real news post
-Log into `/admin/news/new`, fill in the post, publish it, verify it appears on `/news` and the homepage Latest News row.
+### Priority 2 — Phase 5 wrap-up
+Review remaining Phase 5 tasks and close them out or defer to Phase 7.
 
 ## Phase progress
 
@@ -45,6 +40,14 @@ Log into `/admin/news/new`, fill in the post, publish it, verify it appears on `
 ## Session log
 
 Append a new entry at the top of this section after every session. Date, summary, files touched, what's next. Keep it tight — full reasoning belongs in `DECISIONS.md`.
+
+### 2026-06-06 (session 25)
+
+**Did:** Social posting infrastructure + Sentry activation. (1) **Make.com webhook** — Replaced all direct Meta Graph API and TikTok API calls with a single `SOCIAL_WEBHOOK_URL` webhook. `src/lib/social/meta.ts` and `src/lib/social/tiktok.ts` now fire JSON payloads (`platform`, `content_type`, `caption`, `image_url`, `video_url`, `piece_id`) to Make.com. Make.com handles the actual platform posting via native modules. `SOCIAL_WEBHOOK_URL` added to Vercel. (2) **Meta credentials obtained** — Walked through Facebook Developer App setup: retrieved `FACEBOOK_PAGE_ID` (463635280167554), never-expiring `FACEBOOK_PAGE_ACCESS_TOKEN`, and `INSTAGRAM_BUSINESS_ACCOUNT_ID` (17841457606500034) — stored in Vercel for reference even though the app now uses Make.com. (3) **TikTok** — Make.com has no TikTok video upload module; manual posting for now. Publer evaluated as best third-party option if TikTok automation is needed later ($12/month, direct TikTok video publish, native webhooks). (4) **Sentry live** — `NEXT_PUBLIC_SENTRY_DSN` added to Vercel; error tracking now active in production.
+**Touched:** `src/lib/social/meta.ts`, `src/lib/social/tiktok.ts`, `.env.example`, `PROGRESS.md`
+**Decided:** Make.com over direct API for social posting — avoids Facebook developer app complexity and TikTok approval delays. Single `SOCIAL_WEBHOOK_URL` for all platforms; Make.com Router branches on `platform` field.
+**Blocked on:** TikTok auto-post (no Make.com module). Flames Lounge gallery photos.
+**Next:** First real news post. Phase 5 wrap-up review.
 
 ### 2026-06-05 (session 24)
 
