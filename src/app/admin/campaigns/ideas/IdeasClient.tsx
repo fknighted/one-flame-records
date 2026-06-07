@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { generateIdeas, dismissIdea, markExpanded, PILLARS, type Idea } from "./actions";
 
@@ -87,6 +88,7 @@ function IdeaCard({ idea, onDismiss }: { idea: Idea; onDismiss: (id: string) => 
 }
 
 export default function IdeasClient({ initialIdeas }: { initialIdeas: Idea[] }) {
+  const router = useRouter();
   const [ideas, setIdeas] = useState<Idea[]>(initialIdeas);
   const [generating, startGenerating] = useTransition();
   const [genError, setGenError] = useState<string | null>(null);
@@ -100,8 +102,7 @@ export default function IdeasClient({ initialIdeas }: { initialIdeas: Idea[] }) 
     startGenerating(async () => {
       const result = await generateIdeas();
       if (result.error) { setGenError(result.error); return; }
-      // Reload — server revalidates, but we need a page refresh to see new rows
-      window.location.reload();
+      router.refresh();
     });
   }
 
