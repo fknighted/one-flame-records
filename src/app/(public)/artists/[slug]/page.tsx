@@ -412,7 +412,7 @@ export default async function ArtistDetailPage({ params }: Props) {
                         src={track.signedUrl}
                         controls
                         preload="none"
-                        className="h-8 w-44 sm:w-56"
+                        className="h-8 w-28 sm:w-44 md:w-56"
                       />
                       <a
                         href={track.signedUrl}

@@ -172,10 +172,10 @@ export default async function HomePage() {
                 </Link>
               }
             />
-            <div className="-mx-4 sm:mx-0 px-4 sm:px-0 overflow-x-auto pb-4 sm:pb-0">
+            <div className="-mx-4 sm:mx-0 px-4 sm:px-0 overflow-x-auto pb-4 sm:pb-0 snap-x snap-mandatory">
               <div className="grid grid-flow-col sm:grid-flow-row sm:grid-cols-3 lg:grid-cols-6 gap-5 w-max sm:w-auto">
                 {releases.map((release) => (
-                  <div key={release.id} className="w-44 sm:w-auto">
+                  <div key={release.id} className="w-44 sm:w-auto snap-start">
                     <ReleaseCard
                       slug={release.slug}
                       title={release.title}

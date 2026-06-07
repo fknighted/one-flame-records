@@ -7,7 +7,7 @@ type Props = {
 
 export default function SectionHeader({ title, eyebrow, action, dark = false }: Props) {
   return (
-    <div className="flex items-end justify-between gap-4 mb-10">
+    <div className="flex flex-wrap items-end justify-between gap-3 mb-8 sm:mb-10">
       <div>
         {eyebrow && (
           <p className={`text-[11px] font-semibold uppercase tracking-[0.22em] mb-1.5 ${
@@ -16,7 +16,7 @@ export default function SectionHeader({ title, eyebrow, action, dark = false }: 
             {eyebrow}
           </p>
         )}
-        <h2 className={`font-display font-bold text-[2.25rem] leading-[1.05] tracking-tight ${
+        <h2 className={`font-display font-bold text-3xl sm:text-[2.25rem] leading-[1.05] tracking-tight ${
           dark ? "text-bone" : "text-oxblood"
         }`}>
           {title}

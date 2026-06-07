@@ -59,7 +59,7 @@ export default function PublicHeader() {
 
         {/* Hamburger */}
         <button
-          className="md:hidden p-2 -mr-2 text-ink"
+          className="md:hidden p-3 -mr-3 text-ink"
           onClick={() => setOpen((v) => !v)}
           aria-label={open ? "Close menu" : "Open menu"}
           aria-expanded={open}
@@ -81,7 +81,7 @@ export default function PublicHeader() {
       {open && (
         <nav
           id="mobile-menu"
-          className="md:hidden fixed inset-0 top-24 z-[60] flex flex-col px-8 pt-6 gap-0"
+          className="md:hidden fixed inset-0 top-24 z-[60] flex flex-col px-6 pt-4 overflow-y-auto"
           style={{ backgroundColor: "#1A1612" }}
           aria-label="Mobile"
         >
@@ -89,7 +89,7 @@ export default function PublicHeader() {
             <Link
               key={href}
               href={href}
-              className="font-display text-xl font-bold text-bone py-3 border-b border-bone/10 hover:text-ochre transition-colors"
+              className="font-display text-lg font-bold text-bone py-2.5 border-b border-bone/10 hover:text-ochre transition-colors"
               onClick={() => setOpen(false)}
             >
               {label}
@@ -97,7 +97,7 @@ export default function PublicHeader() {
           ))}
           <Link
             href={NAV_CTA.href}
-            className="font-display text-xl font-bold text-ochre py-3 border-b border-bone/10 last:border-0 hover:text-bone transition-colors"
+            className="font-display text-lg font-bold text-ochre py-2.5 mt-1 hover:text-bone transition-colors"
             onClick={() => setOpen(false)}
           >
             {NAV_CTA.label}

@@ -308,7 +308,7 @@ export default function FlamesLoungePage() {
                   </p>
                   <div className="space-y-4">
                     {items.map(({ name, description }) => (
-                      <div key={name} className="flex items-start justify-between gap-4 pb-4 border-b border-[#F5EDD8]/[0.06]">
+                      <div key={name} className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-1 sm:gap-4 pb-4 border-b border-[#F5EDD8]/[0.06]">
                         <div>
                           <p className="font-display font-semibold text-[#F5EDD8] text-base">{name}</p>
                           <p className="text-sm text-[#F5EDD8]/40 mt-0.5">{description}</p>
@@ -344,7 +344,7 @@ export default function FlamesLoungePage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
             {EVENTS.map((event) => (
               <div
                 key={event}

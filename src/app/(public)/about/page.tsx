@@ -112,7 +112,7 @@ export default function AboutPage() {
 
         <ol className="relative border-l border-oxblood/20 space-y-0">
           {TIMELINE.map(({ year, event, detail }, i) => (
-            <li key={i} className="pl-8 pb-10 last:pb-0 relative">
+            <li key={i} className="pl-6 sm:pl-8 pb-8 sm:pb-10 last:pb-0 relative">
               {/* Dot */}
               <span className="absolute -left-[5px] top-[6px] w-2.5 h-2.5 rounded-full bg-oxblood" />
 

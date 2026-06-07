@@ -26,7 +26,7 @@ export default function PublicFooter() {
                 alt="One Flame Records"
                 width={80}
                 height={80}
-                className="h-40 w-auto"
+                className="h-20 sm:h-32 w-auto"
               />
             </Link>
           </div>
