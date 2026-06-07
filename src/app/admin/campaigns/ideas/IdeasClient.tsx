@@ -3,7 +3,7 @@
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { generateIdeas, dismissIdea, markExpanded } from "./actions";
+import { generateIdeas, dismissIdea, markExpanded, createNewsFromIdea } from "./actions";
 import { PILLARS, type Idea } from "./constants";
 
 const PILLAR_COLORS: Record<string, string> = {
@@ -26,10 +26,11 @@ function pillarLabel(value: string): string {
 }
 
 function IdeaCard({ idea, onDismiss }: { idea: Idea; onDismiss: (id: string) => void }) {
-  const [dismissing, startDismiss] = useTransition();
-  const [expanding, startExpand]   = useTransition();
+  const [dismissing, startDismiss]   = useTransition();
+  const [expanding, startExpand]     = useTransition();
+  const [toNews, startToNews]        = useTransition();
 
-  const campaignUrl = `/admin/campaigns/new?title=${encodeURIComponent(idea.title)}&angle=${encodeURIComponent(idea.angle ?? "")}&source_type=${idea.source_type}&platforms=${(idea.suggested_platforms ?? []).join(",")}`;
+  const campaignUrl = `/admin/campaigns/new?title=${encodeURIComponent(idea.title)}&angle=${encodeURIComponent(idea.angle ?? "")}&source_type=${idea.source_type}&platforms=instagram,tiktok,facebook`;
 
   return (
     <div className={`rounded-lg border overflow-hidden transition-opacity ${idea.status === "expanded" ? "opacity-50" : "hover:border-bone/20"} border-bone/10`}>
@@ -60,7 +61,7 @@ function IdeaCard({ idea, onDismiss }: { idea: Idea; onDismiss: (id: string) => 
         <p className="text-[11px] text-bone/25 uppercase tracking-wider">Source: {idea.source_type}</p>
 
         {/* Actions */}
-        <div className="flex items-center gap-3 pt-2 border-t border-bone/8">
+        <div className="flex items-center gap-3 pt-2 border-t border-bone/8 flex-wrap">
           {idea.status !== "expanded" && (
             <Link
               href={campaignUrl}
@@ -70,8 +71,18 @@ function IdeaCard({ idea, onDismiss }: { idea: Idea; onDismiss: (id: string) => 
               {expanding ? "Opening…" : "Start Campaign →"}
             </Link>
           )}
+          {idea.status !== "expanded" && (
+            <button
+              type="button"
+              disabled={toNews}
+              onClick={() => { startToNews(() => createNewsFromIdea(idea.id)); }}
+              className="text-xs text-bone/40 hover:text-bone/70 disabled:opacity-40 transition-colors"
+            >
+              {toNews ? "Creating…" : "→ News post"}
+            </button>
+          )}
           {idea.status === "expanded" && (
-            <span className="text-xs text-bone/30">✓ Expanded into campaign</span>
+            <span className="text-xs text-bone/30">✓ Expanded</span>
           )}
           <form action={() => { startDismiss(() => dismissIdea(idea.id)); }} className="ml-auto">
             <button

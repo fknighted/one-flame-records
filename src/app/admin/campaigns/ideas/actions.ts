@@ -1,6 +1,7 @@
 "use server";
 
 import Anthropic from "@anthropic-ai/sdk";
+import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { createServiceClient } from "@/lib/supabase/server";
 import { requireAdmin } from "@/lib/auth";
@@ -96,6 +97,55 @@ Return ONLY a valid JSON array of 8 objects. No explanation or markdown.`,
     const msg = err instanceof Error ? err.message : String(err);
     return { error: `Generation failed: ${msg}` };
   }
+}
+
+export async function createNewsFromIdea(ideaId: string): Promise<void> {
+  await requireAdmin();
+  const supabase = createServiceClient();
+
+  const { data: idea } = await supabase
+    .from("campaign_ideas")
+    .select("title, angle, pillar")
+    .eq("id", ideaId)
+    .single();
+
+  if (!idea) throw new Error("Idea not found");
+
+  const PILLAR_TO_CATEGORY: Record<string, string> = {
+    artist_spotlight:  "artist",
+    release_promotion: "release",
+    behind_the_music:  "label",
+    culture_roots:     "label",
+    fan_engagement:    "label",
+    label_news:        "label",
+  };
+
+  const slug = `${idea.title
+    .toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, "")
+    .replace(/\s+/g, "-")
+    .slice(0, 70)}-${Date.now()}`;
+
+  const body = `${idea.angle ?? ""}\n\n<!-- Add your full article content here -->`;
+
+  const { data: post, error } = await supabase
+    .from("news_posts")
+    .insert({
+      title:    idea.title,
+      slug,
+      excerpt:  idea.angle ?? "",
+      body,
+      category: PILLAR_TO_CATEGORY[idea.pillar ?? ""] ?? "label",
+      is_published: false,
+    })
+    .select("id")
+    .single();
+
+  if (error || !post) throw new Error(`Failed to create news post: ${error?.message}`);
+
+  await supabase.from("campaign_ideas").update({ status: "expanded" }).eq("id", ideaId);
+
+  redirect(`/admin/news/${post.id}/edit`);
 }
 
 export async function dismissIdea(id: string): Promise<void> {
