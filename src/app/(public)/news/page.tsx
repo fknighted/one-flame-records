@@ -25,11 +25,12 @@ const CATEGORY_PILL: Record<string, string> = {
 export default async function NewsPage() {
   const supabase = await createClient();
 
+  const now = new Date().toISOString();
   const { data: posts } = await supabase
     .from("news_posts")
     .select("id, slug, title, excerpt, cover_url, category, published_at")
     .eq("is_published", true)
-    .lte("published_at", new Date().toISOString())
+    .or(`published_at.is.null,published_at.lte.${now}`)
     .order("published_at", { ascending: false });
 
   return (

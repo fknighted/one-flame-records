@@ -53,7 +53,7 @@ export default async function NewsPostPage({ params }: Props) {
     .select("*")
     .eq("slug", slug)
     .eq("is_published", true)
-    .lte("published_at", new Date().toISOString())
+    .or(`published_at.is.null,published_at.lte.${new Date().toISOString()}`)
     .single();
 
   if (!post) notFound();
