@@ -77,14 +77,14 @@ ${platformContext}
 
 Create a content plan with exactly ${piecesPerPlatform} piece(s) per platform (${piecesPerPlatform * platforms.length} total pieces).
 
-For each piece, decide:
-- Which platform
-- Best content type for that platform (image_post, video_post, reel, story, text_post)
-- A short creative angle/angle (1 sentence describing the angle)
-- Whether an AI-generated image is needed (true/false)
-- For video pieces: "script" or "generated" based on the default mode: ${video_mode}
+Return a raw JSON array (no markdown, no code fences). Each object must use EXACTLY these field names and values:
+- "platform": one of: "instagram", "tiktok", "facebook" (lowercase, no capitals)
+- "content_type": one of: "image_post", "video_post", "reel", "story", "text_post"
+- "angle": one sentence of creative direction (use exactly this key name, not "creative_angle")
+- "image_needed": true or false
+- "video_mode": "${video_mode}" (use this value for all video pieces, "none" for non-video)
 
-Return ONLY a valid JSON array of objects. No explanation, no markdown.`;
+Output only the JSON array. No explanation, no markdown, no code fences.`;
 
       const msg = await getAnthropic().messages.create({
         model: "claude-sonnet-4-6",
@@ -99,9 +99,16 @@ Return ONLY a valid JSON array of objects. No explanation, no markdown.`;
 
       try {
         const parsed = JSON.parse(jsonStr);
-        return PlanSchema.parse(parsed);
+        const normalized = (Array.isArray(parsed) ? parsed : []).map((item: Record<string, unknown>) => ({
+          platform:     typeof item.platform === "string" ? item.platform.toLowerCase() : item.platform,
+          content_type: item.content_type,
+          angle:        item.angle ?? item.creative_angle ?? item.description ?? "",
+          image_needed: item.image_needed ?? false,
+          video_mode:   item.video_mode ?? "none",
+        }));
+        return PlanSchema.parse(normalized);
       } catch {
-        throw new Error(`Claude returned invalid plan JSON: ${raw.slice(0, 200)}`);
+        throw new Error(`Claude returned invalid plan JSON: ${stripped.slice(0, 300)}`);
       }
     });
 
