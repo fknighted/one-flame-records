@@ -7,6 +7,21 @@ import { postToInstagram, postToFacebook } from "@/lib/social/meta";
 import { postToTikTok } from "@/lib/social/tiktok";
 import { requireAdmin } from "@/lib/auth";
 
+export async function triggerCampaignVideo(pieceId: string): Promise<void> {
+  await requireAdmin();
+  const supabase = createServiceClient();
+  const { data: piece } = await supabase
+    .from("content_pieces")
+    .select("campaign_id, video_script, video_url")
+    .eq("id", pieceId)
+    .single();
+  if (!piece?.video_script) throw new Error("Piece has no script to generate from.");
+  if (piece.video_url) throw new Error("Video already generated.");
+
+  await inngest.send({ name: "campaign/video.requested", data: { pieceId } });
+  if (piece.campaign_id) revalidatePath(`/admin/campaigns/${piece.campaign_id}`);
+}
+
 export async function approvePiece(pieceId: string): Promise<void> {
   await requireAdmin();
   const supabase = createServiceClient();

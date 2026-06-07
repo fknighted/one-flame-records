@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from "react";
 import Image from "next/image";
-import { approvePiece, rejectPiece, regeneratePiece, publishApproved } from "./actions";
+import { approvePiece, rejectPiece, regeneratePiece, publishApproved, triggerCampaignVideo } from "./actions";
 
 type Piece = {
   id: string;
@@ -60,11 +60,17 @@ function PieceCard({
 }) {
   const [expanded, setExpanded] = useState(false);
   const [pending, startTransition] = useTransition();
+  const [generatingVideo, startVideoGen] = useTransition();
 
   const canApprove  = piece.status === "ready";
   const canReject   = piece.status === "ready" || piece.status === "approved";
   const canRegen    = piece.status === "ready" || piece.status === "rejected" || piece.status === "failed";
   const showPlatformPicker = piece.status === "ready" || piece.status === "approved";
+  const canGenerateVideo =
+    piece.platform !== "news" &&
+    piece.video_script !== null &&
+    piece.video_url === null &&
+    (piece.status === "ready" || piece.status === "approved");
 
   return (
     <div className={`rounded-lg border overflow-hidden transition-colors ${
@@ -73,8 +79,15 @@ function PieceCard({
       piece.status === "published" ? "border-forest/20 opacity-70" :
       "border-bone/10 hover:border-bone/20"
     }`}>
+      {/* Video (generated) */}
+      {piece.video_url && piece.platform !== "news" && (
+        <div className="relative aspect-video overflow-hidden bg-ink">
+          <video src={piece.video_url} controls preload="metadata" className="w-full h-full object-cover" />
+        </div>
+      )}
+
       {/* Image */}
-      {piece.image_url && (
+      {!piece.video_url && piece.image_url && (
         <div className="relative aspect-square overflow-hidden bg-ink">
           <Image src={piece.image_url} alt="" fill className="object-cover" unoptimized sizes="300px" />
         </div>
@@ -187,6 +200,20 @@ function PieceCard({
                 </label>
               ))}
             </div>
+          </div>
+        )}
+
+        {/* Generate Video button */}
+        {canGenerateVideo && (
+          <div className="pt-2 border-t border-bone/8">
+            <button
+              type="button"
+              disabled={generatingVideo}
+              onClick={() => { startVideoGen(() => triggerCampaignVideo(piece.id)); }}
+              className="w-full text-xs px-3 py-2 rounded bg-ochre/15 text-ochre hover:bg-ochre/25 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium"
+            >
+              {generatingVideo ? "Queuing…" : "⚡ Generate Video from Script"}
+            </button>
           </div>
         )}
 
