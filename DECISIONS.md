@@ -329,3 +329,46 @@ Format for each entry:
 - _Match the label's exact ink theme_ — rejected; the lounge needs to feel like its own destination.
 
 **Consequences:** The public header now has 7 nav items. If the nav becomes crowded on mobile, consider grouping or a mega-menu later.
+
+---
+
+## 2026-06-06 — Social posting via Make.com webhook, not direct platform APIs
+
+**Context:** Direct Meta Graph API and TikTok Content Posting API integrations required complex developer app setup (Facebook page token flow took multiple sessions), and TikTok API access requires weeks of review. Make.com has native platform modules and handles OAuth internally.
+
+**Decision:** All social posting (Instagram, Facebook, TikTok) fires a single JSON webhook to Make.com (`SOCIAL_WEBHOOK_URL`). Payload includes `{ platform, piece_id, content_type, caption, image_url, video_url }`. Make.com's Router module branches on `platform`. TikTok is manual for now — no Make.com video upload module exists; Publer is the best option if automation is later needed.
+
+**Alternatives considered:**
+- _Keep direct Meta API._ Rejected: Facebook page token flow is brittle (tokens need periodic refresh, app secret exposure in chat). Make.com abstracts this.
+- _Zapier instead of Make.com._ Not evaluated — user already uses Make.com for other business ops.
+- _Publer for all platforms._ Considered but Make.com is already in use; can switch later.
+
+**Consequences:** Social posting depends on Make.com remaining connected and the scenario being active. The app has no visibility into whether a post actually succeeded — fire-and-forget. If observability is needed later, Make.com can call a webhook back.
+
+---
+
+## 2026-06-06 — Campaign pieces store news articles in caption + video_script columns
+
+**Context:** `content_pieces` table was designed for social posts. Adding news post generation to the campaign pipeline needed a place to store an article title and body without a schema migration.
+
+**Decision:** For `platform = "news"` pieces, repurpose existing columns: `caption` holds the article headline, `video_script` holds the full markdown body. When the piece is approved and published, a `news_posts` draft is created from these two fields. The piece's `platform` and `content_type` columns were extended with new CHECK constraint values (`news`, `news_post`).
+
+**Alternatives considered:**
+- _New columns on `content_pieces`_ (`article_title`, `article_body`). Rejected: requires a migration and these fields are semantically close to `caption`/`video_script`.
+- _Separate `campaign_articles` table._ Rejected: overkill for Phase 5; the campaign review UI already handles pieces uniformly.
+
+**Consequences:** `video_script` has a dual purpose — video scripts for social pieces, article body for news pieces. Differentiate by checking `piece.platform === "news"` in UI and publish logic.
+
+---
+
+## 2026-06-06 — Null published_at treated as immediately visible for news posts
+
+**Context:** Campaign-generated news posts and manually created drafts that are published without a schedule date have `published_at = NULL`. The original RLS policy required `published_at <= now()` which excluded these posts even when `is_published = true`.
+
+**Decision:** Public news queries use `.or("published_at.is.null,published_at.lte.${now}")` alongside `.eq("is_published", true)`. A null publish date means "show as soon as published". A future date can still be used to schedule visibility.
+
+**Alternatives considered:**
+- _Auto-set `published_at = now()` on publish._ Would work but requires the edit action to intercept and set it. The current approach is more forgiving.
+- _Remove `published_at` filter entirely._ Rejected: would break future scheduling use case.
+
+**Consequences:** Posts with `is_published = true` and `published_at = NULL` are visible immediately. Scheduled posts with a future `published_at` stay hidden until that time. App-level filters are now the primary gate — RLS is a backup, not the sole defence (admin session bypasses the public RLS policy).
