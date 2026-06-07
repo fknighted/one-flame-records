@@ -69,7 +69,7 @@ export default function InkShell({ displayName, pendingApps, children, mode = "a
   const pathname = usePathname();
 
   const groups = mode === "admin" ? ADMIN_NAV : PORTAL_NAV;
-  const homeHref = mode === "admin" ? "/admin" : "/portal";
+  const homeHref = mode === "admin" ? "/" : "/portal";
 
   // Inject pendingApps badge into Applications item
   const resolvedGroups: NavGroup[] = groups.map((group) => ({
