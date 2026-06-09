@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useState, useEffect } from "react";
+import { useActionState, useState } from "react";
 import Link from "next/link";
 import type { ActionState } from "@/app/admin/videos/actions";
 import { getVideoUploadUrl } from "@/app/admin/videos/actions";
@@ -62,18 +62,13 @@ export default function VideoForm({
   const [source, setSource] = useState<"youtube" | "upload">(hasUpload ? "upload" : "youtube");
 
   const [youtubeInput, setYoutubeInput] = useState(initialValues.youtube_id ?? "");
-  const [previewId, setPreviewId] = useState<string | null>(initialValues.youtube_id ?? null);
+  const previewId = extractYouTubeId(youtubeInput);
 
   // Upload state
   const [uploadedUrl, setUploadedUrl] = useState<string>(initialValues.storage_url ?? "");
   const [uploading, setUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [uploadError, setUploadError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const id = extractYouTubeId(youtubeInput);
-    setPreviewId(id);
-  }, [youtubeInput]);
 
   async function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];

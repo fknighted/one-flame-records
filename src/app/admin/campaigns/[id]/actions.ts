@@ -69,7 +69,7 @@ export async function publishApproved(
   if (!pieces?.length) return { published: 0, skipped: 0, errors: [] };
 
   let published = 0;
-  let skipped   = 0;
+  const skipped = 0;
   const errors: string[] = [];
 
   await supabase.from("content_campaigns").update({ status: "publishing" }).eq("id", campaignId);

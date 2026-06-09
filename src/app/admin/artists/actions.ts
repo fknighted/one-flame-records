@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createServiceClient } from "@/lib/supabase/server";
+import { requireAdmin } from "@/lib/auth";
 
 export type ActionState = { error: string } | null;
 
@@ -73,6 +74,7 @@ export async function createArtist(
   _prevState: ActionState,
   formData: FormData
 ): Promise<ActionState> {
+  await requireAdmin();
   const fields = parseFormData(formData);
   if (!fields.stage_name) return { error: "Stage name is required." };
 
@@ -105,12 +107,14 @@ export async function createArtist(
 }
 
 export async function deleteArtist(artistId: string): Promise<void> {
+  await requireAdmin();
   const supabase = createServiceClient();
   await supabase.from("artists").delete().eq("id", artistId);
   revalidatePath("/admin/artists");
 }
 
 export async function activateArtist(artistId: string): Promise<void> {
+  await requireAdmin();
   const supabase = createServiceClient();
   await supabase.from("artists").update({ status: "active" }).eq("id", artistId);
   revalidatePath("/admin/artists");
@@ -120,6 +124,7 @@ export async function updateArtist(
   _prevState: ActionState,
   formData: FormData
 ): Promise<ActionState> {
+  await requireAdmin();
   const id = formData.get("id") as string;
   if (!id) return { error: "Artist ID is missing." };
 

@@ -298,7 +298,7 @@ export default async function HomePage() {
               Sign with One Flame.
             </h2>
             <p className="mt-3 text-bone/70 max-w-md leading-relaxed">
-              We work with artists who have something real to say. If that's you,
+              We work with artists who have something real to say. If that&apos;s you,
               we want to hear it.
             </p>
           </div>

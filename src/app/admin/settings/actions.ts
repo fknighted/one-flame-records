@@ -2,6 +2,7 @@
 
 import { createServiceClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
+import { requireAdmin } from "@/lib/auth";
 
 export type SettingsState = { error: string } | { success: true } | null;
 
@@ -9,6 +10,7 @@ export async function updateBudget(
   _prev: SettingsState,
   formData: FormData
 ): Promise<SettingsState> {
+  await requireAdmin();
   const raw = formData.get("monthly_video_budget_usd") as string;
   const value = parseFloat(raw);
 

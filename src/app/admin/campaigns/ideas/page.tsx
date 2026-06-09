@@ -30,8 +30,8 @@ export default async function IdeasPage() {
           </div>
         </div>
         <p className="mt-3 text-sm text-bone/50 max-w-lg">
-          Draft ideas organised by content pillar. Hit "Generate ideas" and Claude will suggest campaigns
-          based on your roster, recent releases, and news. Click "Start Campaign" to expand any idea into a full campaign.
+          Draft ideas organised by content pillar. Hit &quot;Generate ideas&quot; and Claude will suggest campaigns
+          based on your roster, recent releases, and news. Click &quot;Start Campaign&quot; to expand any idea into a full campaign.
         </p>
       </div>
 

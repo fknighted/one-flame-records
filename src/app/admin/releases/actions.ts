@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createServiceClient } from "@/lib/supabase/server";
+import { requireAdmin } from "@/lib/auth";
 
 export type ActionState = { error: string } | null;
 
@@ -57,6 +58,7 @@ export async function createRelease(
   _prevState: ActionState,
   formData: FormData
 ): Promise<ActionState> {
+  await requireAdmin();
   const fields = parseFormData(formData);
   if (!fields.title) return { error: "Title is required." };
   if (!fields.artist_id) return { error: "Artist is required." };
@@ -91,6 +93,7 @@ export async function createRelease(
 }
 
 export async function deleteRelease(releaseId: string): Promise<void> {
+  await requireAdmin();
   const supabase = createServiceClient();
   await supabase.from("releases").delete().eq("id", releaseId);
   revalidatePath("/admin/releases");
@@ -100,6 +103,7 @@ export async function updateRelease(
   _prevState: ActionState,
   formData: FormData
 ): Promise<ActionState> {
+  await requireAdmin();
   const id = formData.get("id") as string;
   if (!id) return { error: "Release ID is missing." };
 

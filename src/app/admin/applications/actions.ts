@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient, createServiceClient } from "@/lib/supabase/server";
+import { requireAdmin } from "@/lib/auth";
 import { sendEmail } from "@/lib/email/send";
 import { renderApplicationApproved } from "@/lib/email/templates/applicationApproved";
 import { renderApplicationRejected } from "@/lib/email/templates/applicationRejected";
@@ -20,6 +21,7 @@ export async function approveApplication(
   _prev: ActionState,
   formData: FormData
 ): Promise<ActionState> {
+  await requireAdmin();
   const id = (formData.get("id") as string)?.trim();
   if (!id) return { error: "Missing application ID." };
 
@@ -119,6 +121,7 @@ export async function resendInvite(
   _prev: ActionState,
   formData: FormData
 ): Promise<ActionState> {
+  await requireAdmin();
   const id = (formData.get("id") as string)?.trim();
   if (!id) return { error: "Missing application ID." };
 
@@ -169,6 +172,7 @@ export async function rejectApplication(
   _prev: ActionState,
   formData: FormData
 ): Promise<ActionState> {
+  await requireAdmin();
   const id = (formData.get("id") as string)?.trim();
   if (!id) return { error: "Missing application ID." };
 

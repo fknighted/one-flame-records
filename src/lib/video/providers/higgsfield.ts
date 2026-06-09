@@ -7,6 +7,7 @@ function getClient() {
   const credentials = process.env.HF_CREDENTIALS;
   if (!credentials) throw new Error("HF_CREDENTIALS not set");
   // Dynamic import keeps this server-only and avoids edge-runtime issues
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   const { createHiggsfieldClient } = require("@higgsfield/client/v2") as typeof import("@higgsfield/client/v2");
   return createHiggsfieldClient({ credentials });
 }

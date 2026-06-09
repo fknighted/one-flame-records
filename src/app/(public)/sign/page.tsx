@@ -44,7 +44,7 @@ export default function SignPage() {
             For Artists
           </p>
           <h1 className="font-display font-bold text-bone text-[clamp(2.75rem,6vw,5rem)] leading-[1.02] tracking-tight max-w-3xl">
-            We're looking for artists who have something real to say.
+            We&apos;re looking for artists who have something real to say.
           </h1>
           <div className="mt-6 h-px w-24 bg-oxblood" />
           <p className="mt-6 text-lg text-bone/60 max-w-xl leading-relaxed">

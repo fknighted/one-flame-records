@@ -16,6 +16,7 @@ function makeJwt(accessKey: string, secretKey: string): string {
     JSON.stringify({ iss: accessKey, exp: now + 1800, nbf: now - 5 })
   ).toString("base64url");
 
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   const { createHmac } = require("crypto");
   const sig = createHmac("sha256", secretKey)
     .update(`${header}.${payload}`)

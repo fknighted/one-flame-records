@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import ReleaseCard from "@/components/ReleaseCard";
 import ReleasesFilter from "@/components/ReleasesFilter";
@@ -112,12 +113,12 @@ export default async function ReleasesPage({ searchParams }: { searchParams: Sea
                   : "Releases coming soon."}
               </p>
               {isFiltered && (
-                <a
+                <Link
                   href="/releases"
                   className="mt-4 inline-block text-sm text-oxblood hover:underline"
                 >
                   Clear filters
-                </a>
+                </Link>
               )}
             </div>
           )}

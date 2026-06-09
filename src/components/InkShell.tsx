@@ -71,33 +71,24 @@ const PORTAL_NAV: NavGroup[] = [
   },
 ];
 
-export default function InkShell({ displayName, pendingApps, children, mode = "admin" }: Props) {
-  const [open, setOpen] = useState(false);
-  const pathname = usePathname();
-
-  const groups = mode === "admin" ? ADMIN_NAV : PORTAL_NAV;
-  const homeHref = mode === "admin" ? "/" : "/portal";
-
-  // Inject pendingApps badge into Applications item
-  const resolvedGroups: NavGroup[] = groups.map((group) => ({
-    ...group,
-    items: group.items.map((item) =>
-      item.href === "/admin/applications" && pendingApps
-        ? { ...item, badge: pendingApps }
-        : item
-    ),
-  }));
-
+function NavLinks({
+  groups,
+  pathname,
+  onClose,
+}: {
+  groups: NavGroup[];
+  pathname: string;
+  onClose?: () => void;
+}) {
   function isActive(href: string) {
-    // /admin exact match, /admin/ai-studio/* prefix, etc.
     const depth = href.split("/").filter(Boolean).length;
     if (depth <= 1) return pathname === href;
     return pathname === href || pathname.startsWith(href + "/");
   }
 
-  const NavLinks = ({ onClose }: { onClose?: () => void }) => (
+  return (
     <div className="space-y-5">
-      {resolvedGroups.map((group, gi) => (
+      {groups.map((group, gi) => (
         <div key={gi}>
           {group.label && (
             <p className="px-3 mb-1 text-[9px] font-semibold uppercase tracking-[0.2em] text-bone/25">
@@ -131,6 +122,24 @@ export default function InkShell({ displayName, pendingApps, children, mode = "a
       ))}
     </div>
   );
+}
+
+export default function InkShell({ displayName, pendingApps, children, mode = "admin" }: Props) {
+  const [open, setOpen] = useState(false);
+  const pathname = usePathname();
+
+  const groups = mode === "admin" ? ADMIN_NAV : PORTAL_NAV;
+  const homeHref = mode === "admin" ? "/" : "/portal";
+
+  // Inject pendingApps badge into Applications item
+  const resolvedGroups: NavGroup[] = groups.map((group) => ({
+    ...group,
+    items: group.items.map((item) =>
+      item.href === "/admin/applications" && pendingApps
+        ? { ...item, badge: pendingApps }
+        : item
+    ),
+  }));
 
   return (
     <div className="min-h-screen bg-ink text-bone flex flex-col">
@@ -197,7 +206,7 @@ export default function InkShell({ displayName, pendingApps, children, mode = "a
             <p className="text-xs text-bone/40 truncate">{displayName}</p>
           </div>
 
-          <NavLinks onClose={() => setOpen(false)} />
+          <NavLinks groups={resolvedGroups} pathname={pathname} onClose={() => setOpen(false)} />
         </nav>
 
         {/* Main content */}

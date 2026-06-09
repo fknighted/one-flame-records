@@ -314,7 +314,7 @@ export default function ImageGeneratorForm({
             {!refLoading && refArtistId && refImages.length === 0 && (
               <p className="text-xs text-bone/40">
                 No reference images for this artist. Upload one under{" "}
-                <span className="text-bone/60">Artists → Assets</span> with kind "Reference Image".
+                <span className="text-bone/60">Artists → Assets</span> with kind &quot;Reference Image&quot;.
               </p>
             )}
 

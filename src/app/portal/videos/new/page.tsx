@@ -43,7 +43,7 @@ export default async function NewVideoPage() {
         </h1>
         <div className="mt-3 h-px w-16 bg-bone/20" />
         <p className="mt-4 text-sm text-bone/50 leading-relaxed">
-          Choose an instrumental or demo, pick a visual style, and we'll
+          Choose an instrumental or demo, pick a visual style, and we&apos;ll
           generate a music video automatically. Generation usually takes
           10–20 minutes.
         </p>

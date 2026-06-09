@@ -2,6 +2,7 @@
 
 import { redirect } from "next/navigation";
 import { createServiceClient } from "@/lib/supabase/server";
+import { requireAdmin } from "@/lib/auth";
 import { inngest } from "@/lib/inngest/client";
 import { transcribeAudio } from "@/lib/audio/transcribe";
 import { analyzeAudio } from "@/lib/audio/analyze";
@@ -15,6 +16,7 @@ export async function requestVideoAsAdmin(
   _prev: AdminVideoRequestState,
   formData: FormData
 ): Promise<AdminVideoRequestState> {
+  await requireAdmin();
   const assetId = formData.get("asset_id") as string;
   const stylePreset = formData.get("style_preset") as string;
   const aspectRatio = formData.get("aspect_ratio") as string;
@@ -74,6 +76,7 @@ export async function requestVideoAsAdmin(
 export async function transcribeAssetAction(
   assetId: string
 ): Promise<{ transcript: string } | { error: string }> {
+  await requireAdmin();
   const supabase = createServiceClient();
   const { data: asset } = await supabase
     .from("assets")
@@ -104,6 +107,7 @@ export async function generateScriptAction(
     creativeBrief?: string;
   }
 ): Promise<{ scenes: Scene[] } | { error: string }> {
+  await requireAdmin();
   const supabase = createServiceClient();
   const { data: asset } = await supabase
     .from("assets")

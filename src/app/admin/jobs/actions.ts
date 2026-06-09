@@ -3,14 +3,17 @@
 import { revalidatePath } from "next/cache";
 import { createServiceClient } from "@/lib/supabase/server";
 import { inngest } from "@/lib/inngest/client";
+import { requireAdmin } from "@/lib/auth";
 
 export async function deleteJob(jobId: string): Promise<void> {
+  await requireAdmin();
   const supabase = createServiceClient();
   await supabase.from("video_jobs").delete().eq("id", jobId);
   revalidatePath("/admin/jobs");
 }
 
 export async function resetJob(jobId: string): Promise<void> {
+  await requireAdmin();
   const supabase = createServiceClient();
   await supabase
     .from("video_jobs")
@@ -20,6 +23,7 @@ export async function resetJob(jobId: string): Promise<void> {
 }
 
 export async function retryJob(jobId: string): Promise<void> {
+  await requireAdmin();
   const supabase = createServiceClient();
 
   const { data: job } = await supabase

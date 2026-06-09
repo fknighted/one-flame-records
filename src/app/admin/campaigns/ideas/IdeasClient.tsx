@@ -154,7 +154,7 @@ export default function IdeasClient({ initialIdeas }: { initialIdeas: Idea[] }) 
 
       {visible.length === 0 ? (
         <div className="border border-bone/10 rounded-lg p-12 text-center text-bone/30 text-sm">
-          No ideas yet — click "Generate ideas" to get started.
+          No ideas yet — click &quot;Generate ideas&quot; to get started.
         </div>
       ) : (
         <div className="space-y-10">

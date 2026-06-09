@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createServiceClient } from "@/lib/supabase/server";
+import { requireAdmin } from "@/lib/auth";
 
 export type ActionState = { error: string } | null;
 
@@ -51,6 +52,7 @@ export async function createNewsPost(
   _prevState: ActionState,
   formData: FormData
 ): Promise<ActionState> {
+  await requireAdmin();
   const fields = parseFormData(formData);
   if (!fields.title) return { error: "Title is required." };
   if (!fields.slug) return { error: "Slug is required." };

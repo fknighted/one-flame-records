@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createServiceClient } from "@/lib/supabase/server";
+import { requireAdmin } from "@/lib/auth";
 
 export type ActionState = { error: string } | null;
 
@@ -21,6 +22,7 @@ export async function getVideoUploadUrl(
   filename: string,
   contentType: string
 ): Promise<{ signedUrl: string; publicUrl: string }> {
+  await requireAdmin();
   const supabase = createServiceClient();
   const ext = filename.split(".").pop() ?? "mp4";
   const storagePath = `videos/${crypto.randomUUID()}.${ext}`;
@@ -39,6 +41,7 @@ export async function createVideo(
   _prevState: ActionState,
   formData: FormData
 ): Promise<ActionState> {
+  await requireAdmin();
   const title = (formData.get("title") as string)?.trim();
   if (!title) return { error: "Title is required." };
 
@@ -72,6 +75,7 @@ export async function createVideo(
 }
 
 export async function deleteVideo(videoId: string): Promise<void> {
+  await requireAdmin();
   const supabase = createServiceClient();
   await supabase.from("videos").delete().eq("id", videoId);
   revalidatePath("/admin/videos");
@@ -81,6 +85,7 @@ export async function updateVideo(
   _prevState: ActionState,
   formData: FormData
 ): Promise<ActionState> {
+  await requireAdmin();
   const id = formData.get("id") as string;
   if (!id) return { error: "Video ID is missing." };
 

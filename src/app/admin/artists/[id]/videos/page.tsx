@@ -69,7 +69,7 @@ export default async function AdminArtistVideosPage({ params }: Props) {
 
       {rows.length === 0 ? (
         <div className="border border-bone/10 rounded-lg p-10 text-center text-bone/30 text-sm">
-          No video jobs yet. Request one from an artist's asset.
+          No video jobs yet. Request one from an artist&apos;s asset.
         </div>
       ) : (
         <div className="border border-bone/10 rounded-lg overflow-x-auto">

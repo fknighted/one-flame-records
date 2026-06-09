@@ -2,8 +2,10 @@
 
 import { revalidatePath } from "next/cache";
 import { createServiceClient } from "@/lib/supabase/server";
+import { requireAdmin } from "@/lib/auth";
 
 export async function toggleJobPublic(jobId: string, artistId: string, _formData: FormData): Promise<void> {
+  await requireAdmin();
   const supabase = createServiceClient();
 
   const { data: job } = await supabase

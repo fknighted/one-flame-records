@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { createServiceClient } from "@/lib/supabase/server";
+import { requireAdmin } from "@/lib/auth";
 
 export type AssetActionState = { error: string } | null;
 
@@ -13,6 +14,7 @@ export async function uploadAssetForArtist(
   _prev: AssetActionState,
   formData: FormData
 ): Promise<AssetActionState> {
+  await requireAdmin();
   const kind = (formData.get("kind") as string) ?? "";
   const title = ((formData.get("title") as string) ?? "").trim();
   const notes = ((formData.get("notes") as string) ?? "").trim() || null;
@@ -67,6 +69,7 @@ export async function uploadAssetForArtist(
 }
 
 export async function toggleAssetPublic(assetId: string, _formData: FormData): Promise<void> {
+  await requireAdmin();
   const supabase = createServiceClient();
   const { data: asset } = await supabase
     .from("assets")
@@ -85,6 +88,7 @@ export async function toggleAssetPublic(assetId: string, _formData: FormData): P
 }
 
 export async function deleteAsset(assetId: string, _formData: FormData): Promise<void> {
+  await requireAdmin();
   const supabase = createServiceClient();
   const { data: asset } = await supabase
     .from("assets")

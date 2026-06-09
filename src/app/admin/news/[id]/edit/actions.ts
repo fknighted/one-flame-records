@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createServiceClient } from "@/lib/supabase/server";
+import { requireAdmin } from "@/lib/auth";
 
 export type ActionState = { error: string } | null;
 
@@ -51,6 +52,7 @@ export async function updateNewsPost(
   _prevState: ActionState,
   formData: FormData
 ): Promise<ActionState> {
+  await requireAdmin();
   const id = formData.get("id") as string;
   if (!id) return { error: "Post ID is missing." };
 
@@ -87,6 +89,7 @@ export async function updateNewsPost(
 }
 
 export async function deleteNewsPost(postId: string): Promise<void> {
+  await requireAdmin();
   const supabase = createServiceClient();
   await supabase.from("news_posts").delete().eq("id", postId);
   revalidatePath("/admin/news");

@@ -24,7 +24,7 @@ export default async function PortalProfilePage() {
       <div className="max-w-2xl">
         <h1 className="font-display text-2xl text-bone mb-4">Profile</h1>
         <p className="text-bone/50 text-sm">
-          Your artist profile hasn't been linked yet. Contact the label.
+          Your artist profile hasn&apos;t been linked yet. Contact the label.
         </p>
       </div>
     );

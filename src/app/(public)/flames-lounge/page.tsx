@@ -203,7 +203,7 @@ export default async function FlamesLoungePage() {
           </h1>
           <div className="mt-6 h-px w-20 bg-[#8B2A1F]" />
           <p className="mt-6 text-lg text-[#F5EDD8]/55 max-w-md leading-relaxed">
-            Montego Bay's creative space — outdoor studio, gaming, Jamaican food,
+            Montego Bay&apos;s creative space — outdoor studio, gaming, Jamaican food,
             and live events. Part of the One Flame Records family.
           </p>
 
@@ -247,7 +247,7 @@ export default async function FlamesLoungePage() {
             <div>
               <p className="text-[#F5EDD8]/55 leading-relaxed">
                 Flames Lounge is the creative and social hub connected to One Flame Records.
-                It's where artists come to record, decompress, eat well, and connect —
+                It&apos;s where artists come to record, decompress, eat well, and connect —
                 and where the community comes to be part of something real. Walk in, feel it, stay a while.
               </p>
               <p className="mt-4 text-[#F5EDD8]/40 text-sm">
@@ -293,7 +293,7 @@ export default async function FlamesLoungePage() {
               <div className="mt-5 h-px w-14 bg-[#8B2A1F]" />
               <p className="mt-6 text-[#F5EDD8]/55 leading-relaxed max-w-lg">
                 Professional microphones, studio monitors, and mixing capability —
-                all set up outdoors in Montego Bay. There's nothing like recording
+                all set up outdoors in Montego Bay. There&apos;s nothing like recording
                 with the Caribbean air and the sounds of the city around you.
                 Come make something real.
               </p>
@@ -351,7 +351,7 @@ export default async function FlamesLoungePage() {
               ))}
 
               <p className="text-xs text-[#F5EDD8]/25 italic">
-                Beverages available — ask your server for today's selection.
+                Beverages available — ask your server for today&apos;s selection.
               </p>
             </div>
           </div>
