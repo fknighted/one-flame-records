@@ -8,7 +8,7 @@ This is the living state of the build. Update at the end of every session.
 
 - **Phase:** 5 / 6 — Polish + AI content pipeline (both active)
 - **Status:** Phases 1–4 complete. Phase 5 partially done. Phase 6 (image library, content campaigns, ideas, security hardening, Flames Lounge) fully built and live.
-- **Last updated:** 2026-06-06
+- **Last updated:** 2026-06-08
 
 ## Active focus
 
@@ -40,6 +40,14 @@ Phase 5 wrap-up + real content pass.
 ## Session log
 
 Append a new entry at the top of this section after every session. Date, summary, files touched, what's next. Keep it tight — full reasoning belongs in `DECISIONS.md`.
+
+### 2026-06-08 (session 27)
+
+**Did:** Comprehensive site audit — security hardening, code-review bug fixes, Vercel Analytics, and full lint cleanup. (1) **Code-review fixes** — 10 bugs fixed: `onFailure` status set to `"failed"` (was `"approved"`), `downloadFile` HTTP status check, JSON parse `indexOf('[')` guard, `try/finally` cleanup for `/tmp` in assemble-upload, `fs.createReadStream` for upload, duplicate video generation guard, Resend batch error checked, `deleteEvent` error propagated, flames-lounge swapped to `createClient()`, CampaignPiecesClient error display added. (2) **Vercel Analytics + Speed Insights** — `@vercel/analytics` and `@vercel/speed-insights` added to root layout. (3) **Admin action auth** — `requireAdmin()` added to 13 files that were missing it (jobs, codes, settings, releases, videos, artists, news new/edit, applications, artist assets, artist videos, artist videos/new including `generateScriptAction`). (4) **ESLint clean to zero errors** — all `react/no-unescaped-entities` fixed across 10 files; `no-html-link-for-pages` fixed in `releases/page.tsx`; `NavLinks` extracted from `InkShell` render to module-level component (fixes `cannot-create-components-during-render`); `VideoForm` `useEffect` removed in favour of derived state; `kling.ts`/`higgsfield.ts` `require()` calls suppressed. Typecheck passes clean throughout.
+**Touched:** `src/lib/inngest/functions/generate-campaign-video.ts`, `src/app/admin/campaigns/[id]/actions.ts`, `src/app/admin/campaigns/[id]/CampaignPiecesClient.tsx`, `src/app/admin/subscribers/actions.ts`, `src/app/admin/events/actions.ts`, `src/app/admin/events/[id]/edit/DeleteEventButton.tsx`, `src/app/(public)/flames-lounge/page.tsx`, `src/app/(public)/page.tsx`, `src/app/(public)/releases/page.tsx`, `src/app/(public)/sign/page.tsx`, `src/app/admin/ai-studio/images/ImageGeneratorForm.tsx`, `src/app/admin/applications/actions.ts`, `src/app/admin/artists/[id]/assets/actions.ts`, `src/app/admin/artists/[id]/videos/actions.ts`, `src/app/admin/artists/[id]/videos/new/actions.ts`, `src/app/admin/artists/[id]/videos/page.tsx`, `src/app/admin/artists/actions.ts`, `src/app/admin/campaigns/ideas/IdeasClient.tsx`, `src/app/admin/campaigns/ideas/page.tsx`, `src/app/admin/codes/actions.ts`, `src/app/admin/jobs/actions.ts`, `src/app/admin/news/[id]/edit/actions.ts`, `src/app/admin/news/new/actions.ts`, `src/app/admin/releases/actions.ts`, `src/app/admin/settings/actions.ts`, `src/app/admin/videos/actions.ts`, `src/app/portal/profile/page.tsx`, `src/app/portal/videos/new/page.tsx`, `src/components/InkShell.tsx`, `src/components/PortalProfileForm.tsx`, `src/components/VideoForm.tsx`, `src/lib/video/providers/higgsfield.ts`, `src/lib/video/providers/kling.ts`, `package.json`, `src/app/layout.tsx`
+**Decided:** Server Actions bypass Next.js middleware route protection — `requireAdmin()` must be called inside each exported async Server Action, not just at the middleware level.
+**Blocked on:** TikTok auto-post. Flames Lounge gallery photos. Campaign video generation gap (pieces with video_mode="generated" produce script but no video_url).
+**Next:** Phase 5 remaining — portal share toggle, content pass, mobile QA on real device.
 
 ### 2026-06-06 (session 26)
 
