@@ -12,11 +12,12 @@ export async function triggerCampaignVideo(pieceId: string): Promise<void> {
   const supabase = createServiceClient();
   const { data: piece } = await supabase
     .from("content_pieces")
-    .select("campaign_id, video_script, video_url")
+    .select("campaign_id, video_script, video_url, status")
     .eq("id", pieceId)
     .single();
   if (!piece?.video_script) throw new Error("Piece has no script to generate from.");
   if (piece.video_url) throw new Error("Video already generated.");
+  if (piece.status === "generating") throw new Error("Video generation already in progress.");
 
   await inngest.send({ name: "campaign/video.requested", data: { pieceId } });
   if (piece.campaign_id) revalidatePath(`/admin/campaigns/${piece.campaign_id}`);

@@ -54,9 +54,11 @@ export async function updateEvent(_prev: ActionState, formData: FormData): Promi
   redirect("/admin/events");
 }
 
-export async function deleteEvent(id: string): Promise<void> {
+export async function deleteEvent(id: string): Promise<ActionState> {
   await requireAdmin();
   const supabase = createServiceClient();
-  await supabase.from("events").delete().eq("id", id);
+  const { error } = await supabase.from("events").delete().eq("id", id);
+  if (error) return { error: `Failed to delete event: ${error.message}` };
   revalidatePath("/admin/events");
+  return null;
 }

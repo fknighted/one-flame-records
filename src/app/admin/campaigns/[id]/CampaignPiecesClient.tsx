@@ -61,6 +61,7 @@ function PieceCard({
   const [expanded, setExpanded] = useState(false);
   const [pending, startTransition] = useTransition();
   const [generatingVideo, startVideoGen] = useTransition();
+  const [videoError, setVideoError] = useState<string | null>(null);
 
   const canApprove  = piece.status === "ready";
   const canReject   = piece.status === "ready" || piece.status === "approved";
@@ -209,11 +210,23 @@ function PieceCard({
             <button
               type="button"
               disabled={generatingVideo}
-              onClick={() => { startVideoGen(() => triggerCampaignVideo(piece.id)); }}
+              onClick={() => {
+                setVideoError(null);
+                startVideoGen(async () => {
+                  try {
+                    await triggerCampaignVideo(piece.id);
+                  } catch (err) {
+                    setVideoError(err instanceof Error ? err.message : "Failed to queue video generation.");
+                  }
+                });
+              }}
               className="w-full text-xs px-3 py-2 rounded bg-ochre/15 text-ochre hover:bg-ochre/25 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium"
             >
               {generatingVideo ? "Queuing…" : "⚡ Generate Video from Script"}
             </button>
+            {videoError && (
+              <p className="mt-1.5 text-xs text-oxblood">{videoError}</p>
+            )}
           </div>
         )}
 

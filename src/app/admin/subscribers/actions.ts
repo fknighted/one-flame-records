@@ -36,7 +36,7 @@ export async function sendNewsletter(
   let sent = 0;
   for (let i = 0; i < subscribers.length; i += 100) {
     const batch = subscribers.slice(i, i + 100);
-    await resend.batch.send(
+    const { error: batchErr } = await resend.batch.send(
       batch.map((s) => ({
         from,
         to: s.email,
@@ -44,6 +44,7 @@ export async function sendNewsletter(
         html: `${html}<p style="font-size:12px;color:#888;margin-top:32px;">You're receiving this because you subscribed at oneflamerecords.com. Reply to unsubscribe.</p>`,
       }))
     );
+    if (batchErr) return { error: `Send failed after ${sent} emails: ${batchErr.message}`, sent };
     sent += batch.length;
   }
 

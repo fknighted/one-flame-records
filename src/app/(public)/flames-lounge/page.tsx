@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
-import { createServiceClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/supabase/server";
 
 export const metadata: Metadata = {
   title: "Flames Lounge — Montego Bay's Creative Space",
@@ -147,7 +147,7 @@ const EVENT_TYPES_LIST = [
 // ── Page ──────────────────────────────────────────────────────────────────────
 
 export default async function FlamesLoungePage() {
-  const supabase = createServiceClient();
+  const supabase = await createClient();
   const now = new Date().toISOString();
   const { data: upcomingEvents } = await supabase
     .from("events")

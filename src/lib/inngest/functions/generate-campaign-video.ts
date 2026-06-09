@@ -18,6 +18,11 @@ function downloadFile(url: string, dest: string): Promise<void> {
   return new Promise((resolve, reject) => {
     const file = fs.createWriteStream(dest);
     https.get(url, (res) => {
+      if (!res.statusCode || res.statusCode < 200 || res.statusCode >= 300) {
+        res.resume();
+        fs.unlink(dest, () => {});
+        return reject(new Error(`HTTP ${res.statusCode ?? "unknown"} downloading clip`));
+      }
       res.pipe(file);
       file.on("finish", () => file.close(() => resolve()));
     }).on("error", (err) => {
@@ -52,7 +57,7 @@ export const generateCampaignVideo = inngest.createFunction(
       const supabase = createServiceClient();
       await supabase
         .from("content_pieces")
-        .update({ status: "approved", error: `Video generation failed: ${error.message}` })
+        .update({ status: "failed", error: `Video generation failed: ${error.message}` })
         .eq("id", pieceId);
     },
   },
@@ -107,7 +112,9 @@ Example: ["Close-up of...", "Wide shot of...", "Slow pan across..."]`,
         .join("")
         .trim();
       const stripped = raw.replace(/```(?:json)?/g, "").trim();
-      const parsed: unknown = JSON.parse(stripped.startsWith("[") ? stripped : stripped.slice(stripped.indexOf("[")));
+      const start = stripped.indexOf("[");
+      if (start === -1) throw new Error("Claude response did not contain a JSON array");
+      const parsed: unknown = JSON.parse(stripped.startsWith("[") ? stripped : stripped.slice(start));
       if (!Array.isArray(parsed)) throw new Error("Claude did not return a scene array");
       return (parsed as string[]).slice(0, 3);
     });
@@ -133,31 +140,30 @@ Example: ["Close-up of...", "Wide shot of...", "Slow pan across..."]`,
       const tmpDir = `/tmp/campaign-${pieceId}`;
       fs.mkdirSync(tmpDir, { recursive: true });
 
-      const clipPaths: string[] = [];
-      for (let i = 0; i < clipUrls.length; i++) {
-        const dest = path.join(tmpDir, `clip-${i}.mp4`);
-        await downloadFile(clipUrls[i], dest);
-        clipPaths.push(dest);
+      try {
+        const clipPaths: string[] = [];
+        for (let i = 0; i < clipUrls.length; i++) {
+          const dest = path.join(tmpDir, `clip-${i}.mp4`);
+          await downloadFile(clipUrls[i], dest);
+          clipPaths.push(dest);
+        }
+
+        const outPath = path.join(tmpDir, "output.mp4");
+        await concatClips(clipPaths, outPath);
+
+        const storagePath = `campaign-videos/${pieceId}.mp4`;
+        const supabase = createServiceClient();
+
+        const { error: upErr } = await supabase.storage
+          .from("public-media")
+          .upload(storagePath, fs.createReadStream(outPath), { contentType: "video/mp4", upsert: true });
+        if (upErr) throw new Error(`Upload failed: ${upErr.message}`);
+
+        const { data: pub } = supabase.storage.from("public-media").getPublicUrl(storagePath);
+        return pub.publicUrl;
+      } finally {
+        fs.rmSync(tmpDir, { recursive: true, force: true });
       }
-
-      const outPath = path.join(tmpDir, "output.mp4");
-      await concatClips(clipPaths, outPath);
-
-      const buffer = fs.readFileSync(outPath);
-      const storagePath = `campaign-videos/${pieceId}.mp4`;
-      const supabase = createServiceClient();
-
-      const { error: upErr } = await supabase.storage
-        .from("public-media")
-        .upload(storagePath, buffer, { contentType: "video/mp4", upsert: true });
-      if (upErr) throw new Error(`Upload failed: ${upErr.message}`);
-
-      const { data: pub } = supabase.storage.from("public-media").getPublicUrl(storagePath);
-
-      // Cleanup
-      fs.rmSync(tmpDir, { recursive: true, force: true });
-
-      return pub.publicUrl;
     });
 
     // ── Step 6: Update piece ──────────────────────────────────────────────────
