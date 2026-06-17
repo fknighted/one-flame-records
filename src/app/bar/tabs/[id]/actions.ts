@@ -62,19 +62,19 @@ export async function removeTabItem(
 
   const supabase = createServiceClient();
 
+  // Single query: verify the item belongs to tabId AND the tab is still open.
+  // Prevents IDOR where a caller supplies a tabItemId from a different tab.
   const { data: tabItem } = await supabase
     .from("pos_tab_items")
-    .select("price_cents")
+    .select("price_cents, tab_id, pos_tabs!inner(status, total_cents)")
     .eq("id", tabItemId)
+    .eq("tab_id", tabId)
     .single();
 
   if (!tabItem) return { error: "Item not found." };
 
-  const { data: tab } = await supabase
-    .from("pos_tabs")
-    .select("total_cents")
-    .eq("id", tabId)
-    .single();
+  const tabData = Array.isArray(tabItem.pos_tabs) ? tabItem.pos_tabs[0] : tabItem.pos_tabs;
+  if (!tabData || tabData.status !== "open") return { error: "Tab is already closed." };
 
   const { error: deleteError } = await supabase
     .from("pos_tab_items")
@@ -83,12 +83,11 @@ export async function removeTabItem(
 
   if (deleteError) return { error: `Failed to remove item: ${deleteError.message}` };
 
-  if (tab) {
-    await supabase
-      .from("pos_tabs")
-      .update({ total_cents: Math.max(0, tab.total_cents - tabItem.price_cents) })
-      .eq("id", tabId);
-  }
+  await supabase
+    .from("pos_tabs")
+    .update({ total_cents: Math.max(0, tabData.total_cents - tabItem.price_cents) })
+    .eq("id", tabId)
+    .eq("status", "open");
 
   revalidatePath(`/bar/tabs/${tabId}`);
   return null;

@@ -15,7 +15,11 @@ export default async function BarMembersPage({
     .order("display_name");
 
   if (q) {
-    query = query.or(`display_name.ilike.%${q}%,email.ilike.%${q}%`);
+    // Strip PostgREST reserved chars before interpolating into .or() filter string
+    const safe = q.replace(/[(),:*%]/g, "").slice(0, 100);
+    if (safe) {
+      query = query.or(`display_name.ilike.%${safe}%,email.ilike.%${safe}%`);
+    }
   }
 
   const { data: members } = await query.limit(50);
