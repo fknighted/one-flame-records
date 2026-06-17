@@ -35,7 +35,7 @@ export default function SetPasswordPage() {
       return;
     }
 
-    window.location.href = "/portal";
+    window.location.href = "/admin";
   }
 
   return (

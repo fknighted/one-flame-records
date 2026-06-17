@@ -6,26 +6,33 @@ This is the living state of the build. Update at the end of every session.
 
 ## Current state
 
-- **Phase:** 5 / 6 — Polish + AI content pipeline (both active)
-- **Status:** Phases 1–4 complete. Phase 5 partially done. Phase 6 (image library, content campaigns, ideas, security hardening, Flames Lounge) fully built and live.
-- **Last updated:** 2026-06-08
+- **Phase:** 5 + Bar POS (new feature, spans sessions 28–29)
+- **Status:** Phases 1–4 complete. Phase 5 partially done. Bar POS + Gaming Membership fully built (DB, auth, admin, bartender POS, gamer portal, public signup).
+- **Last updated:** 2026-06-17
 
 ## Active focus
 
-Phase 5 wrap-up + real content pass.
+Bar POS go-live — apply migration to production Supabase, then seed menu items from the admin.
 
 ## Blockers
 
-- **TikTok auto-posting** — Make.com has no TikTok video upload module. Manual for now (Publer evaluated as best option if needed later).
-- **Flames Lounge gallery** — Hero live. Gallery grid still placeholder; swap with real photos when available.
-- **Campaign video generation gap** — Pieces with `video_mode = "generated"` produce a script but no `video_url`. kie.ai pipeline not triggered from campaigns yet.
+- **Migration not yet applied to production** — `supabase/migrations/20260617000001_pos_and_gaming.sql` exists locally but must be pushed to the linked project: `npx supabase db push --linked`.
+- **TikTok auto-posting** — Make.com has no TikTok video upload module. Manual for now.
+- **Flames Lounge gallery** — Gallery grid still placeholder; swap with real photos when available.
+- **Campaign video generation gap** — Pieces with `video_mode = "generated"` produce a script but no `video_url`.
 
 ## Next session
 
-### Priority 1 — Phase 5 remaining tasks
-- Task 4: Portal video public share toggle (still to code)
-- Task 8: Content pass — real copy on `/about`, fill out roster, cover art on releases
-- Task 9: Mobile spot-check at 375px on a real device
+### Priority 1 — Bar POS production launch
+1. `npx supabase db push --linked` — apply migration
+2. Add menu items at `/admin/bar/items`
+3. Invite first bartender at `/admin/bar/staff`
+4. Test core loop: open tab → add items → close tab as cash
+
+### Priority 2 — Phase 5 remaining tasks
+- Portal video public share toggle
+- Content pass — real copy on `/about`, fill out roster, cover art on releases
+- Mobile spot-check at 375px on a real device
 
 ## Phase progress
 
@@ -40,6 +47,14 @@ Phase 5 wrap-up + real content pass.
 ## Session log
 
 Append a new entry at the top of this section after every session. Date, summary, files touched, what's next. Keep it tight — full reasoning belongs in `DECISIONS.md`.
+
+### 2026-06-17 (sessions 28–29)
+
+**Did:** Full Bar POS + Gaming Membership system. (1) **Database migration** (`20260617000001_pos_and_gaming.sql`) — extended `profiles_role_check` to include `bartender` and `gamer`; updated `handle_new_user()` trigger to read `raw_user_meta_data->>'role'` so invites with a role payload land correctly; added `is_bar_staff()` SECURITY DEFINER helper; added `current_gamer_member_id()` function; created 5 tables: `pos_items`, `pos_tabs`, `pos_tab_items`, `gamer_members`, `game_sessions`; full RLS policies on all tables using `is_admin()` and `is_bar_staff()`. (2) **Auth layer** — `requireBarStaff()` added to `src/lib/auth.ts`; `src/proxy.ts` rewritten with `roleHome()` helper mapping roles to home routes; `/bar` and `/gamer` route groups added; `src/app/auth/set-password/page.tsx` now redirects to `/admin` so proxy routes each role correctly. (3) **InkShell** — `mode="bar"` and `mode="gamer"` added; `BAR_NAV` and `GAMER_NAV` constants; "Bar" group added to `ADMIN_NAV`. (4) **Admin bar** — `/admin/bar` overview (stat cards + open tabs); `/admin/bar/items` CRUD (create/edit/deactivate/delete menu items); `/admin/bar/tabs` order history with revenue totals; `/admin/bar/members` gamer member list + detail with balance adjust and suspend/reactivate; `/admin/bar/staff` invite/deactivate bartenders. (5) **Bartender `/bar` POS** — layout + active tabs dashboard; open tab form (`pos_tabs` insert + redirect); tab view (item list + `MenuGrid` touch grid + `TabControls` close/void modal); sessions page (start/end game sessions, deducts member balance); members search + invite gamer + member detail. (6) **Gamer portal** — `/gamer` layout (fetches `gamer_members` for display name); dashboard (balance, active session); session history. (7) **Public gamer signup** — `/gamer-signup` page with self-serve form; `gamerSignup` action invites via `auth.admin.inviteUserByEmail` with `{ role: "gamer" }`, creates `gamer_members` row; CTA added to Flames Lounge public page. Supabase types manually extended for all 5 new tables. Typecheck 0 errors, lint 0 errors.
+**Touched:** `supabase/migrations/20260617000001_pos_and_gaming.sql` (new), `src/types/supabase.ts`, `src/lib/auth.ts`, `src/proxy.ts`, `src/app/auth/set-password/page.tsx`, `src/components/InkShell.tsx`, `src/components/MenuGrid.tsx` (new), `src/app/admin/bar/` (all new), `src/app/bar/` (all new), `src/app/gamer/` (all new), `src/app/(public)/gamer-signup/` (new), `src/app/(public)/flames-lounge/page.tsx`
+**Decided:** Single `roleHome()` helper in proxy consolidates all role-to-home-route logic. `is_bar_staff()` SECURITY DEFINER avoids exposing `profiles` table directly in RLS. `gamer_members` created immediately on invite (before password set) so bartender can add notes/balance before first login. Prices stored as cents throughout.
+**Blocked on:** Migration not yet applied to production. Bartender accounts not yet invited.
+**Next:** `npx supabase db push --linked` → add menu items → invite bartender → test core POS loop.
 
 ### 2026-06-08 (session 27)
 

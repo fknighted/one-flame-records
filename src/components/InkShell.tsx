@@ -10,8 +10,7 @@ interface Props {
   displayName: string;
   pendingApps?: number;
   children: React.ReactNode;
-  /** portal mode — different home href and no AI Studio */
-  mode?: "admin" | "portal";
+  mode?: "admin" | "portal" | "bar" | "gamer";
 }
 
 type NavItem = { href: string; label: string; badge?: number };
@@ -48,6 +47,16 @@ const ADMIN_NAV: NavGroup[] = [
     ],
   },
   {
+    label: "Bar",
+    items: [
+      { href: "/admin/bar",         label: "Overview" },
+      { href: "/admin/bar/items",   label: "Menu Items" },
+      { href: "/admin/bar/tabs",    label: "Order History" },
+      { href: "/admin/bar/members", label: "Gamer Members" },
+      { href: "/admin/bar/staff",   label: "Bar Staff" },
+    ],
+  },
+  {
     label: "Onboarding",
     items: [
       { href: "/admin/applications", label: "Applications" },
@@ -56,6 +65,28 @@ const ADMIN_NAV: NavGroup[] = [
   },
   {
     items: [{ href: "/admin/settings", label: "Settings" }],
+  },
+];
+
+const BAR_NAV: NavGroup[] = [
+  {
+    items: [{ href: "/bar", label: "Active Tabs" }],
+  },
+  {
+    label: "Gaming",
+    items: [
+      { href: "/bar/sessions", label: "Sessions" },
+      { href: "/bar/members",  label: "Members" },
+    ],
+  },
+];
+
+const GAMER_NAV: NavGroup[] = [
+  {
+    items: [
+      { href: "/gamer",          label: "Dashboard" },
+      { href: "/gamer/sessions", label: "My Sessions" },
+    ],
   },
 ];
 
@@ -128,8 +159,17 @@ export default function InkShell({ displayName, pendingApps, children, mode = "a
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
 
-  const groups = mode === "admin" ? ADMIN_NAV : PORTAL_NAV;
-  const homeHref = mode === "admin" ? "/" : "/portal";
+  const groups =
+    mode === "admin" ? ADMIN_NAV :
+    mode === "bar"   ? BAR_NAV   :
+    mode === "gamer" ? GAMER_NAV :
+    PORTAL_NAV;
+
+  const homeHref =
+    mode === "admin" ? "/" :
+    mode === "bar"   ? "/bar" :
+    mode === "gamer" ? "/gamer" :
+    "/portal";
 
   // Inject pendingApps badge into Applications item
   const resolvedGroups: NavGroup[] = groups.map((group) => ({

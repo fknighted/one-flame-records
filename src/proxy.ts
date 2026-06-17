@@ -11,14 +11,23 @@ function serviceClient() {
   );
 }
 
+function roleHome(role: string | undefined): string {
+  if (role === "admin")      return "/admin";
+  if (role === "bartender")  return "/bar";
+  if (role === "gamer")      return "/gamer";
+  return "/portal";
+}
+
 export async function proxy(request: NextRequest) {
   const { supabaseResponse, user } = await updateSession(request);
   const { pathname } = request.nextUrl;
 
-  const isAdminRoute = pathname.startsWith("/admin");
+  const isAdminRoute  = pathname.startsWith("/admin");
   const isPortalRoute = pathname.startsWith("/portal");
+  const isBarRoute    = pathname.startsWith("/bar");
+  const isGamerRoute  = pathname.startsWith("/gamer");
 
-  if (!isAdminRoute && !isPortalRoute) {
+  if (!isAdminRoute && !isPortalRoute && !isBarRoute && !isGamerRoute) {
     return supabaseResponse;
   }
 
@@ -29,27 +38,24 @@ export async function proxy(request: NextRequest) {
     return NextResponse.redirect(loginUrl);
   }
 
-  // Fetch role once — used by both admin and portal checks
   const { data: profile } = await serviceClient()
     .from("profiles")
     .select("role")
     .eq("id", user.id)
     .single();
-  const role = profile?.role;
+  const role = profile?.role as string | undefined;
 
-  if (isAdminRoute && role !== "admin") {
-    const portalUrl = request.nextUrl.clone();
-    portalUrl.pathname = "/portal";
-    portalUrl.search = "";
-    return NextResponse.redirect(portalUrl);
+  function redirect(path: string) {
+    const url = request.nextUrl.clone();
+    url.pathname = path;
+    url.search = "";
+    return NextResponse.redirect(url);
   }
 
-  if (isPortalRoute && role === "admin") {
-    const adminUrl = request.nextUrl.clone();
-    adminUrl.pathname = "/admin";
-    adminUrl.search = "";
-    return NextResponse.redirect(adminUrl);
-  }
+  if (isAdminRoute  && role !== "admin")                              return redirect(roleHome(role));
+  if (isPortalRoute && role !== "artist")                             return redirect(roleHome(role));
+  if (isBarRoute    && role !== "admin" && role !== "bartender")      return redirect(roleHome(role));
+  if (isGamerRoute  && role !== "gamer" && role !== "admin")          return redirect(roleHome(role));
 
   return supabaseResponse;
 }

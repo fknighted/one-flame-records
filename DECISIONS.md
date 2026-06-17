@@ -372,3 +372,45 @@ Format for each entry:
 - _Remove `published_at` filter entirely._ Rejected: would break future scheduling use case.
 
 **Consequences:** Posts with `is_published = true` and `published_at = NULL` are visible immediately. Scheduled posts with a future `published_at` stay hidden until that time. App-level filters are now the primary gate — RLS is a backup, not the sole defence (admin session bypasses the public RLS policy).
+
+---
+
+## 2026-06-17 — Bar POS: single roleHome() helper in proxy for all role-to-route mapping
+
+**Context:** Adding `bartender` and `gamer` roles means the proxy needs to protect four route groups (`/admin`, `/portal`, `/bar`, `/gamer`) with different role permissions, and redirect each role to its correct home when they land on the wrong route.
+
+**Decision:** A single `roleHome(role: string | undefined): string` function in `src/proxy.ts` maps every role to its canonical home. All redirect logic in the proxy calls `roleHome()` rather than hardcoding a path. Route protection checks are explicit: `/admin` → admin only; `/portal` → artist only; `/bar` → admin + bartender; `/gamer` → gamer + admin.
+
+**Alternatives considered:**
+- _Per-route guard functions._ Rejected: duplicate logic and easy to forget a role when adding new ones.
+- _Metadata on the route group layout._ Rejected: layouts don't run until the route is matched; the proxy needs to redirect before rendering.
+
+**Consequences:** Adding a new role in future only requires: (1) add to the `profiles_role_check` constraint, (2) add a case in `roleHome()`, (3) add a route group + protection block in the proxy. Nothing else in auth needs to change.
+
+---
+
+## 2026-06-17 — is_bar_staff() as SECURITY DEFINER helper, mirroring is_admin()
+
+**Context:** RLS policies on POS tables need to allow both `admin` and `bartender` roles. Without a helper, every policy would need to embed a subquery against `public.profiles` directly.
+
+**Decision:** `is_bar_staff()` is a SECURITY DEFINER function (like the existing `is_admin()`) that returns true when `auth.uid()` has role `admin` or `bartender` in `public.profiles`. Used in all POS table policies.
+
+**Alternatives considered:**
+- _Inline subquery in each policy._ Works but is verbose, harder to change, and slower per query evaluation.
+- _`is_admin()` covers bartender too._ Rejected: conflates two distinct roles with different access scope.
+
+**Consequences:** Changing what "bar staff" means (e.g. adding a new role) requires updating one function instead of every POS table policy.
+
+---
+
+## 2026-06-17 — gamer_members row created at invite time, not on first login
+
+**Context:** When a bartender (or admin) invites a gamer, they may want to pre-load the member's balance or add notes before the gamer has ever logged in. The Supabase invite flow creates the `auth.users` row immediately but the `profiles` trigger creates a bare `profiles` row — there is no `gamer_members` row until something creates it.
+
+**Decision:** Both `inviteGamer` (bartender flow) and `gamerSignup` (public flow) call `supabase.from("gamer_members").insert(...)` immediately after `auth.admin.inviteUserByEmail` returns. The row exists as soon as the invite is sent.
+
+**Alternatives considered:**
+- _Create gamer_members on first portal login._ Rejected: bartender can't pre-load balance or see the member in the admin list until the gamer logs in.
+- _Trigger on profiles insert._ Rejected: the `profiles` trigger fires for all roles; this would create spurious `gamer_members` rows for admins and artists.
+
+**Consequences:** If an invite is sent but the gamer never completes signup, there will be a `gamer_members` row with `auth_user_id` pointing to a user who hasn't set a password. This is acceptable — the bartender can still see the row and it does no harm.

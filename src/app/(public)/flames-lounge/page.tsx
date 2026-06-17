@@ -435,6 +435,29 @@ export default async function FlamesLoungePage() {
         </div>
       </section>
 
+      {/* ── Gamer membership CTA ── */}
+      <section className="bg-[#0D0B09] border-t border-[#F5EDD8]/[0.05]">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 py-14 sm:py-20 flex flex-col sm:flex-row items-center justify-between gap-6">
+          <div>
+            <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#3F5A3A] mb-2">
+              Gaming Lounge
+            </p>
+            <h2 className="font-display font-bold text-[#F5EDD8] text-2xl sm:text-3xl">
+              Get a gamer account
+            </h2>
+            <p className="mt-2 text-[#F5EDD8]/50 max-w-sm text-sm leading-relaxed">
+              Track your sessions, build up game time credit, and skip the queue. Free to join.
+            </p>
+          </div>
+          <Link
+            href="/gamer-signup"
+            className="shrink-0 rounded-lg bg-[#B8893B] text-[#1A1612] font-semibold px-7 py-3.5 text-sm hover:bg-[#B8893B]/90 transition-colors"
+          >
+            Join as a Gamer
+          </Link>
+        </div>
+      </section>
+
       {/* ── Image gallery placeholder ── */}
       <section className="bg-[#0A0806]">
         <div className="mx-auto max-w-6xl px-4 sm:px-6 py-16 sm:py-20">

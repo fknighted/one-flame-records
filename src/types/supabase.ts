@@ -731,13 +731,231 @@ export type Database = {
           },
         ]
       }
+      game_sessions: {
+        Row: {
+          created_at: string
+          duration_minutes: number | null
+          ended_at: string | null
+          id: string
+          member_id: string | null
+          notes: string | null
+          started_at: string
+          started_by: string | null
+          station: string | null
+          tab_item_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          duration_minutes?: number | null
+          ended_at?: string | null
+          id?: string
+          member_id?: string | null
+          notes?: string | null
+          started_at?: string
+          started_by?: string | null
+          station?: string | null
+          tab_item_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          duration_minutes?: number | null
+          ended_at?: string | null
+          id?: string
+          member_id?: string | null
+          notes?: string | null
+          started_at?: string
+          started_by?: string | null
+          station?: string | null
+          tab_item_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "game_sessions_member_id_fkey"
+            columns: ["member_id"]
+            isOneToOne: false
+            referencedRelation: "gamer_members"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "game_sessions_tab_item_id_fkey"
+            columns: ["tab_item_id"]
+            isOneToOne: false
+            referencedRelation: "pos_tab_items"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      gamer_members: {
+        Row: {
+          auth_user_id: string | null
+          created_at: string
+          display_name: string
+          email: string
+          id: string
+          minutes_balance: number
+          notes: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          auth_user_id?: string | null
+          created_at?: string
+          display_name: string
+          email: string
+          id?: string
+          minutes_balance?: number
+          notes?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          auth_user_id?: string | null
+          created_at?: string
+          display_name?: string
+          email?: string
+          id?: string
+          minutes_balance?: number
+          notes?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      pos_items: {
+        Row: {
+          category: string
+          created_at: string
+          description: string | null
+          id: string
+          is_active: boolean
+          name: string
+          price_cents: number
+          sort_order: number | null
+          updated_at: string
+        }
+        Insert: {
+          category?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          name: string
+          price_cents: number
+          sort_order?: number | null
+          updated_at?: string
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          name?: string
+          price_cents?: number
+          sort_order?: number | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      pos_tab_items: {
+        Row: {
+          created_at: string
+          id: string
+          name: string
+          note: string | null
+          pos_item_id: string | null
+          price_cents: number
+          quantity: number
+          tab_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name: string
+          note?: string | null
+          pos_item_id?: string | null
+          price_cents: number
+          quantity?: number
+          tab_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string
+          note?: string | null
+          pos_item_id?: string | null
+          price_cents?: number
+          quantity?: number
+          tab_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pos_tab_items_tab_id_fkey"
+            columns: ["tab_id"]
+            isOneToOne: false
+            referencedRelation: "pos_tabs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pos_tab_items_pos_item_id_fkey"
+            columns: ["pos_item_id"]
+            isOneToOne: false
+            referencedRelation: "pos_items"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      pos_tabs: {
+        Row: {
+          closed_at: string | null
+          closed_by: string | null
+          created_at: string
+          id: string
+          name: string
+          notes: string | null
+          opened_by: string | null
+          payment_method: string | null
+          status: string
+          total_cents: number
+          updated_at: string
+        }
+        Insert: {
+          closed_at?: string | null
+          closed_by?: string | null
+          created_at?: string
+          id?: string
+          name: string
+          notes?: string | null
+          opened_by?: string | null
+          payment_method?: string | null
+          status?: string
+          total_cents?: number
+          updated_at?: string
+        }
+        Update: {
+          closed_at?: string | null
+          closed_by?: string | null
+          created_at?: string
+          id?: string
+          name?: string
+          notes?: string | null
+          opened_by?: string | null
+          payment_method?: string | null
+          status?: string
+          total_cents?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
       current_artist_id: { Args: never; Returns: string }
+      current_gamer_member_id: { Args: never; Returns: string }
       is_admin: { Args: never; Returns: boolean }
+      is_bar_staff: { Args: never; Returns: boolean }
     }
     Enums: {
       [_ in never]: never

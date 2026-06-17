@@ -1,0 +1,146 @@
+"use client";
+
+import { useActionState } from "react";
+import Link from "next/link";
+import type { ActionState } from "@/app/admin/bar/items/actions";
+
+const CATEGORIES = [
+  { value: "drink",     label: "Drink" },
+  { value: "beverage",  label: "Beverage" },
+  { value: "food",      label: "Food" },
+  { value: "game_time", label: "Game Time" },
+];
+
+const INPUT = "w-full bg-bone/5 border border-bone/15 rounded px-3 py-2 text-sm text-bone placeholder:text-bone/30 focus:outline-none focus:border-ochre/60";
+const LABEL = "block text-xs text-bone/50 mb-1";
+
+type InitialValues = {
+  id?: string;
+  name?: string;
+  category?: string;
+  price_cents?: number;
+  description?: string;
+  sort_order?: number;
+  is_active?: boolean;
+};
+
+export default function MenuItemForm({
+  action,
+  initialValues = {},
+  mode,
+}: {
+  action: (state: ActionState, formData: FormData) => Promise<ActionState>;
+  initialValues?: InitialValues;
+  mode: "create" | "edit";
+}) {
+  const [state, formAction, pending] = useActionState(action, null);
+
+  const defaultPrice = initialValues.price_cents != null
+    ? (initialValues.price_cents / 100).toFixed(2)
+    : "";
+
+  return (
+    <form action={formAction} className="space-y-6">
+      {initialValues.id && <input type="hidden" name="id" value={initialValues.id} />}
+
+      {state?.error && (
+        <div className="bg-oxblood/20 border border-oxblood/50 rounded px-4 py-3 text-sm text-bone">
+          {state.error}
+        </div>
+      )}
+
+      <div>
+        <label className={LABEL}>Name *</label>
+        <input
+          name="name"
+          type="text"
+          required
+          defaultValue={initialValues.name ?? ""}
+          placeholder="e.g. Red Stripe, Jerk Chicken Wrap"
+          className={INPUT}
+        />
+      </div>
+
+      <div className="grid grid-cols-2 gap-4">
+        <div>
+          <label className={LABEL}>Category *</label>
+          <select
+            name="category"
+            required
+            defaultValue={initialValues.category ?? "drink"}
+            className={INPUT + " bg-ink"}
+          >
+            {CATEGORIES.map(({ value, label }) => (
+              <option key={value} value={value}>{label}</option>
+            ))}
+          </select>
+        </div>
+        <div>
+          <label className={LABEL}>Price (USD) *</label>
+          <input
+            name="price"
+            type="number"
+            step="0.01"
+            min="0"
+            required
+            defaultValue={defaultPrice}
+            placeholder="0.00"
+            className={INPUT}
+          />
+        </div>
+      </div>
+
+      <div>
+        <label className={LABEL}>Description (optional)</label>
+        <input
+          name="description"
+          type="text"
+          defaultValue={initialValues.description ?? ""}
+          placeholder="Short description shown on POS"
+          className={INPUT}
+        />
+      </div>
+
+      <div>
+        <label className={LABEL}>Sort order (optional — lower numbers appear first)</label>
+        <input
+          name="sort_order"
+          type="number"
+          min="0"
+          defaultValue={initialValues.sort_order ?? ""}
+          placeholder="0"
+          className={INPUT}
+        />
+      </div>
+
+      {mode === "edit" && (
+        <div>
+          <label className="flex items-center gap-2 cursor-pointer">
+            <input type="hidden" name="is_active" value="false" />
+            <input
+              name="is_active"
+              type="checkbox"
+              value="true"
+              defaultChecked={initialValues.is_active ?? true}
+              className="w-4 h-4 rounded border-bone/30 bg-bone/5 accent-ochre"
+            />
+            <span className="text-sm text-bone/70">Active (visible on POS)</span>
+          </label>
+        </div>
+      )}
+
+      <div className="flex items-center gap-4 pt-2">
+        <button
+          type="submit"
+          disabled={pending}
+          className="bg-ochre text-ink text-sm font-medium px-5 py-2 rounded hover:bg-ochre/90 disabled:opacity-50 transition-colors"
+        >
+          {pending ? "Saving…" : mode === "create" ? "Add Item" : "Save Changes"}
+        </button>
+        <Link href="/admin/bar/items" className="text-sm text-bone/40 hover:text-bone transition-colors">
+          Cancel
+        </Link>
+      </div>
+    </form>
+  );
+}
