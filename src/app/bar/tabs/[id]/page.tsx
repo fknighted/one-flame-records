@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { createServiceClient } from "@/lib/supabase/server";
+import { requireBarStaff } from "@/lib/auth";
 import MenuGrid from "@/components/MenuGrid";
 import TabControls from "./TabControls";
 
@@ -8,6 +9,7 @@ function fmt(cents: number) {
 }
 
 export default async function TabPage({ params }: { params: Promise<{ id: string }> }) {
+  await requireBarStaff();
   const { id } = await params;
   const supabase = createServiceClient();
 

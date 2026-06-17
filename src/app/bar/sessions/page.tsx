@@ -1,4 +1,5 @@
 import { createServiceClient } from "@/lib/supabase/server";
+import { requireBarStaff } from "@/lib/auth";
 import StartSessionForm from "./StartSessionForm";
 import EndSessionButton from "./EndSessionButton";
 
@@ -10,6 +11,7 @@ function elapsed(startedAt: string): string {
 }
 
 export default async function SessionsPage() {
+  await requireBarStaff();
   const supabase = createServiceClient();
 
   const [{ data: activeSessions }, { data: members }] = await Promise.all([

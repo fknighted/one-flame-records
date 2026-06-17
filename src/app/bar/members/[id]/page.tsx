@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { createServiceClient } from "@/lib/supabase/server";
+import { requireBarStaff } from "@/lib/auth";
 
 function fmt(minutes: number): string {
   if (minutes < 60) return `${minutes}m`;
@@ -8,6 +9,7 @@ function fmt(minutes: number): string {
 }
 
 export default async function BarMemberDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  await requireBarStaff();
   const { id } = await params;
   const supabase = createServiceClient();
 

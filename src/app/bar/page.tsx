@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { createServiceClient } from "@/lib/supabase/server";
+import { requireBarStaff } from "@/lib/auth";
 
 function fmt(cents: number) {
   return "$" + (cents / 100).toFixed(2);
@@ -13,6 +14,7 @@ function elapsed(createdAt: string): string {
 }
 
 export default async function BarDashboardPage() {
+  await requireBarStaff();
   const supabase = createServiceClient();
   const { data: openTabs } = await supabase
     .from("pos_tabs")

@@ -1,6 +1,8 @@
+import { requireBarStaff } from "@/lib/auth";
 import OpenTabForm from "./OpenTabForm";
 
-export default function NewTabPage() {
+export default async function NewTabPage() {
+  await requireBarStaff();
   return (
     <div className="max-w-sm mx-auto space-y-6">
       <div>

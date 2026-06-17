@@ -1,11 +1,17 @@
 import Link from "next/link";
 import { createServiceClient } from "@/lib/supabase/server";
+import { requireBarStaff } from "@/lib/auth";
+
+// Allowlist: letters, digits, spaces, @, ., - and _ cover all realistic names/emails
+const SAFE_SEARCH = /^[\w@.\-\s]{1,64}$/;
 
 export default async function BarMembersPage({
   searchParams,
 }: {
   searchParams: Promise<{ q?: string }>;
 }) {
+  await requireBarStaff();
+
   const { q } = await searchParams;
   const supabase = createServiceClient();
 
@@ -14,12 +20,10 @@ export default async function BarMembersPage({
     .select("id, display_name, email, status, minutes_balance")
     .order("display_name");
 
-  if (q) {
-    // Strip PostgREST reserved chars before interpolating into .or() filter string
-    const safe = q.replace(/[(),:*%]/g, "").slice(0, 100);
-    if (safe) {
-      query = query.or(`display_name.ilike.%${safe}%,email.ilike.%${safe}%`);
-    }
+  // Only apply search if input passes the allowlist — rejects PostgREST metacharacters
+  const safeTerm = q?.trim() ?? "";
+  if (safeTerm && SAFE_SEARCH.test(safeTerm)) {
+    query = query.or(`display_name.ilike.%${safeTerm}%,email.ilike.%${safeTerm}%`);
   }
 
   const { data: members } = await query.limit(50);
