@@ -6,17 +6,17 @@ This is the living state of the build. Update at the end of every session.
 
 ## Current state
 
-- **Phase:** 5 + Bar POS (new feature, spans sessions 28–29)
-- **Status:** Phases 1–4 complete. Phase 5 partially done (share toggle done). Bar POS + Gaming Membership fully built.
+- **Phase:** Bar POS launch + ongoing content
+- **Status:** Phases 1–5 complete. Bar POS + Gaming Membership built. Production content entry (artists, releases, cover art) is an ongoing admin task, not a code task.
 - **Last updated:** 2026-06-17
 
 ## Active focus
 
-Phase 5 remaining: content pass + mobile QA. Bar POS launch: apply migration, seed menu, invite bartender.
+Bar POS production launch — apply migration, seed menu items from admin, invite first bartender, run the core loop.
 
 ## Blockers
 
-- **Migration not yet applied to production** — `supabase/migrations/20260617000001_pos_and_gaming.sql` exists locally but must be pushed to the linked project: `npx supabase db push --linked`.
+- **Migration not yet applied to production** — `supabase/migrations/20260617000001_pos_and_gaming.sql` must be pushed: `npx supabase db push --linked`.
 - **TikTok auto-posting** — Make.com has no TikTok video upload module. Manual for now.
 - **Flames Lounge gallery** — Gallery grid still placeholder; swap with real photos when available.
 - **Campaign video generation gap** — Pieces with `video_mode = "generated"` produce a script but no `video_url`.
@@ -29,9 +29,10 @@ Phase 5 remaining: content pass + mobile QA. Bar POS launch: apply migration, se
 3. Invite first bartender at `/admin/bar/staff`
 4. Test core loop: open tab → add items → close tab as cash
 
-### Priority 2 — Phase 5 remaining tasks
-- Content pass — real copy on `/about`, fill out roster, cover art on releases
-- Mobile spot-check at 375px on a real device
+### Priority 2 — Content entry (ongoing, via admin)
+- Add artists with photos at `/admin/artists`
+- Add releases with cover art at `/admin/releases`
+- Publish first news post
 
 ## Phase progress
 
@@ -39,13 +40,20 @@ Phase 5 remaining: content pass + mobile QA. Bar POS launch: apply migration, se
 - [x] **Phase 2** — Public site _(complete)_
 - [x] **Phase 3** — QR onboarding + artist portal _(complete)_
 - [x] **Phase 4** — Video automation _(complete)_
-- [ ] **Phase 5** — Polish, hardening & content
+- [x] **Phase 5** — Polish, hardening & content _(complete)_
 
 ---
 
 ## Session log
 
 Append a new entry at the top of this section after every session. Date, summary, files touched, what's next. Keep it tight — full reasoning belongs in `DECISIONS.md`.
+
+### 2026-06-17 (session 30)
+
+**Did:** Phase 5 complete. (1) **Code review fixes on share toggle** — added `revalidatePath` for `/portal/videos` list, `/videos` public page, and `/artists` layout so all affected pages update after a visibility toggle; added explicit `artist_id` filter on UPDATE as belt-and-suspenders beyond RLS; normalised raw Postgres error to generic message; fixed stale `isPublic` prop with `useState` optimistic flip on submit + `useEffect` revert on error. (2) **Mobile QA** — bar POS tab page height now uses `dvh` with correct breakpoint calculations accounting for InkShell header (`h-16`/`h-20`) + bar layout padding (`p-4`/`p-6`/`p-8`); added `min-h-0` to tab items list and MenuGrid grid so `overflow-y-auto` actually triggers on mobile flex containers. Public pages audited — all responsive, no changes needed.
+**Touched:** `src/app/portal/videos/[job_id]/actions.ts`, `src/app/portal/videos/[job_id]/ShareToggle.tsx`, `src/app/bar/tabs/[id]/page.tsx`, `src/components/MenuGrid.tsx`
+**Decided:** Phase 5 "content pass" is an ongoing admin data-entry task (roster, releases, cover art), not a code task. Pages are all database-driven and will populate when content is entered via `/admin`.
+**Next:** `npx supabase db push --linked` → add menu items → invite bartender → test POS loop.
 
 ### 2026-06-17 (session 29 cont.)
 
