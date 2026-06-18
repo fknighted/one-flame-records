@@ -14,23 +14,27 @@ export async function toggleVideoPublic(
 
   const supabase = await createClient();
 
-  // Session client: RLS ensures the artist can only see/update their own jobs
   const { data: job, error: fetchError } = await supabase
     .from("video_jobs")
-    .select("id, is_public, status")
+    .select("id, is_public, status, artist_id")
     .eq("id", jobId)
     .single();
 
-  if (fetchError || !job) return { error: "Video not found." };
+  if (fetchError || !job || !job.artist_id) return { error: "Video not found." };
   if (job.status !== "complete") return { error: "Only completed videos can be shared." };
 
+  // Explicit artist_id filter as a belt-and-suspenders ownership check beyond RLS
   const { error: updateError } = await supabase
     .from("video_jobs")
     .update({ is_public: !job.is_public })
-    .eq("id", jobId);
+    .eq("id", jobId)
+    .eq("artist_id", job.artist_id);
 
-  if (updateError) return { error: `Failed to update: ${updateError.message}` };
+  if (updateError) return { error: "Could not update visibility." };
 
   revalidatePath(`/portal/videos/${jobId}`);
+  revalidatePath("/portal/videos");
+  revalidatePath("/videos");
+  revalidatePath("/artists", "layout");
   return null;
 }
