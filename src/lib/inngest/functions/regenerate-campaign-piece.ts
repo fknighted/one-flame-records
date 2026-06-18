@@ -84,9 +84,11 @@ Return one sentence only. No explanation, no punctuation at the end.`,
     });
 
     // ── Step 4: Generate piece content ───────────────────────────────────────
-    // Throws on any failure so Inngest retries the step; onFailure marks the piece "failed"
-    // after all retries are exhausted. Returns true on success to gate step 5.
-    const contentGenerated: boolean = await step.run("generate-content", async () => {
+    // Returns content fields; throws on any LLM/parse failure → Inngest retries this step.
+    // DB write is in step 5 so a Supabase failure won't re-run LLM calls on retry.
+    // Piece stays in 'generating' through the retry window; onFailure marks it 'failed'
+    // after all retries are exhausted.
+    const content = await step.run("generate-content", async () => {
       const supabase = createServiceClient();
 
       // ── News post ────────────────────────────────────────────────────────
@@ -119,14 +121,12 @@ Raw JSON only. No code fences.`,
         if (artStart === -1) throw new Error(`Claude returned no JSON for news article: ${artStripped.slice(0, 150)}`);
         const artJson = JSON.parse(artStripped.slice(artStart));
 
-        await supabase.from("content_pieces").update({
-          caption:      artJson.title ?? angle,
-          video_script: artJson.body ?? "",
-          hashtags:     [],
-          image_url:    null,
-          status:       "ready",
-        }).eq("id", pieceId);
-        return true;
+        return {
+          caption:      (artJson.title ?? angle) as string,
+          video_script: (artJson.body ?? null) as string | null,
+          hashtags:     [] as string[],
+          image_url:    null as string | null,
+        };
       }
 
       // ── Social post ──────────────────────────────────────────────────────
@@ -210,19 +210,20 @@ Format: Hook (first 3 seconds) / Body / CTA. Plain text, no JSON.`,
         }
       }
 
-      await supabase.from("content_pieces").update({
-        caption,
-        hashtags,
-        video_script,
-        image_url,
-        status: "ready",
-      }).eq("id", pieceId);
-
-      return true;
+      return { caption, video_script, hashtags, image_url };
     });
 
-    // ── Step 5: Kick off video generation if needed ──────────────────────────
-    if (piece.video_mode === "generated" && contentGenerated) {
+    // ── Step 5: Persist generated content ────────────────────────────────────
+    await step.run("save-content", async () => {
+      const supabase = createServiceClient();
+      await supabase.from("content_pieces").update({
+        ...content,
+        status: "ready",
+      }).eq("id", pieceId);
+    });
+
+    // ── Step 6: Kick off video generation if needed ──────────────────────────
+    if (piece.video_mode === "generated") {
       await step.sendEvent("queue-regen-video", {
         name: "campaign/video.requested" as const,
         data: { pieceId },

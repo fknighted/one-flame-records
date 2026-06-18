@@ -3,25 +3,24 @@
 import { useActionState, useState } from "react";
 import { toggleVideoPublic } from "./actions";
 
-export default function ShareToggle({ jobId, isPublic }: { jobId: string; isPublic: boolean }) {
+type Props = { jobId: string; isPublic: boolean };
+
+// key remounts inner when isPublic changes, resetting useActionState and clearing stale errors
+export default function ShareToggle(props: Props) {
+  return <ShareToggleInner key={String(props.isPublic)} {...props} />;
+}
+
+function ShareToggleInner({ jobId, isPublic }: Props) {
   const [state, formAction, pending] = useActionState(toggleVideoPublic, null);
   const [optimistic, setOptimistic] = useState(isPublic);
-  const [prevIsPublic, setPrevIsPublic] = useState(isPublic);
 
-  // Render-time sync: when the server re-renders with a new prop, pick it up without useEffect
-  if (prevIsPublic !== isPublic) {
-    setPrevIsPublic(isPublic);
-    setOptimistic(isPublic);
-  }
-
-  // While pending: show optimistic regardless of prior error state.
-  // After error: revert to server truth. Otherwise: show optimistic.
+  // While pending: show optimistic. After error: revert to server truth. Otherwise: show optimistic.
   const effective = pending ? optimistic : (state?.error ? isPublic : optimistic);
 
   return (
     <form
       action={formAction}
-      onSubmit={() => setOptimistic((v) => !v)}
+      onSubmit={() => setOptimistic(!isPublic)}
       className="flex flex-col gap-1"
     >
       <input type="hidden" name="job_id" value={jobId} />
