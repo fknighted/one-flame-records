@@ -14,13 +14,14 @@ export default function ShareToggle({ jobId, isPublic }: { jobId: string; isPubl
     setOptimistic(isPublic);
   }
 
-  // On error show the server truth; otherwise show the optimistically-flipped value
-  const effective = state?.error ? isPublic : optimistic;
+  // While pending: show optimistic regardless of prior error state.
+  // After error: revert to server truth. Otherwise: show optimistic.
+  const effective = pending ? optimistic : (state?.error ? isPublic : optimistic);
 
   return (
     <form
       action={formAction}
-      onSubmit={() => setEffective((v) => !v)}
+      onSubmit={() => setOptimistic((v) => !v)}
       className="flex flex-col gap-1"
     >
       <input type="hidden" name="job_id" value={jobId} />
