@@ -73,7 +73,7 @@ export default function MenuGrid({ items, tabId }: Props) {
       </div>
 
       {/* Grid */}
-      <div className="grid grid-cols-2 gap-2 mt-3 overflow-y-auto">
+      <div className="flex-1 min-h-0 grid grid-cols-2 gap-2 mt-3 overflow-y-auto">
         {visible.length === 0 ? (
           <p className="col-span-2 text-center text-bone/30 text-sm py-8">No items in this category</p>
         ) : (

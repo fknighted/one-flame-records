@@ -25,7 +25,7 @@ export default async function TabPage({ params }: { params: Promise<{ id: string
   const isOpen = tab.status === "open";
 
   return (
-    <div className="flex flex-col h-[calc(100vh-4rem)] gap-4 max-w-2xl mx-auto lg:max-w-none">
+    <div className="flex flex-col h-[calc(100dvh-6rem)] sm:h-[calc(100dvh-8rem)] lg:h-[calc(100dvh-9rem)] gap-4 max-w-2xl mx-auto lg:max-w-none">
       {/* Header */}
       <div className="flex items-center justify-between shrink-0">
         <div>
@@ -50,7 +50,7 @@ export default async function TabPage({ params }: { params: Promise<{ id: string
             Order ({tabItems?.length ?? 0} items)
           </h2>
 
-          <div className="flex-1 overflow-y-auto space-y-1.5">
+          <div className="flex-1 min-h-0 overflow-y-auto space-y-1.5">
             {!tabItems?.length ? (
               <p className="text-bone/25 text-sm text-center py-8">No items yet — tap menu to add</p>
             ) : (
