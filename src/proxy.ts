@@ -14,8 +14,10 @@ function serviceClient() {
 function roleHome(role: string | undefined): string {
   if (role === "admin")      return "/admin";
   if (role === "bartender")  return "/bar";
+  if (role === "artist")     return "/portal";
   if (role === "gamer")      return "/gamer";
-  return "/portal";
+  // No profiles row or unrecognised role — send to login to break any redirect loop
+  return "/login";
 }
 
 export async function proxy(request: NextRequest) {
@@ -25,7 +27,8 @@ export async function proxy(request: NextRequest) {
   const isAdminRoute  = pathname.startsWith("/admin");
   const isPortalRoute = pathname.startsWith("/portal");
   const isBarRoute    = pathname.startsWith("/bar");
-  const isGamerRoute  = pathname.startsWith("/gamer");
+  // Use exact match + prefix-with-slash to avoid matching /gamer-signup (public page)
+  const isGamerRoute  = pathname === "/gamer" || pathname.startsWith("/gamer/");
 
   if (!isAdminRoute && !isPortalRoute && !isBarRoute && !isGamerRoute) {
     return supabaseResponse;

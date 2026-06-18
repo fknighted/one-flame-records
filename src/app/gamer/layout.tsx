@@ -9,21 +9,14 @@ export default async function GamerLayout({ children }: { children: React.ReactN
   if (!user) redirect("/login");
 
   const serviceClient = createServiceClient();
-  const { data: profile } = await serviceClient
-    .from("profiles")
-    .select("role")
-    .eq("id", user.id)
-    .single();
+  const [{ data: profile }, { data: member }] = await Promise.all([
+    serviceClient.from("profiles").select("role").eq("id", user.id).single(),
+    serviceClient.from("gamer_members").select("display_name").eq("auth_user_id", user.id).single(),
+  ]);
 
   if (!profile || (profile.role !== "gamer" && profile.role !== "admin")) {
     redirect("/login");
   }
-
-  const { data: member } = await serviceClient
-    .from("gamer_members")
-    .select("display_name")
-    .eq("auth_user_id", user.id)
-    .single();
 
   const displayName = member?.display_name ?? user.email ?? "Gamer";
 

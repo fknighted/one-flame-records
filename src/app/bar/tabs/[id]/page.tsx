@@ -3,6 +3,7 @@ import { createServiceClient } from "@/lib/supabase/server";
 import { requireBarStaff } from "@/lib/auth";
 import MenuGrid from "@/components/MenuGrid";
 import TabControls from "./TabControls";
+import RemoveItemButton from "./RemoveItemButton";
 
 function fmt(cents: number) {
   return "$" + (cents / 100).toFixed(2);
@@ -107,34 +108,7 @@ function TabItem({
       </div>
       <span className="text-bone/50 text-xs shrink-0">×{item.quantity}</span>
       <span className="text-ochre font-mono text-sm shrink-0">{fmt(item.price_cents * item.quantity)}</span>
-      {isOpen && <RemoveButton tabItemId={item.id} tabId={tabId} />}
+      {isOpen && <RemoveItemButton tabItemId={item.id} tabId={tabId} />}
     </div>
-  );
-}
-
-function RemoveButton({ tabItemId, tabId }: { tabItemId: string; tabId: string }) {
-  return (
-    <form>
-      <input type="hidden" name="tab_item_id" value={tabItemId} />
-      <input type="hidden" name="tab_id" value={tabId} />
-      <RemoveSubmit />
-    </form>
-  );
-}
-
-function RemoveSubmit() {
-  return (
-    <button
-      type="submit"
-      formAction={async (fd: FormData) => {
-        "use server";
-        const { removeTabItem } = await import("./actions");
-        await removeTabItem(null, fd);
-      }}
-      className="text-bone/20 hover:text-red-400 transition-colors text-lg leading-none shrink-0 w-6 h-6 flex items-center justify-center"
-      aria-label="Remove item"
-    >
-      ×
-    </button>
   );
 }

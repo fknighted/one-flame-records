@@ -83,11 +83,13 @@ export async function removeTabItem(
 
   if (deleteError) return { error: `Failed to remove item: ${deleteError.message}` };
 
-  await supabase
+  const { error: totalError } = await supabase
     .from("pos_tabs")
     .update({ total_cents: Math.max(0, tabData.total_cents - tabItem.price_cents) })
     .eq("id", tabId)
     .eq("status", "open");
+
+  if (totalError) return { error: `Item removed but total not updated: ${totalError.message}` };
 
   revalidatePath(`/bar/tabs/${tabId}`);
   return null;

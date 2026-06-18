@@ -76,7 +76,11 @@ export async function endSession(
 
     if (member) {
       const newBalance = Math.max(0, member.minutes_balance - durationMinutes);
-      await supabase.from("gamer_members").update({ minutes_balance: newBalance }).eq("id", gs.member_id);
+      const { error: balanceError } = await supabase
+        .from("gamer_members")
+        .update({ minutes_balance: newBalance })
+        .eq("id", gs.member_id);
+      if (balanceError) return { error: `Session ended but balance not deducted: ${balanceError.message}` };
     }
   }
 
