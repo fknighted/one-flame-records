@@ -210,8 +210,9 @@ Return JSON with two keys: "caption" (the post text, no hashtags) and "hashtags"
             const hashtags: string[] = captionJson.hashtags ?? [];
 
             // ── Video script (if needed) ──
+            // "generated" pieces also need a script — generate-campaign-video reads it to make scenes
             let video_script: string | null = null;
-            if (piece.video_mode === "script") {
+            if (piece.video_mode === "script" || piece.video_mode === "generated") {
               const scriptMsg = await getAnthropic().messages.create({
                 model: "claude-sonnet-4-6",
                 max_tokens: 512,
@@ -287,5 +288,22 @@ Format: Hook (first 3 seconds) / Body / CTA. Plain text, no JSON.`,
       const allFailed = pieces?.every((p) => p.status === "failed") ?? false;
       await supabase.from("content_campaigns").update({ status: allFailed ? "failed" : "review" }).eq("id", campaignId);
     });
+
+    // ── Step 6: Kick off AI video generation for "generated" pieces ──────────
+    const videoGenIds = plan
+      .map((p, i) => ({ mode: p.video_mode, id: pieceIds[i] }))
+      .filter(({ mode }) => mode === "generated")
+      .map(({ id }) => id)
+      .filter((id): id is string => Boolean(id));
+
+    if (videoGenIds.length > 0) {
+      await step.sendEvent(
+        "queue-campaign-videos",
+        videoGenIds.map((pieceId) => ({
+          name: "campaign/video.requested" as const,
+          data: { pieceId },
+        }))
+      );
+    }
   }
 );
