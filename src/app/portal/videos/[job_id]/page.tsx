@@ -3,6 +3,7 @@ import { notFound, redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { createServiceClient } from "@/lib/supabase/server";
 import type { Tables } from "@/types/supabase";
+import ShareToggle from "./ShareToggle";
 
 type VideoJob = Tables<"video_jobs"> & {
   assets: { title: string; kind: string; size_bytes: number; duration_seconds: number | null } | null;
@@ -357,6 +358,16 @@ export default async function VideoJobDetailPage({ params }: Props) {
               )}
             </div>
           </div>
+
+          {/* Share toggle — completed videos only */}
+          {ds === "done" && (
+            <div className="border border-bone/10 rounded-lg p-4">
+              <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-bone/40 mb-3">
+                Visibility
+              </p>
+              <ShareToggle jobId={job.id} isPublic={job.is_public ?? false} />
+            </div>
+          )}
         </div>
       </div>
     </div>
