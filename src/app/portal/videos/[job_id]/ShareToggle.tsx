@@ -1,15 +1,21 @@
 "use client";
 
-import { useActionState, useState, useEffect } from "react";
+import { useActionState, useState } from "react";
 import { toggleVideoPublic } from "./actions";
 
 export default function ShareToggle({ jobId, isPublic }: { jobId: string; isPublic: boolean }) {
   const [state, formAction, pending] = useActionState(toggleVideoPublic, null);
-  // Optimistic local state: flip immediately on submit, revert on error, sync on re-render
-  const [effective, setEffective] = useState(isPublic);
+  const [optimistic, setOptimistic] = useState(isPublic);
+  const [prevIsPublic, setPrevIsPublic] = useState(isPublic);
 
-  useEffect(() => { setEffective(isPublic); }, [isPublic]);
-  useEffect(() => { if (state?.error) setEffective(isPublic); }, [state?.error, isPublic]);
+  // Render-time sync: when the server re-renders with a new prop, pick it up without useEffect
+  if (prevIsPublic !== isPublic) {
+    setPrevIsPublic(isPublic);
+    setOptimistic(isPublic);
+  }
+
+  // On error show the server truth; otherwise show the optimistically-flipped value
+  const effective = state?.error ? isPublic : optimistic;
 
   return (
     <form

@@ -48,6 +48,13 @@ Bar POS production launch — apply migration, seed menu items from admin, invit
 
 Append a new entry at the top of this section after every session. Date, summary, files touched, what's next. Keep it tight — full reasoning belongs in `DECISIONS.md`.
 
+### 2026-06-17 (session 32)
+
+**Did:** (1) Wrote `regenerateCampaignPiece` Inngest function (`src/lib/inngest/functions/regenerate-campaign-piece.ts`) to handle the previously unregistered `campaign/regenerate-piece.requested` event. Since `angle` and `image_needed` are ephemeral plan outputs not stored in `content_pieces`, the handler derives a fresh creative angle via Claude (Step 3: "derive-angle") and infers `image_needed` from `content_type` (true for `image_post`/`story`, false otherwise). Runs full content pipeline: caption+hashtags, video script (if `video_mode` is "script" or "generated"), AI image (if `image_needed`). Fires `campaign/video.requested` after completion if `video_mode === "generated"`. Registered in `src/app/api/inngest/route.ts`. (2) Fixed lint error in `ShareToggle.tsx` — replaced two `useEffect` setState calls (which triggered cascade-render lint rule) with render-time prop sync using `prevIsPublic` state pattern + derived `effective` value when error is present.
+**Touched:** `src/lib/inngest/functions/regenerate-campaign-piece.ts` (new), `src/app/api/inngest/route.ts`, `src/app/portal/videos/[job_id]/ShareToggle.tsx`
+**Decided:** `regenerateCampaignPiece` generates a fresh angle rather than reading a stored one (angle was never persisted to DB). `image_needed` inferred from `content_type` — `image_post`/`story` need images; video and text types do not.
+**Next:** Bar POS operations: add menu items at `/admin/bar/items`, invite bartender at `/admin/bar/staff`, test core POS loop.
+
 ### 2026-06-17 (session 31)
 
 **Did:** (1) Confirmed POS migration already applied to production (`Remote database is up to date`). (2) Fixed campaign video generation gap — `generate-campaign.ts` now generates a Claude video script for `video_mode === "generated"` pieces (same as "script" mode; required because `generate-campaign-video` reads the script to make scene prompts). After `mark-review`, fires `campaign/video.requested` events in batch for all generated-mode piece IDs to trigger the `generate-campaign-video` Inngest function. Existing stale pieces can be re-triggered via `triggerCampaignVideo` from the admin campaign detail page.
