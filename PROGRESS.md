@@ -7,12 +7,12 @@ This is the living state of the build. Update at the end of every session.
 ## Current state
 
 - **Phase:** 5 + Bar POS (new feature, spans sessions 28–29)
-- **Status:** Phases 1–4 complete. Phase 5 partially done. Bar POS + Gaming Membership fully built (DB, auth, admin, bartender POS, gamer portal, public signup).
+- **Status:** Phases 1–4 complete. Phase 5 partially done (share toggle done). Bar POS + Gaming Membership fully built.
 - **Last updated:** 2026-06-17
 
 ## Active focus
 
-Bar POS go-live — apply migration to production Supabase, then seed menu items from the admin.
+Phase 5 remaining: content pass + mobile QA. Bar POS launch: apply migration, seed menu, invite bartender.
 
 ## Blockers
 
@@ -30,7 +30,6 @@ Bar POS go-live — apply migration to production Supabase, then seed menu items
 4. Test core loop: open tab → add items → close tab as cash
 
 ### Priority 2 — Phase 5 remaining tasks
-- Portal video public share toggle
 - Content pass — real copy on `/about`, fill out roster, cover art on releases
 - Mobile spot-check at 375px on a real device
 
@@ -47,6 +46,12 @@ Bar POS go-live — apply migration to production Supabase, then seed menu items
 ## Session log
 
 Append a new entry at the top of this section after every session. Date, summary, files touched, what's next. Keep it tight — full reasoning belongs in `DECISIONS.md`.
+
+### 2026-06-17 (session 29 cont.)
+
+**Did:** Phase 5 Task 1 — portal video public/private share toggle. Added `toggleVideoPublic` Server Action (`src/app/portal/videos/[job_id]/actions.ts`) using session client (RLS enforces artist can only update own jobs); guards status === "complete" before toggling. `ShareToggle` client component (`ShareToggle.tsx`) uses `useActionState`, renders green-pill if public / gray if private. Wired into the video detail page right column sidebar inside a "Visibility" card, only shown for completed jobs.
+**Touched:** `src/app/portal/videos/[job_id]/actions.ts` (new), `src/app/portal/videos/[job_id]/ShareToggle.tsx` (new), `src/app/portal/videos/[job_id]/page.tsx`
+**Next:** Content pass + mobile QA (Phase 5 remaining). Bar POS launch: `npx supabase db push --linked` → add menu items → invite bartender.
 
 ### 2026-06-17 (sessions 28–29)
 
