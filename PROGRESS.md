@@ -19,7 +19,7 @@ Bar POS production launch — apply migration, seed menu items from admin, invit
 - **Migration not yet applied to production** — `supabase/migrations/20260617000001_pos_and_gaming.sql` must be pushed: `npx supabase db push --linked`.
 - **TikTok auto-posting** — Make.com has no TikTok video upload module. Manual for now.
 - **Flames Lounge gallery** — Gallery grid still placeholder; swap with real photos when available.
-- **Campaign video generation gap** — Pieces with `video_mode = "generated"` produce a script but no `video_url`.
+- ~~**Campaign video generation gap**~~ — Fixed: generate-campaign now writes scripts for generated-mode pieces and fires `campaign/video.requested` in batch after all pieces complete.
 
 ## Next session
 
@@ -47,6 +47,13 @@ Bar POS production launch — apply migration, seed menu items from admin, invit
 ## Session log
 
 Append a new entry at the top of this section after every session. Date, summary, files touched, what's next. Keep it tight — full reasoning belongs in `DECISIONS.md`.
+
+### 2026-06-17 (session 31)
+
+**Did:** (1) Confirmed POS migration already applied to production (`Remote database is up to date`). (2) Fixed campaign video generation gap — `generate-campaign.ts` now generates a Claude video script for `video_mode === "generated"` pieces (same as "script" mode; required because `generate-campaign-video` reads the script to make scene prompts). After `mark-review`, fires `campaign/video.requested` events in batch for all generated-mode piece IDs to trigger the `generate-campaign-video` Inngest function. Existing stale pieces can be re-triggered via `triggerCampaignVideo` from the admin campaign detail page.
+**Touched:** `src/lib/inngest/functions/generate-campaign.ts`
+**Decided:** Cleared the campaign video generation gap blocker. Stale pieces need manual admin re-trigger.
+**Next:** Bar POS operations: add menu items at `/admin/bar/items`, invite bartender at `/admin/bar/staff`, test core POS loop.
 
 ### 2026-06-17 (session 30)
 
