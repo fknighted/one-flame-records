@@ -32,7 +32,7 @@ export default async function BarDashboardPage() {
 
       {/* Header */}
       <div className="flex items-center justify-between">
-        <h1 className="font-display font-bold text-bone text-2xl">Active Tabs</h1>
+        <h1 className="font-display font-bold text-bone text-2xl">Bar Tabs</h1>
         <Link
           href="/bar/tabs/new"
           className="bg-ochre text-ink text-sm font-semibold px-4 py-2.5 rounded-lg hover:bg-ochre/90 transition-colors"

@@ -72,7 +72,7 @@ const ADMIN_NAV: NavGroup[] = [
 
 const BAR_NAV: NavGroup[] = [
   {
-    items: [{ href: "/bar", label: "Active Tabs" }],
+    items: [{ href: "/bar", label: "Bar Tabs" }],
   },
   {
     label: "Gaming",
