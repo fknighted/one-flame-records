@@ -9,6 +9,8 @@ A web platform for One Flame Records, a Jamaican record label based in Montego B
 1. **The public** — discover the label, artists, releases, and videos via the public site (oneflamerecords.com).
 2. **Signed artists** — log in to a portal to manage their profile, upload demos and instrumentals, and request automated music videos.
 3. **The label (admin)** — manage artists, releases, videos, campaigns, news, and approve new signups via QR application.
+4. **Bartenders** — log in to `/bar` to run the Flames Lounge POS (tabs, menu items, game sessions). Artists can also be bartenders via `profiles.is_bartender = true` flag.
+5. **Gamers** — log in to `/gamer` to view their Flames Lounge gaming membership, balance, and session history.
 
 ## Stack
 
@@ -44,9 +46,11 @@ Source:
 ```
 src/
 ├── app/
-│   ├── (public)/      ← cream-theme public site (home, artists, releases, videos, news, about, contact, signup)
-│   ├── admin/         ← ink-theme label admin (artists, releases, videos, news, campaigns, applications, jobs, AI studio)
+│   ├── (public)/      ← cream-theme public site (home, artists, releases, videos, news, about, contact, signup, flames-lounge, gamer-signup)
+│   ├── admin/         ← ink-theme label admin (artists, releases, videos, news, campaigns, applications, jobs, AI studio, bar/*)
 │   ├── portal/        ← ink-theme artist portal (profile, assets, releases, videos)
+│   ├── bar/           ← ink-theme bartender POS (tabs, inventory, sessions, members)
+│   ├── gamer/         ← ink-theme gamer portal (dashboard, session history)
 │   ├── login/         ← shared login page
 │   ├── auth/          ← callback, portal-invite, set-password pages
 │   └── api/inngest/   ← Inngest webhook route handler
@@ -58,7 +62,8 @@ src/
 │   ├── social/        ← meta.ts, tiktok.ts (fire Make.com webhook, do not call platform APIs directly)
 │   ├── audio/         ← analyze.ts, transcribe.ts
 │   ├── email/         ← send.ts + templates/
-│   ├── auth.ts        ← server-side role helper
+│   ├── bar/           ← pos.ts (shared bar utilities: formatCents, jamaicaMidnight, CATEGORY_LABELS, etc.)
+│   ├── auth.ts        ← server-side role helpers (requireAdmin, requireBarStaff)
 │   └── spotify.ts
 ├── proxy.ts           ← Next.js middleware — route protection + role check
 └── types/supabase.ts  ← generated DB types
@@ -112,6 +117,17 @@ export type ActionState = { error: string } | null;
 ```
 
 Forms use `useActionState` for inline error display. Server Actions have a 10 MB body size limit (set in `next.config.ts`) to support photo/cover uploads.
+
+### Bar POS
+
+The Flames Lounge POS lives at `/bar` (bartenders) and `/admin/bar/*` (label admin). Key patterns:
+
+- **Prices are in cents** — `price_cents` is JMD × 100 (e.g. $200 JMD = `20000`).
+- **Jamaica timezone** — all "today" queries must use `jamaicaMidnight()` from `src/lib/bar/pos.ts`. Jamaica is UTC-5 year-round (no DST); midnight Jamaica = 05:00 UTC. Never use `new Date().setHours(0,0,0,0)` for bar queries (that gives UTC midnight).
+- **Time display** — use `jamaicaTime()` / `jamaicaDateTime()` from `src/lib/bar/pos.ts` for all bar timestamps.
+- **is_bartender flag** — artists can hold both portal and bar access. The proxy and `requireBarStaff()` accept `is_bartender = true` alongside `role = 'bartender'`. Grant via Admin → Bar → Staff → "Promote Existing Artist". Revoke via the same page (sets flag to `false`, does not ban the artist).
+- **Shared bar utilities** (`src/lib/bar/pos.ts`) — `formatCents`, `jamaicaMidnight`, `jamaicaTime`, `jamaicaDateTime`, `CATEGORY_LABELS`, `CATEGORY_ORDER`. All bar pages import from here; never duplicate these.
+- **Categories** — `drink`, `beverage`, `food`, `snack`, `game_time`. The `pos_items_category_check` constraint must be updated in a migration before adding new categories.
 
 ### Inngest pipeline
 
@@ -192,11 +208,21 @@ Full list in `.env.example`.
 - `KIE_API_KEY` — default video model provider (kie.ai)
 - `DEFAULT_VIDEO_MODEL` — `kie` | `kling` | `higgsfield` | `runway` | `pika`
 
+## Roles
+
+| Role | Home route | Access |
+|------|-----------|--------|
+| `admin` | `/admin` | Everything |
+| `artist` | `/portal` | Artist portal only |
+| `bartender` | `/bar` | Bar POS only |
+| `gamer` | `/gamer` | Gamer portal only |
+| `artist` + `is_bartender=true` | `/portal` | Artist portal + bar POS |
+
+`roleHome()` in `src/proxy.ts` maps roles to their home route. `requireBarStaff()` in `src/lib/auth.ts` accepts admin, bartender, or is_bartender flag.
+
 ## Current phase
 
-Phases 1–4 and 6 are complete. Phase 5 (polish + hardening) is in progress — remaining tasks are portal video share toggle, content pass, and mobile QA. See `PROGRESS.md` for live status and blockers.
-
-Do not start work on a later phase before the current one's acceptance criteria are met.
+Phases 1–5 and the Bar POS are complete and operational. Next: first live bar session (open real tab, close as cash). Content entry (artists, releases, news) is ongoing via admin. See `PROGRESS.md` for live status.
 
 ## End of session checklist
 

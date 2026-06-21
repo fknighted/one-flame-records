@@ -128,7 +128,7 @@ export default async function AdminJobsPage() {
       </div>
 
       {/* Stats row */}
-      <div className="grid grid-cols-4 gap-4 mb-8">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
         {stats.map(({ label, value }) => (
           <div key={label} className="rounded-lg border border-bone/10 p-4">
             <p className="text-xs text-bone/40 uppercase tracking-wider mb-1">{label}</p>
@@ -143,8 +143,8 @@ export default async function AdminJobsPage() {
           <p className="text-bone/40 text-sm">No video jobs yet.</p>
         </div>
       ) : (
-        <div className="rounded-lg border border-bone/10 overflow-hidden">
-          <table className="w-full text-sm">
+        <div className="rounded-lg border border-bone/10 overflow-x-auto">
+          <table className="w-full min-w-[720px] text-sm">
             <thead>
               <tr className="border-b border-bone/10 bg-bone/5">
                 <th className="text-left px-4 py-3 text-bone/40 font-medium text-xs uppercase tracking-wider">Artist</th>

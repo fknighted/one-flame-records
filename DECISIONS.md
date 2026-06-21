@@ -403,6 +403,35 @@ Format for each entry:
 
 ---
 
+## 2026-06-21 — is_bartender boolean flag for artist dual-access (portal + bar)
+
+**Context:** A One Flame artist who also works the bar needs both `/portal` (artist) and `/bar` (bartender) access simultaneously. The existing `profiles.role` column is single-valued — setting `role = 'bartender'` would remove portal access.
+
+**Decision:** Add `is_bartender BOOLEAN DEFAULT FALSE` to `profiles`. The proxy checks `role === 'bartender' || is_bartender === true` for bar routes. `requireBarStaff()` does the same server-side. The artist's primary `role` stays `'artist'`, preserving portal access. Admins promote via `/admin/bar/staff` → "Promote Existing Artist" (email lookup + flag flip). Revoking just sets the flag back to `false` — the artist account is never banned.
+
+**Alternatives considered:**
+- _Change role to 'bartender' when on bar shift, revert after._ Rejected: requires manual toggling and loses portal access during the shift.
+- _Junction table (`user_extra_roles`)._ Rejected: overkill for a single extra permission on a small user base; adds a join to every auth check.
+- _Add 'artist-bartender' as a distinct role._ Rejected: proliferates roles unnecessarily and means duplicating all portal RLS policies for this composite role.
+
+**Consequences:** `is_bar_staff()` Postgres function still returns true only for `role = 'bartender'` — it is not updated. Bar POS RLS policies enforce via the DB helper; the proxy and `requireBarStaff()` enforce at the app layer with the `is_bartender` flag. If RLS-level bar access for `is_bartender` users is ever needed (e.g. direct API access), the `is_bar_staff()` helper would need updating.
+
+---
+
+## 2026-06-21 — Jamaica midnight as 05:00 UTC for all "today" bar queries
+
+**Context:** Vercel servers run in UTC. All "today" bar queries used `new Date().setHours(0,0,0,0)` (UTC midnight = 7pm Jamaica previous day) or `new Date(new Date().setHours(0,0,0,0)).toISOString()`. This caused tabs from the evening shift to be excluded from "today" and tabs from the morning to be double-counted.
+
+**Decision:** `jamaicaMidnight(daysAgo = 0)` in `src/lib/bar/pos.ts` computes Jamaica midnight as 05:00 UTC (Jamaica is UTC-5 year-round, no DST). If the current UTC hour is < 5, we're still in Jamaica's previous calendar day, so the function subtracts one extra UTC day before setting `setUTCHours(5, 0, 0, 0)`. All time display uses `jamaicaTime()` / `jamaicaDateTime()` with `timeZone: 'America/Jamaica'`.
+
+**Alternatives considered:**
+- _Store times in Jamaica local time._ Rejected: Postgres/Supabase timestamps are always UTC; converting at write time is fragile across DST-aware regions.
+- _`Intl.DateTimeFormat` to derive midnight._ More correct but more verbose; the UTC-5 offset is stable for Jamaica (no DST).
+
+**Consequences:** All bar queries must use `jamaicaMidnight()` from the shared lib. Never use `new Date().setHours(0,0,0,0)` or `new Date().toISOString().slice(0, 10)` for bar date boundaries.
+
+---
+
 ## 2026-06-17 — gamer_members row created at invite time, not on first login
 
 **Context:** When a bartender (or admin) invites a gamer, they may want to pre-load the member's balance or add notes before the gamer has ever logged in. The Supabase invite flow creates the `auth.users` row immediately but the `profiles` trigger creates a bare `profiles` row — there is no `gamer_members` row until something creates it.

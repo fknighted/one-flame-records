@@ -1,7 +1,8 @@
 import InviteBartenderForm from "./InviteBartenderForm";
 import PromoteBartenderForm from "./PromoteBartenderForm";
+import RevokeBarAccessButton from "./RevokeBarAccessButton";
+import DeactivateButton from "./DeactivateButton";
 import { createServiceClient } from "@/lib/supabase/server";
-import { deactivateBartender, revokeBartenderFlag } from "./actions";
 
 export default async function BarStaffPage() {
   const supabase = createServiceClient();
@@ -62,29 +63,9 @@ export default async function BarStaffPage() {
                 </div>
 
                 {b.isDualAccess ? (
-                  <form action={revokeBartenderFlag.bind(null, b.id)}>
-                    <button
-                      type="submit"
-                      className="text-xs text-oxblood/50 hover:text-oxblood transition-colors"
-                      onClick={(e) => {
-                        if (!confirm(`Revoke bar access for ${b.email}?`)) e.preventDefault();
-                      }}
-                    >
-                      Revoke Bar Access
-                    </button>
-                  </form>
+                  <RevokeBarAccessButton userId={b.id} email={b.email} />
                 ) : !b.banned ? (
-                  <form action={deactivateBartender.bind(null, b.id)}>
-                    <button
-                      type="submit"
-                      className="text-xs text-oxblood/50 hover:text-oxblood transition-colors"
-                      onClick={(e) => {
-                        if (!confirm(`Deactivate ${b.email}?`)) e.preventDefault();
-                      }}
-                    >
-                      Deactivate
-                    </button>
-                  </form>
+                  <DeactivateButton userId={b.id} email={b.email} />
                 ) : null}
               </div>
             ))}

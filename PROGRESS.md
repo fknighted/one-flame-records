@@ -6,28 +6,25 @@ This is the living state of the build. Update at the end of every session.
 
 ## Current state
 
-- **Phase:** Bar POS launch + ongoing content
-- **Status:** Phases 1–5 complete. Bar POS + Gaming Membership built. Production content entry (artists, releases, cover art) is an ongoing admin task, not a code task.
-- **Last updated:** 2026-06-17
+- **Phase:** Bar POS operational + ongoing content
+- **Status:** Phases 1–5 complete. Bar POS fully built, all migrations applied to production, menu items seeded, dual-access bartender system live.
+- **Last updated:** 2026-06-21
 
 ## Active focus
 
-Bar POS production launch — apply migration, seed menu items from admin, invite first bartender, run the core loop.
+First real POS session — grant an artist bar access, open first tab, run the core loop.
 
 ## Blockers
 
-- **Migration not yet applied to production** — `supabase/migrations/20260617000001_pos_and_gaming.sql` must be pushed: `npx supabase db push --linked`.
 - **TikTok auto-posting** — Make.com has no TikTok video upload module. Manual for now.
 - **Flames Lounge gallery** — Gallery grid still placeholder; swap with real photos when available.
-- ~~**Campaign video generation gap**~~ — Fixed: generate-campaign now writes scripts for generated-mode pieces and fires `campaign/video.requested` in batch after all pieces complete.
 
 ## Next session
 
-### Priority 1 — Bar POS production launch
-1. `npx supabase db push --linked` — apply migration
-2. Add menu items at `/admin/bar/items`
-3. Invite first bartender at `/admin/bar/staff`
-4. Test core loop: open tab → add items → close tab as cash
+### Priority 1 — First live bar POS run
+1. Admin → Bar → Staff → "Promote Existing Artist" → enter artist's email → grant bar access
+2. Have that artist log in to `/bar`, open a tab, add items, close as cash
+3. Verify `/admin/bar` shows correct sales totals in Jamaica timezone
 
 ### Priority 2 — Content entry (ongoing, via admin)
 - Add artists with photos at `/admin/artists`
@@ -47,6 +44,14 @@ Bar POS production launch — apply migration, seed menu items from admin, invit
 ## Session log
 
 Append a new entry at the top of this section after every session. Date, summary, files touched, what's next. Keep it tight — full reasoning belongs in `DECISIONS.md`.
+
+### 2026-06-21 (session 33)
+
+**Did:** Full bar POS polish pass + dual-access bartender system. (1) **Inventory consolidation** — Admin inventory page now shows all items (inactive at `opacity-40`) with Edit links and "+ Add Item" button; removed "Menu Items" from ADMIN_NAV (redundant); added "Inventory" to BAR_NAV for read-only bartender view. (2) **Bartender dashboard** — rewritten to show 3 stat chips (Today's Sales / Open Running / Tabs Closed), open tabs grid, and "Settled Today" table with day total. (3) **Shared bar lib** (`src/lib/bar/pos.ts`) — extracted `formatCents`, `CATEGORY_LABELS`, `CATEGORY_ORDER`, `jamaicaMidnight(daysAgo)`, `jamaicaTime()`, `jamaicaDateTime()` used across 7+ files; eliminated duplicate `fmt()` copies and UTC midnight timezone bugs. (4) **Jamaica timezone fix** — all "today" queries now use `jamaicaMidnight()` (Jamaica midnight = 05:00 UTC); all time display uses `timeZone: "America/Jamaica"`. (5) **Snacks category** — extended `pos_items_category_check` constraint; seeded 8 snack items (YardWorks chips x3, Big Foot x2, Sausage x2, Cup Soup). (6) **is_bartender dual-access** — `profiles.is_bartender BOOLEAN DEFAULT FALSE` migration applied; proxy + `requireBarStaff()` accept `is_bartender = true` alongside `role = 'bartender'`; admin bar staff page shows both types with "Artist + Bar" badge and context-appropriate revoke vs deactivate actions; `assignBartenderFlag` action looks up by email and flips flag; `PromoteBartenderForm` client component; `revokeBartenderFlag` just unsets flag (does not ban artist). Also seeded drinks during this session: Campari/Kingston 62/Red Label/Magnum/Boom (small+large)/Craven A single.
+**Touched:** `supabase/migrations/20260621000007_add_snack_items.sql` (new), `supabase/migrations/20260621000008_is_bartender_flag.sql` (new), `src/lib/bar/pos.ts` (new), `src/types/supabase.ts`, `src/proxy.ts`, `src/lib/auth.ts`, `src/app/admin/bar/staff/actions.ts`, `src/app/admin/bar/staff/page.tsx`, `src/app/admin/bar/staff/PromoteBartenderForm.tsx` (new), `src/app/bar/page.tsx`, `src/app/bar/inventory/page.tsx` (new), `src/app/admin/bar/page.tsx`, `src/app/admin/bar/inventory/page.tsx`, `src/app/admin/bar/sales/page.tsx`, `src/app/admin/bar/tabs/page.tsx`, `src/components/InkShell.tsx`, `src/components/MenuGrid.tsx`, `src/components/MenuItemForm.tsx`
+**Decided:** `is_bartender` boolean flag (not a second role or junction table) for artist dual-access — artist keeps portal access while gaining bar access. Logged in DECISIONS.md.
+**Blocked on:** Nothing.
+**Next:** First live bar session — promote an artist to bartender, open first real tab.
 
 ### 2026-06-17 (session 32)
 
