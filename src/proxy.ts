@@ -43,10 +43,11 @@ export async function proxy(request: NextRequest) {
 
   const { data: profile } = await serviceClient()
     .from("profiles")
-    .select("role")
+    .select("role, is_bartender")
     .eq("id", user.id)
     .single();
-  const role = profile?.role as string | undefined;
+  const role         = profile?.role as string | undefined;
+  const isBartender  = profile?.is_bartender === true;
 
   function redirect(path: string) {
     const url = request.nextUrl.clone();
@@ -55,10 +56,10 @@ export async function proxy(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
-  if (isAdminRoute  && role !== "admin")                              return redirect(roleHome(role));
-  if (isPortalRoute && role !== "artist")                             return redirect(roleHome(role));
-  if (isBarRoute    && role !== "admin" && role !== "bartender")      return redirect(roleHome(role));
-  if (isGamerRoute  && role !== "gamer" && role !== "admin")          return redirect(roleHome(role));
+  if (isAdminRoute  && role !== "admin")                                           return redirect(roleHome(role));
+  if (isPortalRoute && role !== "artist")                                          return redirect(roleHome(role));
+  if (isBarRoute    && role !== "admin" && role !== "bartender" && !isBartender)   return redirect(roleHome(role));
+  if (isGamerRoute  && role !== "gamer" && role !== "admin")                       return redirect(roleHome(role));
 
   return supabaseResponse;
 }

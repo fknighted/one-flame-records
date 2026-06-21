@@ -408,6 +408,7 @@ export type Database = {
           artist_id: string | null
           created_at: string
           id: string
+          is_bartender: boolean
           role: string
           updated_at: string
         }
@@ -415,6 +416,7 @@ export type Database = {
           artist_id?: string | null
           created_at?: string
           id: string
+          is_bartender?: boolean
           role?: string
           updated_at?: string
         }
@@ -422,6 +424,7 @@ export type Database = {
           artist_id?: string | null
           created_at?: string
           id?: string
+          is_bartender?: boolean
           role?: string
           updated_at?: string
         }

@@ -21,7 +21,7 @@ export async function requireAdmin(): Promise<void> {
   if (profile?.role !== "admin") throw new Error("Forbidden");
 }
 
-/** Verify the caller is an authenticated admin OR bartender. */
+/** Verify the caller is an authenticated admin, bartender, or artist with bar access. */
 export async function requireBarStaff(): Promise<void> {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
@@ -29,9 +29,13 @@ export async function requireBarStaff(): Promise<void> {
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("role")
+    .select("role, is_bartender")
     .eq("id", user.id)
     .single();
 
-  if (profile?.role !== "admin" && profile?.role !== "bartender") throw new Error("Forbidden");
+  if (
+    profile?.role !== "admin" &&
+    profile?.role !== "bartender" &&
+    !profile?.is_bartender
+  ) throw new Error("Forbidden");
 }

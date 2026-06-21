@@ -1,20 +1,27 @@
 import InviteBartenderForm from "./InviteBartenderForm";
+import PromoteBartenderForm from "./PromoteBartenderForm";
 import { createServiceClient } from "@/lib/supabase/server";
+import { deactivateBartender, revokeBartenderFlag } from "./actions";
 
 export default async function BarStaffPage() {
   const supabase = createServiceClient();
 
+  // Fetch both dedicated bartenders AND artists granted bar access
   const { data: profiles } = await supabase
     .from("profiles")
-    .select("id, role, created_at")
-    .eq("role", "bartender")
+    .select("id, role, is_bartender, created_at")
+    .or("role.eq.bartender,is_bartender.eq.true")
     .order("created_at");
 
-  // Fetch auth user emails in parallel
-  const bartenders = await Promise.all(
+  const staff = await Promise.all(
     (profiles ?? []).map(async (p) => {
       const { data: { user } } = await supabase.auth.admin.getUserById(p.id);
-      return { ...p, email: user?.email ?? "—", banned: !!user?.banned_until };
+      return {
+        ...p,
+        email: user?.email ?? "—",
+        banned: !!user?.banned_until,
+        isDualAccess: p.role !== "bartender" && p.is_bartender,
+      };
     })
   );
 
@@ -26,31 +33,78 @@ export default async function BarStaffPage() {
         <div className="mt-3 h-px w-16 bg-bone/20" />
       </div>
 
-      {/* Existing bartenders */}
+      {/* Staff list */}
       <section className="space-y-3">
-        <h2 className="text-xs font-semibold uppercase tracking-widest text-bone/35">Current Bartenders</h2>
-        {!bartenders.length ? (
-          <p className="text-sm text-bone/30">No bartenders yet. Invite one below.</p>
+        <h2 className="text-xs font-semibold uppercase tracking-widest text-bone/35">Current Bar Staff</h2>
+        {!staff.length ? (
+          <p className="text-sm text-bone/30">No bar staff yet. Invite or promote someone below.</p>
         ) : (
           <div className="border border-bone/10 rounded-lg divide-y divide-bone/10">
-            {bartenders.map((b) => (
+            {staff.map((b) => (
               <div key={b.id} className="flex items-center justify-between px-4 py-3">
                 <div>
-                  <p className="text-sm text-bone">{b.email}</p>
+                  <div className="flex items-center gap-2">
+                    <p className="text-sm text-bone">{b.email}</p>
+                    {b.isDualAccess && (
+                      <span className="text-[10px] bg-forest/20 text-forest px-1.5 py-0.5 rounded-full font-medium">
+                        Artist + Bar
+                      </span>
+                    )}
+                    {b.banned && (
+                      <span className="text-[10px] bg-oxblood/20 text-oxblood px-1.5 py-0.5 rounded-full font-medium">
+                        Deactivated
+                      </span>
+                    )}
+                  </div>
                   <p className="text-xs text-bone/40 mt-0.5">
                     Added {new Date(b.created_at).toLocaleDateString()}
                   </p>
                 </div>
-                {b.banned && (
-                  <span className="text-xs bg-oxblood/20 text-oxblood px-2 py-0.5 rounded-full">Deactivated</span>
-                )}
+
+                {b.isDualAccess ? (
+                  <form action={revokeBartenderFlag.bind(null, b.id)}>
+                    <button
+                      type="submit"
+                      className="text-xs text-oxblood/50 hover:text-oxblood transition-colors"
+                      onClick={(e) => {
+                        if (!confirm(`Revoke bar access for ${b.email}?`)) e.preventDefault();
+                      }}
+                    >
+                      Revoke Bar Access
+                    </button>
+                  </form>
+                ) : !b.banned ? (
+                  <form action={deactivateBartender.bind(null, b.id)}>
+                    <button
+                      type="submit"
+                      className="text-xs text-oxblood/50 hover:text-oxblood transition-colors"
+                      onClick={(e) => {
+                        if (!confirm(`Deactivate ${b.email}?`)) e.preventDefault();
+                      }}
+                    >
+                      Deactivate
+                    </button>
+                  </form>
+                ) : null}
               </div>
             ))}
           </div>
         )}
       </section>
 
-      {/* Invite new bartender */}
+      {/* Promote an existing artist to bar access */}
+      <section className="space-y-4">
+        <h2 className="text-xs font-semibold uppercase tracking-widest text-bone/35 pb-2 border-b border-bone/10">
+          Promote Existing Artist
+        </h2>
+        <p className="text-sm text-bone/40">
+          Enter the email of an artist already in the system to grant them bar access.
+          They keep their artist portal and gain access to the bar POS.
+        </p>
+        <PromoteBartenderForm />
+      </section>
+
+      {/* Invite a brand-new bartender */}
       <section className="space-y-4">
         <h2 className="text-xs font-semibold uppercase tracking-widest text-bone/35 pb-2 border-b border-bone/10">
           Invite New Bartender
