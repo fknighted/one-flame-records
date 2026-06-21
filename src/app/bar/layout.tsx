@@ -11,11 +11,11 @@ export default async function BarLayout({ children }: { children: React.ReactNod
   const serviceClient = createServiceClient();
   const { data: profile } = await serviceClient
     .from("profiles")
-    .select("role")
+    .select("role, is_bartender")
     .eq("id", user.id)
     .single();
 
-  if (!profile || (profile.role !== "bartender" && profile.role !== "admin")) {
+  if (!profile || (profile.role !== "bartender" && profile.role !== "admin" && !profile.is_bartender)) {
     redirect("/login");
   }
 

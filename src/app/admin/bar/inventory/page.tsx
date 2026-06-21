@@ -65,7 +65,8 @@ export default async function InventoryPage() {
           <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-bone/40">
             {CATEGORY_LABELS[cat] ?? cat}
           </h2>
-          <div className="border border-bone/10 rounded-lg overflow-x-auto">
+          <div className="border border-bone/10 rounded-lg overflow-hidden">
+            <div className="overflow-x-auto">
             <table className="w-full min-w-[600px] text-sm">
               <thead className="border-b border-bone/10 bg-bone/3">
                 <tr>
@@ -135,6 +136,7 @@ export default async function InventoryPage() {
                 })}
               </tbody>
             </table>
+            </div>
           </div>
         </section>
       ))}

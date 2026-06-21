@@ -10,20 +10,15 @@ export default async function PortalLayout({ children }: { children: React.React
   if (user) {
     const { data: profile } = await supabase
       .from("profiles")
-      .select("artist_id, is_bartender")
+      .select("is_bartender, artists(stage_name)")
       .eq("id", user.id)
       .single();
 
     isBartender = profile?.is_bartender === true;
 
-    if (profile?.artist_id) {
-      const { data: artist } = await supabase
-        .from("artists")
-        .select("stage_name")
-        .eq("id", profile.artist_id)
-        .single();
-      if (artist?.stage_name) displayName = artist.stage_name;
-    }
+    const artistData = profile?.artists;
+    const stageName = Array.isArray(artistData) ? artistData[0]?.stage_name : artistData?.stage_name;
+    if (stageName) displayName = stageName;
   }
 
   return (

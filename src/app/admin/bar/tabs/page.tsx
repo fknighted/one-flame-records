@@ -76,7 +76,8 @@ export default async function OrderHistoryPage({
       {!tabs?.length ? (
         <p className="text-sm text-bone/30">No tabs found.</p>
       ) : (
-        <div className="border border-bone/10 rounded-lg overflow-x-auto">
+        <div className="border border-bone/10 rounded-lg overflow-hidden">
+          <div className="overflow-x-auto">
           <table className="w-full min-w-[560px] text-sm">
             <thead className="border-b border-bone/10 bg-bone/3">
               <tr>
@@ -117,6 +118,7 @@ export default async function OrderHistoryPage({
               ))}
             </tbody>
           </table>
+          </div>
         </div>
       )}
     </div>

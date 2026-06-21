@@ -3,7 +3,7 @@
 import { useActionState, useState } from "react";
 import type { Database } from "@/types/supabase";
 import { addItemToTab } from "@/app/bar/tabs/[id]/actions";
-import { formatCents } from "@/lib/bar/pos";
+import { formatCents, CATEGORY_ORDER, CATEGORY_LABELS } from "@/lib/bar/pos";
 
 type PosItem = Database["public"]["Tables"]["pos_items"]["Row"];
 
@@ -12,17 +12,10 @@ type Props = {
   tabId: string;
 };
 
-const CATEGORIES = [
-  { key: "drink",     label: "Drinks" },
-  { key: "beverage",  label: "Beverages" },
-  { key: "food",      label: "Food" },
-  { key: "snack",     label: "Snacks" },
-  { key: "game_time", label: "Game Time" },
-] as const;
 
 function AddButton({ item, tabId }: { item: PosItem; tabId: string }) {
   const [state, formAction, pending] = useActionState(addItemToTab, null);
-  const outOfStock = item.stock_quantity !== null && item.stock_quantity === 0;
+  const outOfStock = item.stock_quantity !== null && item.stock_quantity <= 0;
 
   return (
     <form action={formAction}>
@@ -52,9 +45,9 @@ function AddButton({ item, tabId }: { item: PosItem; tabId: string }) {
 }
 
 export default function MenuGrid({ items, tabId }: Props) {
-  const availableCategories = CATEGORIES.filter(c =>
-    items.some(i => i.category === c.key && i.is_active)
-  );
+  const availableCategories = CATEGORY_ORDER
+    .filter(key => items.some(i => i.category === key && i.is_active))
+    .map(key => ({ key, label: CATEGORY_LABELS[key] ?? key }));
 
   const [active, setActive] = useState(availableCategories[0]?.key ?? "drink");
 

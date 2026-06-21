@@ -23,12 +23,13 @@ export async function addItemToTab(
 
   const [{ data: tab }, { data: item }] = await Promise.all([
     supabase.from("pos_tabs").select("id, total_cents, status").eq("id", tabId).single(),
-    supabase.from("pos_items").select("id, name, price_cents, is_active").eq("id", itemId).single(),
+    supabase.from("pos_items").select("id, name, price_cents, is_active, stock_quantity").eq("id", itemId).single(),
   ]);
 
   if (!tab)             return { error: "Tab not found." };
   if (tab.status !== "open") return { error: "This tab is already closed." };
   if (!item?.is_active) return { error: "Item is no longer available." };
+  if (item.stock_quantity !== null && item.stock_quantity <= 0) return { error: "Item is out of stock." };
 
   const { error: insertError } = await supabase.from("pos_tab_items").insert({
     tab_id:     tabId,
@@ -38,6 +39,14 @@ export async function addItemToTab(
     quantity:   1,
   });
   if (insertError) return { error: `Failed to add item: ${insertError.message}` };
+
+  if (item.stock_quantity !== null) {
+    await supabase
+      .from("pos_items")
+      .update({ stock_quantity: item.stock_quantity - 1 })
+      .eq("id", itemId)
+      .gt("stock_quantity", 0);
+  }
 
   const { error: updateError } = await supabase
     .from("pos_tabs")
