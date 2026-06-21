@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { createServiceClient } from "@/lib/supabase/server";
-import { formatCents } from "@/lib/bar/pos";
+import { formatCents, jamaicaDateTime } from "@/lib/bar/pos";
 
 const STATUS_LABELS: Record<string, string> = {
   open:   "Open",
@@ -95,9 +95,7 @@ export default async function OrderHistoryPage({
                     {tab.notes && <p className="text-xs text-bone/40">{tab.notes}</p>}
                   </td>
                   <td className="px-4 py-3 text-bone/60 text-xs">
-                    {new Date(tab.created_at).toLocaleDateString("en-US", {
-                      month: "short", day: "numeric", hour: "2-digit", minute: "2-digit",
-                    })}
+                    {jamaicaDateTime(tab.created_at)}
                   </td>
                   <td className="px-4 py-3">
                     <span className={[

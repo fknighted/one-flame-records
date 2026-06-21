@@ -12,6 +12,24 @@ export function jamaicaMidnight(daysAgo = 0): Date {
   return d;
 }
 
+export function jamaicaTime(isoString: string): string {
+  return new Date(isoString).toLocaleTimeString("en-US", {
+    hour: "2-digit",
+    minute: "2-digit",
+    timeZone: "America/Jamaica",
+  });
+}
+
+export function jamaicaDateTime(isoString: string): string {
+  return new Date(isoString).toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    timeZone: "America/Jamaica",
+  });
+}
+
 export function formatCents(cents: number): string {
   return "$" + (cents / 100).toFixed(2);
 }

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { createServiceClient } from "@/lib/supabase/server";
-import { formatCents, jamaicaMidnight } from "@/lib/bar/pos";
+import { formatCents, jamaicaMidnight, jamaicaTime } from "@/lib/bar/pos";
 
 const STATUS_LABELS: Record<string, string> = {
   open:   "Open",
@@ -104,7 +104,7 @@ export default async function BarOverviewPage() {
                       ) : tab.name}
                     </td>
                     <td className="px-4 py-3 text-bone/50 text-xs">
-                      {new Date(tab.created_at).toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" })}
+                      {jamaicaTime(tab.created_at)}
                     </td>
                     <td className="px-4 py-3">
                       <span className={[

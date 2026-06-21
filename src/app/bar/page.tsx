@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { createServiceClient } from "@/lib/supabase/server";
 import { requireBarStaff } from "@/lib/auth";
-import { formatCents, jamaicaMidnight } from "@/lib/bar/pos";
+import { formatCents, jamaicaMidnight, jamaicaTime } from "@/lib/bar/pos";
 
 function elapsed(createdAt: string): string {
   const ms = Date.now() - new Date(createdAt).getTime();
@@ -103,12 +103,10 @@ export default async function BarDashboardPage() {
                     <tr key={tab.id} className={tab.status === "voided" ? "opacity-40" : ""}>
                       <td className="px-4 py-3 text-bone font-medium">{tab.name}</td>
                       <td className="px-4 py-3 text-bone/50 text-xs font-mono">
-                        {new Date(tab.created_at).toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" })}
+                        {jamaicaTime(tab.created_at)}
                       </td>
                       <td className="px-4 py-3 text-bone/50 text-xs font-mono">
-                        {tab.closed_at
-                          ? new Date(tab.closed_at).toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" })
-                          : "—"}
+                        {tab.closed_at ? jamaicaTime(tab.closed_at) : "—"}
                       </td>
                       <td className="px-4 py-3 text-right font-mono text-bone">
                         {tab.status === "voided"
