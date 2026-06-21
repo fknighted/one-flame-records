@@ -221,7 +221,7 @@ export default async function VideoJobDetailPage({ params }: Props) {
                 Render pipeline · step {Math.min(stepIdx + 1, PIPELINE_STEPS.length)} of {PIPELINE_STEPS.length}
               </p>
             </div>
-            <div className="grid grid-cols-6 gap-3">
+            <div className="grid grid-cols-3 sm:grid-cols-6 gap-3">
               {PIPELINE_STEPS.map((step, i) => {
                 const isDone = i < stepIdx;
                 const isActive = i === stepIdx && ds === "rendering";

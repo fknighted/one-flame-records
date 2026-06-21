@@ -85,8 +85,8 @@ export default async function BarOverviewPage() {
         {!todayAllTabs?.length ? (
           <p className="text-sm text-bone/30">No tabs opened today.</p>
         ) : (
-          <div className="border border-bone/10 rounded-lg overflow-hidden">
-            <table className="w-full text-sm">
+          <div className="border border-bone/10 rounded-lg overflow-x-auto">
+            <table className="w-full min-w-[400px] text-sm">
               <thead className="border-b border-bone/10 bg-bone/3">
                 <tr>
                   <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/40">Customer</th>

@@ -38,8 +38,8 @@ export default async function AdminReleasesPage() {
           </Link>
         </div>
       ) : (
-        <div className="border border-bone/10 rounded-lg overflow-hidden">
-          <table className="w-full text-sm">
+        <div className="border border-bone/10 rounded-lg overflow-x-auto">
+          <table className="w-full min-w-[640px] text-sm">
             <thead>
               <tr className="border-b border-bone/10 bg-bone/5">
                 <th className="text-left px-4 py-3 text-xs font-medium text-bone/40 uppercase tracking-wider w-12" />
