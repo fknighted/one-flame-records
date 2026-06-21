@@ -54,8 +54,8 @@ export default function TabControls({ tabId, total }: { tabId: string; total: nu
         {closeState?.error && (
           <p className="text-sm text-red-400 text-center">{closeState.error}</p>
         )}
-        <div className="grid grid-cols-3 gap-2">
-          {(["cash", "card", "comp"] as const).map(method => (
+        <div className="grid grid-cols-2 gap-2">
+          {(["cash", "comp"] as const).map(method => (
             <button
               key={method}
               type="submit"

@@ -105,7 +105,7 @@ export async function closeTab(
   const paymentMethod = formData.get("payment_method") as string;
 
   if (!tabId) return { error: "Invalid request." };
-  if (!["cash", "card", "comp"].includes(paymentMethod)) return { error: "Select a payment method." };
+  if (!["cash", "comp"].includes(paymentMethod)) return { error: "Select a payment method." };
 
   const supabase   = createServiceClient();
   const session    = await createClient();
