@@ -49,9 +49,10 @@ const ADMIN_NAV: NavGroup[] = [
   {
     label: "Bar",
     items: [
-      { href: "/admin/bar",         label: "Overview" },
-      { href: "/admin/bar/sales",   label: "Sales" },
-      { href: "/admin/bar/items",   label: "Menu Items" },
+      { href: "/admin/bar",           label: "Overview" },
+      { href: "/admin/bar/sales",     label: "Sales" },
+      { href: "/admin/bar/inventory", label: "Inventory" },
+      { href: "/admin/bar/items",     label: "Menu Items" },
       { href: "/admin/bar/tabs",    label: "Order History" },
       { href: "/admin/bar/members", label: "Gamer Members" },
       { href: "/admin/bar/staff",   label: "Bar Staff" },

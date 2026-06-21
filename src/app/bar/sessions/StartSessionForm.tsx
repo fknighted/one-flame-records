@@ -34,13 +34,18 @@ export default function StartSessionForm({ members }: { members: Member[] }) {
         <label htmlFor="station" className="block text-sm font-medium text-bone/70 mb-1.5">
           Station <span className="text-bone/30 font-normal">(optional)</span>
         </label>
-        <input
+        <select
           id="station"
           name="station"
-          type="text"
-          placeholder="e.g. PS5, PC 1, Switch"
-          className="w-full bg-bone/5 border border-bone/15 rounded-lg px-3 py-2.5 text-bone placeholder:text-bone/25 text-sm focus:outline-none focus:border-ochre/50"
-        />
+          defaultValue=""
+          className="w-full bg-bone/5 border border-bone/15 rounded-lg px-3 py-2.5 text-bone text-sm focus:outline-none focus:border-ochre/50"
+        >
+          <option value="">— Select station —</option>
+          <option value="Xbox 1">Xbox 1</option>
+          <option value="Xbox 2">Xbox 2</option>
+          <option value="Xbox 3">Xbox 3</option>
+          <option value="Nintendo Switch">Nintendo Switch</option>
+        </select>
       </div>
 
       <button

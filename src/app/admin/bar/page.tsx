@@ -1,6 +1,12 @@
 import Link from "next/link";
 import { createServiceClient } from "@/lib/supabase/server";
 
+const STATUS_LABELS: Record<string, string> = {
+  open:   "Open",
+  closed: "Closed",
+  voided: "Voided",
+};
+
 function fmt(cents: number) {
   return "$" + (cents / 100).toFixed(2);
 }
@@ -12,29 +18,33 @@ export default async function BarOverviewPage() {
   today.setHours(0, 0, 0, 0);
   const todayIso = today.toISOString();
 
+  const weekAgo = new Date();
+  weekAgo.setDate(weekAgo.getDate() - 7);
+  weekAgo.setHours(0, 0, 0, 0);
+
+  const monthAgo = new Date();
+  monthAgo.setDate(monthAgo.getDate() - 30);
+  monthAgo.setHours(0, 0, 0, 0);
+
   const [
-    { data: openTabs },
-    { data: todayTabs },
+    { data: todayAllTabs },
+    { data: weekClosed },
+    { data: monthClosed },
     { count: totalItems },
     { count: activeMembers },
     { count: activeSessions },
   ] = await Promise.all([
-    supabase.from("pos_tabs").select("id, name, total_cents, created_at").eq("status", "open").order("created_at"),
-    supabase.from("pos_tabs").select("total_cents").eq("status", "closed").gte("closed_at", todayIso),
+    supabase.from("pos_tabs").select("id, name, total_cents, status, created_at").gte("created_at", todayIso).order("created_at", { ascending: false }),
+    supabase.from("pos_tabs").select("total_cents").eq("status", "closed").gte("closed_at", weekAgo.toISOString()),
+    supabase.from("pos_tabs").select("total_cents").eq("status", "closed").gte("closed_at", monthAgo.toISOString()),
     supabase.from("pos_items").select("id", { count: "exact", head: true }).eq("is_active", true),
     supabase.from("gamer_members").select("id", { count: "exact", head: true }).eq("status", "active"),
     supabase.from("game_sessions").select("id", { count: "exact", head: true }).is("ended_at", null),
   ]);
 
-  const todayRevenue = (todayTabs ?? []).reduce((sum, t) => sum + (t.total_cents ?? 0), 0);
-
-  const stats = [
-    { label: "Open Tabs",        value: openTabs?.length ?? 0, href: "/bar" },
-    { label: "Today's Revenue",  value: fmt(todayRevenue),     href: "/admin/bar/tabs" },
-    { label: "Active Sessions",  value: activeSessions ?? 0,   href: "/bar/sessions" },
-    { label: "Menu Items",       value: totalItems ?? 0,       href: "/admin/bar/items" },
-    { label: "Gamer Members",    value: activeMembers ?? 0,    href: "/admin/bar/members" },
-  ];
+  const todayRevenue  = (todayAllTabs ?? []).filter(t => t.status === "closed").reduce((sum, t) => sum + (t.total_cents ?? 0), 0);
+  const weekRevenue   = (weekClosed  ?? []).reduce((sum, t) => sum + (t.total_cents ?? 0), 0);
+  const monthRevenue  = (monthClosed ?? []).reduce((sum, t) => sum + (t.total_cents ?? 0), 0);
 
   return (
     <div className="space-y-8 max-w-4xl">
@@ -44,9 +54,27 @@ export default async function BarOverviewPage() {
         <div className="mt-3 h-px w-16 bg-bone/20" />
       </div>
 
-      {/* Stat cards */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-        {stats.map((s) => (
+      {/* Revenue totals */}
+      <div className="grid grid-cols-3 gap-4">
+        {[
+          { label: "Today",      value: fmt(todayRevenue) },
+          { label: "This Week",  value: fmt(weekRevenue)  },
+          { label: "This Month", value: fmt(monthRevenue) },
+        ].map((card) => (
+          <div key={card.label} className="border border-bone/10 rounded-lg p-4">
+            <p className="text-xs text-bone/40 mb-1">{card.label}</p>
+            <p className="text-2xl font-display font-bold text-bone">{card.value}</p>
+          </div>
+        ))}
+      </div>
+
+      {/* Secondary stats */}
+      <div className="grid grid-cols-3 gap-4">
+        {[
+          { label: "Active Sessions", value: activeSessions ?? 0,  href: "/bar/sessions" },
+          { label: "Menu Items",      value: totalItems ?? 0,       href: "/admin/bar/items" },
+          { label: "Gamer Members",   value: activeMembers ?? 0,    href: "/admin/bar/members" },
+        ].map((s) => (
           <Link
             key={s.label}
             href={s.href}
@@ -58,36 +86,64 @@ export default async function BarOverviewPage() {
         ))}
       </div>
 
-      {/* Open tabs list */}
-      <section>
-        <div className="flex items-center justify-between mb-3">
-          <h2 className="text-xs font-semibold uppercase tracking-widest text-bone/35">Open Tabs</h2>
+      {/* Today's tabs */}
+      <section className="space-y-3">
+        <div className="flex items-center justify-between">
+          <h2 className="text-xs font-semibold uppercase tracking-widest text-bone/35">Today&apos;s Tabs</h2>
           <Link href="/bar/tabs/new" className="text-xs text-ochre hover:underline">+ New Tab</Link>
         </div>
-        {!openTabs?.length ? (
-          <p className="text-sm text-bone/30">No open tabs right now.</p>
+
+        {!todayAllTabs?.length ? (
+          <p className="text-sm text-bone/30">No tabs opened today.</p>
         ) : (
-          <div className="space-y-2">
-            {openTabs.map((tab) => (
-              <Link
-                key={tab.id}
-                href={`/bar/tabs/${tab.id}`}
-                className="flex items-center justify-between border border-bone/10 rounded-lg px-4 py-3 hover:border-bone/25 transition-colors"
-              >
-                <span className="text-sm text-bone">{tab.name}</span>
-                <span className="text-sm font-mono text-ochre">{fmt(tab.total_cents)}</span>
-              </Link>
-            ))}
+          <div className="border border-bone/10 rounded-lg overflow-hidden">
+            <table className="w-full text-sm">
+              <thead className="border-b border-bone/10 bg-bone/3">
+                <tr>
+                  <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/40">Customer</th>
+                  <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/40">Time</th>
+                  <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/40">Status</th>
+                  <th className="text-right px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/40">Total</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-bone/10">
+                {todayAllTabs.map((tab) => (
+                  <tr key={tab.id} className="hover:bg-bone/3 transition-colors">
+                    <td className="px-4 py-3 text-bone font-medium">
+                      {tab.status === "open" ? (
+                        <Link href={`/bar/tabs/${tab.id}`} className="hover:text-ochre transition-colors">{tab.name}</Link>
+                      ) : tab.name}
+                    </td>
+                    <td className="px-4 py-3 text-bone/50 text-xs">
+                      {new Date(tab.created_at).toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" })}
+                    </td>
+                    <td className="px-4 py-3">
+                      <span className={[
+                        "inline-block px-2 py-0.5 rounded-full text-xs font-medium",
+                        tab.status === "closed" ? "bg-forest/20 text-forest" :
+                        tab.status === "open"   ? "bg-ochre/20 text-ochre" :
+                        "bg-bone/10 text-bone/40",
+                      ].join(" ")}>
+                        {STATUS_LABELS[tab.status] ?? tab.status}
+                      </span>
+                    </td>
+                    <td className="px-4 py-3 text-right font-mono text-bone">
+                      {fmt(tab.total_cents ?? 0)}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         )}
       </section>
 
       {/* Quick links */}
       <section className="flex flex-wrap gap-3">
-        <Link href="/admin/bar/items" className="text-sm text-bone/50 hover:text-bone transition-colors border border-bone/15 rounded px-3 py-1.5">Manage Menu</Link>
-        <Link href="/admin/bar/tabs" className="text-sm text-bone/50 hover:text-bone transition-colors border border-bone/15 rounded px-3 py-1.5">Order History</Link>
-        <Link href="/admin/bar/members" className="text-sm text-bone/50 hover:text-bone transition-colors border border-bone/15 rounded px-3 py-1.5">Gamer Members</Link>
-        <Link href="/admin/bar/staff" className="text-sm text-bone/50 hover:text-bone transition-colors border border-bone/15 rounded px-3 py-1.5">Bar Staff</Link>
+        <Link href="/admin/bar/sales"     className="text-sm text-bone/50 hover:text-bone transition-colors border border-bone/15 rounded px-3 py-1.5">Sales Report</Link>
+        <Link href="/admin/bar/inventory" className="text-sm text-bone/50 hover:text-bone transition-colors border border-bone/15 rounded px-3 py-1.5">Inventory</Link>
+        <Link href="/admin/bar/items"     className="text-sm text-bone/50 hover:text-bone transition-colors border border-bone/15 rounded px-3 py-1.5">Manage Menu</Link>
+        <Link href="/admin/bar/tabs"      className="text-sm text-bone/50 hover:text-bone transition-colors border border-bone/15 rounded px-3 py-1.5">Order History</Link>
       </section>
     </div>
   );
