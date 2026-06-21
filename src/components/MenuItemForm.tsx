@@ -8,6 +8,7 @@ const CATEGORIES = [
   { value: "drink",     label: "Drink" },
   { value: "beverage",  label: "Beverage" },
   { value: "food",      label: "Food" },
+  { value: "snack",     label: "Snack" },
   { value: "game_time", label: "Game Time" },
 ];
 

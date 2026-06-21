@@ -38,7 +38,8 @@ export const CATEGORY_LABELS: Record<string, string> = {
   drink:     "Drinks",
   beverage:  "Beverages",
   food:      "Food",
+  snack:     "Snacks",
   game_time: "Game Time",
 };
 
-export const CATEGORY_ORDER = ["drink", "beverage", "food", "game_time"] as const;
+export const CATEGORY_ORDER = ["drink", "beverage", "food", "snack", "game_time"] as const;

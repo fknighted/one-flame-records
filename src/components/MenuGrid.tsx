@@ -16,6 +16,7 @@ const CATEGORIES = [
   { key: "drink",     label: "Drinks" },
   { key: "beverage",  label: "Beverages" },
   { key: "food",      label: "Food" },
+  { key: "snack",     label: "Snacks" },
   { key: "game_time", label: "Game Time" },
 ] as const;
 
