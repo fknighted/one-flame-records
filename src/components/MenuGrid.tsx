@@ -22,6 +22,7 @@ const CATEGORIES = [
 
 function AddButton({ item, tabId }: { item: PosItem; tabId: string }) {
   const [state, formAction, pending] = useActionState(addItemToTab, null);
+  const outOfStock = item.stock_quantity !== null && item.stock_quantity === 0;
 
   return (
     <form action={formAction}>
@@ -29,11 +30,19 @@ function AddButton({ item, tabId }: { item: PosItem; tabId: string }) {
       <input type="hidden" name="item_id" value={item.id} />
       <button
         type="submit"
-        disabled={pending}
-        className="w-full text-left border border-bone/15 rounded-xl p-3 min-h-[72px] flex flex-col justify-between hover:border-ochre/40 hover:bg-ochre/5 active:scale-[0.97] transition-all disabled:opacity-40"
+        disabled={pending || outOfStock}
+        className={[
+          "w-full text-left border rounded-xl p-3 min-h-[72px] flex flex-col justify-between transition-all",
+          outOfStock
+            ? "border-bone/8 opacity-40 cursor-not-allowed"
+            : "border-bone/15 hover:border-ochre/40 hover:bg-ochre/5 active:scale-[0.97] disabled:opacity-40",
+        ].join(" ")}
       >
         <span className="text-bone text-sm font-medium leading-tight line-clamp-2">{item.name}</span>
-        <span className="text-ochre text-sm font-mono font-semibold mt-1">{formatCents(item.price_cents)}</span>
+        <div className="flex items-center justify-between mt-1">
+          <span className="text-ochre text-sm font-mono font-semibold">{formatCents(item.price_cents)}</span>
+          {outOfStock && <span className="text-bone/50 text-[10px] uppercase tracking-wider">Out</span>}
+        </div>
         {state?.error && (
           <span className="text-red-400 text-xs mt-1 block">{state.error}</span>
         )}
