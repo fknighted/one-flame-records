@@ -9,6 +9,7 @@ import LogoutButton from "@/components/LogoutButton";
 interface Props {
   displayName: string;
   pendingApps?: number;
+  isBartender?: boolean;
   children: React.ReactNode;
   mode?: "admin" | "portal" | "bar" | "gamer";
 }
@@ -159,15 +160,20 @@ function NavLinks({
   );
 }
 
-export default function InkShell({ displayName, pendingApps, children, mode = "admin" }: Props) {
+export default function InkShell({ displayName, pendingApps, isBartender, children, mode = "admin" }: Props) {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
 
-  const groups =
+  const baseGroups =
     mode === "admin" ? ADMIN_NAV :
     mode === "bar"   ? BAR_NAV   :
     mode === "gamer" ? GAMER_NAV :
     PORTAL_NAV;
+
+  const groups: NavGroup[] =
+    mode === "portal" && isBartender
+      ? [...baseGroups, { items: [{ href: "/bar", label: "Bar POS →" }] }]
+      : baseGroups;
 
   const homeHref =
     mode === "admin" ? "/" :

@@ -6,12 +6,15 @@ export default async function PortalLayout({ children }: { children: React.React
   const { data: { user } } = await supabase.auth.getUser();
 
   let displayName = user?.email ?? "";
+  let isBartender = false;
   if (user) {
     const { data: profile } = await supabase
       .from("profiles")
-      .select("artist_id")
+      .select("artist_id, is_bartender")
       .eq("id", user.id)
       .single();
+
+    isBartender = profile?.is_bartender === true;
 
     if (profile?.artist_id) {
       const { data: artist } = await supabase
@@ -24,7 +27,7 @@ export default async function PortalLayout({ children }: { children: React.React
   }
 
   return (
-    <InkShell displayName={displayName} mode="portal">
+    <InkShell displayName={displayName} mode="portal" isBartender={isBartender}>
       {children}
     </InkShell>
   );

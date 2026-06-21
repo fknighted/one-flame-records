@@ -8,11 +8,11 @@ This is the living state of the build. Update at the end of every session.
 
 - **Phase:** Bar POS operational + ongoing content
 - **Status:** Phases 1–5 complete. Bar POS fully built, all migrations applied to production, menu items seeded, dual-access bartender system live.
-- **Last updated:** 2026-06-21
+- **Last updated:** 2026-06-21 (session 34)
 
 ## Active focus
 
-First real POS session — grant an artist bar access, open first tab, run the core loop.
+First real POS session — promote an artist to bartender, navigate to `/bar` via new portal nav link, open first tab, run the core loop.
 
 ## Blockers
 
@@ -44,6 +44,14 @@ First real POS session — grant an artist bar access, open first tab, run the c
 ## Session log
 
 Append a new entry at the top of this section after every session. Date, summary, files touched, what's next. Keep it tight — full reasoning belongs in `DECISIONS.md`.
+
+### 2026-06-21 (session 34)
+
+**Did:** One bug fix before first live bar session. Discovered that artist-bartenders (role=artist, is_bartender=true) had no navigation link to `/bar` from the portal — they'd need to type the URL manually, which is a blocker for the live test. Fixed: (1) Added `isBartender?: boolean` prop to `InkShell`. When `mode="portal"` and `isBartender=true`, a "Bar POS →" nav group is appended to the portal sidebar nav. (2) Updated `portal/layout.tsx` to select `is_bartender` alongside `artist_id` from profiles and pass it down. Typecheck clean.
+**Touched:** `src/components/InkShell.tsx`, `src/app/portal/layout.tsx`
+**Decided:** Nothing new architecturally — follows existing `InkShell` mode/prop pattern.
+**Blocked on:** Flames Lounge gallery photos (still placeholder). Content entry pending real artists/releases/news.
+**Next:** First live bar session — promote an artist, open tab, add items, close as cash, verify admin overview totals. Content entry via admin UI.
 
 ### 2026-06-21 (session 33)
 
