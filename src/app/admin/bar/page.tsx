@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { createServiceClient } from "@/lib/supabase/server";
+import { formatCents, jamaicaMidnight } from "@/lib/bar/pos";
 
 const STATUS_LABELS: Record<string, string> = {
   open:   "Open",
@@ -7,24 +8,12 @@ const STATUS_LABELS: Record<string, string> = {
   voided: "Voided",
 };
 
-function fmt(cents: number) {
-  return "$" + (cents / 100).toFixed(2);
-}
-
 export default async function BarOverviewPage() {
   const supabase = createServiceClient();
 
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  const todayIso = today.toISOString();
-
-  const weekAgo = new Date();
-  weekAgo.setDate(weekAgo.getDate() - 7);
-  weekAgo.setHours(0, 0, 0, 0);
-
-  const monthAgo = new Date();
-  monthAgo.setDate(monthAgo.getDate() - 30);
-  monthAgo.setHours(0, 0, 0, 0);
+  const todayStart  = jamaicaMidnight();
+  const weekStart   = jamaicaMidnight(7);
+  const monthStart  = jamaicaMidnight(30);
 
   const [
     { data: todayAllTabs },
@@ -34,9 +23,9 @@ export default async function BarOverviewPage() {
     { count: activeMembers },
     { count: activeSessions },
   ] = await Promise.all([
-    supabase.from("pos_tabs").select("id, name, total_cents, status, created_at").gte("created_at", todayIso).order("created_at", { ascending: false }),
-    supabase.from("pos_tabs").select("total_cents").eq("status", "closed").gte("closed_at", weekAgo.toISOString()),
-    supabase.from("pos_tabs").select("total_cents").eq("status", "closed").gte("closed_at", monthAgo.toISOString()),
+    supabase.from("pos_tabs").select("id, name, total_cents, status, created_at").gte("created_at", todayStart.toISOString()).order("created_at", { ascending: false }),
+    supabase.from("pos_tabs").select("total_cents").eq("status", "closed").gte("closed_at", weekStart.toISOString()),
+    supabase.from("pos_tabs").select("total_cents").eq("status", "closed").gte("closed_at", monthStart.toISOString()),
     supabase.from("pos_items").select("id", { count: "exact", head: true }).eq("is_active", true),
     supabase.from("gamer_members").select("id", { count: "exact", head: true }).eq("status", "active"),
     supabase.from("game_sessions").select("id", { count: "exact", head: true }).is("ended_at", null),
@@ -57,9 +46,9 @@ export default async function BarOverviewPage() {
       {/* Revenue totals */}
       <div className="grid grid-cols-3 gap-4">
         {[
-          { label: "Today",      value: fmt(todayRevenue) },
-          { label: "This Week",  value: fmt(weekRevenue)  },
-          { label: "This Month", value: fmt(monthRevenue) },
+          { label: "Today",      value: formatCents(todayRevenue) },
+          { label: "This Week",  value: formatCents(weekRevenue)  },
+          { label: "This Month", value: formatCents(monthRevenue) },
         ].map((card) => (
           <div key={card.label} className="border border-bone/10 rounded-lg p-4">
             <p className="text-xs text-bone/40 mb-1">{card.label}</p>
@@ -72,7 +61,7 @@ export default async function BarOverviewPage() {
       <div className="grid grid-cols-3 gap-4">
         {[
           { label: "Active Sessions", value: activeSessions ?? 0,  href: "/bar/sessions" },
-          { label: "Menu Items",      value: totalItems ?? 0,       href: "/admin/bar/items" },
+          { label: "Menu Items",      value: totalItems ?? 0,       href: "/admin/bar/inventory" },
           { label: "Gamer Members",   value: activeMembers ?? 0,    href: "/admin/bar/members" },
         ].map((s) => (
           <Link
@@ -128,7 +117,7 @@ export default async function BarOverviewPage() {
                       </span>
                     </td>
                     <td className="px-4 py-3 text-right font-mono text-bone">
-                      {fmt(tab.total_cents ?? 0)}
+                      {formatCents(tab.total_cents ?? 0)}
                     </td>
                   </tr>
                 ))}

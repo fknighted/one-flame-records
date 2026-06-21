@@ -52,7 +52,6 @@ const ADMIN_NAV: NavGroup[] = [
       { href: "/admin/bar",           label: "Overview" },
       { href: "/admin/bar/sales",     label: "Sales" },
       { href: "/admin/bar/inventory", label: "Inventory" },
-      { href: "/admin/bar/items",     label: "Menu Items" },
       { href: "/admin/bar/tabs",    label: "Order History" },
       { href: "/admin/bar/members", label: "Gamer Members" },
       { href: "/admin/bar/staff",   label: "Bar Staff" },
@@ -80,6 +79,9 @@ const BAR_NAV: NavGroup[] = [
       { href: "/bar/sessions", label: "Sessions" },
       { href: "/bar/members",  label: "Members" },
     ],
+  },
+  {
+    items: [{ href: "/bar/inventory", label: "Inventory" }],
   },
 ];
 

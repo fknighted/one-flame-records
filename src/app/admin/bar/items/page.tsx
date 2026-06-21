@@ -2,6 +2,7 @@ import Link from "next/link";
 import { createServiceClient } from "@/lib/supabase/server";
 import { deleteMenuItem } from "./actions";
 import type { Tables } from "@/types/supabase";
+import { formatCents } from "@/lib/bar/pos";
 
 const CATEGORIES = [
   { value: "all",       label: "All" },
@@ -30,8 +31,6 @@ export default async function MenuItemsPage({
   if (cat && cat !== "all") query = query.eq("category", cat);
 
   const { data: items } = await query;
-
-  const deleteWithId = deleteMenuItem.bind(null, "");
 
   return (
     <div className="space-y-8 max-w-4xl">
@@ -97,7 +96,7 @@ export default async function MenuItemsPage({
                   </td>
                   <td className="px-4 py-3 text-bone/60">{CATEGORY_LABELS[item.category] ?? item.category}</td>
                   <td className="px-4 py-3 text-right text-bone font-mono">
-                    ${(item.price_cents / 100).toFixed(2)}
+                    {formatCents(item.price_cents)}
                   </td>
                   <td className="px-4 py-3 text-center">
                     <span className={[

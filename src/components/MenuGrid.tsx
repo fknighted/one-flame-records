@@ -3,6 +3,7 @@
 import { useActionState, useState } from "react";
 import type { Database } from "@/types/supabase";
 import { addItemToTab } from "@/app/bar/tabs/[id]/actions";
+import { formatCents } from "@/lib/bar/pos";
 
 type PosItem = Database["public"]["Tables"]["pos_items"]["Row"];
 
@@ -18,10 +19,6 @@ const CATEGORIES = [
   { key: "game_time", label: "Game Time" },
 ] as const;
 
-function fmt(cents: number) {
-  return "$" + (cents / 100).toFixed(2);
-}
-
 function AddButton({ item, tabId }: { item: PosItem; tabId: string }) {
   const [state, formAction, pending] = useActionState(addItemToTab, null);
 
@@ -35,7 +32,7 @@ function AddButton({ item, tabId }: { item: PosItem; tabId: string }) {
         className="w-full text-left border border-bone/15 rounded-xl p-3 min-h-[72px] flex flex-col justify-between hover:border-ochre/40 hover:bg-ochre/5 active:scale-[0.97] transition-all disabled:opacity-40"
       >
         <span className="text-bone text-sm font-medium leading-tight line-clamp-2">{item.name}</span>
-        <span className="text-ochre text-sm font-mono font-semibold mt-1">{fmt(item.price_cents)}</span>
+        <span className="text-ochre text-sm font-mono font-semibold mt-1">{formatCents(item.price_cents)}</span>
         {state?.error && (
           <span className="text-red-400 text-xs mt-1 block">{state.error}</span>
         )}

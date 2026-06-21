@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { createServiceClient } from "@/lib/supabase/server";
+import { formatCents } from "@/lib/bar/pos";
 
 const STATUS_LABELS: Record<string, string> = {
   open:   "Open",
@@ -67,7 +68,7 @@ export default async function OrderHistoryPage({
 
         {totalRevenue > 0 && (
           <span className="ml-auto text-xs text-bone/50 self-center">
-            Total shown: <span className="text-bone font-mono">${(totalRevenue / 100).toFixed(2)}</span>
+            Total shown: <span className="text-bone font-mono">{formatCents(totalRevenue)}</span>
           </span>
         )}
       </div>
@@ -112,7 +113,7 @@ export default async function OrderHistoryPage({
                     {tab.payment_method ? PAYMENT_LABELS[tab.payment_method] : "—"}
                   </td>
                   <td className="px-4 py-3 text-right font-mono text-bone">
-                    ${(tab.total_cents / 100).toFixed(2)}
+                    {formatCents(tab.total_cents ?? 0)}
                   </td>
                 </tr>
               ))}

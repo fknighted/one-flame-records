@@ -1,12 +1,11 @@
 import Link from "next/link";
 import { createServiceClient } from "@/lib/supabase/server";
+import { formatCents, CATEGORY_LABELS as BASE_CATEGORY_LABELS, jamaicaMidnight } from "@/lib/bar/pos";
 
 const CATEGORY_LABELS: Record<string, string> = {
-  drink:     "Drinks (Alcoholic)",
-  beverage:  "Beverages",
-  food:      "Food",
-  game_time: "Game Time",
-  other:     "Other",
+  ...BASE_CATEGORY_LABELS,
+  drink: "Drinks (Alcoholic)",
+  other: "Other",
 };
 
 const PERIOD_OPTIONS = [
@@ -16,24 +15,10 @@ const PERIOD_OPTIONS = [
   { value: "all",   label: "All Time" },
 ];
 
-function fmt(cents: number) {
-  return "$" + (cents / 100).toFixed(2);
-}
-
 function periodStart(period: string): string | null {
-  const now = new Date();
-  if (period === "today") {
-    now.setUTCHours(0, 0, 0, 0);
-    return now.toISOString();
-  }
-  if (period === "week") {
-    now.setUTCDate(now.getUTCDate() - 7);
-    return now.toISOString();
-  }
-  if (period === "month") {
-    now.setUTCDate(now.getUTCDate() - 30);
-    return now.toISOString();
-  }
+  if (period === "today") return jamaicaMidnight().toISOString();
+  if (period === "week")  return jamaicaMidnight(7).toISOString();
+  if (period === "month") return jamaicaMidnight(30).toISOString();
   return null;
 }
 
@@ -144,7 +129,7 @@ export default async function SalesPage({
           {/* Summary row */}
           <div className="grid grid-cols-3 gap-4">
             {[
-              { label: "Total Revenue",  value: fmt(totalRevenue) },
+              { label: "Total Revenue",  value: formatCents(totalRevenue) },
               { label: "Items Sold",     value: totalItemsSold.toString() },
               { label: "Tabs Closed",    value: closedTabs.length.toString() },
             ].map((card) => (
@@ -174,7 +159,7 @@ export default async function SalesPage({
                       <tr key={cat} className="hover:bg-bone/3 transition-colors">
                         <td className="px-4 py-3 text-bone font-medium">{CATEGORY_LABELS[cat] ?? cat}</td>
                         <td className="px-4 py-3 text-right font-mono text-bone/70">{data.qty}</td>
-                        <td className="px-4 py-3 text-right font-mono text-bone">{fmt(data.cents)}</td>
+                        <td className="px-4 py-3 text-right font-mono text-bone">{formatCents(data.cents)}</td>
                         <td className="px-4 py-3 text-right font-mono text-bone/50">
                           {totalRevenue > 0 ? ((data.cents / totalRevenue) * 100).toFixed(1) : "0.0"}%
                         </td>
@@ -206,7 +191,7 @@ export default async function SalesPage({
                         <td className="px-4 py-3 text-bone font-medium">{name}</td>
                         <td className="px-4 py-3 text-bone/50">{CATEGORY_LABELS[data.category] ?? data.category}</td>
                         <td className="px-4 py-3 text-right font-mono text-bone/70">{data.qty}</td>
-                        <td className="px-4 py-3 text-right font-mono text-bone">{fmt(data.cents)}</td>
+                        <td className="px-4 py-3 text-right font-mono text-bone">{formatCents(data.cents)}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -223,7 +208,7 @@ export default async function SalesPage({
                 {Object.entries(byPayment).map(([method, data]) => (
                   <div key={method} className="rounded-lg border border-bone/10 bg-bone/3 px-5 py-4 min-w-[140px]">
                     <p className="text-xs font-semibold uppercase tracking-wider text-bone/40 mb-1 capitalize">{method}</p>
-                    <p className="font-mono text-bone text-xl font-bold">{fmt(data.cents)}</p>
+                    <p className="font-mono text-bone text-xl font-bold">{formatCents(data.cents)}</p>
                     <p className="text-xs text-bone/40 mt-0.5">{data.count} tab{data.count !== 1 ? "s" : ""}</p>
                   </div>
                 ))}

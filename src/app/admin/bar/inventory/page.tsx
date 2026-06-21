@@ -1,39 +1,27 @@
+import Link from "next/link";
 import { createServiceClient } from "@/lib/supabase/server";
+import { formatCents, CATEGORY_LABELS, CATEGORY_ORDER, jamaicaMidnight } from "@/lib/bar/pos";
 import { updateStock } from "./actions";
-
-const CATEGORY_LABELS: Record<string, string> = {
-  drink:     "Drinks",
-  beverage:  "Beverages",
-  food:      "Food",
-  game_time: "Game Time",
-};
-
-const CATEGORY_ORDER = ["drink", "beverage", "food", "game_time"];
-
-function fmt(cents: number) {
-  return "$" + (cents / 100).toFixed(2);
-}
 
 export default async function InventoryPage() {
   const supabase = createServiceClient();
 
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
+  const todayStart = jamaicaMidnight();
 
   const [{ data: items }, { data: todayTabs }] = await Promise.all([
     supabase
       .from("pos_items")
-      .select("id, name, category, price_cents, stock_quantity")
-      .eq("is_active", true)
-      .order("sort_order", { ascending: true }),
+      .select("id, name, category, price_cents, stock_quantity, is_active")
+      .order("sort_order", { ascending: true, nullsFirst: false })
+      .order("name"),
     supabase
       .from("pos_tabs")
       .select("id")
       .eq("status", "closed")
-      .gte("closed_at", today.toISOString()),
+      .gte("closed_at", todayStart.toISOString()),
   ]);
 
-  // Sold today per item
+  // Settled-today count per item (closed tabs only)
   const todayTabIds = (todayTabs ?? []).map((t) => t.id);
   const soldMap: Record<string, number> = {};
   if (todayTabIds.length > 0) {
@@ -48,20 +36,28 @@ export default async function InventoryPage() {
     }
   }
 
-  // Group by category
-  const grouped: Record<string, typeof items> = {};
+  // Group all items by category
+  const grouped: Record<string, NonNullable<typeof items>> = {};
   for (const item of items ?? []) {
     if (!grouped[item.category]) grouped[item.category] = [];
     grouped[item.category]!.push(item);
   }
 
   return (
-    <div className="space-y-8 max-w-3xl">
-      <div>
-        <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-forest mb-1">Bar</p>
-        <h1 className="font-display font-bold text-bone text-3xl">Inventory</h1>
-        <div className="mt-3 h-px w-16 bg-bone/20" />
-        <p className="mt-3 text-sm text-bone/40">Set the current stock count for each item. "Sold Today" reflects closed tabs only.</p>
+    <div className="space-y-8 max-w-4xl">
+      <div className="flex items-start justify-between">
+        <div>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-forest mb-1">Bar</p>
+          <h1 className="font-display font-bold text-bone text-3xl">Inventory</h1>
+          <div className="mt-3 h-px w-16 bg-bone/20" />
+          <p className="mt-3 text-sm text-bone/40">Set stock counts and manage menu items. Items at 5 or below highlight in red.</p>
+        </div>
+        <Link
+          href="/admin/bar/items/new"
+          className="shrink-0 bg-ochre text-ink text-sm font-semibold px-4 py-2 rounded-lg hover:bg-ochre/90 transition-colors"
+        >
+          + Add Item
+        </Link>
       </div>
 
       {CATEGORY_ORDER.filter((cat) => grouped[cat]?.length).map((cat) => (
@@ -75,22 +71,28 @@ export default async function InventoryPage() {
                 <tr>
                   <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/40">Item</th>
                   <th className="text-right px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/40">Price</th>
-                  <th className="text-right px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/40">Sold Today</th>
+                  <th className="text-right px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/40">Settled Today</th>
                   <th className="text-right px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/40">Stock</th>
-                  <th className="px-4 py-3" />
+                  <th className="text-right px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/40">Set Stock</th>
+                  <th scope="col" className="sr-only px-4 py-3">Edit</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-bone/10">
                 {grouped[cat]!.map((item) => {
-                  const soldToday = soldMap[item.id] ?? 0;
-                  const stock     = item.stock_quantity;
-                  const low       = stock !== null && stock <= 5;
+                  const settledToday = soldMap[item.id] ?? 0;
+                  const stock = item.stock_quantity;
+                  const low = stock !== null && stock <= 5;
                   return (
-                    <tr key={item.id} className="hover:bg-bone/3 transition-colors">
-                      <td className="px-4 py-3 text-bone font-medium">{item.name}</td>
-                      <td className="px-4 py-3 text-right font-mono text-bone/60">{fmt(item.price_cents)}</td>
+                    <tr key={item.id} className={`hover:bg-bone/3 transition-colors ${!item.is_active ? "opacity-40" : ""}`}>
+                      <td className="px-4 py-3 text-bone font-medium">
+                        {item.name}
+                        {!item.is_active && (
+                          <span className="ml-2 text-[10px] font-semibold uppercase tracking-wider text-bone/40 border border-bone/20 rounded px-1">off</span>
+                        )}
+                      </td>
+                      <td className="px-4 py-3 text-right font-mono text-bone/60">{formatCents(item.price_cents)}</td>
                       <td className="px-4 py-3 text-right font-mono text-bone/60">
-                        {soldToday > 0 ? soldToday : <span className="text-bone/25">—</span>}
+                        {settledToday > 0 ? settledToday : <span className="text-bone/25">—</span>}
                       </td>
                       <td className="px-4 py-3 text-right">
                         {stock === null ? (
@@ -109,7 +111,7 @@ export default async function InventoryPage() {
                             name="qty"
                             min="0"
                             defaultValue={stock ?? ""}
-                            placeholder="Set"
+                            placeholder="—"
                             className="w-16 rounded border border-bone/20 bg-transparent text-bone text-xs text-right px-2 py-1 focus:outline-none focus:border-ochre/60"
                           />
                           <button
@@ -119,6 +121,14 @@ export default async function InventoryPage() {
                             Set
                           </button>
                         </form>
+                      </td>
+                      <td className="px-4 py-3 text-right">
+                        <Link
+                          href={`/admin/bar/items/${item.id}/edit`}
+                          className="text-xs text-bone/40 hover:text-bone transition-colors"
+                        >
+                          Edit
+                        </Link>
                       </td>
                     </tr>
                   );

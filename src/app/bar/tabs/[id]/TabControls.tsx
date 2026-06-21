@@ -2,10 +2,7 @@
 
 import { useActionState, useState } from "react";
 import { closeTab, voidTab } from "./actions";
-
-function fmt(cents: number) {
-  return "$" + (cents / 100).toFixed(2);
-}
+import { formatCents } from "@/lib/bar/pos";
 
 export default function TabControls({ tabId, total }: { tabId: string; total: number }) {
   const [showClose, setShowClose] = useState(false);
@@ -48,7 +45,7 @@ export default function TabControls({ tabId, total }: { tabId: string; total: nu
       <form action={closeAction} className="space-y-3">
         <input type="hidden" name="tab_id" value={tabId} />
         <p className="text-sm font-semibold text-bone text-center">
-          Total: <span className="text-ochre">{fmt(total)}</span>
+          Total: <span className="text-ochre">{formatCents(total)}</span>
         </p>
         <p className="text-xs text-bone/50 text-center">How was this paid?</p>
         {closeState?.error && (
@@ -93,7 +90,7 @@ export default function TabControls({ tabId, total }: { tabId: string; total: nu
         onClick={() => setShowClose(true)}
         className="flex-1 bg-ochre text-ink font-semibold py-2.5 rounded-lg text-sm hover:bg-ochre/90 active:scale-[0.98] transition-all"
       >
-        Close Tab — {fmt(total)}
+        Close Tab — {formatCents(total)}
       </button>
     </div>
   );

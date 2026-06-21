@@ -4,10 +4,7 @@ import { requireBarStaff } from "@/lib/auth";
 import MenuGrid from "@/components/MenuGrid";
 import TabControls from "./TabControls";
 import RemoveItemButton from "./RemoveItemButton";
-
-function fmt(cents: number) {
-  return "$" + (cents / 100).toFixed(2);
-}
+import { formatCents } from "@/lib/bar/pos";
 
 export default async function TabPage({ params }: { params: Promise<{ id: string }> }) {
   await requireBarStaff();
@@ -36,7 +33,7 @@ export default async function TabPage({ params }: { params: Promise<{ id: string
           {tab.notes && <p className="text-xs text-bone/40 mt-0.5">{tab.notes}</p>}
         </div>
         <div className="text-right">
-          <p className="text-2xl font-mono text-ochre font-semibold">{fmt(tab.total_cents)}</p>
+          <p className="text-2xl font-mono text-ochre font-semibold">{formatCents(tab.total_cents)}</p>
           <p className="text-xs text-bone/40 capitalize">{tab.status}</p>
         </div>
       </div>
@@ -107,7 +104,7 @@ function TabItem({
         {item.note && <p className="text-bone/40 text-xs">{item.note}</p>}
       </div>
       <span className="text-bone/50 text-xs shrink-0">×{item.quantity}</span>
-      <span className="text-ochre font-mono text-sm shrink-0">{fmt(item.price_cents * item.quantity)}</span>
+      <span className="text-ochre font-mono text-sm shrink-0">{formatCents(item.price_cents * item.quantity)}</span>
       {isOpen && <RemoveItemButton tabItemId={item.id} tabId={tabId} />}
     </div>
   );
