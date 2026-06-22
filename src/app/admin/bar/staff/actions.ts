@@ -50,36 +50,40 @@ export async function resendBartenderInvite(
   _prev: ActionState,
   formData: FormData
 ): Promise<ActionState> {
-  await requireAdmin();
+  try {
+    await requireAdmin();
 
-  const email = formData.get("email") as string;
-  if (!email) return { error: "Email missing." };
+    const email = formData.get("email") as string;
+    if (!email) return { error: "Email missing." };
 
-  const supabase = createServiceClient();
+    const supabase = createServiceClient();
 
-  // generateLink type "recovery" works for confirmed users who need to set/reset
-  // their password. For a user who clicked the invite link (auto-confirmed) but
-  // never completed the set-password step, this is the correct flow.
-  const { data, error } = await supabase.auth.admin.generateLink({
-    type: "recovery",
-    email,
-    options: { redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth/set-password` },
-  });
+    // type "recovery" fails with session_not_found when the user's session was
+    // cleaned up (e.g. after ban/unban). type "magiclink" has no session
+    // dependency — it logs the user in and the callback redirects to set-password.
+    const { data, error } = await supabase.auth.admin.generateLink({
+      type: "magiclink",
+      email,
+      options: { redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback` },
+    });
 
-  if (error) return { error: `Failed to generate link: ${error.message}` };
+    if (error) return { error: `Failed to generate link: ${error.message}` };
 
-  const { sendEmail } = await import("@/lib/email/send");
-  const link = data.properties.action_link;
-  const { error: emailError } = await sendEmail({
-    to: email,
-    subject: "Set up your One Flame bar account",
-    text: `You've been invited to the One Flame bar system. Click the link below to set your password:\n\n${link}\n\nThis link expires in 24 hours.`,
-    html: `<p>You've been invited to the One Flame bar system.</p><p><a href="${link}">Set your password</a></p><p>This link expires in 24 hours.</p>`,
-  });
+    const { sendEmail } = await import("@/lib/email/send");
+    const link = data.properties.action_link;
+    const { error: emailError } = await sendEmail({
+      to: email,
+      subject: "Set up your One Flame bar account",
+      text: `You've been invited to the One Flame bar system. Click the link below to set your password:\n\n${link}\n\nThis link expires in 24 hours.`,
+      html: `<p>You've been invited to the One Flame bar system.</p><p><a href="${link}">Set your password</a></p><p>This link expires in 24 hours.</p>`,
+    });
 
-  if (emailError) return { error: `Link generated but email failed: ${emailError}` };
-  revalidatePath("/admin/bar/staff");
-  return null;
+    if (emailError) return { error: `Link generated but email failed: ${emailError}` };
+    revalidatePath("/admin/bar/staff");
+    return null;
+  } catch (err) {
+    return { error: err instanceof Error ? err.message : "Unknown error" };
+  }
 }
 
 /** Grant bar access to an existing user (artist or otherwise) by email. */
