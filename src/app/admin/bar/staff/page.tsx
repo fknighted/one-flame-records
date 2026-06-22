@@ -23,7 +23,7 @@ export default async function BarStaffPage() {
         ...p,
         email: user?.email ?? "—",
         banned: !!user?.banned_until && new Date(user.banned_until) > new Date(),
-        confirmed: !!user?.email_confirmed_at,
+        confirmed: !!user?.last_sign_in_at,
         isDualAccess: p.role !== "bartender" && p.is_bartender,
       };
     })
