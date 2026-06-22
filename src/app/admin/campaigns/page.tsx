@@ -56,13 +56,13 @@ export default async function CampaignsPage() {
 
   return (
     <div className="space-y-8 max-w-4xl">
-      <div className="flex items-end justify-between gap-4">
+      <div className="flex items-start justify-between gap-4">
         <div>
           <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-forest mb-2">AI Studio</p>
           <h1 className="font-display font-bold text-bone text-3xl">Campaigns</h1>
           <div className="mt-3 h-px w-16 bg-bone/20" />
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 flex-wrap justify-end">
           <Link
             href="/admin/campaigns/ideas"
             className="text-sm text-bone/40 hover:text-ochre transition-colors"

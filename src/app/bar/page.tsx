@@ -79,8 +79,7 @@ export default async function BarDashboardPage() {
       {(closedTabs.length > 0 || voidedTabs.length > 0) && (
         <section className="space-y-3">
           <h2 className="text-xs font-semibold uppercase tracking-widest text-bone/35">Settled Today</h2>
-          <div className="border border-bone/10 rounded-lg overflow-hidden">
-            <div className="overflow-x-auto">
+          <div className="border border-bone/10 rounded-lg overflow-x-auto">
             <table className="w-full min-w-[400px] text-sm">
               <thead className="border-b border-bone/10 bg-bone/3">
                 <tr>
@@ -117,7 +116,6 @@ export default async function BarDashboardPage() {
                 </tr>
               </tfoot>
             </table>
-            </div>
           </div>
         </section>
       )}

@@ -68,8 +68,7 @@ export default async function MenuItemsPage({
           </Link>
         </div>
       ) : (
-        <div className="border border-bone/10 rounded-lg overflow-hidden">
-          <div className="overflow-x-auto">
+        <div className="border border-bone/10 rounded-lg overflow-x-auto">
           <table className="w-full min-w-[460px] text-sm">
             <thead className="border-b border-bone/10 bg-bone/3">
               <tr>
@@ -122,7 +121,6 @@ export default async function MenuItemsPage({
               ))}
             </tbody>
           </table>
-          </div>
         </div>
       )}
     </div>

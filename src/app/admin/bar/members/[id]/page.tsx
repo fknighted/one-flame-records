@@ -27,7 +27,7 @@ export default async function AdminMemberDetailPage({ params }: { params: Promis
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div className="border border-bone/10 rounded-lg p-4">
           <p className="text-xs text-bone/40 mb-1">Balance</p>
           <p className="text-2xl font-display font-bold text-bone">{member.minutes_balance}<span className="text-sm text-bone/40 ml-1">min</span></p>

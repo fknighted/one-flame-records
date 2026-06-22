@@ -44,7 +44,7 @@ export default async function BarOverviewPage() {
       </div>
 
       {/* Revenue totals */}
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         {[
           { label: "Today",      value: formatCents(todayRevenue) },
           { label: "This Week",  value: formatCents(weekRevenue)  },
@@ -58,7 +58,7 @@ export default async function BarOverviewPage() {
       </div>
 
       {/* Secondary stats */}
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         {[
           { label: "Active Sessions", value: activeSessions ?? 0,  href: "/bar/sessions" },
           { label: "Menu Items",      value: totalItems ?? 0,       href: "/admin/bar/inventory" },
@@ -85,8 +85,7 @@ export default async function BarOverviewPage() {
         {!todayAllTabs?.length ? (
           <p className="text-sm text-bone/30">No tabs opened today.</p>
         ) : (
-          <div className="border border-bone/10 rounded-lg overflow-hidden">
-            <div className="overflow-x-auto">
+          <div className="border border-bone/10 rounded-lg overflow-x-auto">
             <table className="w-full min-w-[400px] text-sm">
               <thead className="border-b border-bone/10 bg-bone/3">
                 <tr>
@@ -124,7 +123,6 @@ export default async function BarOverviewPage() {
                 ))}
               </tbody>
             </table>
-            </div>
           </div>
         )}
       </section>

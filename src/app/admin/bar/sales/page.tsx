@@ -127,7 +127,7 @@ export default async function SalesPage({
       ) : (
         <>
           {/* Summary row */}
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             {[
               { label: "Total Revenue",  value: formatCents(totalRevenue) },
               { label: "Items Sold",     value: totalItemsSold.toString() },
@@ -144,8 +144,7 @@ export default async function SalesPage({
           {categoryRows.length > 0 && (
             <section className="space-y-3">
               <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-bone/40">By Category</h2>
-              <div className="border border-bone/10 rounded-lg overflow-hidden">
-                <div className="overflow-x-auto">
+              <div className="border border-bone/10 rounded-lg overflow-x-auto">
                 <table className="w-full min-w-[440px] text-sm">
                   <thead className="border-b border-bone/10 bg-bone/3">
                     <tr>
@@ -168,7 +167,6 @@ export default async function SalesPage({
                     ))}
                   </tbody>
                 </table>
-                </div>
               </div>
             </section>
           )}
@@ -177,8 +175,7 @@ export default async function SalesPage({
           {topItems.length > 0 && (
             <section className="space-y-3">
               <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-bone/40">Top Items</h2>
-              <div className="border border-bone/10 rounded-lg overflow-hidden">
-                <div className="overflow-x-auto">
+              <div className="border border-bone/10 rounded-lg overflow-x-auto">
                 <table className="w-full min-w-[440px] text-sm">
                   <thead className="border-b border-bone/10 bg-bone/3">
                     <tr>
@@ -199,7 +196,6 @@ export default async function SalesPage({
                     ))}
                   </tbody>
                 </table>
-                </div>
               </div>
             </section>
           )}

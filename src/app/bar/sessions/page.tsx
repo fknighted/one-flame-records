@@ -87,8 +87,7 @@ export default async function SessionsPage() {
             No sessions ended today
           </div>
         ) : (
-          <div className="border border-bone/10 rounded-lg overflow-hidden">
-            <div className="overflow-x-auto">
+          <div className="border border-bone/10 rounded-lg overflow-x-auto">
             <table className="w-full min-w-[380px] text-sm">
               <thead className="border-b border-bone/10 bg-bone/3">
                 <tr>
@@ -117,7 +116,6 @@ export default async function SessionsPage() {
                 </tr>
               </tfoot>
             </table>
-            </div>
           </div>
         )}
       </section>

@@ -133,8 +133,8 @@ export default async function AdminCodesPage() {
           <h2 className="text-bone/50 text-xs uppercase tracking-widest mb-3">
             Rotated codes
           </h2>
-          <div className="border border-bone/10 rounded-lg overflow-hidden">
-            <table className="w-full text-sm">
+          <div className="border border-bone/10 rounded-lg overflow-x-auto">
+            <table className="w-full min-w-[480px] text-sm">
               <thead>
                 <tr className="border-b border-bone/10">
                   <th className="text-left px-4 py-2 text-bone/40 font-normal text-xs">

@@ -65,16 +65,15 @@ export default async function InventoryPage() {
           <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-bone/40">
             {CATEGORY_LABELS[cat] ?? cat}
           </h2>
-          <div className="border border-bone/10 rounded-lg overflow-hidden">
-            <div className="overflow-x-auto">
-            <table className="w-full min-w-[600px] text-sm">
+          <div className="border border-bone/10 rounded-lg overflow-x-auto">
+            <table className="w-full min-w-[360px] text-sm">
               <thead className="border-b border-bone/10 bg-bone/3">
                 <tr>
                   <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/40">Item</th>
-                  <th className="text-right px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/40">Price</th>
-                  <th className="text-right px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/40">Settled Today</th>
+                  <th className="hidden sm:table-cell text-right px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/40">Price</th>
+                  <th className="hidden sm:table-cell text-right px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/40">Sold Today</th>
                   <th className="text-right px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/40">Stock</th>
-                  <th className="text-right px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/40">Set Stock</th>
+                  <th className="text-right px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/40">Set</th>
                   <th scope="col" className="sr-only px-4 py-3">Edit</th>
                 </tr>
               </thead>
@@ -91,8 +90,8 @@ export default async function InventoryPage() {
                           <span className="ml-2 text-[10px] font-semibold uppercase tracking-wider text-bone/40 border border-bone/20 rounded px-1">off</span>
                         )}
                       </td>
-                      <td className="px-4 py-3 text-right font-mono text-bone/60">{formatCents(item.price_cents)}</td>
-                      <td className="px-4 py-3 text-right font-mono text-bone/60">
+                      <td className="hidden sm:table-cell px-4 py-3 text-right font-mono text-bone/60">{formatCents(item.price_cents)}</td>
+                      <td className="hidden sm:table-cell px-4 py-3 text-right font-mono text-bone/60">
                         {settledToday > 0 ? settledToday : <span className="text-bone/25">—</span>}
                       </td>
                       <td className="px-4 py-3 text-right">
@@ -104,7 +103,7 @@ export default async function InventoryPage() {
                           </span>
                         )}
                       </td>
-                      <td className="px-4 py-2">
+                      <td className="px-3 py-2">
                         <form action={updateStock} className="flex gap-1.5 justify-end items-center">
                           <input type="hidden" name="id" value={item.id} />
                           <input
@@ -136,7 +135,6 @@ export default async function InventoryPage() {
                 })}
               </tbody>
             </table>
-            </div>
           </div>
         </section>
       ))}

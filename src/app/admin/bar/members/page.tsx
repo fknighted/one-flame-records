@@ -22,8 +22,7 @@ export default async function AdminGamerMembersPage() {
           <Link href="/bar/members" className="text-ochre hover:underline">bar POS</Link>.
         </div>
       ) : (
-        <div className="border border-bone/10 rounded-lg overflow-hidden">
-          <div className="overflow-x-auto">
+        <div className="border border-bone/10 rounded-lg overflow-x-auto">
           <table className="w-full min-w-[520px] text-sm">
             <thead className="border-b border-bone/10 bg-bone/3">
               <tr>
@@ -62,7 +61,6 @@ export default async function AdminGamerMembersPage() {
               ))}
             </tbody>
           </table>
-          </div>
         </div>
       )}
     </div>

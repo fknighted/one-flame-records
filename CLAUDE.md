@@ -169,6 +169,8 @@ Brand tokens (`--color-oxblood`, `--color-cream`, etc.) are defined in `src/app/
 
 **Client Components in Server pages.** When an interactive element (button with `onClick`, form with state) is needed inside a page that is otherwise a Server Component, extract it into its own `PascalCaseButton.tsx` or `PascalCaseClient.tsx` and import it. Never put `onClick` directly on a JSX element in a Server Component file.
 
+**Scrollable tables.** Use a single `overflow-x-auto` on the outer container div — do NOT nest `overflow-hidden` outer + `overflow-x-auto` inner. The nested pattern blocks touch-scroll on iOS Safari. Always add `min-w-[Npx]` to the `<table>` itself so columns don't collapse before the scroll kicks in. Pattern: `<div className="border border-bone/10 rounded-lg overflow-x-auto"><table className="w-full min-w-[Npx]">`.
+
 ## Things to never do
 
 - Never bypass Row-Level Security with the service role key in client-reachable code.
