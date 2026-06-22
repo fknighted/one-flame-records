@@ -56,6 +56,7 @@ const ADMIN_NAV: NavGroup[] = [
       { href: "/admin/bar/tabs",    label: "Order History" },
       { href: "/admin/bar/members", label: "Gamer Members" },
       { href: "/admin/bar/staff",   label: "Bar Staff" },
+      { href: "/bar",               label: "Bar POS →" },
     ],
   },
   {
