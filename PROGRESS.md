@@ -7,8 +7,8 @@ This is the living state of the build. Update at the end of every session.
 ## Current state
 
 - **Phase:** Bar POS operational + ongoing content
-- **Status:** Phases 1–5 complete. Bar POS fully built, all migrations applied to production, menu items seeded, dual-access bartender system live.
-- **Last updated:** 2026-06-21 (session 34)
+- **Status:** Phases 1–5 complete. Bar POS fully built, all migrations applied to production, menu items seeded, dual-access bartender system live. Two full code-review passes applied and clean.
+- **Last updated:** 2026-06-22 (session 35)
 
 ## Active focus
 
@@ -44,6 +44,14 @@ First real POS session — promote an artist to bartender, navigate to `/bar` vi
 ## Session log
 
 Append a new entry at the top of this section after every session. Date, summary, files touched, what's next. Keep it tight — full reasoning belongs in `DECISIONS.md`.
+
+### 2026-06-22 (session 35)
+
+**Did:** Two code-review passes + type system restoration. Session started mid-review (second `/code-review` from session 34 was interrupted by context compaction). Completed Phase 2 verification of 7 candidates, all CONFIRMED except sessions-page caching (REFUTED — already dynamic via cookies()). Fixed all 7 findings: (1) `sessions/page.tsx` today's sessions query switched from `gte("started_at", ...)` to `gte("ended_at", ...)` so overnight sessions (started before midnight, ended after) appear correctly. (2) `admin/bar/items/page.tsx` local `CATEGORY_LABELS` was missing `snack` — removed the local copy, now imports from `pos.ts` (snack items display "Snacks" correctly). (3) `actions.ts` stock decrement now checks the update result and returns an error on failure. (4) Full TOCTOU fix for stock and tab total: new migration `20260622000001_atomic_stock_and_tab_total.sql` adds three Postgres functions (`decrement_pos_item_stock`, `increment_tab_total`, `decrement_tab_total`); `addItemToTab` captures the inserted row ID, calls the atomic stock RPC and rolls back the insert if it races to zero; tab total now uses SQL arithmetic via RPCs in both add and remove paths. (5) `elapsed()` extracted to `pos.ts`, local copies removed from `bar/page.tsx` and `sessions/page.tsx`. (6) `gamer_members` display_name resolution extracted to `getName()` helper in sessions page, deduplicating two identical inline blocks. (7) `Array.isArray` dead code removed from `portal/layout.tsx` (to-one FK always returns object). Also restored Supabase types (file had been empty) — generated 1083-line types file using new PAT, removed `as any` casts from RPC calls in `actions.ts`.
+**Touched:** `src/app/bar/sessions/page.tsx`, `src/app/bar/page.tsx`, `src/app/bar/tabs/[id]/actions.ts`, `src/app/portal/layout.tsx`, `src/app/admin/bar/items/page.tsx`, `src/lib/bar/pos.ts`, `supabase/migrations/20260622000001_atomic_stock_and_tab_total.sql`, `src/types/supabase.ts`
+**Decided:** Atomic RPCs for stock decrement and tab total — logged in DECISIONS.md.
+**Blocked on:** Flames Lounge gallery photos. TikTok auto-posting.
+**Next:** First live bar POS session. Content entry via admin.
 
 ### 2026-06-21 (session 34)
 

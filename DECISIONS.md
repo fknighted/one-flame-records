@@ -14,6 +14,25 @@ Format for each entry:
 
 ---
 
+## 2026-06-22 — Atomic Postgres RPCs for bar stock and tab total
+
+**Context:** `addItemToTab` had a TOCTOU race: two concurrent requests could both read `stock_quantity > 0`, both insert a tab item, then both attempt the decrement — but only the first decrement fires (the second is blocked by `.gt("stock_quantity", 0)`). Result: two items added, one unit decremented. The tab total had the same race: both requests read the same `total_cents`, both write `total + price`, net effect is one price added instead of two.
+
+**Decision:** Three `SECURITY DEFINER` Postgres functions in migration `20260622000001`:
+- `decrement_pos_item_stock(p_item_id)` — `UPDATE … WHERE stock_quantity > 0`, returns `boolean` (false = raced to zero)
+- `increment_tab_total(p_tab_id, p_amount)` — `SET total_cents = total_cents + p_amount`
+- `decrement_tab_total(p_tab_id, p_amount)` — `SET total_cents = GREATEST(0, total_cents - p_amount)`
+
+`addItemToTab` now: inserts tab item (capturing ID), calls `decrement_pos_item_stock`, deletes the insert and returns error if it returns false, then calls `increment_tab_total`. The SQL arithmetic in all three functions makes them atomic single-statement updates — no read-modify-write at the application layer.
+
+**Alternatives considered:**
+- _Full transaction wrapping insert + decrement in a single PG function._ Rejected as over-engineering for current traffic levels; the rollback-on-false pattern achieves correctness with less migration surface area.
+- _Application-layer retry._ Rejected — retrying a failed insert-then-decrement is complex and still racy.
+
+**Consequences:** Tab total and stock quantity are now correct under concurrent adds and removes. The insert→decrement gap is still two separate DB calls (not a true serializable transaction), but the atomic decrement ensures only one caller gets the last unit. Future migration could collapse the whole flow into a single PG function if higher throughput demands it.
+
+---
+
 ## 2026-05-27 — Public assets use server-side signed URLs, not a public bucket
 
 **Context:** Artist assets (instrumentals, demos, reference images) live in the `private-assets` bucket with no public access. When `is_public = true` we want them visible on the public artist page without moving them to a public bucket or changing their storage path.
