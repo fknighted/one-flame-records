@@ -19,16 +19,10 @@ export default async function BarStaffPage() {
   const staff = await Promise.all(
     (profiles ?? []).map(async (p) => {
       const { data: { user } } = await supabase.auth.admin.getUserById(p.id);
-      console.log("[bar/staff debug]", p.id, {
-        email_confirmed_at: user?.email_confirmed_at ?? null,
-        last_sign_in_at: user?.last_sign_in_at ?? null,
-        banned_until: user?.banned_until ?? null,
-      });
       return {
         ...p,
         email: user?.email ?? "—",
         banned: !!user?.banned_until && new Date(user.banned_until) > new Date(),
-        confirmed: !!user?.last_sign_in_at,
         isDualAccess: p.role !== "bartender" && p.is_bartender,
       };
     })
@@ -64,11 +58,6 @@ export default async function BarStaffPage() {
                         Deactivated
                       </span>
                     )}
-                    {!b.confirmed && !b.banned && (
-                      <span className="text-[10px] bg-ochre/20 text-ochre px-1.5 py-0.5 rounded-full font-medium">
-                        Pending invite
-                      </span>
-                    )}
                   </div>
                   <p className="text-xs text-bone/40 mt-0.5">
                     Added {new Date(b.created_at).toLocaleDateString()}
@@ -78,16 +67,12 @@ export default async function BarStaffPage() {
                 {b.isDualAccess ? (
                   <RevokeBarAccessButton userId={b.id} email={b.email} />
                 ) : b.banned ? (
-                  <div className="flex flex-col items-end gap-2">
-                    <ReactivateButton userId={b.id} email={b.email} />
-                    {!b.confirmed && (
-                      <ResendInviteButton email={b.email} />
-                    )}
-                  </div>
-                ) : !b.confirmed ? (
-                  <ResendInviteButton email={b.email} />
+                  <ReactivateButton userId={b.id} email={b.email} />
                 ) : (
-                  <DeactivateButton userId={b.id} email={b.email} />
+                  <div className="flex flex-col items-end gap-2">
+                    <DeactivateButton userId={b.id} email={b.email} />
+                    <ResendInviteButton email={b.email} />
+                  </div>
                 )}
               </div>
             ))}
