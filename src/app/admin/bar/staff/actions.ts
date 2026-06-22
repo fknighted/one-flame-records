@@ -46,6 +46,25 @@ export async function reactivateBartender(userId: string): Promise<void> {
   revalidatePath("/admin/bar/staff");
 }
 
+export async function resendBartenderInvite(
+  _prev: ActionState,
+  formData: FormData
+): Promise<ActionState> {
+  await requireAdmin();
+
+  const email = formData.get("email") as string;
+  if (!email) return { error: "Email missing." };
+
+  const supabase = createServiceClient();
+  const { error } = await supabase.auth.admin.inviteUserByEmail(email, {
+    redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth/set-password`,
+  });
+
+  if (error) return { error: `Failed to resend invite: ${error.message}` };
+  revalidatePath("/admin/bar/staff");
+  return null;
+}
+
 /** Grant bar access to an existing user (artist or otherwise) by email. */
 export async function assignBartenderFlag(
   _prev: ActionState,

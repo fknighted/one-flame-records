@@ -3,6 +3,7 @@ import PromoteBartenderForm from "./PromoteBartenderForm";
 import RevokeBarAccessButton from "./RevokeBarAccessButton";
 import DeactivateButton from "./DeactivateButton";
 import ReactivateButton from "./ReactivateButton";
+import ResendInviteButton from "./ResendInviteButton";
 import { createServiceClient } from "@/lib/supabase/server";
 
 export default async function BarStaffPage() {
@@ -22,6 +23,7 @@ export default async function BarStaffPage() {
         ...p,
         email: user?.email ?? "—",
         banned: !!user?.banned_until && new Date(user.banned_until) > new Date(),
+        confirmed: !!user?.email_confirmed_at,
         isDualAccess: p.role !== "bartender" && p.is_bartender,
       };
     })
@@ -57,6 +59,11 @@ export default async function BarStaffPage() {
                         Deactivated
                       </span>
                     )}
+                    {!b.confirmed && !b.banned && (
+                      <span className="text-[10px] bg-ochre/20 text-ochre px-1.5 py-0.5 rounded-full font-medium">
+                        Pending invite
+                      </span>
+                    )}
                   </div>
                   <p className="text-xs text-bone/40 mt-0.5">
                     Added {new Date(b.created_at).toLocaleDateString()}
@@ -66,7 +73,14 @@ export default async function BarStaffPage() {
                 {b.isDualAccess ? (
                   <RevokeBarAccessButton userId={b.id} email={b.email} />
                 ) : b.banned ? (
-                  <ReactivateButton userId={b.id} email={b.email} />
+                  <div className="flex flex-col items-end gap-2">
+                    <ReactivateButton userId={b.id} email={b.email} />
+                    {!b.confirmed && (
+                      <ResendInviteButton email={b.email} />
+                    )}
+                  </div>
+                ) : !b.confirmed ? (
+                  <ResendInviteButton email={b.email} />
                 ) : (
                   <DeactivateButton userId={b.id} email={b.email} />
                 )}
