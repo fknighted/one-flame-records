@@ -2,6 +2,7 @@ import InviteBartenderForm from "./InviteBartenderForm";
 import PromoteBartenderForm from "./PromoteBartenderForm";
 import RevokeBarAccessButton from "./RevokeBarAccessButton";
 import DeactivateButton from "./DeactivateButton";
+import ReactivateButton from "./ReactivateButton";
 import { createServiceClient } from "@/lib/supabase/server";
 
 export default async function BarStaffPage() {
@@ -20,7 +21,7 @@ export default async function BarStaffPage() {
       return {
         ...p,
         email: user?.email ?? "—",
-        banned: !!user?.banned_until,
+        banned: !!user?.banned_until && new Date(user.banned_until) > new Date(),
         isDualAccess: p.role !== "bartender" && p.is_bartender,
       };
     })
@@ -64,9 +65,11 @@ export default async function BarStaffPage() {
 
                 {b.isDualAccess ? (
                   <RevokeBarAccessButton userId={b.id} email={b.email} />
-                ) : !b.banned ? (
+                ) : b.banned ? (
+                  <ReactivateButton userId={b.id} email={b.email} />
+                ) : (
                   <DeactivateButton userId={b.id} email={b.email} />
-                ) : null}
+                )}
               </div>
             ))}
           </div>

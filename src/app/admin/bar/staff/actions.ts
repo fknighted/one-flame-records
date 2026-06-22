@@ -38,6 +38,14 @@ export async function deactivateBartender(userId: string): Promise<void> {
   revalidatePath("/admin/bar/staff");
 }
 
+export async function reactivateBartender(userId: string): Promise<void> {
+  await requireAdmin();
+  const supabase = createServiceClient();
+  const { error } = await supabase.auth.admin.updateUserById(userId, { ban_duration: "none" });
+  if (error) throw new Error(`Failed to reactivate: ${error.message}`);
+  revalidatePath("/admin/bar/staff");
+}
+
 /** Grant bar access to an existing user (artist or otherwise) by email. */
 export async function assignBartenderFlag(
   _prev: ActionState,
