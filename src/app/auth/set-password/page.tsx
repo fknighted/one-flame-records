@@ -35,7 +35,19 @@ export default function SetPasswordPage() {
       return;
     }
 
-    window.location.href = "/admin";
+    const { data: { user } } = await supabase.auth.getUser();
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("role, is_bartender")
+      .eq("id", user!.id)
+      .single();
+
+    const role = profile?.role;
+    if (role === "admin") window.location.href = "/admin";
+    else if (role === "bartender" || profile?.is_bartender) window.location.href = "/bar";
+    else if (role === "artist") window.location.href = "/portal";
+    else if (role === "gamer") window.location.href = "/gamer";
+    else window.location.href = "/login";
   }
 
   return (
