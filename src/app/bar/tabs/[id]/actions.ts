@@ -47,8 +47,7 @@ export async function addItemToTab(
 
   // Atomic stock decrement — if it returns false, a concurrent request took the last unit
   if (item.stock_quantity !== null) {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { data: ok, error: stockErr } = await (supabase as any).rpc(
+    const { data: ok, error: stockErr } = await supabase.rpc(
       "decrement_pos_item_stock",
       { p_item_id: itemId }
     );
@@ -59,8 +58,7 @@ export async function addItemToTab(
   }
 
   // Atomic total increment (SQL arithmetic — avoids read-modify-write race)
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { error: updateError } = await (supabase as any).rpc(
+  const { error: updateError } = await supabase.rpc(
     "increment_tab_total",
     { p_tab_id: tabId, p_amount: item.price_cents }
   );
@@ -105,8 +103,7 @@ export async function removeTabItem(
   if (deleteError) return { error: `Failed to remove item: ${deleteError.message}` };
 
   // Atomic total decrement, floored at 0
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { error: totalError } = await (supabase as any).rpc(
+  const { error: totalError } = await supabase.rpc(
     "decrement_tab_total",
     { p_tab_id: tabId, p_amount: tabItem.price_cents }
   );
