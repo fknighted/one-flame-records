@@ -1,14 +1,7 @@
 import Link from "next/link";
 import { createServiceClient } from "@/lib/supabase/server";
 import { requireBarStaff } from "@/lib/auth";
-import { formatCents, jamaicaMidnight, jamaicaTime } from "@/lib/bar/pos";
-
-function elapsed(createdAt: string): string {
-  const ms = Date.now() - new Date(createdAt).getTime();
-  const mins = Math.floor(ms / 60000);
-  if (mins < 60) return `${mins}m`;
-  return `${Math.floor(mins / 60)}h ${mins % 60}m`;
-}
+import { formatCents, jamaicaMidnight, jamaicaTime, elapsed } from "@/lib/bar/pos";
 
 export default async function BarDashboardPage() {
   await requireBarStaff();

@@ -22,36 +22,48 @@ export async function addItemToTab(
   const supabase = createServiceClient();
 
   const [{ data: tab }, { data: item }] = await Promise.all([
-    supabase.from("pos_tabs").select("id, total_cents, status").eq("id", tabId).single(),
+    supabase.from("pos_tabs").select("id, status").eq("id", tabId).single(),
     supabase.from("pos_items").select("id, name, price_cents, is_active, stock_quantity").eq("id", itemId).single(),
   ]);
 
-  if (!tab)             return { error: "Tab not found." };
+  if (!tab)                  return { error: "Tab not found." };
   if (tab.status !== "open") return { error: "This tab is already closed." };
-  if (!item?.is_active) return { error: "Item is no longer available." };
+  if (!item?.is_active)      return { error: "Item is no longer available." };
   if (item.stock_quantity !== null && item.stock_quantity <= 0) return { error: "Item is out of stock." };
 
-  const { error: insertError } = await supabase.from("pos_tab_items").insert({
-    tab_id:     tabId,
-    pos_item_id: itemId,
-    name:       item.name,
-    price_cents: item.price_cents,
-    quantity:   1,
-  });
+  // Capture the inserted row ID so we can undo it if the stock decrement races to 0
+  const { data: inserted, error: insertError } = await supabase
+    .from("pos_tab_items")
+    .insert({
+      tab_id:      tabId,
+      pos_item_id: itemId,
+      name:        item.name,
+      price_cents: item.price_cents,
+      quantity:    1,
+    })
+    .select("id")
+    .single();
   if (insertError) return { error: `Failed to add item: ${insertError.message}` };
 
+  // Atomic stock decrement — if it returns false, a concurrent request took the last unit
   if (item.stock_quantity !== null) {
-    await supabase
-      .from("pos_items")
-      .update({ stock_quantity: item.stock_quantity - 1 })
-      .eq("id", itemId)
-      .gt("stock_quantity", 0);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { data: ok, error: stockErr } = await (supabase as any).rpc(
+      "decrement_pos_item_stock",
+      { p_item_id: itemId }
+    );
+    if (stockErr || !ok) {
+      await supabase.from("pos_tab_items").delete().eq("id", inserted.id);
+      return { error: "Item just went out of stock." };
+    }
   }
 
-  const { error: updateError } = await supabase
-    .from("pos_tabs")
-    .update({ total_cents: tab.total_cents + item.price_cents })
-    .eq("id", tabId);
+  // Atomic total increment (SQL arithmetic — avoids read-modify-write race)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { error: updateError } = await (supabase as any).rpc(
+    "increment_tab_total",
+    { p_tab_id: tabId, p_amount: item.price_cents }
+  );
   if (updateError) return { error: `Failed to update total: ${updateError.message}` };
 
   revalidatePath(`/bar/tabs/${tabId}`);
@@ -75,7 +87,7 @@ export async function removeTabItem(
   // Prevents IDOR where a caller supplies a tabItemId from a different tab.
   const { data: tabItem } = await supabase
     .from("pos_tab_items")
-    .select("price_cents, tab_id, pos_tabs!inner(status, total_cents)")
+    .select("price_cents, tab_id, pos_tabs!inner(status)")
     .eq("id", tabItemId)
     .eq("tab_id", tabId)
     .single();
@@ -92,12 +104,12 @@ export async function removeTabItem(
 
   if (deleteError) return { error: `Failed to remove item: ${deleteError.message}` };
 
-  const { error: totalError } = await supabase
-    .from("pos_tabs")
-    .update({ total_cents: Math.max(0, tabData.total_cents - tabItem.price_cents) })
-    .eq("id", tabId)
-    .eq("status", "open");
-
+  // Atomic total decrement, floored at 0
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { error: totalError } = await (supabase as any).rpc(
+    "decrement_tab_total",
+    { p_tab_id: tabId, p_amount: tabItem.price_cents }
+  );
   if (totalError) return { error: `Item removed but total not updated: ${totalError.message}` };
 
   revalidatePath(`/bar/tabs/${tabId}`);

@@ -16,8 +16,7 @@ export default async function PortalLayout({ children }: { children: React.React
 
     isBartender = profile?.is_bartender === true;
 
-    const artistData = profile?.artists;
-    const stageName = Array.isArray(artistData) ? artistData[0]?.stage_name : artistData?.stage_name;
+    const stageName = (profile?.artists as { stage_name: string } | null)?.stage_name;
     if (stageName) displayName = stageName;
   }
 

@@ -1,15 +1,8 @@
 import { createServiceClient } from "@/lib/supabase/server";
 import { requireBarStaff } from "@/lib/auth";
-import { jamaicaMidnight, jamaicaTime } from "@/lib/bar/pos";
+import { jamaicaMidnight, jamaicaTime, elapsed } from "@/lib/bar/pos";
 import StartSessionForm from "./StartSessionForm";
 import EndSessionButton from "./EndSessionButton";
-
-function elapsed(startedAt: string): string {
-  const ms   = Date.now() - new Date(startedAt).getTime();
-  const mins = Math.floor(ms / 60000);
-  if (mins < 60) return `${mins}m`;
-  return `${Math.floor(mins / 60)}h ${mins % 60}m`;
-}
 
 export default async function SessionsPage() {
   await requireBarStaff();
@@ -25,7 +18,7 @@ export default async function SessionsPage() {
       .from("game_sessions")
       .select("id, started_at, ended_at, duration_minutes, station, gamer_members(display_name)")
       .not("ended_at", "is", null)
-      .gte("started_at", jamaicaMidnight().toISOString())
+      .gte("ended_at", jamaicaMidnight().toISOString())
       .order("ended_at", { ascending: false }),
     supabase
       .from("gamer_members")
@@ -35,6 +28,12 @@ export default async function SessionsPage() {
   ]);
 
   const totalMinutesToday = (todaySessions ?? []).reduce((sum, s) => sum + (s.duration_minutes ?? 0), 0);
+
+  function getName(m: { display_name: string } | { display_name: string }[] | null | undefined) {
+    if (!m) return null;
+    const r = Array.isArray(m) ? m[0] : m as { display_name: string };
+    return r?.display_name ?? null;
+  }
 
   return (
     <div className="space-y-6">
@@ -54,23 +53,18 @@ export default async function SessionsPage() {
           </div>
         ) : (
           <div className="space-y-2">
-            {activeSessions.map(s => {
-              const memberName = Array.isArray(s.gamer_members)
-                ? s.gamer_members[0]?.display_name
-                : (s.gamer_members as { display_name: string } | null)?.display_name;
-              return (
-                <div key={s.id} className="flex items-center gap-3 border border-bone/15 rounded-xl px-4 py-3">
-                  <div className="flex-1 min-w-0">
-                    <p className="text-bone font-medium text-sm">
-                      {memberName ?? "Drop-in"}
-                      {s.station && <span className="text-bone/40 ml-2 font-normal">· {s.station}</span>}
-                    </p>
-                    <p className="text-bone/40 text-xs">{elapsed(s.started_at)} elapsed</p>
-                  </div>
-                  <EndSessionButton sessionId={s.id} />
+            {activeSessions.map(s => (
+              <div key={s.id} className="flex items-center gap-3 border border-bone/15 rounded-xl px-4 py-3">
+                <div className="flex-1 min-w-0">
+                  <p className="text-bone font-medium text-sm">
+                    {getName(s.gamer_members) ?? "Drop-in"}
+                    {s.station && <span className="text-bone/40 ml-2 font-normal">· {s.station}</span>}
+                  </p>
+                  <p className="text-bone/40 text-xs">{elapsed(s.started_at)} elapsed</p>
                 </div>
-              );
-            })}
+                <EndSessionButton sessionId={s.id} />
+              </div>
+            ))}
           </div>
         )}
       </section>
@@ -106,20 +100,15 @@ export default async function SessionsPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-bone/10">
-                {todaySessions.map(s => {
-                  const memberName = Array.isArray(s.gamer_members)
-                    ? s.gamer_members[0]?.display_name
-                    : (s.gamer_members as { display_name: string } | null)?.display_name;
-                  return (
-                    <tr key={s.id} className="hover:bg-bone/3 transition-colors">
-                      <td className="px-4 py-3 text-bone font-medium">{memberName ?? <span className="text-bone/30">Drop-in</span>}</td>
-                      <td className="px-4 py-3 text-bone/50">{s.station ?? "—"}</td>
-                      <td className="px-4 py-3 text-right text-bone/50 text-xs font-mono">{jamaicaTime(s.started_at)}</td>
-                      <td className="px-4 py-3 text-right text-bone/50 text-xs font-mono">{s.ended_at ? jamaicaTime(s.ended_at) : "—"}</td>
-                      <td className="px-4 py-3 text-right font-mono text-bone">{s.duration_minutes ?? "—"}</td>
-                    </tr>
-                  );
-                })}
+                {todaySessions.map(s => (
+                  <tr key={s.id} className="hover:bg-bone/3 transition-colors">
+                    <td className="px-4 py-3 text-bone font-medium">{getName(s.gamer_members) ?? <span className="text-bone/30">Drop-in</span>}</td>
+                    <td className="px-4 py-3 text-bone/50">{s.station ?? "—"}</td>
+                    <td className="px-4 py-3 text-right text-bone/50 text-xs font-mono">{jamaicaTime(s.started_at)}</td>
+                    <td className="px-4 py-3 text-right text-bone/50 text-xs font-mono">{s.ended_at ? jamaicaTime(s.ended_at) : "—"}</td>
+                    <td className="px-4 py-3 text-right font-mono text-bone">{s.duration_minutes ?? "—"}</td>
+                  </tr>
+                ))}
               </tbody>
               <tfoot className="border-t border-bone/10 bg-bone/3">
                 <tr>

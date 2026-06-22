@@ -43,3 +43,10 @@ export const CATEGORY_LABELS: Record<string, string> = {
 };
 
 export const CATEGORY_ORDER = ["drink", "beverage", "food", "snack", "game_time"] as const;
+
+export function elapsed(startedAt: string): string {
+  const ms   = Date.now() - new Date(startedAt).getTime();
+  const mins = Math.floor(ms / 60000);
+  if (mins < 60) return `${mins}m`;
+  return `${Math.floor(mins / 60)}h ${mins % 60}m`;
+}

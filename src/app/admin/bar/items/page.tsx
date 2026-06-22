@@ -2,7 +2,7 @@ import Link from "next/link";
 import { createServiceClient } from "@/lib/supabase/server";
 import { deleteMenuItem } from "./actions";
 import type { Tables } from "@/types/supabase";
-import { formatCents } from "@/lib/bar/pos";
+import { formatCents, CATEGORY_LABELS } from "@/lib/bar/pos";
 
 const CATEGORIES = [
   { value: "all",       label: "All" },
@@ -12,13 +12,6 @@ const CATEGORIES = [
   { value: "snack",     label: "Snacks" },
   { value: "game_time", label: "Game Time" },
 ];
-
-const CATEGORY_LABELS: Record<string, string> = {
-  drink:     "Drink",
-  beverage:  "Beverage",
-  food:      "Food",
-  game_time: "Game Time",
-};
 
 export default async function MenuItemsPage({
   searchParams,
