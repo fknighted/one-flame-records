@@ -32,9 +32,17 @@ export async function createClient() {
 // Uses the raw supabase-js client (no @supabase/ssr session management) so
 // the service role key is sent as the Authorization Bearer token and RLS is
 // bypassed regardless of any user session in cookies.
+// persistSession: false prevents the client from trying to manage a user
+// session server-side, which causes "Auth session missing!" on auth admin calls.
 export function createServiceClient() {
   return createSupabaseClient<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
+    process.env.SUPABASE_SERVICE_ROLE_KEY!,
+    {
+      auth: {
+        autoRefreshToken: false,
+        persistSession: false,
+      },
+    }
   );
 }
