@@ -19,6 +19,11 @@ export default async function BarStaffPage() {
   const staff = await Promise.all(
     (profiles ?? []).map(async (p) => {
       const { data: { user } } = await supabase.auth.admin.getUserById(p.id);
+      console.log("[bar/staff debug]", user?.email, {
+        email_confirmed_at: user?.email_confirmed_at,
+        last_sign_in_at: user?.last_sign_in_at,
+        banned_until: user?.banned_until,
+      });
       return {
         ...p,
         email: user?.email ?? "—",
