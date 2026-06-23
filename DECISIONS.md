@@ -462,3 +462,16 @@ Format for each entry:
 - _Trigger on profiles insert._ Rejected: the `profiles` trigger fires for all roles; this would create spurious `gamer_members` rows for admins and artists.
 
 **Consequences:** If an invite is sent but the gamer never completes signup, there will be a `gamer_members` row with `auth_user_id` pointing to a user who hasn't set a password. This is acceptable — the bartender can still see the row and it does no harm.
+
+---
+
+## 2026-06-23 — Unsubscribe link uses email-in-URL, no token
+
+**Context:** The newsletter unsubscribe page at `/unsubscribe?email=x` uses the subscriber's email as the only identifier. Any caller who knows someone's email can unsubscribe them.
+
+**Decision:** Accepted. This is the industry-standard pattern (Mailchimp, Substack, Resend etc. all use plain email links). The risk is narrow: unsubscribe links only appear in email footers sent to the subscriber, so only the subscriber (or someone with access to their inbox) can trigger the action. Adding a token would require an `unsubscribe_token` column, token generation at subscribe time, and token validation at click time — significant complexity for a small newsletter list.
+
+**Alternatives considered:**
+- _HMAC-signed token in the URL._ More secure but adds complexity. Revisit if the list grows large or if abuse is observed.
+
+**Consequences:** `unsubscribeEmail` server action uses `createServiceClient()` (service role, bypasses RLS) since the RLS policy only allows public INSERT, not UPDATE. Document: if switching to user-auth-based unsubscribe in future, also add an RLS UPDATE policy.
