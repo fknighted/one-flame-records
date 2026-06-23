@@ -1,11 +1,20 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 import { createServiceClient } from "@/lib/supabase/server";
 import { inngest } from "@/lib/inngest/client";
 import { postToInstagram, postToFacebook } from "@/lib/social/meta";
 import { postToTikTok } from "@/lib/social/tiktok";
 import { requireAdmin } from "@/lib/auth";
+
+export async function deleteCampaign(campaignId: string): Promise<void> {
+  await requireAdmin();
+  const supabase = createServiceClient();
+  await supabase.from("content_campaigns").delete().eq("id", campaignId);
+  revalidatePath("/admin/campaigns");
+  redirect("/admin/campaigns");
+}
 
 export async function triggerCampaignVideo(pieceId: string): Promise<void> {
   await requireAdmin();

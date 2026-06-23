@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { createServiceClient } from "@/lib/supabase/server";
+import DeleteCampaignButton from "./DeleteCampaignButton";
 
 const STATUS_STYLES: Record<string, string> = {
   draft:       "bg-bone/10 text-bone/40 border border-bone/15",
@@ -110,6 +111,7 @@ export default async function CampaignsPage() {
                 <span className={`shrink-0 text-[10px] font-semibold capitalize px-2 py-0.5 rounded-full ${STATUS_STYLES[c.status] ?? STATUS_STYLES.draft}`}>
                   {STATUS_LABEL[c.status] ?? c.status}
                 </span>
+                <DeleteCampaignButton id={c.id} title={c.title} />
               </Link>
             );
           })}
