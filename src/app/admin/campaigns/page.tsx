@@ -91,15 +91,19 @@ export default async function CampaignsPage() {
           {campaigns.map((c) => {
             const counts = countMap[c.id] ?? { total: 0, approved: 0, published: 0 };
             return (
-              <Link
+              <div
                 key={c.id}
-                href={`/admin/campaigns/${c.id}`}
-                className="flex items-center gap-4 rounded-lg border border-bone/10 p-4 hover:border-bone/20 hover:bg-bone/[0.02] transition-colors group"
+                className="relative flex items-center gap-4 rounded-lg border border-bone/10 p-4 hover:border-bone/20 hover:bg-bone/[0.02] transition-colors group"
               >
-                <span className="text-xl shrink-0 opacity-50">
+                <Link
+                  href={`/admin/campaigns/${c.id}`}
+                  className="absolute inset-0 rounded-lg"
+                  aria-label={c.title}
+                />
+                <span className="relative z-10 text-xl shrink-0 opacity-50">
                   {SOURCE_ICON[c.source_type] ?? "•"}
                 </span>
-                <div className="flex-1 min-w-0">
+                <div className="relative z-10 flex-1 min-w-0">
                   <p className="text-bone font-medium group-hover:text-ochre transition-colors truncate">{c.title}</p>
                   <p className="text-xs text-bone/35 mt-0.5">
                     {counts.total} piece{counts.total !== 1 ? "s" : ""}
@@ -108,11 +112,11 @@ export default async function CampaignsPage() {
                     {" · "}{formatDate(c.created_at)}
                   </p>
                 </div>
-                <span className={`shrink-0 text-[10px] font-semibold capitalize px-2 py-0.5 rounded-full ${STATUS_STYLES[c.status] ?? STATUS_STYLES.draft}`}>
+                <span className={`relative z-10 shrink-0 text-[10px] font-semibold capitalize px-2 py-0.5 rounded-full ${STATUS_STYLES[c.status] ?? STATUS_STYLES.draft}`}>
                   {STATUS_LABEL[c.status] ?? c.status}
                 </span>
                 <DeleteCampaignButton id={c.id} title={c.title} />
-              </Link>
+              </div>
             );
           })}
         </div>

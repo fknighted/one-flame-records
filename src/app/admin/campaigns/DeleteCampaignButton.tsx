@@ -6,9 +6,7 @@ import { deleteCampaign } from "./[id]/actions";
 export default function DeleteCampaignButton({ id, title }: { id: string; title: string }) {
   const [pending, startTransition] = useTransition();
 
-  function handleClick(e: React.MouseEvent) {
-    e.preventDefault();
-    e.stopPropagation();
+  function handleClick() {
     if (!confirm(`Delete campaign "${title}"?`)) return;
     startTransition(() => deleteCampaign(id));
   }
