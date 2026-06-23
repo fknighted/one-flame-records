@@ -141,6 +141,7 @@ export default async function AdminVideosPage() {
                           type="submit"
                           className="text-xs text-bone/25 hover:text-red-400 transition-colors"
                           title="Delete video"
+                          onClick={(e) => { if (!confirm(`Delete video "${video.title}"?`)) e.preventDefault(); }}
                         >
                           ×
                         </button>

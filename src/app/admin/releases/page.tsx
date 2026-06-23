@@ -116,6 +116,7 @@ export default async function AdminReleasesPage() {
                             type="submit"
                             className="text-xs text-bone/30 hover:text-red-400 transition-colors"
                             title="Delete release"
+                            onClick={(e) => { if (!confirm(`Delete release "${release.title}"?`)) e.preventDefault(); }}
                           >
                             ×
                           </button>

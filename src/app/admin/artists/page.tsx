@@ -209,7 +209,7 @@ export default async function AdminArtistsPage({
                       ↗
                     </a>
                     <form action={deleteWithId} className="inline ml-auto">
-                      <button type="submit" className="text-xs text-bone/20 hover:text-red-400 transition-colors" title="Delete artist">
+                      <button type="submit" className="text-xs text-bone/20 hover:text-red-400 transition-colors" title="Delete artist" onClick={(e) => { if (!confirm(`Delete artist "${artist.stage_name}"?`)) e.preventDefault(); }}>
                         ×
                       </button>
                     </form>

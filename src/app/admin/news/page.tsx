@@ -70,6 +70,7 @@ export default async function AdminNewsPage() {
                         type="submit"
                         className="text-xs text-bone/25 hover:text-red-400 transition-colors"
                         title="Delete post"
+                        onClick={(e) => { if (!confirm(`Delete post "${post.title}"?`)) e.preventDefault(); }}
                       >
                         ×
                       </button>
