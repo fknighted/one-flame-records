@@ -219,7 +219,7 @@ export default async function AdminJobsPage() {
                           type="submit"
                           className="text-xs text-bone/30 hover:text-red-400 transition-colors"
                           title="Delete job"
-                          onClick={(e) => { if (!confirm(`Delete video job for "${job.artists?.stage_name ?? 'this artist'}"?`)) e.preventDefault(); }}
+                          onClick={(e) => { if (!confirm(`Delete job for "${job.artists?.stage_name ?? 'unknown artist'}"?`)) e.preventDefault(); }}
                         >
                           ×
                         </button>
