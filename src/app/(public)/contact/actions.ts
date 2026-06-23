@@ -35,7 +35,7 @@ export async function submitContact(
 
   const resend = new Resend(process.env.RESEND_API_KEY);
   const from   = process.env.RESEND_FROM_EMAIL ?? "noreply@oneflamerecords.com";
-  const to     = "fknighted@gmail.com";
+  const to     = process.env.ADMIN_EMAIL ?? "fknighted@gmail.com";
 
   const { error } = await resend.emails.send({
     from,
