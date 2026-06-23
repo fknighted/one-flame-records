@@ -31,6 +31,7 @@ export async function sendNewsletter(
   const html = await marked(body);
   const resend = new Resend(process.env.RESEND_API_KEY);
   const from = process.env.RESEND_FROM_EMAIL ?? "noreply@oneflamerecords.com";
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://oneflamerecords.com";
 
   // Resend batch: max 100 per call
   let sent = 0;
@@ -41,7 +42,7 @@ export async function sendNewsletter(
         from,
         to: s.email,
         subject,
-        html: `${html}<p style="font-size:12px;color:#888;margin-top:32px;">You're receiving this because you subscribed at oneflamerecords.com. Reply to unsubscribe.</p>`,
+        html: `${html}<p style="font-size:12px;color:#888;margin-top:32px;">You're receiving this because you subscribed at oneflamerecords.com. <a href="${siteUrl}/unsubscribe?email=${encodeURIComponent(s.email)}" style="color:#B8893B;">Unsubscribe</a></p>`,
       }))
     );
     if (batchErr) return { error: `Send failed after ${sent} emails: ${batchErr.message}`, sent };
