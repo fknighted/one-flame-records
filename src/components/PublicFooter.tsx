@@ -83,8 +83,16 @@ export default function PublicFooter() {
               Legal
             </p>
             <ul className="space-y-2.5">
-              <li><span className="text-sm text-bone/25">Privacy</span></li>
-              <li><span className="text-sm text-bone/25">Terms</span></li>
+              <li>
+                <Link href="/privacy" className="text-sm text-bone/60 hover:text-ochre transition-colors">
+                  Privacy
+                </Link>
+              </li>
+              <li>
+                <Link href="/terms" className="text-sm text-bone/60 hover:text-ochre transition-colors">
+                  Terms
+                </Link>
+              </li>
             </ul>
           </div>
         </div>
