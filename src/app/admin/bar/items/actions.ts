@@ -19,19 +19,21 @@ export async function createMenuItem(
 ): Promise<ActionState> {
   await requireAdmin();
 
-  const name        = (formData.get("name") as string)?.trim();
-  const category    = formData.get("category") as string;
-  const priceStr    = formData.get("price") as string;
-  const description = (formData.get("description") as string)?.trim() || null;
-  const sortStr     = formData.get("sort_order") as string;
+  const name          = (formData.get("name") as string)?.trim();
+  const category      = formData.get("category") as string;
+  const priceStr      = formData.get("price") as string;
+  const description   = (formData.get("description") as string)?.trim() || null;
+  const sortStr       = formData.get("sort_order") as string;
+  const reorderStr    = formData.get("reorder_level") as string;
 
   if (!name)     return { error: "Name is required." };
   if (!category) return { error: "Category is required." };
 
-  const price_cents = parseCents(priceStr);
+  const price_cents   = parseCents(priceStr);
   if (price_cents === null) return { error: "Enter a valid price (e.g. 5.00)." };
 
-  const sort_order = sortStr ? parseInt(sortStr, 10) : null;
+  const sort_order    = sortStr ? parseInt(sortStr, 10) : null;
+  const reorder_level = reorderStr ? parseInt(reorderStr, 10) : null;
 
   const supabase = createServiceClient();
   const { error } = await supabase.from("pos_items").insert({
@@ -40,6 +42,7 @@ export async function createMenuItem(
     price_cents,
     description,
     sort_order,
+    reorder_level,
   });
 
   if (error) return { error: `Failed to create item: ${error.message}` };
@@ -54,26 +57,28 @@ export async function updateMenuItem(
 ): Promise<ActionState> {
   await requireAdmin();
 
-  const id          = formData.get("id") as string;
-  const name        = (formData.get("name") as string)?.trim();
-  const category    = formData.get("category") as string;
-  const priceStr    = formData.get("price") as string;
-  const description = (formData.get("description") as string)?.trim() || null;
-  const sortStr     = formData.get("sort_order") as string;
-  const is_active   = formData.get("is_active") === "true";
+  const id            = formData.get("id") as string;
+  const name          = (formData.get("name") as string)?.trim();
+  const category      = formData.get("category") as string;
+  const priceStr      = formData.get("price") as string;
+  const description   = (formData.get("description") as string)?.trim() || null;
+  const sortStr       = formData.get("sort_order") as string;
+  const reorderStr    = formData.get("reorder_level") as string;
+  const is_active     = formData.get("is_active") === "true";
 
   if (!id)   return { error: "ID missing." };
   if (!name) return { error: "Name is required." };
 
-  const price_cents = parseCents(priceStr);
+  const price_cents   = parseCents(priceStr);
   if (price_cents === null) return { error: "Enter a valid price (e.g. 5.00)." };
 
-  const sort_order = sortStr ? parseInt(sortStr, 10) : null;
+  const sort_order    = sortStr ? parseInt(sortStr, 10) : null;
+  const reorder_level = reorderStr ? parseInt(reorderStr, 10) : null;
 
   const supabase = createServiceClient();
   const { error } = await supabase
     .from("pos_items")
-    .update({ name, category, price_cents, description, sort_order, is_active })
+    .update({ name, category, price_cents, description, sort_order, reorder_level, is_active })
     .eq("id", id);
 
   if (error) return { error: `Failed to update item: ${error.message}` };

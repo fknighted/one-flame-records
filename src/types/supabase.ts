@@ -507,6 +507,7 @@ export type Database = {
           is_active: boolean
           name: string
           price_cents: number
+          reorder_level: number | null
           sort_order: number | null
           stock_quantity: number | null
           updated_at: string
@@ -519,6 +520,7 @@ export type Database = {
           is_active?: boolean
           name: string
           price_cents: number
+          reorder_level?: number | null
           sort_order?: number | null
           stock_quantity?: number | null
           updated_at?: string
@@ -531,6 +533,7 @@ export type Database = {
           is_active?: boolean
           name?: string
           price_cents?: number
+          reorder_level?: number | null
           sort_order?: number | null
           stock_quantity?: number | null
           updated_at?: string

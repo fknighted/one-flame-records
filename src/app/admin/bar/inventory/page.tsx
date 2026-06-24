@@ -11,7 +11,7 @@ export default async function InventoryPage() {
   const [{ data: items }, { data: todayTabs }] = await Promise.all([
     supabase
       .from("pos_items")
-      .select("id, name, category, price_cents, stock_quantity, is_active")
+      .select("id, name, category, price_cents, stock_quantity, reorder_level, is_active")
       .order("sort_order", { ascending: true, nullsFirst: false })
       .order("name"),
     supabase
@@ -50,7 +50,7 @@ export default async function InventoryPage() {
           <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-forest mb-1">Bar</p>
           <h1 className="font-display font-bold text-bone text-3xl">Inventory</h1>
           <div className="mt-3 h-px w-16 bg-bone/20" />
-          <p className="mt-3 text-sm text-bone/40">Set stock counts and manage menu items. Items at 5 or below highlight in red.</p>
+          <p className="mt-3 text-sm text-bone/40">Set stock counts. Items at or below their reorder level (default 5) highlight in red.</p>
         </div>
         <Link
           href="/admin/bar/items/new"
@@ -81,7 +81,8 @@ export default async function InventoryPage() {
                 {grouped[cat]!.map((item) => {
                   const settledToday = soldMap[item.id] ?? 0;
                   const stock = item.stock_quantity;
-                  const low = stock !== null && stock <= 5;
+                  const threshold = item.reorder_level ?? 5;
+                  const low = stock !== null && stock <= threshold;
                   return (
                     <tr key={item.id} className={`hover:bg-bone/3 transition-colors ${!item.is_active ? "opacity-40" : ""}`}>
                       <td className="px-4 py-3 text-bone font-medium">

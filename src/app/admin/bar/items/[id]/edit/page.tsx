@@ -21,13 +21,14 @@ export default async function EditMenuItemPage({ params }: { params: Promise<{ i
         action={updateMenuItem}
         mode="edit"
         initialValues={{
-          id:          item.id,
-          name:        item.name,
-          category:    item.category,
-          price_cents: item.price_cents,
-          description: item.description ?? "",
-          sort_order:  item.sort_order ?? undefined,
-          is_active:   item.is_active,
+          id:            item.id,
+          name:          item.name,
+          category:      item.category,
+          price_cents:   item.price_cents,
+          description:   item.description ?? "",
+          sort_order:    item.sort_order ?? undefined,
+          reorder_level: item.reorder_level ?? undefined,
+          is_active:     item.is_active,
         }}
       />
     </div>

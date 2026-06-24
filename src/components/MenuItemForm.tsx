@@ -22,6 +22,7 @@ type InitialValues = {
   price_cents?: number;
   description?: string;
   sort_order?: number;
+  reorder_level?: number;
   is_active?: boolean;
 };
 
@@ -110,6 +111,18 @@ export default function MenuItemForm({
           min="0"
           defaultValue={initialValues.sort_order ?? ""}
           placeholder="0"
+          className={INPUT}
+        />
+      </div>
+
+      <div>
+        <label className={LABEL}>Reorder level (optional — highlights red on inventory when stock hits this)</label>
+        <input
+          name="reorder_level"
+          type="number"
+          min="0"
+          defaultValue={initialValues.reorder_level ?? ""}
+          placeholder="5"
           className={INPUT}
         />
       </div>
