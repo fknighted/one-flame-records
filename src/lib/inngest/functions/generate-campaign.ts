@@ -131,8 +131,19 @@ Output only the JSON array. No explanation, no markdown, no code fences.`;
     });
 
     // ── Step 4: Generate each piece in parallel ───────────────────────────────
+    // Cap image generation to avoid runaway cost
+    const maxImages = parseInt(process.env.MAX_CAMPAIGN_IMAGES ?? "10", 10);
+    let imageCount = 0;
+    const cappedPlan = plan.map(piece => {
+      if (piece.image_needed) {
+        imageCount++;
+        if (imageCount > maxImages) return { ...piece, image_needed: false };
+      }
+      return piece;
+    });
+
     await Promise.all(
-      plan.map((piece, i) =>
+      cappedPlan.map((piece, i) =>
         step.run(`generate-piece-${i}`, async () => {
           const pieceId = pieceIds[i];
           if (!pieceId) return;
