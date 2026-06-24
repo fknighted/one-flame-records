@@ -31,7 +31,7 @@ export async function adjustBalance(
   const { data: { user: adminUser } } = await sessionClient.auth.getUser();
   await supabase.from("gamer_balance_transactions").insert({
     member_id:      id,
-    type:           minutes > 0 ? "topup" : "adjustment",
+    type:           minutes > 0 ? "topup" : "correction",
     amount_minutes: minutes,
     reason:         `Admin adjustment`,
     created_by:     adminUser?.id ?? null,

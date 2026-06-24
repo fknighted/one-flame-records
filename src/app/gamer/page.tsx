@@ -99,7 +99,7 @@ export default async function GamerDashboardPage() {
                   <p className="text-bone capitalize">{t.type}</p>
                   {t.reason && <p className="text-xs text-bone/40">{t.reason}</p>}
                 </div>
-                <p className={`font-mono font-semibold ${t.amount_minutes > 0 ? "text-forest" : "text-ochre/70"}`}>
+                <p className={`font-mono font-semibold ${t.amount_minutes > 0 ? "text-forest" : "text-oxblood"}`}>
                   {t.amount_minutes > 0 ? "+" : ""}{t.amount_minutes}m
                 </p>
               </div>
