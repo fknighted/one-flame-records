@@ -113,6 +113,79 @@ export async function removeTabItem(
   return null;
 }
 
+export async function incrementTabItem(
+  _prev: ActionState,
+  formData: FormData
+): Promise<ActionState> {
+  await requireBarStaff();
+
+  const tabItemId = formData.get("tab_item_id") as string;
+  const tabId     = formData.get("tab_id") as string;
+  if (!tabItemId || !tabId) return { error: "Invalid request." };
+
+  const supabase = createServiceClient();
+
+  // Verify the tab is still open and item belongs to this tab
+  const { data: tabItem } = await supabase
+    .from("pos_tab_items")
+    .select("price_cents, tab_id, pos_tabs!inner(status)")
+    .eq("id", tabItemId)
+    .eq("tab_id", tabId)
+    .single();
+
+  if (!tabItem) return { error: "Item not found." };
+  const tabData = Array.isArray(tabItem.pos_tabs) ? tabItem.pos_tabs[0] : tabItem.pos_tabs;
+  if (!tabData || tabData.status !== "open") return { error: "Tab is already closed." };
+
+  // Increment quantity in place
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  await (supabase.rpc as any)("increment_tab_item_quantity", { p_tab_item_id: tabItemId });
+
+  // Increment tab total by the item price
+  await supabase.rpc("increment_tab_total", { p_tab_id: tabId, p_amount: tabItem.price_cents });
+
+  revalidatePath(`/bar/tabs/${tabId}`);
+  return null;
+}
+
+export async function decrementTabItem(
+  _prev: ActionState,
+  formData: FormData
+): Promise<ActionState> {
+  await requireBarStaff();
+
+  const tabItemId = formData.get("tab_item_id") as string;
+  const tabId     = formData.get("tab_id") as string;
+  if (!tabItemId || !tabId) return { error: "Invalid request." };
+
+  const supabase = createServiceClient();
+
+  const { data: tabItem } = await supabase
+    .from("pos_tab_items")
+    .select("quantity, price_cents, tab_id, pos_tabs!inner(status)")
+    .eq("id", tabItemId)
+    .eq("tab_id", tabId)
+    .single();
+
+  if (!tabItem) return { error: "Item not found." };
+  const tabData = Array.isArray(tabItem.pos_tabs) ? tabItem.pos_tabs[0] : tabItem.pos_tabs;
+  if (!tabData || tabData.status !== "open") return { error: "Tab is already closed." };
+
+  if (tabItem.quantity <= 1) {
+    // Remove the item entirely (same as removeTabItem)
+    await supabase.from("pos_tab_items").delete().eq("id", tabItemId);
+  } else {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    await (supabase.rpc as any)("decrement_tab_item_quantity", { p_tab_item_id: tabItemId });
+  }
+
+  // Decrement tab total, floored at 0
+  await supabase.rpc("decrement_tab_total", { p_tab_id: tabId, p_amount: tabItem.price_cents });
+
+  revalidatePath(`/bar/tabs/${tabId}`);
+  return null;
+}
+
 export async function closeTab(
   _prev: ActionState,
   formData: FormData
