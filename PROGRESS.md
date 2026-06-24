@@ -8,25 +8,29 @@ This is the living state of the build. Update at the end of every session.
 
 - **Phase:** Bar POS operational + ongoing content
 - **Status:** Phases 1–5 complete. Bar POS fully built, all migrations applied to production, menu items seeded, dual-access bartender system live. Two full code-review passes applied and clean.
-- **Last updated:** 2026-06-22 (session 35)
+- **Last updated:** 2026-06-23 (session 37)
 
 ## Active focus
 
-First real POS session — promote an artist to bartender, navigate to `/bar` via new portal nav link, open first tab, run the core loop.
+Tier 2 audit items complete. Ready for first live bar POS session + content entry.
 
 ## Blockers
 
 - **TikTok auto-posting** — Make.com has no TikTok video upload module. Manual for now.
 - **Flames Lounge gallery** — Gallery grid still placeholder; swap with real photos when available.
+- **3 pending migrations** — Must run `npx supabase db push --linked` to apply: `20260623000001_tab_item_quantity_rpcs.sql`, `20260623000002_pos_tabs_tip_cents.sql`, `20260623000003_gamer_balance_transactions.sql`
 
 ## Next session
 
-### Priority 1 — First live bar POS run
+### Priority 1 — Apply pending migrations
+Run `npx supabase db push --linked` to deploy the 3 new migrations (tab item quantity RPCs, tip field, gamer balance ledger).
+
+### Priority 2 — First live bar POS run
 1. Admin → Bar → Staff → "Promote Existing Artist" → enter artist's email → grant bar access
-2. Have that artist log in to `/bar`, open a tab, add items, close as cash
+2. Have that artist log in to `/bar`, open a tab, add items (test +/− qty controls), close with a tip
 3. Verify `/admin/bar` shows correct sales totals in Jamaica timezone
 
-### Priority 2 — Content entry (ongoing, via admin)
+### Priority 3 — Content entry (ongoing, via admin)
 - Add artists with photos at `/admin/artists`
 - Add releases with cover art at `/admin/releases`
 - Publish first news post
@@ -44,6 +48,14 @@ First real POS session — promote an artist to bartender, navigate to `/bar` vi
 ## Session log
 
 Append a new entry at the top of this section after every session. Date, summary, files touched, what's next. Keep it tight — full reasoning belongs in `DECISIONS.md`.
+
+### 2026-06-23 (session 37)
+
+**Did:** Full site audit (session 36 read-only pass) then implemented all 7 Tier 2 items. (1) **Events admin** — already existed with full CRUD + nav link; confirmed done. (2) **Campaign deletion** — `deleteCampaign` server action + `DeleteCampaignButton` client component; restructured campaign cards from full-Link wrapper to overlay-Link pattern (button is now a sibling, not nested inside `<a>`, fixing invalid HTML). (3) **Bar POS qty controls** — `incrementTabItem` + `decrementTabItem` server actions; new `QuantityControls` client component replaces `RemoveItemButton`; two new atomic SQL RPCs (`increment_tab_item_quantity`, `decrement_tab_item_quantity`). (4) **Bar POS tip field** — `pos_tabs.tip_cents` migration; `closeTab` now accepts tip; `TabControls` shows JMD dollar tip input that converts to cents via hidden field. (5) **Portal audio player** — `<audio controls preload="none">` row inserted below each audio asset (instrumental/demo) using React.Fragment; no client component needed. (6) **Portal asset edit/delete** — `updateAsset` + `deleteAsset` server actions with ownership checks; `[id]/edit/page.tsx` server page; `EditAssetForm` + `DeleteAssetButton` client components; Edit link added to assets table; table scrollability fixed (`overflow-x-auto` + `min-w-[600px]`). (7) **Gamer balance ledger** — `gamer_balance_transactions` migration + types; `adjustBalance` and `endSession` now insert transaction records; Balance History section added to admin member detail; Recent Transactions card added to gamer dashboard. Also fixed: `"correction"` type for admin deductions, oxblood color for debit amounts.
+**Touched:** `src/app/admin/campaigns/[id]/actions.ts`, `src/app/admin/campaigns/DeleteCampaignButton.tsx` (new), `src/app/admin/campaigns/page.tsx`, `src/app/bar/tabs/[id]/actions.ts`, `src/app/bar/tabs/[id]/QuantityControls.tsx` (new), `src/app/bar/tabs/[id]/page.tsx`, `src/app/bar/tabs/[id]/TabControls.tsx`, `src/app/bar/tabs/[id]/RemoveItemButton.tsx` (deleted), `src/app/portal/assets/actions.ts`, `src/app/portal/assets/page.tsx`, `src/app/portal/assets/[id]/edit/page.tsx` (new), `src/app/portal/assets/[id]/edit/EditAssetForm.tsx` (new), `src/app/portal/assets/[id]/edit/DeleteAssetButton.tsx` (new), `src/app/admin/bar/members/[id]/actions.ts`, `src/app/admin/bar/members/[id]/page.tsx`, `src/app/bar/sessions/actions.ts`, `src/app/gamer/page.tsx`, `supabase/migrations/20260623000001_tab_item_quantity_rpcs.sql` (new), `supabase/migrations/20260623000002_pos_tabs_tip_cents.sql` (new), `supabase/migrations/20260623000003_gamer_balance_transactions.sql` (new), `src/types/supabase.ts`
+**Decided:** Overlay-Link pattern for campaign cards (absolute inset-0 link + relative z-10 siblings) — valid HTML, no button-inside-anchor. Documented campaign delete flow; no separate DECISIONS entry needed.
+**Blocked on:** 3 migrations need `npx supabase db push --linked`. Flames Lounge gallery photos (placeholder). TikTok auto-posting (no Make.com module).
+**Next:** Apply migrations. First live bar session (tab, items, tip, close). Content entry.
 
 ### 2026-06-22 (session 36)
 
