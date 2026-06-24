@@ -50,6 +50,16 @@ export default function PublicHeader() {
             </Link>
           ))}
           <Link
+            href="/search"
+            aria-label="Search"
+            className="text-ink/60 hover:text-oxblood transition-colors"
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <circle cx="11" cy="11" r="8" />
+              <path d="M21 21l-4.35-4.35" />
+            </svg>
+          </Link>
+          <Link
             href={NAV_CTA.href}
             className="text-sm font-semibold text-oxblood border border-oxblood/40 rounded px-3.5 py-1.5 hover:bg-oxblood hover:text-bone transition-colors"
           >
@@ -95,6 +105,13 @@ export default function PublicHeader() {
               {label}
             </Link>
           ))}
+          <Link
+            href="/search"
+            className="font-display text-lg font-bold text-bone py-2.5 border-b border-bone/10 hover:text-ochre transition-colors"
+            onClick={() => setOpen(false)}
+          >
+            Search
+          </Link>
           <Link
             href={NAV_CTA.href}
             className="font-display text-lg font-bold text-ochre py-2.5 mt-1 hover:text-bone transition-colors"
