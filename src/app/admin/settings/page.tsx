@@ -1,5 +1,6 @@
 import { createServiceClient } from "@/lib/supabase/server";
 import { BudgetForm } from "./BudgetForm";
+import MFASection from "./MFASection";
 
 export default async function AdminSettingsPage() {
   const supabase = createServiceClient();
@@ -66,6 +67,12 @@ export default async function AdminSettingsPage() {
         </div>
 
         <BudgetForm currentBudget={budgetUsd} />
+      </section>
+
+      <div className="h-px bg-bone/10" />
+
+      <section className="rounded-lg border border-bone/10 p-6">
+        <MFASection />
       </section>
     </div>
   );
