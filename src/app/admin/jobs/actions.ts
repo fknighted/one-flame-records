@@ -22,6 +22,27 @@ export async function resetJob(jobId: string): Promise<void> {
   revalidatePath("/admin/jobs");
 }
 
+export async function cancelJob(jobId: string): Promise<void> {
+  await requireAdmin();
+  const supabase = createServiceClient();
+
+  // Send Inngest cancel event so the running function exits at next step boundary
+  await inngest.send({ name: "video/cancel.requested", data: { jobId } });
+
+  // Mark the job as failed immediately so the UI updates right away
+  await supabase
+    .from("video_jobs")
+    .update({
+      status:       "failed",
+      error:        "Cancelled by admin",
+      completed_at: new Date().toISOString(),
+    })
+    .eq("id", jobId)
+    .in("status", ["pending", "analyzing", "prompting", "generating", "assembling"]);
+
+  revalidatePath("/admin/jobs");
+}
+
 export async function retryJob(jobId: string): Promise<void> {
   await requireAdmin();
   const supabase = createServiceClient();

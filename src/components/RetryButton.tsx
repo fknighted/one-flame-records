@@ -1,13 +1,14 @@
 "use client";
 
 import { useTransition } from "react";
-import { retryJob, resetJob } from "@/app/admin/jobs/actions";
+import { retryJob, resetJob, cancelJob } from "@/app/admin/jobs/actions";
 
 const ACTIVE_STATUSES = ["pending", "analyzing", "prompting", "generating", "assembling"];
 
 export function JobActions({ jobId, status, errorText }: { jobId: string; status: string; errorText: string | null }) {
   const [retryPending, startRetry] = useTransition();
   const [resetPending, startReset] = useTransition();
+  const [cancelPending, startCancel] = useTransition();
 
   if (status === "failed") {
     return (
@@ -33,14 +34,24 @@ export function JobActions({ jobId, status, errorText }: { jobId: string; status
 
   if (ACTIVE_STATUSES.includes(status)) {
     return (
-      <button
-        onClick={() => startReset(() => resetJob(jobId))}
-        disabled={resetPending}
-        className="text-xs text-bone/30 hover:text-oxblood transition-colors disabled:opacity-50 whitespace-nowrap"
-        title="Mark as failed so it can be retried"
-      >
-        {resetPending ? "Resetting…" : "↩ Reset"}
-      </button>
+      <span className="inline-flex items-center gap-2">
+        <button
+          onClick={() => startCancel(() => cancelJob(jobId))}
+          disabled={cancelPending || resetPending}
+          className="text-xs text-oxblood/60 hover:text-oxblood transition-colors disabled:opacity-50 whitespace-nowrap"
+          title="Cancel this job"
+        >
+          {cancelPending ? "Cancelling…" : "✕ Cancel"}
+        </button>
+        <button
+          onClick={() => startReset(() => resetJob(jobId))}
+          disabled={cancelPending || resetPending}
+          className="text-xs text-bone/25 hover:text-bone/50 transition-colors disabled:opacity-50 whitespace-nowrap"
+          title="Mark as failed (no Inngest signal)"
+        >
+          {resetPending ? "…" : "Reset"}
+        </button>
+      </span>
     );
   }
 

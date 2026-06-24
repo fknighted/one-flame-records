@@ -24,6 +24,7 @@ export const generateVideo = inngest.createFunction(
     id: "generate-video",
     triggers: [{ event: "video/generate.requested" }],
     retries: 2,
+    cancelOn: [{ event: "video/cancel.requested", if: "event.data.jobId == async.data.jobId" }],
     onFailure: async ({ error, event }) => {
       const originalData = (event.data as unknown as { event: { data: { jobId: string } } }).event.data;
       await updateJobStatus(originalData.jobId, "failed", { error: error.message });
