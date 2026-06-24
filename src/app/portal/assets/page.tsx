@@ -98,8 +98,8 @@ export default async function PortalAssetsPage() {
           </Link>
         </div>
       ) : (
-        <div className="rounded-lg border border-bone/10 overflow-hidden">
-          <table className="w-full text-sm">
+        <div className="rounded-lg border border-bone/10 overflow-x-auto">
+          <table className="w-full min-w-[600px] text-sm">
             <thead>
               <tr className="border-b border-bone/10 bg-bone/5">
                 <th className="text-left px-4 py-3 text-bone/40 font-medium text-xs uppercase tracking-wider">

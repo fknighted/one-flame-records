@@ -118,17 +118,17 @@ export async function updateAsset(
   redirect("/portal/assets");
 }
 
-export async function deleteAsset(assetId: string): Promise<void> {
+export async function deleteAsset(assetId: string): Promise<AssetActionState> {
   const sessionClient = await createClient();
   const { data: { user } } = await sessionClient.auth.getUser();
-  if (!user) return;
+  if (!user) return { error: "Not authenticated." };
 
   const { data: profile } = await sessionClient
     .from("profiles")
     .select("artist_id")
     .eq("id", user.id)
     .single();
-  if (!profile?.artist_id) return;
+  if (!profile?.artist_id) return { error: "No artist profile." };
 
   const serviceClient = createServiceClient();
 
@@ -139,12 +139,20 @@ export async function deleteAsset(assetId: string): Promise<void> {
     .eq("artist_id", profile.artist_id)
     .single();
 
-  if (!asset) return;
+  if (!asset) return { error: "Asset not found or access denied." };
 
   await serviceClient.storage.from("private-assets").remove([asset.storage_path]);
-  await serviceClient.from("assets").delete().eq("id", assetId);
+
+  const { error } = await serviceClient
+    .from("assets")
+    .delete()
+    .eq("id", assetId)
+    .eq("artist_id", profile.artist_id);
+
+  if (error) return { error: `Failed to delete: ${error.message}` };
 
   revalidatePath("/portal/assets");
+  return null;
 }
 
 export async function toggleAssetPublic(assetId: string, _formData: FormData): Promise<void> {
