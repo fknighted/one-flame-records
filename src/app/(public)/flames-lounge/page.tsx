@@ -190,7 +190,7 @@ export default async function FlamesLoungePage() {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\u003c") }}
       />
       {/* ── Hero ── */}
       <section className="relative overflow-hidden bg-[#0A0806] min-h-[85vh] flex flex-col justify-end">

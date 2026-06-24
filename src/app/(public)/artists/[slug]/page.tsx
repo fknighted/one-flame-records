@@ -193,7 +193,7 @@ export default async function ArtistDetailPage({ params }: Props) {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\u003c") }}
       />
       {/* ── Hero ── */}
       <div className="relative w-full aspect-[2/1] sm:aspect-[3/1] bg-ink overflow-hidden">
