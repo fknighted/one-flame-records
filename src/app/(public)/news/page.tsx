@@ -22,16 +22,30 @@ const CATEGORY_PILL: Record<string, string> = {
   event:   "bg-ochre/10 text-ochre",
 };
 
-export default async function NewsPage() {
+const PAGE_SIZE = 9;
+
+export default async function NewsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ page?: string }>;
+}) {
+  const { page: pageParam } = await searchParams;
+  const page = Math.max(1, parseInt(pageParam ?? "1", 10) || 1);
+  const from = (page - 1) * PAGE_SIZE;
+  const to   = from + PAGE_SIZE - 1;
+
   const supabase = await createClient();
 
   const now = new Date().toISOString();
-  const { data: posts } = await supabase
+  const { data: posts, count } = await supabase
     .from("news_posts")
-    .select("id, slug, title, excerpt, cover_url, category, published_at")
+    .select("id, slug, title, excerpt, cover_url, category, published_at", { count: "exact" })
     .eq("is_published", true)
     .or(`published_at.is.null,published_at.lte.${now}`)
-    .order("published_at", { ascending: false });
+    .order("published_at", { ascending: false })
+    .range(from, to);
+
+  const totalPages = Math.ceil((count ?? 0) / PAGE_SIZE);
 
   return (
     <>
@@ -114,6 +128,30 @@ export default async function NewsPage() {
             <p className="py-20 text-center text-ink/40 text-sm">
               No posts yet — check back soon.
             </p>
+          )}
+
+          {totalPages > 1 && (
+            <div className="mt-12 flex items-center justify-center gap-2">
+              {page > 1 && (
+                <Link
+                  href={page - 1 === 1 ? "/news" : `/news?page=${page - 1}`}
+                  className="px-4 py-2 rounded border border-oxblood/20 text-sm text-oxblood hover:bg-oxblood/5 transition-colors"
+                >
+                  ← Prev
+                </Link>
+              )}
+              <span className="text-sm text-ink/40">
+                Page {page} of {totalPages}
+              </span>
+              {page < totalPages && (
+                <Link
+                  href={`/news?page=${page + 1}`}
+                  className="px-4 py-2 rounded border border-oxblood/20 text-sm text-oxblood hover:bg-oxblood/5 transition-colors"
+                >
+                  Next →
+                </Link>
+              )}
+            </div>
           )}
         </div>
       </section>
