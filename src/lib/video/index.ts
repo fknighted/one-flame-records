@@ -1,8 +1,6 @@
 import { KlingGenerator } from "@/lib/video/providers/kling";
 import { KieGenerator } from "@/lib/video/providers/kie";
 import { HiggsFieldGenerator } from "@/lib/video/providers/higgsfield";
-import { RunwayGenerator } from "@/lib/video/providers/runway";
-import { PikaGenerator } from "@/lib/video/providers/pika";
 import type { ClipGenerator } from "@/lib/video/types";
 
 export function getClipGenerator(model?: string): ClipGenerator {
@@ -11,8 +9,10 @@ export function getClipGenerator(model?: string): ClipGenerator {
     case "kie":         return new KieGenerator();
     case "kling":       return new KlingGenerator();
     case "higgsfield":  return new HiggsFieldGenerator();
-    case "runway":      return new RunwayGenerator();
-    case "pika":        return new PikaGenerator();
+    case "runway":
+      throw new Error("Video provider 'runway' is not implemented. Set DEFAULT_VIDEO_MODEL to 'kie' or 'kling'.");
+    case "pika":
+      throw new Error("Video provider 'pika' is not implemented. Set DEFAULT_VIDEO_MODEL to 'kie' or 'kling'.");
     default: throw new Error(`Unknown video model: ${choice}`);
   }
 }
