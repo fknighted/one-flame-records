@@ -139,10 +139,12 @@ export async function incrementTabItem(
 
   // Increment quantity in place
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  await (supabase.rpc as any)("increment_tab_item_quantity", { p_tab_item_id: tabItemId });
+  const { error: qtyError } = await (supabase.rpc as any)("increment_tab_item_quantity", { p_tab_item_id: tabItemId });
+  if (qtyError) return { error: `Failed to update quantity: ${qtyError.message}` };
 
   // Increment tab total by the item price
-  await supabase.rpc("increment_tab_total", { p_tab_id: tabId, p_amount: tabItem.price_cents });
+  const { error: totalError } = await supabase.rpc("increment_tab_total", { p_tab_id: tabId, p_amount: tabItem.price_cents });
+  if (totalError) return { error: `Quantity updated but total not synced: ${totalError.message}` };
 
   revalidatePath(`/bar/tabs/${tabId}`);
   return null;
@@ -176,11 +178,13 @@ export async function decrementTabItem(
     await supabase.from("pos_tab_items").delete().eq("id", tabItemId);
   } else {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    await (supabase.rpc as any)("decrement_tab_item_quantity", { p_tab_item_id: tabItemId });
+    const { error: qtyError } = await (supabase.rpc as any)("decrement_tab_item_quantity", { p_tab_item_id: tabItemId });
+    if (qtyError) return { error: `Failed to update quantity: ${qtyError.message}` };
   }
 
   // Decrement tab total, floored at 0
-  await supabase.rpc("decrement_tab_total", { p_tab_id: tabId, p_amount: tabItem.price_cents });
+  const { error: totalError } = await supabase.rpc("decrement_tab_total", { p_tab_id: tabId, p_amount: tabItem.price_cents });
+  if (totalError) return { error: `Quantity updated but total not synced: ${totalError.message}` };
 
   revalidatePath(`/bar/tabs/${tabId}`);
   return null;

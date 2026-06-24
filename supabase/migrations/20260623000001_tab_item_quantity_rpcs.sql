@@ -2,6 +2,7 @@
 CREATE OR REPLACE FUNCTION increment_tab_item_quantity(p_tab_item_id uuid)
 RETURNS void
 LANGUAGE sql
+SECURITY DEFINER
 AS $$
   UPDATE pos_tab_items SET quantity = quantity + 1 WHERE id = p_tab_item_id;
 $$;
@@ -10,6 +11,7 @@ $$;
 CREATE OR REPLACE FUNCTION decrement_tab_item_quantity(p_tab_item_id uuid)
 RETURNS void
 LANGUAGE sql
+SECURITY DEFINER
 AS $$
   UPDATE pos_tab_items SET quantity = GREATEST(quantity - 1, 1) WHERE id = p_tab_item_id;
 $$;
