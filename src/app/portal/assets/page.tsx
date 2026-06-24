@@ -1,3 +1,4 @@
+import React from "react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient, createServiceClient } from "@/lib/supabase/server";
@@ -121,53 +122,70 @@ export default async function PortalAssetsPage() {
             </thead>
             <tbody>
               {assetsWithUrls.map((asset, i) => (
-                <tr
-                  key={asset.id}
-                  className={`border-b border-bone/10 last:border-0 ${
-                    i % 2 !== 0 ? "bg-bone/[0.02]" : ""
-                  }`}
-                >
-                  <td className="px-4 py-3">
-                    <span className="rounded-full bg-forest/20 text-forest text-xs px-2 py-0.5 font-medium">
-                      {KIND_LABELS[asset.kind] ?? asset.kind}
-                    </span>
-                  </td>
-                  <td className="px-4 py-3 text-bone">{asset.title}</td>
-                  <td className="px-4 py-3 text-bone/50 font-mono text-xs">
-                    {formatDuration(asset.duration_seconds)}
-                  </td>
-                  <td className="px-4 py-3 text-bone/50">
-                    {formatDate(asset.created_at)}
-                  </td>
-                  <td className="px-4 py-3">
-                    <form action={toggleAssetPublic.bind(null, asset.id)}>
-                      <button
-                        type="submit"
-                        title={asset.is_public ? "Visible on your public page — click to hide" : "Click to show on your public page"}
-                        className={`text-xs font-medium px-2 py-0.5 rounded transition-colors ${
-                          asset.is_public
-                            ? "bg-forest/20 text-forest hover:bg-forest/30"
-                            : "bg-bone/10 text-bone/30 hover:bg-bone/20 hover:text-bone/60"
-                        }`}
-                      >
-                        {asset.is_public ? "Public" : "Private"}
-                      </button>
-                    </form>
-                  </td>
-                  <td className="px-4 py-3 text-right">
-                    {asset.signedUrl ? (
-                      <a
-                        href={asset.signedUrl}
-                        className="text-ochre hover:text-ochre/80 text-xs font-medium transition-colors"
-                        download
-                      >
-                        Download
-                      </a>
-                    ) : (
-                      <span className="text-bone/20 text-xs">—</span>
-                    )}
-                  </td>
-                </tr>
+                <React.Fragment key={asset.id}>
+                  <tr
+                    className={`border-b border-bone/10 ${
+                      i % 2 !== 0 ? "bg-bone/[0.02]" : ""
+                    }`}
+                  >
+                    <td className="px-4 py-3">
+                      <span className="rounded-full bg-forest/20 text-forest text-xs px-2 py-0.5 font-medium">
+                        {KIND_LABELS[asset.kind] ?? asset.kind}
+                      </span>
+                    </td>
+                    <td className="px-4 py-3 text-bone">{asset.title}</td>
+                    <td className="px-4 py-3 text-bone/50 font-mono text-xs">
+                      {formatDuration(asset.duration_seconds)}
+                    </td>
+                    <td className="px-4 py-3 text-bone/50">
+                      {formatDate(asset.created_at)}
+                    </td>
+                    <td className="px-4 py-3">
+                      <form action={toggleAssetPublic.bind(null, asset.id)}>
+                        <button
+                          type="submit"
+                          title={asset.is_public ? "Visible on your public page — click to hide" : "Click to show on your public page"}
+                          className={`text-xs font-medium px-2 py-0.5 rounded transition-colors ${
+                            asset.is_public
+                              ? "bg-forest/20 text-forest hover:bg-forest/30"
+                              : "bg-bone/10 text-bone/30 hover:bg-bone/20 hover:text-bone/60"
+                          }`}
+                        >
+                          {asset.is_public ? "Public" : "Private"}
+                        </button>
+                      </form>
+                    </td>
+                    <td className="px-4 py-3 text-right">
+                      {asset.signedUrl ? (
+                        <a
+                          href={asset.signedUrl}
+                          className="text-ochre hover:text-ochre/80 text-xs font-medium transition-colors"
+                          download
+                        >
+                          Download
+                        </a>
+                      ) : (
+                        <span className="text-bone/20 text-xs">—</span>
+                      )}
+                    </td>
+                  </tr>
+                  {asset.mime_type?.startsWith("audio/") && asset.signedUrl && (
+                    <tr
+                      className={`border-b border-bone/10 last:border-0 ${
+                        i % 2 !== 0 ? "bg-bone/[0.02]" : ""
+                      }`}
+                    >
+                      <td colSpan={6} className="px-4 pb-3 pt-0">
+                        <audio
+                          src={asset.signedUrl}
+                          controls
+                          preload="none"
+                          className="w-full h-8 opacity-70 hover:opacity-100 transition-opacity"
+                        />
+                      </td>
+                    </tr>
+                  )}
+                </React.Fragment>
               ))}
             </tbody>
           </table>
