@@ -81,6 +81,72 @@ export async function uploadAsset(
   redirect("/portal/assets");
 }
 
+export async function updateAsset(
+  assetId: string,
+  _prev: AssetActionState,
+  formData: FormData
+): Promise<AssetActionState> {
+  const sessionClient = await createClient();
+  const { data: { user } } = await sessionClient.auth.getUser();
+  if (!user) return { error: "Not authenticated." };
+
+  const { data: profile } = await sessionClient
+    .from("profiles")
+    .select("artist_id")
+    .eq("id", user.id)
+    .single();
+  if (!profile?.artist_id) return { error: "No artist profile." };
+
+  const kind  = (formData.get("kind") as string) ?? "";
+  const title = ((formData.get("title") as string) ?? "").trim();
+  const notes = ((formData.get("notes") as string) ?? "").trim() || null;
+
+  const validKinds = ["instrumental", "demo", "reference_video", "reference_image"];
+  if (!validKinds.includes(kind)) return { error: "Invalid kind." };
+  if (!title) return { error: "Title is required." };
+
+  const serviceClient = createServiceClient();
+  const { error } = await serviceClient
+    .from("assets")
+    .update({ kind, title, notes })
+    .eq("id", assetId)
+    .eq("artist_id", profile.artist_id);
+
+  if (error) return { error: `Failed to update: ${error.message}` };
+
+  revalidatePath("/portal/assets");
+  redirect("/portal/assets");
+}
+
+export async function deleteAsset(assetId: string): Promise<void> {
+  const sessionClient = await createClient();
+  const { data: { user } } = await sessionClient.auth.getUser();
+  if (!user) return;
+
+  const { data: profile } = await sessionClient
+    .from("profiles")
+    .select("artist_id")
+    .eq("id", user.id)
+    .single();
+  if (!profile?.artist_id) return;
+
+  const serviceClient = createServiceClient();
+
+  const { data: asset } = await serviceClient
+    .from("assets")
+    .select("storage_path")
+    .eq("id", assetId)
+    .eq("artist_id", profile.artist_id)
+    .single();
+
+  if (!asset) return;
+
+  await serviceClient.storage.from("private-assets").remove([asset.storage_path]);
+  await serviceClient.from("assets").delete().eq("id", assetId);
+
+  revalidatePath("/portal/assets");
+}
+
 export async function toggleAssetPublic(assetId: string, _formData: FormData): Promise<void> {
   const sessionClient = await createClient();
   const { data: { user } } = await sessionClient.auth.getUser();

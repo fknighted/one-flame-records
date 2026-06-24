@@ -155,7 +155,13 @@ export default async function PortalAssetsPage() {
                         </button>
                       </form>
                     </td>
-                    <td className="px-4 py-3 text-right">
+                    <td className="px-4 py-3 text-right space-x-3 whitespace-nowrap">
+                      <Link
+                        href={`/portal/assets/${asset.id}/edit`}
+                        className="text-xs text-bone/40 hover:text-bone transition-colors"
+                      >
+                        Edit
+                      </Link>
                       {asset.signedUrl ? (
                         <a
                           href={asset.signedUrl}
