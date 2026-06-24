@@ -7,8 +7,12 @@ import { formatCents } from "@/lib/bar/pos";
 export default function TabControls({ tabId, total }: { tabId: string; total: number }) {
   const [showClose, setShowClose] = useState(false);
   const [showVoid,  setShowVoid]  = useState(false);
+  const [tipInput,  setTipInput]  = useState("");
   const [closeState, closeAction, closePending] = useActionState(closeTab, null);
   const [voidState,  voidAction,  voidPending]  = useActionState(voidTab, null);
+
+  const tipCents   = Math.max(0, Math.round(Number(tipInput || "0") * 100));
+  const grandTotal = total + tipCents;
 
   if (showVoid) {
     return (
@@ -44,9 +48,28 @@ export default function TabControls({ tabId, total }: { tabId: string; total: nu
     return (
       <form action={closeAction} className="space-y-3">
         <input type="hidden" name="tab_id" value={tabId} />
+        <input type="hidden" name="tip_cents" value={tipCents} />
         <p className="text-sm font-semibold text-bone text-center">
           Total: <span className="text-ochre">{formatCents(total)}</span>
         </p>
+        {/* Tip input */}
+        <div className="flex items-center gap-2">
+          <label className="text-xs text-bone/50 shrink-0">Tip (JMD$)</label>
+          <input
+            type="number"
+            min="0"
+            step="100"
+            placeholder="0"
+            value={tipInput}
+            onChange={e => setTipInput(e.target.value)}
+            className="flex-1 bg-bone/5 border border-bone/20 rounded px-2 py-1 text-bone text-sm text-right font-mono focus:outline-none focus:border-ochre/50"
+          />
+        </div>
+        {tipCents > 0 && (
+          <p className="text-xs text-bone/50 text-center">
+            With tip: <span className="text-ochre font-semibold">{formatCents(grandTotal)}</span>
+          </p>
+        )}
         <p className="text-xs text-bone/50 text-center">How was this paid?</p>
         {closeState?.error && (
           <p className="text-sm text-red-400 text-center">{closeState.error}</p>

@@ -196,8 +196,10 @@ export async function closeTab(
 ): Promise<ActionState> {
   await requireBarStaff();
 
-  const tabId        = formData.get("tab_id") as string;
+  const tabId         = formData.get("tab_id") as string;
   const paymentMethod = formData.get("payment_method") as string;
+  const tipRaw        = formData.get("tip_cents") as string | null;
+  const tipCents      = tipRaw ? Math.max(0, Math.round(Number(tipRaw))) : 0;
 
   if (!tabId) return { error: "Invalid request." };
   if (!["cash", "comp"].includes(paymentMethod)) return { error: "Select a payment method." };
@@ -211,6 +213,7 @@ export async function closeTab(
     payment_method: paymentMethod,
     closed_by:      user?.id ?? null,
     closed_at:      new Date().toISOString(),
+    tip_cents:      tipCents,
   }).eq("id", tabId).eq("status", "open");
 
   if (error) return { error: `Failed to close tab: ${error.message}` };

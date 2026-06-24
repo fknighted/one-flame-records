@@ -566,6 +566,7 @@ export type Database = {
           opened_by: string | null
           payment_method: string | null
           status: string
+          tip_cents: number
           total_cents: number
           updated_at: string
         }
@@ -579,6 +580,7 @@ export type Database = {
           opened_by?: string | null
           payment_method?: string | null
           status?: string
+          tip_cents?: number
           total_cents?: number
           updated_at?: string
         }
@@ -592,6 +594,7 @@ export type Database = {
           opened_by?: string | null
           payment_method?: string | null
           status?: string
+          tip_cents?: number
           total_cents?: number
           updated_at?: string
         }

@@ -1,0 +1,1 @@
+ALTER TABLE pos_tabs ADD COLUMN IF NOT EXISTS tip_cents integer NOT NULL DEFAULT 0;
