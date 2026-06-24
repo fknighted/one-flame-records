@@ -1,14 +1,32 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useEffect, useRef } from "react";
 import { adjustBalance, toggleMemberStatus } from "./actions";
 import type { Tables } from "@/types/supabase";
+import { useToast } from "@/components/ToastProvider";
 
 const INPUT = "bg-bone/5 border border-bone/15 rounded px-3 py-2 text-sm text-bone placeholder:text-bone/30 focus:outline-none focus:border-ochre/60";
 
 export default function MemberAdminActions({ member }: { member: Tables<"gamer_members"> }) {
   const [adjustState, adjustAction, adjustPending] = useActionState(adjustBalance, null);
   const [statusState, statusAction, statusPending] = useActionState(toggleMemberStatus, null);
+  const { showToast } = useToast();
+  const prevAdjPendingRef = useRef(false);
+  const prevStatusPendingRef = useRef(false);
+
+  useEffect(() => {
+    if (prevAdjPendingRef.current && !adjustPending && adjustState === null) {
+      showToast("Balance updated");
+    }
+    prevAdjPendingRef.current = adjustPending;
+  }, [adjustPending, adjustState, showToast]);
+
+  useEffect(() => {
+    if (prevStatusPendingRef.current && !statusPending && statusState === null) {
+      showToast(member.status === "active" ? "Member suspended" : "Member reactivated");
+    }
+    prevStatusPendingRef.current = statusPending;
+  }, [statusPending, statusState, member.status, showToast]);
 
   return (
     <div className="space-y-4">

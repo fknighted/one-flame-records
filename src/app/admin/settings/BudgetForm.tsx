@@ -1,10 +1,20 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useEffect, useRef } from "react";
 import { updateBudget } from "./actions";
+import { useToast } from "@/components/ToastProvider";
 
 export function BudgetForm({ currentBudget }: { currentBudget: number }) {
   const [state, action, pending] = useActionState(updateBudget, null);
+  const { showToast } = useToast();
+  const prevPendingRef = useRef(false);
+
+  useEffect(() => {
+    if (prevPendingRef.current && !pending && state === null) {
+      showToast("Budget saved");
+    }
+    prevPendingRef.current = pending;
+  }, [pending, state, showToast]);
 
   return (
     <form action={action} className="flex items-end gap-3">
@@ -34,9 +44,6 @@ export function BudgetForm({ currentBudget }: { currentBudget: number }) {
       </button>
       {state && "error" in state && (
         <p className="text-xs text-oxblood">{state.error}</p>
-      )}
-      {state && "success" in state && (
-        <p className="text-xs text-forest">Saved.</p>
       )}
     </form>
   );

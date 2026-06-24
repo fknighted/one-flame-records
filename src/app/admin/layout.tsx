@@ -1,6 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { createServiceClient } from "@/lib/supabase/server";
 import InkShell from "@/components/InkShell";
+import { ToastProvider } from "@/components/ToastProvider";
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const [supabase, serviceClient] = [await createClient(), createServiceClient()];
@@ -15,7 +16,9 @@ export default async function AdminLayout({ children }: { children: React.ReactN
 
   return (
     <InkShell displayName={user?.email ?? ""} pendingApps={pendingApps ?? 0} mode="admin">
-      <div className="p-4 sm:p-6 lg:p-8">{children}</div>
+      <ToastProvider>
+        <div className="p-4 sm:p-6 lg:p-8">{children}</div>
+      </ToastProvider>
     </InkShell>
   );
 }
