@@ -12,18 +12,19 @@ This is the living state of the build. Update at the end of every session.
 
 ## Active focus
 
-Tier 2 audit items complete. Ready for first live bar POS session + content entry.
+Tier 2 + Tier 3 audit items complete. Ready for first live bar POS session + content entry.
 
 ## Blockers
 
 - **TikTok auto-posting** — Make.com has no TikTok video upload module. Manual for now.
 - **Flames Lounge gallery** — Gallery grid still placeholder; swap with real photos when available.
-- **3 pending migrations** — Must run `npx supabase db push --linked` to apply: `20260623000001_tab_item_quantity_rpcs.sql`, `20260623000002_pos_tabs_tip_cents.sql`, `20260623000003_gamer_balance_transactions.sql`
+- **1 pending migration** — `20260623000004_pos_items_reorder_level.sql` needs `npx supabase db push --linked` (or manual SQL: `ALTER TABLE pos_items ADD COLUMN IF NOT EXISTS reorder_level integer`).
+- **MAX_CAMPAIGN_IMAGES env var** — Add to Vercel env vars to cap campaign image generation (default 10 if unset).
 
 ## Next session
 
-### Priority 1 — Apply pending migrations
-Run `npx supabase db push --linked` to deploy the 3 new migrations (tab item quantity RPCs, tip field, gamer balance ledger).
+### Priority 1 — Apply pending migration
+Run `npx supabase db push --linked` to deploy `20260623000004_pos_items_reorder_level.sql`, or run `ALTER TABLE pos_items ADD COLUMN IF NOT EXISTS reorder_level integer` in the SQL editor.
 
 ### Priority 2 — First live bar POS run
 1. Admin → Bar → Staff → "Promote Existing Artist" → enter artist's email → grant bar access
@@ -48,6 +49,14 @@ Run `npx supabase db push --linked` to deploy the 3 new migrations (tab item qua
 ## Session log
 
 Append a new entry at the top of this section after every session. Date, summary, files touched, what's next. Keep it tight — full reasoning belongs in `DECISIONS.md`.
+
+### 2026-06-23 (session 37 — Tier 3)
+
+**Did:** Full Tier 3 audit (10 items). (1) **Unimplemented video providers** — runway/pika now throw immediately with a clear error message; removed dead imports. (2) **Per-item reorder_level** — migration adds `reorder_level integer` to `pos_items`; inventory page uses `item.reorder_level ?? 5` as threshold; `MenuItemForm` has reorder_level input; create/update actions persist it. (3) **News pagination** — 9 posts per page, `count: "exact"`, `searchParams` offset, prev/next controls. (4) **News next/prev** — parallel prev/next queries on detail page; 3-column footer nav (← prev | back to news | next →). (5) **Global search** — `/search?q=` Server Component; parallel `ilike` queries for artists (stage_name), releases (title), news (title/excerpt); ink banner + cream results by section; magnifying glass icon added to `PublicHeader`. (6) **JSON-LD structured data** — `MusicAlbum` on release detail (already existed on artist pages); `NewsArticle` on news detail; `LocalBusiness`+`EntertainmentBusiness`+`FoodEstablishment` on Flames Lounge; all 4 pages XSS-safe (`.replace(/</g, "\\u003c")`). (7) **Campaign image cap** — `cappedPlan` in `generate-campaign.ts` limits images to `MAX_CAMPAIGN_IMAGES` env var (default 10) before the parallel generation step. (8) **Inngest job cancellation** — `cancelOn` in `generate-video` function config (`video/cancel.requested` event matching `jobId`); `cancelJob` server action sends event + marks job failed; `JobActions` component shows "✕ Cancel" + "Reset" buttons on active jobs. (9) **Toast notifications** — `ToastProvider` context (3s auto-dismiss, forest success / oxblood error); wired into admin layout; `BudgetForm` and `MemberAdminActions` show toasts on save success using `useRef`/`useEffect` pending→success detection. (10) **TOTP 2FA enrollment** — `MFASection` client component on admin settings: lists enrolled factors, enroll flow (QR code SVG from Supabase + 6-digit verify input), unenroll button; added below budget card in settings page.
+**Touched:** `src/lib/video/index.ts`, `supabase/migrations/20260623000004_pos_items_reorder_level.sql` (new), `src/types/supabase.ts`, `src/app/admin/bar/inventory/page.tsx`, `src/components/MenuItemForm.tsx`, `src/app/admin/bar/items/actions.ts`, `src/app/(public)/news/page.tsx`, `src/app/(public)/news/[slug]/page.tsx`, `src/app/(public)/search/page.tsx` (new), `src/components/PublicHeader.tsx`, `src/app/(public)/flames-lounge/page.tsx`, `src/app/(public)/releases/[slug]/page.tsx`, `src/app/(public)/artists/[slug]/page.tsx`, `src/lib/inngest/functions/generate-campaign.ts`, `src/lib/inngest/functions/generate-video.ts`, `src/app/admin/jobs/actions.ts`, `src/components/RetryButton.tsx`, `src/components/ToastProvider.tsx` (new), `src/app/admin/layout.tsx`, `src/app/admin/settings/BudgetForm.tsx`, `src/app/admin/bar/members/[id]/MemberAdminActions.tsx`, `src/app/admin/settings/MFASection.tsx` (new), `src/app/admin/settings/page.tsx`
+**Decided:** XSS fix for JSON-LD: escape `<` → `<` in all `dangerouslySetInnerHTML` script tags. TOTP enrollment only (not login challenge) — login MFA enforcement would require modifying the auth flow and is out of scope for this pass. Toast pending→success detection via `useRef` tracking previous pending state (since `useActionState` returns `null` for both initial and success states).
+**Blocked on:** 1 pending migration (`reorder_level`). `MAX_CAMPAIGN_IMAGES` Vercel env var not yet set.
+**Next:** Apply migration. First live bar session. Content entry.
 
 ### 2026-06-23 (session 37)
 
