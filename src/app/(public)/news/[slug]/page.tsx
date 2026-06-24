@@ -86,8 +86,26 @@ export default async function NewsPostPage({ params }: Props) {
 
   const htmlBody = await marked(post.body ?? "");
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "NewsArticle",
+    headline: post.title,
+    description: post.excerpt ?? undefined,
+    image: post.cover_url ?? undefined,
+    datePublished: post.published_at ?? undefined,
+    publisher: {
+      "@type": "Organization",
+      name: "One Flame Records",
+      url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://oneflamerecords.com",
+    },
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       {/* ── Ink header ── */}
       <section className="bg-ink">
         <div className="mx-auto max-w-3xl px-4 sm:px-6 pt-12 pb-10">

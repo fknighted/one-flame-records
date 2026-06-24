@@ -167,8 +167,31 @@ export default async function FlamesLoungePage() {
       hour: "numeric", minute: "2-digit", hour12: true,
     });
   }
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": ["EntertainmentBusiness", "FoodEstablishment"],
+    name: "Flames Lounge",
+    description:
+      "Outdoor recording studio, gaming lounge, Jamaican food, and live events in Montego Bay, Jamaica.",
+    url: `${process.env.NEXT_PUBLIC_SITE_URL ?? "https://oneflamerecords.com"}/flames-lounge`,
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: "Montego Bay",
+      addressRegion: "Saint James",
+      addressCountry: "JM",
+    },
+    parentOrganization: {
+      "@type": "Organization",
+      name: "One Flame Records",
+    },
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       {/* ── Hero ── */}
       <section className="relative overflow-hidden bg-[#0A0806] min-h-[85vh] flex flex-col justify-end">
         {/* Hero photo */}
