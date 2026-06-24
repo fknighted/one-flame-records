@@ -81,6 +81,15 @@ export async function endSession(
         .update({ minutes_balance: newBalance })
         .eq("id", gs.member_id);
       if (balanceError) return { error: `Session ended but balance not deducted: ${balanceError.message}` };
+
+      const { data: { user: barUser } } = await (await createClient()).auth.getUser();
+      await supabase.from("gamer_balance_transactions").insert({
+        member_id:      gs.member_id,
+        type:           "session",
+        amount_minutes: -durationMinutes,
+        reason:         `Game session (${durationMinutes}m)`,
+        created_by:     barUser?.id ?? null,
+      });
     }
   }
 

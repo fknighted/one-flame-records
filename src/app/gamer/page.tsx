@@ -24,14 +24,25 @@ export default async function GamerDashboardPage() {
     .single();
 
   let activeSession: { id: string; started_at: string; station: string | null } | null = null;
+  let recentTx: { type: string; amount_minutes: number; reason: string | null }[] | null = null;
+
   if (member) {
-    const { data } = await serviceClient
-      .from("game_sessions")
-      .select("id, started_at, station")
-      .eq("member_id", member.id)
-      .is("ended_at", null)
-      .maybeSingle();
-    activeSession = data ?? null;
+    const [{ data: sessionData }, { data: txData }] = await Promise.all([
+      serviceClient
+        .from("game_sessions")
+        .select("id, started_at, station")
+        .eq("member_id", member.id)
+        .is("ended_at", null)
+        .maybeSingle(),
+      serviceClient
+        .from("gamer_balance_transactions")
+        .select("type, amount_minutes, reason")
+        .eq("member_id", member.id)
+        .order("created_at", { ascending: false })
+        .limit(5),
+    ]);
+    activeSession = sessionData ?? null;
+    recentTx = txData ?? null;
   }
 
   return (
@@ -75,6 +86,27 @@ export default async function GamerDashboardPage() {
       <Link href="/gamer/sessions" className="inline-block text-sm text-ochre hover:underline">
         View session history →
       </Link>
+
+      {recentTx && recentTx.length > 0 && (
+        <div className="border border-bone/15 rounded-2xl p-6">
+          <p className="text-xs font-semibold text-bone/40 uppercase tracking-wider mb-4">
+            Recent Transactions
+          </p>
+          <div className="space-y-2">
+            {recentTx.map((t, i) => (
+              <div key={i} className="flex items-center justify-between text-sm">
+                <div>
+                  <p className="text-bone capitalize">{t.type}</p>
+                  {t.reason && <p className="text-xs text-bone/40">{t.reason}</p>}
+                </div>
+                <p className={`font-mono font-semibold ${t.amount_minutes > 0 ? "text-forest" : "text-ochre/70"}`}>
+                  {t.amount_minutes > 0 ? "+" : ""}{t.amount_minutes}m
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

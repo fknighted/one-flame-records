@@ -7,9 +7,10 @@ export default async function AdminMemberDetailPage({ params }: { params: Promis
   const { id } = await params;
   const supabase = createServiceClient();
 
-  const [{ data: member }, { data: sessions }] = await Promise.all([
+  const [{ data: member }, { data: sessions }, { data: transactions }] = await Promise.all([
     supabase.from("gamer_members").select("*").eq("id", id).single(),
     supabase.from("game_sessions").select("*").eq("member_id", id).order("started_at", { ascending: false }).limit(50),
+    supabase.from("gamer_balance_transactions").select("*").eq("member_id", id).order("created_at", { ascending: false }).limit(50),
   ]);
 
   if (!member) notFound();
@@ -59,6 +60,29 @@ export default async function AdminMemberDetailPage({ params }: { params: Promis
                 </div>
                 <p className="text-bone/60 font-mono">
                   {s.duration_minutes != null ? `${s.duration_minutes} min` : "In progress"}
+                </p>
+              </div>
+            ))}
+          </div>
+        )}
+      </section>
+
+      {/* Balance history */}
+      <section className="space-y-3">
+        <h2 className="text-xs font-semibold uppercase tracking-widest text-bone/35">Balance History</h2>
+        {!transactions?.length ? (
+          <p className="text-sm text-bone/30">No transactions yet.</p>
+        ) : (
+          <div className="border border-bone/10 rounded-lg divide-y divide-bone/10">
+            {transactions.map((t) => (
+              <div key={t.id} className="flex items-center justify-between px-4 py-3 text-sm">
+                <div>
+                  <p className="text-bone capitalize">{t.type}</p>
+                  {t.reason && <p className="text-xs text-bone/40">{t.reason}</p>}
+                  <p className="text-xs text-bone/30">{new Date(t.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}</p>
+                </div>
+                <p className={`font-mono font-semibold text-sm ${t.amount_minutes > 0 ? "text-forest" : "text-oxblood"}`}>
+                  {t.amount_minutes > 0 ? "+" : ""}{t.amount_minutes}m
                 </p>
               </div>
             ))}

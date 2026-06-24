@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { createServiceClient } from "@/lib/supabase/server";
+import { createServiceClient, createClient } from "@/lib/supabase/server";
 import { requireAdmin } from "@/lib/auth";
 
 export type ActionState = { error: string } | null;
@@ -26,6 +26,16 @@ export async function adjustBalance(
 
   const { error } = await supabase.from("gamer_members").update({ minutes_balance: newBalance }).eq("id", id);
   if (error) return { error: `Failed to adjust balance: ${error.message}` };
+
+  const sessionClient = await createClient();
+  const { data: { user: adminUser } } = await sessionClient.auth.getUser();
+  await supabase.from("gamer_balance_transactions").insert({
+    member_id:      id,
+    type:           minutes > 0 ? "topup" : "adjustment",
+    amount_minutes: minutes,
+    reason:         `Admin adjustment`,
+    created_by:     adminUser?.id ?? null,
+  });
 
   revalidatePath(`/admin/bar/members/${id}`);
   return null;

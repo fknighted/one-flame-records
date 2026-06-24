@@ -390,6 +390,36 @@ export type Database = {
           },
         ]
       }
+      gamer_balance_transactions: {
+        Row: {
+          id: string
+          member_id: string
+          type: string
+          amount_minutes: number
+          reason: string | null
+          created_by: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          member_id: string
+          type: string
+          amount_minutes: number
+          reason?: string | null
+          created_by?: string | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          member_id?: string
+          type?: string
+          amount_minutes?: number
+          reason?: string | null
+          created_by?: string | null
+          created_at?: string
+        }
+        Relationships: []
+      }
       gamer_members: {
         Row: {
           auth_user_id: string | null
