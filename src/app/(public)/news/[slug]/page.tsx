@@ -58,6 +58,32 @@ export default async function NewsPostPage({ params }: Props) {
 
   if (!post) notFound();
 
+  const now = new Date().toISOString();
+  const publishedFilter = `published_at.is.null,published_at.lte.${now}`;
+
+  const [{ data: prevPost }, { data: nextPost }] = await Promise.all([
+    // Previous = published just before this post (chronologically earlier)
+    supabase
+      .from("news_posts")
+      .select("slug, title")
+      .eq("is_published", true)
+      .or(publishedFilter)
+      .lt("published_at", post.published_at ?? now)
+      .order("published_at", { ascending: false })
+      .limit(1)
+      .maybeSingle(),
+    // Next = published just after this post (chronologically later)
+    supabase
+      .from("news_posts")
+      .select("slug, title")
+      .eq("is_published", true)
+      .or(publishedFilter)
+      .gt("published_at", post.published_at ?? now)
+      .order("published_at", { ascending: true })
+      .limit(1)
+      .maybeSingle(),
+  ]);
+
   const htmlBody = await marked(post.body ?? "");
 
   return (
@@ -120,10 +146,28 @@ export default async function NewsPostPage({ params }: Props) {
             dangerouslySetInnerHTML={{ __html: htmlBody }}
           />
 
-          <div className="mt-12 pt-8 border-t border-oxblood/10">
-            <Link href="/news" className="text-sm text-oxblood hover:text-ochre transition-colors">
-              ← All news
-            </Link>
+          <div className="mt-12 pt-8 border-t border-oxblood/10 grid grid-cols-3 gap-4 items-center text-sm">
+            <div className="text-left">
+              {prevPost && (
+                <Link href={`/news/${prevPost.slug}`} className="text-oxblood hover:text-ochre transition-colors">
+                  <span className="block text-xs text-ink/40 mb-1">← Previous</span>
+                  <span className="font-medium line-clamp-1">{prevPost.title}</span>
+                </Link>
+              )}
+            </div>
+            <div className="text-center">
+              <Link href="/news" className="text-xs text-ink/40 hover:text-oxblood transition-colors">
+                All news
+              </Link>
+            </div>
+            <div className="text-right">
+              {nextPost && (
+                <Link href={`/news/${nextPost.slug}`} className="text-oxblood hover:text-ochre transition-colors">
+                  <span className="block text-xs text-ink/40 mb-1">Next →</span>
+                  <span className="font-medium line-clamp-1">{nextPost.title}</span>
+                </Link>
+              )}
+            </div>
           </div>
         </div>
       </section>
