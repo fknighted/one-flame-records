@@ -190,6 +190,39 @@ export async function decrementTabItem(
   return null;
 }
 
+export async function saveTabAsRegular(tabId: string): Promise<ActionState> {
+  await requireBarStaff();
+
+  const supabase = createServiceClient();
+
+  const { data: tab } = await supabase
+    .from("pos_tabs")
+    .select("id, name, regular_id")
+    .eq("id", tabId)
+    .single();
+
+  if (!tab)           return { error: "Tab not found." };
+  if (tab.regular_id) return { error: "Tab is already linked to a regular." };
+
+  const { data: regular, error: createError } = await supabase
+    .from("bar_regulars")
+    .insert({ name: tab.name })
+    .select("id")
+    .single();
+
+  if (createError || !regular) return { error: `Failed to create regular: ${createError?.message}` };
+
+  const { error: linkError } = await supabase
+    .from("pos_tabs")
+    .update({ regular_id: regular.id })
+    .eq("id", tabId);
+
+  if (linkError) return { error: `Failed to link tab: ${linkError.message}` };
+
+  revalidatePath(`/bar/tabs/${tabId}`);
+  return null;
+}
+
 export async function closeTab(
   _prev: ActionState,
   formData: FormData

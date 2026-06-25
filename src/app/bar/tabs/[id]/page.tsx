@@ -5,6 +5,7 @@ import MenuGrid from "@/components/MenuGrid";
 import TabControls from "./TabControls";
 import QuantityControls from "./QuantityControls";
 import { formatCents } from "@/lib/bar/pos";
+import SaveAsRegularButton from "./SaveAsRegularButton";
 
 export default async function TabPage({ params }: { params: Promise<{ id: string }> }) {
   await requireBarStaff();
@@ -31,6 +32,7 @@ export default async function TabPage({ params }: { params: Promise<{ id: string
           </p>
           <h1 className="font-display font-bold text-bone text-xl leading-tight">{tab.name}</h1>
           {tab.notes && <p className="text-xs text-bone/40 mt-0.5">{tab.notes}</p>}
+          {!tab.regular_id && isOpen && <SaveAsRegularButton tabId={id} />}
         </div>
         <div className="text-right">
           <p className="text-2xl font-mono text-ochre font-semibold">{formatCents(tab.total_cents)}</p>
