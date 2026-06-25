@@ -43,7 +43,6 @@ export default function OpenTabForm({ regulars }: { regulars: Regular[] }) {
           type="text"
           list={hasRegulars ? "regulars-list" : undefined}
           autoFocus
-          autoComplete="off"
           value={nameInput}
           onChange={e => handleNameChange(e.target.value)}
           placeholder={hasRegulars ? "Type a name or pick a regular…" : "e.g. Table 3, Jay, Walk-in"}
