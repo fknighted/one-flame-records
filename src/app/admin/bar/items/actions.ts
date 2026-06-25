@@ -64,7 +64,7 @@ export async function updateMenuItem(
   const description   = (formData.get("description") as string)?.trim() || null;
   const sortStr       = formData.get("sort_order") as string;
   const reorderStr    = formData.get("reorder_level") as string;
-  const is_active     = formData.get("is_active") === "true";
+  const is_active     = formData.getAll("is_active").includes("true");
 
   if (!id)   return { error: "ID missing." };
   if (!name) return { error: "Name is required." };
