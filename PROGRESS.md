@@ -8,30 +8,26 @@ This is the living state of the build. Update at the end of every session.
 
 - **Phase:** Bar POS operational + ongoing content
 - **Status:** Phases 1–5 complete. Bar POS fully built, all migrations applied to production, menu items seeded, dual-access bartender system live. Two full code-review passes applied and clean.
-- **Last updated:** 2026-06-23 (session 37)
+- **Last updated:** 2026-06-25 (session 38)
 
 ## Active focus
 
-Tier 2 + Tier 3 audit items complete. Ready for first live bar POS session + content entry.
+Bar POS operational improvements complete. Ready for first live bar POS session + content entry.
 
 ## Blockers
 
 - **TikTok auto-posting** — Make.com has no TikTok video upload module. Manual for now.
 - **Flames Lounge gallery** — Gallery grid still placeholder; swap with real photos when available.
-- **1 pending migration** — `20260623000004_pos_items_reorder_level.sql` needs `npx supabase db push --linked` (or manual SQL: `ALTER TABLE pos_items ADD COLUMN IF NOT EXISTS reorder_level integer`).
 - **MAX_CAMPAIGN_IMAGES env var** — Add to Vercel env vars to cap campaign image generation (default 10 if unset).
 
 ## Next session
 
-### Priority 1 — Apply pending migration
-Run `npx supabase db push --linked` to deploy `20260623000004_pos_items_reorder_level.sql`, or run `ALTER TABLE pos_items ADD COLUMN IF NOT EXISTS reorder_level integer` in the SQL editor.
-
-### Priority 2 — First live bar POS run
+### Priority 1 — First live bar POS run
 1. Admin → Bar → Staff → "Promote Existing Artist" → enter artist's email → grant bar access
 2. Have that artist log in to `/bar`, open a tab, add items (test +/− qty controls), close with a tip
 3. Verify `/admin/bar` shows correct sales totals in Jamaica timezone
 
-### Priority 3 — Content entry (ongoing, via admin)
+### Priority 2 — Content entry (ongoing, via admin)
 - Add artists with photos at `/admin/artists`
 - Add releases with cover art at `/admin/releases`
 - Publish first news post
@@ -49,6 +45,14 @@ Run `npx supabase db push --linked` to deploy `20260623000004_pos_items_reorder_
 ## Session log
 
 Append a new entry at the top of this section after every session. Date, summary, files touched, what's next. Keep it tight — full reasoning belongs in `DECISIONS.md`.
+
+### 2026-06-25 (session 38 — Bar POS improvements + code review fixes)
+
+**Did:** (1) **Carryover open tabs** — bar dashboard now shows ALL open tabs (no date filter) + today's settled tabs filtered by `closed_at`. (2) **Close tab confirmation** — added `showConfirm` intermediate state before the payment screen. (3) **Bar regulars** — new `bar_regulars` table; `/bar/regulars` management page; autocomplete datalist on new tab form; `regular_id` FK on `pos_tabs`; "Save as regular" button on tab detail page. (4) **Inventory delete** — delete button added to admin inventory page. (5) **Artist delete UI** — `DeleteArtistButton` on artist list and edit pages. (6) **`is_active` checkbox fix** — `formData.getAll("is_active").includes("true")` so checked state saves correctly. (7) **Server Component `onClick` fixes** — extracted `DeleteMenuItemButton` and `DeleteArtistButton` as client components (production crash fix). (8) **Bartender restock list** — "Needs Restocking" panel at bottom of `/bar/inventory` showing items below reorder threshold. (9) **Code review** — 8 findings fixed: `bar_regulars` RLS migration, `deleteArtist` session leak (nullify profile role), error surfacing in `SaveAsRegularButton` + `RegularsClient`, orphan rollback in `saveTabAsRegular`, threshold `<=` → `<`, `<a>` → `<Link>` in `OpenTabForm`, `type="button"` on edit/remove buttons, edit form auto-close on save.
+**Touched:** `src/app/bar/page.tsx`, `src/app/bar/tabs/[id]/TabControls.tsx`, `src/app/bar/tabs/[id]/page.tsx`, `src/app/bar/tabs/[id]/actions.ts`, `src/app/bar/tabs/[id]/SaveAsRegularButton.tsx` (new), `src/app/bar/tabs/new/OpenTabForm.tsx`, `src/app/bar/tabs/new/actions.ts`, `src/app/bar/regulars/` (new — page, actions, RegularsClient), `src/app/admin/bar/items/DeleteMenuItemButton.tsx` (new), `src/app/admin/bar/items/page.tsx`, `src/app/admin/bar/items/actions.ts`, `src/app/admin/bar/inventory/page.tsx`, `src/app/bar/inventory/page.tsx`, `src/app/admin/artists/DeleteArtistButton.tsx` (new), `src/app/admin/artists/actions.ts`, `src/app/admin/artists/page.tsx`, `src/app/admin/artists/[id]/edit/page.tsx`, `src/components/InkShell.tsx`, `src/types/supabase.ts`, `supabase/migrations/20260625000001_bar_regulars.sql` (new), `supabase/migrations/20260625000002_bar_regulars_rls.sql` (new)
+**Decided:** `saveTabAsRegular` rolls back orphaned `bar_regular` row if the `pos_tabs` link update fails. `deleteArtist` nullifies `profiles.role` before deleting the artist row to prevent dangling portal sessions. Restock threshold uses `<` not `<=` — items at exactly the reorder level are not yet understocked.
+**Blocked on:** Nothing new.
+**Next:** First live bar session. Content entry.
 
 ### 2026-06-23 (session 37 — Tier 3)
 
