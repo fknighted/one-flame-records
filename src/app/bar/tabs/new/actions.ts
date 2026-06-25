@@ -13,8 +13,9 @@ export async function openTab(
 ): Promise<ActionState> {
   await requireBarStaff();
 
-  const name  = (formData.get("name") as string)?.trim();
-  const notes = (formData.get("notes") as string)?.trim() || null;
+  const name       = (formData.get("name") as string)?.trim();
+  const notes      = (formData.get("notes") as string)?.trim() || null;
+  const regularId  = (formData.get("regular_id") as string)?.trim() || null;
 
   if (!name) return { error: "Customer name is required." };
 
@@ -24,7 +25,7 @@ export async function openTab(
   const serviceClient = createServiceClient();
   const { data: tab, error } = await serviceClient
     .from("pos_tabs")
-    .insert({ name, notes, opened_by: user?.id ?? null })
+    .insert({ name, notes, opened_by: user?.id ?? null, regular_id: regularId })
     .select("id")
     .single();
 

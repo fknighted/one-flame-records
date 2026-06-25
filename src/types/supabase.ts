@@ -142,6 +142,30 @@ export type Database = {
           },
         ]
       }
+      bar_regulars: {
+        Row: {
+          created_at: string
+          id: string
+          name: string
+          notes: string | null
+          phone: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name: string
+          notes?: string | null
+          phone?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string
+          notes?: string | null
+          phone?: string | null
+        }
+        Relationships: []
+      }
       campaign_ideas: {
         Row: {
           angle: string | null
@@ -598,6 +622,7 @@ export type Database = {
           notes: string | null
           opened_by: string | null
           payment_method: string | null
+          regular_id: string | null
           status: string
           tip_cents: number
           total_cents: number
@@ -612,6 +637,7 @@ export type Database = {
           notes?: string | null
           opened_by?: string | null
           payment_method?: string | null
+          regular_id?: string | null
           status?: string
           tip_cents?: number
           total_cents?: number
@@ -626,12 +652,21 @@ export type Database = {
           notes?: string | null
           opened_by?: string | null
           payment_method?: string | null
+          regular_id?: string | null
           status?: string
           tip_cents?: number
           total_cents?: number
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "pos_tabs_regular_id_fkey"
+            columns: ["regular_id"]
+            isOneToOne: false
+            referencedRelation: "bar_regulars"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       profiles: {
         Row: {
