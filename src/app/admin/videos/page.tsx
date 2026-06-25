@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { createServiceClient } from "@/lib/supabase/server";
-import { deleteVideo } from "./actions";
+import DeleteVideoButton from "./DeleteVideoButton";
 
 const KIND_LABELS: Record<string, string> = {
   official: "Official",
@@ -136,16 +136,7 @@ export default async function AdminVideosPage() {
                       >
                         Edit
                       </Link>
-                      <form action={deleteVideo.bind(null, video.id)} className="inline">
-                        <button
-                          type="submit"
-                          className="text-xs text-bone/25 hover:text-red-400 transition-colors"
-                          title="Delete video"
-                          onClick={(e) => { if (!confirm(`Delete video "${video.title}"?`)) e.preventDefault(); }}
-                        >
-                          ×
-                        </button>
-                      </form>
+                      <DeleteVideoButton id={video.id} title={video.title} />
                     </td>
                   </tr>
                 );

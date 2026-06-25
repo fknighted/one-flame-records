@@ -1,8 +1,8 @@
 import { createServiceClient } from "@/lib/supabase/server";
-import { deleteJob } from "./actions";
 import { JobsAutoRefresh } from "@/components/JobsAutoRefresh";
 import { JobActions } from "@/components/RetryButton";
 import { ArtistPickerDropdown } from "@/components/ArtistPickerDropdown";
+import DeleteJobButton from "./DeleteJobButton";
 
 const STATUS_STYLES: Record<string, string> = {
   pending:    "bg-bone/10 text-bone/40",
@@ -158,7 +158,6 @@ export default async function AdminJobsPage() {
             </thead>
             <tbody>
               {(jobs as unknown as JobRow[]).map((job, i) => {
-                const deleteWithId = deleteJob.bind(null, job.id);
                 return (
                   <tr
                     key={job.id}
@@ -214,16 +213,7 @@ export default async function AdminJobsPage() {
                           Logs ↗
                         </a>
                       )}
-                      <form action={deleteWithId} className="inline">
-                        <button
-                          type="submit"
-                          className="text-xs text-bone/30 hover:text-red-400 transition-colors"
-                          title="Delete job"
-                          onClick={(e) => { if (!confirm(`Delete job for "${job.artists?.stage_name ?? 'unknown artist'}"?`)) e.preventDefault(); }}
-                        >
-                          ×
-                        </button>
-                      </form>
+                      <DeleteJobButton id={job.id} artistName={job.artists?.stage_name ?? "unknown artist"} />
                     </td>
                   </tr>
                 );

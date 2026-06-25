@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { createServiceClient } from "@/lib/supabase/server";
-import { deleteNewsPost } from "./[id]/edit/actions";
+import DeleteNewsPostButton from "./DeleteNewsPostButton";
 
 export default async function AdminNewsPage() {
   const supabase = createServiceClient();
@@ -65,16 +65,7 @@ export default async function AdminNewsPage() {
                     >
                       Edit
                     </Link>
-                    <form action={deleteNewsPost.bind(null, post.id)} className="inline">
-                      <button
-                        type="submit"
-                        className="text-xs text-bone/25 hover:text-red-400 transition-colors"
-                        title="Delete post"
-                        onClick={(e) => { if (!confirm(`Delete post "${post.title}"?`)) e.preventDefault(); }}
-                      >
-                        ×
-                      </button>
-                    </form>
+                    <DeleteNewsPostButton id={post.id} title={post.title} />
                   </td>
                 </tr>
               ))}
