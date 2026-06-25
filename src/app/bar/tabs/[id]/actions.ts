@@ -217,7 +217,11 @@ export async function saveTabAsRegular(tabId: string): Promise<ActionState> {
     .update({ regular_id: regular.id })
     .eq("id", tabId);
 
-  if (linkError) return { error: `Failed to link tab: ${linkError.message}` };
+  if (linkError) {
+    // Roll back the orphaned regular so it doesn't pollute the autocomplete list
+    await supabase.from("bar_regulars").delete().eq("id", regular.id);
+    return { error: `Failed to link tab: ${linkError.message}` };
+  }
 
   revalidatePath(`/bar/tabs/${tabId}`);
   return null;

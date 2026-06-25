@@ -25,7 +25,7 @@ export default async function BarInventoryPage() {
     const stock = item.stock_quantity;
     if (stock === null) return false;
     const threshold = item.reorder_level ?? 5;
-    return stock <= threshold;
+    return stock < threshold;
   }).sort((a, b) => {
     // OUT items first, then by stock ascending
     const aStock = a.stock_quantity ?? 999;
@@ -80,7 +80,7 @@ export default async function BarInventoryPage() {
                 {grouped[cat]!.map((item) => {
                   const stock = item.stock_quantity;
                   const threshold = item.reorder_level ?? 5;
-                  const low   = stock !== null && stock <= threshold;
+                  const low   = stock !== null && stock < threshold;
                   const none  = stock !== null && stock === 0;
                   return (
                     <tr key={item.id} className={none ? "opacity-50" : ""}>

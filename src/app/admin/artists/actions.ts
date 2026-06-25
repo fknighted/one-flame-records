@@ -106,11 +106,24 @@ export async function createArtist(
   redirect("/admin/artists");
 }
 
-export async function deleteArtist(artistId: string): Promise<void> {
+export async function deleteArtist(artistId: string): Promise<{ error: string } | null> {
   await requireAdmin();
   const supabase = createServiceClient();
-  await supabase.from("artists").delete().eq("id", artistId);
+
+  // Nullify the role on any linked profile before deletion so the session
+  // cookie no longer grants portal access after the artist row is gone.
+  // (ON DELETE SET NULL clears artist_id but leaves role='artist' intact.)
+  await supabase
+    .from("profiles")
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    .update({ role: null } as any)
+    .eq("artist_id", artistId);
+
+  const { error } = await supabase.from("artists").delete().eq("id", artistId);
+  if (error) return { error: `Failed to delete artist: ${error.message}` };
+
   revalidatePath("/admin/artists");
+  return null;
 }
 
 export async function activateArtist(artistId: string): Promise<void> {

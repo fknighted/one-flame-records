@@ -27,7 +27,8 @@ export default function DeleteArtistButton({
       onClick={() => {
         if (!confirm(`Permanently delete "${name}"? This cannot be undone.`)) return;
         startTransition(async () => {
-          await deleteArtist(id);
+          const result = await deleteArtist(id);
+          if (result?.error) { alert(result.error); return; }
           router.push("/admin/artists");
         });
       }}

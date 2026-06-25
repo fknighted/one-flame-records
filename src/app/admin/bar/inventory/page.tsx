@@ -83,7 +83,7 @@ export default async function InventoryPage() {
                   const settledToday = soldMap[item.id] ?? 0;
                   const stock = item.stock_quantity;
                   const threshold = item.reorder_level ?? 5;
-                  const low = stock !== null && stock <= threshold;
+                  const low = stock !== null && stock < threshold;
                   return (
                     <tr key={item.id} className={`hover:bg-bone/3 transition-colors ${!item.is_active ? "opacity-40" : ""}`}>
                       <td className="px-4 py-3 text-bone font-medium">

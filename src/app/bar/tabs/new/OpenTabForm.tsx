@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState, useState } from "react";
+import Link from "next/link";
 import { openTab } from "./actions";
 
 type Regular = { id: string; name: string; phone: string | null; notes: string | null };
@@ -87,7 +88,7 @@ export default function OpenTabForm({ regulars }: { regulars: Regular[] }) {
 
       {hasRegulars && (
         <p className="text-center text-xs text-bone/30">
-          <a href="/bar/regulars" className="hover:text-bone/60 transition-colors">Manage regulars →</a>
+          <Link href="/bar/regulars" className="hover:text-bone/60 transition-colors">Manage regulars →</Link>
         </p>
       )}
     </form>

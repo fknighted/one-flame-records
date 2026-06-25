@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useState, useTransition } from "react";
+import { useActionState, useEffect, useState, useTransition } from "react";
 import { createRegular, updateRegular, deleteRegular } from "./actions";
 
 type Regular = { id: string; name: string; phone: string | null; notes: string | null };
@@ -46,6 +46,12 @@ function RegularRow({ regular }: { regular: Regular }) {
   const action = updateRegular.bind(null, regular.id);
   const [state, formAction, pending] = useActionState(action, null);
   const [deletePending, startDelete] = useTransition();
+  const [deleteError, setDeleteError] = useState<string | null>(null);
+
+  // Close edit form automatically after a successful save
+  useEffect(() => {
+    if (state === null && !pending && editing) setEditing(false);
+  }, [state, pending, editing]);
 
   if (editing) {
     return (
@@ -104,21 +110,28 @@ function RegularRow({ regular }: { regular: Regular }) {
       <td className="px-4 py-3 text-right">
         <span className="inline-flex items-center gap-3">
           <button
+            type="button"
             onClick={() => setEditing(true)}
             className="text-xs text-ochre/60 hover:text-ochre transition-colors"
           >
             Edit
           </button>
           <button
+            type="button"
             onClick={() => {
               if (!confirm(`Remove ${regular.name} from regulars?`)) return;
-              startDelete(async () => { await deleteRegular(regular.id); });
+              setDeleteError(null);
+              startDelete(async () => {
+                const result = await deleteRegular(regular.id);
+                if (result?.error) setDeleteError(result.error);
+              });
             }}
             disabled={deletePending}
             className="text-xs text-oxblood/40 hover:text-oxblood transition-colors disabled:opacity-50"
           >
             {deletePending ? "…" : "Remove"}
           </button>
+          {deleteError && <span className="text-xs text-oxblood">{deleteError}</span>}
         </span>
       </td>
     </tr>
