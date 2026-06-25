@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import ArtistForm from "@/components/ArtistForm";
 import { updateArtist } from "@/app/admin/artists/actions";
 import { createServiceClient } from "@/lib/supabase/server";
-import DeleteArtistButton from "./DeleteArtistButton";
+import DeleteArtistButton from "@/app/admin/artists/DeleteArtistButton";
 
 const STATUS_STYLES: Record<string, string> = {
   active:   "bg-forest/20 text-forest border border-forest/25",

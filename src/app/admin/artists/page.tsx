@@ -1,7 +1,8 @@
 import Link from "next/link";
 import Image from "next/image";
 import { createServiceClient } from "@/lib/supabase/server";
-import { deleteArtist, activateArtist } from "./actions";
+import { activateArtist } from "./actions";
+import DeleteArtistButton from "./DeleteArtistButton";
 
 const STATUS_STYLES: Record<string, string> = {
   active:   "bg-forest/20 text-forest border border-forest/25",
@@ -114,7 +115,6 @@ export default async function AdminArtistsPage({
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {(artists ?? []).map((artist) => {
-            const deleteWithId   = deleteArtist.bind(null, artist.id);
             const activateWithId = activateArtist.bind(null, artist.id);
             const genres = (artist.genres as string[] | null) ?? [];
             const assetCount = assetMap[artist.id] ?? 0;
@@ -208,11 +208,11 @@ export default async function AdminArtistsPage({
                     >
                       ↗
                     </a>
-                    <form action={deleteWithId} className="inline ml-auto">
-                      <button type="submit" className="text-xs text-bone/20 hover:text-red-400 transition-colors" title="Delete artist" onClick={(e) => { if (!confirm(`Delete artist "${artist.stage_name}"?`)) e.preventDefault(); }}>
-                        ×
-                      </button>
-                    </form>
+                    <DeleteArtistButton
+                      id={artist.id}
+                      name={artist.stage_name}
+                      className="ml-auto text-xs text-bone/20 hover:text-red-400 transition-colors disabled:opacity-50"
+                    />
                   </div>
                 </div>
               </div>
