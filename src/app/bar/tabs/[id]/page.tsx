@@ -60,7 +60,7 @@ export default async function TabPage({ params }: { params: Promise<{ id: string
           {/* Close tab controls */}
           {isOpen && (
             <div className="shrink-0 pt-3 border-t border-bone/10 mt-3">
-              <TabControls tabId={id} total={tab.total_cents} />
+              <TabControls tabId={id} total={tab.total_cents} tabName={tab.name} />
             </div>
           )}
           {!isOpen && (

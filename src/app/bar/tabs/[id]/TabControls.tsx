@@ -4,9 +4,10 @@ import { useActionState, useState } from "react";
 import { closeTab, voidTab } from "./actions";
 import { formatCents } from "@/lib/bar/pos";
 
-export default function TabControls({ tabId, total }: { tabId: string; total: number }) {
-  const [showClose, setShowClose] = useState(false);
-  const [showVoid,  setShowVoid]  = useState(false);
+export default function TabControls({ tabId, total, tabName }: { tabId: string; total: number; tabName: string }) {
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [showClose,   setShowClose]   = useState(false);
+  const [showVoid,    setShowVoid]    = useState(false);
   const [tipInput,  setTipInput]  = useState("");
   const [closeState, closeAction, closePending] = useActionState(closeTab, null);
   const [voidState,  voidAction,  voidPending]  = useActionState(voidTab, null);
@@ -41,6 +42,34 @@ export default function TabControls({ tabId, total }: { tabId: string; total: nu
           </button>
         </div>
       </form>
+    );
+  }
+
+  if (showConfirm) {
+    return (
+      <div className="space-y-4">
+        <div className="text-center space-y-1">
+          <p className="text-bone font-semibold">Close tab for {tabName}?</p>
+          <p className="text-2xl font-mono text-ochre">{formatCents(total)}</p>
+          <p className="text-xs text-bone/40">This cannot be undone once payment is recorded.</p>
+        </div>
+        <div className="flex gap-2">
+          <button
+            type="button"
+            onClick={() => setShowConfirm(false)}
+            className="flex-1 border border-bone/20 text-bone/60 py-2.5 rounded-lg text-sm hover:text-bone transition-colors"
+          >
+            Not yet
+          </button>
+          <button
+            type="button"
+            onClick={() => { setShowConfirm(false); setShowClose(true); }}
+            className="flex-1 bg-ochre text-ink font-semibold py-2.5 rounded-lg text-sm hover:bg-ochre/90 transition-colors"
+          >
+            Yes, close it
+          </button>
+        </div>
+      </div>
     );
   }
 
@@ -110,7 +139,7 @@ export default function TabControls({ tabId, total }: { tabId: string; total: nu
       </button>
       <button
         type="button"
-        onClick={() => setShowClose(true)}
+        onClick={() => setShowConfirm(true)}
         className="flex-1 bg-ochre text-ink font-semibold py-2.5 rounded-lg text-sm hover:bg-ochre/90 active:scale-[0.98] transition-all"
       >
         Close Tab — {formatCents(total)}

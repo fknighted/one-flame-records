@@ -7,18 +7,26 @@ export default async function BarDashboardPage() {
   await requireBarStaff();
   const supabase = createServiceClient();
 
-  const { data: todayTabs } = await supabase
+  // All open tabs — no date filter so carryover tabs from previous days appear
+  const { data: openTabs } = await supabase
     .from("pos_tabs")
     .select("id, name, total_cents, status, created_at, closed_at, notes")
-    .gte("created_at", jamaicaMidnight().toISOString())
+    .eq("status", "open")
     .order("created_at", { ascending: false });
 
-  const openTabs   = (todayTabs ?? []).filter((t) => t.status === "open");
-  const closedTabs = (todayTabs ?? []).filter((t) => t.status === "closed");
-  const voidedTabs = (todayTabs ?? []).filter((t) => t.status === "voided");
+  // Today's settled tabs — use closed_at so tabs opened yesterday but paid today are included
+  const { data: settledTabs } = await supabase
+    .from("pos_tabs")
+    .select("id, name, total_cents, status, created_at, closed_at, notes")
+    .in("status", ["closed", "voided"])
+    .gte("closed_at", jamaicaMidnight().toISOString())
+    .order("closed_at", { ascending: false });
+
+  const closedTabs = (settledTabs ?? []).filter((t) => t.status === "closed");
+  const voidedTabs = (settledTabs ?? []).filter((t) => t.status === "voided");
 
   const todayRevenue = closedTabs.reduce((sum, t) => sum + (t.total_cents ?? 0), 0);
-  const openRunning  = openTabs.reduce((sum, t) => sum + (t.total_cents ?? 0), 0);
+  const openRunning  = (openTabs ?? []).reduce((sum, t) => sum + (t.total_cents ?? 0), 0);
 
   return (
     <div className="space-y-8">
@@ -51,14 +59,14 @@ export default async function BarDashboardPage() {
       </div>
 
       {/* Open tabs */}
-      {!openTabs.length ? (
+      {!(openTabs ?? []).length ? (
         <div className="border border-bone/10 rounded-xl p-10 text-center text-bone/30">
           <p className="text-lg mb-2">No open tabs</p>
           <Link href="/bar/tabs/new" className="text-sm text-ochre hover:underline">Open the first one</Link>
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-          {openTabs.map((tab) => (
+          {(openTabs ?? []).map((tab) => (
             <Link
               key={tab.id}
               href={`/bar/tabs/${tab.id}`}
@@ -75,7 +83,7 @@ export default async function BarDashboardPage() {
         </div>
       )}
 
-      {/* All today's tabs — closed + voided */}
+      {/* Today's settled tabs — closed + voided */}
       {(closedTabs.length > 0 || voidedTabs.length > 0) && (
         <section className="space-y-3">
           <h2 className="text-xs font-semibold uppercase tracking-widest text-bone/35">Settled Today</h2>
