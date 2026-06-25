@@ -190,6 +190,50 @@ export async function decrementTabItem(
   return null;
 }
 
+export async function addCustomItem(
+  _prev: ActionState,
+  formData: FormData
+): Promise<ActionState> {
+  await requireBarStaff();
+
+  const tabId      = formData.get("tab_id") as string;
+  const rawName    = (formData.get("name") as string)?.trim();
+  const rawPrice   = formData.get("price") as string;
+
+  if (!tabId) return { error: "Invalid request." };
+
+  const name = rawName || "Other";
+  const dollars = parseFloat(rawPrice);
+  if (isNaN(dollars) || dollars <= 0) return { error: "Enter a valid amount." };
+  const price_cents = Math.round(dollars * 100);
+
+  const supabase = createServiceClient();
+
+  const { data: tab } = await supabase
+    .from("pos_tabs")
+    .select("id, status")
+    .eq("id", tabId)
+    .single();
+
+  if (!tab)                  return { error: "Tab not found." };
+  if (tab.status !== "open") return { error: "This tab is already closed." };
+
+  const { error: insertError } = await supabase
+    .from("pos_tab_items")
+    .insert({ tab_id: tabId, name, price_cents, quantity: 1 });
+
+  if (insertError) return { error: `Failed to add item: ${insertError.message}` };
+
+  const { error: totalError } = await supabase.rpc(
+    "increment_tab_total",
+    { p_tab_id: tabId, p_amount: price_cents }
+  );
+  if (totalError) return { error: `Item added but total not updated: ${totalError.message}` };
+
+  revalidatePath(`/bar/tabs/${tabId}`);
+  return null;
+}
+
 export async function saveTabAsRegular(tabId: string): Promise<ActionState> {
   await requireBarStaff();
 

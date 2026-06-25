@@ -6,6 +6,7 @@ import TabControls from "./TabControls";
 import QuantityControls from "./QuantityControls";
 import { formatCents } from "@/lib/bar/pos";
 import SaveAsRegularButton from "./SaveAsRegularButton";
+import CustomItemForm from "./CustomItemForm";
 
 export default async function TabPage({ params }: { params: Promise<{ id: string }> }) {
   await requireBarStaff();
@@ -74,14 +75,22 @@ export default async function TabPage({ params }: { params: Promise<{ id: string
           )}
         </div>
 
-        {/* Right: menu grid (only when tab is open) */}
+        {/* Right: menu grid + custom item (only when tab is open) */}
         {isOpen && items && (
-          <div className="lg:flex-1 min-h-0 flex flex-col">
-            <h2 className="text-xs font-semibold text-bone/40 uppercase tracking-wider mb-2 shrink-0">
-              Menu
-            </h2>
-            <div className="flex-1 min-h-0">
-              <MenuGrid items={items} tabId={id} />
+          <div className="lg:flex-1 min-h-0 flex flex-col gap-3">
+            <div>
+              <h2 className="text-xs font-semibold text-bone/40 uppercase tracking-wider mb-2">
+                Menu
+              </h2>
+              <div className="flex-1 min-h-0">
+                <MenuGrid items={items} tabId={id} />
+              </div>
+            </div>
+            <div className="shrink-0">
+              <h2 className="text-xs font-semibold text-bone/40 uppercase tracking-wider mb-2">
+                Other / Custom
+              </h2>
+              <CustomItemForm tabId={id} />
             </div>
           </div>
         )}
