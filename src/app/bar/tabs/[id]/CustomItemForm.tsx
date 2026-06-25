@@ -30,7 +30,7 @@ export default function CustomItemForm({ tabId }: { tabId: string }) {
           type="number"
           min="0.01"
           step="0.01"
-          placeholder="$0.00"
+          placeholder="J$0.00"
           required
           className="w-24 bg-bone/5 border border-bone/15 rounded px-3 py-2 text-bone placeholder:text-bone/25 text-sm focus:outline-none focus:border-ochre/50 text-right"
         />
