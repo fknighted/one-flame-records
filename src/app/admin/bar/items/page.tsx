@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { createServiceClient } from "@/lib/supabase/server";
-import { deleteMenuItem } from "./actions";
 import type { Tables } from "@/types/supabase";
 import { formatCents, CATEGORY_LABELS } from "@/lib/bar/pos";
+import DeleteMenuItemButton from "./DeleteMenuItemButton";
 
 const CATEGORIES = [
   { value: "all",       label: "All" },
@@ -107,15 +107,7 @@ export default async function MenuItemsPage({
                     >
                       Edit
                     </Link>
-                    <form action={deleteMenuItem.bind(null, item.id)} className="inline">
-                      <button
-                        type="submit"
-                        className="text-xs text-oxblood/50 hover:text-oxblood transition-colors"
-                        onClick={(e) => { if (!confirm(`Delete "${item.name}"?`)) e.preventDefault(); }}
-                      >
-                        Delete
-                      </button>
-                    </form>
+                    <DeleteMenuItemButton id={item.id} name={item.name} />
                   </td>
                 </tr>
               ))}
