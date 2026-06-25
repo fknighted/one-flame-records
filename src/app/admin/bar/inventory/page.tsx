@@ -2,6 +2,7 @@ import Link from "next/link";
 import { createServiceClient } from "@/lib/supabase/server";
 import { formatCents, CATEGORY_LABELS, CATEGORY_ORDER, jamaicaMidnight } from "@/lib/bar/pos";
 import { updateStock } from "./actions";
+import DeleteMenuItemButton from "@/app/admin/bar/items/DeleteMenuItemButton";
 
 export default async function InventoryPage() {
   const supabase = createServiceClient();
@@ -74,7 +75,7 @@ export default async function InventoryPage() {
                   <th className="hidden sm:table-cell text-right px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/40">Sold Today</th>
                   <th className="text-right px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/40">Stock</th>
                   <th className="text-right px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/40">Set</th>
-                  <th scope="col" className="sr-only px-4 py-3">Edit</th>
+                  <th scope="col" className="sr-only px-4 py-3">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-bone/10">
@@ -124,12 +125,15 @@ export default async function InventoryPage() {
                         </form>
                       </td>
                       <td className="px-4 py-3 text-right">
-                        <Link
-                          href={`/admin/bar/items/${item.id}/edit`}
-                          className="text-xs text-bone/40 hover:text-bone transition-colors"
-                        >
-                          Edit
-                        </Link>
+                        <span className="inline-flex items-center gap-3">
+                          <Link
+                            href={`/admin/bar/items/${item.id}/edit`}
+                            className="text-xs text-bone/40 hover:text-bone transition-colors"
+                          >
+                            Edit
+                          </Link>
+                          <DeleteMenuItemButton id={item.id} name={item.name} />
+                        </span>
                       </td>
                     </tr>
                   );
