@@ -28,6 +28,17 @@ const STYLE_PRESETS = [
   "Acoustic roots session",
   "Cinematic Jamaican landscape",
   "Studio session documentary",
+  "Lovers rock romance",
+  "Spiritual roots mystic",
+  "Kingston street life",
+  "Bashment party / club",
+  "Black and white timeless",
+  "VHS nostalgia",
+  "Tropical beach escape",
+  "Fashion editorial",
+  "Lyric video",
+  "Abstract visualizer",
+  "Festival / carnival",
 ];
 
 const ASPECT_RATIOS = [

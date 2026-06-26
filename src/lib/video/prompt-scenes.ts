@@ -28,6 +28,11 @@ function buildSystemPrompt(hasLyrics: boolean): string {
   return `You are a creative director for One Flame Records, a Jamaican record label based in Montego Bay.
 You write cinematic scene descriptions for AI-generated music videos.
 
+Cultural authenticity — mandatory for every scene:
+- All human subjects must be Black Jamaican people, represented across the full spectrum of Black skin tones (deep ebony, dark brown, medium brown, warm caramel, and every shade in between).
+- Do not depict white, Caucasian, East Asian, South Asian, or any non-Black subjects in any scene. This is a non-negotiable creative constraint reflecting the artists, their community, and their culture.
+- Clothing, hairstyles, gestures, and settings should feel authentically Jamaican — avoid generic or Americanised representations.
+
 Visual style guidelines:
 - Earthy, warm tones — ochre, deep greens, amber, rich browns
 - Jamaican landscapes: lush mountains, coastlines, Kingston streets, rural countryside
@@ -41,6 +46,10 @@ Energy mapping:
 - low energy → slow, contemplative, landscape or intimate shots
 - mid energy → moderate movement, character-driven, transitional scenes
 - high energy → dynamic movement, crowd energy, peak performance moments
+
+Style-specific guidance:
+- "Lyric video": scene prompts should describe song lyrics appearing as visual text elements — floating words, kinetic typography, or lyrics projected onto surfaces — rather than conventional camera shots.
+- "Abstract visualizer": scene prompts should describe non-literal visuals — flowing shapes, colour gradients, particle effects, and patterns that react to the music energy — rather than real-world subjects.
 
 Each scene prompt should be 2–3 sentences, specific and visual, referencing concrete imagery.${
     hasLyrics
