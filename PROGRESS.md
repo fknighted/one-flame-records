@@ -18,7 +18,6 @@ Code review pass on session 39's delete buttons. Content entry is next via admin
 
 - **TikTok auto-posting** — Make.com has no TikTok video upload module. Manual for now.
 - **Flames Lounge gallery** — Gallery grid still placeholder; swap with real photos when available.
-- **MAX_CAMPAIGN_IMAGES env var** — Add to Vercel dashboard → Settings → Environment Variables (default 10 if unset).
 
 ## Next session
 
@@ -50,7 +49,7 @@ Append a new entry at the top of this section after every session. Date, summary
 **Did:** `/code-review` on session 39's changes. 8 finder angles → 7 findings (3 CONFIRMED-HIGH, 3 CONFIRMED-MEDIUM, 1 PLAUSIBLE-LOW). Applied 3 bug fixes: (1) **C1 — unsafe `startTransition`** — all three delete buttons (`DeleteJobButton`, `DeleteNewsPostButton`, `DeleteVideoButton`) updated from `startTransition(() => action(id))` to `startTransition(async () => { try { await action(id); } catch { alert(...); } })`. Non-async callback drops rejected Promises silently in React 19. (2) **C2 — silent Supabase delete failures** — `deleteJob`, `deleteVideo`, `deleteNewsPost` now destructure `{ error }` from the Supabase delete call and throw if it fails. Previously `revalidatePath` fired even on FK constraint violations or RLS blocks. (3) **C4 — fragile import path** — `deleteNewsPost` moved to canonical `src/app/admin/news/actions.ts` (was only in `[id]/edit/actions.ts`). `DeleteNewsPostButton` imports from the sibling `./actions`. A re-export attempt in `[id]/edit/actions.ts` caused a Turbopack build failure (`"use server"` files may only export async functions, not re-exports) — fixed by importing directly in `[id]/edit/page.tsx` from `"../../actions"`. Build passes clean (83 routes).
 **Touched:** `src/app/admin/jobs/DeleteJobButton.tsx`, `src/app/admin/jobs/actions.ts`, `src/app/admin/news/DeleteNewsPostButton.tsx`, `src/app/admin/news/actions.ts` (new), `src/app/admin/news/[id]/edit/actions.ts`, `src/app/admin/news/[id]/edit/page.tsx`, `src/app/admin/videos/DeleteVideoButton.tsx`, `src/app/admin/videos/actions.ts`
 **Decided:** Turbopack enforces that `"use server"` files may only export async functions — `export { x } from "..."` re-exports are not allowed and cause build failures. Documented in CLAUDE.md (already noted).
-**Blocked on:** Same as session 39. Content entry still pending. `MAX_CAMPAIGN_IMAGES` Vercel env var not yet set.
+**Blocked on:** Content entry still pending. Flames Lounge gallery still placeholder.
 **Next:** Content entry via admin UI (artists with photos, releases with cover art, first news post). Set `MAX_CAMPAIGN_IMAGES` in Vercel.
 
 ### 2026-06-28 (session 39 — First live bar session + video style expansion)
