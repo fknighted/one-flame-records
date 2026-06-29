@@ -2,7 +2,8 @@ import { notFound } from "next/navigation";
 import { createServiceClient } from "@/lib/supabase/server";
 import NewsForm from "@/components/NewsForm";
 import DeletePostButton from "./DeletePostButton";
-import { updateNewsPost, deleteNewsPost } from "./actions";
+import { updateNewsPost } from "./actions";
+import { deleteNewsPost } from "../../actions";
 
 type Props = { params: Promise<{ id: string }> };
 

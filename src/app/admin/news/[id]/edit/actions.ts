@@ -88,4 +88,3 @@ export async function updateNewsPost(
   redirect("/admin/news");
 }
 
-export { deleteNewsPost } from "../../actions";
