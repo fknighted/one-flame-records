@@ -33,6 +33,20 @@ Format for each entry:
 
 ---
 
+## 2026-06-28 — Cultural authenticity directive in Claude video system prompt
+
+**Context:** One Flame Records artists are Black Jamaicans. Without an explicit instruction, AI video generation models and Claude's scene-prompting layer default to racially ambiguous or even non-Black subjects, which misrepresents the label, its artists, and their community.
+
+**Decision:** Added a mandatory cultural authenticity block at the top of `buildSystemPrompt()` in `src/lib/video/prompt-scenes.ts`. It declares: all human subjects must be Black Jamaican across the full spectrum of Black skin tones; no white, Caucasian, East Asian, South Asian, or non-Black subjects; clothing/hairstyles/settings must be authentically Jamaican. This sits in the system prompt so it applies universally to every style preset and every video job — no per-request action required.
+
+**Alternatives considered:**
+- _Per-style string addition._ Rejected — the directive is not style-specific; it would have to be duplicated into every one of 16 presets and any future presets added.
+- _Creative brief field._ Rejected — relies on the user remembering to type it; system-prompt placement makes it automatic and non-negotiable.
+
+**Consequences:** Every AI-generated scene description from this point forward will reflect Black Jamaican subjects. If a future style genuinely calls for non-human or abstract subjects (e.g. "Abstract visualizer"), the style-specific hint already in the system prompt handles the exception cleanly without weakening the general rule.
+
+---
+
 ## 2026-05-27 — Public assets use server-side signed URLs, not a public bucket
 
 **Context:** Artist assets (instrumentals, demos, reference images) live in the `private-assets` bucket with no public access. When `is_public = true` we want them visible on the public artist page without moving them to a public bucket or changing their storage path.

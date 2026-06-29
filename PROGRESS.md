@@ -8,29 +8,28 @@ This is the living state of the build. Update at the end of every session.
 
 - **Phase:** Bar POS operational + ongoing content
 - **Status:** Phases 1–5 complete. Bar POS fully built, all migrations applied to production, menu items seeded, dual-access bartender system live. Two full code-review passes applied and clean.
-- **Last updated:** 2026-06-25 (session 38)
+- **Last updated:** 2026-06-28 (session 39)
 
 ## Active focus
 
-Bar POS operational improvements complete. Ready for first live bar POS session + content entry.
+First live bar session complete and clean. Video styles expanded. Content entry is next.
 
 ## Blockers
 
 - **TikTok auto-posting** — Make.com has no TikTok video upload module. Manual for now.
 - **Flames Lounge gallery** — Gallery grid still placeholder; swap with real photos when available.
-- **MAX_CAMPAIGN_IMAGES env var** — Add to Vercel env vars to cap campaign image generation (default 10 if unset).
+- **MAX_CAMPAIGN_IMAGES env var** — Add to Vercel dashboard → Settings → Environment Variables (default 10 if unset).
 
 ## Next session
 
-### Priority 1 — First live bar POS run
-1. Admin → Bar → Staff → "Promote Existing Artist" → enter artist's email → grant bar access
-2. Have that artist log in to `/bar`, open a tab, add items (test +/− qty controls), close with a tip
-3. Verify `/admin/bar` shows correct sales totals in Jamaica timezone
+### Priority 1 — Content entry (ongoing, via admin)
+- Add artists with photos at `/admin/artists/new`
+- Add releases with cover art at `/admin/releases/new`
+- Publish first news post at `/admin/news/new`
 
-### Priority 2 — Content entry (ongoing, via admin)
-- Add artists with photos at `/admin/artists`
-- Add releases with cover art at `/admin/releases`
-- Publish first news post
+### Priority 2 — Housekeeping
+- Set `MAX_CAMPAIGN_IMAGES` env var in Vercel dashboard
+- Flames Lounge gallery photos when real venue shots are available
 
 ## Phase progress
 
@@ -45,6 +44,14 @@ Bar POS operational improvements complete. Ready for first live bar POS session 
 ## Session log
 
 Append a new entry at the top of this section after every session. Date, summary, files touched, what's next. Keep it tight — full reasoning belongs in `DECISIONS.md`.
+
+### 2026-06-28 (session 39 — First live bar session + video style expansion)
+
+**Did:** (1) **First live bar POS session** — all 6 steps completed end-to-end (promoted artist to bartender, opened tab, added items incl. custom charge, closed with cash + tip, verified Jamaica timezone totals in admin). Test data cleaned up via Supabase SQL (deleted Frank/$1,000 test tab, reversed stock quantities). (2) **Production bug fix — admin onClick crashes** — Videos, News, and Video Jobs admin list pages had `onClick` with `confirm()` directly on buttons in Server Components (same crash pattern fixed in session 38 for artists + menu items). Fixed by creating `DeleteVideoButton`, `DeleteNewsPostButton`, `DeleteJobButton` as client components. (3) **Video style presets** — expanded from 5 to 16 options in both `VideoRequestForm` and `AdminVideoRequestForm`: added Lovers rock romance, Spiritual roots mystic, Kingston street life, Bashment party / club, Black and white timeless, VHS nostalgia, Tropical beach escape, Fashion editorial, Lyric video, Abstract visualizer, Festival / carnival. (4) **Cultural authenticity directive** — added mandatory constraint to Claude system prompt in `prompt-scenes.ts`: all human subjects must be Black Jamaican people across full spectrum of skin tones; no non-Black subjects; authentic Jamaican clothing/settings. Style-specific hints added for Lyric video and Abstract visualizer formats.
+**Touched:** `src/app/admin/videos/DeleteVideoButton.tsx` (new), `src/app/admin/videos/page.tsx`, `src/app/admin/news/DeleteNewsPostButton.tsx` (new), `src/app/admin/news/page.tsx`, `src/app/admin/jobs/DeleteJobButton.tsx` (new), `src/app/admin/jobs/page.tsx`, `src/components/VideoRequestForm.tsx`, `src/components/AdminVideoRequestForm.tsx`, `src/lib/video/prompt-scenes.ts`
+**Decided:** Cultural authenticity directive lives in Claude system prompt (not per-style or per-request) so it applies universally to every video generation regardless of style selected. See DECISIONS.md.
+**Blocked on:** Nothing new. Content entry still pending.
+**Next:** Content entry (artists, releases, news). Set MAX_CAMPAIGN_IMAGES in Vercel.
 
 ### 2026-06-25 (session 38 — Bar POS improvements + code review fixes)
 

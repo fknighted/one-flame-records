@@ -139,6 +139,12 @@ Inngest functions always use `createServiceClient()` and initialize Anthropic/Op
 
 Claude responses in Inngest: always strip markdown code fences before `JSON.parse`. Normalize field names defensively (e.g. `angle ?? creative_angle ?? description`).
 
+### Video style presets and cultural authenticity
+
+`STYLE_PRESETS` arrays in `src/components/VideoRequestForm.tsx` and `src/components/AdminVideoRequestForm.tsx` must always be identical — 16 options as of session 39.
+
+The Claude system prompt in `src/lib/video/prompt-scenes.ts` (`buildSystemPrompt()`) contains a **mandatory cultural authenticity directive**: all human subjects in generated scenes must be Black Jamaican people across all shades of Black skin tones. No white, Caucasian, East Asian, South Asian, or non-Black subjects. Do not remove or weaken this directive — it is a creative and cultural requirement from the label, not a preference.
+
 ### Social posting via Make.com
 
 Never call Instagram, Facebook, or TikTok APIs directly. All social posting fires a JSON payload to `SOCIAL_WEBHOOK_URL` (Make.com webhook) with fields: `platform`, `piece_id`, `content_type`, `caption`, `image_url`, `video_url`. Make.com routes by `platform` to the appropriate native module. TikTok video upload has no Make.com module — manual posting only.
