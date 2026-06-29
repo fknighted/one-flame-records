@@ -8,11 +8,11 @@ This is the living state of the build. Update at the end of every session.
 
 - **Phase:** Bar POS operational + ongoing content
 - **Status:** Phases 1–5 complete. Bar POS fully built, all migrations applied to production, menu items seeded, dual-access bartender system live. Two full code-review passes applied and clean.
-- **Last updated:** 2026-06-28 (session 39)
+- **Last updated:** 2026-06-29 (session 40)
 
 ## Active focus
 
-First live bar session complete and clean. Video styles expanded. Content entry is next.
+Code review pass on session 39's delete buttons. Content entry is next via admin UI.
 
 ## Blockers
 
@@ -44,6 +44,14 @@ First live bar session complete and clean. Video styles expanded. Content entry 
 ## Session log
 
 Append a new entry at the top of this section after every session. Date, summary, files touched, what's next. Keep it tight — full reasoning belongs in `DECISIONS.md`.
+
+### 2026-06-29 (session 40 — Code review: delete button bug fixes)
+
+**Did:** `/code-review` on session 39's changes. 8 finder angles → 7 findings (3 CONFIRMED-HIGH, 3 CONFIRMED-MEDIUM, 1 PLAUSIBLE-LOW). Applied 3 bug fixes: (1) **C1 — unsafe `startTransition`** — all three delete buttons (`DeleteJobButton`, `DeleteNewsPostButton`, `DeleteVideoButton`) updated from `startTransition(() => action(id))` to `startTransition(async () => { try { await action(id); } catch { alert(...); } })`. Non-async callback drops rejected Promises silently in React 19. (2) **C2 — silent Supabase delete failures** — `deleteJob`, `deleteVideo`, `deleteNewsPost` now destructure `{ error }` from the Supabase delete call and throw if it fails. Previously `revalidatePath` fired even on FK constraint violations or RLS blocks. (3) **C4 — fragile import path** — `deleteNewsPost` moved to canonical `src/app/admin/news/actions.ts` (was only in `[id]/edit/actions.ts`). `DeleteNewsPostButton` imports from the sibling `./actions`. A re-export attempt in `[id]/edit/actions.ts` caused a Turbopack build failure (`"use server"` files may only export async functions, not re-exports) — fixed by importing directly in `[id]/edit/page.tsx` from `"../../actions"`. Build passes clean (83 routes).
+**Touched:** `src/app/admin/jobs/DeleteJobButton.tsx`, `src/app/admin/jobs/actions.ts`, `src/app/admin/news/DeleteNewsPostButton.tsx`, `src/app/admin/news/actions.ts` (new), `src/app/admin/news/[id]/edit/actions.ts`, `src/app/admin/news/[id]/edit/page.tsx`, `src/app/admin/videos/DeleteVideoButton.tsx`, `src/app/admin/videos/actions.ts`
+**Decided:** Turbopack enforces that `"use server"` files may only export async functions — `export { x } from "..."` re-exports are not allowed and cause build failures. Documented in CLAUDE.md (already noted).
+**Blocked on:** Same as session 39. Content entry still pending. `MAX_CAMPAIGN_IMAGES` Vercel env var not yet set.
+**Next:** Content entry via admin UI (artists with photos, releases with cover art, first news post). Set `MAX_CAMPAIGN_IMAGES` in Vercel.
 
 ### 2026-06-28 (session 39 — First live bar session + video style expansion)
 
