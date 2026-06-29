@@ -12,7 +12,13 @@ export default function DeleteJobButton({ id, artistName }: { id: string; artist
       disabled={pending}
       onClick={() => {
         if (!confirm(`Delete job for "${artistName}"?`)) return;
-        startTransition(() => deleteJob(id));
+        startTransition(async () => {
+          try {
+            await deleteJob(id);
+          } catch {
+            alert("Delete failed. Please try again.");
+          }
+        });
       }}
       className="text-xs text-bone/30 hover:text-red-400 transition-colors disabled:opacity-50"
       title="Delete job"

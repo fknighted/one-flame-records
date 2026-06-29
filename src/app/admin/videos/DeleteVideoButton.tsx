@@ -12,7 +12,13 @@ export default function DeleteVideoButton({ id, title }: { id: string; title: st
       disabled={pending}
       onClick={() => {
         if (!confirm(`Delete video "${title}"?`)) return;
-        startTransition(() => deleteVideo(id));
+        startTransition(async () => {
+          try {
+            await deleteVideo(id);
+          } catch {
+            alert("Delete failed. Please try again.");
+          }
+        });
       }}
       className="text-xs text-bone/25 hover:text-red-400 transition-colors disabled:opacity-50"
       title="Delete video"

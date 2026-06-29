@@ -8,7 +8,8 @@ import { requireAdmin } from "@/lib/auth";
 export async function deleteJob(jobId: string): Promise<void> {
   await requireAdmin();
   const supabase = createServiceClient();
-  await supabase.from("video_jobs").delete().eq("id", jobId);
+  const { error } = await supabase.from("video_jobs").delete().eq("id", jobId);
+  if (error) throw new Error(error.message);
   revalidatePath("/admin/jobs");
 }
 

@@ -88,9 +88,4 @@ export async function updateNewsPost(
   redirect("/admin/news");
 }
 
-export async function deleteNewsPost(postId: string): Promise<void> {
-  await requireAdmin();
-  const supabase = createServiceClient();
-  await supabase.from("news_posts").delete().eq("id", postId);
-  revalidatePath("/admin/news");
-}
+export { deleteNewsPost } from "../../actions";

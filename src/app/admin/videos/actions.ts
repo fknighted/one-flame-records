@@ -77,7 +77,8 @@ export async function createVideo(
 export async function deleteVideo(videoId: string): Promise<void> {
   await requireAdmin();
   const supabase = createServiceClient();
-  await supabase.from("videos").delete().eq("id", videoId);
+  const { error } = await supabase.from("videos").delete().eq("id", videoId);
+  if (error) throw new Error(error.message);
   revalidatePath("/admin/videos");
 }
 
