@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { createServiceClient } from "@/lib/supabase/server";
+import { JobsAutoRefresh } from "@/components/JobsAutoRefresh";
 import type { ClipResult } from "@/lib/video/types";
 
 type Scene = { start: number; end: number; prompt: string; aspectRatio: string };
@@ -40,8 +41,12 @@ export default async function JobDetailPage({ params }: Props) {
   const clips = (jobParams.generatedClips ?? []).filter(Boolean) as ClipResult[];
   const scenes = jobParams.scenes ?? [];
 
+  const ACTIVE = ["pending", "analyzing", "prompting", "generating", "assembling"];
+  const isActive = ACTIVE.includes(job.status);
+
   return (
     <div className="max-w-4xl space-y-8">
+      <JobsAutoRefresh hasActiveJobs={isActive} />
       <div>
         <Link
           href="/admin/jobs"

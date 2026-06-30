@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { createServiceClient } from "@/lib/supabase/server";
 import VideoLibraryFilter from "@/components/VideoLibraryFilter";
+import { JobsAutoRefresh } from "@/components/JobsAutoRefresh";
 import { toggleVideoPublic } from "./actions";
 import type { Tables } from "@/types/supabase";
 
@@ -131,11 +132,12 @@ export default async function PortalVideosPage({ searchParams }: Params) {
         </Link>
       </div>
 
-      {/* Active indicator */}
+      {/* Active indicator + auto-refresh */}
+      <JobsAutoRefresh hasActiveJobs={renderingCount > 0} />
       {renderingCount > 0 && (
         <div className="flex items-center gap-2 mb-5 text-xs text-bone/50">
           <span className="w-1.5 h-1.5 rounded-full bg-ochre animate-pulse" />
-          {renderingCount} job{renderingCount !== 1 ? "s" : ""} rendering now — this page updates automatically
+          {renderingCount} job{renderingCount !== 1 ? "s" : ""} rendering — updates every 30s
         </div>
       )}
 
