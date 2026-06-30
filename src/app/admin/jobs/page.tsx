@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { createServiceClient } from "@/lib/supabase/server";
 import { JobsAutoRefresh } from "@/components/JobsAutoRefresh";
 import { JobActions } from "@/components/RetryButton";
@@ -165,8 +166,13 @@ export default async function AdminJobsPage() {
                       i % 2 !== 0 ? "bg-bone/[0.02]" : ""
                     }`}
                   >
-                    <td className="px-4 py-3 text-bone">
-                      {job.artists?.stage_name ?? "—"}
+                    <td className="px-4 py-3">
+                      <Link
+                        href={`/admin/jobs/${job.id}`}
+                        className="text-bone hover:text-ochre transition-colors"
+                      >
+                        {job.artists?.stage_name ?? "—"}
+                      </Link>
                     </td>
                     <td className="px-4 py-3 text-bone/70 max-w-[180px] truncate">
                       {job.assets?.title ?? "—"}

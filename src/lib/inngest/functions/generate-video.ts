@@ -116,6 +116,18 @@ export const generateVideo = inngest.createFunction(
       })
     );
 
+    // Persist scenes into params so the detail page can show prompts alongside clips
+    await step.run("save-scenes", async () => {
+      const supabase = createServiceClient();
+      const { data } = await supabase.from("video_jobs").select("params").eq("id", jobId).single();
+      const cur = (data?.params ?? {}) as Record<string, unknown>;
+      const { error } = await supabase
+        .from("video_jobs")
+        .update({ params: { ...cur, scenes } })
+        .eq("id", jobId);
+      if (error) throw new Error(`Failed to save scenes: ${error.message}`);
+    });
+
     await step.run("mark-generating", () => updateJobStatus(jobId, "generating"));
 
     // Clips saved from a previous run (e.g. ran out of credits mid-way).
