@@ -25,6 +25,16 @@ export async function requestVideoAsAdmin(
   const creativeBrief = (formData.get("creative_brief") as string)?.trim() || undefined;
   const refImageIdsRaw = formData.getAll("reference_image_ids") as string[];
   const referenceImageIds = refImageIdsRaw.filter(Boolean).length ? refImageIdsRaw.filter(Boolean) : undefined;
+  const scenesRaw = (formData.get("scenes") as string | null)?.trim() || null;
+  let editedScenes: Scene[] | undefined;
+  if (scenesRaw) {
+    try {
+      const parsed = JSON.parse(scenesRaw);
+      if (Array.isArray(parsed) && parsed.length > 0) editedScenes = parsed as Scene[];
+    } catch {
+      // malformed — ignore, Inngest will generate fresh scenes
+    }
+  }
 
   if (!assetId) return { error: "Please select an asset." };
 
@@ -53,6 +63,7 @@ export async function requestVideoAsAdmin(
         ...(lyrics ? { lyrics } : {}),
         ...(creativeBrief ? { creativeBrief } : {}),
         ...(referenceImageIds ? { referenceImageIds } : {}),
+        ...(editedScenes ? { scenes: editedScenes } : {}),
       },
     })
     .select("id")

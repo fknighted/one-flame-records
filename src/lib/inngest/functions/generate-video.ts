@@ -3,6 +3,7 @@ import { createServiceClient } from "@/lib/supabase/server";
 import { analyzeAudio } from "@/lib/audio/analyze";
 import { transcribeAudio } from "@/lib/audio/transcribe";
 import { generateScenePrompts } from "@/lib/video/prompt-scenes";
+import type { Scene } from "@/lib/video/prompt-scenes";
 import { getClipGenerator } from "@/lib/video";
 import { assembleVideo } from "@/lib/video/assemble";
 import { sendEmail } from "@/lib/email/send";
@@ -78,6 +79,7 @@ export const generateVideo = inngest.createFunction(
       lyrics?: string;
       creativeBrief?: string;
       referenceImageIds?: string[];
+      scenes?: Scene[];
     };
 
     // Load signed URLs for reference images (if any)
@@ -105,28 +107,34 @@ export const generateVideo = inngest.createFunction(
     // Manual lyrics override auto-transcript
     const lyrics = params.lyrics || transcript || undefined;
 
-    const scenes = await step.run("write-prompts", () =>
-      generateScenePrompts(audioFeatures, {
-        stylePreset: params.stylePreset ?? "Vintage roots reggae performance",
-        aspectRatio: params.aspectRatio ?? "16:9",
-        genres: [],
-        lyrics,
-        creativeBrief: params.creativeBrief,
-        referenceImageUrls: referenceImageUrls.length ? referenceImageUrls : undefined,
-      })
-    );
+    // Use pre-approved scenes from params (admin edited them before submitting, or this is
+    // a per-clip regeneration retry) — skip Claude generation entirely.
+    const scenes: Scene[] = params.scenes?.length
+      ? params.scenes
+      : await step.run("write-prompts", () =>
+          generateScenePrompts(audioFeatures, {
+            stylePreset: params.stylePreset ?? "Vintage roots reggae performance",
+            aspectRatio: params.aspectRatio ?? "16:9",
+            genres: [],
+            lyrics,
+            creativeBrief: params.creativeBrief,
+            referenceImageUrls: referenceImageUrls.length ? referenceImageUrls : undefined,
+          })
+        );
 
-    // Persist scenes into params so the detail page can show prompts alongside clips
-    await step.run("save-scenes", async () => {
-      const supabase = createServiceClient();
-      const { data } = await supabase.from("video_jobs").select("params").eq("id", jobId).single();
-      const cur = (data?.params ?? {}) as Record<string, unknown>;
-      const { error } = await supabase
-        .from("video_jobs")
-        .update({ params: { ...cur, scenes } })
-        .eq("id", jobId);
-      if (error) throw new Error(`Failed to save scenes: ${error.message}`);
-    });
+    // Persist scenes into params (only needed when we just generated them fresh)
+    if (!params.scenes?.length) {
+      await step.run("save-scenes", async () => {
+        const supabase = createServiceClient();
+        const { data } = await supabase.from("video_jobs").select("params").eq("id", jobId).single();
+        const cur = (data?.params ?? {}) as Record<string, unknown>;
+        const { error } = await supabase
+          .from("video_jobs")
+          .update({ params: { ...cur, scenes } })
+          .eq("id", jobId);
+        if (error) throw new Error(`Failed to save scenes: ${error.message}`);
+      });
+    }
 
     await step.run("mark-generating", () => updateJobStatus(jobId, "generating"));
 

@@ -86,7 +86,7 @@ export function AdminVideoRequestForm({ assets, defaultAssetId, referenceImages,
 
   const [scripting, setScripting] = useState(false);
   const [scriptError, setScriptError] = useState<string | null>(null);
-  const [scriptScenes, setScriptScenes] = useState<ScenePreview[] | null>(null);
+  const [editableScenes, setEditableScenes] = useState<ScenePreview[] | null>(null);
 
   const selectedAsset = assets.find((a) => a.id === selectedAssetId);
   const estimate = estimateCost(selectedAsset?.duration_seconds ?? null);
@@ -108,7 +108,7 @@ export function AdminVideoRequestForm({ assets, defaultAssetId, referenceImages,
     if (!selectedAssetId) return;
     setScripting(true);
     setScriptError(null);
-    setScriptScenes(null);
+    setEditableScenes(null);
     const result = await onGenerateScript(selectedAssetId, {
       stylePreset: selectedStylePreset,
       aspectRatio: selectedAspectRatio,
@@ -118,7 +118,7 @@ export function AdminVideoRequestForm({ assets, defaultAssetId, referenceImages,
     if ("error" in result) {
       setScriptError(result.error);
     } else {
-      setScriptScenes(result.scenes);
+      setEditableScenes(result.scenes);
     }
     setScripting(false);
   }
@@ -140,7 +140,7 @@ export function AdminVideoRequestForm({ assets, defaultAssetId, referenceImages,
           name="asset_id"
           required
           defaultValue={defaultAssetId ?? ""}
-          onChange={(e) => { setSelectedAssetId(e.target.value); setScriptScenes(null); }}
+          onChange={(e) => { setSelectedAssetId(e.target.value); setEditableScenes(null); }}
           className="w-full rounded border border-bone/20 bg-bone/5 px-3 py-2 text-bone text-sm focus:outline-none focus:border-ochre"
         >
           <option value="">Select an asset…</option>
@@ -168,7 +168,7 @@ export function AdminVideoRequestForm({ assets, defaultAssetId, referenceImages,
         <select
           name="style_preset"
           defaultValue={STYLE_PRESETS[0]}
-          onChange={(e) => { setSelectedStylePreset(e.target.value); setScriptScenes(null); }}
+          onChange={(e) => { setSelectedStylePreset(e.target.value); setEditableScenes(null); }}
           className="w-full rounded border border-bone/20 bg-bone/5 px-3 py-2 text-bone text-sm focus:outline-none focus:border-ochre"
         >
           {STYLE_PRESETS.map((s) => (
@@ -190,7 +190,7 @@ export function AdminVideoRequestForm({ assets, defaultAssetId, referenceImages,
                 name="aspect_ratio"
                 value={value}
                 defaultChecked={value === "16:9"}
-                onChange={() => { setSelectedAspectRatio(value as "16:9" | "9:16" | "1:1"); setScriptScenes(null); }}
+                onChange={() => { setSelectedAspectRatio(value as "16:9" | "9:16" | "1:1"); setEditableScenes(null); }}
                 className="accent-ochre"
               />
               <span className="text-sm text-bone">{label}</span>
@@ -243,7 +243,7 @@ export function AdminVideoRequestForm({ assets, defaultAssetId, referenceImages,
           name="creative_brief"
           rows={4}
           value={creativeBrief}
-          onChange={(e) => { setCreativeBrief(e.target.value); setScriptScenes(null); }}
+          onChange={(e) => { setCreativeBrief(e.target.value); setEditableScenes(null); }}
           placeholder="Mood, story arc, locations, visual references, anything you want Claude to factor in…"
           className="w-full rounded border border-bone/20 bg-bone/5 px-3 py-2 text-bone text-sm placeholder:text-bone/25 focus:outline-none focus:border-ochre resize-y"
         />
@@ -272,7 +272,7 @@ export function AdminVideoRequestForm({ assets, defaultAssetId, referenceImages,
           name="lyrics"
           rows={6}
           value={lyrics}
-          onChange={(e) => { setLyrics(e.target.value); setScriptScenes(null); }}
+          onChange={(e) => { setLyrics(e.target.value); setEditableScenes(null); }}
           placeholder="Leave blank to auto-transcribe from the audio…"
           className="w-full rounded border border-bone/20 bg-bone/5 px-3 py-2 text-bone text-sm placeholder:text-bone/25 focus:outline-none focus:border-ochre resize-y font-mono"
         />
@@ -291,7 +291,7 @@ export function AdminVideoRequestForm({ assets, defaultAssetId, referenceImages,
             disabled={!selectedAssetId || scripting}
             className="text-xs px-3 py-1.5 rounded border border-ochre/40 text-ochre hover:bg-ochre/10 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
           >
-            {scripting ? "Generating…" : scriptScenes ? "Regenerate" : "Generate preview"}
+            {scripting ? "Generating…" : editableScenes ? "Regenerate" : "Generate preview"}
           </button>
         </div>
 
@@ -303,9 +303,10 @@ export function AdminVideoRequestForm({ assets, defaultAssetId, referenceImages,
           <p className="text-xs text-bone/30 animate-pulse">Analyzing audio and writing scene prompts…</p>
         )}
 
-        {scriptScenes && !scripting && (
+        {editableScenes && !scripting && (
           <div className="space-y-2 max-h-96 overflow-y-auto pr-1">
-            {scriptScenes.map((scene, i) => (
+            <p className="text-xs text-bone/30 pb-1">Edit any scene below before submitting.</p>
+            {editableScenes.map((scene, i) => (
               <div key={i} className="rounded border border-bone/10 bg-bone/5 p-3">
                 <div className="flex items-center gap-2 mb-1.5">
                   <span className="text-xs font-mono text-bone/30">
@@ -313,18 +314,31 @@ export function AdminVideoRequestForm({ assets, defaultAssetId, referenceImages,
                   </span>
                   <span className="text-xs text-bone/60">Scene {i + 1}</span>
                 </div>
-                <p className="text-xs text-bone/80 leading-relaxed">{scene.prompt}</p>
+                <textarea
+                  rows={3}
+                  value={scene.prompt}
+                  onChange={(e) => {
+                    const updated = editableScenes.map((s, j) =>
+                      j === i ? { ...s, prompt: e.target.value } : s
+                    );
+                    setEditableScenes(updated);
+                  }}
+                  className="w-full text-xs text-bone/80 leading-relaxed bg-transparent border border-bone/15 rounded px-2 py-1.5 focus:outline-none focus:border-ochre resize-y"
+                />
               </div>
             ))}
           </div>
         )}
 
-        {!scriptScenes && !scripting && !scriptError && (
+        {!editableScenes && !scripting && !scriptError && (
           <p className="text-xs text-bone/20">No preview yet — select an asset and click Generate preview.</p>
         )}
       </div>
 
       <input type="hidden" name="model" value="" />
+      {editableScenes && (
+        <input type="hidden" name="scenes" value={JSON.stringify(editableScenes)} />
+      )}
 
       <button
         type="submit"

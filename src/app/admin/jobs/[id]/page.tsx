@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { createServiceClient } from "@/lib/supabase/server";
 import { JobsAutoRefresh } from "@/components/JobsAutoRefresh";
+import { RegenerateClipButton } from "./RegenerateClipButton";
 import type { ClipResult } from "@/lib/video/types";
 
 type Scene = { start: number; end: number; prompt: string; aspectRatio: string };
@@ -38,8 +39,12 @@ export default async function JobDetailPage({ params }: Props) {
   if (!job) notFound();
 
   const jobParams = (job.params ?? {}) as JobParams;
-  const clips = (jobParams.generatedClips ?? []).filter(Boolean) as ClipResult[];
+  // Keep the raw generatedClips array (with nulls) so we can map clip index → slot index.
+  // rawClips[i] is null when that slot hasn't been generated yet (rare on the detail page).
+  const rawClips = jobParams.generatedClips ?? [];
+  const clips = rawClips.filter(Boolean) as ClipResult[];
   const scenes = jobParams.scenes ?? [];
+  const canRegenerate = job.status === "complete" || job.status === "failed";
 
   const ACTIVE = ["pending", "analyzing", "prompting", "generating", "assembling"];
   const isActive = ACTIVE.includes(job.status);
@@ -89,25 +94,34 @@ export default async function JobDetailPage({ params }: Props) {
             Clip URLs are temporary — they expire within 24 hours of generation.
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {clips.map((clip, i) => (
-              <div key={i} className="rounded-lg border border-bone/10 overflow-hidden bg-bone/[0.02]">
-                <video
-                  src={clip.videoUrl}
-                  controls
-                  preload="metadata"
-                  className="w-full aspect-video object-contain bg-black"
-                />
-                <div className="px-3 pt-2 pb-1 flex items-center justify-between text-xs text-bone/40">
-                  <span>Clip {i + 1} · {clip.durationSeconds}s · {clip.model}</span>
-                  <span>${clip.costEstimateUsd.toFixed(3)}</span>
+            {rawClips.map((clip, slotIndex) => {
+              if (!clip) return null;
+              const displayIndex = slotIndex + 1;
+              return (
+                <div key={slotIndex} className="rounded-lg border border-bone/10 overflow-hidden bg-bone/[0.02]">
+                  <video
+                    src={clip.videoUrl}
+                    controls
+                    preload="metadata"
+                    className="w-full aspect-video object-contain bg-black"
+                  />
+                  <div className="px-3 pt-2 pb-1 flex items-center justify-between text-xs text-bone/40">
+                    <span>Clip {displayIndex} · {clip.durationSeconds}s · {clip.model}</span>
+                    <div className="flex items-center gap-3">
+                      <span>${clip.costEstimateUsd.toFixed(3)}</span>
+                      {canRegenerate && (
+                        <RegenerateClipButton jobId={job.id} clipIndex={slotIndex} />
+                      )}
+                    </div>
+                  </div>
+                  {scenes[slotIndex] && (
+                    <p className="px-3 pb-3 text-xs text-bone/50 leading-relaxed">
+                      {scenes[slotIndex].prompt}
+                    </p>
+                  )}
                 </div>
-                {scenes[i] && (
-                  <p className="px-3 pb-3 text-xs text-bone/50 leading-relaxed">
-                    {scenes[i].prompt}
-                  </p>
-                )}
-              </div>
-            ))}
+              );
+            })}
           </div>
         </section>
       ) : (
