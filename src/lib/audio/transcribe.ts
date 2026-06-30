@@ -11,7 +11,7 @@ export async function transcribeAudio(audioUrl: string): Promise<string | null> 
 
   const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
   const result = await client.audio.transcriptions.create({
-    model: "whisper-1",
+    model: "gpt-4o-transcribe",
     file,
     response_format: "text",
   });
