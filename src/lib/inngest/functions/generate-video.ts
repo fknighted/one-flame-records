@@ -158,51 +158,67 @@ export const generateVideo = inngest.createFunction(
         })
       );
 
-      // Poll each clip (or reuse saved result)
+      // All clips in the batch were submitted simultaneously — wait once for the whole batch
+      const anyNewClips = batchTaskIds.some((id) => id !== null);
+      if (anyNewClips) await step.sleep(`batch-${batchStart}-initial`, "3m");
+
+      // Build opts array once
+      const batchOpts = Array.from({ length: batchSize }, (_, k) => ({
+        prompt: scenes[batchStart + k].prompt,
+        durationSeconds: scenes[batchStart + k].end - scenes[batchStart + k].start,
+        aspectRatio: scenes[batchStart + k].aspectRatio,
+      }));
+
+      // Poll all clips in parallel on each attempt — much faster than sequential
+      for (let attempt = 0; attempt < 60; attempt++) {
+        const pollResults = await Promise.all(
+          Array.from({ length: batchSize }, (_, k) => {
+            const i = batchStart + k;
+            if (savedClips[i] != null) return Promise.resolve(null); // already done
+            return step.run(`clip-${i}-poll-${attempt}`, async () => {
+              const generator = getClipGenerator(params.model);
+              return generator.checkClip(batchTaskIds[k]!, batchOpts[k]);
+            });
+          })
+        );
+
+        // Save any clips that just completed
+        for (let k = 0; k < batchSize; k++) {
+          const i = batchStart + k;
+          if (savedClips[i] != null || pollResults[k] === null) continue;
+          const poll = pollResults[k]!;
+          if (!poll.done) continue;
+
+          const result = poll.result;
+          await step.run(`save-clip-${i}`, async () => {
+            const supabase = createServiceClient();
+            const { data } = await supabase
+              .from("video_jobs").select("params").eq("id", jobId).single();
+            const cur = (data?.params ?? {}) as Record<string, unknown>;
+            const updated = [...((cur.generatedClips as (ClipResult | null)[]) ?? [])];
+            updated[i] = result;
+            const { error } = await supabase
+              .from("video_jobs")
+              .update({ params: JSON.parse(JSON.stringify({ ...cur, generatedClips: updated })) })
+              .eq("id", jobId);
+            if (error) throw new Error(`Failed to save clip ${i}: ${error.message}`);
+          });
+          savedClips[i] = result;
+        }
+
+        // Done if all clips are saved
+        const allDone = Array.from({ length: batchSize }, (_, k) => savedClips[batchStart + k] != null).every(Boolean);
+        if (allDone) break;
+
+        if (attempt === 59) throw new Error(`Clips timed out after 30 min`);
+        await step.sleep(`batch-${batchStart}-gap-${attempt}`, "30s");
+      }
+
+      // Collect results for this batch
       for (let k = 0; k < batchSize; k++) {
         const i = batchStart + k;
-
-        // Reuse clip from a previous run — no credits spent
-        if (savedClips[i]) {
-          clips.push(savedClips[i]!);
-          continue;
-        }
-
-        const opts = {
-          prompt: scenes[i].prompt,
-          durationSeconds: scenes[i].end - scenes[i].start,
-          aspectRatio: scenes[i].aspectRatio,
-        };
-        let clipResult: ClipResult | null = null;
-
-        await step.sleep(`clip-${i}-initial`, "5m");
-
-        for (let attempt = 0; attempt < 50; attempt++) {
-          const poll = await step.run(`clip-${i}-poll-${attempt}`, async () => {
-            const generator = getClipGenerator(params.model);
-            return generator.checkClip(batchTaskIds[k]!, opts);
-          });
-          if (poll.done) { clipResult = poll.result; break; }
-          await step.sleep(`clip-${i}-gap-${attempt}`, "30s");
-        }
-        if (!clipResult) throw new Error(`Clip ${i} timed out after 30 min`);
-
-        // Persist result into params so retries skip this clip
-        await step.run(`save-clip-${i}`, async () => {
-          const supabase = createServiceClient();
-          const { data } = await supabase
-            .from("video_jobs").select("params").eq("id", jobId).single();
-          const cur = (data?.params ?? {}) as Record<string, unknown>;
-          const updated = [...((cur.generatedClips as (ClipResult | null)[]) ?? [])];
-          updated[i] = clipResult!;
-          const { error } = await supabase
-            .from("video_jobs")
-            .update({ params: JSON.parse(JSON.stringify({ ...cur, generatedClips: updated })) })
-            .eq("id", jobId);
-          if (error) throw new Error(`Failed to save clip ${i}: ${error.message}`);
-        });
-
-        clips.push(clipResult);
+        if (!savedClips[i]) throw new Error(`Clip ${i} missing after poll loop`);
+        clips.push(savedClips[i]!);
       }
     }
 
