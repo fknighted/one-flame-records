@@ -33,6 +33,21 @@ Format for each entry:
 
 ---
 
+## 2026-06-30 — gpt-4o-transcribe over whisper-1 for Patois lyrics
+
+**Context:** Auto-transcribed lyrics from Jamaican Patois tracks were coming back garbled — Whisper-1 treats Patois as non-standard English and mistranscribes vocabulary specific to Jamaican dialect (e.g. "inna", "deh", "dutty", "nuh"). The transcription feeds the Claude scene-prompt system, so bad lyrics produce generic or inaccurate scene descriptions.
+
+**Decision:** Switched `src/lib/audio/transcribe.ts` from `whisper-1` to `gpt-4o-transcribe`. Same API endpoint and response format — one-line model change. `gpt-4o-transcribe` is OpenAI's latest generation audio model with significantly better dialect coverage, including Caribbean English and Patois-adjacent speech patterns.
+
+**Alternatives considered:**
+- _Groq Whisper large-v3-turbo._ Fast and cheap, but requires a separate `GROQ_API_KEY` and additional env var management. Not worth it when gpt-4o-transcribe is already available on the existing `OPENAI_API_KEY`.
+- _AssemblyAI._ Better dialect support but a third SDK dependency and separate pricing model. Deferred.
+- _Manual lyrics override._ Already exists as a fallback (`params.lyrics` in the video request form overrides auto-transcription). Remains the safety valve if gpt-4o-transcribe still struggles with specific tracks.
+
+**Consequences:** Slightly higher per-call cost than whisper-1, but the transcription is used once per job and is not on a hot path. Lyrics quality directly affects scene prompt quality and therefore video relevance — the upgrade pays for itself in fewer re-runs.
+
+---
+
 ## 2026-06-28 — Cultural authenticity directive in Claude video system prompt
 
 **Context:** One Flame Records artists are Black Jamaicans. Without an explicit instruction, AI video generation models and Claude's scene-prompting layer default to racially ambiguous or even non-Black subjects, which misrepresents the label, its artists, and their community.

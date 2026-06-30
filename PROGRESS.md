@@ -8,11 +8,11 @@ This is the living state of the build. Update at the end of every session.
 
 - **Phase:** Bar POS operational + ongoing content
 - **Status:** Phases 1–5 complete. Bar POS fully built, all migrations applied to production, menu items seeded, dual-access bartender system live. Two full code-review passes applied and clean.
-- **Last updated:** 2026-06-29 (session 40)
+- **Last updated:** 2026-06-30 (session 41)
 
 ## Active focus
 
-Code review pass on session 39's delete buttons. Content entry is next via admin UI.
+Fix 3 code review bugs from session 41. Content entry via admin UI.
 
 ## Blockers
 
@@ -21,12 +21,17 @@ Code review pass on session 39's delete buttons. Content entry is next via admin
 
 ## Next session
 
-### Priority 1 — Content entry (ongoing, via admin)
+### Priority 1 — Fix code review bugs (session 41 findings)
+1. `src/app/portal/videos/new/actions.ts:108` — wrap `inngest.send()` in try/catch (zombie job row + 500 on bad key — same pattern already in admin path)
+2. `src/app/admin/jobs/[id]/actions.ts:38` — narrow the `catch {}` to only suppress missing-key errors; re-throw everything else so the admin sees real failures
+3. `src/app/admin/jobs/[id]/actions.ts:22` — guard against `!params.scenes?.length` in `regenerateClip`; throw a clear error rather than silently forking with new scenes
+
+### Priority 2 — Content entry (ongoing, via admin)
 - Add artists with photos at `/admin/artists/new`
 - Add releases with cover art at `/admin/releases/new`
 - Publish first news post at `/admin/news/new`
 
-### Priority 2 — Housekeeping
+### Priority 3 — Housekeeping
 - Set `MAX_CAMPAIGN_IMAGES` env var in Vercel dashboard
 - Flames Lounge gallery photos when real venue shots are available
 
@@ -43,6 +48,14 @@ Code review pass on session 39's delete buttons. Content entry is next via admin
 ## Session log
 
 Append a new entry at the top of this section after every session. Date, summary, files touched, what's next. Keep it tight — full reasoning belongs in `DECISIONS.md`.
+
+### 2026-06-30 (session 41 — Code review: video pipeline + transcription upgrade)
+
+**Did:** (1) **Code review** — 8-angle `/code-review` on sessions 38–40's video pipeline changes (editable scene prompts, per-clip regeneration, parallel clip polling). 6 findings survived verification: 2 CONFIRMED bugs — (a) portal `requestVideo` calls `inngest.send()` without try/catch, so a bad Inngest key inserts a zombie job row and 500s the artist; (b) `regenerateClip` wraps the whole `inngest.send()` in a silent `catch {}` that swallows ALL errors (not just missing key), leaving the job stuck at "queued" with no feedback. 1 PLAUSIBLE bug — `regenerateClip` on pre-scenes jobs (no `params.scenes`) re-generates a completely new scene list, making the replacement clip visually inconsistent with the rest of the video. 3 cleanup/efficiency findings (excessive DB reads in save-clip, batchOpts redundancy, setEditableScenes copy-paste). (2) **Transcription upgrade** — swapped `whisper-1` for `gpt-4o-transcribe` in `src/lib/audio/transcribe.ts` to improve accuracy on Jamaican Patois vocabulary. (3) **Creative Systems Overview.md** — created a 1,142-line comprehensive reference doc (design, stack, routes, auth, DB schema, RLS, storage, all 5 portals, AI pipelines, bar POS, Inngest, Sentry, Vercel, security) for uploading to ChatGPT / Claude Web.
+**Touched:** `src/lib/audio/transcribe.ts`, `Creative Systems Overview.md` (new)
+**Decided:** gpt-4o-transcribe over whisper-1 for Patois accuracy — see DECISIONS.md.
+**Blocked on:** 3 code review bugs not yet fixed (see next session priorities). TikTok auto-posting. Flames Lounge gallery placeholder. `MAX_CAMPAIGN_IMAGES` env var.
+**Next:** Fix 3 code review bugs. Content entry (artists, releases, news). Set `MAX_CAMPAIGN_IMAGES` in Vercel.
 
 ### 2026-06-29 (session 40 — Code review: delete button bug fixes)
 
