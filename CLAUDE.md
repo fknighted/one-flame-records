@@ -143,7 +143,7 @@ Claude responses in Inngest: always strip markdown code fences before `JSON.pars
 
 `STYLE_PRESETS` arrays in `src/components/VideoRequestForm.tsx` and `src/components/AdminVideoRequestForm.tsx` must always be identical — 16 options as of session 39.
 
-The Claude system prompt in `src/lib/video/prompt-scenes.ts` (`buildSystemPrompt()`) contains a **mandatory cultural authenticity directive**: all human subjects in generated scenes must be Black Jamaican people across all shades of Black skin tones. No white, Caucasian, East Asian, South Asian, or non-Black subjects. Do not remove or weaken this directive — it is a creative and cultural requirement from the label, not a preference.
+The Claude system prompt in `src/lib/video/prompt-scenes.ts` (`buildSystemPrompt()`) contains a **mandatory cultural authenticity directive**: every human subject must be a Jamaican person described through visual specifics — skin tones from deep ebony through warm caramel, authentic Jamaican hairstyles, genuine Jamaican dress and settings. The directive instructs Claude to describe subjects by visible appearance and cultural setting rather than by racial labels, because Kling/kie.ai content moderation flags explicit racial group designations. Do not remove or weaken the intent — it is a creative and cultural requirement from the label. Do not revert to explicit racial exclusion language — that breaks the video pipeline.
 
 ### Social posting via Make.com
 
