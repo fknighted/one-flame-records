@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { createServiceClient } from "@/lib/supabase/server";
 import { toggleJobPublic } from "./actions";
 import type { Tables } from "@/types/supabase";
+import YoutubeUploadButton from "@/components/YoutubeUploadButton";
 
 type VideoJob = Tables<"video_jobs">;
 
@@ -81,6 +82,7 @@ export default async function AdminArtistVideosPage({ params }: Props) {
                 <th className="text-left px-4 py-3 text-xs font-medium text-bone/40 uppercase tracking-wider">Created</th>
                 <th className="text-left px-4 py-3 text-xs font-medium text-bone/40 uppercase tracking-wider">Completed</th>
                 <th className="text-left px-4 py-3 text-xs font-medium text-bone/40 uppercase tracking-wider">Public</th>
+                <th className="text-left px-4 py-3 text-xs font-medium text-bone/40 uppercase tracking-wider">YouTube</th>
                 <th className="px-4 py-3 w-20" />
               </tr>
             </thead>
@@ -137,6 +139,16 @@ export default async function AdminArtistVideosPage({ params }: Props) {
                         </form>
                       ) : (
                         <span className="text-bone/20 text-xs">—</span>
+                      )}
+                    </td>
+                    <td className="px-4 py-3">
+                      {job.status === "complete" && (
+                        <YoutubeUploadButton
+                          source="video_job"
+                          id={job.id}
+                          youtubeId={(job as { youtube_id?: string | null }).youtube_id ?? null}
+                          uploadStatus={(job as { youtube_upload_status?: string | null }).youtube_upload_status ?? null}
+                        />
                       )}
                     </td>
                     <td className="px-4 py-3 text-right">

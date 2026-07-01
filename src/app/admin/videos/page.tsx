@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { createServiceClient } from "@/lib/supabase/server";
 import DeleteVideoButton from "./DeleteVideoButton";
+import YoutubeUploadButton from "@/components/YoutubeUploadButton";
 
 const KIND_LABELS: Record<string, string> = {
   official: "Official",
@@ -15,7 +16,7 @@ export default async function AdminVideosPage() {
   const { data: videos, error } = await supabase
     .from("videos")
     .select(
-      "id, title, youtube_id, storage_url, kind, featured, published_at, artists(stage_name)"
+      "id, title, youtube_id, storage_url, kind, featured, published_at, youtube_upload_status, artists(stage_name)"
     )
     .order("published_at", { ascending: false });
 
@@ -110,7 +111,7 @@ export default async function AdminVideosPage() {
                       )}
                     </td>
                     <td className="px-4 py-3 text-right space-x-3 whitespace-nowrap">
-                      {video.youtube_id && (
+                      {video.youtube_id ? (
                         <a
                           href={`https://www.youtube.com/watch?v=${video.youtube_id}`}
                           target="_blank"
@@ -119,8 +120,7 @@ export default async function AdminVideosPage() {
                         >
                           Watch ↗
                         </a>
-                      )}
-                      {!video.youtube_id && video.storage_url && (
+                      ) : video.storage_url ? (
                         <a
                           href={video.storage_url}
                           target="_blank"
@@ -129,6 +129,14 @@ export default async function AdminVideosPage() {
                         >
                           Watch ↗
                         </a>
+                      ) : null}
+                      {video.storage_url && (
+                        <YoutubeUploadButton
+                          source="video"
+                          id={video.id}
+                          youtubeId={video.youtube_id ?? null}
+                          uploadStatus={(video as { youtube_upload_status?: string | null }).youtube_upload_status ?? null}
+                        />
                       )}
                       <Link
                         href={`/admin/videos/${video.id}/edit`}

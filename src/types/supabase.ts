@@ -892,6 +892,8 @@ export type Database = {
           started_at: string | null
           status: string
           updated_at: string
+          youtube_id: string | null
+          youtube_upload_status: string | null
         }
         Insert: {
           artist_id: string
@@ -908,6 +910,8 @@ export type Database = {
           started_at?: string | null
           status?: string
           updated_at?: string
+          youtube_id?: string | null
+          youtube_upload_status?: string | null
         }
         Update: {
           artist_id?: string
@@ -924,6 +928,8 @@ export type Database = {
           started_at?: string | null
           status?: string
           updated_at?: string
+          youtube_id?: string | null
+          youtube_upload_status?: string | null
         }
         Relationships: [
           {
@@ -955,6 +961,7 @@ export type Database = {
           title: string
           updated_at: string
           youtube_id: string | null
+          youtube_upload_status: string | null
         }
         Insert: {
           artist_id: string
@@ -968,6 +975,7 @@ export type Database = {
           title: string
           updated_at?: string
           youtube_id?: string | null
+          youtube_upload_status?: string | null
         }
         Update: {
           artist_id?: string
@@ -981,6 +989,7 @@ export type Database = {
           title?: string
           updated_at?: string
           youtube_id?: string | null
+          youtube_upload_status?: string | null
         }
         Relationships: [
           {

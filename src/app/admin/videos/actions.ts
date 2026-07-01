@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createServiceClient } from "@/lib/supabase/server";
 import { requireAdmin } from "@/lib/auth";
+import { inngest } from "@/lib/inngest/client";
 
 export type ActionState = { error: string } | null;
 
@@ -80,6 +81,24 @@ export async function deleteVideo(videoId: string): Promise<void> {
   const { error } = await supabase.from("videos").delete().eq("id", videoId);
   if (error) throw new Error(error.message);
   revalidatePath("/admin/videos");
+}
+
+export async function requestYouTubeUpload(
+  source: "video" | "video_job",
+  id: string
+): Promise<ActionState> {
+  await requireAdmin();
+  const supabase = createServiceClient();
+
+  // Optimistically mark as uploading so the UI updates before Inngest fires
+  const table = source === "video" ? "videos" : "video_jobs";
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  await supabase.from(table).update({ youtube_upload_status: "uploading" } as any).eq("id", id);
+
+  await inngest.send({ name: "youtube/upload.requested", data: { source, id } });
+
+  revalidatePath(source === "video" ? "/admin/videos" : "/admin/artists");
+  return null;
 }
 
 export async function updateVideo(

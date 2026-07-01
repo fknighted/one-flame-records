@@ -55,7 +55,7 @@ Albums, EPs, singles. Public reads.
 | `featured` | `boolean` | Default false |
 
 ### `videos`
-Music videos, lyric videos, behind-the-scenes. YouTube-embedded only. Public reads.
+Music videos, lyric videos, behind-the-scenes. Can be YouTube-embedded or a direct upload (`storage_url`). Public reads.
 
 | Column | Type | Notes |
 |---|---|---|
@@ -63,7 +63,9 @@ Music videos, lyric videos, behind-the-scenes. YouTube-embedded only. Public rea
 | `artist_id` | `uuid` | FK → `artists.id` |
 | `release_id` | `uuid` nullable | FK → `releases.id` |
 | `title` | `text` | |
-| `youtube_id` | `text` | The 11-char YouTube ID |
+| `youtube_id` | `text` nullable | The 11-char YouTube ID. Set manually when linking an existing YouTube video, or automatically after a YouTube upload via the admin panel. |
+| `storage_url` | `text` nullable | Public URL of a video file uploaded to Supabase Storage (`public-media/videos/...`). |
+| `youtube_upload_status` | `text` nullable | `'uploading'` \| `'done'` \| `'failed'`. Tracks YouTube API upload triggered from `/admin/videos`. |
 | `kind` | `text` | `'music_video'`, `'lyric'`, `'live'`, `'behind_scenes'`, `'generated'` |
 | `published_at` | `timestamptz` | |
 | `featured` | `boolean` | |
@@ -128,6 +130,8 @@ Phase 4 — state machine for an automated video request.
 | `error` | `text` nullable | If failed |
 | `cost_estimate_usd` | `numeric` nullable | Written by pipeline on complete |
 | `is_public` | `boolean` | Default false. When true, video appears on public artist page and `/videos` page (admin/artist can toggle). |
+| `youtube_id` | `text` nullable | Set after admin uploads the completed video to YouTube via the admin panel. |
+| `youtube_upload_status` | `text` nullable | `'uploading'` \| `'done'` \| `'failed'`. Tracks the Inngest `upload-to-youtube` job. |
 | `started_at`, `completed_at` | `timestamptz` | |
 
 ### `news_posts`
@@ -223,7 +227,9 @@ src/app/
 │   ├── applications/                  /admin/applications (review pending)
 │   ├── codes/                         /admin/codes (manage QR codes)
 │   ├── jobs/                          /admin/jobs (video pipeline observability)
-│   └── settings/                      /admin/settings (monthly budget)
+│   └── settings/
+│       ├── page.tsx                   /admin/settings (monthly budget, MFA)
+│       └── brand/page.tsx             /admin/settings/brand (intro/outro clip upload)
 ├── signup/[code]/page.tsx             /signup/<code> (QR landing)
 ├── login/page.tsx                     /login (shared admin + artist)
 └── api/
