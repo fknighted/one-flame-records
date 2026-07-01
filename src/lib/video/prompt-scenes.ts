@@ -53,12 +53,13 @@ Style-specific guidance:
 
 Each scene prompt should be 2–3 sentences, specific and visual, referencing concrete imagery.${
     hasLyrics
-      ? "\nWhen lyrics are provided, let them guide the imagery — reflect the meaning and mood of the words in each scene."
+      ? "\n\nLyrics are provided — treat them as the PRIMARY structural guide. Map each distinct lyrical section (verse, chorus, bridge, hook) to one or more scenes. The scene's imagery must directly visualise what the specific lyrics describe — the people, places, actions, and emotions named in those words. Do NOT default to generic Jamaican landscapes when the lyrics name specific scenes. If the lyrics say \"stand by the river\" that scene should show a river; if they say \"dancehall tonight\" show a dancehall. Follow the song's narrative arc from first scene to last."
       : "\nDo NOT mention lyrics, specific song titles, or artist names in the prompts."
   }`;
 }
 
 function buildUserPrompt(audio: AudioFeatures, params: SceneParams): string {
+  const genreList = params.genres.filter(Boolean).join(", ") || "reggae";
   let prompt = `Generate scene descriptions for a music video with these characteristics:
 
 Audio analysis:
@@ -67,7 +68,7 @@ Audio analysis:
 - Sections: ${JSON.stringify(audio.sections)}
 
 Artist style:
-- Genres: ${params.genres.join(", ") || "reggae"}
+- Genres: ${genreList}
 - Visual direction: ${params.stylePreset}
 - Aspect ratio: ${params.aspectRatio}`;
 

@@ -39,13 +39,13 @@ export const generateVideo = inngest.createFunction(
       const supabase = createServiceClient();
       const { data, error } = await supabase
         .from("video_jobs")
-        .select("*, assets(storage_path, title), artists(stage_name)")
+        .select("*, assets(storage_path, title, notes), artists(stage_name, genres)")
         .eq("id", jobId)
         .single();
       if (error || !data) throw new Error(`Job not found: ${jobId}`);
 
       // Generate a signed URL for the source audio
-      const asset = data.assets as { storage_path: string; title: string } | null;
+      const asset = data.assets as { storage_path: string; title: string; notes: string | null } | null;
       if (!asset) throw new Error("No asset linked to job");
 
       const { data: signed } = await supabase.storage
@@ -53,10 +53,11 @@ export const generateVideo = inngest.createFunction(
         .createSignedUrl(asset.storage_path, 86400); // 24h — pipeline can run 2+ hours
       if (!signed?.signedUrl) throw new Error("Could not sign asset URL");
 
-      const artistName =
-        (data.artists as { stage_name: string } | null)?.stage_name ?? "One Flame Records";
+      const artistData = data.artists as { stage_name: string; genres: string[] | null } | null;
+      const artistName = artistData?.stage_name ?? "One Flame Records";
+      const artistGenres = artistData?.genres ?? [];
 
-      return { ...data, audioUrl: signed.signedUrl, assetTitle: asset.title, artistName };
+      return { ...data, audioUrl: signed.signedUrl, assetTitle: asset.title, assetNotes: asset.notes, artistName, artistGenres };
     });
 
     await step.run("mark-analyzing", () =>
@@ -79,6 +80,7 @@ export const generateVideo = inngest.createFunction(
       lyrics?: string;
       creativeBrief?: string;
       referenceImageIds?: string[];
+      referenceVideoIds?: string[];
       scenes?: Scene[];
     };
 
@@ -107,6 +109,25 @@ export const generateVideo = inngest.createFunction(
     // Manual lyrics override auto-transcript
     const lyrics = params.lyrics || transcript || undefined;
 
+    // Load reference video notes to enrich the creative brief
+    const refVideoContext = await step.run("load-ref-videos", async () => {
+      if (!params.referenceVideoIds?.length) return null;
+      const supabase = createServiceClient();
+      const { data: refVideos } = await supabase
+        .from("assets")
+        .select("title, notes")
+        .in("id", params.referenceVideoIds);
+      if (!refVideos?.length) return null;
+      return refVideos.map((v) => `- ${v.title}${v.notes ? `: ${v.notes}` : ""}`).join("\n");
+    });
+
+    // Compile enriched creative brief: asset notes + reference video context + manual brief
+    const briefParts: string[] = [];
+    if (job.assetNotes) briefParts.push(`Track notes: ${job.assetNotes}`);
+    if (refVideoContext) briefParts.push(`Reference clips:\n${refVideoContext}`);
+    if (params.creativeBrief) briefParts.push(`Director's notes: ${params.creativeBrief}`);
+    const enrichedBrief = briefParts.join("\n\n") || undefined;
+
     // Use pre-approved scenes from params (admin edited them before submitting, or this is
     // a per-clip regeneration retry) — skip Claude generation entirely.
     const scenes: Scene[] = params.scenes?.length
@@ -115,9 +136,9 @@ export const generateVideo = inngest.createFunction(
           generateScenePrompts(audioFeatures, {
             stylePreset: params.stylePreset ?? "Vintage roots reggae performance",
             aspectRatio: params.aspectRatio ?? "16:9",
-            genres: [],
+            genres: (job.artistGenres as string[] | undefined) ?? [],
             lyrics,
-            creativeBrief: params.creativeBrief,
+            creativeBrief: enrichedBrief,
             referenceImageUrls: referenceImageUrls.length ? referenceImageUrls : undefined,
           })
         );

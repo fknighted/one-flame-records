@@ -25,6 +25,8 @@ export async function requestVideoAsAdmin(
   const creativeBrief = (formData.get("creative_brief") as string)?.trim() || undefined;
   const refImageIdsRaw = formData.getAll("reference_image_ids") as string[];
   const referenceImageIds = refImageIdsRaw.filter(Boolean).length ? refImageIdsRaw.filter(Boolean) : undefined;
+  const refVideoIdsRaw = formData.getAll("reference_video_ids") as string[];
+  const referenceVideoIds = refVideoIdsRaw.filter(Boolean).length ? refVideoIdsRaw.filter(Boolean) : undefined;
   const scenesRaw = (formData.get("scenes") as string | null)?.trim() || null;
   let editedScenes: Scene[] | undefined;
   if (scenesRaw) {
@@ -63,6 +65,7 @@ export async function requestVideoAsAdmin(
         ...(lyrics ? { lyrics } : {}),
         ...(creativeBrief ? { creativeBrief } : {}),
         ...(referenceImageIds ? { referenceImageIds } : {}),
+        ...(referenceVideoIds ? { referenceVideoIds } : {}),
         ...(editedScenes ? { scenes: editedScenes } : {}),
       },
     })
@@ -116,13 +119,16 @@ export async function generateScriptAction(
     aspectRatio: "16:9" | "9:16" | "1:1";
     lyrics?: string;
     creativeBrief?: string;
+    referenceVideoIds?: string[];
+    artistGenres?: string[];
   }
 ): Promise<{ scenes: Scene[] } | { error: string }> {
   await requireAdmin();
   const supabase = createServiceClient();
+
   const { data: asset } = await supabase
     .from("assets")
-    .select("storage_path")
+    .select("storage_path, notes")
     .eq("id", assetId)
     .single();
 
@@ -134,13 +140,32 @@ export async function generateScriptAction(
 
   if (!signed?.signedUrl) return { error: "Could not sign asset URL" };
 
+  // Compile enriched creative brief: asset notes + reference video notes + manual brief
+  const briefParts: string[] = [];
+  if (asset.notes) briefParts.push(`Track notes: ${asset.notes}`);
+
+  if (params.referenceVideoIds?.length) {
+    const { data: refVideos } = await supabase
+      .from("assets")
+      .select("title, notes")
+      .in("id", params.referenceVideoIds);
+    if (refVideos?.length) {
+      const lines = refVideos.map((v) => `- ${v.title}${v.notes ? `: ${v.notes}` : ""}`).join("\n");
+      briefParts.push(`Reference clips:\n${lines}`);
+    }
+  }
+
+  if (params.creativeBrief) briefParts.push(`Director's notes: ${params.creativeBrief}`);
+
+  const enrichedBrief = briefParts.join("\n\n") || undefined;
+
   const audioFeatures = await analyzeAudio(signed.signedUrl);
   const scenes = await generateScenePrompts(audioFeatures, {
     stylePreset: params.stylePreset,
     aspectRatio: params.aspectRatio,
-    genres: [],
+    genres: params.artistGenres ?? [],
     lyrics: params.lyrics,
-    creativeBrief: params.creativeBrief,
+    creativeBrief: enrichedBrief,
   });
 
   return { scenes };

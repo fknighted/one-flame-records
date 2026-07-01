@@ -53,6 +53,7 @@ interface AssetOption {
   id: string;
   title: string;
   duration_seconds: number | null;
+  notes: string | null;
 }
 
 interface ReferenceImage {
@@ -61,25 +62,41 @@ interface ReferenceImage {
   thumbUrl: string | null;
 }
 
+interface ReferenceVideo {
+  id: string;
+  title: string;
+  notes: string | null;
+}
+
 interface Props {
   assets: AssetOption[];
   defaultAssetId?: string;
   referenceImages: ReferenceImage[];
+  referenceVideos: ReferenceVideo[];
+  artistGenres: string[];
   action: (prev: AdminVideoRequestState, formData: FormData) => Promise<AdminVideoRequestState>;
   onTranscribe: (assetId: string) => Promise<{ transcript: string } | { error: string }>;
   onGenerateScript: (
     assetId: string,
-    params: { stylePreset: string; aspectRatio: "16:9" | "9:16" | "1:1"; lyrics?: string; creativeBrief?: string }
+    params: {
+      stylePreset: string;
+      aspectRatio: "16:9" | "9:16" | "1:1";
+      lyrics?: string;
+      creativeBrief?: string;
+      referenceVideoIds?: string[];
+      artistGenres?: string[];
+    }
   ) => Promise<{ scenes: ScenePreview[] } | { error: string }>;
 }
 
-export function AdminVideoRequestForm({ assets, defaultAssetId, referenceImages, action, onTranscribe, onGenerateScript }: Props) {
+export function AdminVideoRequestForm({ assets, defaultAssetId, referenceImages, referenceVideos, artistGenres, action, onTranscribe, onGenerateScript }: Props) {
   const [state, formAction, pending] = useActionState(action, null);
   const [selectedAssetId, setSelectedAssetId] = useState(defaultAssetId ?? "");
   const [selectedStylePreset, setSelectedStylePreset] = useState(STYLE_PRESETS[0]);
   const [selectedAspectRatio, setSelectedAspectRatio] = useState<"16:9" | "9:16" | "1:1">("16:9");
   const [lyrics, setLyrics] = useState("");
   const [creativeBrief, setCreativeBrief] = useState("");
+  const [selectedRefVideoIds, setSelectedRefVideoIds] = useState<string[]>([]);
 
   const [transcribing, setTranscribing] = useState(false);
   const [transcribeError, setTranscribeError] = useState<string | null>(null);
@@ -114,6 +131,8 @@ export function AdminVideoRequestForm({ assets, defaultAssetId, referenceImages,
       aspectRatio: selectedAspectRatio,
       lyrics: lyrics.trim() || undefined,
       creativeBrief: creativeBrief.trim() || undefined,
+      referenceVideoIds: selectedRefVideoIds.length ? selectedRefVideoIds : undefined,
+      artistGenres: artistGenres.length ? artistGenres : undefined,
     });
     if ("error" in result) {
       setScriptError(result.error);
@@ -140,7 +159,16 @@ export function AdminVideoRequestForm({ assets, defaultAssetId, referenceImages,
           name="asset_id"
           required
           defaultValue={defaultAssetId ?? ""}
-          onChange={(e) => { setSelectedAssetId(e.target.value); setEditableScenes(null); }}
+          onChange={(e) => {
+            const id = e.target.value;
+            setSelectedAssetId(id);
+            setEditableScenes(null);
+            // Auto-fill Director's notes from the asset's notes field if brief is empty
+            const asset = assets.find((a) => a.id === id);
+            if (asset?.notes && !creativeBrief.trim()) {
+              setCreativeBrief(asset.notes);
+            }
+          }}
           className="w-full rounded border border-bone/20 bg-bone/5 px-3 py-2 text-bone text-sm focus:outline-none focus:border-ochre"
         >
           <option value="">Select an asset…</option>
@@ -227,6 +255,43 @@ export function AdminVideoRequestForm({ assets, defaultAssetId, referenceImages,
                 <span className="text-sm text-bone group-hover:text-ochre transition-colors truncate">
                   {img.title}
                 </span>
+              </label>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Reference videos */}
+      {referenceVideos.length > 0 && (
+        <div>
+          <label className="block text-sm font-medium text-bone/70 mb-2">
+            Reference videos
+            <span className="ml-2 text-bone/40 font-normal text-xs">optional — title &amp; notes guide the script</span>
+          </label>
+          <div className="flex flex-col gap-2">
+            {referenceVideos.map((vid) => (
+              <label key={vid.id} className="flex items-start gap-3 cursor-pointer group">
+                <input
+                  type="checkbox"
+                  name="reference_video_ids"
+                  value={vid.id}
+                  checked={selectedRefVideoIds.includes(vid.id)}
+                  onChange={(e) => {
+                    setSelectedRefVideoIds((prev) =>
+                      e.target.checked ? [...prev, vid.id] : prev.filter((x) => x !== vid.id)
+                    );
+                    setEditableScenes(null);
+                  }}
+                  className="accent-ochre flex-shrink-0 mt-0.5"
+                />
+                <div className="min-w-0">
+                  <span className="text-sm text-bone group-hover:text-ochre transition-colors truncate block">
+                    {vid.title}
+                  </span>
+                  {vid.notes && (
+                    <span className="text-xs text-bone/35 leading-relaxed line-clamp-2">{vid.notes}</span>
+                  )}
+                </div>
               </label>
             ))}
           </div>

@@ -17,17 +17,17 @@ export default async function AdminRequestVideoPage({ params, searchParams }: Pr
 
   const { data: artist } = await supabase
     .from("artists")
-    .select("id, stage_name")
+    .select("id, stage_name, genres")
     .eq("id", id)
     .single();
 
   if (!artist) notFound();
 
-  // Fetch audio assets and reference images in parallel
-  const [{ data: assets }, { data: refAssets }] = await Promise.all([
+  // Fetch audio assets, reference images, and reference videos in parallel
+  const [{ data: assets }, { data: refAssets }, { data: refVideoAssets }] = await Promise.all([
     supabase
       .from("assets")
-      .select("id, title, duration_seconds")
+      .select("id, title, duration_seconds, notes")
       .eq("artist_id", id)
       .in("kind", ["instrumental", "demo"])
       .order("created_at", { ascending: false }),
@@ -36,6 +36,12 @@ export default async function AdminRequestVideoPage({ params, searchParams }: Pr
       .select("id, title, storage_path")
       .eq("artist_id", id)
       .eq("kind", "reference_image")
+      .order("created_at", { ascending: false }),
+    supabase
+      .from("assets")
+      .select("id, title, notes")
+      .eq("artist_id", id)
+      .eq("kind", "reference_video")
       .order("created_at", { ascending: false }),
   ]);
 
@@ -75,6 +81,8 @@ export default async function AdminRequestVideoPage({ params, searchParams }: Pr
           assets={assets}
           defaultAssetId={asset_id}
           referenceImages={referenceImages}
+          referenceVideos={refVideoAssets ?? []}
+          artistGenres={(artist.genres as string[] | null) ?? []}
           action={action}
           onTranscribe={transcribeAssetAction}
           onGenerateScript={generateScriptAction}
