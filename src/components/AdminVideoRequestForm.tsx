@@ -126,20 +126,25 @@ export function AdminVideoRequestForm({ assets, defaultAssetId, referenceImages,
     setScripting(true);
     setScriptError(null);
     setEditableScenes(null);
-    const result = await onGenerateScript(selectedAssetId, {
-      stylePreset: selectedStylePreset,
-      aspectRatio: selectedAspectRatio,
-      lyrics: lyrics.trim() || undefined,
-      creativeBrief: creativeBrief.trim() || undefined,
-      referenceVideoIds: selectedRefVideoIds.length ? selectedRefVideoIds : undefined,
-      artistGenres: artistGenres.length ? artistGenres : undefined,
-    });
-    if ("error" in result) {
-      setScriptError(result.error);
-    } else {
-      setEditableScenes(result.scenes);
+    try {
+      const result = await onGenerateScript(selectedAssetId, {
+        stylePreset: selectedStylePreset,
+        aspectRatio: selectedAspectRatio,
+        lyrics: lyrics.trim() || undefined,
+        creativeBrief: creativeBrief.trim() || undefined,
+        referenceVideoIds: selectedRefVideoIds.length ? selectedRefVideoIds : undefined,
+        artistGenres: artistGenres.length ? artistGenres : undefined,
+      });
+      if ("error" in result) {
+        setScriptError(result.error);
+      } else {
+        setEditableScenes(result.scenes);
+      }
+    } catch (err) {
+      setScriptError(err instanceof Error ? err.message : "Script generation failed — check server logs.");
+    } finally {
+      setScripting(false);
     }
-    setScripting(false);
   }
 
   return (
