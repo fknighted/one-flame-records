@@ -47,7 +47,7 @@ const ASPECT_RATIOS = [
   { value: "1:1",  label: "1:1 — Square (Instagram)" },
 ];
 
-type ScenePreview = { start: number; end: number; prompt: string; aspectRatio: string };
+type ScenePreview = { start: number; end: number; prompt: string; aspectRatio: string; referenceImageId?: string };
 
 interface AssetOption {
   id: string;
@@ -390,6 +390,40 @@ export function AdminVideoRequestForm({ assets, defaultAssetId, referenceImages,
                   }}
                   className="w-full text-xs text-bone/80 leading-relaxed bg-transparent border border-bone/15 rounded px-2 py-1.5 focus:outline-none focus:border-ochre resize-y"
                 />
+                {referenceImages.length > 0 && (
+                  <div className="mt-2">
+                    <p className="text-xs text-bone/30 mb-1.5">Starting frame <span className="text-bone/20">(optional)</span></p>
+                    <div className="flex flex-wrap gap-1.5">
+                      {referenceImages.map((img) => (
+                        <button
+                          key={img.id}
+                          type="button"
+                          title={img.title}
+                          onClick={() =>
+                            setEditableScenes((prev) =>
+                              prev!.map((s, j) =>
+                                j === i
+                                  ? { ...s, referenceImageId: s.referenceImageId === img.id ? undefined : img.id }
+                                  : s
+                              )
+                            )
+                          }
+                          className={`w-10 h-10 rounded overflow-hidden flex-shrink-0 border-2 transition-all ${
+                            scene.referenceImageId === img.id
+                              ? "border-ochre ring-1 ring-ochre/40"
+                              : "border-transparent opacity-50 hover:opacity-80"
+                          }`}
+                        >
+                          {img.thumbUrl ? (
+                            <img src={img.thumbUrl} alt={img.title} className="w-full h-full object-cover" />
+                          ) : (
+                            <div className="w-full h-full bg-bone/10" />
+                          )}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
             ))}
           </div>

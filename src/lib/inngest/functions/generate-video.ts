@@ -178,10 +178,28 @@ export const generateVideo = inngest.createFunction(
           if (savedClips[i]) return Promise.resolve(null); // already done — skip API call
           return step.run(`submit-clip-${i}`, async () => {
             const generator = getClipGenerator(params.model);
+
+            let referenceImage: string | undefined;
+            if (scenes[i].referenceImageId) {
+              const supabase = createServiceClient();
+              const { data: refAsset } = await supabase
+                .from("assets")
+                .select("storage_path")
+                .eq("id", scenes[i].referenceImageId)
+                .single();
+              if (refAsset) {
+                const { data: signed } = await supabase.storage
+                  .from("private-assets")
+                  .createSignedUrl(refAsset.storage_path, 3600);
+                referenceImage = signed?.signedUrl;
+              }
+            }
+
             return generator.submitClip({
               prompt: scenes[i].prompt,
               durationSeconds: scenes[i].end - scenes[i].start,
               aspectRatio: scenes[i].aspectRatio,
+              referenceImage,
             });
           });
         })

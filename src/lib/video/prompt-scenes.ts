@@ -16,6 +16,7 @@ const SceneSchema = z.object({
   end: z.number(),
   prompt: z.string().min(10),
   aspectRatio: z.enum(["16:9", "9:16", "1:1"]),
+  referenceImageId: z.string().optional(),
 });
 
 export type Scene = z.infer<typeof SceneSchema>;
