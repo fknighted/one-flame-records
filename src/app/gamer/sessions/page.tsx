@@ -34,7 +34,7 @@ export default async function GamerSessionsPage() {
       <h1 className="font-display font-bold text-bone text-2xl">Session History</h1>
 
       {!sessions?.length ? (
-        <p className="text-bone/30 text-sm">No sessions yet — visit the Flames Lounge to play!</p>
+        <p className="text-bone/50 text-sm">No sessions yet — visit the Flames Lounge to play!</p>
       ) : (
         <div className="space-y-2">
           {sessions.map(s => (
@@ -47,7 +47,7 @@ export default async function GamerSessionsPage() {
                     day: "numeric",
                   })}
                 </p>
-                <p className="text-bone/40 text-xs mt-0.5">
+                <p className="text-bone/60 text-xs mt-0.5">
                   {new Date(s.started_at).toLocaleTimeString("en-JM", { hour: "2-digit", minute: "2-digit" })}
                   {s.station ? ` · ${s.station}` : ""}
                 </p>

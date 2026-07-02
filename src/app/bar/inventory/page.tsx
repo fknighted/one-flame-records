@@ -37,7 +37,7 @@ export default async function BarInventoryPage() {
     <div className="space-y-8">
       <div>
         <h1 className="font-display font-bold text-bone text-2xl">Inventory</h1>
-        <p className="mt-1 text-sm text-bone/40">Current stock levels. Contact admin to update counts.</p>
+        <p className="mt-1 text-sm text-bone/60">Current stock levels. Contact admin to update counts.</p>
       </div>
 
       {needsRestock.length > 0 && (
@@ -51,7 +51,7 @@ export default async function BarInventoryPage() {
                 {needsRestock.map((item) => (
                   <tr key={item.id}>
                     <td className="px-4 py-3 text-bone font-medium">{item.name}</td>
-                    <td className="px-4 py-3 text-xs text-bone/40">{CATEGORY_LABELS[item.category] ?? item.category}</td>
+                    <td className="px-4 py-3 text-xs text-bone/60">{CATEGORY_LABELS[item.category] ?? item.category}</td>
                     <td className="px-4 py-3 text-right">
                       {item.stock_quantity === 0 ? (
                         <span className="text-red-400 font-bold text-sm">OUT</span>
@@ -71,7 +71,7 @@ export default async function BarInventoryPage() {
 
       {CATEGORY_ORDER.filter((cat) => grouped[cat]?.length).map((cat) => (
         <section key={cat} className="space-y-2">
-          <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-bone/40">
+          <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-bone/60">
             {CATEGORY_LABELS[cat] ?? cat}
           </h2>
           <div className="border border-bone/10 rounded-lg overflow-hidden">
@@ -87,7 +87,7 @@ export default async function BarInventoryPage() {
                       <td className="px-4 py-3 text-bone font-medium">{item.name}</td>
                       <td className="px-4 py-3 text-right">
                         {stock === null ? (
-                          <span className="text-bone/25 text-xs">not tracked</span>
+                          <span className="text-bone/60 text-xs">not tracked</span>
                         ) : none ? (
                           <span className="text-red-400 font-bold text-sm">OUT</span>
                         ) : (

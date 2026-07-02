@@ -55,7 +55,7 @@ function PipelineProgress({ status }: { status: string }) {
           </div>
         );
       })}
-      <span className="text-[11px] text-bone/40 ml-0.5">
+      <span className="text-[11px] text-bone/60 ml-0.5">
         {STEP_LABELS[status] ?? "In progress"}
       </span>
     </div>
@@ -114,7 +114,7 @@ export default async function PortalVideosPage({ searchParams }: Params) {
       {/* Header */}
       <div className="flex items-start justify-between gap-4 mb-8 pb-6 border-b border-bone/10">
         <div>
-          <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-forest mb-2">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-sage mb-2">
             Artist Portal
           </p>
           <h1 className="font-display font-bold text-bone text-3xl leading-none mb-3">
@@ -151,7 +151,7 @@ export default async function PortalVideosPage({ searchParams }: Params) {
       {/* Job list */}
       {filtered.length === 0 ? (
         <div className="rounded-lg border border-bone/10 p-12 text-center">
-          <p className="text-sm text-bone/40 mb-4">
+          <p className="text-sm text-bone/60 mb-4">
             {jobs.length === 0
               ? "No video jobs yet."
               : "No jobs match this filter."}
@@ -200,7 +200,7 @@ export default async function PortalVideosPage({ searchParams }: Params) {
                       <p className="font-display font-bold text-bone text-base leading-snug truncate group-hover:text-ochre transition-colors">
                         {assetTitle}
                       </p>
-                      <p className="font-mono text-[10px] text-bone/25 mt-0.5 uppercase tracking-widest">
+                      <p className="font-mono text-[10px] text-bone/60 mt-0.5 uppercase tracking-widest">
                         VJ-{vid}
                       </p>
                     </div>
@@ -209,9 +209,9 @@ export default async function PortalVideosPage({ searchParams }: Params) {
                     <span
                       className={`shrink-0 text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded ${
                         isDone
-                          ? "bg-forest/20 text-forest"
+                          ? "bg-forest/20 text-sage"
                           : isFailed
-                          ? "bg-oxblood/20 text-oxblood"
+                          ? "bg-oxblood/20 text-rose"
                           : "bg-ochre/15 text-ochre"
                       }`}
                     >
@@ -225,14 +225,14 @@ export default async function PortalVideosPage({ searchParams }: Params) {
                   {/* Done: date + actions */}
                   {isDone && (
                     <div className="flex items-center gap-4 mt-2">
-                      <span className="text-xs text-bone/30">{relativeDate(job.completed_at)}</span>
+                      <span className="text-xs text-bone/50">{relativeDate(job.completed_at)}</span>
                       <form action={toggleVideoPublic.bind(null, job.id)} onClick={(e) => e.stopPropagation()}>
                         <button
                           type="submit"
                           className={`text-[10px] font-semibold px-2 py-0.5 rounded transition-colors ${
                             job.is_public
-                              ? "bg-forest/20 text-forest hover:bg-forest/30"
-                              : "bg-bone/10 text-bone/30 hover:bg-bone/20 hover:text-bone/60"
+                              ? "bg-forest/20 text-sage hover:bg-forest/30"
+                              : "bg-bone/10 text-bone/50 hover:bg-bone/20 hover:text-bone/60"
                           }`}
                         >
                           {job.is_public ? "Public" : "Private"}
@@ -253,7 +253,7 @@ export default async function PortalVideosPage({ searchParams }: Params) {
 
                   {/* Failed: error message */}
                   {isFailed && job.error && (
-                    <p className="mt-1.5 text-[11px] text-oxblood/80 leading-snug line-clamp-2">
+                    <p className="mt-1.5 text-[11px] text-rose/80 leading-snug line-clamp-2">
                       {job.error}
                     </p>
                   )}
@@ -265,7 +265,7 @@ export default async function PortalVideosPage({ searchParams }: Params) {
       )}
 
       {/* Queue note */}
-      <p className="mt-8 text-xs text-bone/25 leading-relaxed">
+      <p className="mt-8 text-xs text-bone/60 leading-relaxed">
         Average render time is 12–20 minutes. Carlton reviews every job before it goes public — allow 24 hours after completion.
       </p>
     </div>

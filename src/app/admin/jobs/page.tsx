@@ -6,13 +6,13 @@ import { ArtistPickerDropdown } from "@/components/ArtistPickerDropdown";
 import DeleteJobButton from "./DeleteJobButton";
 
 const STATUS_STYLES: Record<string, string> = {
-  pending:    "bg-bone/10 text-bone/40",
-  analyzing:  "bg-forest/20 text-forest",
-  prompting:  "bg-forest/20 text-forest",
-  generating: "bg-forest/20 text-forest",
+  pending:    "bg-bone/10 text-bone/60",
+  analyzing:  "bg-forest/20 text-sage",
+  prompting:  "bg-forest/20 text-sage",
+  generating: "bg-forest/20 text-sage",
   assembling: "bg-ochre/20 text-ochre",
-  complete:   "bg-forest/30 text-forest",
-  failed:     "bg-oxblood/20 text-oxblood",
+  complete:   "bg-forest/30 text-sage",
+  failed:     "bg-oxblood/20 text-rose",
 };
 
 const STATUS_LABELS: Record<string, string> = {
@@ -111,13 +111,13 @@ export default async function AdminJobsPage() {
 
       <div className="mb-8 flex items-start justify-between gap-4">
         <div>
-          <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-forest mb-2">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-sage mb-2">
             Label Admin
           </p>
           <div className="flex items-center gap-3">
             <h1 className="font-display font-bold text-bone text-3xl">Video jobs</h1>
             {hasActiveJobs && (
-              <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-forest/20 text-forest text-xs font-medium">
+              <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-forest/20 text-sage text-xs font-medium">
                 <span className="w-1.5 h-1.5 rounded-full bg-forest animate-pulse" />
                 Live
               </span>
@@ -132,7 +132,7 @@ export default async function AdminJobsPage() {
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
         {stats.map(({ label, value }) => (
           <div key={label} className="rounded-lg border border-bone/10 p-4">
-            <p className="text-xs text-bone/40 uppercase tracking-wider mb-1">{label}</p>
+            <p className="text-xs text-bone/60 uppercase tracking-wider mb-1">{label}</p>
             <p className="font-display text-2xl text-bone">{value}</p>
           </div>
         ))}
@@ -141,19 +141,19 @@ export default async function AdminJobsPage() {
       {/* Jobs table */}
       {!jobs || jobs.length === 0 ? (
         <div className="rounded-lg border border-bone/10 p-10 text-center">
-          <p className="text-bone/40 text-sm">No video jobs yet.</p>
+          <p className="text-bone/60 text-sm">No video jobs yet.</p>
         </div>
       ) : (
         <div className="rounded-lg border border-bone/10 overflow-x-auto">
           <table className="w-full min-w-[720px] text-sm">
             <thead>
               <tr className="border-b border-bone/10 bg-bone/5">
-                <th className="text-left px-4 py-3 text-bone/40 font-medium text-xs uppercase tracking-wider">Artist</th>
-                <th className="text-left px-4 py-3 text-bone/40 font-medium text-xs uppercase tracking-wider">Asset</th>
-                <th className="text-left px-4 py-3 text-bone/40 font-medium text-xs uppercase tracking-wider">Status</th>
-                <th className="text-left px-4 py-3 text-bone/40 font-medium text-xs uppercase tracking-wider">Requested</th>
-                <th className="text-left px-4 py-3 text-bone/40 font-medium text-xs uppercase tracking-wider">Cost</th>
-                <th className="text-left px-4 py-3 text-bone/40 font-medium text-xs uppercase tracking-wider">Process time</th>
+                <th className="text-left px-4 py-3 text-bone/60 font-medium text-xs uppercase tracking-wider">Artist</th>
+                <th className="text-left px-4 py-3 text-bone/60 font-medium text-xs uppercase tracking-wider">Asset</th>
+                <th className="text-left px-4 py-3 text-bone/60 font-medium text-xs uppercase tracking-wider">Status</th>
+                <th className="text-left px-4 py-3 text-bone/60 font-medium text-xs uppercase tracking-wider">Requested</th>
+                <th className="text-left px-4 py-3 text-bone/60 font-medium text-xs uppercase tracking-wider">Cost</th>
+                <th className="text-left px-4 py-3 text-bone/60 font-medium text-xs uppercase tracking-wider">Process time</th>
                 <th className="px-4 py-3" />
               </tr>
             </thead>
@@ -180,7 +180,7 @@ export default async function AdminJobsPage() {
                     <td className="px-4 py-3">
                       <span
                         className={`rounded-full px-2 py-0.5 text-xs font-medium ${
-                          STATUS_STYLES[job.status] ?? "bg-bone/10 text-bone/40"
+                          STATUS_STYLES[job.status] ?? "bg-bone/10 text-bone/60"
                         }`}
                       >
                         {STATUS_LABELS[job.status] ?? job.status}
@@ -214,7 +214,7 @@ export default async function AdminJobsPage() {
                           href={`https://app.inngest.com/env/production/runs/${job.inngest_run_id}`}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-bone/30 hover:text-bone/60 text-xs transition-colors"
+                          className="text-bone/50 hover:text-bone/60 text-xs transition-colors"
                         >
                           Logs ↗
                         </a>

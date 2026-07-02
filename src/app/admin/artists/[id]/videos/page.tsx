@@ -18,9 +18,9 @@ function formatDate(iso: string) {
 }
 
 const STATUS_PILL: Record<string, string> = {
-  pending:    "bg-bone/10 text-bone/40",
+  pending:    "bg-bone/10 text-bone/60",
   processing: "bg-ochre/15 text-ochre",
-  complete:   "bg-forest/20 text-forest",
+  complete:   "bg-forest/20 text-sage",
   failed:     "bg-red-900/30 text-red-400",
 };
 
@@ -52,7 +52,7 @@ export default async function AdminArtistVideosPage({ params }: Props) {
         <div>
           <Link
             href={`/admin/artists/${id}/edit`}
-            className="text-xs text-bone/40 hover:text-ochre transition-colors"
+            className="text-xs text-bone/60 hover:text-ochre transition-colors"
           >
             ← {artist.stage_name}
           </Link>
@@ -69,7 +69,7 @@ export default async function AdminArtistVideosPage({ params }: Props) {
       </div>
 
       {rows.length === 0 ? (
-        <div className="border border-bone/10 rounded-lg p-10 text-center text-bone/30 text-sm">
+        <div className="border border-bone/10 rounded-lg p-10 text-center text-bone/50 text-sm">
           No video jobs yet. Request one from an artist&apos;s asset.
         </div>
       ) : (
@@ -77,12 +77,12 @@ export default async function AdminArtistVideosPage({ params }: Props) {
           <table className="w-full min-w-[640px] text-sm">
             <thead>
               <tr className="border-b border-bone/10 bg-bone/5">
-                <th className="text-left px-4 py-3 text-xs font-medium text-bone/40 uppercase tracking-wider">Style</th>
-                <th className="text-left px-4 py-3 text-xs font-medium text-bone/40 uppercase tracking-wider">Status</th>
-                <th className="text-left px-4 py-3 text-xs font-medium text-bone/40 uppercase tracking-wider">Created</th>
-                <th className="text-left px-4 py-3 text-xs font-medium text-bone/40 uppercase tracking-wider">Completed</th>
-                <th className="text-left px-4 py-3 text-xs font-medium text-bone/40 uppercase tracking-wider">Public</th>
-                <th className="text-left px-4 py-3 text-xs font-medium text-bone/40 uppercase tracking-wider">YouTube</th>
+                <th className="text-left px-4 py-3 text-xs font-medium text-bone/60 uppercase tracking-wider">Style</th>
+                <th className="text-left px-4 py-3 text-xs font-medium text-bone/60 uppercase tracking-wider">Status</th>
+                <th className="text-left px-4 py-3 text-xs font-medium text-bone/60 uppercase tracking-wider">Created</th>
+                <th className="text-left px-4 py-3 text-xs font-medium text-bone/60 uppercase tracking-wider">Completed</th>
+                <th className="text-left px-4 py-3 text-xs font-medium text-bone/60 uppercase tracking-wider">Public</th>
+                <th className="text-left px-4 py-3 text-xs font-medium text-bone/60 uppercase tracking-wider">YouTube</th>
                 <th className="px-4 py-3 w-20" />
               </tr>
             </thead>
@@ -98,13 +98,13 @@ export default async function AdminArtistVideosPage({ params }: Props) {
                         {params.stylePreset ?? "—"}
                       </span>
                       {params.aspectRatio && (
-                        <span className="block text-bone/35 text-xs mt-0.5">
+                        <span className="block text-bone/52 text-xs mt-0.5">
                           {params.aspectRatio}
                         </span>
                       )}
                     </td>
                     <td className="px-4 py-3">
-                      <span className={`inline-block rounded-full px-2.5 py-0.5 text-xs font-medium capitalize ${STATUS_PILL[job.status] ?? "bg-bone/10 text-bone/40"}`}>
+                      <span className={`inline-block rounded-full px-2.5 py-0.5 text-xs font-medium capitalize ${STATUS_PILL[job.status] ?? "bg-bone/10 text-bone/60"}`}>
                         {job.status}
                       </span>
                       {job.error && (
@@ -130,15 +130,15 @@ export default async function AdminArtistVideosPage({ params }: Props) {
                             title={job.is_public ? "Click to make private" : "Click to make public"}
                             className={`text-xs font-medium px-2 py-0.5 rounded transition-colors ${
                               job.is_public
-                                ? "bg-forest/20 text-forest hover:bg-forest/30"
-                                : "bg-bone/10 text-bone/30 hover:bg-bone/20 hover:text-bone/60"
+                                ? "bg-forest/20 text-sage hover:bg-forest/30"
+                                : "bg-bone/10 text-bone/50 hover:bg-bone/20 hover:text-bone/60"
                             }`}
                           >
                             {job.is_public ? "Public" : "Private"}
                           </button>
                         </form>
                       ) : (
-                        <span className="text-bone/20 text-xs">—</span>
+                        <span className="text-bone/52 text-xs">—</span>
                       )}
                     </td>
                     <td className="px-4 py-3">
@@ -155,7 +155,7 @@ export default async function AdminArtistVideosPage({ params }: Props) {
                       {job.status === "complete" && (
                         <Link
                           href={`/admin/jobs?job=${job.id}`}
-                          className="text-xs text-bone/30 hover:text-ochre transition-colors"
+                          className="text-xs text-bone/50 hover:text-ochre transition-colors"
                         >
                           View →
                         </Link>

@@ -5,12 +5,12 @@ const ACTIVE_STATUSES = ["pending", "analyzing", "prompting", "generating", "ass
 
 const STATUS_PILL: Record<string, string> = {
   pending:    "bg-bone/10 text-bone/50",
-  analyzing:  "bg-forest/20 text-forest",
-  prompting:  "bg-forest/20 text-forest",
-  generating: "bg-forest/20 text-forest",
+  analyzing:  "bg-forest/20 text-sage",
+  prompting:  "bg-forest/20 text-sage",
+  generating: "bg-forest/20 text-sage",
   assembling: "bg-ochre/20 text-ochre",
-  complete:   "bg-forest/30 text-forest",
-  failed:     "bg-oxblood/20 text-oxblood",
+  complete:   "bg-forest/30 text-sage",
+  failed:     "bg-oxblood/20 text-rose",
 };
 
 function elapsed(startIso: string | null): string {
@@ -88,7 +88,7 @@ export default async function AdminOverviewPage() {
     <div className="space-y-8 max-w-5xl">
       {/* Header */}
       <div>
-        <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-forest mb-2">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-sage mb-2">
           Label Admin
         </p>
         <h1 className="font-display font-bold text-bone text-3xl">Overview</h1>
@@ -103,7 +103,7 @@ export default async function AdminOverviewPage() {
             href={href}
             className="rounded-lg border border-bone/10 p-4 hover:border-bone/20 hover:bg-bone/[0.03] transition-colors group"
           >
-            <p className="text-xs text-bone/40 uppercase tracking-wider mb-1">{label}</p>
+            <p className="text-xs text-bone/60 uppercase tracking-wider mb-1">{label}</p>
             <p className="font-display text-2xl text-bone group-hover:text-ochre transition-colors">{value}</p>
           </Link>
         ))}
@@ -112,8 +112,8 @@ export default async function AdminOverviewPage() {
       {/* Monthly spend bar */}
       <div className="rounded-lg border border-bone/10 p-5">
         <div className="flex items-center justify-between mb-3">
-          <p className="text-xs text-bone/40 uppercase tracking-wider">Monthly video spend</p>
-          <Link href="/admin/settings" className="text-xs text-bone/30 hover:text-ochre transition-colors">
+          <p className="text-xs text-bone/60 uppercase tracking-wider">Monthly video spend</p>
+          <Link href="/admin/settings" className="text-xs text-bone/50 hover:text-ochre transition-colors">
             Manage budget →
           </Link>
         </div>
@@ -129,7 +129,7 @@ export default async function AdminOverviewPage() {
 
       {/* Quick actions */}
       <div>
-        <p className="text-xs text-bone/40 uppercase tracking-wider mb-3">Quick actions</p>
+        <p className="text-xs text-bone/60 uppercase tracking-wider mb-3">Quick actions</p>
         <div className="flex flex-wrap gap-2">
           {quickActions.map(({ label, href }) => (
             <Link
@@ -152,16 +152,16 @@ export default async function AdminOverviewPage() {
             <p className="text-xs font-semibold uppercase tracking-wider text-bone/50">
               Active Jobs
               {(activeJobs?.length ?? 0) > 0 && (
-                <span className="ml-2 inline-flex items-center gap-1 text-forest">
+                <span className="ml-2 inline-flex items-center gap-1 text-sage">
                   <span className="w-1.5 h-1.5 rounded-full bg-forest animate-pulse inline-block" />
                   Live
                 </span>
               )}
             </p>
-            <Link href="/admin/jobs" className="text-xs text-bone/30 hover:text-ochre transition-colors">View all →</Link>
+            <Link href="/admin/jobs" className="text-xs text-bone/50 hover:text-ochre transition-colors">View all →</Link>
           </div>
           {(activeJobs?.length ?? 0) === 0 ? (
-            <p className="px-4 py-6 text-sm text-bone/30 text-center">No active jobs.</p>
+            <p className="px-4 py-6 text-sm text-bone/50 text-center">No active jobs.</p>
           ) : (
             <ul className="divide-y divide-bone/5">
               {(activeJobs ?? []).map((job) => {
@@ -171,13 +171,13 @@ export default async function AdminOverviewPage() {
                   <li key={job.id} className="flex items-center justify-between px-4 py-3 gap-3">
                     <div className="min-w-0">
                       <p className="text-sm text-bone truncate">{artist?.stage_name ?? "—"}</p>
-                      <p className="text-xs text-bone/40 truncate">{asset?.title ?? "—"}</p>
+                      <p className="text-xs text-bone/60 truncate">{asset?.title ?? "—"}</p>
                     </div>
                     <div className="flex items-center gap-2 shrink-0">
-                      <span className={`rounded-full px-2 py-0.5 text-[10px] font-medium ${STATUS_PILL[job.status] ?? "bg-bone/10 text-bone/40"}`}>
+                      <span className={`rounded-full px-2 py-0.5 text-[10px] font-medium ${STATUS_PILL[job.status] ?? "bg-bone/10 text-bone/60"}`}>
                         {job.status}
                       </span>
-                      <span className="text-xs text-bone/30 font-mono">{elapsed(job.started_at)}</span>
+                      <span className="text-xs text-bone/50 font-mono">{elapsed(job.started_at)}</span>
                     </div>
                   </li>
                 );
@@ -190,17 +190,17 @@ export default async function AdminOverviewPage() {
         <div className="rounded-lg border border-bone/10 overflow-hidden">
           <div className="flex items-center justify-between px-4 py-3 border-b border-bone/10 bg-bone/[0.02]">
             <p className="text-xs font-semibold uppercase tracking-wider text-bone/50">Pending Applications</p>
-            <Link href="/admin/applications" className="text-xs text-bone/30 hover:text-ochre transition-colors">Review →</Link>
+            <Link href="/admin/applications" className="text-xs text-bone/50 hover:text-ochre transition-colors">Review →</Link>
           </div>
           {(pendingApplications?.length ?? 0) === 0 ? (
-            <p className="px-4 py-6 text-sm text-bone/30 text-center">All clear — no pending applications.</p>
+            <p className="px-4 py-6 text-sm text-bone/50 text-center">All clear — no pending applications.</p>
           ) : (
             <ul className="divide-y divide-bone/5">
               {(pendingApplications ?? []).map((app) => (
                 <li key={app.id} className="flex items-center justify-between px-4 py-3 gap-3">
                   <div className="min-w-0">
                     <p className="text-sm text-bone truncate">{app.stage_name}</p>
-                    <p className="text-xs text-bone/40 truncate">{app.email}</p>
+                    <p className="text-xs text-bone/60 truncate">{app.email}</p>
                   </div>
                   <Link href={`/admin/applications/${app.id}`} className="shrink-0 text-xs text-ochre hover:text-ochre/70 transition-colors">
                     Review →

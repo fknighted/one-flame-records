@@ -24,12 +24,12 @@ export default async function BrandSettingsPage() {
       <div className="mb-8">
         <Link
           href="/admin/settings"
-          className="text-xs text-bone/40 hover:text-ochre transition-colors"
+          className="text-xs text-bone/60 hover:text-ochre transition-colors"
         >
           ← Settings
         </Link>
         <div className="mt-3">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-forest mb-2">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-sage mb-2">
             Label Admin
           </p>
           <h1 className="font-display font-bold text-bone text-3xl">Brand Video Clips</h1>
@@ -46,7 +46,7 @@ export default async function BrandSettingsPage() {
           <h2 className="text-sm font-semibold text-bone/60 uppercase tracking-wider mb-3">
             Intro clip
           </h2>
-          <p className="text-xs text-bone/40 mb-3">
+          <p className="text-xs text-bone/60 mb-3">
             Plays before the music video begins. Typically 3–8 seconds. Include the One Flame
             Records logo and/or &ldquo;Presents&rdquo; title card.
           </p>
@@ -63,7 +63,7 @@ export default async function BrandSettingsPage() {
           <h2 className="text-sm font-semibold text-bone/60 uppercase tracking-wider mb-3">
             Outro clip
           </h2>
-          <p className="text-xs text-bone/40 mb-3">
+          <p className="text-xs text-bone/60 mb-3">
             Plays after the music video ends. Typically 3–6 seconds. Include the One Flame
             Records logo, website, and/or social handles.
           </p>

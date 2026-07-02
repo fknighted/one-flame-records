@@ -43,12 +43,12 @@ export default async function SessionsPage() {
 
       {/* Active sessions */}
       <section>
-        <h2 className="text-xs font-semibold text-bone/40 uppercase tracking-wider mb-3">
+        <h2 className="text-xs font-semibold text-bone/60 uppercase tracking-wider mb-3">
           Active ({activeSessions?.length ?? 0})
         </h2>
 
         {!activeSessions?.length ? (
-          <div className="border border-bone/10 rounded-xl p-10 text-center text-bone/30 text-sm">
+          <div className="border border-bone/10 rounded-xl p-10 text-center text-bone/50 text-sm">
             No active sessions
           </div>
         ) : (
@@ -58,9 +58,9 @@ export default async function SessionsPage() {
                 <div className="flex-1 min-w-0">
                   <p className="text-bone font-medium text-sm">
                     {getName(s.gamer_members) ?? "Drop-in"}
-                    {s.station && <span className="text-bone/40 ml-2 font-normal">· {s.station}</span>}
+                    {s.station && <span className="text-bone/60 ml-2 font-normal">· {s.station}</span>}
                   </p>
-                  <p className="text-bone/40 text-xs">{elapsed(s.started_at)} elapsed</p>
+                  <p className="text-bone/60 text-xs">{elapsed(s.started_at)} elapsed</p>
                 </div>
                 <EndSessionButton sessionId={s.id} />
               </div>
@@ -72,7 +72,7 @@ export default async function SessionsPage() {
       {/* Today's ended sessions */}
       <section>
         <div className="flex items-center justify-between mb-3">
-          <h2 className="text-xs font-semibold text-bone/40 uppercase tracking-wider">
+          <h2 className="text-xs font-semibold text-bone/60 uppercase tracking-wider">
             Today&apos;s Sessions ({todaySessions?.length ?? 0})
           </h2>
           {totalMinutesToday > 0 && (
@@ -83,7 +83,7 @@ export default async function SessionsPage() {
         </div>
 
         {!todaySessions?.length ? (
-          <div className="border border-bone/10 rounded-xl p-6 text-center text-bone/30 text-sm">
+          <div className="border border-bone/10 rounded-xl p-6 text-center text-bone/50 text-sm">
             No sessions ended today
           </div>
         ) : (
@@ -91,17 +91,17 @@ export default async function SessionsPage() {
             <table className="w-full min-w-[380px] text-sm">
               <thead className="border-b border-bone/10 bg-bone/3">
                 <tr>
-                  <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/40">Member</th>
-                  <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/40">Station</th>
-                  <th className="text-right px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/40">Start</th>
-                  <th className="text-right px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/40">End</th>
-                  <th className="text-right px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/40">Min</th>
+                  <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Member</th>
+                  <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Station</th>
+                  <th className="text-right px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Start</th>
+                  <th className="text-right px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">End</th>
+                  <th className="text-right px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Min</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-bone/10">
                 {todaySessions.map(s => (
                   <tr key={s.id} className="hover:bg-bone/3 transition-colors">
-                    <td className="px-4 py-3 text-bone font-medium">{getName(s.gamer_members) ?? <span className="text-bone/30">Drop-in</span>}</td>
+                    <td className="px-4 py-3 text-bone font-medium">{getName(s.gamer_members) ?? <span className="text-bone/50">Drop-in</span>}</td>
                     <td className="px-4 py-3 text-bone/50">{s.station ?? "—"}</td>
                     <td className="px-4 py-3 text-right text-bone/50 text-xs font-mono">{jamaicaTime(s.started_at)}</td>
                     <td className="px-4 py-3 text-right text-bone/50 text-xs font-mono">{s.ended_at ? jamaicaTime(s.ended_at) : "—"}</td>
@@ -122,7 +122,7 @@ export default async function SessionsPage() {
 
       {/* Start session form */}
       <section>
-        <h2 className="text-xs font-semibold text-bone/40 uppercase tracking-wider mb-3">
+        <h2 className="text-xs font-semibold text-bone/60 uppercase tracking-wider mb-3">
           Start Session
         </h2>
         <StartSessionForm members={members ?? []} />

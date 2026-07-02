@@ -31,11 +31,11 @@ export default async function NewVideoPage() {
       <div className="mb-8">
         <Link
           href="/portal/videos"
-          className="text-xs text-bone/40 hover:text-bone/70 transition-colors mb-4 inline-block"
+          className="text-xs text-bone/60 hover:text-bone/70 transition-colors mb-4 inline-block"
         >
           ← Back to videos
         </Link>
-        <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-forest mb-2">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-sage mb-2">
           Artist Portal
         </p>
         <h1 className="font-display font-bold text-bone text-3xl">

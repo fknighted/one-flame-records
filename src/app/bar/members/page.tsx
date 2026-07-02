@@ -47,7 +47,7 @@ export default async function BarMembersPage({
           defaultValue={q}
           type="search"
           placeholder="Search by name or email…"
-          className="flex-1 bg-bone/5 border border-bone/15 rounded-lg px-4 py-2.5 text-bone placeholder:text-bone/30 text-sm focus:outline-none focus:border-ochre/50"
+          className="flex-1 bg-bone/5 border border-bone/15 rounded-lg px-4 py-2.5 text-bone placeholder:text-bone/50 text-sm focus:outline-none focus:border-ochre/50"
         />
         <button
           type="submit"
@@ -59,7 +59,7 @@ export default async function BarMembersPage({
 
       {/* List */}
       {!members?.length ? (
-        <p className="text-bone/30 text-sm text-center py-12">
+        <p className="text-bone/50 text-sm text-center py-12">
           {q ? "No members found" : "No members yet"}
         </p>
       ) : (
@@ -72,10 +72,10 @@ export default async function BarMembersPage({
             >
               <div className="flex-1 min-w-0">
                 <p className="text-bone font-medium text-sm">{m.display_name}</p>
-                <p className="text-bone/40 text-xs">{m.email}</p>
+                <p className="text-bone/60 text-xs">{m.email}</p>
               </div>
               <span className={`text-xs px-2 py-0.5 rounded-full ${
-                m.status === "active" ? "bg-forest/20 text-forest" : "bg-red-900/30 text-red-400"
+                m.status === "active" ? "bg-forest/20 text-sage" : "bg-red-900/30 text-red-400"
               }`}>
                 {m.status}
               </span>

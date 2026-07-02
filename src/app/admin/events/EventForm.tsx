@@ -25,7 +25,7 @@ type Event = {
   is_public: boolean;
 };
 
-const INPUT = "w-full bg-bone/5 border border-bone/15 rounded px-3 py-2 text-sm text-bone placeholder:text-bone/30 focus:outline-none focus:border-ochre/60";
+const INPUT = "w-full bg-bone/5 border border-bone/15 rounded px-3 py-2 text-sm text-bone placeholder:text-bone/50 focus:outline-none focus:border-ochre/60";
 const LABEL = "block text-xs text-bone/50 mb-1.5";
 
 function toDatetimeLocal(iso: string | null): string {
@@ -41,7 +41,7 @@ export default function EventForm({ event }: { event?: Event }) {
   return (
     <form action={formAction} className="space-y-5 max-w-2xl">
       {state?.error && (
-        <p className="rounded bg-oxblood/20 border border-oxblood/40 px-4 py-2 text-sm text-oxblood">
+        <p className="rounded bg-oxblood/20 border border-oxblood/40 px-4 py-2 text-sm text-rose">
           {state.error}
         </p>
       )}
@@ -132,7 +132,7 @@ export default function EventForm({ event }: { event?: Event }) {
           <option value="true">Public</option>
           <option value="false">Private</option>
         </select>
-        <span className="text-xs text-bone/40">Public events appear on the Flames Lounge page.</span>
+        <span className="text-xs text-bone/60">Public events appear on the Flames Lounge page.</span>
       </div>
 
       <div className="flex items-center gap-4 pt-2">
@@ -143,7 +143,7 @@ export default function EventForm({ event }: { event?: Event }) {
         >
           {pending ? "Saving…" : isEdit ? "Save changes" : "Create event"}
         </button>
-        <a href="/admin/events" className="text-sm text-bone/40 hover:text-bone transition-colors">
+        <a href="/admin/events" className="text-sm text-bone/60 hover:text-bone transition-colors">
           Cancel
         </a>
       </div>

@@ -30,7 +30,7 @@ export default async function EditAssetPage({ params }: { params: Promise<{ id: 
   return (
     <div className="max-w-lg">
       <div className="mb-8">
-        <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-forest mb-2">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-sage mb-2">
           Artist Portal
         </p>
         <h1 className="font-display font-bold text-bone text-3xl">Edit Asset</h1>

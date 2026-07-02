@@ -32,7 +32,7 @@ function ShareToggleInner({ jobId, isPublic }: Props) {
         disabled={pending}
         className={`flex items-center gap-2.5 rounded-lg border px-4 py-2.5 text-sm font-medium transition-colors disabled:opacity-50 ${
           effective
-            ? "border-forest/40 bg-forest/10 text-forest hover:bg-forest/20"
+            ? "border-forest/40 bg-forest/10 text-sage hover:bg-forest/20"
             : "border-bone/20 text-bone/50 hover:text-bone hover:border-bone/40"
         }`}
       >

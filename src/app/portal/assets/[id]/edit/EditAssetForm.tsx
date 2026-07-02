@@ -22,7 +22,7 @@ export default function EditAssetForm({
   return (
     <form action={action} className="space-y-5">
       <div>
-        <label className="block text-xs font-semibold uppercase tracking-wider text-bone/40 mb-1.5">
+        <label className="block text-xs font-semibold uppercase tracking-wider text-bone/60 mb-1.5">
           Kind
         </label>
         <select
@@ -37,7 +37,7 @@ export default function EditAssetForm({
       </div>
 
       <div>
-        <label className="block text-xs font-semibold uppercase tracking-wider text-bone/40 mb-1.5">
+        <label className="block text-xs font-semibold uppercase tracking-wider text-bone/60 mb-1.5">
           Title
         </label>
         <input
@@ -49,9 +49,9 @@ export default function EditAssetForm({
       </div>
 
       <div>
-        <label className="block text-xs font-semibold uppercase tracking-wider text-bone/40 mb-1.5">
+        <label className="block text-xs font-semibold uppercase tracking-wider text-bone/60 mb-1.5">
           Notes{" "}
-          <span className="text-bone/25 font-normal normal-case tracking-normal">(optional)</span>
+          <span className="text-bone/60 font-normal normal-case tracking-normal">(optional)</span>
         </label>
         <textarea
           name="notes"

@@ -6,7 +6,7 @@ type AppRow = Tables<"signup_applications">;
 
 const STATUS_BADGE: Record<string, string> = {
   pending:  "bg-ochre/15 text-ochre",
-  approved: "bg-forest/20 text-forest",
+  approved: "bg-forest/20 text-sage",
   rejected: "bg-oxblood/20 text-red-400",
 };
 
@@ -42,7 +42,7 @@ export default async function AdminApplicationsPage() {
     <div className="max-w-4xl">
       {/* Header */}
       <div className="mb-8">
-        <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-forest mb-2">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-sage mb-2">
           QR Onboarding
         </p>
         <h1 className="font-display font-bold text-bone text-3xl">
@@ -59,7 +59,7 @@ export default async function AdminApplicationsPage() {
       {!applications || applications.length === 0 ? (
         <div className="bg-bone/5 border border-bone/10 rounded-lg p-8 text-center">
           <p className="text-bone/50 text-sm">No applications yet.</p>
-          <p className="text-bone/30 text-xs mt-1">
+          <p className="text-bone/50 text-xs mt-1">
             Share a signup link from{" "}
             <Link href="/admin/codes" className="text-ochre hover:underline">
               Codes
@@ -69,22 +69,22 @@ export default async function AdminApplicationsPage() {
         </div>
       ) : (
         <div className="border border-bone/10 rounded-lg overflow-hidden">
-          <div className="px-4 py-2 border-b border-bone/10 text-xs text-bone/40">
+          <div className="px-4 py-2 border-b border-bone/10 text-xs text-bone/60">
             {total} total
           </div>
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-bone/10">
-                <th className="text-left px-4 py-2.5 text-bone/40 font-normal text-xs">
+                <th className="text-left px-4 py-2.5 text-bone/60 font-normal text-xs">
                   Artist
                 </th>
-                <th className="text-left px-4 py-2.5 text-bone/40 font-normal text-xs hidden sm:table-cell">
+                <th className="text-left px-4 py-2.5 text-bone/60 font-normal text-xs hidden sm:table-cell">
                   Email
                 </th>
-                <th className="text-left px-4 py-2.5 text-bone/40 font-normal text-xs hidden md:table-cell">
+                <th className="text-left px-4 py-2.5 text-bone/60 font-normal text-xs hidden md:table-cell">
                   Submitted
                 </th>
-                <th className="text-left px-4 py-2.5 text-bone/40 font-normal text-xs">
+                <th className="text-left px-4 py-2.5 text-bone/60 font-normal text-xs">
                   Status
                 </th>
                 <th className="px-4 py-2.5" />
@@ -98,7 +98,7 @@ export default async function AdminApplicationsPage() {
                 >
                   <td className="px-4 py-3">
                     <p className="text-bone font-medium">{app.stage_name}</p>
-                    <p className="text-bone/40 text-xs">{app.legal_name}</p>
+                    <p className="text-bone/60 text-xs">{app.legal_name}</p>
                   </td>
                   <td className="px-4 py-3 text-bone/60 hidden sm:table-cell">
                     {app.email}

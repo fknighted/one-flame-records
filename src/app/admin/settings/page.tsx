@@ -36,7 +36,7 @@ export default async function AdminSettingsPage() {
   return (
     <div className="max-w-2xl">
       <div className="mb-8">
-        <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-forest mb-2">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-sage mb-2">
           Label Admin
         </p>
         <h1 className="font-display font-bold text-bone text-3xl">Settings</h1>
@@ -61,7 +61,7 @@ export default async function AdminSettingsPage() {
               style={{ width: `${pctUsed}%` }}
             />
           </div>
-          <p className="text-xs text-bone/30 mt-2">
+          <p className="text-xs text-bone/50 mt-2">
             Budget resets on the 1st of each month.
           </p>
         </div>

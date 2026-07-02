@@ -7,8 +7,8 @@ import { createServiceClient } from "@/lib/supabase/server";
 import DeleteArtistButton from "@/app/admin/artists/DeleteArtistButton";
 
 const STATUS_STYLES: Record<string, string> = {
-  active:   "bg-forest/20 text-forest border border-forest/25",
-  inactive: "bg-bone/10 text-bone/40 border border-bone/15",
+  active:   "bg-forest/20 text-sage border border-forest/25",
+  inactive: "bg-bone/10 text-bone/60 border border-bone/15",
   pending:  "bg-ochre/15 text-ochre border border-ochre/25",
 };
 
@@ -50,7 +50,7 @@ export default async function EditArtistPage({
       {/* Breadcrumb */}
       <Link
         href="/admin/artists"
-        className="inline-flex items-center gap-1.5 text-xs text-bone/35 hover:text-bone/70 transition-colors"
+        className="inline-flex items-center gap-1.5 text-xs text-bone/52 hover:text-bone/70 transition-colors"
       >
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
           <path d="M19 12H5M5 12l7-7M5 12l7 7" />
@@ -86,9 +86,9 @@ export default async function EditArtistPage({
             </span>
           </div>
           {genres.length > 0 && (
-            <p className="mt-0.5 text-xs text-bone/40">{genres.join(", ")}</p>
+            <p className="mt-0.5 text-xs text-bone/60">{genres.join(", ")}</p>
           )}
-          <div className="mt-2 flex items-center gap-4 text-xs text-bone/35">
+          <div className="mt-2 flex items-center gap-4 text-xs text-bone/52">
             <Link href={`/admin/artists/${id}/assets`} className="hover:text-ochre transition-colors">
               {assetCount ?? 0} assets →
             </Link>
@@ -113,7 +113,7 @@ export default async function EditArtistPage({
 
       <div className="h-px bg-bone/10" />
       <div className="flex items-center justify-between">
-        <p className="text-xs text-bone/30">Danger zone</p>
+        <p className="text-xs text-bone/50">Danger zone</p>
         <DeleteArtistButton id={artist.id} name={artist.stage_name} />
       </div>
     </div>

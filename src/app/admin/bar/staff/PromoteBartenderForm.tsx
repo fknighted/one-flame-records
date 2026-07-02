@@ -4,7 +4,7 @@ import { useActionState } from "react";
 import type { ActionState } from "./actions";
 import { assignBartenderFlag } from "./actions";
 
-const INPUT = "w-full bg-bone/5 border border-bone/15 rounded px-3 py-2 text-sm text-bone placeholder:text-bone/30 focus:outline-none focus:border-ochre/60";
+const INPUT = "w-full bg-bone/5 border border-bone/15 rounded px-3 py-2 text-sm text-bone placeholder:text-bone/50 focus:outline-none focus:border-ochre/60";
 const LABEL = "block text-xs text-bone/50 mb-1";
 
 export default function PromoteBartenderForm() {
@@ -30,7 +30,7 @@ export default function PromoteBartenderForm() {
           placeholder="artist@example.com"
           className={INPUT}
         />
-        <p className="mt-1.5 text-xs text-bone/30">
+        <p className="mt-1.5 text-xs text-bone/50">
           The artist keeps their portal access — bar access is added on top.
         </p>
       </div>

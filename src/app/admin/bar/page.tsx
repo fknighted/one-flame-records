@@ -38,7 +38,7 @@ export default async function BarOverviewPage() {
   return (
     <div className="space-y-8 max-w-4xl">
       <div>
-        <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-forest mb-1">Bar</p>
+        <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-sage mb-1">Bar</p>
         <h1 className="font-display font-bold text-bone text-3xl">Overview</h1>
         <div className="mt-3 h-px w-16 bg-bone/20" />
       </div>
@@ -51,7 +51,7 @@ export default async function BarOverviewPage() {
           { label: "This Month", value: formatCents(monthRevenue) },
         ].map((card) => (
           <div key={card.label} className="border border-bone/10 rounded-lg p-4">
-            <p className="text-xs text-bone/40 mb-1">{card.label}</p>
+            <p className="text-xs text-bone/60 mb-1">{card.label}</p>
             <p className="text-2xl font-display font-bold text-bone">{card.value}</p>
           </div>
         ))}
@@ -69,7 +69,7 @@ export default async function BarOverviewPage() {
             href={s.href}
             className="border border-bone/10 rounded-lg p-4 hover:border-bone/25 transition-colors"
           >
-            <p className="text-xs text-bone/40 mb-1">{s.label}</p>
+            <p className="text-xs text-bone/60 mb-1">{s.label}</p>
             <p className="text-2xl font-display font-bold text-bone">{s.value}</p>
           </Link>
         ))}
@@ -78,21 +78,21 @@ export default async function BarOverviewPage() {
       {/* Today's tabs */}
       <section className="space-y-3">
         <div className="flex items-center justify-between">
-          <h2 className="text-xs font-semibold uppercase tracking-widest text-bone/35">Today&apos;s Tabs</h2>
+          <h2 className="text-xs font-semibold uppercase tracking-widest text-bone/52">Today&apos;s Tabs</h2>
           <Link href="/bar/tabs/new" className="text-xs text-ochre hover:underline">+ New Tab</Link>
         </div>
 
         {!todayAllTabs?.length ? (
-          <p className="text-sm text-bone/30">No tabs opened today.</p>
+          <p className="text-sm text-bone/50">No tabs opened today.</p>
         ) : (
           <div className="border border-bone/10 rounded-lg overflow-x-auto">
             <table className="w-full min-w-[400px] text-sm">
               <thead className="border-b border-bone/10 bg-bone/3">
                 <tr>
-                  <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/40">Customer</th>
-                  <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/40">Time</th>
-                  <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/40">Status</th>
-                  <th className="text-right px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/40">Total</th>
+                  <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Customer</th>
+                  <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Time</th>
+                  <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Status</th>
+                  <th className="text-right px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Total</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-bone/10">
@@ -109,9 +109,9 @@ export default async function BarOverviewPage() {
                     <td className="px-4 py-3">
                       <span className={[
                         "inline-block px-2 py-0.5 rounded-full text-xs font-medium",
-                        tab.status === "closed" ? "bg-forest/20 text-forest" :
+                        tab.status === "closed" ? "bg-forest/20 text-sage" :
                         tab.status === "open"   ? "bg-ochre/20 text-ochre" :
-                        "bg-bone/10 text-bone/40",
+                        "bg-bone/10 text-bone/60",
                       ].join(" ")}>
                         {STATUS_LABELS[tab.status] ?? tab.status}
                       </span>

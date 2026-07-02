@@ -3,7 +3,7 @@
 import { useActionState } from "react";
 import { sendNewsletter, type NewsletterState } from "./actions";
 
-const INPUT = "w-full bg-bone/5 border border-bone/15 rounded px-3 py-2 text-sm text-bone placeholder:text-bone/30 focus:outline-none focus:border-ochre/60";
+const INPUT = "w-full bg-bone/5 border border-bone/15 rounded px-3 py-2 text-sm text-bone placeholder:text-bone/50 focus:outline-none focus:border-ochre/60";
 const LABEL = "block text-xs text-bone/50 mb-1.5";
 
 export default function NewsletterForm({ activeCount }: { activeCount: number }) {
@@ -12,10 +12,10 @@ export default function NewsletterForm({ activeCount }: { activeCount: number })
   return (
     <form action={formAction} className="space-y-5">
       {state?.error && (
-        <p className="rounded bg-oxblood/20 border border-oxblood/40 px-4 py-2 text-sm text-oxblood">{state.error}</p>
+        <p className="rounded bg-oxblood/20 border border-oxblood/40 px-4 py-2 text-sm text-rose">{state.error}</p>
       )}
       {state?.sent != null && !state.error && (
-        <p className="rounded bg-forest/15 border border-forest/25 px-4 py-2 text-sm text-forest">
+        <p className="rounded bg-forest/15 border border-forest/25 px-4 py-2 text-sm text-sage">
           ✓ Sent to {state.sent} subscriber{state.sent !== 1 ? "s" : ""}.
         </p>
       )}
@@ -45,7 +45,7 @@ export default function NewsletterForm({ activeCount }: { activeCount: number })
           {pending ? "Sending…" : `Send to ${activeCount} subscriber${activeCount !== 1 ? "s" : ""}`}
         </button>
         {activeCount === 0 && (
-          <p className="text-xs text-bone/40">No active subscribers yet.</p>
+          <p className="text-xs text-bone/60">No active subscribers yet.</p>
         )}
       </div>
     </form>

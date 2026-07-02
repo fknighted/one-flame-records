@@ -187,7 +187,7 @@ export function AdminVideoRequestForm({ assets, defaultAssetId, referenceImages,
           ))}
         </select>
         {estimate && (
-          <p className="mt-2 text-xs text-bone/40">
+          <p className="mt-2 text-xs text-bone/60">
             ~{estimate.clips} clips · estimated cost <span className="text-bone/60">${estimate.cost}</span>
           </p>
         )}
@@ -237,7 +237,7 @@ export function AdminVideoRequestForm({ assets, defaultAssetId, referenceImages,
         <div>
           <label className="block text-sm font-medium text-bone/70 mb-2">
             Reference images
-            <span className="ml-2 text-bone/40 font-normal text-xs">optional — anchors visual style</span>
+            <span className="ml-2 text-bone/60 font-normal text-xs">optional — anchors visual style</span>
           </label>
           <div className="flex flex-col gap-2">
             {referenceImages.map((img) => (
@@ -271,7 +271,7 @@ export function AdminVideoRequestForm({ assets, defaultAssetId, referenceImages,
         <div>
           <label className="block text-sm font-medium text-bone/70 mb-2">
             Reference videos
-            <span className="ml-2 text-bone/40 font-normal text-xs">optional — title &amp; notes guide the script</span>
+            <span className="ml-2 text-bone/60 font-normal text-xs">optional — title &amp; notes guide the script</span>
           </label>
           <div className="flex flex-col gap-2">
             {referenceVideos.map((vid) => (
@@ -294,7 +294,7 @@ export function AdminVideoRequestForm({ assets, defaultAssetId, referenceImages,
                     {vid.title}
                   </span>
                   {vid.notes && (
-                    <span className="text-xs text-bone/35 leading-relaxed line-clamp-2">{vid.notes}</span>
+                    <span className="text-xs text-bone/52 leading-relaxed line-clamp-2">{vid.notes}</span>
                   )}
                 </div>
               </label>
@@ -307,7 +307,7 @@ export function AdminVideoRequestForm({ assets, defaultAssetId, referenceImages,
       <div>
         <label className="block text-sm font-medium text-bone/70 mb-2">
           Director&apos;s notes
-          <span className="ml-2 text-bone/40 font-normal text-xs">optional</span>
+          <span className="ml-2 text-bone/60 font-normal text-xs">optional</span>
         </label>
         <textarea
           name="creative_brief"
@@ -315,7 +315,7 @@ export function AdminVideoRequestForm({ assets, defaultAssetId, referenceImages,
           value={creativeBrief}
           onChange={(e) => { setCreativeBrief(e.target.value); setEditableScenes(null); }}
           placeholder="Mood, story arc, locations, visual references, anything you want Claude to factor in…"
-          className="w-full rounded border border-bone/20 bg-bone/5 px-3 py-2 text-bone text-sm placeholder:text-bone/25 focus:outline-none focus:border-ochre resize-y"
+          className="w-full rounded border border-bone/20 bg-bone/5 px-3 py-2 text-bone text-sm placeholder:text-bone/60 focus:outline-none focus:border-ochre resize-y"
         />
       </div>
 
@@ -324,7 +324,7 @@ export function AdminVideoRequestForm({ assets, defaultAssetId, referenceImages,
         <div className="flex items-center justify-between mb-2">
           <label className="text-sm font-medium text-bone/70">
             Lyrics
-            <span className="ml-2 text-bone/40 font-normal text-xs">auto-transcribed — paste here to override</span>
+            <span className="ml-2 text-bone/60 font-normal text-xs">auto-transcribed — paste here to override</span>
           </label>
           <button
             type="button"
@@ -336,7 +336,7 @@ export function AdminVideoRequestForm({ assets, defaultAssetId, referenceImages,
           </button>
         </div>
         {transcribeError && (
-          <p className="mb-2 text-xs text-oxblood">{transcribeError}</p>
+          <p className="mb-2 text-xs text-rose">{transcribeError}</p>
         )}
         <textarea
           name="lyrics"
@@ -344,7 +344,7 @@ export function AdminVideoRequestForm({ assets, defaultAssetId, referenceImages,
           value={lyrics}
           onChange={(e) => { setLyrics(e.target.value); setEditableScenes(null); }}
           placeholder="Leave blank to auto-transcribe from the audio…"
-          className="w-full rounded border border-bone/20 bg-bone/5 px-3 py-2 text-bone text-sm placeholder:text-bone/25 focus:outline-none focus:border-ochre resize-y font-mono"
+          className="w-full rounded border border-bone/20 bg-bone/5 px-3 py-2 text-bone text-sm placeholder:text-bone/60 focus:outline-none focus:border-ochre resize-y font-mono"
         />
       </div>
 
@@ -353,7 +353,7 @@ export function AdminVideoRequestForm({ assets, defaultAssetId, referenceImages,
         <div className="flex items-center justify-between mb-3">
           <div>
             <p className="text-sm font-medium text-bone/70">Scene plan preview</p>
-            <p className="text-xs text-bone/30 mt-0.5">Run Claude before submitting to review the video script</p>
+            <p className="text-xs text-bone/50 mt-0.5">Run Claude before submitting to review the video script</p>
           </div>
           <button
             type="button"
@@ -366,20 +366,20 @@ export function AdminVideoRequestForm({ assets, defaultAssetId, referenceImages,
         </div>
 
         {scriptError && (
-          <p className="text-xs text-oxblood">{scriptError}</p>
+          <p className="text-xs text-rose">{scriptError}</p>
         )}
 
         {scripting && (
-          <p className="text-xs text-bone/30 animate-pulse">Analyzing audio and writing scene prompts…</p>
+          <p className="text-xs text-bone/50 animate-pulse">Analyzing audio and writing scene prompts…</p>
         )}
 
         {editableScenes && !scripting && (
           <div className="space-y-2 max-h-96 overflow-y-auto pr-1">
-            <p className="text-xs text-bone/30 pb-1">Edit any scene below before submitting.</p>
+            <p className="text-xs text-bone/50 pb-1">Edit any scene below before submitting.</p>
             {editableScenes.map((scene, i) => (
               <div key={i} className="rounded border border-bone/10 bg-bone/5 p-3">
                 <div className="flex items-center gap-2 mb-1.5">
-                  <span className="text-xs font-mono text-bone/30">
+                  <span className="text-xs font-mono text-bone/50">
                     {formatTime(scene.start)} – {formatTime(scene.end)}
                   </span>
                   <span className="text-xs text-bone/60">Scene {i + 1}</span>
@@ -397,7 +397,7 @@ export function AdminVideoRequestForm({ assets, defaultAssetId, referenceImages,
                 />
                 {referenceImages.length > 0 && (
                   <div className="mt-2">
-                    <p className="text-xs text-bone/30 mb-1.5">Starting frame <span className="text-bone/20">(optional)</span></p>
+                    <p className="text-xs text-bone/50 mb-1.5">Starting frame <span className="text-bone/52">(optional)</span></p>
                     <div className="flex flex-wrap gap-1.5">
                       {referenceImages.map((img) => (
                         <button
@@ -435,7 +435,7 @@ export function AdminVideoRequestForm({ assets, defaultAssetId, referenceImages,
         )}
 
         {!editableScenes && !scripting && !scriptError && (
-          <p className="text-xs text-bone/20">No preview yet — select an asset and click Generate preview.</p>
+          <p className="text-xs text-bone/52">No preview yet — select an asset and click Generate preview.</p>
         )}
       </div>
 

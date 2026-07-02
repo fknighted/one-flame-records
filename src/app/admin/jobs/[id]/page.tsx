@@ -17,13 +17,13 @@ type JobParams = {
 type Props = { params: Promise<{ id: string }> };
 
 const STATUS_STYLES: Record<string, string> = {
-  pending:    "bg-bone/10 text-bone/40",
-  analyzing:  "bg-forest/20 text-forest",
-  prompting:  "bg-forest/20 text-forest",
-  generating: "bg-forest/20 text-forest",
+  pending:    "bg-bone/10 text-bone/60",
+  analyzing:  "bg-forest/20 text-sage",
+  prompting:  "bg-forest/20 text-sage",
+  generating: "bg-forest/20 text-sage",
   assembling: "bg-ochre/20 text-ochre",
-  complete:   "bg-forest/30 text-forest",
-  failed:     "bg-oxblood/20 text-oxblood",
+  complete:   "bg-forest/30 text-sage",
+  failed:     "bg-oxblood/20 text-rose",
 };
 
 export default async function JobDetailPage({ params }: Props) {
@@ -55,7 +55,7 @@ export default async function JobDetailPage({ params }: Props) {
       <div>
         <Link
           href="/admin/jobs"
-          className="text-xs text-bone/40 hover:text-bone/70 transition-colors"
+          className="text-xs text-bone/60 hover:text-bone/70 transition-colors"
         >
           ← Back to jobs
         </Link>
@@ -65,7 +65,7 @@ export default async function JobDetailPage({ params }: Props) {
           </h1>
           <span
             className={`rounded-full px-2 py-0.5 text-xs font-medium ${
-              STATUS_STYLES[job.status] ?? "bg-bone/10 text-bone/40"
+              STATUS_STYLES[job.status] ?? "bg-bone/10 text-bone/60"
             }`}
           >
             {job.status}
@@ -75,12 +75,12 @@ export default async function JobDetailPage({ params }: Props) {
           {(job.assets as { title: string } | null)?.title ?? "—"}
         </p>
         {jobParams.stylePreset && (
-          <p className="text-bone/30 text-xs mt-1">{jobParams.stylePreset}</p>
+          <p className="text-bone/50 text-xs mt-1">{jobParams.stylePreset}</p>
         )}
       </div>
 
       {job.error && (
-        <div className="rounded-lg border border-oxblood/30 bg-oxblood/10 px-4 py-3 text-sm text-oxblood">
+        <div className="rounded-lg border border-oxblood/30 bg-oxblood/10 px-4 py-3 text-sm text-rose">
           {job.error}
         </div>
       )}
@@ -90,7 +90,7 @@ export default async function JobDetailPage({ params }: Props) {
           <h2 className="font-display text-lg text-bone">
             Generated clips ({clips.length})
           </h2>
-          <p className="text-xs text-bone/40">
+          <p className="text-xs text-bone/60">
             Clip URLs are temporary — they expire within 24 hours of generation.
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -105,7 +105,7 @@ export default async function JobDetailPage({ params }: Props) {
                     preload="metadata"
                     className="w-full aspect-video object-contain bg-black"
                   />
-                  <div className="px-3 pt-2 pb-1 flex items-center justify-between text-xs text-bone/40">
+                  <div className="px-3 pt-2 pb-1 flex items-center justify-between text-xs text-bone/60">
                     <span>Clip {displayIndex} · {clip.durationSeconds}s · {clip.model}</span>
                     <div className="flex items-center gap-3">
                       <span>${clip.costEstimateUsd.toFixed(3)}</span>
@@ -126,7 +126,7 @@ export default async function JobDetailPage({ params }: Props) {
         </section>
       ) : (
         <div className="rounded-lg border border-bone/10 p-8 text-center">
-          <p className="text-bone/40 text-sm">
+          <p className="text-bone/60 text-sm">
             {job.status === "pending" || job.status === "analyzing" || job.status === "prompting"
               ? "Clips haven't been generated yet."
               : "No clips saved for this job."}

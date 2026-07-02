@@ -39,7 +39,7 @@ export default async function OrderHistoryPage({
   return (
     <div className="space-y-8 max-w-4xl">
       <div>
-        <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-forest mb-1">Bar</p>
+        <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-sage mb-1">Bar</p>
         <h1 className="font-display font-bold text-bone text-3xl">Order History</h1>
         <div className="mt-3 h-px w-16 bg-bone/20" />
       </div>
@@ -74,17 +74,17 @@ export default async function OrderHistoryPage({
       </div>
 
       {!tabs?.length ? (
-        <p className="text-sm text-bone/30">No tabs found.</p>
+        <p className="text-sm text-bone/50">No tabs found.</p>
       ) : (
         <div className="border border-bone/10 rounded-lg overflow-x-auto">
           <table className="w-full min-w-[560px] text-sm">
             <thead className="border-b border-bone/10 bg-bone/3">
               <tr>
-                <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/40">Customer</th>
-                <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/40">Opened</th>
-                <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/40">Status</th>
-                <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/40">Payment</th>
-                <th className="text-right px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/40">Total</th>
+                <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Customer</th>
+                <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Opened</th>
+                <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Status</th>
+                <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Payment</th>
+                <th className="text-right px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Total</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-bone/10">
@@ -92,7 +92,7 @@ export default async function OrderHistoryPage({
                 <tr key={tab.id} className="hover:bg-bone/3 transition-colors">
                   <td className="px-4 py-3 text-bone font-medium">
                     {tab.name}
-                    {tab.notes && <p className="text-xs text-bone/40">{tab.notes}</p>}
+                    {tab.notes && <p className="text-xs text-bone/60">{tab.notes}</p>}
                   </td>
                   <td className="px-4 py-3 text-bone/60 text-xs">
                     {jamaicaDateTime(tab.created_at)}
@@ -100,9 +100,9 @@ export default async function OrderHistoryPage({
                   <td className="px-4 py-3">
                     <span className={[
                       "inline-block px-2 py-0.5 rounded-full text-xs font-medium",
-                      tab.status === "closed" ? "bg-forest/20 text-forest" :
+                      tab.status === "closed" ? "bg-forest/20 text-sage" :
                       tab.status === "open"   ? "bg-ochre/20 text-ochre" :
-                      "bg-bone/10 text-bone/40",
+                      "bg-bone/10 text-bone/60",
                     ].join(" ")}>
                       {STATUS_LABELS[tab.status] ?? tab.status}
                     </span>

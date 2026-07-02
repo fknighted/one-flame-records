@@ -36,7 +36,7 @@ export default function OpenTabForm({ regulars }: { regulars: Regular[] }) {
 
       <div>
         <label htmlFor="name" className="block text-sm font-medium text-bone/70 mb-1.5">
-          Customer Name <span className="text-oxblood">*</span>
+          Customer Name <span className="text-rose">*</span>
         </label>
         <input
           id="name"
@@ -47,7 +47,7 @@ export default function OpenTabForm({ regulars }: { regulars: Regular[] }) {
           value={nameInput}
           onChange={e => handleNameChange(e.target.value)}
           placeholder={hasRegulars ? "Type a name or pick a regular…" : "e.g. Table 3, Jay, Walk-in"}
-          className="w-full bg-bone/5 border border-bone/15 rounded-lg px-4 py-3 text-bone placeholder:text-bone/25 text-base focus:outline-none focus:border-ochre/50 transition-colors"
+          className="w-full bg-bone/5 border border-bone/15 rounded-lg px-4 py-3 text-bone placeholder:text-bone/60 text-base focus:outline-none focus:border-ochre/50 transition-colors"
         />
         {hasRegulars && (
           <datalist id="regulars-list">
@@ -60,21 +60,21 @@ export default function OpenTabForm({ regulars }: { regulars: Regular[] }) {
           <p className="text-xs text-ochre/70 mt-1.5 px-1">{hint}</p>
         )}
         {regularId && (
-          <p className="text-xs text-forest/70 mt-1 px-1">Regular customer ✓</p>
+          <p className="text-xs text-sage/70 mt-1 px-1">Regular customer ✓</p>
         )}
         <input type="hidden" name="regular_id" value={regularId ?? ""} />
       </div>
 
       <div>
         <label htmlFor="notes" className="block text-sm font-medium text-bone/70 mb-1.5">
-          Notes <span className="text-bone/30 font-normal">(optional)</span>
+          Notes <span className="text-bone/50 font-normal">(optional)</span>
         </label>
         <input
           id="notes"
           name="notes"
           type="text"
           placeholder="e.g. VIP, allergies, seat number"
-          className="w-full bg-bone/5 border border-bone/15 rounded-lg px-4 py-3 text-bone placeholder:text-bone/25 text-base focus:outline-none focus:border-ochre/50 transition-colors"
+          className="w-full bg-bone/5 border border-bone/15 rounded-lg px-4 py-3 text-bone placeholder:text-bone/60 text-base focus:outline-none focus:border-ochre/50 transition-colors"
         />
       </div>
 
@@ -87,7 +87,7 @@ export default function OpenTabForm({ regulars }: { regulars: Regular[] }) {
       </button>
 
       {hasRegulars && (
-        <p className="text-center text-xs text-bone/30">
+        <p className="text-center text-xs text-bone/50">
           <Link href="/bar/regulars" className="hover:text-bone/60 transition-colors">Manage regulars →</Link>
         </p>
       )}

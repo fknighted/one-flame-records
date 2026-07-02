@@ -29,14 +29,14 @@ export default async function ImageLibraryPage() {
     <div className="space-y-6 max-w-5xl">
       <div>
         <div className="flex items-center gap-2 mb-4">
-          <Link href="/admin/ai-studio" className="text-xs text-bone/30 hover:text-bone/60 transition-colors">
+          <Link href="/admin/ai-studio" className="text-xs text-bone/50 hover:text-bone/60 transition-colors">
             AI Studio
           </Link>
-          <span className="text-bone/20 text-xs">/</span>
-          <Link href="/admin/ai-studio/images" className="text-xs text-bone/30 hover:text-bone/60 transition-colors">
+          <span className="text-bone/52 text-xs">/</span>
+          <Link href="/admin/ai-studio/images" className="text-xs text-bone/50 hover:text-bone/60 transition-colors">
             Images
           </Link>
-          <span className="text-bone/20 text-xs">/</span>
+          <span className="text-bone/52 text-xs">/</span>
           <span className="text-xs text-bone/60">Library</span>
         </div>
         <h1 className="font-display font-bold text-bone text-2xl">Image Library</h1>
@@ -44,7 +44,7 @@ export default async function ImageLibraryPage() {
       </div>
 
       {!images?.length ? (
-        <div className="border border-bone/10 rounded-lg p-12 text-center text-bone/30 text-sm">
+        <div className="border border-bone/10 rounded-lg p-12 text-center text-bone/50 text-sm">
           No images generated yet.{" "}
           <Link href="/admin/ai-studio/images" className="underline hover:text-bone/60">
             Generate the first one.
@@ -73,13 +73,13 @@ export default async function ImageLibraryPage() {
                 {img.prompt && (
                   <p className="text-xs text-bone/50 leading-snug line-clamp-2">{img.prompt}</p>
                 )}
-                <p className="text-[10px] text-bone/25">{formatDate(img.created_at)}</p>
+                <p className="text-[10px] text-bone/60">{formatDate(img.created_at)}</p>
                 <div className="flex gap-3 pt-1">
                   <a
                     href={img.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-xs text-bone/40 hover:text-ochre transition-colors"
+                    className="text-xs text-bone/60 hover:text-ochre transition-colors"
                   >
                     Download
                   </a>

@@ -120,7 +120,7 @@ export default async function VideoJobDetailPage({ params }: Props) {
   return (
     <div className="px-8 py-8 max-w-5xl">
       {/* ── Breadcrumb ── */}
-      <div className="flex items-center justify-between mb-6 font-mono text-[11px] text-bone/30 uppercase tracking-[0.14em]">
+      <div className="flex items-center justify-between mb-6 font-mono text-[11px] text-bone/50 uppercase tracking-[0.14em]">
         <div className="flex items-center gap-2">
           <Link href="/portal/videos" className="hover:text-bone/60 transition-colors">
             ← Videos
@@ -128,7 +128,7 @@ export default async function VideoJobDetailPage({ params }: Props) {
           <span>/</span>
           <span className="text-bone">VJ-{vid}</span>
         </div>
-        <span className="font-mono text-[11px] text-bone/30">
+        <span className="font-mono text-[11px] text-bone/50">
           {ds === "rendering" ? "Live render" : ds === "done" ? "Complete" : "Failed"} · {vid}
         </span>
       </div>
@@ -202,10 +202,10 @@ export default async function VideoJobDetailPage({ params }: Props) {
               </div>
             ) : (
               <div className="text-center px-8">
-                <p className="font-mono text-[10px] text-bone/30 uppercase tracking-[0.14em] mb-4">
+                <p className="font-mono text-[10px] text-bone/50 uppercase tracking-[0.14em] mb-4">
                   PREVIEW · NOT FINAL · {vid}
                 </p>
-                <p className="text-[13px] text-bone/40">
+                <p className="text-[13px] text-bone/60">
                   {ds === "failed"
                     ? "Render failed — no preview available"
                     : `${STATUS_LABELS[job.status] ?? "Processing"}`}
@@ -287,7 +287,7 @@ export default async function VideoJobDetailPage({ params }: Props) {
         <div className="space-y-5">
           {/* Source asset */}
           <div className="border border-bone/10 rounded-lg p-4">
-            <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-bone/40 mb-3">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-bone/60 mb-3">
               Source
             </p>
             <div className="flex items-start justify-between gap-2 py-2 border-b border-bone/10 last:border-0">
@@ -295,7 +295,7 @@ export default async function VideoJobDetailPage({ params }: Props) {
                 <p className="text-[12.5px] text-bone truncate font-medium">
                   {job.assets?.title ?? "—"}
                 </p>
-                <p className="font-mono text-[10.5px] text-bone/30 mt-0.5">
+                <p className="font-mono text-[10.5px] text-bone/50 mt-0.5">
                   {job.assets?.kind ?? "—"}
                   {job.assets?.size_bytes ? ` · ${formatBytes(job.assets.size_bytes)}` : ""}
                   {job.assets?.duration_seconds ? ` · ${formatDuration(job.assets.duration_seconds)}` : ""}
@@ -309,7 +309,7 @@ export default async function VideoJobDetailPage({ params }: Props) {
 
           {/* Settings */}
           <div className="border border-bone/10 rounded-lg p-4">
-            <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-bone/40 mb-3">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-bone/60 mb-3">
               Settings
             </p>
             <div className="space-y-2">
@@ -328,7 +328,7 @@ export default async function VideoJobDetailPage({ params }: Props) {
 
           {/* Timestamps */}
           <div className="border border-bone/10 rounded-lg p-4">
-            <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-bone/40 mb-3">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-bone/60 mb-3">
               Timeline
             </p>
             <div className="space-y-2">
@@ -362,7 +362,7 @@ export default async function VideoJobDetailPage({ params }: Props) {
           {/* Share toggle — completed videos only */}
           {ds === "done" && (
             <div className="border border-bone/10 rounded-lg p-4">
-              <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-bone/40 mb-3">
+              <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-bone/60 mb-3">
                 Visibility
               </p>
               <ShareToggle jobId={job.id} isPublic={job.is_public ?? false} />

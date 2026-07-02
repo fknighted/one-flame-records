@@ -19,7 +19,7 @@ export default async function EditEventPage({ params }: { params: Promise<{ id: 
     <div className="space-y-8 max-w-2xl">
       <div className="flex items-start justify-between gap-4">
         <div>
-          <Link href="/admin/events" className="text-xs text-bone/40 hover:text-ochre transition-colors mb-3 block">
+          <Link href="/admin/events" className="text-xs text-bone/60 hover:text-ochre transition-colors mb-3 block">
             ← Events
           </Link>
           <h1 className="font-display font-bold text-bone text-3xl">{event.title}</h1>

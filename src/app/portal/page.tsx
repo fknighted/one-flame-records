@@ -20,7 +20,7 @@ const JOB_STATUS_STYLES: Record<string, string> = {
   prompting:  "bg-ochre/15 text-ochre",
   generating: "bg-ochre/15 text-ochre",
   assembling: "bg-ochre/15 text-ochre",
-  complete:   "bg-forest/20 text-forest",
+  complete:   "bg-forest/20 text-sage",
   failed:     "bg-oxblood/20 text-bone/70",
 };
 
@@ -126,7 +126,7 @@ export default async function PortalDashboardPage() {
     <div className="max-w-3xl">
       {/* Welcome */}
       <div className="mb-10">
-        <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-forest mb-3">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-sage mb-3">
           Artist Portal
         </p>
         <h1 className="font-display font-bold text-bone text-[clamp(2rem,4vw,2.75rem)] leading-tight">
@@ -144,7 +144,7 @@ export default async function PortalDashboardPage() {
             className="rounded-lg border border-bone/10 bg-bone/5 px-5 py-4 hover:border-bone/20 transition-colors"
           >
             <p className="font-display font-bold text-bone text-3xl">{value}</p>
-            <p className="text-xs text-bone/40 mt-1 uppercase tracking-widest">{label}</p>
+            <p className="text-xs text-bone/60 mt-1 uppercase tracking-widest">{label}</p>
           </Link>
         ))}
       </div>
@@ -157,14 +157,14 @@ export default async function PortalDashboardPage() {
             href={href}
             className="rounded-lg border border-bone/10 bg-bone/5 p-5 hover:bg-bone/10 hover:border-ochre/30 transition-colors group flex flex-col gap-3"
           >
-            <span className="text-bone/40 group-hover:text-ochre transition-colors">
+            <span className="text-bone/60 group-hover:text-ochre transition-colors">
               {icon}
             </span>
             <div>
               <p className="text-bone text-sm font-semibold group-hover:text-ochre transition-colors">
                 {label}
               </p>
-              <p className="text-bone/40 text-xs mt-0.5 leading-relaxed">{description}</p>
+              <p className="text-bone/60 text-xs mt-0.5 leading-relaxed">{description}</p>
             </div>
           </Link>
         ))}
@@ -173,7 +173,7 @@ export default async function PortalDashboardPage() {
       {/* Recent assets */}
       <div className="mb-8">
         <div className="flex items-center justify-between mb-3">
-          <h2 className="text-[10px] font-semibold uppercase tracking-widest text-bone/30">
+          <h2 className="text-[10px] font-semibold uppercase tracking-widest text-bone/50">
             Recent uploads
           </h2>
           <Link href="/portal/assets" className="text-xs text-ochre hover:text-ochre/70 transition-colors">
@@ -182,7 +182,7 @@ export default async function PortalDashboardPage() {
         </div>
         {!recentAssets || recentAssets.length === 0 ? (
           <div className="rounded-lg border border-bone/10 p-6 text-center">
-            <p className="text-bone/40 text-sm">No uploads yet.</p>
+            <p className="text-bone/60 text-sm">No uploads yet.</p>
             <Link
               href="/portal/assets/new"
               className="mt-2 inline-block text-xs text-ochre hover:text-ochre/80 transition-colors"
@@ -198,12 +198,12 @@ export default async function PortalDashboardPage() {
                 className="flex items-center justify-between px-4 py-3 border-b border-bone/5 last:border-0"
               >
                 <div className="flex items-center gap-3 min-w-0">
-                  <span className="shrink-0 px-2 py-0.5 rounded bg-bone/10 text-bone/40 text-[10px] uppercase tracking-wide">
+                  <span className="shrink-0 px-2 py-0.5 rounded bg-bone/10 text-bone/60 text-[10px] uppercase tracking-wide">
                     {KIND_LABELS[asset.kind] ?? asset.kind}
                   </span>
                   <p className="text-sm text-bone/70 truncate">{asset.title}</p>
                 </div>
-                <p className="text-xs text-bone/25 shrink-0 ml-4">{formatDate(asset.created_at)}</p>
+                <p className="text-xs text-bone/60 shrink-0 ml-4">{formatDate(asset.created_at)}</p>
               </div>
             ))}
           </div>
@@ -213,7 +213,7 @@ export default async function PortalDashboardPage() {
       {/* Recent video jobs */}
       <div>
         <div className="flex items-center justify-between mb-3">
-          <h2 className="text-[10px] font-semibold uppercase tracking-widest text-bone/30">
+          <h2 className="text-[10px] font-semibold uppercase tracking-widest text-bone/50">
             Video jobs
           </h2>
           <Link href="/portal/videos" className="text-xs text-ochre hover:text-ochre/70 transition-colors">
@@ -222,7 +222,7 @@ export default async function PortalDashboardPage() {
         </div>
         {!recentJobs || recentJobs.length === 0 ? (
           <div className="rounded-lg border border-bone/10 p-6 text-center">
-            <p className="text-bone/40 text-sm">No video jobs yet.</p>
+            <p className="text-bone/60 text-sm">No video jobs yet.</p>
             <Link
               href="/portal/videos/new"
               className="mt-2 inline-block text-xs text-ochre hover:text-ochre/80 transition-colors"
@@ -250,7 +250,7 @@ export default async function PortalDashboardPage() {
                     {job.assets?.title ?? "—"}
                   </p>
                 </div>
-                <p className="text-xs text-bone/25 shrink-0 ml-4">{formatDate(job.created_at)}</p>
+                <p className="text-xs text-bone/60 shrink-0 ml-4">{formatDate(job.created_at)}</p>
               </Link>
             ))}
           </div>

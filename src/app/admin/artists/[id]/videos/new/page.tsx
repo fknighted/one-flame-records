@@ -63,14 +63,14 @@ export default async function AdminRequestVideoPage({ params, searchParams }: Pr
       <div className="mb-8">
         <Link
           href={`/admin/artists/${id}/assets`}
-          className="text-xs text-bone/40 hover:text-ochre transition-colors"
+          className="text-xs text-bone/60 hover:text-ochre transition-colors"
         >
           ← {artist.stage_name} — Assets
         </Link>
         <h1 className="font-display font-bold text-bone text-2xl mt-2">
           Request video
         </h1>
-        <p className="text-bone/40 text-sm mt-1">
+        <p className="text-bone/60 text-sm mt-1">
           for {artist.stage_name} · budget check bypassed
         </p>
         <div className="mt-3 h-px w-16 bg-bone/20" />
@@ -89,7 +89,7 @@ export default async function AdminRequestVideoPage({ params, searchParams }: Pr
         />
       ) : (
         <div className="rounded-lg border border-bone/10 p-10 text-center">
-          <p className="text-bone/40 text-sm mb-4">
+          <p className="text-bone/60 text-sm mb-4">
             No instrumentals or demos uploaded for this artist yet.
           </p>
           <Link

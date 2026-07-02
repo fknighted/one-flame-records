@@ -64,7 +64,7 @@ function buildPrompt(purpose: Purpose, style: string, name: string, notes: strin
   return `${base}${extra}. ${suffix}`.trim();
 }
 
-const INPUT = "w-full bg-bone/5 border border-bone/15 rounded px-3 py-2 text-sm text-bone placeholder:text-bone/30 focus:outline-none focus:border-ochre/60";
+const INPUT = "w-full bg-bone/5 border border-bone/15 rounded px-3 py-2 text-sm text-bone placeholder:text-bone/50 focus:outline-none focus:border-ochre/60";
 const LABEL = "block text-xs text-bone/50 mb-1.5";
 
 type RefMode = "none" | "artist" | "upload";
@@ -275,7 +275,7 @@ export default function ImageGeneratorForm({
       <div className="space-y-3">
         <div>
           <label className={LABEL}>Reference image (optional)</label>
-          <p className="text-[11px] text-bone/30 mb-2">
+          <p className="text-[11px] text-bone/50 mb-2">
             When provided, the AI uses it as visual guidance — style, composition, or likeness.
           </p>
           <div className="flex gap-2">
@@ -308,11 +308,11 @@ export default function ImageGeneratorForm({
             </select>
 
             {refLoading && (
-              <p className="text-xs text-bone/40">Loading reference images…</p>
+              <p className="text-xs text-bone/60">Loading reference images…</p>
             )}
 
             {!refLoading && refArtistId && refImages.length === 0 && (
-              <p className="text-xs text-bone/40">
+              <p className="text-xs text-bone/60">
                 No reference images for this artist. Upload one under{" "}
                 <span className="text-bone/60">Artists → Assets</span> with kind &quot;Reference Image&quot;.
               </p>
@@ -372,7 +372,7 @@ export default function ImageGeneratorForm({
 
         {/* Active reference summary */}
         {activeRefPreview && (
-          <div className="flex items-center gap-2 text-xs text-bone/40">
+          <div className="flex items-center gap-2 text-xs text-bone/60">
             <div className="relative w-8 h-8 rounded overflow-hidden shrink-0 border border-ochre/40">
               <Image src={activeRefPreview} alt="" fill className="object-cover" unoptimized />
             </div>
@@ -380,7 +380,7 @@ export default function ImageGeneratorForm({
               Reference selected —{" "}
               {selectedRef.mode === "artist" ? selectedRef.title : "uploaded image"}
             </span>
-            <button type="button" onClick={() => setSelectedRef({ mode: "none" })} className="text-bone/30 hover:text-ochre ml-1">
+            <button type="button" onClick={() => setSelectedRef({ mode: "none" })} className="text-bone/50 hover:text-ochre ml-1">
               remove
             </button>
           </div>
@@ -409,7 +409,7 @@ export default function ImageGeneratorForm({
           value={prompt}
           onChange={e => setPrompt(e.target.value)}
         />
-        <p className="mt-1 text-[11px] text-bone/30">Edit freely — sent directly to gpt-image-1.</p>
+        <p className="mt-1 text-[11px] text-bone/50">Edit freely — sent directly to gpt-image-1.</p>
       </div>
 
       {/* Generate */}
@@ -427,13 +427,13 @@ export default function ImageGeneratorForm({
       </button>
 
       {genError && (
-        <p className="rounded bg-oxblood/20 border border-oxblood/40 px-4 py-2 text-sm text-oxblood">{genError}</p>
+        <p className="rounded bg-oxblood/20 border border-oxblood/40 px-4 py-2 text-sm text-rose">{genError}</p>
       )}
 
       {/* Result */}
       {generatedUrl && (
         <div className="space-y-4 pt-2 border-t border-bone/10">
-          <p className="text-xs text-bone/40 uppercase tracking-wider">Result</p>
+          <p className="text-xs text-bone/60 uppercase tracking-wider">Result</p>
 
           <div className="rounded overflow-hidden border border-bone/10 bg-bone/5">
             <Image src={generatedUrl} alt="Generated image" width={1024} height={1024} className="w-full h-auto" unoptimized />
@@ -468,16 +468,16 @@ export default function ImageGeneratorForm({
                   type="button"
                   onClick={handleApply}
                   disabled={applying || !applyTarget || applied}
-                  className="rounded bg-forest/20 border border-forest/30 px-4 py-2 text-sm text-forest hover:bg-forest/30 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  className="rounded bg-forest/20 border border-forest/30 px-4 py-2 text-sm text-sage hover:bg-forest/30 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                 >
                   {applying ? "Applying…" : applied ? "✓ Applied" : "Apply →"}
                 </button>
-                {returnUrl && applied && <span className="text-xs text-bone/40">Redirecting…</span>}
+                {returnUrl && applied && <span className="text-xs text-bone/60">Redirecting…</span>}
               </div>
             )}
           </div>
 
-          {applyError && <p className="text-xs text-oxblood">{applyError}</p>}
+          {applyError && <p className="text-xs text-rose">{applyError}</p>}
         </div>
       )}
     </div>

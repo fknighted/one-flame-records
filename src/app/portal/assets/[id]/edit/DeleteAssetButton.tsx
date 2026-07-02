@@ -29,7 +29,7 @@ export default function DeleteAssetButton({ assetId, title }: { assetId: string;
       <button
         onClick={handleDelete}
         disabled={pending}
-        className="text-sm text-oxblood/60 hover:text-oxblood transition-colors disabled:opacity-40"
+        className="text-sm text-rose/60 hover:text-rose transition-colors disabled:opacity-40"
       >
         {pending ? "Deleting…" : "Delete asset"}
       </button>

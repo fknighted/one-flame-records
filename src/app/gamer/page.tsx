@@ -54,20 +54,20 @@ export default async function GamerDashboardPage() {
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {/* Balance */}
         <div className="border border-bone/15 rounded-2xl p-6">
-          <p className="text-xs font-semibold text-bone/40 uppercase tracking-wider mb-2">
+          <p className="text-xs font-semibold text-bone/60 uppercase tracking-wider mb-2">
             Game Time Balance
           </p>
           <p className="text-4xl font-mono text-ochre font-semibold">
             {member ? fmt(member.minutes_balance) : "—"}
           </p>
-          <p className="text-xs text-bone/30 mt-2">
+          <p className="text-xs text-bone/50 mt-2">
             Ask a bartender to top up your balance
           </p>
         </div>
 
         {/* Active session */}
         <div className="border border-bone/15 rounded-2xl p-6">
-          <p className="text-xs font-semibold text-bone/40 uppercase tracking-wider mb-2">
+          <p className="text-xs font-semibold text-bone/60 uppercase tracking-wider mb-2">
             Current Session
           </p>
           {activeSession ? (
@@ -78,7 +78,7 @@ export default async function GamerDashboardPage() {
               )}
             </>
           ) : (
-            <p className="text-bone/30 text-sm">No active session</p>
+            <p className="text-bone/50 text-sm">No active session</p>
           )}
         </div>
       </div>
@@ -89,7 +89,7 @@ export default async function GamerDashboardPage() {
 
       {recentTx && recentTx.length > 0 && (
         <div className="border border-bone/15 rounded-2xl p-6">
-          <p className="text-xs font-semibold text-bone/40 uppercase tracking-wider mb-4">
+          <p className="text-xs font-semibold text-bone/60 uppercase tracking-wider mb-4">
             Recent Transactions
           </p>
           <div className="space-y-2">
@@ -97,9 +97,9 @@ export default async function GamerDashboardPage() {
               <div key={i} className="flex items-center justify-between text-sm">
                 <div>
                   <p className="text-bone capitalize">{t.type}</p>
-                  {t.reason && <p className="text-xs text-bone/40">{t.reason}</p>}
+                  {t.reason && <p className="text-xs text-bone/60">{t.reason}</p>}
                 </div>
-                <p className={`font-mono font-semibold ${t.amount_minutes > 0 ? "text-forest" : "text-oxblood"}`}>
+                <p className={`font-mono font-semibold ${t.amount_minutes > 0 ? "text-sage" : "text-rose"}`}>
                   {t.amount_minutes > 0 ? "+" : ""}{t.amount_minutes}m
                 </p>
               </div>

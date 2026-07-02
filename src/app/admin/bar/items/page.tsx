@@ -30,7 +30,7 @@ export default async function MenuItemsPage({
     <div className="space-y-8 max-w-4xl">
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-forest mb-1">Bar</p>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-sage mb-1">Bar</p>
           <h1 className="font-display font-bold text-bone text-3xl">Menu Items</h1>
           <div className="mt-3 h-px w-16 bg-bone/20" />
         </div>
@@ -61,7 +61,7 @@ export default async function MenuItemsPage({
       </div>
 
       {!items?.length ? (
-        <div className="border border-bone/10 rounded-lg p-12 text-center text-bone/30 text-sm">
+        <div className="border border-bone/10 rounded-lg p-12 text-center text-bone/50 text-sm">
           No items yet.{" "}
           <Link href="/admin/bar/items/new" className="text-ochre hover:underline">
             Add your first menu item.
@@ -72,10 +72,10 @@ export default async function MenuItemsPage({
           <table className="w-full min-w-[460px] text-sm">
             <thead className="border-b border-bone/10 bg-bone/3">
               <tr>
-                <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/40">Name</th>
-                <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/40">Category</th>
-                <th className="text-right px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/40">Price</th>
-                <th className="text-center px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/40">Status</th>
+                <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Name</th>
+                <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Category</th>
+                <th className="text-right px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Price</th>
+                <th className="text-center px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Status</th>
                 <th className="px-4 py-3" />
               </tr>
             </thead>
@@ -85,7 +85,7 @@ export default async function MenuItemsPage({
                   <td className="px-4 py-3 text-bone font-medium">
                     {item.name}
                     {item.description && (
-                      <p className="text-xs text-bone/40 mt-0.5">{item.description}</p>
+                      <p className="text-xs text-bone/60 mt-0.5">{item.description}</p>
                     )}
                   </td>
                   <td className="px-4 py-3 text-bone/60">{CATEGORY_LABELS[item.category] ?? item.category}</td>
@@ -95,7 +95,7 @@ export default async function MenuItemsPage({
                   <td className="px-4 py-3 text-center">
                     <span className={[
                       "inline-block px-2 py-0.5 rounded-full text-xs font-medium",
-                      item.is_active ? "bg-forest/20 text-forest" : "bg-bone/10 text-bone/40",
+                      item.is_active ? "bg-forest/20 text-sage" : "bg-bone/10 text-bone/60",
                     ].join(" ")}>
                       {item.is_active ? "Active" : "Inactive"}
                     </span>
@@ -103,7 +103,7 @@ export default async function MenuItemsPage({
                   <td className="px-4 py-3 text-right">
                     <Link
                       href={`/admin/bar/items/${item.id}/edit`}
-                      className="text-xs text-bone/40 hover:text-bone transition-colors mr-4"
+                      className="text-xs text-bone/60 hover:text-bone transition-colors mr-4"
                     >
                       Edit
                     </Link>

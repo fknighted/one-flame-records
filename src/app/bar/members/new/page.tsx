@@ -10,7 +10,7 @@ export default function InviteGamerPage() {
   return (
     <div className="max-w-sm mx-auto space-y-6">
       <div>
-        <p className="text-xs text-bone/40 mb-1">
+        <p className="text-xs text-bone/60 mb-1">
           <Link href="/bar/members" className="hover:text-bone transition-colors">← Members</Link>
         </p>
         <h1 className="font-display font-bold text-bone text-2xl">Invite Gamer</h1>
@@ -28,7 +28,7 @@ export default function InviteGamerPage() {
 
         <div>
           <label htmlFor="display_name" className="block text-sm font-medium text-bone/70 mb-1.5">
-            Display Name <span className="text-oxblood">*</span>
+            Display Name <span className="text-rose">*</span>
           </label>
           <input
             id="display_name"
@@ -36,20 +36,20 @@ export default function InviteGamerPage() {
             type="text"
             autoFocus
             placeholder="e.g. Jay King"
-            className="w-full bg-bone/5 border border-bone/15 rounded-lg px-4 py-3 text-bone placeholder:text-bone/25 text-base focus:outline-none focus:border-ochre/50 transition-colors"
+            className="w-full bg-bone/5 border border-bone/15 rounded-lg px-4 py-3 text-bone placeholder:text-bone/60 text-base focus:outline-none focus:border-ochre/50 transition-colors"
           />
         </div>
 
         <div>
           <label htmlFor="email" className="block text-sm font-medium text-bone/70 mb-1.5">
-            Email <span className="text-oxblood">*</span>
+            Email <span className="text-rose">*</span>
           </label>
           <input
             id="email"
             name="email"
             type="email"
             placeholder="gamer@email.com"
-            className="w-full bg-bone/5 border border-bone/15 rounded-lg px-4 py-3 text-bone placeholder:text-bone/25 text-base focus:outline-none focus:border-ochre/50 transition-colors"
+            className="w-full bg-bone/5 border border-bone/15 rounded-lg px-4 py-3 text-bone placeholder:text-bone/60 text-base focus:outline-none focus:border-ochre/50 transition-colors"
           />
         </div>
 

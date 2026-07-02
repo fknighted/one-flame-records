@@ -23,7 +23,7 @@ const SOCIAL_LABELS: { key: keyof Socials; label: string; prefix: string }[] = [
 
 const STATUS_BADGE: Record<string, string> = {
   pending:  "bg-ochre/15 text-ochre",
-  approved: "bg-forest/20 text-forest",
+  approved: "bg-forest/20 text-sage",
   rejected: "bg-oxblood/20 text-red-400",
 };
 
@@ -62,13 +62,13 @@ export default async function ApplicationDetailPage({
       <div className="mb-8">
         <Link
           href="/admin/applications"
-          className="text-xs text-bone/40 hover:text-bone/70 transition-colors mb-4 inline-block"
+          className="text-xs text-bone/60 hover:text-bone/70 transition-colors mb-4 inline-block"
         >
           ← Applications
         </Link>
         <div className="flex items-start justify-between gap-4">
           <div>
-            <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-forest mb-2">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-sage mb-2">
               Application
             </p>
             <h1 className="font-display font-bold text-bone text-3xl">
@@ -112,7 +112,7 @@ export default async function ApplicationDetailPage({
 
         {/* Socials */}
         <div className="px-5 py-4">
-          <p className="text-xs text-bone/40 uppercase tracking-widest mb-2">
+          <p className="text-xs text-bone/60 uppercase tracking-widest mb-2">
             Socials
           </p>
           <div className="space-y-1.5">
@@ -120,7 +120,7 @@ export default async function ApplicationDetailPage({
               const handle = socials[key];
               if (!handle) {
                 return (
-                  <p key={key} className="text-sm text-bone/30">
+                  <p key={key} className="text-sm text-bone/50">
                     {label}: —
                   </p>
                 );
@@ -128,7 +128,7 @@ export default async function ApplicationDetailPage({
               const url = handle.startsWith("http") ? handle : `${prefix}${handle}`;
               return (
                 <p key={key} className="text-sm">
-                  <span className="text-bone/40">{label}: </span>
+                  <span className="text-bone/60">{label}: </span>
                   <a
                     href={url}
                     target="_blank"
@@ -145,7 +145,7 @@ export default async function ApplicationDetailPage({
 
         {app.message && (
           <div className="px-5 py-4">
-            <p className="text-xs text-bone/40 uppercase tracking-widest mb-2">
+            <p className="text-xs text-bone/60 uppercase tracking-widest mb-2">
               Message
             </p>
             <p className="text-sm text-bone/80 whitespace-pre-wrap">
@@ -163,7 +163,7 @@ export default async function ApplicationDetailPage({
       {/* Actions — only shown while pending */}
       {app.status === "pending" && (
         <div className="mt-8">
-          <p className="text-xs text-bone/40 uppercase tracking-widest mb-4">
+          <p className="text-xs text-bone/60 uppercase tracking-widest mb-4">
             Decision
           </p>
           <ApplicationActions id={app.id} />
@@ -172,7 +172,7 @@ export default async function ApplicationDetailPage({
 
       {app.status !== "pending" && (
         <div className="mt-6">
-          <p className="text-sm text-bone/40">
+          <p className="text-sm text-bone/60">
             This application has been{" "}
             <span className="capitalize">{app.status}</span>.
           </p>
@@ -194,7 +194,7 @@ function Field({
 }) {
   return (
     <div className="px-5 py-4 flex flex-col sm:flex-row sm:items-start gap-1 sm:gap-4">
-      <p className="text-xs text-bone/40 uppercase tracking-widest sm:w-28 shrink-0 pt-px">
+      <p className="text-xs text-bone/60 uppercase tracking-widest sm:w-28 shrink-0 pt-px">
         {label}
       </p>
       <p className="text-sm text-bone/80">{value}</p>

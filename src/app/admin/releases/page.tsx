@@ -31,7 +31,7 @@ export default async function AdminReleasesPage() {
       </div>
 
       {releases.length === 0 ? (
-        <div className="border border-bone/10 rounded-lg p-12 text-center text-bone/30 text-sm">
+        <div className="border border-bone/10 rounded-lg p-12 text-center text-bone/50 text-sm">
           No releases yet.{" "}
           <Link href="/admin/releases/new" className="underline hover:text-bone/60">
             Add the first one.
@@ -43,20 +43,20 @@ export default async function AdminReleasesPage() {
           <table className="w-full min-w-[640px] text-sm">
             <thead>
               <tr className="border-b border-bone/10 bg-bone/5">
-                <th className="text-left px-4 py-3 text-xs font-medium text-bone/40 uppercase tracking-wider w-12" />
-                <th className="text-left px-4 py-3 text-xs font-medium text-bone/40 uppercase tracking-wider">
+                <th className="text-left px-4 py-3 text-xs font-medium text-bone/60 uppercase tracking-wider w-12" />
+                <th className="text-left px-4 py-3 text-xs font-medium text-bone/60 uppercase tracking-wider">
                   Title
                 </th>
-                <th className="text-left px-4 py-3 text-xs font-medium text-bone/40 uppercase tracking-wider">
+                <th className="text-left px-4 py-3 text-xs font-medium text-bone/60 uppercase tracking-wider">
                   Artist
                 </th>
-                <th className="text-left px-4 py-3 text-xs font-medium text-bone/40 uppercase tracking-wider">
+                <th className="text-left px-4 py-3 text-xs font-medium text-bone/60 uppercase tracking-wider">
                   Type
                 </th>
-                <th className="text-left px-4 py-3 text-xs font-medium text-bone/40 uppercase tracking-wider">
+                <th className="text-left px-4 py-3 text-xs font-medium text-bone/60 uppercase tracking-wider">
                   Date
                 </th>
-                <th className="text-left px-4 py-3 text-xs font-medium text-bone/40 uppercase tracking-wider">
+                <th className="text-left px-4 py-3 text-xs font-medium text-bone/60 uppercase tracking-wider">
                   Featured
                 </th>
                 <th className="px-4 py-3 w-16" />
@@ -83,7 +83,7 @@ export default async function AdminReleasesPage() {
                     </td>
                     <td className="px-4 py-3">
                       <span className="text-bone font-medium">{release.title}</span>
-                      <span className="block text-bone/35 text-xs mt-0.5">
+                      <span className="block text-bone/52 text-xs mt-0.5">
                         /{release.slug}
                       </span>
                     </td>
@@ -107,14 +107,14 @@ export default async function AdminReleasesPage() {
                       <div className="flex items-center gap-3 justify-end">
                         <Link
                           href={`/admin/releases/${release.id}/edit`}
-                          className="text-xs text-bone/40 hover:text-ochre transition-colors"
+                          className="text-xs text-bone/60 hover:text-ochre transition-colors"
                         >
                           Edit
                         </Link>
                         <form action={deleteWithId}>
                           <button
                             type="submit"
-                            className="text-xs text-bone/30 hover:text-red-400 transition-colors"
+                            className="text-xs text-bone/50 hover:text-red-400 transition-colors"
                             title="Delete release"
                             onClick={(e) => { if (!confirm(`Delete release "${release.title}"?`)) e.preventDefault(); }}
                           >

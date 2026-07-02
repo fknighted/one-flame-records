@@ -24,18 +24,18 @@ const PLATFORM_COLORS: Record<string, string> = {
   instagram: "bg-[#E1306C]/15 text-[#E1306C] border border-[#E1306C]/25",
   tiktok:    "bg-bone/10 text-bone border border-bone/20",
   facebook:  "bg-[#1877F2]/15 text-[#1877F2] border border-[#1877F2]/25",
-  news:      "bg-forest/15 text-forest border border-forest/25",
+  news:      "bg-forest/15 text-sage border border-forest/25",
 };
 
 const STATUS_STYLES: Record<string, string> = {
-  pending:    "bg-bone/10 text-bone/40",
-  generating: "bg-forest/20 text-forest animate-pulse",
+  pending:    "bg-bone/10 text-bone/60",
+  generating: "bg-forest/20 text-sage animate-pulse",
   ready:      "bg-ochre/15 text-ochre",
-  approved:   "bg-forest/25 text-forest",
-  rejected:   "bg-oxblood/20 text-oxblood",
+  approved:   "bg-forest/25 text-sage",
+  rejected:   "bg-oxblood/20 text-rose",
   publishing: "bg-ochre/20 text-ochre animate-pulse",
-  published:  "bg-forest/30 text-forest",
-  failed:     "bg-oxblood/20 text-oxblood",
+  published:  "bg-forest/30 text-sage",
+  failed:     "bg-oxblood/20 text-rose",
 };
 
 const STATUS_LABEL: Record<string, string> = {
@@ -100,10 +100,10 @@ function PieceCard({
           <span className={`text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full ${PLATFORM_COLORS[piece.platform] ?? "bg-bone/10 text-bone/50"}`}>
             {piece.platform}
           </span>
-          <span className="text-[10px] text-bone/35 uppercase tracking-wider">
+          <span className="text-[10px] text-bone/52 uppercase tracking-wider">
             {piece.content_type.replace("_", " ")}
           </span>
-          <span className={`ml-auto text-[10px] font-medium px-2 py-0.5 rounded-full ${STATUS_STYLES[piece.status] ?? "bg-bone/10 text-bone/40"}`}>
+          <span className={`ml-auto text-[10px] font-medium px-2 py-0.5 rounded-full ${STATUS_STYLES[piece.status] ?? "bg-bone/10 text-bone/60"}`}>
             {STATUS_LABEL[piece.status] ?? piece.status}
           </span>
         </div>
@@ -119,7 +119,7 @@ function PieceCard({
                 <button
                   type="button"
                   onClick={() => setExpanded(!expanded)}
-                  className="text-xs text-bone/40 hover:text-ochre transition-colors"
+                  className="text-xs text-bone/60 hover:text-ochre transition-colors"
                 >
                   {expanded ? "Hide article ↑" : "Preview article ↓"}
                 </button>
@@ -153,7 +153,7 @@ function PieceCard({
                 <button
                   type="button"
                   onClick={() => setExpanded(!expanded)}
-                  className="text-xs text-bone/40 hover:text-ochre transition-colors"
+                  className="text-xs text-bone/60 hover:text-ochre transition-colors"
                 >
                   {expanded ? "Hide script ↑" : "View script ↓"}
                 </button>
@@ -169,12 +169,12 @@ function PieceCard({
 
         {/* Error */}
         {piece.error && (
-          <p className="text-xs text-oxblood bg-oxblood/10 rounded p-2">{piece.error}</p>
+          <p className="text-xs text-rose bg-oxblood/10 rounded p-2">{piece.error}</p>
         )}
 
         {/* Published timestamp */}
         {piece.published_at && (
-          <p className="text-[11px] text-bone/30">
+          <p className="text-[11px] text-bone/50">
             Published {new Date(piece.published_at).toLocaleString("en-US", { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" })}
           </p>
         )}
@@ -182,7 +182,7 @@ function PieceCard({
         {/* Platform picker — social pieces only */}
         {showPlatformPicker && piece.platform !== "news" && (
           <div className="pt-2 border-t border-bone/8">
-            <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-bone/35 mb-1.5">Post to</p>
+            <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-bone/52 mb-1.5">Post to</p>
             <div className="flex gap-3 flex-wrap">
               {ALL_PLATFORMS.map((p) => (
                 <label key={p} className="flex items-center gap-1.5 cursor-pointer">
@@ -225,7 +225,7 @@ function PieceCard({
               {generatingVideo ? "Queuing…" : "⚡ Generate Video from Script"}
             </button>
             {videoError && (
-              <p className="mt-1.5 text-xs text-oxblood">{videoError}</p>
+              <p className="mt-1.5 text-xs text-rose">{videoError}</p>
             )}
           </div>
         )}
@@ -235,21 +235,21 @@ function PieceCard({
           <div className="flex gap-2 pt-1 border-t border-bone/8">
             {canApprove && (
               <form action={() => { startTransition(() => approvePiece(piece.id)); }}>
-                <button type="submit" disabled={pending} className="text-xs px-3 py-1.5 rounded bg-forest/20 text-forest hover:bg-forest/30 disabled:opacity-50 transition-colors">
+                <button type="submit" disabled={pending} className="text-xs px-3 py-1.5 rounded bg-forest/20 text-sage hover:bg-forest/30 disabled:opacity-50 transition-colors">
                   ✓ Approve
                 </button>
               </form>
             )}
             {canReject && (
               <form action={() => { startTransition(() => rejectPiece(piece.id)); }}>
-                <button type="submit" disabled={pending} className="text-xs px-3 py-1.5 rounded bg-bone/10 text-bone/50 hover:bg-oxblood/20 hover:text-oxblood disabled:opacity-50 transition-colors">
+                <button type="submit" disabled={pending} className="text-xs px-3 py-1.5 rounded bg-bone/10 text-bone/50 hover:bg-oxblood/20 hover:text-rose disabled:opacity-50 transition-colors">
                   Reject
                 </button>
               </form>
             )}
             {canRegen && (
               <form action={() => { startTransition(() => regeneratePiece(piece.id)); }}>
-                <button type="submit" disabled={pending} className="text-xs text-bone/30 hover:text-ochre transition-colors ml-auto">
+                <button type="submit" disabled={pending} className="text-xs text-bone/50 hover:text-ochre transition-colors ml-auto">
                   ↻ Regen
                 </button>
               </form>
@@ -302,11 +302,11 @@ export default function CampaignPiecesClient({
     <div className="space-y-8">
       {/* Progress + stats */}
       <div className="space-y-3">
-        <div className="flex items-center gap-4 text-xs text-bone/40">
+        <div className="flex items-center gap-4 text-xs text-bone/60">
           <span>{totalCount} pieces</span>
           <span>{readyCount} ready to review</span>
           <span>{approvedCount} approved</span>
-          {publishedCount > 0 && <span className="text-forest">{publishedCount} published</span>}
+          {publishedCount > 0 && <span className="text-sage">{publishedCount} published</span>}
         </div>
         <div className="h-1.5 w-full rounded-full bg-bone/10 overflow-hidden">
           <div className="h-full rounded-full bg-forest transition-all" style={{ width: `${pct}%` }} />
@@ -324,22 +324,22 @@ export default function CampaignPiecesClient({
           >
             {publishing ? "Publishing…" : `Publish ${approvedCount} approved piece${approvedCount !== 1 ? "s" : ""}`}
           </button>
-          <p className="text-xs text-bone/35">Social pieces post via Make.com. News pieces create a draft in /admin/news.</p>
+          <p className="text-xs text-bone/52">Social pieces post via Make.com. News pieces create a draft in /admin/news.</p>
         </div>
       )}
 
       {publishResult && (
         <div className="rounded border border-bone/15 p-4 space-y-1 text-sm">
-          <p className="text-forest">✓ {publishResult.published} published</p>
+          <p className="text-sage">✓ {publishResult.published} published</p>
           {publishResult.skipped > 0 && <p className="text-ochre">{publishResult.skipped} skipped (manual post required)</p>}
-          {publishResult.errors.map((e, i) => <p key={i} className="text-oxblood text-xs">{e}</p>)}
+          {publishResult.errors.map((e, i) => <p key={i} className="text-rose text-xs">{e}</p>)}
         </div>
       )}
 
       {/* Pieces grouped by platform */}
       {Object.entries(byPlatform).map(([platform, platformPieces]) => (
         <div key={platform}>
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-bone/35 mb-3 capitalize">{platform}</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-bone/52 mb-3 capitalize">{platform}</p>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {platformPieces.map((piece) => (
               <PieceCard

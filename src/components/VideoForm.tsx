@@ -29,10 +29,10 @@ const KIND_OPTIONS = [
 ];
 
 const INPUT =
-  "w-full bg-bone/5 border border-bone/15 rounded px-3 py-2 text-sm text-bone placeholder:text-bone/30 focus:outline-none focus:border-ochre/60";
+  "w-full bg-bone/5 border border-bone/15 rounded px-3 py-2 text-sm text-bone placeholder:text-bone/50 focus:outline-none focus:border-ochre/60";
 const LABEL = "block text-xs text-bone/50 mb-1";
 const SECTION_HEADING =
-  "text-xs font-sans uppercase tracking-widest text-bone/35 pb-2 border-b border-bone/10";
+  "text-xs font-sans uppercase tracking-widest text-bone/52 pb-2 border-b border-bone/10";
 
 function extractYouTubeId(input: string): string | null {
   const trimmed = input.trim();
@@ -201,16 +201,16 @@ export default function VideoForm({
                       style={{ width: `${uploadProgress}%` }}
                     />
                   </div>
-                  <p className="text-xs text-bone/40">Uploading… {uploadProgress}%</p>
+                  <p className="text-xs text-bone/60">Uploading… {uploadProgress}%</p>
                 </div>
               )}
 
               {uploadError && (
-                <p className="text-xs text-oxblood">{uploadError}</p>
+                <p className="text-xs text-rose">{uploadError}</p>
               )}
 
               {uploadedUrl && !uploading && (
-                <p className="text-xs text-forest">✓ Video uploaded successfully</p>
+                <p className="text-xs text-sage">✓ Video uploaded successfully</p>
               )}
 
               {initialValues.storage_url && !uploadedUrl && (
@@ -221,7 +221,7 @@ export default function VideoForm({
                     preload="metadata"
                     className="w-full rounded border border-bone/10 bg-ink aspect-video"
                   />
-                  <p className="text-xs text-bone/40">
+                  <p className="text-xs text-bone/60">
                     Upload a new file to replace this video.
                   </p>
                 </div>
@@ -319,7 +319,7 @@ export default function VideoForm({
         >
           {pending ? "Saving…" : uploading ? "Uploading…" : mode === "create" ? "Add Video" : "Save Changes"}
         </button>
-        <Link href="/admin/videos" className="text-sm text-bone/40 hover:text-bone transition-colors">
+        <Link href="/admin/videos" className="text-sm text-bone/60 hover:text-bone transition-colors">
           Cancel
         </Link>
       </div>

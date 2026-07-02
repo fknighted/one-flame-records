@@ -23,7 +23,7 @@ export function BudgetForm({ currentBudget }: { currentBudget: number }) {
           Monthly cap (USD)
         </label>
         <div className="relative">
-          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-bone/40 text-sm">$</span>
+          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-bone/60 text-sm">$</span>
           <input
             type="number"
             name="monthly_video_budget_usd"
@@ -43,7 +43,7 @@ export function BudgetForm({ currentBudget }: { currentBudget: number }) {
         {pending ? "Saving…" : "Save budget"}
       </button>
       {state && "error" in state && (
-        <p className="text-xs text-oxblood">{state.error}</p>
+        <p className="text-xs text-rose">{state.error}</p>
       )}
     </form>
   );

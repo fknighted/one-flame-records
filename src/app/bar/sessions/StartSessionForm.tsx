@@ -16,7 +16,7 @@ export default function StartSessionForm({ members }: { members: Member[] }) {
 
       <div>
         <label htmlFor="member_id" className="block text-sm font-medium text-bone/70 mb-1.5">
-          Member <span className="text-bone/30 font-normal">(optional)</span>
+          Member <span className="text-bone/50 font-normal">(optional)</span>
         </label>
         <select
           id="member_id"
@@ -32,7 +32,7 @@ export default function StartSessionForm({ members }: { members: Member[] }) {
 
       <div>
         <label htmlFor="station" className="block text-sm font-medium text-bone/70 mb-1.5">
-          Station <span className="text-bone/30 font-normal">(optional)</span>
+          Station <span className="text-bone/50 font-normal">(optional)</span>
         </label>
         <select
           id="station"

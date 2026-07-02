@@ -20,7 +20,7 @@ export default function DeleteJobButton({ id, artistName }: { id: string; artist
           }
         });
       }}
-      className="text-xs text-bone/30 hover:text-red-400 transition-colors disabled:opacity-50"
+      className="text-xs text-bone/50 hover:text-red-400 transition-colors disabled:opacity-50"
       title="Delete job"
     >
       {pending ? "…" : "×"}

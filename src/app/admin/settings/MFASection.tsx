@@ -78,16 +78,16 @@ export default function MFASection() {
     <section className="space-y-4">
       <div>
         <h2 className="text-sm font-semibold text-bone">Two-Factor Authentication</h2>
-        <p className="text-xs text-bone/40 mt-1">
+        <p className="text-xs text-bone/60 mt-1">
           Protect your admin account with an authenticator app (Google Authenticator, Authy, 1Password).
         </p>
       </div>
 
       {success && (
-        <p className="text-sm text-forest">{success}</p>
+        <p className="text-sm text-sage">{success}</p>
       )}
       {error && (
-        <p className="text-sm text-oxblood">{error}</p>
+        <p className="text-sm text-rose">{error}</p>
       )}
 
       {verified.length > 0 ? (
@@ -96,11 +96,11 @@ export default function MFASection() {
             <div key={f.id} className="flex items-center justify-between border border-bone/10 rounded-lg px-4 py-3">
               <div>
                 <p className="text-sm text-bone font-medium">Authenticator app</p>
-                <p className="text-xs text-bone/40">TOTP · Active</p>
+                <p className="text-xs text-bone/60">TOTP · Active</p>
               </div>
               <button
                 onClick={() => unenroll(f.id)}
-                className="text-xs text-oxblood/60 hover:text-oxblood transition-colors"
+                className="text-xs text-rose/60 hover:text-rose transition-colors"
               >
                 Remove
               </button>
@@ -151,7 +151,7 @@ export default function MFASection() {
                 setCode("");
                 setError(null);
               }}
-              className="text-sm text-bone/40 hover:text-bone transition-colors"
+              className="text-sm text-bone/60 hover:text-bone transition-colors"
             >
               Cancel
             </button>

@@ -132,7 +132,7 @@ function NavLinks({
       {groups.map((group, gi) => (
         <div key={gi}>
           {group.label && (
-            <p className="px-3 mb-1 text-[9px] font-semibold uppercase tracking-[0.2em] text-bone/25">
+            <p className="px-3 mb-1 text-[9px] font-semibold uppercase tracking-[0.2em] text-bone/60">
               {group.label}
             </p>
           )}
@@ -258,7 +258,7 @@ export default function InkShell({ displayName, pendingApps, isBartender, childr
 
           {/* Display name — mobile */}
           <div className="sm:hidden px-3 mb-4 pb-4 border-b border-bone/10">
-            <p className="text-xs text-bone/40 truncate">{displayName}</p>
+            <p className="text-xs text-bone/60 truncate">{displayName}</p>
           </div>
 
           <NavLinks groups={resolvedGroups} pathname={pathname} onClose={() => setOpen(false)} />

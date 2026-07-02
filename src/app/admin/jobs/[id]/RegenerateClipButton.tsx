@@ -20,7 +20,7 @@ export function RegenerateClipButton({ jobId, clipIndex }: Props) {
           await regenerateClip(jobId, clipIndex);
         })
       }
-      className="text-xs px-2.5 py-1 rounded border border-bone/15 text-bone/40 hover:text-ochre hover:border-ochre/40 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+      className="text-xs px-2.5 py-1 rounded border border-bone/15 text-bone/60 hover:text-ochre hover:border-ochre/40 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
     >
       {pending ? "…" : "↺ Regenerate"}
     </button>

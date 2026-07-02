@@ -15,7 +15,7 @@ export default function DeleteCampaignButton({ id, title }: { id: string; title:
     <button
       onClick={handleClick}
       disabled={pending}
-      className="shrink-0 text-bone/20 hover:text-oxblood transition-colors text-lg leading-none disabled:opacity-40 px-1"
+      className="shrink-0 text-bone/52 hover:text-rose transition-colors text-lg leading-none disabled:opacity-40 px-1"
       title="Delete campaign"
       aria-label="Delete campaign"
     >

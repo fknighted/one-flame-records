@@ -28,16 +28,16 @@ export default async function TabPage({ params }: { params: Promise<{ id: string
       {/* Header */}
       <div className="flex items-center justify-between shrink-0">
         <div>
-          <p className="text-xs text-bone/40 mb-0.5">
+          <p className="text-xs text-bone/60 mb-0.5">
             <a href="/bar" className="hover:text-bone transition-colors">← Tabs</a>
           </p>
           <h1 className="font-display font-bold text-bone text-xl leading-tight">{tab.name}</h1>
-          {tab.notes && <p className="text-xs text-bone/40 mt-0.5">{tab.notes}</p>}
+          {tab.notes && <p className="text-xs text-bone/60 mt-0.5">{tab.notes}</p>}
           {!tab.regular_id && isOpen && <SaveAsRegularButton tabId={id} />}
         </div>
         <div className="text-right">
           <p className="text-2xl font-mono text-ochre font-semibold">{formatCents(tab.total_cents)}</p>
-          <p className="text-xs text-bone/40 capitalize">{tab.status}</p>
+          <p className="text-xs text-bone/60 capitalize">{tab.status}</p>
         </div>
       </div>
 
@@ -46,13 +46,13 @@ export default async function TabPage({ params }: { params: Promise<{ id: string
 
         {/* Left: current tab items */}
         <div className="lg:w-2/5 flex flex-col">
-          <h2 className="text-xs font-semibold text-bone/40 uppercase tracking-wider mb-2">
+          <h2 className="text-xs font-semibold text-bone/60 uppercase tracking-wider mb-2">
             Order ({tabItems?.length ?? 0} items)
           </h2>
 
           <div className="space-y-1.5">
             {!tabItems?.length ? (
-              <p className="text-bone/25 text-sm text-center py-8">No items yet — tap menu to add</p>
+              <p className="text-bone/60 text-sm text-center py-8">No items yet — tap menu to add</p>
             ) : (
               tabItems.map(ti => (
                 <TabItem key={ti.id} item={ti} tabId={id} isOpen={isOpen} />
@@ -68,7 +68,7 @@ export default async function TabPage({ params }: { params: Promise<{ id: string
           )}
           {!isOpen && (
             <div className="pt-3 border-t border-bone/10 mt-3">
-              <p className="text-center text-sm text-bone/40 capitalize">
+              <p className="text-center text-sm text-bone/60 capitalize">
                 Tab {tab.status} · {tab.payment_method ?? "—"}
               </p>
             </div>
@@ -79,7 +79,7 @@ export default async function TabPage({ params }: { params: Promise<{ id: string
         {isOpen && items && (
           <div className="lg:flex-1 flex flex-col gap-3">
             <div>
-              <h2 className="text-xs font-semibold text-bone/40 uppercase tracking-wider mb-2">
+              <h2 className="text-xs font-semibold text-bone/60 uppercase tracking-wider mb-2">
                 Menu
               </h2>
               <div className="flex-1 min-h-0">
@@ -87,7 +87,7 @@ export default async function TabPage({ params }: { params: Promise<{ id: string
               </div>
             </div>
             <div className="shrink-0">
-              <h2 className="text-xs font-semibold text-bone/40 uppercase tracking-wider mb-2">
+              <h2 className="text-xs font-semibold text-bone/60 uppercase tracking-wider mb-2">
                 Other / Custom
               </h2>
               <CustomItemForm tabId={id} />
@@ -112,7 +112,7 @@ function TabItem({
     <div className="flex items-center gap-2 border border-bone/10 rounded-lg px-3 py-2">
       <div className="flex-1 min-w-0">
         <p className="text-bone text-sm font-medium truncate">{item.name}</p>
-        {item.note && <p className="text-bone/40 text-xs">{item.note}</p>}
+        {item.note && <p className="text-bone/60 text-xs">{item.note}</p>}
       </div>
       <span className="text-ochre font-mono text-sm shrink-0">{formatCents(item.price_cents * item.quantity)}</span>
       {isOpen && <QuantityControls tabItemId={item.id} tabId={tabId} quantity={item.quantity} />}

@@ -19,7 +19,7 @@ const PLATFORMS = [
   { value: "news",      label: "Website News" },
 ];
 
-const INPUT  = "w-full bg-bone/5 border border-bone/15 rounded px-3 py-2 text-sm text-bone placeholder:text-bone/30 focus:outline-none focus:border-ochre/60";
+const INPUT  = "w-full bg-bone/5 border border-bone/15 rounded px-3 py-2 text-sm text-bone placeholder:text-bone/50 focus:outline-none focus:border-ochre/60";
 const LABEL  = "block text-xs text-bone/50 mb-1.5";
 
 export default function CampaignForm() {
@@ -35,7 +35,7 @@ export default function CampaignForm() {
   return (
     <form action={formAction} className="space-y-8 max-w-2xl">
       {state?.error && (
-        <p className="rounded bg-oxblood/20 border border-oxblood/40 px-4 py-2 text-sm text-oxblood">{state.error}</p>
+        <p className="rounded bg-oxblood/20 border border-oxblood/40 px-4 py-2 text-sm text-rose">{state.error}</p>
       )}
 
       {/* Title */}
@@ -106,7 +106,7 @@ export default function CampaignForm() {
               <option key={n} value={n}>{n} piece{n > 1 ? "s" : ""} per platform</option>
             ))}
           </select>
-          <p className="mt-1 text-[11px] text-bone/30">3 platforms × 2 = 6 total pieces</p>
+          <p className="mt-1 text-[11px] text-bone/50">3 platforms × 2 = 6 total pieces</p>
         </div>
 
         <div>
@@ -120,7 +120,7 @@ export default function CampaignForm() {
                 <input type="radio" name="video_mode" value={value} defaultChecked={value === "script"} className="mt-0.5 accent-ochre" />
                 <span>
                   <span className="block text-sm text-bone/70">{label}</span>
-                  <span className="block text-[11px] text-bone/30">{hint}</span>
+                  <span className="block text-[11px] text-bone/50">{hint}</span>
                 </span>
               </label>
             ))}
@@ -136,7 +136,7 @@ export default function CampaignForm() {
         >
           {pending ? "Creating…" : "Create Campaign"}
         </button>
-        <Link href="/admin/campaigns" className="text-sm text-bone/40 hover:text-bone transition-colors">
+        <Link href="/admin/campaigns" className="text-sm text-bone/60 hover:text-bone transition-colors">
           Cancel
         </Link>
       </div>

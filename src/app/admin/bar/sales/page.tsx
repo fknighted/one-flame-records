@@ -99,7 +99,7 @@ export default async function SalesPage({
     <div className="space-y-8 max-w-4xl">
       {/* Header */}
       <div>
-        <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-forest mb-1">Bar</p>
+        <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-sage mb-1">Bar</p>
         <h1 className="font-display font-bold text-bone text-3xl">Sales</h1>
         <div className="mt-3 h-px w-16 bg-bone/20" />
       </div>
@@ -123,7 +123,7 @@ export default async function SalesPage({
       </div>
 
       {closedTabs.length === 0 ? (
-        <p className="text-sm text-bone/30">No closed tabs for this period.</p>
+        <p className="text-sm text-bone/50">No closed tabs for this period.</p>
       ) : (
         <>
           {/* Summary row */}
@@ -134,7 +134,7 @@ export default async function SalesPage({
               { label: "Tabs Closed",    value: closedTabs.length.toString() },
             ].map((card) => (
               <div key={card.label} className="rounded-lg border border-bone/10 bg-bone/3 px-5 py-4">
-                <p className="text-xs font-semibold uppercase tracking-wider text-bone/40 mb-1">{card.label}</p>
+                <p className="text-xs font-semibold uppercase tracking-wider text-bone/60 mb-1">{card.label}</p>
                 <p className="font-mono text-bone text-2xl font-bold">{card.value}</p>
               </div>
             ))}
@@ -143,15 +143,15 @@ export default async function SalesPage({
           {/* Revenue by category */}
           {categoryRows.length > 0 && (
             <section className="space-y-3">
-              <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-bone/40">By Category</h2>
+              <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-bone/60">By Category</h2>
               <div className="border border-bone/10 rounded-lg overflow-x-auto">
                 <table className="w-full min-w-[440px] text-sm">
                   <thead className="border-b border-bone/10 bg-bone/3">
                     <tr>
-                      <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/40">Category</th>
-                      <th className="text-right px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/40">Qty Sold</th>
-                      <th className="text-right px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/40">Revenue</th>
-                      <th className="text-right px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/40">% of Total</th>
+                      <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Category</th>
+                      <th className="text-right px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Qty Sold</th>
+                      <th className="text-right px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Revenue</th>
+                      <th className="text-right px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">% of Total</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-bone/10">
@@ -174,15 +174,15 @@ export default async function SalesPage({
           {/* Top items */}
           {topItems.length > 0 && (
             <section className="space-y-3">
-              <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-bone/40">Top Items</h2>
+              <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-bone/60">Top Items</h2>
               <div className="border border-bone/10 rounded-lg overflow-x-auto">
                 <table className="w-full min-w-[440px] text-sm">
                   <thead className="border-b border-bone/10 bg-bone/3">
                     <tr>
-                      <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/40">Item</th>
-                      <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/40">Category</th>
-                      <th className="text-right px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/40">Qty</th>
-                      <th className="text-right px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/40">Revenue</th>
+                      <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Item</th>
+                      <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Category</th>
+                      <th className="text-right px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Qty</th>
+                      <th className="text-right px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Revenue</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-bone/10">
@@ -203,13 +203,13 @@ export default async function SalesPage({
           {/* Payment method split */}
           {Object.keys(byPayment).length > 0 && (
             <section className="space-y-3">
-              <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-bone/40">Payment Methods</h2>
+              <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-bone/60">Payment Methods</h2>
               <div className="flex flex-wrap gap-3">
                 {Object.entries(byPayment).map(([method, data]) => (
                   <div key={method} className="rounded-lg border border-bone/10 bg-bone/3 px-5 py-4 min-w-[140px]">
-                    <p className="text-xs font-semibold uppercase tracking-wider text-bone/40 mb-1 capitalize">{method}</p>
+                    <p className="text-xs font-semibold uppercase tracking-wider text-bone/60 mb-1 capitalize">{method}</p>
                     <p className="font-mono text-bone text-xl font-bold">{formatCents(data.cents)}</p>
-                    <p className="text-xs text-bone/40 mt-0.5">{data.count} tab{data.count !== 1 ? "s" : ""}</p>
+                    <p className="text-xs text-bone/60 mt-0.5">{data.count} tab{data.count !== 1 ? "s" : ""}</p>
                   </div>
                 ))}
               </div>

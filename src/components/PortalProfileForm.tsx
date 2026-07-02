@@ -14,12 +14,12 @@ type InitialValues = {
 };
 
 const INPUT =
-  "w-full bg-bone/5 border border-bone/15 rounded px-3 py-2 text-sm text-bone placeholder:text-bone/30 focus:outline-none focus:border-ochre/60";
+  "w-full bg-bone/5 border border-bone/15 rounded px-3 py-2 text-sm text-bone placeholder:text-bone/50 focus:outline-none focus:border-ochre/60";
 const LABEL = "block text-xs text-bone/50 mb-1";
 const READONLY =
-  "w-full bg-transparent border border-bone/8 rounded px-3 py-2 text-sm text-bone/40 cursor-default";
+  "w-full bg-transparent border border-bone/8 rounded px-3 py-2 text-sm text-bone/60 cursor-default";
 const SECTION_HEADING =
-  "text-xs font-sans uppercase tracking-widest text-bone/35 pb-2 border-b border-bone/10";
+  "text-xs font-sans uppercase tracking-widest text-bone/52 pb-2 border-b border-bone/10";
 
 export default function PortalProfileForm({
   initialValues,
@@ -63,7 +63,7 @@ export default function PortalProfileForm({
       {/* Read-only identity fields */}
       <section className="space-y-4">
         <h2 className={SECTION_HEADING}>Identity</h2>
-        <p className="text-xs text-bone/30">
+        <p className="text-xs text-bone/50">
           To change your stage name, hometown, or genres — contact the label.
         </p>
         <div className="grid grid-cols-2 gap-4">
@@ -196,7 +196,7 @@ export default function PortalProfileForm({
           {pending ? "Saving…" : "Save Changes"}
         </button>
         {showSaved && (
-          <span className="text-sm text-forest">Saved.</span>
+          <span className="text-sm text-sage">Saved.</span>
         )}
       </div>
     </form>

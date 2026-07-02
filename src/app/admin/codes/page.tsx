@@ -56,7 +56,7 @@ export default async function AdminCodesPage() {
     <div className="max-w-3xl">
       {/* Header */}
       <div className="mb-8">
-        <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-forest mb-2">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-sage mb-2">
           QR Onboarding
         </p>
         <h1 className="font-display font-bold text-bone text-3xl">
@@ -110,7 +110,7 @@ export default async function AdminCodesPage() {
               </div>
 
               <div className="border-t border-bone/10 pt-4">
-                <p className="text-xs text-bone/40 uppercase tracking-widest mb-3">
+                <p className="text-xs text-bone/60 uppercase tracking-widest mb-3">
                   Rotate code
                 </p>
                 <GenerateCodeForm mode="rotate" defaultLabel={rotateLabel} />
@@ -137,16 +137,16 @@ export default async function AdminCodesPage() {
             <table className="w-full min-w-[480px] text-sm">
               <thead>
                 <tr className="border-b border-bone/10">
-                  <th className="text-left px-4 py-2 text-bone/40 font-normal text-xs">
+                  <th className="text-left px-4 py-2 text-bone/60 font-normal text-xs">
                     Label
                   </th>
-                  <th className="text-left px-4 py-2 text-bone/40 font-normal text-xs">
+                  <th className="text-left px-4 py-2 text-bone/60 font-normal text-xs">
                     Code
                   </th>
-                  <th className="text-left px-4 py-2 text-bone/40 font-normal text-xs">
+                  <th className="text-left px-4 py-2 text-bone/60 font-normal text-xs">
                     Created
                   </th>
-                  <th className="text-left px-4 py-2 text-bone/40 font-normal text-xs">
+                  <th className="text-left px-4 py-2 text-bone/60 font-normal text-xs">
                     Rotated
                   </th>
                 </tr>

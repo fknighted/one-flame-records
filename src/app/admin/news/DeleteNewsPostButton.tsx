@@ -20,7 +20,7 @@ export default function DeleteNewsPostButton({ id, title }: { id: string; title:
           }
         });
       }}
-      className="text-xs text-bone/25 hover:text-red-400 transition-colors disabled:opacity-50"
+      className="text-xs text-bone/60 hover:text-red-400 transition-colors disabled:opacity-50"
       title="Delete post"
     >
       {pending ? "…" : "×"}

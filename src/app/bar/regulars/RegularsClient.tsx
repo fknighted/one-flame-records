@@ -9,26 +9,26 @@ function AddForm() {
   const [state, action, pending] = useActionState(createRegular, null);
   return (
     <form action={action} className="border border-bone/10 rounded-lg p-4 space-y-3">
-      <p className="text-xs font-semibold text-bone/40 uppercase tracking-wider">Add Regular</p>
-      {state?.error && <p className="text-sm text-oxblood">{state.error}</p>}
+      <p className="text-xs font-semibold text-bone/60 uppercase tracking-wider">Add Regular</p>
+      {state?.error && <p className="text-sm text-rose">{state.error}</p>}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <input
           name="name"
           required
           placeholder="Name *"
-          className="bg-bone/5 border border-bone/15 rounded-lg px-3 py-2 text-bone placeholder:text-bone/25 text-sm focus:outline-none focus:border-ochre/50"
+          className="bg-bone/5 border border-bone/15 rounded-lg px-3 py-2 text-bone placeholder:text-bone/60 text-sm focus:outline-none focus:border-ochre/50"
         />
         <input
           name="phone"
           type="tel"
           placeholder="Phone (optional)"
-          className="bg-bone/5 border border-bone/15 rounded-lg px-3 py-2 text-bone placeholder:text-bone/25 text-sm focus:outline-none focus:border-ochre/50"
+          className="bg-bone/5 border border-bone/15 rounded-lg px-3 py-2 text-bone placeholder:text-bone/60 text-sm focus:outline-none focus:border-ochre/50"
         />
       </div>
       <input
         name="notes"
         placeholder="Notes (optional — e.g. usual order, seat preference)"
-        className="w-full bg-bone/5 border border-bone/15 rounded-lg px-3 py-2 text-bone placeholder:text-bone/25 text-sm focus:outline-none focus:border-ochre/50"
+        className="w-full bg-bone/5 border border-bone/15 rounded-lg px-3 py-2 text-bone placeholder:text-bone/60 text-sm focus:outline-none focus:border-ochre/50"
       />
       <button
         type="submit"
@@ -58,7 +58,7 @@ function RegularRow({ regular }: { regular: Regular }) {
       <tr>
         <td colSpan={4} className="px-4 py-3">
           <form action={formAction} className="space-y-2">
-            {state?.error && <p className="text-sm text-oxblood">{state.error}</p>}
+            {state?.error && <p className="text-sm text-rose">{state.error}</p>}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
               <input
                 name="name"
@@ -91,7 +91,7 @@ function RegularRow({ regular }: { regular: Regular }) {
               <button
                 type="button"
                 onClick={() => setEditing(false)}
-                className="text-xs text-bone/40 hover:text-bone transition-colors px-2"
+                className="text-xs text-bone/60 hover:text-bone transition-colors px-2"
               >
                 Cancel
               </button>
@@ -106,7 +106,7 @@ function RegularRow({ regular }: { regular: Regular }) {
     <tr className="hover:bg-bone/3 transition-colors">
       <td className="px-4 py-3 text-bone font-medium">{regular.name}</td>
       <td className="px-4 py-3 text-bone/50 text-sm">{regular.phone ?? "—"}</td>
-      <td className="px-4 py-3 text-bone/40 text-sm">{regular.notes ?? "—"}</td>
+      <td className="px-4 py-3 text-bone/60 text-sm">{regular.notes ?? "—"}</td>
       <td className="px-4 py-3 text-right">
         <span className="inline-flex items-center gap-3">
           <button
@@ -127,11 +127,11 @@ function RegularRow({ regular }: { regular: Regular }) {
               });
             }}
             disabled={deletePending}
-            className="text-xs text-oxblood/40 hover:text-oxblood transition-colors disabled:opacity-50"
+            className="text-xs text-rose/40 hover:text-rose transition-colors disabled:opacity-50"
           >
             {deletePending ? "…" : "Remove"}
           </button>
-          {deleteError && <span className="text-xs text-oxblood">{deleteError}</span>}
+          {deleteError && <span className="text-xs text-rose">{deleteError}</span>}
         </span>
       </td>
     </tr>
@@ -144,15 +144,15 @@ export default function RegularsClient({ regulars }: { regulars: Regular[] }) {
       <AddForm />
 
       {regulars.length === 0 ? (
-        <p className="text-bone/30 text-sm text-center py-8">No regulars yet — add the first one above.</p>
+        <p className="text-bone/50 text-sm text-center py-8">No regulars yet — add the first one above.</p>
       ) : (
         <div className="border border-bone/10 rounded-lg overflow-x-auto">
           <table className="w-full min-w-[500px] text-sm">
             <thead className="border-b border-bone/10 bg-bone/3">
               <tr>
-                <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/40">Name</th>
-                <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/40">Phone</th>
-                <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/40">Notes</th>
+                <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Name</th>
+                <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Phone</th>
+                <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Notes</th>
                 <th className="px-4 py-3" />
               </tr>
             </thead>

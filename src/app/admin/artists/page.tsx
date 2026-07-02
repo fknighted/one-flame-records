@@ -5,8 +5,8 @@ import { activateArtist } from "./actions";
 import DeleteArtistButton from "./DeleteArtistButton";
 
 const STATUS_STYLES: Record<string, string> = {
-  active:   "bg-forest/20 text-forest border border-forest/25",
-  inactive: "bg-bone/10 text-bone/40 border border-bone/15",
+  active:   "bg-forest/20 text-sage border border-forest/25",
+  inactive: "bg-bone/10 text-bone/60 border border-bone/15",
   pending:  "bg-ochre/15 text-ochre border border-ochre/25",
 };
 
@@ -70,7 +70,7 @@ export default async function AdminArtistsPage({
       {/* Header */}
       <div className="flex items-end justify-between gap-4">
         <div>
-          <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-forest mb-2">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-sage mb-2">
             Catalog
           </p>
           <h1 className="font-display font-bold text-bone text-3xl">Artists</h1>
@@ -105,7 +105,7 @@ export default async function AdminArtistsPage({
 
       {/* Artist grid */}
       {(artists ?? []).length === 0 ? (
-        <div className="border border-bone/10 rounded-lg p-12 text-center text-bone/30 text-sm">
+        <div className="border border-bone/10 rounded-lg p-12 text-center text-bone/50 text-sm">
           {filterStatus === "all" ? (
             <>No artists yet. <Link href="/admin/artists/new" className="underline hover:text-bone/60">Add the first one.</Link></>
           ) : (
@@ -164,7 +164,7 @@ export default async function AdminArtistsPage({
                   <div>
                     <p className="font-display font-bold text-bone text-lg leading-tight">{artist.stage_name}</p>
                     {artist.hometown && (
-                      <p className="text-xs text-bone/40 mt-0.5">{artist.hometown}</p>
+                      <p className="text-xs text-bone/60 mt-0.5">{artist.hometown}</p>
                     )}
                   </div>
 
@@ -179,7 +179,7 @@ export default async function AdminArtistsPage({
                   )}
 
                   {/* Counts */}
-                  <div className="flex gap-4 text-xs text-bone/35">
+                  <div className="flex gap-4 text-xs text-bone/52">
                     <span>{assetCount} asset{assetCount !== 1 ? "s" : ""}</span>
                     <span>{jobCount} video job{jobCount !== 1 ? "s" : ""}</span>
                   </div>
@@ -188,22 +188,22 @@ export default async function AdminArtistsPage({
                   <div className="flex items-center gap-3 pt-1 border-t border-bone/8">
                     {artist.status === "pending" && (
                       <form action={activateWithId} className="inline">
-                        <button type="submit" className="text-xs text-forest hover:text-forest/70 transition-colors">
+                        <button type="submit" className="text-xs text-sage hover:text-sage/70 transition-colors">
                           Activate
                         </button>
                       </form>
                     )}
-                    <Link href={`/admin/artists/${artist.id}/assets`} className="text-xs text-bone/40 hover:text-ochre transition-colors">
+                    <Link href={`/admin/artists/${artist.id}/assets`} className="text-xs text-bone/60 hover:text-ochre transition-colors">
                       Assets
                     </Link>
-                    <Link href={`/admin/artists/${artist.id}/edit`} className="text-xs text-bone/40 hover:text-ochre transition-colors">
+                    <Link href={`/admin/artists/${artist.id}/edit`} className="text-xs text-bone/60 hover:text-ochre transition-colors">
                       Edit
                     </Link>
                     <a
                       href={`/artists/${artist.slug}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-xs text-bone/30 hover:text-bone/60 transition-colors"
+                      className="text-xs text-bone/50 hover:text-bone/60 transition-colors"
                       title="View public profile"
                     >
                       ↗
@@ -211,7 +211,7 @@ export default async function AdminArtistsPage({
                     <DeleteArtistButton
                       id={artist.id}
                       name={artist.stage_name}
-                      className="ml-auto text-xs text-bone/20 hover:text-red-400 transition-colors disabled:opacity-50"
+                      className="ml-auto text-xs text-bone/52 hover:text-red-400 transition-colors disabled:opacity-50"
                     />
                   </div>
                 </div>

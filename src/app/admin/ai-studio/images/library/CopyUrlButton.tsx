@@ -11,7 +11,7 @@ export default function CopyUrlButton({ url }: { url: string }) {
     });
   }
   return (
-    <button type="button" onClick={handleCopy} className="text-xs text-bone/40 hover:text-ochre transition-colors">
+    <button type="button" onClick={handleCopy} className="text-xs text-bone/60 hover:text-ochre transition-colors">
       {copied ? "✓ Copied" : "Copy URL"}
     </button>
   );

@@ -24,7 +24,7 @@ export default async function AdminNewsPage() {
       {posts && posts.length > 0 ? (
         <div className="overflow-x-auto rounded-lg border border-bone/10">
           <table className="w-full text-sm text-bone/80">
-            <thead className="border-b border-bone/10 text-[11px] uppercase tracking-wider text-bone/40">
+            <thead className="border-b border-bone/10 text-[11px] uppercase tracking-wider text-bone/60">
               <tr>
                 <th className="px-4 py-3 text-left">Title</th>
                 <th className="px-4 py-3 text-left">Category</th>
@@ -40,11 +40,11 @@ export default async function AdminNewsPage() {
                   <td className="px-4 py-3 capitalize text-bone/60">{post.category}</td>
                   <td className="px-4 py-3">
                     {post.is_published ? (
-                      <span className="inline-block rounded-full bg-forest/30 px-2 py-0.5 text-xs text-forest">
+                      <span className="inline-block rounded-full bg-forest/30 px-2 py-0.5 text-xs text-sage">
                         Published
                       </span>
                     ) : (
-                      <span className="inline-block rounded-full bg-bone/10 px-2 py-0.5 text-xs text-bone/40">
+                      <span className="inline-block rounded-full bg-bone/10 px-2 py-0.5 text-xs text-bone/60">
                         Draft
                       </span>
                     )}
@@ -61,7 +61,7 @@ export default async function AdminNewsPage() {
                   <td className="px-4 py-3 text-right space-x-3">
                     <Link
                       href={`/admin/news/${post.id}/edit`}
-                      className="text-xs text-oxblood hover:text-ochre transition-colors"
+                      className="text-xs text-rose hover:text-ochre transition-colors"
                     >
                       Edit
                     </Link>
@@ -73,7 +73,7 @@ export default async function AdminNewsPage() {
           </table>
         </div>
       ) : (
-        <p className="text-bone/40 text-sm py-10 text-center">No posts yet.</p>
+        <p className="text-bone/60 text-sm py-10 text-center">No posts yet.</p>
       )}
     </div>
   );

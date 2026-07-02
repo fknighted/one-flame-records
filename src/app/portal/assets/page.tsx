@@ -73,7 +73,7 @@ export default async function PortalAssetsPage() {
     <div className="max-w-3xl">
       <div className="mb-8 flex items-start justify-between">
         <div>
-          <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-forest mb-2">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-sage mb-2">
             Artist Portal
           </p>
           <h1 className="font-display font-bold text-bone text-3xl">Assets</h1>
@@ -89,7 +89,7 @@ export default async function PortalAssetsPage() {
 
       {assetsWithUrls.length === 0 ? (
         <div className="rounded-lg border border-bone/10 p-10 text-center">
-          <p className="text-bone/40 text-sm">No assets uploaded yet.</p>
+          <p className="text-bone/60 text-sm">No assets uploaded yet.</p>
           <Link
             href="/portal/assets/new"
             className="mt-4 inline-block rounded bg-ochre px-4 py-2 text-sm font-semibold text-ink hover:bg-ochre/90 transition-colors"
@@ -102,19 +102,19 @@ export default async function PortalAssetsPage() {
           <table className="w-full min-w-[600px] text-sm">
             <thead>
               <tr className="border-b border-bone/10 bg-bone/5">
-                <th className="text-left px-4 py-3 text-bone/40 font-medium text-xs uppercase tracking-wider">
+                <th className="text-left px-4 py-3 text-bone/60 font-medium text-xs uppercase tracking-wider">
                   Kind
                 </th>
-                <th className="text-left px-4 py-3 text-bone/40 font-medium text-xs uppercase tracking-wider">
+                <th className="text-left px-4 py-3 text-bone/60 font-medium text-xs uppercase tracking-wider">
                   Title
                 </th>
-                <th className="text-left px-4 py-3 text-bone/40 font-medium text-xs uppercase tracking-wider">
+                <th className="text-left px-4 py-3 text-bone/60 font-medium text-xs uppercase tracking-wider">
                   Duration
                 </th>
-                <th className="text-left px-4 py-3 text-bone/40 font-medium text-xs uppercase tracking-wider">
+                <th className="text-left px-4 py-3 text-bone/60 font-medium text-xs uppercase tracking-wider">
                   Uploaded
                 </th>
-                <th className="text-left px-4 py-3 text-bone/40 font-medium text-xs uppercase tracking-wider">
+                <th className="text-left px-4 py-3 text-bone/60 font-medium text-xs uppercase tracking-wider">
                   Visibility
                 </th>
                 <th className="px-4 py-3" />
@@ -129,7 +129,7 @@ export default async function PortalAssetsPage() {
                     }`}
                   >
                     <td className="px-4 py-3">
-                      <span className="rounded-full bg-forest/20 text-forest text-xs px-2 py-0.5 font-medium">
+                      <span className="rounded-full bg-forest/20 text-sage text-xs px-2 py-0.5 font-medium">
                         {KIND_LABELS[asset.kind] ?? asset.kind}
                       </span>
                     </td>
@@ -147,8 +147,8 @@ export default async function PortalAssetsPage() {
                           title={asset.is_public ? "Visible on your public page — click to hide" : "Click to show on your public page"}
                           className={`text-xs font-medium px-2 py-0.5 rounded transition-colors ${
                             asset.is_public
-                              ? "bg-forest/20 text-forest hover:bg-forest/30"
-                              : "bg-bone/10 text-bone/30 hover:bg-bone/20 hover:text-bone/60"
+                              ? "bg-forest/20 text-sage hover:bg-forest/30"
+                              : "bg-bone/10 text-bone/50 hover:bg-bone/20 hover:text-bone/60"
                           }`}
                         >
                           {asset.is_public ? "Public" : "Private"}
@@ -158,7 +158,7 @@ export default async function PortalAssetsPage() {
                     <td className="px-4 py-3 text-right space-x-3 whitespace-nowrap">
                       <Link
                         href={`/portal/assets/${asset.id}/edit`}
-                        className="text-xs text-bone/40 hover:text-bone transition-colors"
+                        className="text-xs text-bone/60 hover:text-bone transition-colors"
                       >
                         Edit
                       </Link>
@@ -171,7 +171,7 @@ export default async function PortalAssetsPage() {
                           Download
                         </a>
                       ) : (
-                        <span className="text-bone/20 text-xs">—</span>
+                        <span className="text-bone/52 text-xs">—</span>
                       )}
                     </td>
                   </tr>

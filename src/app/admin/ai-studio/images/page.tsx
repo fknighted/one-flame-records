@@ -16,13 +16,13 @@ export default async function AIImagesPage() {
     <div className="space-y-6 max-w-2xl">
       <div>
         <div className="flex items-center gap-2 mb-4">
-          <Link href="/admin/ai-studio" className="text-xs text-bone/30 hover:text-bone/60 transition-colors">
+          <Link href="/admin/ai-studio" className="text-xs text-bone/50 hover:text-bone/60 transition-colors">
             AI Studio
           </Link>
-          <span className="text-bone/20 text-xs">/</span>
+          <span className="text-bone/52 text-xs">/</span>
           <span className="text-xs text-bone/60">Images</span>
         </div>
-        <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-forest mb-1">DALL-E 3</p>
+        <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-sage mb-1">DALL-E 3</p>
         <h1 className="font-display font-bold text-bone text-2xl">Image Generator</h1>
         <p className="mt-1 text-sm text-bone/50">
           Generate artist photos, release covers, and promotional images. Images are saved to your media library.

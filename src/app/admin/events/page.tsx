@@ -40,17 +40,17 @@ export default async function EventsPage() {
               {TYPE_LABELS[event.type] ?? event.type}
             </span>
             {!event.is_public && (
-              <span className="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full bg-oxblood/15 text-oxblood">
+              <span className="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full bg-oxblood/15 text-rose">
                 Private
               </span>
             )}
           </div>
-          <p className="text-xs text-bone/40">{formatDate(event.event_date)}</p>
+          <p className="text-xs text-bone/60">{formatDate(event.event_date)}</p>
           {event.location !== "Flames Lounge, Montego Bay" && (
-            <p className="text-xs text-bone/30 mt-0.5">{event.location}</p>
+            <p className="text-xs text-bone/50 mt-0.5">{event.location}</p>
           )}
         </div>
-        <Link href={`/admin/events/${event.id}/edit`} className="shrink-0 text-xs text-bone/40 hover:text-ochre transition-colors">
+        <Link href={`/admin/events/${event.id}/edit`} className="shrink-0 text-xs text-bone/60 hover:text-ochre transition-colors">
           Edit →
         </Link>
       </div>
@@ -61,7 +61,7 @@ export default async function EventsPage() {
     <div className="space-y-10 max-w-3xl">
       <div className="flex items-start justify-between gap-4">
         <div>
-          <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-forest mb-2">Community</p>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-sage mb-2">Community</p>
           <h1 className="font-display font-bold text-bone text-3xl">Events</h1>
           <div className="mt-3 h-px w-16 bg-bone/20" />
         </div>
@@ -74,12 +74,12 @@ export default async function EventsPage() {
       </div>
 
       {(events ?? []).length === 0 ? (
-        <p className="text-bone/40 text-sm">No events yet.</p>
+        <p className="text-bone/60 text-sm">No events yet.</p>
       ) : (
         <div className="space-y-8">
           {upcoming.length > 0 && (
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-bone/35 mb-3">Upcoming</p>
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-bone/52 mb-3">Upcoming</p>
               <div className="rounded-lg border border-bone/10 overflow-hidden">
                 {upcoming.map((event, i) => <EventRow key={event.id} event={event} i={i} />)}
               </div>
@@ -87,7 +87,7 @@ export default async function EventsPage() {
           )}
           {past.length > 0 && (
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-bone/35 mb-3">Past</p>
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-bone/52 mb-3">Past</p>
               <div className="rounded-lg border border-bone/10 overflow-hidden opacity-60">
                 {past.map((event, i) => <EventRow key={event.id} event={event} i={i} />)}
               </div>

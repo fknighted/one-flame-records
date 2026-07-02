@@ -48,10 +48,10 @@ export default async function InventoryPage() {
     <div className="space-y-8 max-w-4xl">
       <div className="flex items-start justify-between">
         <div>
-          <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-forest mb-1">Bar</p>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-sage mb-1">Bar</p>
           <h1 className="font-display font-bold text-bone text-3xl">Inventory</h1>
           <div className="mt-3 h-px w-16 bg-bone/20" />
-          <p className="mt-3 text-sm text-bone/40">Set stock counts. Items at or below their reorder level (default 5) highlight in red.</p>
+          <p className="mt-3 text-sm text-bone/60">Set stock counts. Items at or below their reorder level (default 5) highlight in red.</p>
         </div>
         <Link
           href="/admin/bar/items/new"
@@ -63,18 +63,18 @@ export default async function InventoryPage() {
 
       {CATEGORY_ORDER.filter((cat) => grouped[cat]?.length).map((cat) => (
         <section key={cat} className="space-y-3">
-          <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-bone/40">
+          <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-bone/60">
             {CATEGORY_LABELS[cat] ?? cat}
           </h2>
           <div className="border border-bone/10 rounded-lg overflow-x-auto">
             <table className="w-full min-w-[360px] text-sm">
               <thead className="border-b border-bone/10 bg-bone/3">
                 <tr>
-                  <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/40">Item</th>
-                  <th className="hidden sm:table-cell text-right px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/40">Price</th>
-                  <th className="hidden sm:table-cell text-right px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/40">Sold Today</th>
-                  <th className="text-right px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/40">Stock</th>
-                  <th className="text-right px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/40">Set</th>
+                  <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Item</th>
+                  <th className="hidden sm:table-cell text-right px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Price</th>
+                  <th className="hidden sm:table-cell text-right px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Sold Today</th>
+                  <th className="text-right px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Stock</th>
+                  <th className="text-right px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Set</th>
                   <th scope="col" className="sr-only px-4 py-3">Actions</th>
                 </tr>
               </thead>
@@ -89,16 +89,16 @@ export default async function InventoryPage() {
                       <td className="px-4 py-3 text-bone font-medium">
                         {item.name}
                         {!item.is_active && (
-                          <span className="ml-2 text-[10px] font-semibold uppercase tracking-wider text-bone/40 border border-bone/20 rounded px-1">off</span>
+                          <span className="ml-2 text-[10px] font-semibold uppercase tracking-wider text-bone/60 border border-bone/20 rounded px-1">off</span>
                         )}
                       </td>
                       <td className="hidden sm:table-cell px-4 py-3 text-right font-mono text-bone/60">{formatCents(item.price_cents)}</td>
                       <td className="hidden sm:table-cell px-4 py-3 text-right font-mono text-bone/60">
-                        {settledToday > 0 ? settledToday : <span className="text-bone/25">—</span>}
+                        {settledToday > 0 ? settledToday : <span className="text-bone/60">—</span>}
                       </td>
                       <td className="px-4 py-3 text-right">
                         {stock === null ? (
-                          <span className="text-bone/25 font-mono">—</span>
+                          <span className="text-bone/60 font-mono">—</span>
                         ) : (
                           <span className={`font-mono font-bold ${low ? "text-red-400" : "text-bone"}`}>
                             {stock}
@@ -128,7 +128,7 @@ export default async function InventoryPage() {
                         <span className="inline-flex items-center gap-3">
                           <Link
                             href={`/admin/bar/items/${item.id}/edit`}
-                            className="text-xs text-bone/40 hover:text-bone transition-colors"
+                            className="text-xs text-bone/60 hover:text-bone transition-colors"
                           >
                             Edit
                           </Link>

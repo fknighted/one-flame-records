@@ -9,6 +9,10 @@
   --color-bone:    #F5EDD8;
   --color-ochre:   #B8893B;
 
+  /* Ink-background readable variants — same hue, lifted for dark-bg contrast */
+  --color-rose:    #E0907F;  /* oxblood brightened for ink bg */
+  --color-sage:    #82A57A;  /* forest brightened for ink bg */
+
   /* Font stack */
   --font-display: var(--font-fraunces);
   --font-sans:    var(--font-inter);

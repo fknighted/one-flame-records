@@ -13,7 +13,7 @@ const PURPOSES = [
 ] as const;
 type Purpose = typeof PURPOSES[number]["value"];
 
-const INPUT  = "w-full bg-bone/5 border border-bone/15 rounded px-3 py-2 text-sm text-bone placeholder:text-bone/30 focus:outline-none focus:border-ochre/60";
+const INPUT  = "w-full bg-bone/5 border border-bone/15 rounded px-3 py-2 text-sm text-bone placeholder:text-bone/50 focus:outline-none focus:border-ochre/60";
 const LABEL  = "block text-xs text-bone/50 mb-1.5";
 
 export default function CopyGeneratorForm({ artists }: { artists: Artist[] }) {
@@ -130,14 +130,14 @@ export default function CopyGeneratorForm({ artists }: { artists: Artist[] }) {
       </button>
 
       {error && (
-        <p className="rounded bg-oxblood/20 border border-oxblood/40 px-4 py-2 text-sm text-oxblood">{error}</p>
+        <p className="rounded bg-oxblood/20 border border-oxblood/40 px-4 py-2 text-sm text-rose">{error}</p>
       )}
 
       {/* Output */}
       {output && (
         <div className="space-y-3 pt-4 border-t border-bone/10">
           <div className="flex items-center justify-between">
-            <p className="text-xs text-bone/40 uppercase tracking-wider">Output</p>
+            <p className="text-xs text-bone/60 uppercase tracking-wider">Output</p>
             <button
               type="button"
               onClick={handleCopy}
@@ -153,7 +153,7 @@ export default function CopyGeneratorForm({ artists }: { artists: Artist[] }) {
             rows={12}
             className={`${INPUT} font-sans leading-relaxed`}
           />
-          <p className="text-[11px] text-bone/25">Output is editable — refine before using.</p>
+          <p className="text-[11px] text-bone/60">Output is editable — refine before using.</p>
         </div>
       )}
     </div>

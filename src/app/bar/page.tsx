@@ -45,22 +45,22 @@ export default async function BarDashboardPage() {
       {/* Today's stats */}
       <div className="grid grid-cols-3 gap-3">
         <div className="border border-bone/10 rounded-lg p-3">
-          <p className="text-[10px] text-bone/40 uppercase tracking-wider mb-1">Today&apos;s Sales</p>
+          <p className="text-[10px] text-bone/60 uppercase tracking-wider mb-1">Today&apos;s Sales</p>
           <p className="text-xl font-display font-bold text-bone">{formatCents(todayRevenue)}</p>
         </div>
         <div className="border border-bone/10 rounded-lg p-3">
-          <p className="text-[10px] text-bone/40 uppercase tracking-wider mb-1">Open Running</p>
+          <p className="text-[10px] text-bone/60 uppercase tracking-wider mb-1">Open Running</p>
           <p className="text-xl font-display font-bold text-ochre">{formatCents(openRunning)}</p>
         </div>
         <div className="border border-bone/10 rounded-lg p-3">
-          <p className="text-[10px] text-bone/40 uppercase tracking-wider mb-1">Tabs Closed</p>
+          <p className="text-[10px] text-bone/60 uppercase tracking-wider mb-1">Tabs Closed</p>
           <p className="text-xl font-display font-bold text-bone">{closedTabs.length}</p>
         </div>
       </div>
 
       {/* Open tabs */}
       {!(openTabs ?? []).length ? (
-        <div className="border border-bone/10 rounded-xl p-10 text-center text-bone/30">
+        <div className="border border-bone/10 rounded-xl p-10 text-center text-bone/50">
           <p className="text-lg mb-2">No open tabs</p>
           <Link href="/bar/tabs/new" className="text-sm text-ochre hover:underline">Open the first one</Link>
         </div>
@@ -74,9 +74,9 @@ export default async function BarDashboardPage() {
             >
               <div className="flex items-start justify-between mb-3">
                 <h2 className="font-display font-bold text-bone text-lg leading-tight">{tab.name}</h2>
-                <span className="text-xs text-bone/40 mt-1">{elapsed(tab.created_at)}</span>
+                <span className="text-xs text-bone/60 mt-1">{elapsed(tab.created_at)}</span>
               </div>
-              {tab.notes && <p className="text-xs text-bone/40 mb-3">{tab.notes}</p>}
+              {tab.notes && <p className="text-xs text-bone/60 mb-3">{tab.notes}</p>}
               <p className="text-2xl font-mono text-ochre">{formatCents(tab.total_cents ?? 0)}</p>
             </Link>
           ))}
@@ -86,15 +86,15 @@ export default async function BarDashboardPage() {
       {/* Today's settled tabs — closed + voided */}
       {(closedTabs.length > 0 || voidedTabs.length > 0) && (
         <section className="space-y-3">
-          <h2 className="text-xs font-semibold uppercase tracking-widest text-bone/35">Settled Today</h2>
+          <h2 className="text-xs font-semibold uppercase tracking-widest text-bone/52">Settled Today</h2>
           <div className="border border-bone/10 rounded-lg overflow-x-auto">
             <table className="w-full min-w-[400px] text-sm">
               <thead className="border-b border-bone/10 bg-bone/3">
                 <tr>
-                  <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/40">Customer</th>
-                  <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/40">Opened</th>
-                  <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/40">Closed</th>
-                  <th className="text-right px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/40">Total</th>
+                  <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Customer</th>
+                  <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Opened</th>
+                  <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Closed</th>
+                  <th className="text-right px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Total</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-bone/10">
@@ -111,7 +111,7 @@ export default async function BarDashboardPage() {
                       </td>
                       <td className="px-4 py-3 text-right font-mono text-bone">
                         {tab.status === "voided"
-                          ? <span className="text-bone/30">voided</span>
+                          ? <span className="text-bone/50">voided</span>
                           : formatCents(tab.total_cents ?? 0)}
                       </td>
                     </tr>

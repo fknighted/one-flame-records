@@ -17,7 +17,7 @@ export default async function SubscribersPage() {
   return (
     <div className="space-y-10 max-w-3xl">
       <div>
-        <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-forest mb-2">Community</p>
+        <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-sage mb-2">Community</p>
         <h1 className="font-display font-bold text-bone text-3xl">Subscribers</h1>
         <div className="mt-3 h-px w-16 bg-bone/20" />
       </div>
@@ -30,7 +30,7 @@ export default async function SubscribersPage() {
           { label: "Unsubscribed", value: (total ?? 0) - (active ?? 0) },
         ].map(({ label, value }) => (
           <div key={label} className="rounded-lg border border-bone/10 p-4">
-            <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-bone/35 mb-1">{label}</p>
+            <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-bone/52 mb-1">{label}</p>
             <p className="font-display font-bold text-bone text-2xl">{value}</p>
           </div>
         ))}
@@ -55,11 +55,11 @@ export default async function SubscribersPage() {
                 <span className="text-bone/80 font-mono text-xs">{s.email}</span>
                 <div className="flex items-center gap-4 shrink-0">
                   <span className={`text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full ${
-                    s.status === "active" ? "bg-forest/15 text-forest" : "bg-bone/10 text-bone/40"
+                    s.status === "active" ? "bg-forest/15 text-sage" : "bg-bone/10 text-bone/60"
                   }`}>
                     {s.status}
                   </span>
-                  <span className="text-bone/30 text-xs">{formatDate(s.created_at)}</span>
+                  <span className="text-bone/50 text-xs">{formatDate(s.created_at)}</span>
                 </div>
               </div>
             ))}

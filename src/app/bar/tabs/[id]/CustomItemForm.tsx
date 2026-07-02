@@ -16,14 +16,14 @@ export default function CustomItemForm({ tabId }: { tabId: string }) {
     <form ref={formRef} action={action} className="space-y-2">
       <input type="hidden" name="tab_id" value={tabId} />
       {state?.error && (
-        <p className="text-xs text-oxblood">{state.error}</p>
+        <p className="text-xs text-rose">{state.error}</p>
       )}
       <div className="flex gap-2">
         <input
           name="name"
           type="text"
           placeholder="Description (optional)"
-          className="flex-1 min-w-0 bg-bone/5 border border-bone/15 rounded px-3 py-2 text-bone placeholder:text-bone/25 text-sm focus:outline-none focus:border-ochre/50"
+          className="flex-1 min-w-0 bg-bone/5 border border-bone/15 rounded px-3 py-2 text-bone placeholder:text-bone/60 text-sm focus:outline-none focus:border-ochre/50"
         />
         <input
           name="price"
@@ -32,7 +32,7 @@ export default function CustomItemForm({ tabId }: { tabId: string }) {
           step="0.01"
           placeholder="J$0.00"
           required
-          className="w-24 bg-bone/5 border border-bone/15 rounded px-3 py-2 text-bone placeholder:text-bone/25 text-sm focus:outline-none focus:border-ochre/50 text-right"
+          className="w-24 bg-bone/5 border border-bone/15 rounded px-3 py-2 text-bone placeholder:text-bone/60 text-sm focus:outline-none focus:border-ochre/50 text-right"
         />
         <button
           type="submit"

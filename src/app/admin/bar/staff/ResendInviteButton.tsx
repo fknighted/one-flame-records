@@ -20,7 +20,7 @@ export default function ResendInviteButton({ email }: { email: string }) {
         {pending ? "Sending…" : "Resend invite"}
       </button>
       {state?.error && (
-        <p className="text-[10px] text-oxblood">{state.error}</p>
+        <p className="text-[10px] text-rose">{state.error}</p>
       )}
     </form>
   );

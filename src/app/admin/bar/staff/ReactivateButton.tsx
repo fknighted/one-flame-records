@@ -13,7 +13,7 @@ export default function ReactivateButton({
     <form action={reactivateBartender.bind(null, userId)}>
       <button
         type="submit"
-        className="text-xs text-forest/70 hover:text-forest transition-colors"
+        className="text-xs text-sage/70 hover:text-sage transition-colors"
         onClick={(e) => {
           if (!confirm(`Reactivate ${email}?`)) e.preventDefault();
         }}

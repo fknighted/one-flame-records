@@ -5,7 +5,7 @@ import { adjustBalance, toggleMemberStatus } from "./actions";
 import type { Tables } from "@/types/supabase";
 import { useToast } from "@/components/ToastProvider";
 
-const INPUT = "bg-bone/5 border border-bone/15 rounded px-3 py-2 text-sm text-bone placeholder:text-bone/30 focus:outline-none focus:border-ochre/60";
+const INPUT = "bg-bone/5 border border-bone/15 rounded px-3 py-2 text-sm text-bone placeholder:text-bone/50 focus:outline-none focus:border-ochre/60";
 
 export default function MemberAdminActions({ member }: { member: Tables<"gamer_members"> }) {
   const [adjustState, adjustAction, adjustPending] = useActionState(adjustBalance, null);
@@ -65,8 +65,8 @@ export default function MemberAdminActions({ member }: { member: Tables<"gamer_m
             className={[
               "text-sm px-3 py-2 rounded transition-colors disabled:opacity-50",
               member.status === "active"
-                ? "bg-oxblood/20 text-oxblood hover:bg-oxblood/30"
-                : "bg-forest/20 text-forest hover:bg-forest/30",
+                ? "bg-oxblood/20 text-rose hover:bg-oxblood/30"
+                : "bg-forest/20 text-sage hover:bg-forest/30",
             ].join(" ")}
           >
             {statusPending ? "Saving…" : member.status === "active" ? "Suspend Member" : "Reactivate Member"}

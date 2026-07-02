@@ -67,13 +67,13 @@ export default async function AdminArtistAssetsPage({
         <div className="flex items-center justify-between">
           <Link
             href={`/admin/artists/${id}/edit`}
-            className="text-xs text-bone/40 hover:text-ochre transition-colors"
+            className="text-xs text-bone/60 hover:text-ochre transition-colors"
           >
             ← {artist.stage_name}
           </Link>
           <Link
             href={`/admin/artists/${id}/videos`}
-            className="text-xs text-bone/40 hover:text-ochre transition-colors"
+            className="text-xs text-bone/60 hover:text-ochre transition-colors"
           >
             Generated Videos →
           </Link>
@@ -85,11 +85,11 @@ export default async function AdminArtistAssetsPage({
 
       {/* Asset list */}
       <div>
-        <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-bone/40 mb-3">
+        <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-bone/60 mb-3">
           Library ({rows.length})
         </h2>
         {rows.length === 0 ? (
-          <div className="border border-bone/10 rounded-lg p-8 text-center text-bone/30 text-sm">
+          <div className="border border-bone/10 rounded-lg p-8 text-center text-bone/50 text-sm">
             No assets yet. Upload the first one below.
           </div>
         ) : (
@@ -97,12 +97,12 @@ export default async function AdminArtistAssetsPage({
             <table className="w-full min-w-[560px] text-sm">
               <thead>
                 <tr className="border-b border-bone/10 bg-bone/5">
-                  <th className="text-left px-4 py-3 text-xs font-medium text-bone/40 uppercase tracking-wider">Title</th>
-                  <th className="text-left px-4 py-3 text-xs font-medium text-bone/40 uppercase tracking-wider">Kind</th>
-                  <th className="text-left px-4 py-3 text-xs font-medium text-bone/40 uppercase tracking-wider">Size</th>
-                  <th className="text-left px-4 py-3 text-xs font-medium text-bone/40 uppercase tracking-wider">Duration</th>
-                  <th className="text-left px-4 py-3 text-xs font-medium text-bone/40 uppercase tracking-wider">Uploaded</th>
-                  <th className="text-left px-4 py-3 text-xs font-medium text-bone/40 uppercase tracking-wider">Public</th>
+                  <th className="text-left px-4 py-3 text-xs font-medium text-bone/60 uppercase tracking-wider">Title</th>
+                  <th className="text-left px-4 py-3 text-xs font-medium text-bone/60 uppercase tracking-wider">Kind</th>
+                  <th className="text-left px-4 py-3 text-xs font-medium text-bone/60 uppercase tracking-wider">Size</th>
+                  <th className="text-left px-4 py-3 text-xs font-medium text-bone/60 uppercase tracking-wider">Duration</th>
+                  <th className="text-left px-4 py-3 text-xs font-medium text-bone/60 uppercase tracking-wider">Uploaded</th>
+                  <th className="text-left px-4 py-3 text-xs font-medium text-bone/60 uppercase tracking-wider">Public</th>
                   <th className="px-4 py-3 w-10" />
                 </tr>
               </thead>
@@ -114,7 +114,7 @@ export default async function AdminArtistAssetsPage({
                       <td className="px-4 py-3">
                         <span className="text-bone font-medium">{asset.title}</span>
                         {asset.notes && (
-                          <span className="block text-bone/35 text-xs mt-0.5 truncate max-w-[240px]">
+                          <span className="block text-bone/52 text-xs mt-0.5 truncate max-w-[240px]">
                             {asset.notes}
                           </span>
                         )}
@@ -138,8 +138,8 @@ export default async function AdminArtistAssetsPage({
                             title={asset.is_public ? "Click to make private" : "Click to make public"}
                             className={`text-xs font-medium px-2 py-0.5 rounded transition-colors ${
                               asset.is_public
-                                ? "bg-forest/20 text-forest hover:bg-forest/30"
-                                : "bg-bone/10 text-bone/30 hover:bg-bone/20 hover:text-bone/60"
+                                ? "bg-forest/20 text-sage hover:bg-forest/30"
+                                : "bg-bone/10 text-bone/50 hover:bg-bone/20 hover:text-bone/60"
                             }`}
                           >
                             {asset.is_public ? "Public" : "Private"}
@@ -159,7 +159,7 @@ export default async function AdminArtistAssetsPage({
                           <form action={deleteWithId}>
                             <button
                               type="submit"
-                              className="text-xs text-bone/30 hover:text-red-400 transition-colors"
+                              className="text-xs text-bone/50 hover:text-red-400 transition-colors"
                               title="Delete asset"
                             >
                               ×
@@ -178,7 +178,7 @@ export default async function AdminArtistAssetsPage({
 
       {/* Upload form */}
       <div>
-        <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-bone/40 mb-4">
+        <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-bone/60 mb-4">
           Upload new asset
         </h2>
         <div className="border border-bone/10 rounded-lg p-6 max-w-lg">

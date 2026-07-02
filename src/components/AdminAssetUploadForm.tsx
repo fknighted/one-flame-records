@@ -72,19 +72,19 @@ export default function AdminAssetUploadForm({ artistId }: { artistId: string })
           type="text"
           required
           placeholder="Track or file name"
-          className="w-full rounded border border-bone/20 bg-ink px-3 py-2 text-sm text-bone placeholder:text-bone/30 focus:border-ochre focus:outline-none"
+          className="w-full rounded border border-bone/20 bg-ink px-3 py-2 text-sm text-bone placeholder:text-bone/50 focus:border-ochre focus:outline-none"
         />
       </div>
 
       <div>
         <label className="mb-2 block text-xs font-semibold uppercase tracking-[0.15em] text-bone/50">
-          Notes <span className="normal-case text-bone/30">(optional)</span>
+          Notes <span className="normal-case text-bone/50">(optional)</span>
         </label>
         <textarea
           name="notes"
           rows={3}
           placeholder="BPM, key, or any notes for the pipeline…"
-          className="w-full resize-none rounded border border-bone/20 bg-ink px-3 py-2 text-sm text-bone placeholder:text-bone/30 focus:border-ochre focus:outline-none"
+          className="w-full resize-none rounded border border-bone/20 bg-ink px-3 py-2 text-sm text-bone placeholder:text-bone/50 focus:border-ochre focus:outline-none"
         />
       </div>
 
@@ -99,7 +99,7 @@ export default function AdminAssetUploadForm({ artistId }: { artistId: string })
           accept={currentKind.accept}
           className="w-full cursor-pointer text-sm text-bone/70 file:mr-3 file:cursor-pointer file:rounded file:border-0 file:bg-bone/10 file:px-3 file:py-1.5 file:text-xs file:font-semibold file:text-bone hover:file:bg-bone/20"
         />
-        <p className="mt-1.5 text-xs text-bone/30">Max 10 MB</p>
+        <p className="mt-1.5 text-xs text-bone/50">Max 10 MB</p>
       </div>
 
       <div className="flex items-center gap-4 pt-2">

@@ -51,7 +51,7 @@ export default function TabControls({ tabId, total, tabName }: { tabId: string; 
         <div className="text-center space-y-1">
           <p className="text-bone font-semibold">Close tab for {tabName}?</p>
           <p className="text-2xl font-mono text-ochre">{formatCents(total)}</p>
-          <p className="text-xs text-bone/40">This cannot be undone once payment is recorded.</p>
+          <p className="text-xs text-bone/60">This cannot be undone once payment is recorded.</p>
         </div>
         <div className="flex gap-2">
           <button
@@ -120,7 +120,7 @@ export default function TabControls({ tabId, total, tabName }: { tabId: string; 
         <button
           type="button"
           onClick={() => setShowClose(false)}
-          className="w-full text-sm text-bone/40 hover:text-bone/60 transition-colors py-1"
+          className="w-full text-sm text-bone/60 hover:text-bone/60 transition-colors py-1"
         >
           Cancel
         </button>
@@ -133,7 +133,7 @@ export default function TabControls({ tabId, total, tabName }: { tabId: string; 
       <button
         type="button"
         onClick={() => setShowVoid(true)}
-        className="border border-bone/15 text-bone/40 hover:text-red-400 hover:border-red-400/30 px-3 py-2.5 rounded-lg text-sm transition-colors"
+        className="border border-bone/15 text-bone/60 hover:text-red-400 hover:border-red-400/30 px-3 py-2.5 rounded-lg text-sm transition-colors"
       >
         Void
       </button>

@@ -111,7 +111,7 @@ const STREAMING: {
 
 function StreamingIcons({ links }: { links: StreamingLinks }) {
   const active = STREAMING.filter(({ key }) => links[key]);
-  if (!active.length) return <span className="text-bone/20 text-xs">—</span>;
+  if (!active.length) return <span className="text-bone/52 text-xs">—</span>;
   return (
     <div className="flex items-center gap-2">
       {active.map(({ key, label, buildUrl, path }) => (
@@ -121,7 +121,7 @@ function StreamingIcons({ links }: { links: StreamingLinks }) {
           target="_blank"
           rel="noopener noreferrer"
           aria-label={label}
-          className="text-bone/40 hover:text-ochre transition-colors"
+          className="text-bone/60 hover:text-ochre transition-colors"
           onClick={(e) => e.stopPropagation()}
         >
           <svg width="13" height="13" viewBox="0 0 13 13" fill="currentColor" aria-hidden="true">
@@ -192,7 +192,7 @@ export default async function PortalReleasesPage({
       {/* ── Header ── */}
       <div className="flex items-end justify-between mb-6 pb-5 border-b border-bone/10">
         <div>
-          <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-forest mb-1">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-sage mb-1">
             {isAdmin ? "Label catalog" : "Your releases"}
           </p>
           <h1 className="font-display font-bold text-bone text-[2rem] sm:text-[2.5rem] leading-none tracking-[-0.018em]">
@@ -255,7 +255,7 @@ export default async function PortalReleasesPage({
         <Suspense fallback={null}>
           <ReleasesManagerFilter basePath="/portal/releases" />
         </Suspense>
-        <span className="font-mono text-[11px] text-bone/40 tracking-[0.04em] shrink-0 ml-3">
+        <span className="font-mono text-[11px] text-bone/60 tracking-[0.04em] shrink-0 ml-3">
           {filtered.length} of {releases.length}
         </span>
       </div>
@@ -272,7 +272,7 @@ export default async function PortalReleasesPage({
           (col) => (
             <span
               key={col}
-              className="font-mono text-[10px] text-bone/30 uppercase tracking-[0.16em]"
+              className="font-mono text-[10px] text-bone/50 uppercase tracking-[0.16em]"
             >
               {col}
             </span>
@@ -285,7 +285,7 @@ export default async function PortalReleasesPage({
         <div className="py-16 text-center">
           {releases.length === 0 ? (
             <>
-              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-bone/30 mb-2">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-bone/50 mb-2">
                 Empty roster
               </p>
               <p className="font-display font-bold text-bone text-2xl">
@@ -333,7 +333,7 @@ export default async function PortalReleasesPage({
                       </p>
                       <StatusPill status={release.production_status} />
                     </div>
-                    <p className="text-[11px] text-bone/40 mb-1.5">
+                    <p className="text-[11px] text-bone/60 mb-1.5">
                       {release.catalog_no && (
                         <span className="font-mono">{release.catalog_no} · </span>
                       )}
@@ -355,7 +355,7 @@ export default async function PortalReleasesPage({
                       : "grid-cols-[80px_44px_1fr_100px_130px_110px_110px]"
                   }`}
                 >
-                  <span className="font-mono text-xs text-forest tracking-[0.06em] font-medium">
+                  <span className="font-mono text-xs text-sage tracking-[0.06em] font-medium">
                     {release.catalog_no ?? "—"}
                   </span>
 
@@ -375,7 +375,7 @@ export default async function PortalReleasesPage({
                     <p className="font-display font-bold text-bone text-base leading-snug tracking-[-0.005em] group-hover:text-ochre transition-colors truncate">
                       {release.title}
                     </p>
-                    <p className="text-[11px] text-bone/30 mt-0.5">—</p>
+                    <p className="text-[11px] text-bone/50 mt-0.5">—</p>
                   </div>
 
                   {isAdmin && (

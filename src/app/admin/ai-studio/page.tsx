@@ -47,7 +47,7 @@ export default function AIStudioPage() {
   return (
     <div className="max-w-4xl space-y-8">
       <div>
-        <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-forest mb-2">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-sage mb-2">
           Admin
         </p>
         <h1 className="font-display font-bold text-bone text-3xl">AI Studio</h1>
@@ -64,11 +64,11 @@ export default function AIStudioPage() {
             href={href}
             className="group flex flex-col gap-4 rounded-lg border border-bone/10 p-6 hover:border-ochre/30 hover:bg-bone/[0.02] transition-colors"
           >
-            <div className="text-bone/40 group-hover:text-ochre transition-colors">
+            <div className="text-bone/60 group-hover:text-ochre transition-colors">
               {icon}
             </div>
             <div>
-              <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-bone/25 mb-1">{eyebrow}</p>
+              <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-bone/60 mb-1">{eyebrow}</p>
               <h2 className="font-display font-bold text-bone text-lg group-hover:text-ochre transition-colors">{title}</h2>
               <p className="mt-1.5 text-sm text-bone/50 leading-relaxed">{description}</p>
             </div>

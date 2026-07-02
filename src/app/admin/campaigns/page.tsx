@@ -3,13 +3,13 @@ import { createServiceClient } from "@/lib/supabase/server";
 import DeleteCampaignButton from "./DeleteCampaignButton";
 
 const STATUS_STYLES: Record<string, string> = {
-  draft:       "bg-bone/10 text-bone/40 border border-bone/15",
-  generating:  "bg-forest/20 text-forest border border-forest/25",
+  draft:       "bg-bone/10 text-bone/60 border border-bone/15",
+  generating:  "bg-forest/20 text-sage border border-forest/25",
   review:      "bg-ochre/15 text-ochre border border-ochre/25",
-  approved:    "bg-forest/30 text-forest border border-forest/30",
+  approved:    "bg-forest/30 text-sage border border-forest/30",
   publishing:  "bg-ochre/20 text-ochre border border-ochre/30",
-  done:        "bg-forest/30 text-forest border border-forest/30",
-  failed:      "bg-oxblood/20 text-oxblood border border-oxblood/25",
+  done:        "bg-forest/30 text-sage border border-forest/30",
+  failed:      "bg-oxblood/20 text-rose border border-oxblood/25",
 };
 
 const STATUS_LABEL: Record<string, string> = {
@@ -59,14 +59,14 @@ export default async function CampaignsPage() {
     <div className="space-y-8 max-w-4xl">
       <div className="flex items-start justify-between gap-4">
         <div>
-          <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-forest mb-2">AI Studio</p>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-sage mb-2">AI Studio</p>
           <h1 className="font-display font-bold text-bone text-3xl">Campaigns</h1>
           <div className="mt-3 h-px w-16 bg-bone/20" />
         </div>
         <div className="flex items-center gap-3 flex-wrap justify-end">
           <Link
             href="/admin/campaigns/ideas"
-            className="text-sm text-bone/40 hover:text-ochre transition-colors"
+            className="text-sm text-bone/60 hover:text-ochre transition-colors"
           >
             Ideas →
           </Link>
@@ -80,7 +80,7 @@ export default async function CampaignsPage() {
       </div>
 
       {!campaigns?.length ? (
-        <div className="border border-bone/10 rounded-lg p-12 text-center text-bone/30 text-sm">
+        <div className="border border-bone/10 rounded-lg p-12 text-center text-bone/50 text-sm">
           No campaigns yet.{" "}
           <Link href="/admin/campaigns/new" className="underline hover:text-bone/60">
             Create the first one.
@@ -105,7 +105,7 @@ export default async function CampaignsPage() {
                 </span>
                 <div className="relative z-10 flex-1 min-w-0">
                   <p className="text-bone font-medium group-hover:text-ochre transition-colors truncate">{c.title}</p>
-                  <p className="text-xs text-bone/35 mt-0.5">
+                  <p className="text-xs text-bone/52 mt-0.5">
                     {counts.total} piece{counts.total !== 1 ? "s" : ""}
                     {counts.approved > 0 && ` · ${counts.approved} approved`}
                     {counts.published > 0 && ` · ${counts.published} published`}

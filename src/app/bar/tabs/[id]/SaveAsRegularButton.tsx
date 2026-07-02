@@ -22,11 +22,11 @@ export default function SaveAsRegularButton({ tabId }: { tabId: string }) {
             router.refresh();
           });
         }}
-        className="text-xs text-bone/40 hover:text-forest transition-colors disabled:opacity-40"
+        className="text-xs text-bone/60 hover:text-sage transition-colors disabled:opacity-40"
       >
         {pending ? "Saving…" : "+ Add to regulars"}
       </button>
-      {error && <span className="text-xs text-oxblood">{error}</span>}
+      {error && <span className="text-xs text-rose">{error}</span>}
     </span>
   );
 }
