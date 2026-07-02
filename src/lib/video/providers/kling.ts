@@ -51,8 +51,10 @@ async function submitTask(opts: ClipOptions): Promise<string> {
     body: JSON.stringify({
       model_name: MODEL,
       prompt: opts.prompt,
-      negative_prompt: "blurry, low quality, watermark, text overlay",
-      cfg_scale: 0.5,
+      negative_prompt:
+        "text, words, letters, subtitles, captions, written text, typography, title card, watermark, " +
+        "blurry, low quality, distorted, deformed, overexposed, low resolution",
+      cfg_scale: 0.6,
       mode: MODE,
       duration: toKlingDuration(opts.durationSeconds),
       aspect_ratio: toKlingAspectRatio(opts.aspectRatio),

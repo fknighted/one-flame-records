@@ -3,8 +3,13 @@ import type { ClipGenerator, ClipOptions, ClipPollResult, ClipResult } from "@/l
 const KIE_API_BASE = "https://api.kie.ai";
 
 // Kling 2.6 via kie.ai unified market API — ~$0.125/5s clip
-const DEFAULT_KIE_MODEL = "kling-2.6/text-to-video";
+const MODEL_T2V = "kling-2.6/text-to-video";
+const MODEL_I2V = "kling-2.6/image-to-video";
 const COST_PER_SECOND_USD = 0.025;
+
+const NEGATIVE_PROMPT =
+  "text, words, letters, subtitles, captions, written text, typography, title card, watermark, " +
+  "blurry, low quality, distorted, deformed, overexposed, low resolution";
 
 function getAuthHeader(): string {
   const apiKey = process.env.KIE_API_KEY;
@@ -27,13 +32,13 @@ export class KieGenerator implements ClipGenerator {
         Authorization: getAuthHeader(),
       },
       body: JSON.stringify({
-        model: DEFAULT_KIE_MODEL,
+        model: opts.referenceImage ? MODEL_I2V : MODEL_T2V,
         input: {
           prompt: opts.prompt,
-          negative_prompt: "blurry, low quality, watermark, text overlay",
+          negative_prompt: NEGATIVE_PROMPT,
           duration: toDuration(opts.durationSeconds),
           aspect_ratio: opts.aspectRatio,
-          sound: false,
+          cfg_scale: 0.6,
           ...(opts.referenceImage ? { image_url: opts.referenceImage } : {}),
         },
       }),
@@ -78,7 +83,7 @@ export class KieGenerator implements ClipGenerator {
         result: {
           videoUrl,
           durationSeconds: actualDuration,
-          model: DEFAULT_KIE_MODEL,
+          model: MODEL_T2V,
           costEstimateUsd: actualDuration * COST_PER_SECOND_USD,
         },
       };

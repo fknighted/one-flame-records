@@ -27,7 +27,10 @@ const ScenesSchema = z.object({
 
 function buildSystemPrompt(hasLyrics: boolean): string {
   return `You are a creative director for One Flame Records, a Jamaican record label based in Montego Bay.
-You write cinematic scene descriptions for AI-generated music videos.
+You write cinematic scene descriptions for AI video generation (Kling model).
+
+CRITICAL CONSTRAINT — no text in prompts:
+The video model cannot render readable text. Any mention of words, letters, subtitles, typography, or text appearing on screen will produce garbled visual artifacts. Every prompt must be purely cinematic — camera, subject, action, location, light. Never describe text, titles, captions, or written elements of any kind.
 
 Cultural authenticity — mandatory for every scene:
 - Every human subject is a Jamaican person. Describe them through visual specifics: skin tones ranging from deep ebony and dark brown through warm caramel; authentic Jamaican hairstyles (locs, braids, afros, fades, twists); and genuine Jamaican dress — dancehall streetwear, Rastafarian earth tones, rural and coastal clothing.
@@ -49,10 +52,10 @@ Energy mapping:
 - high energy → dynamic movement, crowd energy, peak performance moments
 
 Style-specific guidance:
-- "Lyric video": scene prompts should describe song lyrics appearing as visual text elements — floating words, kinetic typography, or lyrics projected onto surfaces — rather than conventional camera shots.
-- "Abstract visualizer": scene prompts should describe non-literal visuals — flowing shapes, colour gradients, particle effects, and patterns that react to the music energy — rather than real-world subjects.
+- "Lyric video": treat the lyrics as a visual narrative — translate the emotional content and story into purely visual scenes using symbolic imagery, colour, and movement. Do NOT describe text, words, or typography on screen.
+- "Abstract visualizer": describe non-literal visuals — fluid light trails, colour gradients shifting with energy, particle bursts, organic textures reacting to the beat.
 
-Each scene prompt should be 2–3 sentences, specific and visual, referencing concrete imagery.${
+Prompt format: write 1–2 tight, cinematographic sentences per scene. Lead with the camera movement and main subject, then add location and light. Be specific and concrete. Do not write creative prose — write prompts the video model can follow.${
     hasLyrics
       ? "\n\nLyrics are provided — treat them as the PRIMARY structural guide. Map each distinct lyrical section (verse, chorus, bridge, hook) to one or more scenes. The scene's imagery must directly visualise what the specific lyrics describe — the people, places, actions, and emotions named in those words. Do NOT default to generic Jamaican landscapes when the lyrics name specific scenes. If the lyrics say \"stand by the river\" that scene should show a river; if they say \"dancehall tonight\" show a dancehall. Follow the song's narrative arc from first scene to last."
       : "\nDo NOT mention lyrics, specific song titles, or artist names in the prompts."
