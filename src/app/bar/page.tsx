@@ -7,11 +7,11 @@ export default async function BarDashboardPage() {
   await requireBarStaff();
   const supabase = createServiceClient();
 
-  // All open tabs — no date filter so carryover tabs from previous days appear
+  // All open + away tabs — no date filter so carryover tabs appear
   const { data: openTabs } = await supabase
     .from("pos_tabs")
     .select("id, name, total_cents, status, created_at, closed_at, notes")
-    .eq("status", "open")
+    .in("status", ["open", "away"])
     .order("created_at", { ascending: false });
 
   // Today's settled tabs — use closed_at so tabs opened yesterday but paid today are included
@@ -49,7 +49,7 @@ export default async function BarDashboardPage() {
           <p className="text-xl font-display font-bold text-bone">{formatCents(todayRevenue)}</p>
         </div>
         <div className="border border-bone/10 rounded-lg p-3">
-          <p className="text-[10px] text-bone/60 uppercase tracking-wider mb-1">Open Running</p>
+          <p className="text-[10px] text-bone/60 uppercase tracking-wider mb-1">Unpaid Running</p>
           <p className="text-xl font-display font-bold text-ochre">{formatCents(openRunning)}</p>
         </div>
         <div className="border border-bone/10 rounded-lg p-3">
@@ -70,11 +70,22 @@ export default async function BarDashboardPage() {
             <Link
               key={tab.id}
               href={`/bar/tabs/${tab.id}`}
-              className="border border-bone/15 rounded-xl p-4 hover:border-ochre/40 hover:bg-bone/3 transition-colors active:scale-[0.98]"
+              className={`border rounded-xl p-4 hover:border-ochre/40 hover:bg-bone/3 transition-colors active:scale-[0.98] ${
+                tab.status === "away"
+                  ? "border-ochre/25 bg-ochre/5"
+                  : "border-bone/15"
+              }`}
             >
               <div className="flex items-start justify-between mb-3">
                 <h2 className="font-display font-bold text-bone text-lg leading-tight">{tab.name}</h2>
-                <span className="text-xs text-bone/60 mt-1">{elapsed(tab.created_at)}</span>
+                <div className="flex flex-col items-end gap-1 mt-0.5">
+                  {tab.status === "away" && (
+                    <span className="text-[10px] font-semibold text-ochre bg-ochre/15 border border-ochre/20 rounded-full px-2 py-0.5 uppercase tracking-wide">
+                      Left · Paying Later
+                    </span>
+                  )}
+                  <span className="text-xs text-bone/60">{elapsed(tab.created_at)}</span>
+                </div>
               </div>
               {tab.notes && <p className="text-xs text-bone/60 mb-3">{tab.notes}</p>}
               <p className="text-2xl font-mono text-ochre">{formatCents(tab.total_cents ?? 0)}</p>

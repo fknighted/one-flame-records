@@ -271,6 +271,54 @@ export async function saveTabAsRegular(tabId: string): Promise<ActionState> {
   return null;
 }
 
+export async function markTabAway(
+  _prev: ActionState,
+  formData: FormData
+): Promise<ActionState> {
+  await requireBarStaff();
+
+  const tabId = formData.get("tab_id") as string;
+  if (!tabId) return { error: "Invalid request." };
+
+  const supabase = createServiceClient();
+
+  const { error } = await supabase
+    .from("pos_tabs")
+    .update({ status: "away" })
+    .eq("id", tabId)
+    .eq("status", "open");
+
+  if (error) return { error: `Failed to update tab: ${error.message}` };
+
+  revalidatePath(`/bar/tabs/${tabId}`);
+  revalidatePath("/bar");
+  return null;
+}
+
+export async function reopenTab(
+  _prev: ActionState,
+  formData: FormData
+): Promise<ActionState> {
+  await requireBarStaff();
+
+  const tabId = formData.get("tab_id") as string;
+  if (!tabId) return { error: "Invalid request." };
+
+  const supabase = createServiceClient();
+
+  const { error } = await supabase
+    .from("pos_tabs")
+    .update({ status: "open" })
+    .eq("id", tabId)
+    .eq("status", "away");
+
+  if (error) return { error: `Failed to reopen tab: ${error.message}` };
+
+  revalidatePath(`/bar/tabs/${tabId}`);
+  revalidatePath("/bar");
+  return null;
+}
+
 export async function closeTab(
   _prev: ActionState,
   formData: FormData

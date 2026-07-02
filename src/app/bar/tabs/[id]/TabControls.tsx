@@ -1,16 +1,25 @@
 "use client";
 
 import { useActionState, useState } from "react";
-import { closeTab, voidTab } from "./actions";
+import { closeTab, voidTab, markTabAway, reopenTab } from "./actions";
 import { formatCents } from "@/lib/bar/pos";
 
-export default function TabControls({ tabId, total, tabName }: { tabId: string; total: number; tabName: string }) {
+interface Props {
+  tabId: string;
+  total: number;
+  tabName: string;
+  status: "open" | "away";
+}
+
+export default function TabControls({ tabId, total, tabName, status }: Props) {
   const [showConfirm, setShowConfirm] = useState(false);
   const [showClose,   setShowClose]   = useState(false);
   const [showVoid,    setShowVoid]    = useState(false);
   const [tipInput,  setTipInput]  = useState("");
   const [closeState, closeAction, closePending] = useActionState(closeTab, null);
   const [voidState,  voidAction,  voidPending]  = useActionState(voidTab, null);
+  const [awayState,  awayAction,  awayPending]  = useActionState(markTabAway, null);
+  const [reopenState, reopenAction, reopenPending] = useActionState(reopenTab, null);
 
   const tipCents   = Math.max(0, Math.round(Number(tipInput || "0") * 100));
   const grandTotal = total + tipCents;
@@ -81,7 +90,6 @@ export default function TabControls({ tabId, total, tabName }: { tabId: string; 
         <p className="text-sm font-semibold text-bone text-center">
           Total: <span className="text-ochre">{formatCents(total)}</span>
         </p>
-        {/* Tip input */}
         <div className="flex items-center gap-2">
           <label className="text-xs text-bone/50 shrink-0">Tip (JMD$)</label>
           <input
@@ -128,22 +136,76 @@ export default function TabControls({ tabId, total, tabName }: { tabId: string; 
     );
   }
 
+  // ── Away state: customer has left, tab locked ──────────────────────────────
+  if (status === "away") {
+    return (
+      <div className="space-y-3">
+        <div className="rounded-lg bg-ochre/10 border border-ochre/20 px-4 py-3 text-center">
+          <p className="text-xs text-ochre font-semibold uppercase tracking-wider">Customer Left</p>
+          <p className="text-xs text-bone/60 mt-0.5">Tab locked — no new items can be added</p>
+        </div>
+        {awayState?.error  && <p className="text-sm text-red-400 text-center">{awayState.error}</p>}
+        {reopenState?.error && <p className="text-sm text-red-400 text-center">{reopenState.error}</p>}
+        <button
+          type="button"
+          onClick={() => setShowConfirm(true)}
+          className="w-full bg-ochre text-ink font-semibold py-2.5 rounded-lg text-sm hover:bg-ochre/90 active:scale-[0.98] transition-all"
+        >
+          Collect Payment — {formatCents(total)}
+        </button>
+        <div className="flex gap-2">
+          <form action={reopenAction} className="flex-1">
+            <input type="hidden" name="tab_id" value={tabId} />
+            <button
+              type="submit"
+              disabled={reopenPending}
+              className="w-full border border-bone/15 text-bone/60 hover:text-bone hover:border-bone/30 py-2 rounded-lg text-sm transition-colors disabled:opacity-50"
+            >
+              {reopenPending ? "Reopening…" : "Customer Returned — Reopen"}
+            </button>
+          </form>
+          <button
+            type="button"
+            onClick={() => setShowVoid(true)}
+            className="border border-bone/15 text-bone/60 hover:text-red-400 hover:border-red-400/30 px-3 py-2 rounded-lg text-sm transition-colors"
+          >
+            Void
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // ── Open state: normal controls ────────────────────────────────────────────
   return (
-    <div className="flex gap-2">
-      <button
-        type="button"
-        onClick={() => setShowVoid(true)}
-        className="border border-bone/15 text-bone/60 hover:text-red-400 hover:border-red-400/30 px-3 py-2.5 rounded-lg text-sm transition-colors"
-      >
-        Void
-      </button>
-      <button
-        type="button"
-        onClick={() => setShowConfirm(true)}
-        className="flex-1 bg-ochre text-ink font-semibold py-2.5 rounded-lg text-sm hover:bg-ochre/90 active:scale-[0.98] transition-all"
-      >
-        Close Tab — {formatCents(total)}
-      </button>
+    <div className="space-y-2">
+      {awayState?.error && <p className="text-sm text-red-400 text-center">{awayState.error}</p>}
+      <form action={awayAction}>
+        <input type="hidden" name="tab_id" value={tabId} />
+        <button
+          type="submit"
+          disabled={awayPending}
+          className="w-full border border-bone/15 text-bone/60 hover:text-ochre hover:border-ochre/30 py-2 rounded-lg text-sm transition-colors disabled:opacity-50"
+        >
+          {awayPending ? "Saving…" : "Customer Left — Lock Tab"}
+        </button>
+      </form>
+      <div className="flex gap-2">
+        <button
+          type="button"
+          onClick={() => setShowVoid(true)}
+          className="border border-bone/15 text-bone/60 hover:text-red-400 hover:border-red-400/30 px-3 py-2.5 rounded-lg text-sm transition-colors"
+        >
+          Void
+        </button>
+        <button
+          type="button"
+          onClick={() => setShowConfirm(true)}
+          className="flex-1 bg-ochre text-ink font-semibold py-2.5 rounded-lg text-sm hover:bg-ochre/90 active:scale-[0.98] transition-all"
+        >
+          Close Tab — {formatCents(total)}
+        </button>
+      </div>
     </div>
   );
 }

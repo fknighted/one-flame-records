@@ -22,6 +22,8 @@ export default async function TabPage({ params }: { params: Promise<{ id: string
   if (!tab) notFound();
 
   const isOpen = tab.status === "open";
+  const isAway = tab.status === "away";
+  const isActive = isOpen || isAway; // tab still needs payment
 
   return (
     <div className="flex flex-col gap-4 max-w-2xl mx-auto lg:max-w-none pb-16">
@@ -37,7 +39,13 @@ export default async function TabPage({ params }: { params: Promise<{ id: string
         </div>
         <div className="text-right">
           <p className="text-2xl font-mono text-ochre font-semibold">{formatCents(tab.total_cents)}</p>
-          <p className="text-xs text-bone/60 capitalize">{tab.status}</p>
+          {isAway ? (
+            <span className="inline-block text-xs font-semibold text-ochre bg-ochre/10 border border-ochre/20 rounded-full px-2 py-0.5">
+              Customer Left
+            </span>
+          ) : (
+            <p className="text-xs text-bone/60 capitalize">{tab.status}</p>
+          )}
         </div>
       </div>
 
@@ -60,13 +68,18 @@ export default async function TabPage({ params }: { params: Promise<{ id: string
             )}
           </div>
 
-          {/* Close tab controls */}
-          {isOpen && (
+          {/* Tab controls */}
+          {isActive && (
             <div className="pt-3 border-t border-bone/10 mt-3">
-              <TabControls tabId={id} total={tab.total_cents} tabName={tab.name} />
+              <TabControls
+                tabId={id}
+                total={tab.total_cents}
+                tabName={tab.name}
+                status={tab.status as "open" | "away"}
+              />
             </div>
           )}
-          {!isOpen && (
+          {!isActive && (
             <div className="pt-3 border-t border-bone/10 mt-3">
               <p className="text-center text-sm text-bone/60 capitalize">
                 Tab {tab.status} · {tab.payment_method ?? "—"}
@@ -75,7 +88,7 @@ export default async function TabPage({ params }: { params: Promise<{ id: string
           )}
         </div>
 
-        {/* Right: menu grid + custom item (only when tab is open) */}
+        {/* Right: menu grid + custom item (only when tab is open, not away) */}
         {isOpen && items && (
           <div className="lg:flex-1 flex flex-col gap-3">
             <div>
