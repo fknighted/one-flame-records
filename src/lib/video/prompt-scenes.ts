@@ -1,4 +1,4 @@
-import Anthropic from "@anthropic-ai/sdk";
+import OpenAI from "openai";
 import { z } from "zod";
 import type { AudioFeatures } from "@/lib/audio/analyze";
 
@@ -82,70 +82,78 @@ Artist style:
   }
 
   prompt += `\n\nGenerate one scene per section. Each scene should match the energy level of its section.
-Return the scenes array using the generate_scenes tool.`;
+Return the scenes array using the generate_scenes function.`;
 
   return prompt;
 }
 
-async function callClaude(
+async function callOpenAI(
   audio: AudioFeatures,
   params: SceneParams,
   previousError?: string
 ): Promise<Scene[]> {
-  const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+  const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
-  const textPrompt = buildUserPrompt(audio, params) +
+  const textPrompt =
+    buildUserPrompt(audio, params) +
     (previousError ? `\n\nPrevious output failed validation: ${previousError}. Please fix it.` : "");
 
   // Build user message content — text first, then reference images if provided
-  type UserContent = Anthropic.TextBlockParam | Anthropic.ImageBlockParam;
-  const userContent: UserContent[] = [{ type: "text", text: textPrompt }];
+  type ImageUrlBlock = { type: "image_url"; image_url: { url: string } };
+  type TextBlock = { type: "text"; text: string };
+  const userContent: (TextBlock | ImageUrlBlock)[] = [{ type: "text", text: textPrompt }];
 
   if (params.referenceImageUrls?.length) {
     for (const url of params.referenceImageUrls) {
-      userContent.push({ type: "image", source: { type: "url", url } });
+      userContent.push({ type: "image_url", image_url: { url } });
     }
   }
 
-  const response = await client.messages.create({
-    model: "claude-opus-4-8",
+  const response = await client.chat.completions.create({
+    model: "gpt-4o",
     max_tokens: 4096,
-    system: buildSystemPrompt(!!params.lyrics),
+    messages: [
+      { role: "system", content: buildSystemPrompt(!!params.lyrics) },
+      { role: "user", content: userContent },
+    ],
     tools: [
       {
-        name: "generate_scenes",
-        description: "Output the array of video scenes",
-        input_schema: {
-          type: "object" as const,
-          properties: {
-            scenes: {
-              type: "array",
-              items: {
-                type: "object",
-                properties: {
-                  start: { type: "number", description: "Start time in seconds" },
-                  end: { type: "number", description: "End time in seconds" },
-                  prompt: { type: "string", description: "Cinematic scene description" },
-                  aspectRatio: { type: "string", enum: ["16:9", "9:16", "1:1"] },
+        type: "function",
+        function: {
+          name: "generate_scenes",
+          description: "Output the array of video scenes",
+          parameters: {
+            type: "object",
+            properties: {
+              scenes: {
+                type: "array",
+                items: {
+                  type: "object",
+                  properties: {
+                    start: { type: "number", description: "Start time in seconds" },
+                    end: { type: "number", description: "End time in seconds" },
+                    prompt: { type: "string", description: "Cinematic scene description" },
+                    aspectRatio: { type: "string", enum: ["16:9", "9:16", "1:1"] },
+                  },
+                  required: ["start", "end", "prompt", "aspectRatio"],
                 },
-                required: ["start", "end", "prompt", "aspectRatio"],
               },
             },
+            required: ["scenes"],
           },
-          required: ["scenes"],
         },
       },
     ],
-    tool_choice: { type: "any" },
-    messages: [{ role: "user", content: userContent }],
+    tool_choice: { type: "function", function: { name: "generate_scenes" } },
   });
 
-  const toolUse = response.content.find((b) => b.type === "tool_use");
-  if (!toolUse || toolUse.type !== "tool_use") {
-    throw new Error("Claude did not call the generate_scenes tool");
+  const toolCall = response.choices[0]?.message?.tool_calls?.[0];
+  if (!toolCall || toolCall.type !== "function") {
+    throw new Error("OpenAI did not call the generate_scenes function");
   }
 
-  return ScenesSchema.parse(toolUse.input).scenes;
+  const data = JSON.parse(toolCall.function.arguments);
+  return ScenesSchema.parse(data).scenes;
 }
 
 export async function generateScenePrompts(
@@ -153,9 +161,9 @@ export async function generateScenePrompts(
   params: SceneParams
 ): Promise<Scene[]> {
   try {
-    return await callClaude(audio, params);
+    return await callOpenAI(audio, params);
   } catch (err) {
     const errorMsg = err instanceof Error ? err.message : String(err);
-    return callClaude(audio, params, errorMsg);
+    return callOpenAI(audio, params, errorMsg);
   }
 }
