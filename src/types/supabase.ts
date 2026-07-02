@@ -12,6 +12,31 @@ export type Database = {
   __InternalSupabase: {
     PostgrestVersion: "14.5"
   }
+  graphql_public: {
+    Tables: {
+      [_ in never]: never
+    }
+    Views: {
+      [_ in never]: never
+    }
+    Functions: {
+      graphql: {
+        Args: {
+          extensions?: Json
+          operationName?: string
+          query?: string
+          variables?: Json
+        }
+        Returns: Json
+      }
+    }
+    Enums: {
+      [_ in never]: never
+    }
+    CompositeTypes: {
+      [_ in never]: never
+    }
+  }
   public: {
     Tables: {
       ai_generated_images: {
@@ -364,10 +389,12 @@ export type Database = {
         Row: {
           created_at: string
           duration_minutes: number | null
+          duration_type: string | null
           ended_at: string | null
           id: string
           member_id: string | null
           notes: string | null
+          price_jmd: number | null
           started_at: string
           started_by: string | null
           station: string | null
@@ -376,10 +403,12 @@ export type Database = {
         Insert: {
           created_at?: string
           duration_minutes?: number | null
+          duration_type?: string | null
           ended_at?: string | null
           id?: string
           member_id?: string | null
           notes?: string | null
+          price_jmd?: number | null
           started_at?: string
           started_by?: string | null
           station?: string | null
@@ -388,10 +417,12 @@ export type Database = {
         Update: {
           created_at?: string
           duration_minutes?: number | null
+          duration_type?: string | null
           ended_at?: string | null
           id?: string
           member_id?: string | null
           notes?: string | null
+          price_jmd?: number | null
           started_at?: string
           started_by?: string | null
           station?: string | null
@@ -416,33 +447,41 @@ export type Database = {
       }
       gamer_balance_transactions: {
         Row: {
+          amount_minutes: number
+          created_at: string
+          created_by: string | null
           id: string
           member_id: string
-          type: string
-          amount_minutes: number
           reason: string | null
-          created_by: string | null
-          created_at: string
+          type: string
         }
         Insert: {
+          amount_minutes: number
+          created_at?: string
+          created_by?: string | null
           id?: string
           member_id: string
-          type: string
-          amount_minutes: number
           reason?: string | null
-          created_by?: string | null
-          created_at?: string
+          type: string
         }
         Update: {
+          amount_minutes?: number
+          created_at?: string
+          created_by?: string | null
           id?: string
           member_id?: string
-          type?: string
-          amount_minutes?: number
           reason?: string | null
-          created_by?: string | null
-          created_at?: string
+          type?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "gamer_balance_transactions_member_id_fkey"
+            columns: ["member_id"]
+            isOneToOne: false
+            referencedRelation: "gamer_members"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       gamer_members: {
         Row: {
@@ -1019,8 +1058,16 @@ export type Database = {
         Args: { p_item_id: string }
         Returns: boolean
       }
+      decrement_tab_item_quantity: {
+        Args: { p_tab_item_id: string }
+        Returns: undefined
+      }
       decrement_tab_total: {
         Args: { p_amount: number; p_tab_id: string }
+        Returns: undefined
+      }
+      increment_tab_item_quantity: {
+        Args: { p_tab_item_id: string }
         Returns: undefined
       }
       increment_tab_total: {
@@ -1157,6 +1204,9 @@ export type CompositeTypes<
     : never
 
 export const Constants = {
+  graphql_public: {
+    Enums: {},
+  },
   public: {
     Enums: {},
   },

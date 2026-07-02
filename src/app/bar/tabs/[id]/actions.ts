@@ -343,7 +343,7 @@ export async function closeTab(
     closed_by:      user?.id ?? null,
     closed_at:      new Date().toISOString(),
     tip_cents:      tipCents,
-  }).eq("id", tabId).eq("status", "open");
+  }).eq("id", tabId).in("status", ["open", "away"]);
 
   if (error) return { error: `Failed to close tab: ${error.message}` };
 
@@ -367,7 +367,7 @@ export async function voidTab(
     status:    "voided",
     closed_by: user?.id ?? null,
     closed_at: new Date().toISOString(),
-  }).eq("id", tabId).eq("status", "open");
+  }).eq("id", tabId).in("status", ["open", "away"]);
 
   if (error) return { error: `Failed to void tab: ${error.message}` };
 

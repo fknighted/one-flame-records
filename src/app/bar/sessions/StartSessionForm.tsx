@@ -5,6 +5,11 @@ import { startSession } from "./actions";
 
 type Member = { id: string; display_name: string };
 
+const DURATIONS = [
+  { value: "half_hour", label: "½ Hour",  sublabel: "$300 JMD", minutes: 30 },
+  { value: "one_hour",  label: "1 Hour",  sublabel: "$600 JMD", minutes: 60 },
+] as const;
+
 export default function StartSessionForm({ members }: { members: Member[] }) {
   const [state, formAction, pending] = useActionState(startSession, null);
 
@@ -13,6 +18,31 @@ export default function StartSessionForm({ members }: { members: Member[] }) {
       {state?.error && (
         <p className="text-sm text-red-400">{state.error}</p>
       )}
+
+      {/* Duration selector */}
+      <div>
+        <label className="block text-sm font-medium text-bone/70 mb-2">
+          Session Duration
+        </label>
+        <div className="grid grid-cols-2 gap-2">
+          {DURATIONS.map((d, i) => (
+            <label key={d.value} className="cursor-pointer">
+              <input
+                type="radio"
+                name="duration_type"
+                value={d.value}
+                defaultChecked={i === 0}
+                className="sr-only peer"
+              />
+              <div className="border border-bone/15 rounded-lg px-3 py-3 text-center transition-colors peer-checked:border-ochre peer-checked:bg-ochre/10 hover:border-bone/30">
+                <p className="text-bone font-semibold text-sm">{d.label}</p>
+                <p className="text-ochre text-xs font-mono">{d.sublabel}</p>
+                <p className="text-bone/50 text-xs">{d.minutes} min</p>
+              </div>
+            </label>
+          ))}
+        </div>
+      </div>
 
       <div>
         <label htmlFor="member_id" className="block text-sm font-medium text-bone/70 mb-1.5">
