@@ -4,7 +4,7 @@ Reference document. Update in the same commit as any schema, route, or RLS chang
 
 ## Stack rationale
 
-See `DECISIONS.md` for the why. This doc covers the how.
+See `decisions.md` for the why. This doc covers the how.
 
 ## Data model
 

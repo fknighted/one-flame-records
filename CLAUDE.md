@@ -30,15 +30,19 @@ Side stack used elsewhere in the business (do not pull into this repo): Make.com
 
 ## Repo layout
 
-All documentation lives at the **repo root**:
+All documentation lives in **`docs/`** (see the vault-level `PROJECT-CONVENTIONS.md`):
 
 ```
-architecture.md        ← data model, RLS, routes, env vars
-brand.md               ← palette, typography, voice, components
-video-pipeline.md      ← Inngest design, model interface
-operations.md          ← runbook for common admin tasks
-PROGRESS.md            ← living status, update at end of every session
-DECISIONS.md           ← append-only architectural decision log
+docs/
+├── project-memory.md      ← living status, update at end of every session
+├── next-session-prompt.md ← short "pick this up next" brief
+├── decisions.md           ← append-only architectural decision log
+├── architecture.md        ← data model, RLS, routes, env vars
+├── brand.md               ← palette, typography, voice, components
+├── video-pipeline.md      ← Inngest design, model interface
+├── operations.md          ← runbook for common admin tasks
+├── Creative Systems Overview.md  ← full reference doc (for ChatGPT/Claude Web upload)
+└── phases/                ← phase-1…phase-5 build plans
 ```
 
 Source:
@@ -151,7 +155,7 @@ Never call Instagram, Facebook, or TikTok APIs directly. All social posting fire
 
 ### Tailwind v4 — CSS-first
 
-Brand tokens (`--color-oxblood`, `--color-cream`, etc.) are defined in `src/app/globals.css` inside an `@theme inline` block. There is no `tailwind.config.ts`. The `brand.md` doc shows a `tailwind.config.ts` excerpt that is illustrative only — ignore it.
+Brand tokens (`--color-oxblood`, `--color-cream`, etc.) are defined in `src/app/globals.css` inside an `@theme inline` block. There is no `tailwind.config.ts`. The `docs/brand.md` doc shows a `tailwind.config.ts` excerpt that is illustrative only — ignore it.
 
 ### Video provider abstraction
 
@@ -165,7 +169,7 @@ Brand tokens (`--color-oxblood`, `--color-cream`, etc.) are defined in `src/app/
 
 **File naming.** Components are `PascalCase.tsx`. Utilities are `kebab-case.ts`. Use the `@/` alias for `src/`; no relative paths deeper than one `../`.
 
-**Database changes.** Every schema change is a numbered SQL migration. Never edit an applied migration — write a new one. Update `architecture.md` in the same commit.
+**Database changes.** Every schema change is a numbered SQL migration. Never edit an applied migration — write a new one. Update `docs/architecture.md` in the same commit.
 
 **Commits.** Conventional commits: `feat:`, `fix:`, `chore:`, `docs:`, `refactor:`. One logical change per commit.
 
@@ -184,12 +188,12 @@ Brand tokens (`--color-oxblood`, `--color-cream`, etc.) are defined in `src/app/
 - Never call Supabase from a Client Component.
 - Never deploy a destructive migration to production without backing up first.
 - Never use a real artist's email or PII in seed data or test fixtures.
-- Never modify `CLAUDE.md`, `PROGRESS.md`, or `DECISIONS.md` silently — these are the project memory.
+- Never modify `CLAUDE.md`, `docs/project-memory.md`, or `docs/decisions.md` silently — these are the project memory.
 - Never call platform social APIs directly — route through the Make.com webhook.
 
 ## Brand quick reference
 
-Full system in `brand.md`. The essentials:
+Full system in `docs/brand.md`. The essentials:
 
 - **Oxblood** `#8B2A1F` — headlines, the flame
 - **Forest** `#3F5A3A` — accents, inner flame
@@ -230,10 +234,11 @@ Full list in `.env.example`.
 
 ## Current phase
 
-Phases 1–5 and the Bar POS are complete and operational. Next: first live bar session (open real tab, close as cash). Content entry (artists, releases, news) is ongoing via admin. See `PROGRESS.md` for live status.
+Phases 1–5 and the Bar POS are complete and operational. Next: first live bar session (open real tab, close as cash). Content entry (artists, releases, news) is ongoing via admin. See `docs/project-memory.md` for live status.
 
 ## End of session checklist
 
-1. Update `PROGRESS.md` — what got done, blockers, next session goal.
-2. If a non-obvious architectural decision was made, append an entry to `DECISIONS.md`.
-3. Commit and push.
+1. Update `docs/project-memory.md` — what got done, blockers, next session goal.
+2. Refresh `docs/next-session-prompt.md` with the top priorities for next time.
+3. If a non-obvious architectural decision was made, append an entry to `docs/decisions.md`.
+4. Commit and push.

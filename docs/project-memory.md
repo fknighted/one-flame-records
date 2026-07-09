@@ -47,7 +47,7 @@ Fix 3 code review bugs from session 41. Content entry via admin UI.
 
 ## Session log
 
-Append a new entry at the top of this section after every session. Date, summary, files touched, what's next. Keep it tight — full reasoning belongs in `DECISIONS.md`.
+Append a new entry at the top of this section after every session. Date, summary, files touched, what's next. Keep it tight — full reasoning belongs in `decisions.md`.
 
 ### 2026-06-30 (session 41 — Code review: video pipeline + transcription upgrade)
 

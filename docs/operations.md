@@ -93,16 +93,17 @@ If a key leaks (you committed it, a contractor had access, etc.):
 2. Update the value in Vercel environment variables (per-environment: production, preview, development).
 3. Trigger a redeploy.
 4. Update your local `.env.local`.
-5. Note the rotation in `DECISIONS.md` with date and reason.
+5. Note the rotation in `decisions.md` with date and reason.
 
 Never rotate just one of the three environments — they fall out of sync and break previews.
 
-## Updating CLAUDE.md and PROGRESS.md
+## Updating CLAUDE.md and project-memory.md
 
 At the end of every Claude Code session:
 
-- **PROGRESS.md** — always. Even if nothing shipped, log what was tried and what's blocked.
+- **project-memory.md** — always. Even if nothing shipped, log what was tried and what's blocked.
+- **next-session-prompt.md** — refresh with the top priorities for next time.
 - **CLAUDE.md** — only when something structural changes (new convention, new top-level folder, new env var added to the required list).
-- **DECISIONS.md** — only when an architectural call was made that isn't obvious from the code itself.
+- **decisions.md** — only when an architectural call was made that isn't obvious from the code itself.
 
 This is the project's memory. If three months from now you (or a new contributor) need to understand why something is the way it is, these files are how you find out.

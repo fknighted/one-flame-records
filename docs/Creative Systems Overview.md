@@ -161,12 +161,15 @@ Confident, grounded, specific. "Pressed in Montego Bay." Never corporate, never 
 ├── supabase/
 │   ├── migrations/            ← numbered SQL migrations (40+ files)
 │   └── seed.sql
-├── architecture.md
-├── brand.md
-├── video-pipeline.md
-├── operations.md
-├── PROGRESS.md
-├── DECISIONS.md
+├── docs/
+│   ├── project-memory.md      ← living status
+│   ├── next-session-prompt.md ← next-session brief
+│   ├── decisions.md           ← decision log
+│   ├── architecture.md
+│   ├── brand.md
+│   ├── video-pipeline.md
+│   ├── operations.md
+│   └── phases/                ← phase-1…phase-5 build plans
 └── CLAUDE.md
 ```
 
