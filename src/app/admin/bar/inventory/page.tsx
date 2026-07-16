@@ -3,7 +3,7 @@ import { createServiceClient } from "@/lib/supabase/server";
 import { formatCents, marginPct, SECTION_LABELS, SECTION_ORDER, resolveSection, jamaicaMidnight } from "@/lib/bar/pos";
 import { updateStock, addStock } from "./actions";
 import DeleteMenuItemButton from "@/app/admin/bar/items/DeleteMenuItemButton";
-import AddStockForm, { type StockTarget } from "@/components/AddStockForm";
+import InventoryAddRow, { type InvRow } from "@/components/InventoryAddRow";
 
 type Item = {
   id: string;
@@ -55,9 +55,11 @@ export default async function InventoryPage() {
   const grouped: Record<string, Item[]> = {};
   for (const item of allItems) (grouped[resolveSection(item)] ??= []).push(item);
 
-  const toTarget = (i: Item): StockTarget => ({
+  const toRow = (i: Item): InvRow => ({
     id: i.id,
     name: i.name,
+    stock: i.stock_quantity,
+    threshold: i.reorder_level ?? 5,
     bottleYield: i.bottle_yield,
     priceCents: i.price_cents,
   });
@@ -79,9 +81,10 @@ export default async function InventoryPage() {
         </Link>
       </div>
 
-      {/* Add stock (with cost) — grouped so bottle-family items share one card */}
+      {/* Add stock — click a line to expand its form (same as the bar POS list) */}
       <section className="space-y-3">
         <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-bone/60">Add stock</h2>
+        <p className="text-[11px] text-bone/40 -mt-1">Tap an item to open its add form.</p>
         {SECTION_ORDER.filter((sec) => grouped[sec]?.some((i) => !i.bottle_parent_id)).map((sec) => {
           // Whole-bottle SKUs draw from their shot parent's pool, so no add row.
           const catItems = grouped[sec]!.filter((i) => !i.bottle_parent_id);
@@ -89,30 +92,17 @@ export default async function InventoryPage() {
           return (
             <div key={sec} className="space-y-2">
               <p className="text-[11px] uppercase tracking-wider text-bone/40">{SECTION_LABELS[sec] ?? sec}</p>
-              <div className="grid gap-3 sm:grid-cols-2">
+              <div className="space-y-2">
                 {catItems.map((item) => {
                   if (rendered.has(item.id)) return null;
                   if (item.bottle_group) {
                     const siblings = catItems.filter((i) => i.bottle_group === item.bottle_group);
                     siblings.forEach((s) => rendered.add(s.id));
                     const title = item.bottle_group.charAt(0).toUpperCase() + item.bottle_group.slice(1);
-                    return (
-                      <div key={item.bottle_group} className="rounded-lg border border-bone/10 p-4 space-y-3">
-                        <div className="flex items-baseline justify-between">
-                          <h3 className="text-bone font-medium">{title}</h3>
-                          <span className="text-[11px] text-bone/40">by the bottle</span>
-                        </div>
-                        <AddStockForm action={addStock} targets={siblings.map(toTarget)} />
-                      </div>
-                    );
+                    return <InventoryAddRow key={item.bottle_group} action={addStock} title={title} rows={siblings.map(toRow)} isGroup />;
                   }
                   rendered.add(item.id);
-                  return (
-                    <div key={item.id} className="rounded-lg border border-bone/10 p-4 space-y-3">
-                      <h3 className="text-bone font-medium">{item.name}</h3>
-                      <AddStockForm action={addStock} targets={[toTarget(item)]} />
-                    </div>
-                  );
+                  return <InventoryAddRow key={item.id} action={addStock} title={item.name} rows={[toRow(item)]} isGroup={false} />;
                 })}
               </div>
             </div>
