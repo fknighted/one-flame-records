@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { createServiceClient } from "@/lib/supabase/server";
-import { formatCents, CATEGORY_LABELS as BASE_CATEGORY_LABELS, jamaicaMidnight } from "@/lib/bar/pos";
+import { formatCents, CATEGORY_LABELS as BASE_CATEGORY_LABELS, jamaicaMidnight, jamaicaDateTime } from "@/lib/bar/pos";
 
 const CATEGORY_LABELS: Record<string, string> = {
   ...BASE_CATEGORY_LABELS,
@@ -43,6 +43,15 @@ export default async function SalesPage({
   const { data: tabs } = await tabQuery;
   const closedTabs = tabs ?? [];
   const tabIds = closedTabs.map((t) => t.id);
+
+  // ── Still-open / away tabs (outstanding money, independent of the period) ──
+  const { data: openTabsData } = await supabase
+    .from("pos_tabs")
+    .select("id, name, total_cents, status, created_at")
+    .in("status", ["open", "away"])
+    .order("created_at", { ascending: true });
+  const openTabs = openTabsData ?? [];
+  const openTotal = openTabs.reduce((sum, t) => sum + (t.total_cents ?? 0), 0);
 
   // ── Fetch line items for those tabs ───────────────────────────────────────
   const lineItems =
@@ -125,6 +134,57 @@ export default async function SalesPage({
           </Link>
         ))}
       </div>
+
+      {/* Open tabs — outstanding now, independent of the period filter */}
+      <section className="space-y-3">
+        <div className="flex items-baseline justify-between">
+          <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-bone/60">Open Tabs ({openTabs.length})</h2>
+          <span className="text-sm text-bone/60">
+            Outstanding <span className="font-mono font-bold text-ochre">{formatCents(openTotal)}</span>
+          </span>
+        </div>
+        {openTabs.length === 0 ? (
+          <p className="text-sm text-bone/50">No open tabs.</p>
+        ) : (
+          <div className="border border-ochre/20 rounded-lg overflow-x-auto">
+            <table className="w-full min-w-[400px] text-sm">
+              <thead className="border-b border-bone/10 bg-bone/3">
+                <tr>
+                  <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Customer</th>
+                  <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Opened</th>
+                  <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Status</th>
+                  <th className="text-right px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Total</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-bone/10">
+                {openTabs.map((tab) => (
+                  <tr key={tab.id} className="hover:bg-bone/3 transition-colors">
+                    <td className="px-4 py-3 text-bone font-medium">
+                      <Link href={`/bar/tabs/${tab.id}`} className="hover:text-ochre transition-colors">{tab.name}</Link>
+                    </td>
+                    <td className="px-4 py-3 text-bone/50 text-xs">{jamaicaDateTime(tab.created_at)}</td>
+                    <td className="px-4 py-3">
+                      <span className={[
+                        "inline-block px-2 py-0.5 rounded-full text-xs font-medium",
+                        tab.status === "away" ? "bg-red-400/15 text-red-400" : "bg-ochre/20 text-ochre",
+                      ].join(" ")}>
+                        {tab.status === "away" ? "Away" : "Open"}
+                      </span>
+                    </td>
+                    <td className="px-4 py-3 text-right font-mono text-bone">{formatCents(tab.total_cents ?? 0)}</td>
+                  </tr>
+                ))}
+              </tbody>
+              <tfoot className="border-t border-bone/10 bg-bone/3">
+                <tr>
+                  <td colSpan={3} className="px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Outstanding</td>
+                  <td className="px-4 py-3 text-right font-mono font-bold text-ochre">{formatCents(openTotal)}</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        )}
+      </section>
 
       {closedTabs.length === 0 ? (
         <p className="text-sm text-bone/50">No closed tabs for this period.</p>

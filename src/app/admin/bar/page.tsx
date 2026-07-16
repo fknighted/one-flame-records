@@ -1,9 +1,10 @@
 import Link from "next/link";
 import { createServiceClient } from "@/lib/supabase/server";
-import { formatCents, jamaicaMidnight, jamaicaTime } from "@/lib/bar/pos";
+import { formatCents, jamaicaMidnight, jamaicaTime, jamaicaDateTime } from "@/lib/bar/pos";
 
 const STATUS_LABELS: Record<string, string> = {
   open:   "Open",
+  away:   "Away",
   closed: "Closed",
   voided: "Voided",
 };
@@ -17,6 +18,7 @@ export default async function BarOverviewPage() {
 
   const [
     { data: todayAllTabs },
+    { data: openTabs },
     { data: weekClosed },
     { data: monthClosed },
     { count: totalItems },
@@ -24,12 +26,17 @@ export default async function BarOverviewPage() {
     { count: activeSessions },
   ] = await Promise.all([
     supabase.from("pos_tabs").select("id, name, total_cents, status, created_at").gte("created_at", todayStart.toISOString()).order("created_at", { ascending: false }),
+    // All still-open / away (customer left, unpaid) tabs — outstanding money, regardless of day.
+    supabase.from("pos_tabs").select("id, name, total_cents, status, created_at").in("status", ["open", "away"]).order("created_at", { ascending: true }),
     supabase.from("pos_tabs").select("id, total_cents").eq("status", "closed").gte("closed_at", weekStart.toISOString()),
     supabase.from("pos_tabs").select("id, total_cents").eq("status", "closed").gte("closed_at", monthStart.toISOString()),
     supabase.from("pos_items").select("id", { count: "exact", head: true }).eq("is_active", true),
     supabase.from("gamer_members").select("id", { count: "exact", head: true }).eq("status", "active"),
     supabase.from("game_sessions").select("id", { count: "exact", head: true }).is("ended_at", null),
   ]);
+
+  const openList = openTabs ?? [];
+  const openTotal = openList.reduce((sum, t) => sum + (t.total_cents ?? 0), 0);
 
   const todayClosedTabs = (todayAllTabs ?? []).filter(t => t.status === "closed");
   const todayRevenue  = todayClosedTabs.reduce((sum, t) => sum + (t.total_cents ?? 0), 0);
@@ -116,6 +123,58 @@ export default async function BarOverviewPage() {
           </Link>
         ))}
       </div>
+
+      {/* Open tabs — outstanding money right now */}
+      <section className="space-y-3">
+        <div className="flex items-baseline justify-between">
+          <h2 className="text-xs font-semibold uppercase tracking-widest text-bone/52">Open Tabs ({openList.length})</h2>
+          <span className="text-sm text-bone/60">
+            Outstanding <span className="font-mono font-bold text-ochre">{formatCents(openTotal)}</span>
+          </span>
+        </div>
+
+        {openList.length === 0 ? (
+          <p className="text-sm text-bone/50">No open tabs.</p>
+        ) : (
+          <div className="border border-ochre/20 rounded-lg overflow-x-auto">
+            <table className="w-full min-w-[400px] text-sm">
+              <thead className="border-b border-bone/10 bg-bone/3">
+                <tr>
+                  <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Customer</th>
+                  <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Opened</th>
+                  <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Status</th>
+                  <th className="text-right px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Total</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-bone/10">
+                {openList.map((tab) => (
+                  <tr key={tab.id} className="hover:bg-bone/3 transition-colors">
+                    <td className="px-4 py-3 text-bone font-medium">
+                      <Link href={`/bar/tabs/${tab.id}`} className="hover:text-ochre transition-colors">{tab.name}</Link>
+                    </td>
+                    <td className="px-4 py-3 text-bone/50 text-xs">{jamaicaDateTime(tab.created_at)}</td>
+                    <td className="px-4 py-3">
+                      <span className={[
+                        "inline-block px-2 py-0.5 rounded-full text-xs font-medium",
+                        tab.status === "away" ? "bg-red-400/15 text-red-400" : "bg-ochre/20 text-ochre",
+                      ].join(" ")}>
+                        {STATUS_LABELS[tab.status] ?? tab.status}
+                      </span>
+                    </td>
+                    <td className="px-4 py-3 text-right font-mono text-bone">{formatCents(tab.total_cents ?? 0)}</td>
+                  </tr>
+                ))}
+              </tbody>
+              <tfoot className="border-t border-bone/10 bg-bone/3">
+                <tr>
+                  <td colSpan={3} className="px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Outstanding</td>
+                  <td className="px-4 py-3 text-right font-mono font-bold text-ochre">{formatCents(openTotal)}</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        )}
+      </section>
 
       {/* Today's tabs */}
       <section className="space-y-3">
