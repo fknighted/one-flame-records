@@ -3,7 +3,7 @@
 import { useActionState, useState } from "react";
 import type { Database } from "@/types/supabase";
 import { addItemToTab } from "@/app/bar/tabs/[id]/actions";
-import { formatCents, CATEGORY_ORDER, CATEGORY_LABELS } from "@/lib/bar/pos";
+import { formatCents, CATEGORY_ORDER, CATEGORY_LABELS, SECTION_ORDER, SECTION_LABELS, resolveSection } from "@/lib/bar/pos";
 
 type PosItem = Database["public"]["Tables"]["pos_items"]["Row"];
 
@@ -70,6 +70,13 @@ export default function MenuGrid({ items, tabId }: Props) {
   const byId = new Map(items.map(i => [i.id, i]));
   const visible = items.filter(i => i.category === active && i.is_active);
 
+  // Cluster items within the active category tab by section (rums together,
+  // beers together, …) without changing the category tabs themselves.
+  const groups: Record<string, PosItem[]> = {};
+  for (const item of visible) (groups[resolveSection(item)] ??= []).push(item);
+  const sections = SECTION_ORDER.filter(s => groups[s]?.length);
+  const showLabels = sections.length > 1;
+
   return (
     <div className="flex flex-col h-full">
       {/* Category tabs */}
@@ -89,15 +96,26 @@ export default function MenuGrid({ items, tabId }: Props) {
         ))}
       </div>
 
-      {/* Grid */}
-      <div className="flex-1 min-h-0 grid grid-cols-2 gap-2 mt-3 overflow-y-auto">
+      {/* Grid, clustered by section within the tab */}
+      <div className="flex-1 min-h-0 mt-3 overflow-y-auto space-y-4">
         {visible.length === 0 ? (
-          <p className="col-span-2 text-center text-bone/30 text-sm py-8">No items in this category</p>
+          <p className="text-center text-bone/30 text-sm py-8">No items in this category</p>
         ) : (
-          visible.map(item => {
-            const { disabled, badge } = availability(item, byId);
-            return <AddButton key={item.id} item={item} tabId={tabId} disabled={disabled} badge={badge} />;
-          })
+          sections.map(sec => (
+            <div key={sec} className="space-y-2">
+              {showLabels && (
+                <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-bone/40">
+                  {SECTION_LABELS[sec] ?? sec}
+                </p>
+              )}
+              <div className="grid grid-cols-2 gap-2">
+                {groups[sec].map(item => {
+                  const { disabled, badge } = availability(item, byId);
+                  return <AddButton key={item.id} item={item} tabId={tabId} disabled={disabled} badge={badge} />;
+                })}
+              </div>
+            </div>
+          ))
         )}
       </div>
     </div>
