@@ -56,6 +56,31 @@ export const CATEGORY_LABELS: Record<string, string> = {
 
 export const CATEGORY_ORDER = ["drink", "beverage", "food", "snack", "game_time"] as const;
 
+/**
+ * Inventory display sections. Splits the broad "drink" category into
+ * Rums / Beers / Other Drinks and pulls Cigarettes to the bottom.
+ * Non-drink items fall back to their category. POS `category` is unchanged.
+ */
+export const SECTION_LABELS: Record<string, string> = {
+  rum:       "Rums",
+  beer:      "Beers",
+  other:     "Other Drinks",
+  beverage:  "Beverages",
+  food:      "Food",
+  snack:     "Snacks",
+  game_time: "Game Time",
+  cigarette: "Cigarettes",
+};
+
+// Cigarettes render last.
+export const SECTION_ORDER = ["rum", "beer", "other", "beverage", "food", "snack", "game_time", "cigarette"] as const;
+
+/** Resolve an item's display section: explicit menu_section, else derive from category. */
+export function resolveSection(item: { menu_section?: string | null; category: string }): string {
+  if (item.menu_section) return item.menu_section;
+  return item.category === "drink" ? "other" : item.category;
+}
+
 export function elapsed(startedAt: string): string {
   const ms   = Date.now() - new Date(startedAt).getTime();
   const mins = Math.floor(ms / 60000);

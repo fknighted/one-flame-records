@@ -32,6 +32,7 @@ export default async function EditMenuItemPage({ params }: { params: Promise<{ i
           is_active:     item.is_active,
           bottle_group:  item.bottle_group,
           bottle_yield:  item.bottle_yield,
+          menu_section:  item.menu_section,
         }}
       />
     </div>

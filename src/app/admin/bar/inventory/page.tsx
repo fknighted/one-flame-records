@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { createServiceClient } from "@/lib/supabase/server";
-import { formatCents, marginPct, CATEGORY_LABELS, CATEGORY_ORDER, jamaicaMidnight } from "@/lib/bar/pos";
+import { formatCents, marginPct, SECTION_LABELS, SECTION_ORDER, resolveSection, jamaicaMidnight } from "@/lib/bar/pos";
 import { updateStock, addStock } from "./actions";
 import DeleteMenuItemButton from "@/app/admin/bar/items/DeleteMenuItemButton";
 import AddStockForm, { type StockTarget } from "@/components/AddStockForm";
@@ -16,6 +16,7 @@ type Item = {
   is_active: boolean;
   bottle_group: string | null;
   bottle_yield: number | null;
+  menu_section: string | null;
 };
 
 export default async function InventoryPage() {
@@ -26,7 +27,7 @@ export default async function InventoryPage() {
   const [{ data: items }, { data: todayTabs }] = await Promise.all([
     supabase
       .from("pos_items")
-      .select("id, name, category, price_cents, cost_cents, stock_quantity, reorder_level, is_active, bottle_group, bottle_yield")
+      .select("id, name, category, price_cents, cost_cents, stock_quantity, reorder_level, is_active, bottle_group, bottle_yield, menu_section")
       .order("sort_order", { ascending: true, nullsFirst: false })
       .order("name"),
     supabase
@@ -51,7 +52,7 @@ export default async function InventoryPage() {
 
   const allItems = (items ?? []) as Item[];
   const grouped: Record<string, Item[]> = {};
-  for (const item of allItems) (grouped[item.category] ??= []).push(item);
+  for (const item of allItems) (grouped[resolveSection(item)] ??= []).push(item);
 
   const toTarget = (i: Item): StockTarget => ({
     id: i.id,
@@ -80,12 +81,12 @@ export default async function InventoryPage() {
       {/* Add stock (with cost) — grouped so bottle-family items share one card */}
       <section className="space-y-3">
         <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-bone/60">Add stock</h2>
-        {CATEGORY_ORDER.filter((cat) => grouped[cat]?.length).map((cat) => {
-          const catItems = grouped[cat]!;
+        {SECTION_ORDER.filter((sec) => grouped[sec]?.length).map((sec) => {
+          const catItems = grouped[sec]!;
           const rendered = new Set<string>();
           return (
-            <div key={cat} className="space-y-2">
-              <p className="text-[11px] uppercase tracking-wider text-bone/40">{CATEGORY_LABELS[cat] ?? cat}</p>
+            <div key={sec} className="space-y-2">
+              <p className="text-[11px] uppercase tracking-wider text-bone/40">{SECTION_LABELS[sec] ?? sec}</p>
               <div className="grid gap-3 sm:grid-cols-2">
                 {catItems.map((item) => {
                   if (rendered.has(item.id)) return null;
@@ -118,10 +119,10 @@ export default async function InventoryPage() {
       </section>
 
       {/* Manage — cost, margin, set/remove, edit */}
-      {CATEGORY_ORDER.filter((cat) => grouped[cat]?.length).map((cat) => (
-        <section key={cat} className="space-y-3">
+      {SECTION_ORDER.filter((sec) => grouped[sec]?.length).map((sec) => (
+        <section key={sec} className="space-y-3">
           <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-bone/60">
-            {CATEGORY_LABELS[cat] ?? cat}
+            {SECTION_LABELS[sec] ?? sec}
           </h2>
           <div className="border border-bone/10 rounded-lg overflow-x-auto">
             <table className="w-full min-w-[560px] text-sm">
@@ -138,7 +139,7 @@ export default async function InventoryPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-bone/10">
-                {grouped[cat]!.map((item) => {
+                {grouped[sec]!.map((item) => {
                   const settledToday = soldMap[item.id] ?? 0;
                   const stock = item.stock_quantity;
                   const threshold = item.reorder_level ?? 5;

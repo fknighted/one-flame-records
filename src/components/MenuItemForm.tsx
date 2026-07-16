@@ -27,7 +27,16 @@ type InitialValues = {
   is_active?: boolean;
   bottle_group?: string | null;
   bottle_yield?: number | null;
+  menu_section?: string | null;
 };
+
+const SECTIONS = [
+  { value: "",          label: "Auto (by category)" },
+  { value: "rum",       label: "Rums" },
+  { value: "beer",      label: "Beers" },
+  { value: "other",     label: "Other Drinks" },
+  { value: "cigarette", label: "Cigarettes" },
+];
 
 export default function MenuItemForm({
   action,
@@ -140,6 +149,19 @@ export default function MenuItemForm({
           </div>
         </div>
       </fieldset>
+
+      <div>
+        <label className={LABEL}>Inventory section (how it groups on the inventory page)</label>
+        <select
+          name="menu_section"
+          defaultValue={initialValues.menu_section ?? ""}
+          className={INPUT + " bg-ink"}
+        >
+          {SECTIONS.map(({ value, label }) => (
+            <option key={value} value={value}>{label}</option>
+          ))}
+        </select>
+      </div>
 
       <div>
         <label className={LABEL}>Description (optional)</label>

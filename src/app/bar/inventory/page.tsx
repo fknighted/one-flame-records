@@ -1,6 +1,6 @@
 import { createServiceClient } from "@/lib/supabase/server";
 import { requireBarStaff } from "@/lib/auth";
-import { CATEGORY_LABELS, CATEGORY_ORDER } from "@/lib/bar/pos";
+import { SECTION_LABELS, SECTION_ORDER, resolveSection } from "@/lib/bar/pos";
 import InventoryAddRow, { type InvRow } from "@/components/InventoryAddRow";
 import { addStock } from "./actions";
 
@@ -9,6 +9,7 @@ type Item = {
   id: string;
   name: string;
   category: string;
+  menu_section: string | null;
   stock_quantity: number | null;
   reorder_level: number | null;
   bottle_group: string | null;
@@ -22,14 +23,14 @@ export default async function BarInventoryPage() {
 
   const { data: items } = await supabase
     .from("pos_items")
-    .select("id, name, category, stock_quantity, reorder_level, bottle_group, bottle_yield, price_cents")
+    .select("id, name, category, menu_section, stock_quantity, reorder_level, bottle_group, bottle_yield, price_cents")
     .eq("is_active", true)
     .order("sort_order", { ascending: true, nullsFirst: false })
     .order("name");
 
   const allItems = (items ?? []) as Item[];
   const grouped: Record<string, Item[]> = {};
-  for (const item of allItems) (grouped[item.category] ??= []).push(item);
+  for (const item of allItems) (grouped[resolveSection(item)] ??= []).push(item);
 
   const toRow = (i: Item): InvRow => ({
     id: i.id,
@@ -47,14 +48,14 @@ export default async function BarInventoryPage() {
         <p className="mt-1 text-sm text-bone/60">Tap an item to add stock as you buy it. You can add but not remove — an admin adjusts counts. Low or out items show in red.</p>
       </div>
 
-      {CATEGORY_ORDER.filter((cat) => grouped[cat]?.length).map((cat) => {
-        const catItems = grouped[cat]!;
+      {SECTION_ORDER.filter((sec) => grouped[sec]?.length).map((sec) => {
+        const catItems = grouped[sec]!;
         const rendered = new Set<string>();
 
         return (
-          <section key={cat} className="space-y-2">
+          <section key={sec} className="space-y-2">
             <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-bone/60">
-              {CATEGORY_LABELS[cat] ?? cat}
+              {SECTION_LABELS[sec] ?? sec}
             </h2>
             <div className="space-y-2">
               {catItems.map((item) => {

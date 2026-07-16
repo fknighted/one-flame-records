@@ -28,6 +28,7 @@ export async function createMenuItem(
   const reorderStr    = formData.get("reorder_level") as string;
   const bottleGroup   = (formData.get("bottle_group") as string)?.trim() || null;
   const bottleYldStr  = formData.get("bottle_yield") as string;
+  const menuSection   = (formData.get("menu_section") as string)?.trim() || null;
 
   if (!name)     return { error: "Name is required." };
   if (!category) return { error: "Category is required." };
@@ -51,6 +52,7 @@ export async function createMenuItem(
     reorder_level,
     bottle_group: bottleGroup,
     bottle_yield,
+    menu_section: menuSection,
   });
 
   if (error) return { error: `Failed to create item: ${error.message}` };
@@ -75,6 +77,7 @@ export async function updateMenuItem(
   const reorderStr    = formData.get("reorder_level") as string;
   const bottleGroup   = (formData.get("bottle_group") as string)?.trim() || null;
   const bottleYldStr  = formData.get("bottle_yield") as string;
+  const menuSection   = (formData.get("menu_section") as string)?.trim() || null;
   const is_active     = formData.getAll("is_active").includes("true");
 
   if (!id)   return { error: "ID missing." };
@@ -91,7 +94,7 @@ export async function updateMenuItem(
   const supabase = createServiceClient();
   const { error } = await supabase
     .from("pos_items")
-    .update({ name, category, price_cents, cost_cents, description, sort_order, reorder_level, bottle_group: bottleGroup, bottle_yield, is_active })
+    .update({ name, category, price_cents, cost_cents, description, sort_order, reorder_level, bottle_group: bottleGroup, bottle_yield, menu_section: menuSection, is_active })
     .eq("id", id);
 
   if (error) return { error: `Failed to update item: ${error.message}` };

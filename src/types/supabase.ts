@@ -568,6 +568,7 @@ export type Database = {
           category: string
           cost_cents: number | null
           created_at: string
+          menu_section: string | null
           description: string | null
           id: string
           is_active: boolean
@@ -584,6 +585,7 @@ export type Database = {
           category?: string
           cost_cents?: number | null
           created_at?: string
+          menu_section?: string | null
           description?: string | null
           id?: string
           is_active?: boolean
@@ -600,6 +602,7 @@ export type Database = {
           category?: string
           cost_cents?: number | null
           created_at?: string
+          menu_section?: string | null
           description?: string | null
           id?: string
           is_active?: boolean
