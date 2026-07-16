@@ -14,6 +14,7 @@ type Item = {
   reorder_level: number | null;
   bottle_group: string | null;
   bottle_yield: number | null;
+  bottle_parent_id: string | null;
   price_cents: number;
 };
 
@@ -23,12 +24,14 @@ export default async function BarInventoryPage() {
 
   const { data: items } = await supabase
     .from("pos_items")
-    .select("id, name, category, menu_section, stock_quantity, reorder_level, bottle_group, bottle_yield, price_cents")
+    .select("id, name, category, menu_section, stock_quantity, reorder_level, bottle_group, bottle_yield, bottle_parent_id, price_cents")
     .eq("is_active", true)
     .order("sort_order", { ascending: true, nullsFirst: false })
     .order("name");
 
-  const allItems = (items ?? []) as Item[];
+  // Whole-bottle SKUs draw from their shot parent's pool — you restock the
+  // shots, not the bottle — so they don't get their own add row here.
+  const allItems = ((items ?? []) as Item[]).filter((i) => !i.bottle_parent_id);
   const grouped: Record<string, Item[]> = {};
   for (const item of allItems) (grouped[resolveSection(item)] ??= []).push(item);
 

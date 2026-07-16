@@ -564,6 +564,7 @@ export type Database = {
       pos_items: {
         Row: {
           bottle_group: string | null
+          bottle_parent_id: string | null
           bottle_yield: number | null
           category: string
           cost_cents: number | null
@@ -581,6 +582,7 @@ export type Database = {
         }
         Insert: {
           bottle_group?: string | null
+          bottle_parent_id?: string | null
           bottle_yield?: number | null
           category?: string
           cost_cents?: number | null
@@ -598,6 +600,7 @@ export type Database = {
         }
         Update: {
           bottle_group?: string | null
+          bottle_parent_id?: string | null
           bottle_yield?: number | null
           category?: string
           cost_cents?: number | null
@@ -1122,6 +1125,10 @@ export type Database = {
       current_gamer_member_id: { Args: never; Returns: string }
       decrement_pos_item_stock: {
         Args: { p_item_id: string }
+        Returns: boolean
+      }
+      decrement_pos_item_stock_by: {
+        Args: { p_item_id: string; p_qty: number }
         Returns: boolean
       }
       decrement_tab_item_quantity: {

@@ -23,12 +23,52 @@ export async function addItemToTab(
 
   const [{ data: tab }, { data: item }] = await Promise.all([
     supabase.from("pos_tabs").select("id, status").eq("id", tabId).single(),
-    supabase.from("pos_items").select("id, name, price_cents, cost_cents, is_active, stock_quantity").eq("id", itemId).single(),
+    supabase.from("pos_items").select("id, name, price_cents, cost_cents, is_active, stock_quantity, bottle_parent_id").eq("id", itemId).single(),
   ]);
 
   if (!tab)                  return { error: "Tab not found." };
   if (tab.status !== "open") return { error: "This tab is already closed." };
   if (!item?.is_active)      return { error: "Item is no longer available." };
+
+  // A whole-bottle item draws from its shot parent's pool: one bottle = the
+  // parent's bottle_yield shots. Only sellable while MORE THAN one bottle's
+  // worth remains, and its cost snapshot is (per-shot cost × shots per bottle).
+  let costSnapshot = item.cost_cents;
+  if (item.bottle_parent_id) {
+    const { data: parent } = await supabase
+      .from("pos_items")
+      .select("id, stock_quantity, bottle_yield, cost_cents")
+      .eq("id", item.bottle_parent_id)
+      .single();
+    const yieldPer = parent?.bottle_yield ?? 0;
+    if (!parent || yieldPer <= 0) return { error: "Bottle is not set up for sale." };
+    const tracked = parent.stock_quantity !== null;
+    if (tracked && parent.stock_quantity! <= yieldPer) {
+      return { error: "Only one bottle's worth left — sold by the shot only." };
+    }
+    costSnapshot = parent.cost_cents != null ? parent.cost_cents * yieldPer : null;
+
+    const { data: inserted, error: insertError } = await supabase
+      .from("pos_tab_items")
+      .insert({ tab_id: tabId, pos_item_id: itemId, name: item.name, price_cents: item.price_cents, cost_cents: costSnapshot, quantity: 1 })
+      .select("id")
+      .single();
+    if (insertError) return { error: `Failed to add item: ${insertError.message}` };
+
+    if (tracked) {
+      const { data: ok, error: stockErr } = await supabase.rpc("decrement_pos_item_stock_by", { p_item_id: parent.id, p_qty: yieldPer });
+      if (stockErr || !ok) {
+        await supabase.from("pos_tab_items").delete().eq("id", inserted.id);
+        return { error: "Not enough stock for a whole bottle." };
+      }
+    }
+    const { error: totalErr } = await supabase.rpc("increment_tab_total", { p_tab_id: tabId, p_amount: item.price_cents });
+    if (totalErr) return { error: `Failed to update total: ${totalErr.message}` };
+
+    revalidatePath(`/bar/tabs/${tabId}`);
+    return null;
+  }
+
   if (item.stock_quantity !== null && item.stock_quantity <= 0) return { error: "Item is out of stock." };
 
   // Capture the inserted row ID so we can undo it if the stock decrement races to 0
@@ -39,7 +79,7 @@ export async function addItemToTab(
       pos_item_id: itemId,
       name:        item.name,
       price_cents: item.price_cents,
-      cost_cents:  item.cost_cents,   // snapshot unit cost at sale → profit locked to sale time
+      cost_cents:  costSnapshot,   // snapshot unit cost at sale → profit locked to sale time
       quantity:    1,
     })
     .select("id")

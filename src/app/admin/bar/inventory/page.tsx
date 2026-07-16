@@ -16,6 +16,7 @@ type Item = {
   is_active: boolean;
   bottle_group: string | null;
   bottle_yield: number | null;
+  bottle_parent_id: string | null;
   menu_section: string | null;
 };
 
@@ -27,7 +28,7 @@ export default async function InventoryPage() {
   const [{ data: items }, { data: todayTabs }] = await Promise.all([
     supabase
       .from("pos_items")
-      .select("id, name, category, price_cents, cost_cents, stock_quantity, reorder_level, is_active, bottle_group, bottle_yield, menu_section")
+      .select("id, name, category, price_cents, cost_cents, stock_quantity, reorder_level, is_active, bottle_group, bottle_yield, bottle_parent_id, menu_section")
       .order("sort_order", { ascending: true, nullsFirst: false })
       .order("name"),
     supabase
@@ -81,8 +82,9 @@ export default async function InventoryPage() {
       {/* Add stock (with cost) — grouped so bottle-family items share one card */}
       <section className="space-y-3">
         <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-bone/60">Add stock</h2>
-        {SECTION_ORDER.filter((sec) => grouped[sec]?.length).map((sec) => {
-          const catItems = grouped[sec]!;
+        {SECTION_ORDER.filter((sec) => grouped[sec]?.some((i) => !i.bottle_parent_id)).map((sec) => {
+          // Whole-bottle SKUs draw from their shot parent's pool, so no add row.
+          const catItems = grouped[sec]!.filter((i) => !i.bottle_parent_id);
           const rendered = new Set<string>();
           return (
             <div key={sec} className="space-y-2">
@@ -144,6 +146,7 @@ export default async function InventoryPage() {
                   const stock = item.stock_quantity;
                   const threshold = item.reorder_level ?? 5;
                   const low = stock !== null && stock < threshold;
+                  const isBottle = !!item.bottle_parent_id; // whole-bottle SKU: stock/cost derive from its shot parent
                   const margin = marginPct(item.price_cents, item.cost_cents);
                   return (
                     <tr key={item.id} className={`hover:bg-bone/3 transition-colors ${!item.is_active ? "opacity-40" : ""}`}>
@@ -155,7 +158,9 @@ export default async function InventoryPage() {
                       </td>
                       <td className="hidden sm:table-cell px-4 py-3 text-right font-mono text-bone/60">{formatCents(item.price_cents)}</td>
                       <td className="px-4 py-3 text-right font-mono">
-                        {item.cost_cents == null ? (
+                        {isBottle ? (
+                          <span className="text-bone/40 text-xs">from shots</span>
+                        ) : item.cost_cents == null ? (
                           <Link href={`/admin/bar/items/${item.id}/edit`} className="text-ochre/80 hover:text-ochre text-xs">set cost</Link>
                         ) : (
                           <span className="text-bone/60">{formatCents(item.cost_cents)}</span>
@@ -172,13 +177,18 @@ export default async function InventoryPage() {
                         {settledToday > 0 ? settledToday : <span className="text-bone/60">—</span>}
                       </td>
                       <td className="px-4 py-3 text-right">
-                        {stock === null ? (
+                        {isBottle ? (
+                          <span className="text-bone/40 text-xs">pooled</span>
+                        ) : stock === null ? (
                           <span className="text-bone/60 font-mono">—</span>
                         ) : (
                           <span className={`font-mono font-bold ${low ? "text-red-400" : "text-bone"}`}>{stock}</span>
                         )}
                       </td>
                       <td className="px-3 py-2">
+                        {isBottle ? (
+                          <div className="text-right text-bone/30 text-xs pr-2">—</div>
+                        ) : (
                         <form action={updateStock} className="flex gap-1.5 justify-end items-center">
                           <input type="hidden" name="id" value={item.id} />
                           <input
@@ -196,6 +206,7 @@ export default async function InventoryPage() {
                             Set
                           </button>
                         </form>
+                        )}
                       </td>
                       <td className="px-4 py-3 text-right">
                         <span className="inline-flex items-center gap-3">

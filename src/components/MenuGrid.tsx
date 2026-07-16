@@ -13,9 +13,8 @@ type Props = {
 };
 
 
-function AddButton({ item, tabId }: { item: PosItem; tabId: string }) {
+function AddButton({ item, tabId, disabled, badge }: { item: PosItem; tabId: string; disabled: boolean; badge?: string }) {
   const [state, formAction, pending] = useActionState(addItemToTab, null);
-  const outOfStock = item.stock_quantity !== null && item.stock_quantity <= 0;
 
   return (
     <form action={formAction}>
@@ -23,10 +22,10 @@ function AddButton({ item, tabId }: { item: PosItem; tabId: string }) {
       <input type="hidden" name="item_id" value={item.id} />
       <button
         type="submit"
-        disabled={pending || outOfStock}
+        disabled={pending || disabled}
         className={[
           "w-full text-left border rounded-xl p-3 min-h-[72px] flex flex-col justify-between transition-all",
-          outOfStock
+          disabled
             ? "border-bone/8 opacity-40 cursor-not-allowed"
             : "border-bone/15 hover:border-ochre/40 hover:bg-ochre/5 active:scale-[0.97] disabled:opacity-40",
         ].join(" ")}
@@ -34,7 +33,7 @@ function AddButton({ item, tabId }: { item: PosItem; tabId: string }) {
         <span className="text-bone text-sm font-medium leading-tight line-clamp-2">{item.name}</span>
         <div className="flex items-center justify-between mt-1">
           <span className="text-ochre text-sm font-mono font-semibold">{formatCents(item.price_cents)}</span>
-          {outOfStock && <span className="text-bone/50 text-[10px] uppercase tracking-wider">Out</span>}
+          {badge && <span className="text-bone/50 text-[10px] uppercase tracking-wider">{badge}</span>}
         </div>
         {state?.error && (
           <span className="text-red-400 text-xs mt-1 block">{state.error}</span>
@@ -44,6 +43,23 @@ function AddButton({ item, tabId }: { item: PosItem; tabId: string }) {
   );
 }
 
+/**
+ * Availability for the tab screen. Whole-bottle items (bottle_parent_id) draw
+ * from their shot parent's pool: sellable only while MORE THAN one bottle's
+ * worth of shots remains (parent stock > bottle_yield).
+ */
+function availability(item: PosItem, byId: Map<string, PosItem>): { disabled: boolean; badge?: string } {
+  if (item.bottle_parent_id) {
+    const parent = byId.get(item.bottle_parent_id);
+    const yieldPer = parent?.bottle_yield ?? 0;
+    if (!parent || yieldPer <= 0) return { disabled: true, badge: "N/A" };
+    if (parent.stock_quantity === null) return { disabled: false };
+    return parent.stock_quantity > yieldPer ? { disabled: false } : { disabled: true, badge: "Low" };
+  }
+  const out = item.stock_quantity !== null && item.stock_quantity <= 0;
+  return { disabled: out, badge: out ? "Out" : undefined };
+}
+
 export default function MenuGrid({ items, tabId }: Props) {
   const availableCategories = CATEGORY_ORDER
     .filter(key => items.some(i => i.category === key && i.is_active))
@@ -51,6 +67,7 @@ export default function MenuGrid({ items, tabId }: Props) {
 
   const [active, setActive] = useState(availableCategories[0]?.key ?? "drink");
 
+  const byId = new Map(items.map(i => [i.id, i]));
   const visible = items.filter(i => i.category === active && i.is_active);
 
   return (
@@ -77,9 +94,10 @@ export default function MenuGrid({ items, tabId }: Props) {
         {visible.length === 0 ? (
           <p className="col-span-2 text-center text-bone/30 text-sm py-8">No items in this category</p>
         ) : (
-          visible.map(item => (
-            <AddButton key={item.id} item={item} tabId={tabId} />
-          ))
+          visible.map(item => {
+            const { disabled, badge } = availability(item, byId);
+            return <AddButton key={item.id} item={item} tabId={tabId} disabled={disabled} badge={badge} />;
+          })
         )}
       </div>
     </div>
