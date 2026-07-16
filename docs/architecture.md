@@ -150,6 +150,20 @@ Label news and announcements. Public can read published posts; admin full access
 | `is_published` | `boolean` | Default false. Must be true AND `published_at <= now()` for public access. |
 | `created_at`, `updated_at` | `timestamptz` | |
 
+### Bar POS — inventory cost & profit (migration `20260716000001`)
+
+Cost capture added on top of the existing `pos_items` / `pos_tabs` / `pos_tab_items` bar tables so the label can see profit (revenue − cost of goods sold).
+
+- **`pos_items`** new columns:
+  - `cost_cents` (`int` nullable) — current unit cost of this sellable SKU (JMD × 100), updated to the latest purchase's per-unit cost. `NULL` = unknown (treated as $0 in profit, so profit is overstated until set).
+  - `bottle_group` (`text` nullable) — optional: SKUs sharing a value render together with an output picker. Left NULL for the current rum items (two brands stocked independently; the half-flask pours from either).
+  - `bottle_yield` (`int` nullable) — set → the item is stocked **by the bottle**. Holds the *default* units per bottle; the actual yield is editable at add-time (750ml ≈ 16 × 1.5oz shots, 1L ≈ 22). Live defaults: Rum Shot 16, J B Rum Shot 16, Rum - Half Flask 4.
+- **`pos_tab_items`** new column `cost_cents` (`int` nullable) — the item's `cost_cents` **snapshotted at time of sale** (mirrors `price_cents`). Profit is locked to sale time: editing an item's cost later never rewrites past profit.
+- **`pos_stock_purchases`** — append-only inventory-addition ledger: `pos_item_id`, `quantity_added`, `unit_cost_cents`, `total_cost_cents`, `containers` (bottles, nullable), `container_cost_cents` (nullable), `added_by`, `note`, `created_at`. RLS: select = `is_bar_staff()`; no insert/update/delete policy — all writes go through the service client / RPC (add-only, no remove path).
+- **`add_pos_item_stock(p_item_id, p_qty, p_unit_cost_cents)`** — `SECURITY DEFINER` RPC; atomically adds `p_qty` to `stock_quantity` (NULL→0) and sets `cost_cents`. Add-only (rejects non-positive qty). Companion to the existing `decrement_pos_item_stock`.
+
+Permissions: bartenders can only **add** stock (`/bar/inventory`, server-guarded positive-qty, confirmation step); admin retains the absolute "Set" overwrite (`updateStock`) to lower/remove and edits price + cost via the item form. Cost, margin, and profit are **admin-only** — never shown on `/bar`. Profit = `Σ(closed-tab total_cents) − Σ(pos_tab_items.quantity × cost_cents)`; gaming session revenue (`game_sessions.price_jmd`) is a separate stream, excluded from this COGS calc.
+
 ## Row-Level Security
 
 RLS is **on** for every table. Default-deny, then grant explicit policies.

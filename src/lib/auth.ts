@@ -39,3 +39,10 @@ export async function requireBarStaff(): Promise<void> {
     !profile?.is_bartender
   ) throw new Error("Forbidden");
 }
+
+/** Current authenticated user's id, or null. For audit fields (e.g. added_by). */
+export async function currentUserId(): Promise<string | null> {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  return user?.id ?? null;
+}

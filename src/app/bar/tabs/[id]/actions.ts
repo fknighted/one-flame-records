@@ -23,7 +23,7 @@ export async function addItemToTab(
 
   const [{ data: tab }, { data: item }] = await Promise.all([
     supabase.from("pos_tabs").select("id, status").eq("id", tabId).single(),
-    supabase.from("pos_items").select("id, name, price_cents, is_active, stock_quantity").eq("id", itemId).single(),
+    supabase.from("pos_items").select("id, name, price_cents, cost_cents, is_active, stock_quantity").eq("id", itemId).single(),
   ]);
 
   if (!tab)                  return { error: "Tab not found." };
@@ -39,6 +39,7 @@ export async function addItemToTab(
       pos_item_id: itemId,
       name:        item.name,
       price_cents: item.price_cents,
+      cost_cents:  item.cost_cents,   // snapshot unit cost at sale → profit locked to sale time
       quantity:    1,
     })
     .select("id")

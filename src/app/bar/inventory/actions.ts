@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { createServiceClient } from "@/lib/supabase/server";
-import { requireAdmin, currentUserId } from "@/lib/auth";
+import { requireBarStaff, currentUserId } from "@/lib/auth";
 import { applyStockPurchase } from "@/lib/bar/inventory";
 
 export type ActionState = { error: string } | { ok: string } | null;
@@ -14,27 +14,16 @@ function parseCents(value: string | null): number | null {
   return Math.round(dollars * 100);
 }
 
-/** Admin-only absolute overwrite of stock — this is how admin lowers/removes stock. */
-export async function updateStock(formData: FormData) {
-  await requireAdmin();
-  const id  = formData.get("id") as string;
-  const raw = formData.get("qty") as string;
-  const qty = parseInt(raw, 10);
-  if (!id || isNaN(qty) || qty < 0) return;
-  const supabase = createServiceClient();
-  await supabase
-    .from("pos_items")
-    .update({ stock_quantity: qty, updated_at: new Date().toISOString() })
-    .eq("id", id);
-  revalidatePath("/admin/bar/inventory");
-}
-
-/** Admin add-only stock purchase (same additive flow as the bartender path). */
+/**
+ * Bartender add-only stock. Add-only is enforced here: quantities/containers
+ * must be positive; there is no set/remove path on the staff side. The bottle
+ * yield is read from the item in the DB (never trusted from the client).
+ */
 export async function addStock(
   _prev: ActionState,
   formData: FormData
 ): Promise<ActionState> {
-  await requireAdmin();
+  await requireBarStaff();
 
   const itemId = formData.get("item_id") as string;
   if (!itemId) return { error: "Invalid request." };
@@ -49,6 +38,8 @@ export async function addStock(
 
   const addedBy = await currentUserId();
   const isBottle = !!item.bottle_yield;
+  // Yield (units per bottle) is editable at add-time — 750ml vs 1L pour a
+  // different number of shots. Fall back to the item's stored default.
   const yieldOverride = parseInt(formData.get("bottle_yield") as string, 10);
 
   const result = isBottle
@@ -70,6 +61,6 @@ export async function addStock(
 
   if (!result.ok) return { error: result.error };
 
-  revalidatePath("/admin/bar/inventory");
+  revalidatePath("/bar/inventory");
   return { ok: `Added ${result.quantityAdded} ${item.name} — stock now ${result.newStock}.` };
 }

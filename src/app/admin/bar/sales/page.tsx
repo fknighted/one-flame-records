@@ -50,35 +50,39 @@ export default async function SalesPage({
       ? (
           await supabase
             .from("pos_tab_items")
-            .select("name, price_cents, quantity, pos_items(category)")
+            .select("name, price_cents, cost_cents, quantity, pos_items(category)")
             .in("tab_id", tabIds)
         ).data ?? []
       : [];
 
   // ── Aggregate ─────────────────────────────────────────────────────────────
 
-  type LineItem = (typeof lineItems)[number];
-
   const totalRevenue = closedTabs.reduce((sum, t) => sum + (t.total_cents ?? 0), 0);
   const totalItemsSold = lineItems.reduce((sum, li) => sum + (li.quantity ?? 1), 0);
+  // Cost of goods sold (cost snapshotted at sale). Missing cost counts as 0.
+  const totalCost = lineItems.reduce((sum, li) => sum + (li.cost_cents ?? 0) * (li.quantity ?? 1), 0);
+  const totalProfit = totalRevenue - totalCost;
+  const totalMargin = totalRevenue > 0 ? Math.round((totalProfit / totalRevenue) * 100) : null;
 
-  // Revenue by category
-  const byCategory: Record<string, { qty: number; cents: number }> = {};
+  // Revenue + cost by category
+  const byCategory: Record<string, { qty: number; cents: number; cost: number }> = {};
   for (const li of lineItems) {
     const cat = (li.pos_items as { category: string } | null)?.category ?? "other";
-    if (!byCategory[cat]) byCategory[cat] = { qty: 0, cents: 0 };
+    if (!byCategory[cat]) byCategory[cat] = { qty: 0, cents: 0, cost: 0 };
     byCategory[cat].qty   += li.quantity ?? 1;
     byCategory[cat].cents += (li.price_cents ?? 0) * (li.quantity ?? 1);
+    byCategory[cat].cost  += (li.cost_cents ?? 0) * (li.quantity ?? 1);
   }
 
   // Top items by revenue
-  const byItem: Record<string, { category: string; qty: number; cents: number }> = {};
+  const byItem: Record<string, { category: string; qty: number; cents: number; cost: number }> = {};
   for (const li of lineItems) {
     const cat = (li.pos_items as { category: string } | null)?.category ?? "other";
     const key = li.name;
-    if (!byItem[key]) byItem[key] = { category: cat, qty: 0, cents: 0 };
+    if (!byItem[key]) byItem[key] = { category: cat, qty: 0, cents: 0, cost: 0 };
     byItem[key].qty   += li.quantity ?? 1;
     byItem[key].cents += (li.price_cents ?? 0) * (li.quantity ?? 1);
+    byItem[key].cost  += (li.cost_cents ?? 0) * (li.quantity ?? 1);
   }
   const topItems = Object.entries(byItem)
     .sort(([, a], [, b]) => b.cents - a.cents)
@@ -127,44 +131,53 @@ export default async function SalesPage({
       ) : (
         <>
           {/* Summary row */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
             {[
-              { label: "Total Revenue",  value: formatCents(totalRevenue) },
-              { label: "Items Sold",     value: totalItemsSold.toString() },
-              { label: "Tabs Closed",    value: closedTabs.length.toString() },
+              { label: "Total Revenue",  value: formatCents(totalRevenue), tone: "text-bone" },
+              { label: "Cost of Goods",  value: formatCents(totalCost),    tone: "text-bone/60" },
+              { label: "Profit",         value: formatCents(totalProfit),  tone: totalProfit < 0 ? "text-red-400" : "text-sage", sub: totalMargin != null ? `${totalMargin}% margin` : undefined },
+              { label: "Items Sold",     value: totalItemsSold.toString(), tone: "text-bone" },
+              { label: "Tabs Closed",    value: closedTabs.length.toString(), tone: "text-bone" },
             ].map((card) => (
               <div key={card.label} className="rounded-lg border border-bone/10 bg-bone/3 px-5 py-4">
                 <p className="text-xs font-semibold uppercase tracking-wider text-bone/60 mb-1">{card.label}</p>
-                <p className="font-mono text-bone text-2xl font-bold">{card.value}</p>
+                <p className={`font-mono text-2xl font-bold ${card.tone}`}>{card.value}</p>
+                {card.sub && <p className="text-[11px] text-bone/40 mt-0.5">{card.sub}</p>}
               </div>
             ))}
           </div>
+          <p className="-mt-4 text-[11px] text-bone/35">
+            Profit uses cost captured at time of sale. Items sold before a cost was set (or with no cost) count as pure profit.
+          </p>
 
           {/* Revenue by category */}
           {categoryRows.length > 0 && (
             <section className="space-y-3">
               <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-bone/60">By Category</h2>
               <div className="border border-bone/10 rounded-lg overflow-x-auto">
-                <table className="w-full min-w-[440px] text-sm">
+                <table className="w-full min-w-[520px] text-sm">
                   <thead className="border-b border-bone/10 bg-bone/3">
                     <tr>
                       <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Category</th>
                       <th className="text-right px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Qty Sold</th>
                       <th className="text-right px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Revenue</th>
-                      <th className="text-right px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">% of Total</th>
+                      <th className="hidden sm:table-cell text-right px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Cost</th>
+                      <th className="text-right px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Profit</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-bone/10">
-                    {categoryRows.map(([cat, data]) => (
-                      <tr key={cat} className="hover:bg-bone/3 transition-colors">
-                        <td className="px-4 py-3 text-bone font-medium">{CATEGORY_LABELS[cat] ?? cat}</td>
-                        <td className="px-4 py-3 text-right font-mono text-bone/70">{data.qty}</td>
-                        <td className="px-4 py-3 text-right font-mono text-bone">{formatCents(data.cents)}</td>
-                        <td className="px-4 py-3 text-right font-mono text-bone/50">
-                          {totalRevenue > 0 ? ((data.cents / totalRevenue) * 100).toFixed(1) : "0.0"}%
-                        </td>
-                      </tr>
-                    ))}
+                    {categoryRows.map(([cat, data]) => {
+                      const profit = data.cents - data.cost;
+                      return (
+                        <tr key={cat} className="hover:bg-bone/3 transition-colors">
+                          <td className="px-4 py-3 text-bone font-medium">{CATEGORY_LABELS[cat] ?? cat}</td>
+                          <td className="px-4 py-3 text-right font-mono text-bone/70">{data.qty}</td>
+                          <td className="px-4 py-3 text-right font-mono text-bone">{formatCents(data.cents)}</td>
+                          <td className="hidden sm:table-cell px-4 py-3 text-right font-mono text-bone/50">{formatCents(data.cost)}</td>
+                          <td className={`px-4 py-3 text-right font-mono ${profit < 0 ? "text-red-400" : "text-sage"}`}>{formatCents(profit)}</td>
+                        </tr>
+                      );
+                    })}
                   </tbody>
                 </table>
               </div>
@@ -176,24 +189,29 @@ export default async function SalesPage({
             <section className="space-y-3">
               <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-bone/60">Top Items</h2>
               <div className="border border-bone/10 rounded-lg overflow-x-auto">
-                <table className="w-full min-w-[440px] text-sm">
+                <table className="w-full min-w-[520px] text-sm">
                   <thead className="border-b border-bone/10 bg-bone/3">
                     <tr>
                       <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Item</th>
-                      <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Category</th>
+                      <th className="hidden sm:table-cell text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Category</th>
                       <th className="text-right px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Qty</th>
                       <th className="text-right px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Revenue</th>
+                      <th className="text-right px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Profit</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-bone/10">
-                    {topItems.map(([name, data]) => (
-                      <tr key={name} className="hover:bg-bone/3 transition-colors">
-                        <td className="px-4 py-3 text-bone font-medium">{name}</td>
-                        <td className="px-4 py-3 text-bone/50">{CATEGORY_LABELS[data.category] ?? data.category}</td>
-                        <td className="px-4 py-3 text-right font-mono text-bone/70">{data.qty}</td>
-                        <td className="px-4 py-3 text-right font-mono text-bone">{formatCents(data.cents)}</td>
-                      </tr>
-                    ))}
+                    {topItems.map(([name, data]) => {
+                      const profit = data.cents - data.cost;
+                      return (
+                        <tr key={name} className="hover:bg-bone/3 transition-colors">
+                          <td className="px-4 py-3 text-bone font-medium">{name}</td>
+                          <td className="hidden sm:table-cell px-4 py-3 text-bone/50">{CATEGORY_LABELS[data.category] ?? data.category}</td>
+                          <td className="px-4 py-3 text-right font-mono text-bone/70">{data.qty}</td>
+                          <td className="px-4 py-3 text-right font-mono text-bone">{formatCents(data.cents)}</td>
+                          <td className={`px-4 py-3 text-right font-mono ${profit < 0 ? "text-red-400" : "text-sage"}`}>{formatCents(profit)}</td>
+                        </tr>
+                      );
+                    })}
                   </tbody>
                 </table>
               </div>

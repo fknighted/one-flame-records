@@ -24,16 +24,42 @@ export default async function BarOverviewPage() {
     { count: activeSessions },
   ] = await Promise.all([
     supabase.from("pos_tabs").select("id, name, total_cents, status, created_at").gte("created_at", todayStart.toISOString()).order("created_at", { ascending: false }),
-    supabase.from("pos_tabs").select("total_cents").eq("status", "closed").gte("closed_at", weekStart.toISOString()),
-    supabase.from("pos_tabs").select("total_cents").eq("status", "closed").gte("closed_at", monthStart.toISOString()),
+    supabase.from("pos_tabs").select("id, total_cents").eq("status", "closed").gte("closed_at", weekStart.toISOString()),
+    supabase.from("pos_tabs").select("id, total_cents").eq("status", "closed").gte("closed_at", monthStart.toISOString()),
     supabase.from("pos_items").select("id", { count: "exact", head: true }).eq("is_active", true),
     supabase.from("gamer_members").select("id", { count: "exact", head: true }).eq("status", "active"),
     supabase.from("game_sessions").select("id", { count: "exact", head: true }).is("ended_at", null),
   ]);
 
-  const todayRevenue  = (todayAllTabs ?? []).filter(t => t.status === "closed").reduce((sum, t) => sum + (t.total_cents ?? 0), 0);
+  const todayClosedTabs = (todayAllTabs ?? []).filter(t => t.status === "closed");
+  const todayRevenue  = todayClosedTabs.reduce((sum, t) => sum + (t.total_cents ?? 0), 0);
   const weekRevenue   = (weekClosed  ?? []).reduce((sum, t) => sum + (t.total_cents ?? 0), 0);
   const monthRevenue  = (monthClosed ?? []).reduce((sum, t) => sum + (t.total_cents ?? 0), 0);
+
+  // Cost of goods sold = Σ(quantity × cost snapshotted at sale) over each window's closed tabs.
+  // Sessions revenue (game_sessions) is a separate stream and is excluded here, as it is from revenue above.
+  const todayTabIds = todayClosedTabs.map(t => t.id);
+  const weekTabIds  = (weekClosed  ?? []).map(t => t.id);
+  const monthTabIds = (monthClosed ?? []).map(t => t.id);
+  const allTabIds = Array.from(new Set([...todayTabIds, ...weekTabIds, ...monthTabIds]));
+
+  const costByTab: Record<string, number> = {};
+  if (allTabIds.length > 0) {
+    const { data: lineItems } = await supabase
+      .from("pos_tab_items")
+      .select("tab_id, quantity, cost_cents")
+      .in("tab_id", allTabIds);
+    for (const li of lineItems ?? []) {
+      costByTab[li.tab_id] = (costByTab[li.tab_id] ?? 0) + (li.quantity ?? 1) * (li.cost_cents ?? 0);
+    }
+  }
+  const sumCost = (ids: string[]) => ids.reduce((s, id) => s + (costByTab[id] ?? 0), 0);
+
+  const windows = [
+    { label: "Today",      revenue: todayRevenue, cost: sumCost(todayTabIds) },
+    { label: "This Week",  revenue: weekRevenue,  cost: sumCost(weekTabIds)  },
+    { label: "This Month", revenue: monthRevenue, cost: sumCost(monthTabIds) },
+  ];
 
   return (
     <div className="space-y-8 max-w-4xl">
@@ -43,19 +69,35 @@ export default async function BarOverviewPage() {
         <div className="mt-3 h-px w-16 bg-bone/20" />
       </div>
 
-      {/* Revenue totals */}
+      {/* Revenue + profit totals (admin only) */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        {[
-          { label: "Today",      value: formatCents(todayRevenue) },
-          { label: "This Week",  value: formatCents(weekRevenue)  },
-          { label: "This Month", value: formatCents(monthRevenue) },
-        ].map((card) => (
-          <div key={card.label} className="border border-bone/10 rounded-lg p-4">
-            <p className="text-xs text-bone/60 mb-1">{card.label}</p>
-            <p className="text-2xl font-display font-bold text-bone">{card.value}</p>
-          </div>
-        ))}
+        {windows.map((w) => {
+          const profit = w.revenue - w.cost;
+          const margin = w.revenue > 0 ? Math.round((profit / w.revenue) * 100) : null;
+          return (
+            <div key={w.label} className="border border-bone/10 rounded-lg p-4">
+              <p className="text-xs text-bone/60 mb-1">{w.label}</p>
+              <p className="text-2xl font-display font-bold text-bone">{formatCents(w.revenue)}</p>
+              <p className="text-[11px] text-bone/40 mt-0.5">revenue</p>
+              <div className="mt-3 pt-3 border-t border-bone/10 space-y-1">
+                <div className="flex justify-between text-xs">
+                  <span className="text-bone/50">Cost</span>
+                  <span className="font-mono text-bone/60">{formatCents(w.cost)}</span>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span className="text-bone/70">Profit</span>
+                  <span className={`font-mono font-bold ${profit < 0 ? "text-red-400" : "text-sage"}`}>
+                    {formatCents(profit)}{margin != null && <span className="text-bone/40 font-normal"> · {margin}%</span>}
+                  </span>
+                </div>
+              </div>
+            </div>
+          );
+        })}
       </div>
+      <p className="-mt-4 text-[11px] text-bone/35">
+        Profit = tab revenue − cost of goods sold (cost locked at time of sale). Items without a cost set count as pure profit until you add their cost. Gaming session revenue is tracked separately.
+      </p>
 
       {/* Secondary stats */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">

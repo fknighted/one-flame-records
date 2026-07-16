@@ -563,7 +563,10 @@ export type Database = {
       }
       pos_items: {
         Row: {
+          bottle_group: string | null
+          bottle_yield: number | null
           category: string
+          cost_cents: number | null
           created_at: string
           description: string | null
           id: string
@@ -576,7 +579,10 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          bottle_group?: string | null
+          bottle_yield?: number | null
           category?: string
+          cost_cents?: number | null
           created_at?: string
           description?: string | null
           id?: string
@@ -589,7 +595,10 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          bottle_group?: string | null
+          bottle_yield?: number | null
           category?: string
+          cost_cents?: number | null
           created_at?: string
           description?: string | null
           id?: string
@@ -603,8 +612,56 @@ export type Database = {
         }
         Relationships: []
       }
+      pos_stock_purchases: {
+        Row: {
+          added_by: string | null
+          container_cost_cents: number | null
+          containers: number | null
+          created_at: string
+          id: string
+          note: string | null
+          pos_item_id: string
+          quantity_added: number
+          total_cost_cents: number
+          unit_cost_cents: number
+        }
+        Insert: {
+          added_by?: string | null
+          container_cost_cents?: number | null
+          containers?: number | null
+          created_at?: string
+          id?: string
+          note?: string | null
+          pos_item_id: string
+          quantity_added: number
+          total_cost_cents: number
+          unit_cost_cents: number
+        }
+        Update: {
+          added_by?: string | null
+          container_cost_cents?: number | null
+          containers?: number | null
+          created_at?: string
+          id?: string
+          note?: string | null
+          pos_item_id?: string
+          quantity_added?: number
+          total_cost_cents?: number
+          unit_cost_cents?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pos_stock_purchases_pos_item_id_fkey"
+            columns: ["pos_item_id"]
+            isOneToOne: false
+            referencedRelation: "pos_items"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       pos_tab_items: {
         Row: {
+          cost_cents: number | null
           created_at: string
           id: string
           name: string
@@ -615,6 +672,7 @@ export type Database = {
           tab_id: string
         }
         Insert: {
+          cost_cents?: number | null
           created_at?: string
           id?: string
           name: string
@@ -625,6 +683,7 @@ export type Database = {
           tab_id: string
         }
         Update: {
+          cost_cents?: number | null
           created_at?: string
           id?: string
           name?: string
@@ -1052,6 +1111,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      add_pos_item_stock: {
+        Args: { p_item_id: string; p_qty: number; p_unit_cost_cents: number }
+        Returns: number
+      }
       current_artist_id: { Args: never; Returns: string }
       current_gamer_member_id: { Args: never; Returns: string }
       decrement_pos_item_stock: {

@@ -34,6 +34,18 @@ export function formatCents(cents: number): string {
   return "$" + (cents / 100).toFixed(2);
 }
 
+/** Default number of shots in one bottle of spirit (per-item bottle_yield overrides this). */
+export const DEFAULT_SHOTS_PER_BOTTLE = 16;
+
+/**
+ * Gross margin as a whole-number percentage: (price − cost) / price × 100.
+ * Returns null when cost is unknown or price is 0 (margin is meaningless).
+ */
+export function marginPct(priceCents: number, costCents: number | null): number | null {
+  if (costCents == null || priceCents <= 0) return null;
+  return Math.round(((priceCents - costCents) / priceCents) * 100);
+}
+
 export const CATEGORY_LABELS: Record<string, string> = {
   drink:     "Drinks",
   beverage:  "Beverages",

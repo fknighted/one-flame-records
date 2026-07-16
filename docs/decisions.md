@@ -14,6 +14,26 @@ Format for each entry:
 
 ---
 
+## 2026-07-16 — Bar inventory cost capture: add-only, bottle→shot breakdown, cost locked at sale
+
+**Context:** The bar POS tracked revenue but had no cost data, so profit was impossible. The label buys rum by the bottle (16 shots) but sells it as shots (and wanted flasks + whole-bottle options too). Staff needed to record purchase cost when restocking; the owner needed cost inputs to reach a day/week/month profit figure. Bartenders must not be able to remove stock or see margins.
+
+**Decision:** Migration `20260716000001` adds `pos_items.cost_cents` / `bottle_group` / `bottle_yield`, a snapshot `pos_tab_items.cost_cents`, an append-only `pos_stock_purchases` ledger, and an add-only `add_pos_item_stock` RPC. A shared `applyStockPurchase` (`src/lib/bar/inventory.ts`) backs both the bartender (`/bar/inventory`, `requireBarStaff`) and admin (`/admin/bar/inventory`, `requireAdmin`) add actions. An item with `bottle_yield` set is stocked **by the bottle**: you enter bottles + cost per bottle + units-per-bottle, and per-unit cost = bottle cost ÷ yield. Profit = closed-tab revenue − Σ(qty × snapshot cost), shown only under `/admin/bar/*`.
+
+**Model correction (same session, migration `20260716000002`):** The original plan assumed a single legacy `'Rum'` item to split into a Shot/Flask/Bottle family sharing `bottle_group='rum'`. Production had diverged — the real items are `'Rum Shot'` and `'J B Rum Shot'` (two brands, each its own bottle) plus `'Rum - Half Flask'`, which is poured from **either** brand's bottle. Two consequences:
+- **`bottle_yield` is an editable default, not fixed.** Rum comes in 750ml (~16 × 1.5oz shots) or 1L (~22) bottles, so units-per-bottle is entered at add-time (prefilled from the item's default). `bottle_yield` alone marks an item as bottle-portioned — `bottle_group` is not required.
+- **No shared group / no whole-bottle SKU.** The two brands are stocked independently; the half-flask is a single pooled item stocked from whichever bottle was poured (its cost = the last bottle's). `bottle_group` is left NULL; the sibling-dropdown only appears if a real group is ever configured. The `20260716000001` placeholder rows (`Rum Flask`, `Rum (Bottle)`, $0/inactive) were deleted.
+
+**Alternatives considered:**
+- _Single pooled "Rum" item measured in shots._ Rejected — bigger rewrite of the sell/decrement path; separate SKUs match the existing items.
+- _Fixed `bottle_yield` per item._ Rejected once we learned bottles are 750ml **or** 1L — yield must be editable per purchase.
+- _Always use current cost for profit (no per-sale snapshot)._ Rejected — the owner chose cost-locked-at-sale so past profit is stable when prices change; snapshot mirrors how `price_cents` already works.
+- _Weighted-average COGS._ Deferred — `cost_cents` holds the latest purchase's unit cost; weighted-average is a possible future refinement.
+
+**Consequences:** Historical profit is fixed at sale time (edit a cost → only future sales change). Items with no cost set count as pure profit (flagged in admin UI). Bartenders are add-only with a confirmation step; admin alone can lower/remove stock and edit price/cost. Gaming session revenue stays a separate stream, excluded from tab-based COGS. The pre-existing `incrementTabItem` quirk (quantity bump doesn't re-decrement stock) is untouched; profit is unaffected since it uses `quantity × cost_cents`.
+
+---
+
 ## 2026-06-22 — Atomic Postgres RPCs for bar stock and tab total
 
 **Context:** `addItemToTab` had a TOCTOU race: two concurrent requests could both read `stock_quantity > 0`, both insert a tab item, then both attempt the decrement — but only the first decrement fires (the second is blocked by `.gt("stock_quantity", 0)`). Result: two items added, one unit decremented. The tab total had the same race: both requests read the same `total_cents`, both write `total + price`, net effect is one price added instead of two.

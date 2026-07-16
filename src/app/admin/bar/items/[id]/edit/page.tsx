@@ -25,10 +25,13 @@ export default async function EditMenuItemPage({ params }: { params: Promise<{ i
           name:          item.name,
           category:      item.category,
           price_cents:   item.price_cents,
+          cost_cents:    item.cost_cents,
           description:   item.description ?? "",
           sort_order:    item.sort_order ?? undefined,
           reorder_level: item.reorder_level ?? undefined,
           is_active:     item.is_active,
+          bottle_group:  item.bottle_group,
+          bottle_yield:  item.bottle_yield,
         }}
       />
     </div>
