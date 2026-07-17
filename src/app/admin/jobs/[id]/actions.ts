@@ -3,7 +3,7 @@
 import { redirect } from "next/navigation";
 import { createServiceClient } from "@/lib/supabase/server";
 import { requireAdmin } from "@/lib/auth";
-import { inngest } from "@/lib/inngest/client";
+import { sendVideoGenerateRequest } from "@/lib/inngest/send";
 import type { ClipResult } from "@/lib/video/types";
 
 export async function regenerateClip(jobId: string, clipIndex: number): Promise<void> {
@@ -19,6 +19,18 @@ export async function regenerateClip(jobId: string, clipIndex: number): Promise<
   if (!job) throw new Error("Job not found");
 
   const params = (job.params ?? {}) as Record<string, unknown>;
+
+  // Single-clip regeneration only makes sense when the scene plan is stored:
+  // the new job reuses params.scenes so the replacement clip matches the rest.
+  // A pre-scenes job would re-plan every scene from scratch, producing a clip
+  // that's visually inconsistent with the video — refuse instead.
+  const scenes = params.scenes as unknown[] | undefined;
+  if (!scenes?.length) {
+    throw new Error(
+      "This video predates stored scene data, so a single clip can't be regenerated without re-planning the whole video. Regenerate the full video instead."
+    );
+  }
+
   const generatedClips = [...((params.generatedClips as (ClipResult | null)[]) ?? [])];
   generatedClips[clipIndex] = null;
 
@@ -35,11 +47,9 @@ export async function regenerateClip(jobId: string, clipIndex: number): Promise<
 
   if (error || !newJob) throw new Error(error?.message ?? "Could not create replacement job");
 
-  try {
-    await inngest.send({ name: "video/generate.requested", data: { jobId: newJob.id } });
-  } catch {
-    // event key missing — job row exists, can be triggered manually
-  }
+  // A missing event key is tolerated (the row exists, admin can trigger it
+  // manually); any real dispatch failure re-throws so the admin sees it.
+  await sendVideoGenerateRequest(newJob.id);
 
   redirect(`/admin/jobs/${newJob.id}`);
 }

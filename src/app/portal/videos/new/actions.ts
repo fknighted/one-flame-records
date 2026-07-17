@@ -2,7 +2,7 @@
 
 import { redirect } from "next/navigation";
 import { createClient, createServiceClient } from "@/lib/supabase/server";
-import { inngest } from "@/lib/inngest/client";
+import { sendVideoGenerateRequest } from "@/lib/inngest/send";
 import { jamaicaMonthStart } from "@/lib/bar/pos";
 
 export type VideoRequestState = { error: string } | null;
@@ -104,10 +104,18 @@ export async function requestVideo(
 
   if (jobError || !job) return { error: "Could not create video job." };
 
-  await inngest.send({
-    name: "video/generate.requested",
-    data: { jobId: job.id },
-  });
+  // A missing event key is tolerated (the job stays pending and can be triggered
+  // by the label). A genuine dispatch failure would leave a job that never runs,
+  // so remove the row and let the artist retry rather than 500-ing.
+  try {
+    await sendVideoGenerateRequest(job.id);
+  } catch {
+    await createServiceClient().from("video_jobs").delete().eq("id", job.id);
+    return {
+      error:
+        "We couldn't queue your video just now. Please try again in a moment.",
+    };
+  }
 
   redirect("/portal/videos");
 }
