@@ -31,19 +31,18 @@ export default async function SalesPage({
   const { period = "today" } = await searchParams;
   const supabase = createServiceClient();
 
-  // ── Fetch closed tabs in period ───────────────────────────────────────────
-  let tabQuery = supabase
-    .from("pos_tabs")
-    .select("id, payment_method, total_cents, closed_at")
-    .eq("status", "closed")
-    .order("closed_at", { ascending: false });
-
   const start = periodStart(period);
-  if (start) tabQuery = tabQuery.gte("closed_at", start);
 
-  const { data: tabs, error: tabsError } = await tabQuery;
-  const closedTabs = tabs ?? [];
-  const tabIds = closedTabs.map((t) => t.id);
+  // ── Aggregated sales figures for the period (grouped in Postgres) ──────────
+  const [
+    { data: paymentRows, error: payError },
+    { data: categoryData, error: catError },
+    { data: topItemData, error: topError },
+  ] = await Promise.all([
+    supabase.rpc("bar_sales_payment_summary", { p_start: start }),
+    supabase.rpc("bar_sales_by_category", { p_start: start }),
+    supabase.rpc("bar_sales_top_items", { p_start: start, p_limit: 10 }),
+  ]);
 
   // ── Still-open / away tabs (outstanding money, independent of the period) ──
   const { data: openTabsData, error: openError } = await supabase
@@ -65,73 +64,47 @@ export default async function SalesPage({
   const voidCount = voids.reduce((sum, v) => sum + (v.quantity ?? 1), 0);
   const voidValue = voids.reduce((sum, v) => sum + (v.price_cents ?? 0) * (v.quantity ?? 1), 0);
 
-  // ── Fetch line items for those tabs ───────────────────────────────────────
-  let lineItems: {
-    name: string;
-    price_cents: number;
-    cost_cents: number | null;
-    quantity: number;
-    pos_items: { category: string } | null;
-  }[] = [];
-  let lineError = null;
-  if (tabIds.length > 0) {
-    const { data, error } = await supabase
-      .from("pos_tab_items")
-      .select("name, price_cents, cost_cents, quantity, pos_items(category)")
-      .in("tab_id", tabIds);
-    lineItems = data ?? [];
-    lineError = error;
-  }
-
   // Surface (don't swallow) money-query failures rather than rendering $0 as real.
-  const loadError = tabsError || openError || lineError;
+  const loadError = payError || catError || topError || openError;
   if (loadError) {
     Sentry.captureException(loadError, { tags: { area: "bar-sales" }, extra: { period } });
   }
 
-  // ── Aggregate ─────────────────────────────────────────────────────────────
+  // ── Derive view models from the aggregated rows ───────────────────────────
+  const payments = paymentRows ?? [];
+  const categories = categoryData ?? [];
+  const items = topItemData ?? [];
 
-  const totalRevenue = closedTabs.reduce((sum, t) => sum + (t.total_cents ?? 0), 0);
-  const totalItemsSold = lineItems.reduce((sum, li) => sum + (li.quantity ?? 1), 0);
-  // Cost of goods sold (cost snapshotted at sale). Missing cost counts as 0.
-  const totalCost = lineItems.reduce((sum, li) => sum + (li.cost_cents ?? 0) * (li.quantity ?? 1), 0);
-  const totalProfit = totalRevenue - totalCost;
-  const totalMargin = totalRevenue > 0 ? Math.round((totalProfit / totalRevenue) * 100) : null;
+  // Revenue is the sum of closed-tab totals (tip excluded, as before); cost of
+  // goods is the sum of line-item cost snapshots. Missing cost counts as 0.
+  const totalRevenue   = payments.reduce((sum, p) => sum + (p.revenue_cents ?? 0), 0);
+  const tabsClosed     = payments.reduce((sum, p) => sum + (p.tab_count ?? 0), 0);
+  const totalItemsSold = categories.reduce((sum, c) => sum + (c.qty ?? 0), 0);
+  const totalCost      = categories.reduce((sum, c) => sum + (c.cost_cents ?? 0), 0);
+  const totalProfit    = totalRevenue - totalCost;
+  const totalMargin    = totalRevenue > 0 ? Math.round((totalProfit / totalRevenue) * 100) : null;
 
-  // Revenue + cost by category
-  const byCategory: Record<string, { qty: number; cents: number; cost: number }> = {};
-  for (const li of lineItems) {
-    const cat = (li.pos_items as { category: string } | null)?.category ?? "other";
-    if (!byCategory[cat]) byCategory[cat] = { qty: 0, cents: 0, cost: 0 };
-    byCategory[cat].qty   += li.quantity ?? 1;
-    byCategory[cat].cents += (li.price_cents ?? 0) * (li.quantity ?? 1);
-    byCategory[cat].cost  += (li.cost_cents ?? 0) * (li.quantity ?? 1);
-  }
+  // By category, sorted by revenue (matches the previous Object.entries order).
+  const categoryRows = categories
+    .map((c): [string, { qty: number; cents: number; cost: number }] => [
+      c.category,
+      { qty: c.qty, cents: c.revenue_cents, cost: c.cost_cents },
+    ])
+    .sort(([, a], [, b]) => b.cents - a.cents);
 
-  // Top items by revenue
-  const byItem: Record<string, { category: string; qty: number; cents: number; cost: number }> = {};
-  for (const li of lineItems) {
-    const cat = (li.pos_items as { category: string } | null)?.category ?? "other";
-    const key = li.name;
-    if (!byItem[key]) byItem[key] = { category: cat, qty: 0, cents: 0, cost: 0 };
-    byItem[key].qty   += li.quantity ?? 1;
-    byItem[key].cents += (li.price_cents ?? 0) * (li.quantity ?? 1);
-    byItem[key].cost  += (li.cost_cents ?? 0) * (li.quantity ?? 1);
-  }
-  const topItems = Object.entries(byItem)
-    .sort(([, a], [, b]) => b.cents - a.cents)
-    .slice(0, 10);
+  // Top items already arrive sorted by revenue (limit 10).
+  const topItems = items.map(
+    (it): [string, { category: string; qty: number; cents: number; cost: number }] => [
+      it.name,
+      { category: it.category, qty: it.qty, cents: it.revenue_cents, cost: it.cost_cents },
+    ]
+  );
 
-  // Payment method split
+  // Payment-method split.
   const byPayment: Record<string, { count: number; cents: number }> = {};
-  for (const tab of closedTabs) {
-    const method = tab.payment_method ?? "unknown";
-    if (!byPayment[method]) byPayment[method] = { count: 0, cents: 0 };
-    byPayment[method].count += 1;
-    byPayment[method].cents += tab.total_cents ?? 0;
+  for (const p of payments) {
+    byPayment[p.payment_method] = { count: p.tab_count, cents: p.revenue_cents };
   }
-
-  const categoryRows = Object.entries(byCategory).sort(([, a], [, b]) => b.cents - a.cents);
 
   return (
     <div className="space-y-8 max-w-4xl">
@@ -255,7 +228,7 @@ export default async function SalesPage({
         )}
       </section>
 
-      {closedTabs.length === 0 ? (
+      {tabsClosed === 0 ? (
         <p className="text-sm text-bone/50">No closed tabs for this period.</p>
       ) : (
         <>
@@ -266,7 +239,7 @@ export default async function SalesPage({
               { label: "Cost of Goods",  value: formatCents(totalCost),    tone: "text-bone/60" },
               { label: "Profit",         value: formatCents(totalProfit),  tone: totalProfit < 0 ? "text-red-400" : "text-sage", sub: totalMargin != null ? `${totalMargin}% margin` : undefined },
               { label: "Items Sold",     value: totalItemsSold.toString(), tone: "text-bone" },
-              { label: "Tabs Closed",    value: closedTabs.length.toString(), tone: "text-bone" },
+              { label: "Tabs Closed",    value: tabsClosed.toString(), tone: "text-bone" },
             ].map((card) => (
               <div key={card.label} className="rounded-lg border border-bone/10 bg-bone/3 px-5 py-4">
                 <p className="text-xs font-semibold uppercase tracking-wider text-bone/60 mb-1">{card.label}</p>

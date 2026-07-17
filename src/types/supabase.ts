@@ -1201,6 +1201,18 @@ export type Database = {
         Args: never
         Returns: { campaign_id: string; total: number; approved: number; published: number }[]
       }
+      bar_sales_payment_summary: {
+        Args: { p_start: string | null }
+        Returns: { payment_method: string; tab_count: number; revenue_cents: number }[]
+      }
+      bar_sales_by_category: {
+        Args: { p_start: string | null }
+        Returns: { category: string; qty: number; revenue_cents: number; cost_cents: number }[]
+      }
+      bar_sales_top_items: {
+        Args: { p_start: string | null; p_limit?: number }
+        Returns: { name: string; category: string; qty: number; revenue_cents: number; cost_cents: number }[]
+      }
       current_artist_id: { Args: never; Returns: string }
       adjust_member_minutes: {
         Args: { p_member_id: string; p_delta: number; p_clamp_zero?: boolean }
