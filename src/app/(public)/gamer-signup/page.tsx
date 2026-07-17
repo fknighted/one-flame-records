@@ -42,6 +42,15 @@ export default function GamerSignupPage() {
         </div>
 
         <form action={formAction} className="space-y-5">
+          {/* Honeypot — hidden from humans; bots that fill it are silently dropped. */}
+          <input
+            type="text"
+            name="website"
+            tabIndex={-1}
+            autoComplete="off"
+            aria-hidden="true"
+            className="absolute left-[-9999px] w-px h-px opacity-0"
+          />
           {state && "error" in state && (
             <p className="text-sm text-oxblood bg-oxblood/10 border border-oxblood/20 rounded-lg px-4 py-3">
               {state.error}

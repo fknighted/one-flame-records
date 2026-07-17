@@ -665,6 +665,24 @@ export type Database = {
           },
         ]
       }
+      signup_throttle: {
+        Row: {
+          created_at: string
+          id: string
+          key: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          key: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          key?: string
+        }
+        Relationships: []
+      }
       pos_voids: {
         Row: {
           cost_cents: number | null
@@ -1176,6 +1194,10 @@ export type Database = {
         Returns: number
       }
       current_artist_id: { Args: never; Returns: string }
+      adjust_member_minutes: {
+        Args: { p_member_id: string; p_delta: number; p_clamp_zero?: boolean }
+        Returns: number
+      }
       current_gamer_member_id: { Args: never; Returns: string }
       decrement_pos_item_stock: {
         Args: { p_item_id: string }

@@ -8,9 +8,23 @@ export type ProfileActionState =
   | { success: true }
   | null;
 
+// Allowed image types → canonical extension. The photo lands in the PUBLIC
+// bucket, so we never trust the client-supplied filename/content-type for the
+// stored extension — an attacker could otherwise host arbitrary content (HTML/
+// SVG) on the Supabase public domain.
+const IMAGE_EXT_BY_TYPE: Record<string, string> = {
+  "image/jpeg": "jpg",
+  "image/png": "png",
+  "image/webp": "webp",
+};
+const MAX_PHOTO_BYTES = 5 * 1024 * 1024; // 5 MB
+
 async function uploadPhoto(file: File, artistId: string): Promise<string> {
+  const ext = IMAGE_EXT_BY_TYPE[file.type];
+  if (!ext) throw new Error("Photo must be a JPG, PNG, or WebP image.");
+  if (file.size > MAX_PHOTO_BYTES) throw new Error("Photo must be under 5 MB.");
+
   const supabase = createServiceClient();
-  const ext = file.name.split(".").pop() ?? "jpg";
   const path = `photos/${artistId}/${crypto.randomUUID()}.${ext}`;
   const buffer = await file.arrayBuffer();
 
