@@ -41,8 +41,10 @@ export function jamaicaDateTime(isoString: string): string {
   });
 }
 
+// JMD is a whole-dollar currency in practice — cents are noise. Round to the
+// nearest dollar and group thousands for readability (e.g. 218_180 → "$2,182").
 export function formatCents(cents: number): string {
-  return "$" + (cents / 100).toFixed(2);
+  return "$" + Math.round(cents / 100).toLocaleString("en-US");
 }
 
 /** Default number of shots in one bottle of spirit (per-item bottle_yield overrides this). */
