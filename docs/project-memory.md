@@ -22,19 +22,18 @@ Post-launch performance + correctness cleanup. Remaining backlog is small; see N
 
 ## Next session
 
-### Priority 1 — Fix code review bugs (session 41 findings — verified STILL OPEN 2026-07-17)
-1. `src/app/portal/videos/new/actions.ts:107` — wrap `inngest.send()` in try/catch (zombie job row + 500 on bad key — the admin path already does this)
-2. `src/app/admin/jobs/[id]/actions.ts:40` — narrow the `catch {}` to only suppress missing-key errors; re-throw everything else so the admin sees real failures
-3. `src/app/admin/jobs/[id]/actions.ts:22` — guard `regenerateClip` against a pre-scenes job (no `params.scenes`) silently forking a new scene list
+### Priority 1 — `game_sessions.price_jmd` → cents
+- Last remaining break of the "money is cents" invariant (currently stored in whole dollars, compensated with ×100 shims). Migrate the column to cents, remove the shims, update reads/writes. Money change — verify against prod (the service-role verification-script approach from 2026-07-17 works well).
 
-### Priority 2 — Deferred perf/quality (unblocked, pure code)
-- **Bar profit/COGS aggregation RPC** — the all-time Sales query still loads all rows into JS; move to a SUM/GROUP BY RPC (mirror the 2026-07-17 admin count-RPC pattern). Verify the money math against prod before shipping.
-- **`game_sessions.price_jmd` → cents** — last remaining break of the "money is cents" invariant (currently ×100 shims).
-- **(Optional) tag-based cache invalidation** — replace the 120s public-page revalidate with `revalidateTag` in admin actions for instant updates.
+### Priority 2 — Optional / when wanted
+- **Tag-based cache invalidation** — replace the 120s public-page revalidate with `revalidateTag` in admin actions for instant content updates.
+- **Enter `pos_items.cost_cents`** (owner data entry) — bar profit reads $0 / overstated until done; the Sales aggregation is ready for it.
 
 ### Priority 3 — Content entry + housekeeping (ongoing, via admin)
-- Add artists/releases/news via `/admin`; enter `pos_items.cost_cents`.
-- Set `MAX_CAMPAIGN_IMAGES` env var in the Vercel dashboard; Flames Lounge gallery + logo SVGs when assets exist.
+- Add artists/releases/news via `/admin`.
+- Set `MAX_CAMPAIGN_IMAGES` env var in the Vercel dashboard; Flames Lounge gallery + logo SVGs when owner assets exist.
+
+_Done 2026-07-17 (see session log): session-41 code-review bugs; whole-dollar money display; bar sales aggregation RPCs (verified vs prod)._
 
 ## Phase progress
 
@@ -51,6 +50,14 @@ Post-launch performance + correctness cleanup. Remaining backlog is small; see N
 Append a new entry at the top of this section after every session. Date, summary, files touched, what's next. Keep it tight — full reasoning belongs in `decisions.md`.
 
 > **Note:** Sessions 2026-07-16 through 2026-07-17-2 (bar cost/profit, full-site audit, public-page caching) were logged in `docs/session-handoffs/` and the auto-memory index rather than here. This log resumes at 2026-07-17.
+
+### 2026-07-17 (Session-41 bug fixes, whole-dollar money, bar sales RPCs)
+
+**Did:** Three tracks. (1) **Session-41 code-review bugs** (all verified still open, now fixed) — new `src/lib/inngest/send.ts` `sendVideoGenerateRequest()` helper tolerates a missing Inngest event key but re-throws real failures; portal `requestVideo` now deletes the job row + shows an inline retry instead of a zombie row + 500; admin `regenerateClip` uses the helper (no more `catch {}` swallowing everything) and throws a clear error when a pre-scenes job would fork a fresh scene list. Commit `b2855be`. (2) **Whole-dollar money display** — `formatCents` rounds to whole JMD dollars with thousands separators (display-only; storage stays cents); consistent everywhere via the shared formatter. Commit `b3c20cf`. (3) **Bar sales aggregation RPCs** — migration `20260717000002` (3 STABLE RPCs, service_role-only) replaces the unbounded closed-tab + line-item scan on `/admin/bar/sales`; **verified against prod** with an independent paginated-fetch + JS-reduce script (exact match on revenue/cost/items/tabs/category/payment across today/week/month/all) before merging. Commit `2d087ed`.
+**Touched:** `src/lib/inngest/send.ts` (new), `src/app/portal/videos/new/actions.ts`, `src/app/admin/jobs/[id]/actions.ts`, `src/lib/bar/pos.ts`, `src/app/admin/bar/sales/page.tsx`, `supabase/migrations/20260717000002_bar_sales_aggregation_rpcs.sql` (new), `src/types/supabase.ts`.
+**Verified:** typecheck + lint + build clean throughout. Bar sales RPCs verified against production data (see `decisions.md`). NOT exercised live: the two auth-gated Inngest server actions (no artist/admin creds) — logic compiles and is straightforward.
+**Decided:** RPC aggregation + independent-reduction verification for money SQL; whole-dollar display. See `decisions.md` (2026-07-17).
+**Next:** `game_sessions.price_jmd` → cents (last money-invariant break). Optional: tag-based cache invalidation. Owner: enter `pos_items.cost_cents`.
 
 ### 2026-07-17 (Admin count aggregation RPCs)
 

@@ -14,6 +14,32 @@ Format for each entry:
 
 ---
 
+## 2026-07-17 — Bar sales figures aggregated in Postgres; verified against prod
+
+**Context:** The admin Sales page (`/admin/bar/sales`) computed revenue, COGS, profit, per-category, top-items, and payment split by pulling **all** closed tabs and **every** line item of those tabs into JS, then reducing. For "All Time" that scan is unbounded, and past 1000 rows PostgREST's default cap would have silently truncated the line-item fetch — understating profit. This was the last unbounded whole-table pull from the 2026-07-17 perf audit (audit "High #4"), and the one deferred because money math needed live-DB verification.
+
+**Decision:** Migration `20260717000002` adds three `LANGUAGE sql STABLE` RPCs — `bar_sales_payment_summary(p_start)`, `bar_sales_by_category(p_start)`, `bar_sales_top_items(p_start, p_limit)` — that push SUM/GROUP BY into Postgres over the already-indexed `pos_tab_items → pos_tabs` join. `p_start` is the period lower bound or NULL for all-time. Cent sums are **bigint** (all-time revenue overflows int4's ~$214k JMD ceiling). Semantics mirror the old JS exactly, including its quirks (revenue from `pos_tabs.total_cents` with tip excluded; cost from line-item snapshots; `quantity ?? 1`; category `?? 'other'`). Restricted to `service_role` (REVOKE FROM PUBLIC / GRANT).
+
+**Verification (the part that was blocked):** Rather than shipping unverified money SQL, the migration was pushed to prod first (additive, unused until the page deploys), then a Node script using the service-role key computed every figure a second, independent way — a paginated raw-row fetch + JS reduce (no 1000-row cap) — and compared it to the RPC output across today/week/month/all-time. Exact match on revenue, cost, items, tabs, and every per-category and per-payment figure. Only then was the page change merged. (COGS is $0 in prod today because `pos_items.cost_cents` isn't entered yet; revenue and per-category revenue are non-zero and matched, and the cost SQL is structurally identical to the validated revenue SQL.)
+
+**Alternatives considered:**
+- _Ship on code-level confidence without live verification._ Rejected — money figures the owner uses for decisions; the independent-reduction check was cheap and decisive.
+- _One RPC returning JSON for all sections._ Rejected — three `RETURNS TABLE` RPCs match the existing aggregation precedent (`admin_*_counts`, 2026-07-17) and keep the page's derivations readable.
+
+**Consequences:** Sales page no longer transfers thousands of rows to count them, and the latent 1000-row truncation is gone. Types hand-added to `src/types/supabase.ts` (no local Docker). Same deploy-ordering rule as the count RPCs: migration to prod before the calling code.
+
+---
+
+## 2026-07-17 — Bar money displayed as whole rounded dollars
+
+**Context:** JMD is a whole-dollar currency in practice — the `.XX` cents shown across the POS (via `formatCents`) were noise, and bottle→shot cost division produced ugly fractional-dollar figures.
+
+**Decision:** `formatCents` in `src/lib/bar/pos.ts` now returns `"$" + Math.round(cents / 100).toLocaleString("en-US")` — rounded whole dollars with thousands grouping (e.g. `$2,182`). **Storage stays in cents**; this is display-only. Every bar/gamer/admin money figure already routes through the shared `formatCents`, so the change is consistent everywhere in one edit (confirmed no stray `.toFixed(2)`/`/100` money formatting bypasses it).
+
+**Consequences:** Independent per-figure rounding means a displayed profit can differ from displayed-revenue − displayed-cost by $1 — acceptable for a whole-dollar currency. USD figures (video-budget spend) are unaffected — different formatter, and API-cost cents there are meaningful.
+
+---
+
 ## 2026-07-17 — Admin list counts aggregated in Postgres via RPCs
 
 **Context:** The admin Artists and Campaigns list pages derived their per-card counts by pulling whole tables into JS: Artists fetched **every** `assets` row and **every** `video_jobs` row for the listed artists (`.select("artist_id").in(...)`) and tallied them in loops; Campaigns fetched **every** `content_pieces` row (no filter at all) and grouped total/approved/published in JS. Both fetches are unbounded — they grow with the catalog, transferring thousands of rows to count them. Supabase-js has no GROUP BY, so the grouping had to live either in an RPC or a view.
