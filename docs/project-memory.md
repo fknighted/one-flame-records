@@ -6,34 +6,35 @@ This is the living state of the build. Update at the end of every session.
 
 ## Current state
 
-- **Phase:** Bar POS operational + ongoing content
-- **Status:** Phases 1–5 complete. Bar POS fully built, all migrations applied to production, menu items seeded, dual-access bartender system live. Two full code-review passes applied and clean.
-- **Last updated:** 2026-06-30 (session 41)
+- **Phase:** Bar POS operational + ongoing content + post-launch hardening/perf
+- **Status:** Phases 1–5 complete. Bar POS live with cost/profit tracking. A full-site audit (2026-07-16/17) shipped all Critical+High security/design/perf fixes; public-page caching and admin count-aggregation RPCs landed 2026-07-17. **Recent detailed session history lives in `docs/session-handoffs/` (2026-07-16, 2026-07-17, 2026-07-17-2) and the auto-memory index** — the session log below jumps from session 41 to 2026-07-17.
+- **Last updated:** 2026-07-17
 
 ## Active focus
 
-Fix 3 code review bugs from session 41. Content entry via admin UI.
+Post-launch performance + correctness cleanup. Remaining backlog is small; see Next session.
 
 ## Blockers
 
 - **TikTok auto-posting** — Make.com has no TikTok video upload module. Manual for now.
-- **Flames Lounge gallery** — Gallery grid still placeholder; swap with real photos when available.
+- **Flames Lounge gallery / logos** — gallery grid + logo assets still placeholder; needs owner-provided assets.
+- **`pos_items.cost_cents`** — most items have no cost entered → bar profit overstated until the owner enters costs (data entry, not code).
 
 ## Next session
 
-### Priority 1 — Fix code review bugs (session 41 findings)
-1. `src/app/portal/videos/new/actions.ts:108` — wrap `inngest.send()` in try/catch (zombie job row + 500 on bad key — same pattern already in admin path)
-2. `src/app/admin/jobs/[id]/actions.ts:38` — narrow the `catch {}` to only suppress missing-key errors; re-throw everything else so the admin sees real failures
-3. `src/app/admin/jobs/[id]/actions.ts:22` — guard against `!params.scenes?.length` in `regenerateClip`; throw a clear error rather than silently forking with new scenes
+### Priority 1 — Fix code review bugs (session 41 findings — verified STILL OPEN 2026-07-17)
+1. `src/app/portal/videos/new/actions.ts:107` — wrap `inngest.send()` in try/catch (zombie job row + 500 on bad key — the admin path already does this)
+2. `src/app/admin/jobs/[id]/actions.ts:40` — narrow the `catch {}` to only suppress missing-key errors; re-throw everything else so the admin sees real failures
+3. `src/app/admin/jobs/[id]/actions.ts:22` — guard `regenerateClip` against a pre-scenes job (no `params.scenes`) silently forking a new scene list
 
-### Priority 2 — Content entry (ongoing, via admin)
-- Add artists with photos at `/admin/artists/new`
-- Add releases with cover art at `/admin/releases/new`
-- Publish first news post at `/admin/news/new`
+### Priority 2 — Deferred perf/quality (unblocked, pure code)
+- **Bar profit/COGS aggregation RPC** — the all-time Sales query still loads all rows into JS; move to a SUM/GROUP BY RPC (mirror the 2026-07-17 admin count-RPC pattern). Verify the money math against prod before shipping.
+- **`game_sessions.price_jmd` → cents** — last remaining break of the "money is cents" invariant (currently ×100 shims).
+- **(Optional) tag-based cache invalidation** — replace the 120s public-page revalidate with `revalidateTag` in admin actions for instant updates.
 
-### Priority 3 — Housekeeping
-- Set `MAX_CAMPAIGN_IMAGES` env var in Vercel dashboard
-- Flames Lounge gallery photos when real venue shots are available
+### Priority 3 — Content entry + housekeeping (ongoing, via admin)
+- Add artists/releases/news via `/admin`; enter `pos_items.cost_cents`.
+- Set `MAX_CAMPAIGN_IMAGES` env var in the Vercel dashboard; Flames Lounge gallery + logo SVGs when assets exist.
 
 ## Phase progress
 
@@ -48,6 +49,16 @@ Fix 3 code review bugs from session 41. Content entry via admin UI.
 ## Session log
 
 Append a new entry at the top of this section after every session. Date, summary, files touched, what's next. Keep it tight — full reasoning belongs in `decisions.md`.
+
+> **Note:** Sessions 2026-07-16 through 2026-07-17-2 (bar cost/profit, full-site audit, public-page caching) were logged in `docs/session-handoffs/` and the auto-memory index rather than here. This log resumes at 2026-07-17.
+
+### 2026-07-17 (Admin count aggregation RPCs)
+
+**Did:** Replaced the two remaining unbounded whole-table pulls behind admin list counts with Postgres aggregation. Migration `20260717000001` adds `admin_artist_counts(p_artist_ids)` → per-artist `(asset_count, job_count)` and `admin_campaign_piece_counts()` → per-campaign `(total, approved, published)`; both `LANGUAGE sql STABLE`, counts cast to int, EXECUTE revoked from PUBLIC and granted to `service_role` (grouping columns already indexed by `…0009`). Rewired `admin/artists/page.tsx` and `admin/campaigns/page.tsx` to `supabase.rpc(...)`. Also fixed a correctness bug: the dashboard "Active Jobs" stat card read `activeJobs?.length` off a `.limit(5)` list (could never show >5) → now a real head count. Migration pushed to prod first (`npx supabase db push --linked`), then code committed — order matters so admin pages never call a missing function.
+**Touched:** `supabase/migrations/20260717000001_admin_count_rpcs.sql` (new), `src/app/admin/artists/page.tsx`, `src/app/admin/campaigns/page.tsx`, `src/app/admin/page.tsx`, `src/types/supabase.ts`. Commit `1cb2ae1`.
+**Verified:** typecheck + lint (no new problems) + build clean; admin routes confirmed `ƒ` (dynamic, not prerendered at build). NOT verified: live admin page load (no admin creds) — RPC read path unproven in a live session, though the push succeeded and the SQL is straight `GROUP BY` over indexed columns.
+**Decided:** RPC aggregation over views (no view precedent; artists page needs an id-array param) and over per-row head counts. See `decisions.md` (2026-07-17). Establishes the pattern for the still-deferred bar profit/COGS RPC.
+**Next:** Session-41 code-review bugs (verified still open). Bar profit/COGS aggregation RPC. `game_sessions.price_jmd` → cents.
 
 ### 2026-06-30 (session 41 — Code review: video pipeline + transcription upgrade)
 

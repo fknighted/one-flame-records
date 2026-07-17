@@ -14,6 +14,23 @@ Format for each entry:
 
 ---
 
+## 2026-07-17 — Admin list counts aggregated in Postgres via RPCs
+
+**Context:** The admin Artists and Campaigns list pages derived their per-card counts by pulling whole tables into JS: Artists fetched **every** `assets` row and **every** `video_jobs` row for the listed artists (`.select("artist_id").in(...)`) and tallied them in loops; Campaigns fetched **every** `content_pieces` row (no filter at all) and grouped total/approved/published in JS. Both fetches are unbounded — they grow with the catalog, transferring thousands of rows to count them. Supabase-js has no GROUP BY, so the grouping had to live either in an RPC or a view.
+
+**Decision:** Migration `20260717000001` adds two read-only aggregation RPCs — `admin_artist_counts(p_artist_ids uuid[])` returning `(artist_id, asset_count, job_count)` per artist (FULL JOIN of two grouped subqueries), and `admin_campaign_piece_counts()` returning `(campaign_id, total, approved, published)` per campaign (`count(*) FILTER (WHERE …)`). Both are `LANGUAGE sql STABLE`, counts cast to `int` so supabase-js returns numbers not bigint strings. The grouping columns were already indexed by `…0009_performance_indexes` (`assets_artist_id_idx`, `video_jobs_artist_id_idx`, `content_pieces_campaign_id_idx`). The pages call `supabase.rpc(...)` and build the same maps from one aggregated row per artist/campaign. Also fixed a latent correctness bug: the dashboard "Active Jobs" stat card read `activeJobs?.length` off a list capped at `.limit(5)`, so it could never display more than 5 — now a real head count.
+
+**Access control:** `CREATE FUNCTION` grants EXECUTE to `PUBLIC` by default, and `anon`/`authenticated` inherit through PUBLIC — so revoking those roles individually is a no-op. The migration `REVOKE EXECUTE … FROM PUBLIC` then `GRANT … TO service_role`, since these are only ever called through the service client on admin pages.
+
+**Alternatives considered:**
+- _A SQL view instead of functions._ Rejected — no view precedent exists in the migrations (all prior aggregation is RPCs), and a view can't take the artist-id array parameter the artists page needs.
+- _`{ count: "exact", head: true }` per artist/campaign._ Rejected — that's one round-trip **per row**; a single grouped RPC is one round-trip total.
+- _Leave the whole-table pulls._ Rejected — this was the last open item from the 2026-07-17 performance-audit backlog.
+
+**Consequences:** Types for the two RPCs were hand-added to `src/types/supabase.ts` (no local Docker to regen). Deployment ordering matters — the migration must reach prod **before** the code deploys, or admin pages call a missing function; done in that order this session. Establishes the RPC-aggregation pattern for the still-deferred bar profit/COGS aggregation (the remaining unbounded-pull, blocked on live-DB money verification).
+
+---
+
 ## 2026-07-16 — Bar inventory cost capture: add-only, bottle→shot breakdown, cost locked at sale
 
 **Context:** The bar POS tracked revenue but had no cost data, so profit was impossible. The label buys rum by the bottle (16 shots) but sells it as shots (and wanted flasks + whole-bottle options too). Staff needed to record purchase cost when restocking; the owner needed cost inputs to reach a day/week/month profit figure. Bartenders must not be able to remove stock or see margins.
