@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { createServiceClient } from "@/lib/supabase/server";
 import { deleteRelease } from "./actions";
+import DeleteReleaseButton from "./DeleteReleaseButton";
 
 const TYPE_LABELS: Record<string, string> = {
   single: "Single",
@@ -111,16 +112,7 @@ export default async function AdminReleasesPage() {
                         >
                           Edit
                         </Link>
-                        <form action={deleteWithId}>
-                          <button
-                            type="submit"
-                            className="text-xs text-bone/50 hover:text-red-400 transition-colors"
-                            title="Delete release"
-                            onClick={(e) => { if (!confirm(`Delete release "${release.title}"?`)) e.preventDefault(); }}
-                          >
-                            ×
-                          </button>
-                        </form>
+                        <DeleteReleaseButton action={deleteWithId} title={release.title} />
                       </div>
                     </td>
                   </tr>

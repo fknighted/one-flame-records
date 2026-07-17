@@ -6,6 +6,8 @@ import { createServiceClient } from "@/lib/supabase/server";
 import VideoLibraryFilter from "@/components/VideoLibraryFilter";
 import { JobsAutoRefresh } from "@/components/JobsAutoRefresh";
 import { toggleVideoPublic } from "./actions";
+import TogglePublicButton from "./TogglePublicButton";
+import WatchLink from "./WatchLink";
 import type { Tables } from "@/types/supabase";
 
 type VideoJob = Tables<"video_jobs"> & {
@@ -226,28 +228,8 @@ export default async function PortalVideosPage({ searchParams }: Params) {
                   {isDone && (
                     <div className="flex items-center gap-4 mt-2">
                       <span className="text-xs text-bone/50">{relativeDate(job.completed_at)}</span>
-                      <form action={toggleVideoPublic.bind(null, job.id)} onClick={(e) => e.stopPropagation()}>
-                        <button
-                          type="submit"
-                          className={`text-[10px] font-semibold px-2 py-0.5 rounded transition-colors ${
-                            job.is_public
-                              ? "bg-forest/20 text-sage hover:bg-forest/30"
-                              : "bg-bone/10 text-bone/50 hover:bg-bone/20 hover:text-bone/60"
-                          }`}
-                        >
-                          {job.is_public ? "Public" : "Private"}
-                        </button>
-                      </form>
-                      {job.output_url && (
-                        <span
-                          onClick={(e) => e.stopPropagation()}
-                          className="text-xs font-medium text-ochre hover:text-ochre/80 transition-colors"
-                        >
-                          <a href={job.output_url} target="_blank" rel="noopener noreferrer">
-                            Watch →
-                          </a>
-                        </span>
-                      )}
+                      <TogglePublicButton action={toggleVideoPublic.bind(null, job.id)} isPublic={!!job.is_public} />
+                      {job.output_url && <WatchLink href={job.output_url} />}
                     </div>
                   )}
 
