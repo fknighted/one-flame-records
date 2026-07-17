@@ -33,25 +33,17 @@ export default async function AdminArtistsPage({
   const { data: artists, error } = await query;
   if (error) throw new Error(`Failed to load artists: ${error.message}`);
 
-  // Get asset + video counts for all artists in one shot
-  const [{ data: assetCounts }, { data: jobCounts }] = await Promise.all([
-    supabase
-      .from("assets")
-      .select("artist_id")
-      .in("artist_id", (artists ?? []).map((a) => a.id)),
-    supabase
-      .from("video_jobs")
-      .select("artist_id")
-      .in("artist_id", (artists ?? []).map((a) => a.id)),
-  ]);
+  // Get asset + video counts for all artists in one aggregated round-trip
+  // (grouped in Postgres — see admin_artist_counts RPC).
+  const { data: counts } = await supabase.rpc("admin_artist_counts", {
+    p_artist_ids: (artists ?? []).map((a) => a.id),
+  });
 
   const assetMap: Record<string, number> = {};
-  for (const row of assetCounts ?? []) {
-    assetMap[row.artist_id] = (assetMap[row.artist_id] ?? 0) + 1;
-  }
   const jobMap: Record<string, number> = {};
-  for (const row of jobCounts ?? []) {
-    jobMap[row.artist_id] = (jobMap[row.artist_id] ?? 0) + 1;
+  for (const row of counts ?? []) {
+    assetMap[row.artist_id] = row.asset_count;
+    jobMap[row.artist_id] = row.job_count;
   }
 
   const total    = artists?.length ?? 0;

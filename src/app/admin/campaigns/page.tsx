@@ -42,17 +42,13 @@ export default async function CampaignsPage() {
     .select("id, title, source_type, status, created_at")
     .order("created_at", { ascending: false });
 
-  // Get piece counts per campaign
-  const { data: pieceCounts } = await supabase
-    .from("content_pieces")
-    .select("campaign_id, status");
+  // Get piece counts per campaign — grouped in Postgres (see
+  // admin_campaign_piece_counts RPC) rather than pulling every piece row.
+  const { data: pieceCounts } = await supabase.rpc("admin_campaign_piece_counts");
 
   const countMap: Record<string, { total: number; approved: number; published: number }> = {};
   for (const p of pieceCounts ?? []) {
-    if (!countMap[p.campaign_id]) countMap[p.campaign_id] = { total: 0, approved: 0, published: 0 };
-    countMap[p.campaign_id].total++;
-    if (p.status === "approved") countMap[p.campaign_id].approved++;
-    if (p.status === "published") countMap[p.campaign_id].published++;
+    countMap[p.campaign_id] = { total: p.total, approved: p.approved, published: p.published };
   }
 
   return (

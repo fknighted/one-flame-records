@@ -32,6 +32,7 @@ export default async function AdminOverviewPage() {
     { count: releaseCount },
     { count: videoCount },
     { count: pendingApps },
+    { count: activeJobCount },
     { data: activeJobs },
     { data: pendingApplications },
     { data: budgetRow },
@@ -41,6 +42,7 @@ export default async function AdminOverviewPage() {
     supabase.from("releases").select("id", { count: "exact", head: true }),
     supabase.from("videos").select("id", { count: "exact", head: true }),
     supabase.from("signup_applications").select("id", { count: "exact", head: true }).eq("status", "pending"),
+    supabase.from("video_jobs").select("id", { count: "exact", head: true }).in("status", ACTIVE_STATUSES),
     supabase
       .from("video_jobs")
       .select("id, status, started_at, artists(stage_name), assets(title)")
@@ -70,7 +72,7 @@ export default async function AdminOverviewPage() {
     { label: "Active Artists", value: artistCount ?? 0, href: "/admin/artists" },
     { label: "Releases", value: releaseCount ?? 0, href: "/admin/releases" },
     { label: "Videos", value: videoCount ?? 0, href: "/admin/videos" },
-    { label: "Active Jobs", value: activeJobs?.length ?? 0, href: "/admin/jobs" },
+    { label: "Active Jobs", value: activeJobCount ?? 0, href: "/admin/jobs" },
     { label: "Pending Apps", value: pendingApps ?? 0, href: "/admin/applications" },
   ];
 

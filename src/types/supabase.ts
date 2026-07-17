@@ -1193,6 +1193,14 @@ export type Database = {
         Args: { p_item_id: string; p_qty: number; p_unit_cost_cents: number }
         Returns: number
       }
+      admin_artist_counts: {
+        Args: { p_artist_ids: string[] }
+        Returns: { artist_id: string; asset_count: number; job_count: number }[]
+      }
+      admin_campaign_piece_counts: {
+        Args: never
+        Returns: { campaign_id: string; total: number; approved: number; published: number }[]
+      }
       current_artist_id: { Args: never; Returns: string }
       adjust_member_minutes: {
         Args: { p_member_id: string; p_delta: number; p_clamp_zero?: boolean }
