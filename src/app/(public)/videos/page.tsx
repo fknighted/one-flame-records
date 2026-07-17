@@ -1,5 +1,6 @@
 import { Suspense } from "react";
-import { createClient, createServiceClient } from "@/lib/supabase/server";
+import { unstable_cache } from "next/cache";
+import { createServiceClient } from "@/lib/supabase/server";
 import VideoEmbed from "@/components/VideoEmbed";
 import VideosFilter from "@/components/VideosFilter";
 import SectionHeader from "@/components/SectionHeader";
@@ -21,46 +22,67 @@ type VideoJobRow = Tables<"video_jobs"> & {
 
 type SearchParams = Promise<{ artist?: string; kind?: string }>;
 
+// This page renders dynamically (it reads searchParams), so we cache the
+// searchParams-independent DB reads: the active-artist list, every video
+// (videos RLS is USING true) and the public+complete generated jobs. artist/
+// kind filtering happens in JS below. Signed URLs are minted per-request (see
+// component) so they never outlive their 1h TTL.
+const getVideosData = unstable_cache(
+  async () => {
+    const supabase = createServiceClient();
+    const [{ data: artists }, { data: videos }, { data: publicJobs }] = await Promise.all([
+      supabase
+        .from("artists")
+        .select("id, stage_name")
+        .eq("status", "active")
+        .order("stage_name", { ascending: true }),
+
+      supabase
+        .from("videos")
+        .select("*, artists(stage_name)")
+        .order("featured", { ascending: false })
+        .order("published_at", { ascending: false })
+        .returns<VideoRow[]>(),
+
+      supabase
+        .from("video_jobs")
+        .select("*, artists(stage_name)")
+        .eq("is_public", true)
+        .eq("status", "complete")
+        .order("completed_at", { ascending: false })
+        .returns<VideoJobRow[]>(),
+    ]);
+    return {
+      artists: artists ?? [],
+      videos: videos ?? [],
+      publicJobs: publicJobs ?? [],
+    };
+  },
+  ["public-videos-page"],
+  { revalidate: 120 }
+);
+
 export default async function VideosPage({
   searchParams,
 }: {
   searchParams: SearchParams;
 }) {
   const { artist, kind } = await searchParams;
-  const supabase = await createClient();
+
+  const { artists, videos: allVideos, publicJobs } = await getVideosData();
+
+  let videos = allVideos;
+  if (artist) videos = videos.filter((v) => v.artist_id === artist);
+  if (kind) videos = videos.filter((v) => v.kind === kind);
+
+  // Sign generated-video URLs per-request (one round trip, not N) — kept out of
+  // the cache so a signed URL never outlives its 1h TTL.
   const service = createServiceClient();
-
-  const { data: artists } = await supabase
-    .from("artists")
-    .select("id, stage_name")
-    .eq("status", "active")
-    .order("stage_name", { ascending: true });
-
-  let query = supabase
-    .from("videos")
-    .select("*, artists(stage_name)")
-    .order("featured", { ascending: false })
-    .order("published_at", { ascending: false });
-
-  if (artist) query = query.eq("artist_id", artist);
-  if (kind) query = query.eq("kind", kind);
-
-  const { data: videos } = await query.returns<VideoRow[]>();
-
-  const { data: publicJobs } = await service
-    .from("video_jobs")
-    .select("*, artists(stage_name)")
-    .eq("is_public", true)
-    .eq("status", "complete")
-    .order("completed_at", { ascending: false })
-    .returns<VideoJobRow[]>();
-
-  // Sign all generated-video URLs in a single request (one round trip, not N).
-  const jobPaths = (publicJobs ?? []).map((job) => `videos/${job.id}.mp4`);
+  const jobPaths = publicJobs.map((job) => `videos/${job.id}.mp4`);
   const { data: signedJobs } = jobPaths.length
     ? await service.storage.from("generated-videos").createSignedUrls(jobPaths, 3600)
     : { data: [] };
-  const jobsWithUrls = (publicJobs ?? []).map((job, i) => ({
+  const jobsWithUrls = publicJobs.map((job, i) => ({
     ...job,
     videoUrl: signedJobs?.[i]?.signedUrl ?? null,
   }));

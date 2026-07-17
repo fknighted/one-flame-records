@@ -1,6 +1,7 @@
 import { Suspense } from "react";
+import { unstable_cache } from "next/cache";
 import Link from "next/link";
-import { createClient } from "@/lib/supabase/server";
+import { createServiceClient } from "@/lib/supabase/server";
 import ReleaseCard from "@/components/ReleaseCard";
 import ReleasesFilter from "@/components/ReleasesFilter";
 import type { Tables } from "@/types/supabase";
@@ -16,22 +17,36 @@ type ReleaseRow = Tables<"releases"> & {
 
 type SearchParams = Promise<{ artist?: string; type?: string; sort?: string }>;
 
+// This page renders dynamically (it reads searchParams), so `revalidate` can't
+// cache it. Instead we cache the searchParams-independent DB reads: the full
+// active-artist list and every release (releases RLS is USING true, so the
+// cookieless service client returns exactly the public set). Filtering and
+// sorting happen in JS below, per request.
+const getReleasesData = unstable_cache(
+  async () => {
+    const supabase = createServiceClient();
+    const [{ data: artists }, { data: allReleases }] = await Promise.all([
+      supabase
+        .from("artists")
+        .select("id, stage_name")
+        .eq("status", "active")
+        .order("stage_name", { ascending: true }),
+
+      supabase
+        .from("releases")
+        .select("*, artists(stage_name, slug)")
+        .returns<ReleaseRow[]>(),
+    ]);
+    return { artists: artists ?? [], allReleases: allReleases ?? [] };
+  },
+  ["public-releases-page"],
+  { revalidate: 120 }
+);
+
 export default async function ReleasesPage({ searchParams }: { searchParams: SearchParams }) {
   const { artist, type, sort } = await searchParams;
-  const supabase = await createClient();
 
-  const [{ data: artists }, { data: allReleases }] = await Promise.all([
-    supabase
-      .from("artists")
-      .select("id, stage_name")
-      .eq("status", "active")
-      .order("stage_name", { ascending: true }),
-
-    supabase
-      .from("releases")
-      .select("*, artists(stage_name, slug)")
-      .returns<ReleaseRow[]>(),
-  ]);
+  const { artists, allReleases } = await getReleasesData();
 
   // Filter
   let releases = allReleases ?? [];

@@ -524,3 +524,26 @@ Format for each entry:
 - _HMAC-signed token in the URL._ More secure but adds complexity. Revisit if the list grows large or if abuse is observed.
 
 **Consequences:** `unsubscribeEmail` server action uses `createServiceClient()` (service role, bypasses RLS) since the RLS policy only allows public INSERT, not UPDATE. Document: if switching to user-auth-based unsubscribe in future, also add an RLS UPDATE policy.
+
+---
+
+## 2026-07-17 — Public pages cache via cookieless service client + RLS-mirroring filters
+
+**Context:** Every public page called `await createClient()`, which reads cookies (`next/headers`). Reading cookies forces dynamic rendering, so `export const revalidate` did nothing and every visit hit Supabase live. The blocker to caching was that `createClient()` respects RLS, so the pages' anon-visibility was enforced by RLS policies — not by explicit query filters. Switching to the cookieless `createServiceClient()` (which **bypasses RLS**) is what enables caching, but only safe if each query reproduces its table's RLS SELECT policy exactly, or it would leak drafts/unpublished rows.
+
+**Decision:** Convert all data-driven public pages to `createServiceClient()` reads, each carrying an explicit public-only filter that mirrors the table's RLS policy:
+- `artists` → `.eq("status","active")` (RLS: `status = 'active'`)
+- `releases` / `videos` → no filter (RLS: `USING (true)` — all public)
+- `events` → `.eq("is_public", true)` (RLS: `is_public = true`)
+- `news_posts` → `.eq("is_published", true).lte("published_at", now)` (RLS: `is_published AND published_at <= now`). This **replaced** the prior `.or(published_at.is.null, ...)` filter, which was looser than RLS — under a service client that `.or` would have shown null-dated posts the live site hides. `generateMetadata` on `/news/[slug]` previously had no publish filter at all (pure RLS) and now carries the full clause.
+
+Static pages (`/`, `/artists`, `/flames-lounge`) get `export const revalidate = 120` → static ISR. Detail pages (`/artists/[slug]`, `/releases/[slug]`, `/news/[slug]`) add `generateStaticParams` → prerendered ISR, with default `dynamicParams` covering slugs added after build. Pages that read `searchParams` (`/releases`, `/videos`, `/news`) can't be static, so their searchParams-independent reads are wrapped in `unstable_cache({ revalidate: 120 })` and filtering/pagination runs in JS. `/search` stays on `createClient()` (live, RLS-protected) by design.
+
+Signed URLs (1h TTL) are always minted **per-request**, never inside the cache, so a cached page can never serve an expired URL (120s revalidate ≪ 3600s TTL).
+
+**Alternatives considered:**
+- _Keep `createClient()` + `unstable_cache`._ Rejected: `createClient()` reads cookies, which is disallowed inside `unstable_cache` and would still force dynamic at the page level.
+- _Centralized `src/lib/public-data.ts` module for all public reads._ Deferred: keeps the audited RLS-mirroring filters inline where each page's reviewer can see them; smaller blast radius. Revisit if the filters start getting copy-pasted.
+- _Tag-based invalidation (`revalidateTag` in admin actions)._ Deferred in favor of time-based (120s) — self-contained to the public pages, touches no admin code. Content changes rarely; a ≤2-min delay is invisible.
+
+**Consequences:** Any **new** public page using `createServiceClient()` MUST filter to public-only rows to match RLS, or it will leak non-public data (RLS is bypassed). The `news_posts` reads deliberately exclude null-`published_at` posts to match live behavior. To shorten the update-visibility delay, lower the `revalidate` constant or add tag-based invalidation later.

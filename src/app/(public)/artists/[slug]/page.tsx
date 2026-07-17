@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { createClient, createServiceClient } from "@/lib/supabase/server";
+import { createServiceClient } from "@/lib/supabase/server";
 import ReleaseCard from "@/components/ReleaseCard";
 import VideoEmbed from "@/components/VideoEmbed";
 import SectionHeader from "@/components/SectionHeader";
@@ -35,8 +35,25 @@ type VideoRow = Tables<"videos"> & {
 type AssetRow = Tables<"assets">;
 type VideoJobRow = Tables<"video_jobs">;
 
+// Public detail page — cookieless service-client reads, served as ISR.
+// getArtist gates on status='active' (the artists RLS public rule); releases
+// and videos are public by RLS; assets/video_jobs already filter is_public.
+// Signed URLs (1h TTL) are minted per-request below, well within revalidate.
+export const revalidate = 120;
+
+// Prerender every active artist at build; slugs added later fall back to
+// on-demand ISR (dynamicParams defaults to true).
+export async function generateStaticParams() {
+  const supabase = createServiceClient();
+  const { data } = await supabase
+    .from("artists")
+    .select("slug")
+    .eq("status", "active");
+  return (data ?? []).map(({ slug }) => ({ slug }));
+}
+
 async function getArtist(slug: string) {
-  const supabase = await createClient();
+  const supabase = createServiceClient();
   const { data } = await supabase
     .from("artists")
     .select("*")
@@ -103,7 +120,7 @@ function BioParagraphs({ bio }: { bio: string }) {
 
 export default async function ArtistDetailPage({ params }: Props) {
   const { slug } = await params;
-  const supabase = await createClient();
+  const supabase = createServiceClient();
 
   const artist = await getArtist(slug);
   if (!artist) notFound();

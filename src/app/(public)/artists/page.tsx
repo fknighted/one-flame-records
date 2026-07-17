@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server";
+import { createServiceClient } from "@/lib/supabase/server";
 import ArtistCard from "@/components/ArtistCard";
 
 export const metadata = {
@@ -7,8 +7,12 @@ export const metadata = {
     "The full One Flame Records roster — reggae and dancehall artists from Montego Bay, Jamaica.",
 };
 
+// Public roster — cookieless service-client read filtered to status='active'
+// (matching the artists RLS SELECT policy), served as ISR.
+export const revalidate = 120;
+
 export default async function ArtistsPage() {
-  const supabase = await createClient();
+  const supabase = createServiceClient();
 
   const { data: artists } = await supabase
     .from("artists")

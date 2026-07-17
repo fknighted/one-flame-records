@@ -1,7 +1,8 @@
 import Link from "next/link";
 import Image from "next/image";
 import type { Metadata } from "next";
-import { createClient } from "@/lib/supabase/server";
+import { unstable_cache } from "next/cache";
+import { createServiceClient } from "@/lib/supabase/server";
 
 export const metadata: Metadata = {
   title: "News — One Flame Records",
@@ -24,6 +25,27 @@ const CATEGORY_PILL: Record<string, string> = {
 
 const PAGE_SIZE = 9;
 
+// This page renders dynamically (it reads searchParams for pagination), so we
+// cache each page slice via the cookieless service client. The filter mirrors
+// the news_posts RLS SELECT policy exactly (is_published AND published_at<=now)
+// since the service client bypasses RLS; `now` is frozen per revalidate window.
+const getNewsPage = unstable_cache(
+  async (from: number, to: number) => {
+    const supabase = createServiceClient();
+    const now = new Date().toISOString();
+    const { data: posts, count } = await supabase
+      .from("news_posts")
+      .select("id, slug, title, excerpt, cover_url, category, published_at", { count: "exact" })
+      .eq("is_published", true)
+      .lte("published_at", now)
+      .order("published_at", { ascending: false })
+      .range(from, to);
+    return { posts: posts ?? [], count: count ?? 0 };
+  },
+  ["public-news-list"],
+  { revalidate: 120 }
+);
+
 export default async function NewsPage({
   searchParams,
 }: {
@@ -34,18 +56,9 @@ export default async function NewsPage({
   const from = (page - 1) * PAGE_SIZE;
   const to   = from + PAGE_SIZE - 1;
 
-  const supabase = await createClient();
+  const { posts, count } = await getNewsPage(from, to);
 
-  const now = new Date().toISOString();
-  const { data: posts, count } = await supabase
-    .from("news_posts")
-    .select("id, slug, title, excerpt, cover_url, category, published_at", { count: "exact" })
-    .eq("is_published", true)
-    .or(`published_at.is.null,published_at.lte.${now}`)
-    .order("published_at", { ascending: false })
-    .range(from, to);
-
-  const totalPages = Math.ceil((count ?? 0) / PAGE_SIZE);
+  const totalPages = Math.ceil(count / PAGE_SIZE);
 
   return (
     <>

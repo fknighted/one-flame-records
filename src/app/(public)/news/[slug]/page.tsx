@@ -3,9 +3,26 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { marked } from "marked";
-import { createClient } from "@/lib/supabase/server";
+import { createServiceClient } from "@/lib/supabase/server";
 
 type Props = { params: Promise<{ slug: string }> };
+
+// Public post page — cookieless service-client reads, served as ISR. The
+// service client bypasses RLS, so every news_posts query below reproduces the
+// RLS SELECT policy exactly: is_published = true AND published_at <= now.
+export const revalidate = 120;
+
+// Prerender every currently-published post at build; posts published later fall
+// back to on-demand ISR (dynamicParams defaults to true).
+export async function generateStaticParams() {
+  const supabase = createServiceClient();
+  const { data } = await supabase
+    .from("news_posts")
+    .select("slug")
+    .eq("is_published", true)
+    .lte("published_at", new Date().toISOString());
+  return (data ?? []).map(({ slug }) => ({ slug }));
+}
 
 function formatDate(dateStr: string) {
   return new Date(dateStr).toLocaleDateString("en-US", {
@@ -23,12 +40,14 @@ const CATEGORY_PILL: Record<string, string> = {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const supabase = await createClient();
+  const supabase = createServiceClient();
   const { data: post } = await supabase
     .from("news_posts")
     .select("title, excerpt, cover_url")
     .eq("slug", slug)
-    .single();
+    .eq("is_published", true)
+    .lte("published_at", new Date().toISOString())
+    .maybeSingle();
 
   if (!post) return { title: "Not found — One Flame Records" };
 
@@ -46,20 +65,19 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function NewsPostPage({ params }: Props) {
   const { slug } = await params;
-  const supabase = await createClient();
+  const supabase = createServiceClient();
+
+  const now = new Date().toISOString();
 
   const { data: post } = await supabase
     .from("news_posts")
     .select("*")
     .eq("slug", slug)
     .eq("is_published", true)
-    .or(`published_at.is.null,published_at.lte.${new Date().toISOString()}`)
-    .single();
+    .lte("published_at", now)
+    .maybeSingle();
 
   if (!post) notFound();
-
-  const now = new Date().toISOString();
-  const publishedFilter = `published_at.is.null,published_at.lte.${now}`;
 
   const [{ data: prevPost }, { data: nextPost }] = await Promise.all([
     // Previous = published just before this post (chronologically earlier)
@@ -67,17 +85,18 @@ export default async function NewsPostPage({ params }: Props) {
       .from("news_posts")
       .select("slug, title")
       .eq("is_published", true)
-      .or(publishedFilter)
+      .lte("published_at", now)
       .lt("published_at", post.published_at ?? now)
       .order("published_at", { ascending: false })
       .limit(1)
       .maybeSingle(),
-    // Next = published just after this post (chronologically later)
+    // Next = published just after this post (chronologically later, but not
+    // scheduled in the future — must also be <= now)
     supabase
       .from("news_posts")
       .select("slug, title")
       .eq("is_published", true)
-      .or(publishedFilter)
+      .lte("published_at", now)
       .gt("published_at", post.published_at ?? now)
       .order("published_at", { ascending: true })
       .limit(1)

@@ -1,7 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
-import { createClient } from "@/lib/supabase/server";
+import { createServiceClient } from "@/lib/supabase/server";
+
+// Public lounge page — cookieless service-client read filtered to is_public
+// events (matching the events RLS SELECT policy), served as ISR.
+export const revalidate = 120;
 
 export const metadata: Metadata = {
   title: "Flames Lounge — Montego Bay's Creative Space",
@@ -147,7 +151,7 @@ const EVENT_TYPES_LIST = [
 // ── Page ──────────────────────────────────────────────────────────────────────
 
 export default async function FlamesLoungePage() {
-  const supabase = await createClient();
+  const supabase = createServiceClient();
   const now = new Date().toISOString();
   const { data: upcomingEvents } = await supabase
     .from("events")

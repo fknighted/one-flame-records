@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { createClient } from "@/lib/supabase/server";
+import { createServiceClient } from "@/lib/supabase/server";
 import ArtistCard from "@/components/ArtistCard";
 import ReleaseCard from "@/components/ReleaseCard";
 import VideoEmbed from "@/components/VideoEmbed";
@@ -39,8 +39,14 @@ function formatDate(dateStr: string) {
   });
 }
 
+// Public homepage — no per-user data, so read with the cookieless service
+// client and serve as ISR. Every query below filters to public-only rows
+// (active artists; releases/videos are public by RLS; published news), so the
+// service client (which bypasses RLS) returns exactly what anon users may see.
+export const revalidate = 120;
+
 export default async function HomePage() {
-  const supabase = await createClient();
+  const supabase = createServiceClient();
 
   const [{ data: featuredArtists }, { data: releases }, { data: videos }, { data: newsPosts }] =
     await Promise.all([
@@ -69,8 +75,11 @@ export default async function HomePage() {
       supabase
         .from("news_posts")
         .select("id, slug, title, excerpt, cover_url, category, published_at")
+        // Mirror the news_posts RLS SELECT policy exactly (is_published AND
+        // published_at <= now) since the service client bypasses RLS. Excludes
+        // null-dated posts, matching what anon users see today.
         .eq("is_published", true)
-        .or(`published_at.is.null,published_at.lte.${new Date().toISOString()}`)
+        .lte("published_at", new Date().toISOString())
         .order("published_at", { ascending: false })
         .limit(3)
         .returns<NewsPost[]>(),

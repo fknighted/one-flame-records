@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { createClient } from "@/lib/supabase/server";
+import { createServiceClient } from "@/lib/supabase/server";
 import VideoEmbed from "@/components/VideoEmbed";
 import type { Tables } from "@/types/supabase";
 import { buildSpotifyEmbedUrl } from "@/lib/spotify";
@@ -95,8 +95,20 @@ const STREAMING_SERVICES: {
   },
 ];
 
+// Public detail page — releases and videos are public by RLS (USING true), so
+// the cookieless service client returns identical rows. Served as ISR.
+export const revalidate = 120;
+
+// Prerender every release at build (releases are all public); slugs added later
+// fall back to on-demand ISR (dynamicParams defaults to true).
+export async function generateStaticParams() {
+  const supabase = createServiceClient();
+  const { data } = await supabase.from("releases").select("slug");
+  return (data ?? []).map(({ slug }) => ({ slug }));
+}
+
 async function getRelease(slug: string) {
-  const supabase = await createClient();
+  const supabase = createServiceClient();
   const { data } = await supabase
     .from("releases")
     .select("*, artists(id, stage_name, slug)")
@@ -129,7 +141,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function ReleaseDetailPage({ params }: Props) {
   const { slug } = await params;
-  const supabase = await createClient();
+  const supabase = createServiceClient();
 
   const release = await getRelease(slug);
   if (!release) notFound();
