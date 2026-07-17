@@ -2,11 +2,128 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import * as Sentry from "@sentry/nextjs";
 import { createServiceClient } from "@/lib/supabase/server";
 import { createClient } from "@/lib/supabase/server";
-import { requireBarStaff } from "@/lib/auth";
+import { requireBarStaff, currentUserId } from "@/lib/auth";
 
 export type ActionState = { error: string } | null;
+
+type ServiceClient = ReturnType<typeof createServiceClient>;
+
+// ─────────────────────────────────────────────────────────────
+// Stock helpers — one code path owns how a line item maps to a stock pool,
+// so add / increment / decrement / remove all stay consistent (incl. the
+// whole-bottle "draw from the shot parent" model).
+// ─────────────────────────────────────────────────────────────
+
+/**
+ * Draw `units` worth of stock for a sold line item. Returns ok:false with a
+ * user-facing message when there isn't enough. Untracked items (and custom
+ * items with no pos_item_id) are a no-op success.
+ */
+async function drawStockForLine(
+  supabase: ServiceClient,
+  posItemId: string | null,
+  units: number,
+): Promise<{ ok: boolean; error?: string }> {
+  if (!posItemId || units <= 0) return { ok: true };
+
+  const { data: item } = await supabase
+    .from("pos_items")
+    .select("id, stock_quantity, bottle_parent_id")
+    .eq("id", posItemId)
+    .single();
+  if (!item) return { ok: true };
+
+  if (item.bottle_parent_id) {
+    const { data: parent } = await supabase
+      .from("pos_items")
+      .select("id, stock_quantity, bottle_yield")
+      .eq("id", item.bottle_parent_id)
+      .single();
+    const per = parent?.bottle_yield ?? 0;
+    if (!parent || per <= 0) return { ok: false, error: "Bottle is not set up for sale." };
+    if (parent.stock_quantity === null) return { ok: true };
+    // Keep the last bottle's worth sellable by the shot only.
+    if (parent.stock_quantity <= per * units) {
+      return { ok: false, error: "Only one bottle's worth left — sold by the shot only." };
+    }
+    const { data: okd, error } = await supabase.rpc("decrement_pos_item_stock_by", { p_item_id: parent.id, p_qty: per * units });
+    if (error || !okd) return { ok: false, error: "Not enough stock for a whole bottle." };
+    return { ok: true };
+  }
+
+  if (item.stock_quantity === null) return { ok: true };
+  const { data: okd, error } = await supabase.rpc("decrement_pos_item_stock_by", { p_item_id: item.id, p_qty: units });
+  if (error || !okd) return { ok: false, error: "Not enough stock." };
+  return { ok: true };
+}
+
+/**
+ * Restore `units` worth of stock when a sale is canceled (item removed or
+ * quantity decreased). Best-effort: an untracked item or missing pos_item no-ops.
+ */
+async function restoreStockForLine(
+  supabase: ServiceClient,
+  posItemId: string | null,
+  units: number,
+): Promise<void> {
+  if (!posItemId || units <= 0) return;
+
+  const { data: item } = await supabase
+    .from("pos_items")
+    .select("id, stock_quantity, bottle_parent_id")
+    .eq("id", posItemId)
+    .single();
+  if (!item) return;
+
+  if (item.bottle_parent_id) {
+    const { data: parent } = await supabase
+      .from("pos_items")
+      .select("id, stock_quantity, bottle_yield")
+      .eq("id", item.bottle_parent_id)
+      .single();
+    const per = parent?.bottle_yield ?? 0;
+    if (parent && parent.stock_quantity !== null && per > 0) {
+      await supabase.rpc("increment_pos_item_stock_by", { p_item_id: parent.id, p_qty: per * units });
+    }
+    return;
+  }
+
+  if (item.stock_quantity !== null) {
+    await supabase.rpc("increment_pos_item_stock_by", { p_item_id: item.id, p_qty: units });
+  }
+}
+
+/** Append a canceled-sale row to the voids ledger. Best-effort; never blocks the cancel. */
+async function logVoid(
+  supabase: ServiceClient,
+  v: {
+    tabId: string;
+    posItemId: string | null;
+    name: string;
+    quantity: number;
+    priceCents: number;
+    costCents: number | null;
+    reason: string | null;
+    voidedBy: string | null;
+  },
+): Promise<void> {
+  const { error } = await supabase.from("pos_voids").insert({
+    tab_id:      v.tabId,
+    pos_item_id: v.posItemId,
+    name:        v.name,
+    quantity:    v.quantity,
+    price_cents: v.priceCents,
+    cost_cents:  v.costCents,
+    reason:      v.reason,
+    voided_by:   v.voidedBy,
+  });
+  if (error) {
+    Sentry.captureException(error, { tags: { area: "bar-void-ledger" }, extra: { tabId: v.tabId, name: v.name } });
+  }
+}
 
 export async function addItemToTab(
   _prev: ActionState,
@@ -117,6 +234,7 @@ export async function removeTabItem(
 
   const tabItemId = formData.get("tab_item_id") as string;
   const tabId     = formData.get("tab_id") as string;
+  const reason    = ((formData.get("reason") as string) ?? "").trim() || null;
 
   if (!tabItemId || !tabId) return { error: "Invalid request." };
 
@@ -126,7 +244,7 @@ export async function removeTabItem(
   // Prevents IDOR where a caller supplies a tabItemId from a different tab.
   const { data: tabItem } = await supabase
     .from("pos_tab_items")
-    .select("price_cents, tab_id, pos_tabs!inner(status)")
+    .select("name, price_cents, cost_cents, quantity, pos_item_id, tab_id, pos_tabs!inner(status)")
     .eq("id", tabItemId)
     .eq("tab_id", tabId)
     .single();
@@ -136,6 +254,8 @@ export async function removeTabItem(
   const tabData = Array.isArray(tabItem.pos_tabs) ? tabItem.pos_tabs[0] : tabItem.pos_tabs;
   if (!tabData || tabData.status !== "open") return { error: "Tab is already closed." };
 
+  const qty = tabItem.quantity ?? 1;
+
   const { error: deleteError } = await supabase
     .from("pos_tab_items")
     .delete()
@@ -143,12 +263,29 @@ export async function removeTabItem(
 
   if (deleteError) return { error: `Failed to remove item: ${deleteError.message}` };
 
-  // Atomic total decrement, floored at 0
+  // Cancel = un-sell: restore the stock these units drew, and log the cancellation
+  // so it shows up in Sales/Overview rather than silently disappearing.
+  await restoreStockForLine(supabase, tabItem.pos_item_id, qty);
+  await logVoid(supabase, {
+    tabId,
+    posItemId: tabItem.pos_item_id,
+    name: tabItem.name,
+    quantity: qty,
+    priceCents: tabItem.price_cents,
+    costCents: tabItem.cost_cents,
+    reason,
+    voidedBy: await currentUserId(),
+  });
+
+  // Atomic total decrement, floored at 0 — remove the whole line's worth
   const { error: totalError } = await supabase.rpc(
     "decrement_tab_total",
-    { p_tab_id: tabId, p_amount: tabItem.price_cents }
+    { p_tab_id: tabId, p_amount: tabItem.price_cents * qty }
   );
-  if (totalError) return { error: `Item removed but total not updated: ${totalError.message}` };
+  if (totalError) {
+    Sentry.captureException(totalError, { tags: { area: "bar-tab-total" }, extra: { tabId, action: "removeTabItem" } });
+    return { error: `Item removed but total not updated: ${totalError.message}` };
+  }
 
   revalidatePath(`/bar/tabs/${tabId}`);
   return null;
@@ -169,7 +306,7 @@ export async function incrementTabItem(
   // Verify the tab is still open and item belongs to this tab
   const { data: tabItem } = await supabase
     .from("pos_tab_items")
-    .select("price_cents, tab_id, pos_tabs!inner(status)")
+    .select("price_cents, pos_item_id, tab_id, pos_tabs!inner(status)")
     .eq("id", tabItemId)
     .eq("tab_id", tabId)
     .single();
@@ -178,14 +315,25 @@ export async function incrementTabItem(
   const tabData = Array.isArray(tabItem.pos_tabs) ? tabItem.pos_tabs[0] : tabItem.pos_tabs;
   if (!tabData || tabData.status !== "open") return { error: "Tab is already closed." };
 
+  // A + tap sells one more unit — draw its stock first (whole-bottle aware).
+  // If there isn't enough, refuse the increment rather than overselling.
+  const drew = await drawStockForLine(supabase, tabItem.pos_item_id, 1);
+  if (!drew.ok) return { error: drew.error ?? "Not enough stock." };
+
   // Increment quantity in place
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { error: qtyError } = await (supabase.rpc as any)("increment_tab_item_quantity", { p_tab_item_id: tabItemId });
-  if (qtyError) return { error: `Failed to update quantity: ${qtyError.message}` };
+  const { error: qtyError } = await supabase.rpc("increment_tab_item_quantity", { p_tab_item_id: tabItemId });
+  if (qtyError) {
+    // Roll back the stock we just drew so it doesn't leak
+    await restoreStockForLine(supabase, tabItem.pos_item_id, 1);
+    return { error: `Failed to update quantity: ${qtyError.message}` };
+  }
 
   // Increment tab total by the item price
   const { error: totalError } = await supabase.rpc("increment_tab_total", { p_tab_id: tabId, p_amount: tabItem.price_cents });
-  if (totalError) return { error: `Quantity updated but total not synced: ${totalError.message}` };
+  if (totalError) {
+    Sentry.captureException(totalError, { tags: { area: "bar-tab-total" }, extra: { tabId, action: "incrementTabItem" } });
+    return { error: `Quantity updated but total not synced: ${totalError.message}` };
+  }
 
   revalidatePath(`/bar/tabs/${tabId}`);
   return null;
@@ -199,13 +347,14 @@ export async function decrementTabItem(
 
   const tabItemId = formData.get("tab_item_id") as string;
   const tabId     = formData.get("tab_id") as string;
+  const reason    = ((formData.get("reason") as string) ?? "").trim() || null;
   if (!tabItemId || !tabId) return { error: "Invalid request." };
 
   const supabase = createServiceClient();
 
   const { data: tabItem } = await supabase
     .from("pos_tab_items")
-    .select("quantity, price_cents, tab_id, pos_tabs!inner(status)")
+    .select("name, quantity, price_cents, cost_cents, pos_item_id, tab_id, pos_tabs!inner(status)")
     .eq("id", tabItemId)
     .eq("tab_id", tabId)
     .single();
@@ -218,14 +367,29 @@ export async function decrementTabItem(
     // Remove the item entirely (same as removeTabItem)
     await supabase.from("pos_tab_items").delete().eq("id", tabItemId);
   } else {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { error: qtyError } = await (supabase.rpc as any)("decrement_tab_item_quantity", { p_tab_item_id: tabItemId });
+    const { error: qtyError } = await supabase.rpc("decrement_tab_item_quantity", { p_tab_item_id: tabItemId });
     if (qtyError) return { error: `Failed to update quantity: ${qtyError.message}` };
   }
 
+  // Cancel of a single unit = un-sell one: restore its stock and log the void.
+  await restoreStockForLine(supabase, tabItem.pos_item_id, 1);
+  await logVoid(supabase, {
+    tabId,
+    posItemId: tabItem.pos_item_id,
+    name: tabItem.name,
+    quantity: 1,
+    priceCents: tabItem.price_cents,
+    costCents: tabItem.cost_cents,
+    reason,
+    voidedBy: await currentUserId(),
+  });
+
   // Decrement tab total, floored at 0
   const { error: totalError } = await supabase.rpc("decrement_tab_total", { p_tab_id: tabId, p_amount: tabItem.price_cents });
-  if (totalError) return { error: `Quantity updated but total not synced: ${totalError.message}` };
+  if (totalError) {
+    Sentry.captureException(totalError, { tags: { area: "bar-tab-total" }, extra: { tabId, action: "decrementTabItem" } });
+    return { error: `Quantity updated but total not synced: ${totalError.message}` };
+  }
 
   revalidatePath(`/bar/tabs/${tabId}`);
   return null;

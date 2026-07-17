@@ -1,4 +1,5 @@
 import Link from "next/link";
+import * as Sentry from "@sentry/nextjs";
 import { createServiceClient } from "@/lib/supabase/server";
 import { formatCents, CATEGORY_LABELS as BASE_CATEGORY_LABELS, jamaicaMidnight, jamaicaDateTime } from "@/lib/bar/pos";
 
@@ -40,12 +41,12 @@ export default async function SalesPage({
   const start = periodStart(period);
   if (start) tabQuery = tabQuery.gte("closed_at", start);
 
-  const { data: tabs } = await tabQuery;
+  const { data: tabs, error: tabsError } = await tabQuery;
   const closedTabs = tabs ?? [];
   const tabIds = closedTabs.map((t) => t.id);
 
   // ── Still-open / away tabs (outstanding money, independent of the period) ──
-  const { data: openTabsData } = await supabase
+  const { data: openTabsData, error: openError } = await supabase
     .from("pos_tabs")
     .select("id, name, total_cents, status, created_at")
     .in("status", ["open", "away"])
@@ -53,16 +54,40 @@ export default async function SalesPage({
   const openTabs = openTabsData ?? [];
   const openTotal = openTabs.reduce((sum, t) => sum + (t.total_cents ?? 0), 0);
 
+  // ── Canceled sales (voids) in the period ──────────────────────────────────
+  let voidQuery = supabase
+    .from("pos_voids")
+    .select("name, quantity, price_cents, reason, created_at")
+    .order("created_at", { ascending: false });
+  if (start) voidQuery = voidQuery.gte("created_at", start);
+  const { data: voidsData } = await voidQuery;
+  const voids = voidsData ?? [];
+  const voidCount = voids.reduce((sum, v) => sum + (v.quantity ?? 1), 0);
+  const voidValue = voids.reduce((sum, v) => sum + (v.price_cents ?? 0) * (v.quantity ?? 1), 0);
+
   // ── Fetch line items for those tabs ───────────────────────────────────────
-  const lineItems =
-    tabIds.length > 0
-      ? (
-          await supabase
-            .from("pos_tab_items")
-            .select("name, price_cents, cost_cents, quantity, pos_items(category)")
-            .in("tab_id", tabIds)
-        ).data ?? []
-      : [];
+  let lineItems: {
+    name: string;
+    price_cents: number;
+    cost_cents: number | null;
+    quantity: number;
+    pos_items: { category: string } | null;
+  }[] = [];
+  let lineError = null;
+  if (tabIds.length > 0) {
+    const { data, error } = await supabase
+      .from("pos_tab_items")
+      .select("name, price_cents, cost_cents, quantity, pos_items(category)")
+      .in("tab_id", tabIds);
+    lineItems = data ?? [];
+    lineError = error;
+  }
+
+  // Surface (don't swallow) money-query failures rather than rendering $0 as real.
+  const loadError = tabsError || openError || lineError;
+  if (loadError) {
+    Sentry.captureException(loadError, { tags: { area: "bar-sales" }, extra: { period } });
+  }
 
   // ── Aggregate ─────────────────────────────────────────────────────────────
 
@@ -116,6 +141,12 @@ export default async function SalesPage({
         <h1 className="font-display font-bold text-bone text-3xl">Sales</h1>
         <div className="mt-3 h-px w-16 bg-bone/20" />
       </div>
+
+      {loadError && (
+        <div className="rounded-lg border border-rose/30 bg-rose/10 px-4 py-3 text-sm text-rose">
+          Some sales data couldn&apos;t be loaded, so the totals below may be incomplete. Refresh to try again.
+        </div>
+      )}
 
       {/* Period filter */}
       <div className="flex flex-wrap gap-2">
@@ -181,6 +212,44 @@ export default async function SalesPage({
                   <td className="px-4 py-3 text-right font-mono font-bold text-ochre">{formatCents(openTotal)}</td>
                 </tr>
               </tfoot>
+            </table>
+          </div>
+        )}
+      </section>
+
+      {/* Canceled sales (voids) — un-sold items, stock restored, logged here */}
+      <section className="space-y-3">
+        <div className="flex items-baseline justify-between">
+          <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-bone/60">Canceled ({voidCount})</h2>
+          <span className="text-sm text-bone/60">
+            Value <span className="font-mono font-bold text-bone/70">{formatCents(voidValue)}</span>
+          </span>
+        </div>
+        {voids.length === 0 ? (
+          <p className="text-sm text-bone/50">No canceled items for this period.</p>
+        ) : (
+          <div className="border border-bone/10 rounded-lg overflow-x-auto">
+            <table className="w-full min-w-[480px] text-sm">
+              <thead className="border-b border-bone/10 bg-bone/3">
+                <tr>
+                  <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Item</th>
+                  <th className="text-right px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Qty</th>
+                  <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Reason</th>
+                  <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">When</th>
+                  <th className="text-right px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Value</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-bone/10">
+                {voids.map((v, i) => (
+                  <tr key={i} className="hover:bg-bone/3 transition-colors">
+                    <td className="px-4 py-3 text-bone font-medium">{v.name}</td>
+                    <td className="px-4 py-3 text-right font-mono text-bone/70">{v.quantity ?? 1}</td>
+                    <td className="px-4 py-3 text-bone/50">{v.reason || <span className="text-bone/30">—</span>}</td>
+                    <td className="px-4 py-3 text-bone/50 text-xs">{jamaicaDateTime(v.created_at)}</td>
+                    <td className="px-4 py-3 text-right font-mono text-bone/60">{formatCents((v.price_cents ?? 0) * (v.quantity ?? 1))}</td>
+                  </tr>
+                ))}
+              </tbody>
             </table>
           </div>
         )}

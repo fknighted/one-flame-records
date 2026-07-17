@@ -665,6 +665,60 @@ export type Database = {
           },
         ]
       }
+      pos_voids: {
+        Row: {
+          cost_cents: number | null
+          created_at: string
+          id: string
+          name: string
+          pos_item_id: string | null
+          price_cents: number
+          quantity: number
+          reason: string | null
+          tab_id: string | null
+          voided_by: string | null
+        }
+        Insert: {
+          cost_cents?: number | null
+          created_at?: string
+          id?: string
+          name: string
+          pos_item_id?: string | null
+          price_cents: number
+          quantity: number
+          reason?: string | null
+          tab_id?: string | null
+          voided_by?: string | null
+        }
+        Update: {
+          cost_cents?: number | null
+          created_at?: string
+          id?: string
+          name?: string
+          pos_item_id?: string | null
+          price_cents?: number
+          quantity?: number
+          reason?: string | null
+          tab_id?: string | null
+          voided_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pos_voids_pos_item_id_fkey"
+            columns: ["pos_item_id"]
+            isOneToOne: false
+            referencedRelation: "pos_items"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pos_voids_tab_id_fkey"
+            columns: ["tab_id"]
+            isOneToOne: false
+            referencedRelation: "pos_tabs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       pos_tab_items: {
         Row: {
           cost_cents: number | null
@@ -1138,6 +1192,10 @@ export type Database = {
       decrement_tab_total: {
         Args: { p_amount: number; p_tab_id: string }
         Returns: undefined
+      }
+      increment_pos_item_stock_by: {
+        Args: { p_item_id: string; p_qty: number }
+        Returns: boolean
       }
       increment_tab_item_quantity: {
         Args: { p_tab_item_id: string }
