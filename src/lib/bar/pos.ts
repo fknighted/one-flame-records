@@ -12,6 +12,17 @@ export function jamaicaMidnight(daysAgo = 0): Date {
   return d;
 }
 
+/**
+ * Start of the current Jamaica calendar month, as a UTC Date.
+ * Jamaica is UTC-5, so 00:00 on the 1st (Jamaica) = 05:00 UTC on the 1st.
+ * Use for "this month" windows instead of `new Date().setDate(1)` (which gives
+ * UTC month start and is off by 5h near the boundary).
+ */
+export function jamaicaMonthStart(): Date {
+  const jamaicaNow = new Date(Date.now() - 5 * 60 * 60 * 1000);
+  return new Date(Date.UTC(jamaicaNow.getUTCFullYear(), jamaicaNow.getUTCMonth(), 1, 5, 0, 0, 0));
+}
+
 export function jamaicaTime(isoString: string): string {
   return new Date(isoString).toLocaleTimeString("en-US", {
     hour: "2-digit",

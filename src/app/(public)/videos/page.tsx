@@ -55,14 +55,15 @@ export default async function VideosPage({
     .order("completed_at", { ascending: false })
     .returns<VideoJobRow[]>();
 
-  const jobsWithUrls = await Promise.all(
-    (publicJobs ?? []).map(async (job) => {
-      const { data } = await service.storage
-        .from("generated-videos")
-        .createSignedUrl(`videos/${job.id}.mp4`, 3600);
-      return { ...job, videoUrl: data?.signedUrl ?? null };
-    })
-  );
+  // Sign all generated-video URLs in a single request (one round trip, not N).
+  const jobPaths = (publicJobs ?? []).map((job) => `videos/${job.id}.mp4`);
+  const { data: signedJobs } = jobPaths.length
+    ? await service.storage.from("generated-videos").createSignedUrls(jobPaths, 3600)
+    : { data: [] };
+  const jobsWithUrls = (publicJobs ?? []).map((job, i) => ({
+    ...job,
+    videoUrl: signedJobs?.[i]?.signedUrl ?? null,
+  }));
 
   const isFiltered = !!(artist || kind);
 

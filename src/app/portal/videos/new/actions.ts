@@ -3,6 +3,7 @@
 import { redirect } from "next/navigation";
 import { createClient, createServiceClient } from "@/lib/supabase/server";
 import { inngest } from "@/lib/inngest/client";
+import { jamaicaMonthStart } from "@/lib/bar/pos";
 
 export type VideoRequestState = { error: string } | null;
 
@@ -22,10 +23,8 @@ async function checkBudget(): Promise<boolean> {
 
   const budgetUsd = Number(setting?.value ?? 100);
 
-  // Sum cost_estimate_usd for jobs created this calendar month
-  const monthStart = new Date();
-  monthStart.setDate(1);
-  monthStart.setHours(0, 0, 0, 0);
+  // Sum cost_estimate_usd for jobs created this calendar month (Jamaica time)
+  const monthStart = jamaicaMonthStart();
 
   const { data: jobs } = await service
     .from("video_jobs")

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { createServiceClient } from "@/lib/supabase/server";
+import { jamaicaMonthStart } from "@/lib/bar/pos";
 
 const ACTIVE_STATUSES = ["pending", "analyzing", "prompting", "generating", "assembling"];
 
@@ -24,9 +25,7 @@ function elapsed(startIso: string | null): string {
 export default async function AdminOverviewPage() {
   const supabase = createServiceClient();
 
-  const monthStart = new Date();
-  monthStart.setDate(1);
-  monthStart.setHours(0, 0, 0, 0);
+  const monthStart = jamaicaMonthStart();
 
   const [
     { count: artistCount },

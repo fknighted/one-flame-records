@@ -60,14 +60,15 @@ export default async function PortalAssetsPage() {
     .order("created_at", { ascending: false });
 
   const serviceClient = createServiceClient();
-  const assetsWithUrls = await Promise.all(
-    (assets ?? []).map(async (asset: AssetRow) => {
-      const { data } = await serviceClient.storage
-        .from("private-assets")
-        .createSignedUrl(asset.storage_path, 3600);
-      return { ...asset, signedUrl: data?.signedUrl ?? null };
-    })
-  );
+  // Sign all asset URLs in a single request rather than one round trip each.
+  const assetPaths = (assets ?? []).map((asset: AssetRow) => asset.storage_path);
+  const { data: signedAssets } = assetPaths.length
+    ? await serviceClient.storage.from("private-assets").createSignedUrls(assetPaths, 3600)
+    : { data: [] };
+  const assetsWithUrls = (assets ?? []).map((asset: AssetRow, i: number) => ({
+    ...asset,
+    signedUrl: signedAssets?.[i]?.signedUrl ?? null,
+  }));
 
   return (
     <div className="max-w-3xl">

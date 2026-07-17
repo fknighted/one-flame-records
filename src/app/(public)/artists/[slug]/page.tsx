@@ -146,25 +146,25 @@ export default async function ArtistDetailPage({ params }: Props) {
       .returns<VideoJobRow[]>(),
   ]);
 
-  // Generate signed URLs for public assets (files live in private-assets bucket)
-  const assetsWithUrls = await Promise.all(
-    (publicAssets ?? []).map(async (asset) => {
-      const { data } = await service.storage
-        .from("private-assets")
-        .createSignedUrl(asset.storage_path, 3600);
-      return { ...asset, signedUrl: data?.signedUrl ?? null };
-    })
-  );
+  // Sign public asset URLs in one request (files live in private-assets bucket)
+  const assetPaths = (publicAssets ?? []).map((asset) => asset.storage_path);
+  const { data: signedAssets } = assetPaths.length
+    ? await service.storage.from("private-assets").createSignedUrls(assetPaths, 3600)
+    : { data: [] };
+  const assetsWithUrls = (publicAssets ?? []).map((asset, i) => ({
+    ...asset,
+    signedUrl: signedAssets?.[i]?.signedUrl ?? null,
+  }));
 
-  // Generate fresh signed URLs for generated videos (path is always videos/{id}.mp4)
-  const jobsWithUrls = await Promise.all(
-    (publicJobs ?? []).map(async (job) => {
-      const { data } = await service.storage
-        .from("generated-videos")
-        .createSignedUrl(`videos/${job.id}.mp4`, 3600);
-      return { ...job, videoUrl: data?.signedUrl ?? null };
-    })
-  );
+  // Sign generated-video URLs in one request (path is always videos/{id}.mp4)
+  const jobPaths = (publicJobs ?? []).map((job) => `videos/${job.id}.mp4`);
+  const { data: signedJobs } = jobPaths.length
+    ? await service.storage.from("generated-videos").createSignedUrls(jobPaths, 3600)
+    : { data: [] };
+  const jobsWithUrls = (publicJobs ?? []).map((job, i) => ({
+    ...job,
+    videoUrl: signedJobs?.[i]?.signedUrl ?? null,
+  }));
 
   const publicPhotos = assetsWithUrls.filter((a) => a.kind === "reference_image");
   const publicMusic = assetsWithUrls.filter((a) => a.kind === "instrumental" || a.kind === "demo");

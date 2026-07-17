@@ -533,7 +533,8 @@ export async function closeTab(
   const tabId         = formData.get("tab_id") as string;
   const paymentMethod = formData.get("payment_method") as string;
   const tipRaw        = formData.get("tip_cents") as string | null;
-  const tipCents      = tipRaw ? Math.max(0, Math.round(Number(tipRaw))) : 0;
+  const tipParsed     = Math.round(Number(tipRaw));
+  const tipCents      = Number.isFinite(tipParsed) ? Math.max(0, tipParsed) : 0;
 
   if (!tabId) return { error: "Invalid request." };
   if (!["cash", "comp"].includes(paymentMethod)) return { error: "Select a payment method." };
