@@ -23,7 +23,7 @@ export default async function AdminNewsPage() {
 
       {posts && posts.length > 0 ? (
         <div className="overflow-x-auto rounded-lg border border-bone/10">
-          <table className="w-full text-sm text-bone/80">
+          <table className="w-full min-w-[560px] text-sm text-bone/80">
             <thead className="border-b border-bone/10 text-[11px] uppercase tracking-wider text-bone/60">
               <tr>
                 <th className="px-4 py-3 text-left">Title</th>

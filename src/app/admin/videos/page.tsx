@@ -42,8 +42,7 @@ export default async function AdminVideosPage() {
           </Link>
         </div>
       ) : (
-        <div className="border border-bone/10 rounded-lg overflow-hidden">
-          <div className="overflow-x-auto">
+        <div className="border border-bone/10 rounded-lg overflow-x-auto">
           <table className="w-full min-w-[640px] text-sm">
             <thead>
               <tr className="border-b border-bone/10 bg-bone/5">
@@ -151,7 +150,6 @@ export default async function AdminVideosPage() {
               })}
             </tbody>
           </table>
-          </div>
         </div>
       )}
     </div>

@@ -28,7 +28,7 @@ type NewsPost = {
 const NEWS_CATEGORY_PILL: Record<string, string> = {
   label:   "bg-oxblood/10 text-oxblood",
   release: "bg-forest/10 text-forest",
-  event:   "bg-ochre/10 text-ochre",
+  event:   "bg-ochre text-ink",
 };
 
 function formatDate(dateStr: string) {

@@ -68,11 +68,11 @@ export default async function AdminApplicationsPage() {
           </p>
         </div>
       ) : (
-        <div className="border border-bone/10 rounded-lg overflow-hidden">
+        <div className="border border-bone/10 rounded-lg overflow-x-auto">
           <div className="px-4 py-2 border-b border-bone/10 text-xs text-bone/60">
             {total} total
           </div>
-          <table className="w-full text-sm">
+          <table className="w-full min-w-[640px] text-sm">
             <thead>
               <tr className="border-b border-bone/10">
                 <th className="text-left px-4 py-2.5 text-bone/60 font-normal text-xs">
