@@ -590,3 +590,58 @@ Signed URLs (1h TTL) are always minted **per-request**, never inside the cache, 
 - _Tag-based invalidation (`revalidateTag` in admin actions)._ Deferred in favor of time-based (120s) — self-contained to the public pages, touches no admin code. Content changes rarely; a ≤2-min delay is invisible.
 
 **Consequences:** Any **new** public page using `createServiceClient()` MUST filter to public-only rows to match RLS, or it will leak non-public data (RLS is bypassed). The `news_posts` reads deliberately exclude null-`published_at` posts to match live behavior. To shorten the update-visibility delay, lower the `revalidate` constant or add tag-based invalidation later.
+
+---
+
+## 2026-08-09 — Money is whole JMD dollars; the `price_jmd` → cents migration is cancelled
+
+**Context:** `game_sessions.price_jmd` was the last column storing money in whole
+dollars while the rest of the bar schema stores integer cents (`price_cents`,
+`cost_cents`, `unit_cost_cents`, `total_cents`). The standing plan of record
+(`next-session-prompt.md` Priority 1) was to migrate it to cents and drop the ×100
+shims, restoring a uniform "money is cents" invariant.
+
+**Decision:** Cancelled by the owner. `game_sessions.price_jmd` stays in whole
+dollars. The business has no sub-dollar prices — every menu and session price is a
+round JMD dollar (J$250, J$450, J$500, J$7,500) — and the UI already displays
+whole dollars everywhere (`b3c20cf`). The migration would have been a live-money
+schema change on a production POS in exchange for internal tidiness, with no
+user-visible correctness gain.
+
+**Alternatives considered:**
+- _Migrate `price_jmd` to cents as planned._ Rejected: real risk (production money
+  data, ×100 shims on read and write paths) for zero real-world precision benefit.
+- _Keep integer cents as an internal storage form._ Rejected by the owner. Cents
+  are a fiction in this business: no price, cost, or tip is ever a fraction of a
+  dollar, so every `_cents` column carries two digits that are always `00` and
+  every read and write pays a ×100 / ÷100 tax to maintain them.
+
+**Decision, part two — convert the schema to whole dollars.** The owner has
+directed that cents be removed entirely rather than retained as an internal form.
+`game_sessions.price_jmd` therefore becomes the model the rest of the schema
+converges on, not the exception.
+
+**Scope of the conversion** (measured 2026-08-09, not estimated):
+- **Columns:** `pos_items.price_cents`, `pos_items.cost_cents`,
+  `pos_tab_items.price_cents`, `pos_tab_items.cost_cents`, `pos_tabs.total_cents`,
+  `pos_tabs.tip_cents`, `pos_stock_purchases.unit_cost_cents` /
+  `total_cost_cents` / `container_cost_cents`.
+- **Money-carrying RPCs:** `increment_tab_total`, `decrement_tab_total`,
+  `add_pos_item_stock`, `bar_sales_payment_summary`, `bar_sales_by_category`,
+  `bar_sales_top_items`.
+- **Application surface:** 22 TypeScript/TSX files reference cents; `formatCents`
+  from `src/lib/bar/pos.ts` has 61 call sites. The `Math.round(dollars * 100)`
+  shims in `bar/items`, `bar/inventory`, `admin/bar/*` actions and the
+  `tipCents` capture in `TabControls.tsx` all disappear.
+- **Live data:** `pos_tab_items.cost_cents` is a *sale-time snapshot* — historical
+  profit is locked to it. Any backfill must preserve past profit exactly, not
+  recompute it from current costs.
+
+**Consequences:** This is a production money migration on a live POS, so it is
+gated: verify against prod before and after, using the service-role verification
+script pattern (`scratchpad/verify-bar-sales.mjs`) — read raw values, compute the
+expected result independently, compare. Do not apply the migration to production
+without Frank's explicit approval. Until the conversion ships, `_cents` columns
+remain authoritative and code must keep treating them as cents; a half-converted
+schema is the one genuinely dangerous state here. After it ships, `formatCents`
+and the ×100 shims must be deleted, not left as no-ops.

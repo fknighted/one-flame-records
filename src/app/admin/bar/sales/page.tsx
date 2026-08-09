@@ -1,7 +1,7 @@
 import Link from "next/link";
 import * as Sentry from "@sentry/nextjs";
 import { createServiceClient } from "@/lib/supabase/server";
-import { formatCents, CATEGORY_LABELS as BASE_CATEGORY_LABELS, jamaicaMidnight, jamaicaDateTime } from "@/lib/bar/pos";
+import { formatJmd, CATEGORY_LABELS as BASE_CATEGORY_LABELS, jamaicaMidnight, jamaicaDateTime } from "@/lib/bar/pos";
 
 const CATEGORY_LABELS: Record<string, string> = {
   ...BASE_CATEGORY_LABELS,
@@ -47,22 +47,22 @@ export default async function SalesPage({
   // ── Still-open / away tabs (outstanding money, independent of the period) ──
   const { data: openTabsData, error: openError } = await supabase
     .from("pos_tabs")
-    .select("id, name, total_cents, status, created_at")
+    .select("id, name, total_jmd, status, created_at")
     .in("status", ["open", "away"])
     .order("created_at", { ascending: true });
   const openTabs = openTabsData ?? [];
-  const openTotal = openTabs.reduce((sum, t) => sum + (t.total_cents ?? 0), 0);
+  const openTotal = openTabs.reduce((sum, t) => sum + (t.total_jmd ?? 0), 0);
 
   // ── Canceled sales (voids) in the period ──────────────────────────────────
   let voidQuery = supabase
     .from("pos_voids")
-    .select("name, quantity, price_cents, reason, created_at")
+    .select("name, quantity, price_jmd, reason, created_at")
     .order("created_at", { ascending: false });
   if (start) voidQuery = voidQuery.gte("created_at", start);
   const { data: voidsData } = await voidQuery;
   const voids = voidsData ?? [];
   const voidCount = voids.reduce((sum, v) => sum + (v.quantity ?? 1), 0);
-  const voidValue = voids.reduce((sum, v) => sum + (v.price_cents ?? 0) * (v.quantity ?? 1), 0);
+  const voidValue = voids.reduce((sum, v) => sum + (v.price_jmd ?? 0) * (v.quantity ?? 1), 0);
 
   // Surface (don't swallow) money-query failures rather than rendering $0 as real.
   const loadError = payError || catError || topError || openError;
@@ -77,33 +77,33 @@ export default async function SalesPage({
 
   // Revenue is the sum of closed-tab totals (tip excluded, as before); cost of
   // goods is the sum of line-item cost snapshots. Missing cost counts as 0.
-  const totalRevenue   = payments.reduce((sum, p) => sum + (p.revenue_cents ?? 0), 0);
+  const totalRevenue   = payments.reduce((sum, p) => sum + (p.revenue_jmd ?? 0), 0);
   const tabsClosed     = payments.reduce((sum, p) => sum + (p.tab_count ?? 0), 0);
   const totalItemsSold = categories.reduce((sum, c) => sum + (c.qty ?? 0), 0);
-  const totalCost      = categories.reduce((sum, c) => sum + (c.cost_cents ?? 0), 0);
+  const totalCost      = categories.reduce((sum, c) => sum + (c.cost_jmd ?? 0), 0);
   const totalProfit    = totalRevenue - totalCost;
   const totalMargin    = totalRevenue > 0 ? Math.round((totalProfit / totalRevenue) * 100) : null;
 
   // By category, sorted by revenue (matches the previous Object.entries order).
   const categoryRows = categories
-    .map((c): [string, { qty: number; cents: number; cost: number }] => [
+    .map((c): [string, { qty: number; jmd: number; cost: number }] => [
       c.category,
-      { qty: c.qty, cents: c.revenue_cents, cost: c.cost_cents },
+      { qty: c.qty, jmd: c.revenue_jmd, cost: c.cost_jmd },
     ])
-    .sort(([, a], [, b]) => b.cents - a.cents);
+    .sort(([, a], [, b]) => b.jmd - a.jmd);
 
   // Top items already arrive sorted by revenue (limit 10).
   const topItems = items.map(
-    (it): [string, { category: string; qty: number; cents: number; cost: number }] => [
+    (it): [string, { category: string; qty: number; jmd: number; cost: number }] => [
       it.name,
-      { category: it.category, qty: it.qty, cents: it.revenue_cents, cost: it.cost_cents },
+      { category: it.category, qty: it.qty, jmd: it.revenue_jmd, cost: it.cost_jmd },
     ]
   );
 
   // Payment-method split.
-  const byPayment: Record<string, { count: number; cents: number }> = {};
+  const byPayment: Record<string, { count: number; jmd: number }> = {};
   for (const p of payments) {
-    byPayment[p.payment_method] = { count: p.tab_count, cents: p.revenue_cents };
+    byPayment[p.payment_method] = { count: p.tab_count, jmd: p.revenue_jmd };
   }
 
   return (
@@ -144,7 +144,7 @@ export default async function SalesPage({
         <div className="flex items-baseline justify-between">
           <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-bone/60">Open Tabs ({openTabs.length})</h2>
           <span className="text-sm text-bone/60">
-            Outstanding <span className="font-mono font-bold text-ochre">{formatCents(openTotal)}</span>
+            Outstanding <span className="font-mono font-bold text-ochre">{formatJmd(openTotal)}</span>
           </span>
         </div>
         {openTabs.length === 0 ? (
@@ -175,14 +175,14 @@ export default async function SalesPage({
                         {tab.status === "away" ? "Away" : "Open"}
                       </span>
                     </td>
-                    <td className="px-4 py-3 text-right font-mono text-bone">{formatCents(tab.total_cents ?? 0)}</td>
+                    <td className="px-4 py-3 text-right font-mono text-bone">{formatJmd(tab.total_jmd ?? 0)}</td>
                   </tr>
                 ))}
               </tbody>
               <tfoot className="border-t border-bone/10 bg-bone/3">
                 <tr>
                   <td colSpan={3} className="px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Outstanding</td>
-                  <td className="px-4 py-3 text-right font-mono font-bold text-ochre">{formatCents(openTotal)}</td>
+                  <td className="px-4 py-3 text-right font-mono font-bold text-ochre">{formatJmd(openTotal)}</td>
                 </tr>
               </tfoot>
             </table>
@@ -195,7 +195,7 @@ export default async function SalesPage({
         <div className="flex items-baseline justify-between">
           <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-bone/60">Canceled ({voidCount})</h2>
           <span className="text-sm text-bone/60">
-            Value <span className="font-mono font-bold text-bone/70">{formatCents(voidValue)}</span>
+            Value <span className="font-mono font-bold text-bone/70">{formatJmd(voidValue)}</span>
           </span>
         </div>
         {voids.length === 0 ? (
@@ -219,7 +219,7 @@ export default async function SalesPage({
                     <td className="px-4 py-3 text-right font-mono text-bone/70">{v.quantity ?? 1}</td>
                     <td className="px-4 py-3 text-bone/50">{v.reason || <span className="text-bone/30">—</span>}</td>
                     <td className="px-4 py-3 text-bone/50 text-xs">{jamaicaDateTime(v.created_at)}</td>
-                    <td className="px-4 py-3 text-right font-mono text-bone/60">{formatCents((v.price_cents ?? 0) * (v.quantity ?? 1))}</td>
+                    <td className="px-4 py-3 text-right font-mono text-bone/60">{formatJmd((v.price_jmd ?? 0) * (v.quantity ?? 1))}</td>
                   </tr>
                 ))}
               </tbody>
@@ -235,9 +235,9 @@ export default async function SalesPage({
           {/* Summary row */}
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
             {[
-              { label: "Total Revenue",  value: formatCents(totalRevenue), tone: "text-bone" },
-              { label: "Cost of Goods",  value: formatCents(totalCost),    tone: "text-bone/60" },
-              { label: "Profit",         value: formatCents(totalProfit),  tone: totalProfit < 0 ? "text-red-400" : "text-sage", sub: totalMargin != null ? `${totalMargin}% margin` : undefined },
+              { label: "Total Revenue",  value: formatJmd(totalRevenue), tone: "text-bone" },
+              { label: "Cost of Goods",  value: formatJmd(totalCost),    tone: "text-bone/60" },
+              { label: "Profit",         value: formatJmd(totalProfit),  tone: totalProfit < 0 ? "text-red-400" : "text-sage", sub: totalMargin != null ? `${totalMargin}% margin` : undefined },
               { label: "Items Sold",     value: totalItemsSold.toString(), tone: "text-bone" },
               { label: "Tabs Closed",    value: tabsClosed.toString(), tone: "text-bone" },
             ].map((card) => (
@@ -269,14 +269,14 @@ export default async function SalesPage({
                   </thead>
                   <tbody className="divide-y divide-bone/10">
                     {categoryRows.map(([cat, data]) => {
-                      const profit = data.cents - data.cost;
+                      const profit = data.jmd - data.cost;
                       return (
                         <tr key={cat} className="hover:bg-bone/3 transition-colors">
                           <td className="px-4 py-3 text-bone font-medium">{CATEGORY_LABELS[cat] ?? cat}</td>
                           <td className="px-4 py-3 text-right font-mono text-bone/70">{data.qty}</td>
-                          <td className="px-4 py-3 text-right font-mono text-bone">{formatCents(data.cents)}</td>
-                          <td className="hidden sm:table-cell px-4 py-3 text-right font-mono text-bone/50">{formatCents(data.cost)}</td>
-                          <td className={`px-4 py-3 text-right font-mono ${profit < 0 ? "text-red-400" : "text-sage"}`}>{formatCents(profit)}</td>
+                          <td className="px-4 py-3 text-right font-mono text-bone">{formatJmd(data.jmd)}</td>
+                          <td className="hidden sm:table-cell px-4 py-3 text-right font-mono text-bone/50">{formatJmd(data.cost)}</td>
+                          <td className={`px-4 py-3 text-right font-mono ${profit < 0 ? "text-red-400" : "text-sage"}`}>{formatJmd(profit)}</td>
                         </tr>
                       );
                     })}
@@ -303,14 +303,14 @@ export default async function SalesPage({
                   </thead>
                   <tbody className="divide-y divide-bone/10">
                     {topItems.map(([name, data]) => {
-                      const profit = data.cents - data.cost;
+                      const profit = data.jmd - data.cost;
                       return (
                         <tr key={name} className="hover:bg-bone/3 transition-colors">
                           <td className="px-4 py-3 text-bone font-medium">{name}</td>
                           <td className="hidden sm:table-cell px-4 py-3 text-bone/50">{CATEGORY_LABELS[data.category] ?? data.category}</td>
                           <td className="px-4 py-3 text-right font-mono text-bone/70">{data.qty}</td>
-                          <td className="px-4 py-3 text-right font-mono text-bone">{formatCents(data.cents)}</td>
-                          <td className={`px-4 py-3 text-right font-mono ${profit < 0 ? "text-red-400" : "text-sage"}`}>{formatCents(profit)}</td>
+                          <td className="px-4 py-3 text-right font-mono text-bone">{formatJmd(data.jmd)}</td>
+                          <td className={`px-4 py-3 text-right font-mono ${profit < 0 ? "text-red-400" : "text-sage"}`}>{formatJmd(profit)}</td>
                         </tr>
                       );
                     })}
@@ -328,7 +328,7 @@ export default async function SalesPage({
                 {Object.entries(byPayment).map(([method, data]) => (
                   <div key={method} className="rounded-lg border border-bone/10 bg-bone/3 px-5 py-4 min-w-[140px]">
                     <p className="text-xs font-semibold uppercase tracking-wider text-bone/60 mb-1 capitalize">{method}</p>
-                    <p className="font-mono text-bone text-xl font-bold">{formatCents(data.cents)}</p>
+                    <p className="font-mono text-bone text-xl font-bold">{formatJmd(data.jmd)}</p>
                     <p className="text-xs text-bone/60 mt-0.5">{data.count} tab{data.count !== 1 ? "s" : ""}</p>
                   </div>
                 ))}

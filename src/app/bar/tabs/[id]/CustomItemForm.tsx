@@ -28,9 +28,9 @@ export default function CustomItemForm({ tabId }: { tabId: string }) {
         <input
           name="price"
           type="number"
-          min="0.01"
-          step="0.01"
-          placeholder="J$0.00"
+          min="1"
+          step="1"
+          placeholder="J$0"
           required
           className="w-24 bg-bone/5 border border-bone/15 rounded px-3 py-2 text-bone placeholder:text-bone/60 text-sm focus:outline-none focus:border-ochre/50 text-right"
         />

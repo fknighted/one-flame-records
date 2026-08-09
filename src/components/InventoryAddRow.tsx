@@ -11,7 +11,7 @@ export type InvRow = {
   stock: number | null;
   threshold: number;
   bottleYield: number | null;
-  priceCents: number;
+  priceJmd: number;
 };
 
 function StockPill({ stock, threshold }: { stock: number | null; threshold: number }) {
@@ -43,7 +43,7 @@ export default function InventoryAddRow({
     id: r.id,
     name: r.name,
     bottleYield: r.bottleYield,
-    priceCents: r.priceCents,
+    priceJmd: r.priceJmd,
   }));
   const anyLow = rows.some((r) => r.stock !== null && r.stock < r.threshold);
 

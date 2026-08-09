@@ -43,3 +43,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# money migration verification snapshot (contains business figures, not secrets)
+.money-snapshot.json

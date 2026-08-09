@@ -19,8 +19,8 @@ type InitialValues = {
   id?: string;
   name?: string;
   category?: string;
-  price_cents?: number;
-  cost_cents?: number | null;
+  price_jmd?: number;
+  cost_jmd?: number | null;
   description?: string;
   sort_order?: number;
   reorder_level?: number;
@@ -49,12 +49,9 @@ export default function MenuItemForm({
 }) {
   const [state, formAction, pending] = useActionState(action, null);
 
-  const defaultPrice = initialValues.price_cents != null
-    ? (initialValues.price_cents / 100).toFixed(2)
-    : "";
-  const defaultCost = initialValues.cost_cents != null
-    ? (initialValues.cost_cents / 100).toFixed(2)
-    : "";
+  // Stored values are already whole dollars — no conversion, no decimals.
+  const defaultPrice = initialValues.price_jmd != null ? String(initialValues.price_jmd) : "";
+  const defaultCost  = initialValues.cost_jmd  != null ? String(initialValues.cost_jmd)  : "";
 
   return (
     <form action={formAction} className="space-y-6">
@@ -97,11 +94,11 @@ export default function MenuItemForm({
           <input
             name="price"
             type="number"
-            step="0.01"
+            step="1"
             min="0"
             required
             defaultValue={defaultPrice}
-            placeholder="0.00"
+            placeholder="0"
             className={INPUT}
           />
         </div>
@@ -112,10 +109,10 @@ export default function MenuItemForm({
         <input
           name="cost"
           type="number"
-          step="0.01"
+          step="1"
           min="0"
           defaultValue={defaultCost}
-          placeholder="0.00"
+          placeholder="0"
           className={INPUT}
         />
       </div>

@@ -1,7 +1,7 @@
 "use client";
 
 import { useActionState, useMemo, useState } from "react";
-import { formatCents } from "@/lib/bar/pos";
+import { formatJmd } from "@/lib/bar/pos";
 
 type ActionState = { error: string } | { ok: string } | null;
 
@@ -9,7 +9,7 @@ export type StockTarget = {
   id: string;
   name: string;
   bottleYield: number | null; // set → sold by the bottle (this many units per bottle)
-  priceCents: number;
+  priceJmd: number;
 };
 
 const INPUT =
@@ -70,15 +70,18 @@ export default function AddStockForm({
       if (isNaN(costDollars) || costDollars < 0) return null;
       if (!Number.isInteger(yieldNum) || yieldNum <= 0) return null;
       const units = b * yieldNum;
-      const perUnitCents = Math.round((costDollars * 100) / yieldNum);
-      return { units, perUnitCents, totalCents: Math.round(b * costDollars * 100) };
+      // Money is whole dollars: a bottle cost that doesn't divide evenly by its
+      // yield rounds to the nearest dollar per unit, so unit × units may differ
+      // slightly from the bottle total. Total is the authoritative spend.
+      const perUnitJmd = Math.round(costDollars / yieldNum);
+      return { units, perUnitJmd, totalJmd: Math.round(b * costDollars) };
     }
     const q = parseInt(quantity, 10);
     const costDollars = parseFloat(unitCost);
     if (!Number.isInteger(q) || q <= 0) return null;
     if (isNaN(costDollars) || costDollars < 0) return null;
-    const perUnitCents = Math.round(costDollars * 100);
-    return { units: q, perUnitCents, totalCents: q * perUnitCents };
+    const perUnitJmd = Math.round(costDollars);
+    return { units: q, perUnitJmd, totalJmd: q * perUnitJmd };
   }, [isBottle, containers, containerCost, yieldNum, quantity, unitCost]);
 
   function handleReview() {
@@ -160,10 +163,10 @@ export default function AddStockForm({
                   <input
                     type="number"
                     min="0"
-                    step="0.01"
+                    step="1"
                     value={containerCost}
                     onChange={(e) => setContainerCost(e.target.value)}
-                    placeholder="4000.00"
+                    placeholder="4000"
                     className={INPUT}
                   />
                 </div>
@@ -198,10 +201,10 @@ export default function AddStockForm({
                   <input
                     type="number"
                     min="0"
-                    step="0.01"
+                    step="1"
                     value={unitCost}
                     onChange={(e) => setUnitCost(e.target.value)}
-                    placeholder="0.00"
+                    placeholder="0"
                     className={INPUT}
                   />
                 </div>
@@ -212,7 +215,7 @@ export default function AddStockForm({
           {preview && isBottle && (
             <p className="text-[11px] text-bone/50">
               Adds <span className="text-bone">{preview.units}</span> × {target?.name} at{" "}
-              <span className="text-bone">{formatCents(preview.perUnitCents)}</span> each.
+              <span className="text-bone">{formatJmd(preview.perUnitJmd)}</span> each.
             </p>
           )}
 
@@ -229,8 +232,8 @@ export default function AddStockForm({
           <div className="space-y-3 rounded-lg border border-ochre/30 bg-ochre/5 p-3">
             <p className="text-sm text-bone">
               Add <span className="font-semibold">{preview.units} {target?.name}</span> at{" "}
-              <span className="font-semibold">{formatCents(preview.perUnitCents)}</span> each
-              {" — "}total cost <span className="font-semibold">{formatCents(preview.totalCents)}</span>.
+              <span className="font-semibold">{formatJmd(preview.perUnitJmd)}</span> each
+              {" — "}total cost <span className="font-semibold">{formatJmd(preview.totalJmd)}</span>.
             </p>
             <p className="text-[11px] text-bone/50">This can’t be removed once added. Confirm it’s right.</p>
             <div className="flex items-center gap-2">

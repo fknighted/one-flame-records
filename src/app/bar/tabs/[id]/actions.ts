@@ -104,8 +104,8 @@ async function logVoid(
     posItemId: string | null;
     name: string;
     quantity: number;
-    priceCents: number;
-    costCents: number | null;
+    priceJmd: number;
+    costJmd: number | null;
     reason: string | null;
     voidedBy: string | null;
   },
@@ -115,8 +115,8 @@ async function logVoid(
     pos_item_id: v.posItemId,
     name:        v.name,
     quantity:    v.quantity,
-    price_cents: v.priceCents,
-    cost_cents:  v.costCents,
+    price_jmd: v.priceJmd,
+    cost_jmd:  v.costJmd,
     reason:      v.reason,
     voided_by:   v.voidedBy,
   });
@@ -140,7 +140,7 @@ export async function addItemToTab(
 
   const [{ data: tab }, { data: item }] = await Promise.all([
     supabase.from("pos_tabs").select("id, status").eq("id", tabId).single(),
-    supabase.from("pos_items").select("id, name, price_cents, cost_cents, is_active, stock_quantity, bottle_parent_id").eq("id", itemId).single(),
+    supabase.from("pos_items").select("id, name, price_jmd, cost_jmd, is_active, stock_quantity, bottle_parent_id").eq("id", itemId).single(),
   ]);
 
   if (!tab)                  return { error: "Tab not found." };
@@ -150,11 +150,11 @@ export async function addItemToTab(
   // A whole-bottle item draws from its shot parent's pool: one bottle = the
   // parent's bottle_yield shots. Only sellable while MORE THAN one bottle's
   // worth remains, and its cost snapshot is (per-shot cost × shots per bottle).
-  let costSnapshot = item.cost_cents;
+  let costSnapshot = item.cost_jmd;
   if (item.bottle_parent_id) {
     const { data: parent } = await supabase
       .from("pos_items")
-      .select("id, stock_quantity, bottle_yield, cost_cents")
+      .select("id, stock_quantity, bottle_yield, cost_jmd")
       .eq("id", item.bottle_parent_id)
       .single();
     const yieldPer = parent?.bottle_yield ?? 0;
@@ -163,11 +163,11 @@ export async function addItemToTab(
     if (tracked && parent.stock_quantity! <= yieldPer) {
       return { error: "Only one bottle's worth left — sold by the shot only." };
     }
-    costSnapshot = parent.cost_cents != null ? parent.cost_cents * yieldPer : null;
+    costSnapshot = parent.cost_jmd != null ? parent.cost_jmd * yieldPer : null;
 
     const { data: inserted, error: insertError } = await supabase
       .from("pos_tab_items")
-      .insert({ tab_id: tabId, pos_item_id: itemId, name: item.name, price_cents: item.price_cents, cost_cents: costSnapshot, quantity: 1 })
+      .insert({ tab_id: tabId, pos_item_id: itemId, name: item.name, price_jmd: item.price_jmd, cost_jmd: costSnapshot, quantity: 1 })
       .select("id")
       .single();
     if (insertError) return { error: `Failed to add item: ${insertError.message}` };
@@ -179,7 +179,7 @@ export async function addItemToTab(
         return { error: "Not enough stock for a whole bottle." };
       }
     }
-    const { error: totalErr } = await supabase.rpc("increment_tab_total", { p_tab_id: tabId, p_amount: item.price_cents });
+    const { error: totalErr } = await supabase.rpc("increment_tab_total", { p_tab_id: tabId, p_amount: item.price_jmd });
     if (totalErr) return { error: `Failed to update total: ${totalErr.message}` };
 
     revalidatePath(`/bar/tabs/${tabId}`);
@@ -195,8 +195,8 @@ export async function addItemToTab(
       tab_id:      tabId,
       pos_item_id: itemId,
       name:        item.name,
-      price_cents: item.price_cents,
-      cost_cents:  costSnapshot,   // snapshot unit cost at sale → profit locked to sale time
+      price_jmd: item.price_jmd,
+      cost_jmd:  costSnapshot,   // snapshot unit cost at sale → profit locked to sale time
       quantity:    1,
     })
     .select("id")
@@ -218,7 +218,7 @@ export async function addItemToTab(
   // Atomic total increment (SQL arithmetic — avoids read-modify-write race)
   const { error: updateError } = await supabase.rpc(
     "increment_tab_total",
-    { p_tab_id: tabId, p_amount: item.price_cents }
+    { p_tab_id: tabId, p_amount: item.price_jmd }
   );
   if (updateError) return { error: `Failed to update total: ${updateError.message}` };
 
@@ -244,7 +244,7 @@ export async function removeTabItem(
   // Prevents IDOR where a caller supplies a tabItemId from a different tab.
   const { data: tabItem } = await supabase
     .from("pos_tab_items")
-    .select("name, price_cents, cost_cents, quantity, pos_item_id, tab_id, pos_tabs!inner(status)")
+    .select("name, price_jmd, cost_jmd, quantity, pos_item_id, tab_id, pos_tabs!inner(status)")
     .eq("id", tabItemId)
     .eq("tab_id", tabId)
     .single();
@@ -271,8 +271,8 @@ export async function removeTabItem(
     posItemId: tabItem.pos_item_id,
     name: tabItem.name,
     quantity: qty,
-    priceCents: tabItem.price_cents,
-    costCents: tabItem.cost_cents,
+    priceJmd: tabItem.price_jmd,
+    costJmd: tabItem.cost_jmd,
     reason,
     voidedBy: await currentUserId(),
   });
@@ -280,7 +280,7 @@ export async function removeTabItem(
   // Atomic total decrement, floored at 0 — remove the whole line's worth
   const { error: totalError } = await supabase.rpc(
     "decrement_tab_total",
-    { p_tab_id: tabId, p_amount: tabItem.price_cents * qty }
+    { p_tab_id: tabId, p_amount: tabItem.price_jmd * qty }
   );
   if (totalError) {
     Sentry.captureException(totalError, { tags: { area: "bar-tab-total" }, extra: { tabId, action: "removeTabItem" } });
@@ -306,7 +306,7 @@ export async function incrementTabItem(
   // Verify the tab is still open and item belongs to this tab
   const { data: tabItem } = await supabase
     .from("pos_tab_items")
-    .select("price_cents, pos_item_id, tab_id, pos_tabs!inner(status)")
+    .select("price_jmd, pos_item_id, tab_id, pos_tabs!inner(status)")
     .eq("id", tabItemId)
     .eq("tab_id", tabId)
     .single();
@@ -329,7 +329,7 @@ export async function incrementTabItem(
   }
 
   // Increment tab total by the item price
-  const { error: totalError } = await supabase.rpc("increment_tab_total", { p_tab_id: tabId, p_amount: tabItem.price_cents });
+  const { error: totalError } = await supabase.rpc("increment_tab_total", { p_tab_id: tabId, p_amount: tabItem.price_jmd });
   if (totalError) {
     Sentry.captureException(totalError, { tags: { area: "bar-tab-total" }, extra: { tabId, action: "incrementTabItem" } });
     return { error: `Quantity updated but total not synced: ${totalError.message}` };
@@ -354,7 +354,7 @@ export async function decrementTabItem(
 
   const { data: tabItem } = await supabase
     .from("pos_tab_items")
-    .select("name, quantity, price_cents, cost_cents, pos_item_id, tab_id, pos_tabs!inner(status)")
+    .select("name, quantity, price_jmd, cost_jmd, pos_item_id, tab_id, pos_tabs!inner(status)")
     .eq("id", tabItemId)
     .eq("tab_id", tabId)
     .single();
@@ -378,14 +378,14 @@ export async function decrementTabItem(
     posItemId: tabItem.pos_item_id,
     name: tabItem.name,
     quantity: 1,
-    priceCents: tabItem.price_cents,
-    costCents: tabItem.cost_cents,
+    priceJmd: tabItem.price_jmd,
+    costJmd: tabItem.cost_jmd,
     reason,
     voidedBy: await currentUserId(),
   });
 
   // Decrement tab total, floored at 0
-  const { error: totalError } = await supabase.rpc("decrement_tab_total", { p_tab_id: tabId, p_amount: tabItem.price_cents });
+  const { error: totalError } = await supabase.rpc("decrement_tab_total", { p_tab_id: tabId, p_amount: tabItem.price_jmd });
   if (totalError) {
     Sentry.captureException(totalError, { tags: { area: "bar-tab-total" }, extra: { tabId, action: "decrementTabItem" } });
     return { error: `Quantity updated but total not synced: ${totalError.message}` };
@@ -408,9 +408,12 @@ export async function addCustomItem(
   if (!tabId) return { error: "Invalid request." };
 
   const name = rawName || "Other";
+  // Whole dollars only. This input is exactly where sub-dollar amounts entered the
+  // ledger before (it shipped with step="0.01"), so reject rather than round.
   const dollars = parseFloat(rawPrice);
   if (isNaN(dollars) || dollars <= 0) return { error: "Enter a valid amount." };
-  const price_cents = Math.round(dollars * 100);
+  if (!Number.isInteger(dollars))     return { error: "Enter a whole-dollar amount (e.g. 250)." };
+  const price_jmd = dollars;
 
   const supabase = createServiceClient();
 
@@ -425,13 +428,13 @@ export async function addCustomItem(
 
   const { error: insertError } = await supabase
     .from("pos_tab_items")
-    .insert({ tab_id: tabId, name, price_cents, quantity: 1 });
+    .insert({ tab_id: tabId, name, price_jmd, quantity: 1 });
 
   if (insertError) return { error: `Failed to add item: ${insertError.message}` };
 
   const { error: totalError } = await supabase.rpc(
     "increment_tab_total",
-    { p_tab_id: tabId, p_amount: price_cents }
+    { p_tab_id: tabId, p_amount: price_jmd }
   );
   if (totalError) return { error: `Item added but total not updated: ${totalError.message}` };
 
@@ -532,9 +535,9 @@ export async function closeTab(
 
   const tabId         = formData.get("tab_id") as string;
   const paymentMethod = formData.get("payment_method") as string;
-  const tipRaw        = formData.get("tip_cents") as string | null;
+  const tipRaw        = formData.get("tip_jmd") as string | null;
   const tipParsed     = Math.round(Number(tipRaw));
-  const tipCents      = Number.isFinite(tipParsed) ? Math.max(0, tipParsed) : 0;
+  const tipJmd      = Number.isFinite(tipParsed) ? Math.max(0, tipParsed) : 0;
 
   if (!tabId) return { error: "Invalid request." };
   if (!["cash", "comp"].includes(paymentMethod)) return { error: "Select a payment method." };
@@ -548,7 +551,7 @@ export async function closeTab(
     payment_method: paymentMethod,
     closed_by:      user?.id ?? null,
     closed_at:      new Date().toISOString(),
-    tip_cents:      tipCents,
+    tip_jmd:      tipJmd,
   }).eq("id", tabId).in("status", ["open", "away"]);
 
   if (error) return { error: `Failed to close tab: ${error.message}` };

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { createServiceClient } from "@/lib/supabase/server";
 import { requireBarStaff } from "@/lib/auth";
-import { formatCents, jamaicaMidnight, jamaicaTime, elapsed } from "@/lib/bar/pos";
+import { formatJmd, jamaicaMidnight, jamaicaTime, elapsed } from "@/lib/bar/pos";
 
 export default async function BarDashboardPage() {
   await requireBarStaff();
@@ -10,14 +10,14 @@ export default async function BarDashboardPage() {
   // All open + away tabs — no date filter so carryover tabs appear
   const { data: openTabs } = await supabase
     .from("pos_tabs")
-    .select("id, name, total_cents, status, created_at, closed_at, notes")
+    .select("id, name, total_jmd, status, created_at, closed_at, notes")
     .in("status", ["open", "away"])
     .order("created_at", { ascending: false });
 
   // Today's settled tabs — use closed_at so tabs opened yesterday but paid today are included
   const { data: settledTabs } = await supabase
     .from("pos_tabs")
-    .select("id, name, total_cents, status, created_at, closed_at, notes")
+    .select("id, name, total_jmd, status, created_at, closed_at, notes")
     .in("status", ["closed", "voided"])
     .gte("closed_at", jamaicaMidnight().toISOString())
     .order("closed_at", { ascending: false });
@@ -25,8 +25,8 @@ export default async function BarDashboardPage() {
   const closedTabs = (settledTabs ?? []).filter((t) => t.status === "closed");
   const voidedTabs = (settledTabs ?? []).filter((t) => t.status === "voided");
 
-  const todayRevenue = closedTabs.reduce((sum, t) => sum + (t.total_cents ?? 0), 0);
-  const openRunning  = (openTabs ?? []).reduce((sum, t) => sum + (t.total_cents ?? 0), 0);
+  const todayRevenue = closedTabs.reduce((sum, t) => sum + (t.total_jmd ?? 0), 0);
+  const openRunning  = (openTabs ?? []).reduce((sum, t) => sum + (t.total_jmd ?? 0), 0);
 
   return (
     <div className="space-y-8">
@@ -46,11 +46,11 @@ export default async function BarDashboardPage() {
       <div className="grid grid-cols-3 gap-3">
         <div className="border border-bone/10 rounded-lg p-3">
           <p className="text-[10px] text-bone/60 uppercase tracking-wider mb-1">Today&apos;s Sales</p>
-          <p className="text-xl font-display font-bold text-bone">{formatCents(todayRevenue)}</p>
+          <p className="text-xl font-display font-bold text-bone">{formatJmd(todayRevenue)}</p>
         </div>
         <div className="border border-bone/10 rounded-lg p-3">
           <p className="text-[10px] text-bone/60 uppercase tracking-wider mb-1">Unpaid Running</p>
-          <p className="text-xl font-display font-bold text-ochre">{formatCents(openRunning)}</p>
+          <p className="text-xl font-display font-bold text-ochre">{formatJmd(openRunning)}</p>
         </div>
         <div className="border border-bone/10 rounded-lg p-3">
           <p className="text-[10px] text-bone/60 uppercase tracking-wider mb-1">Tabs Closed</p>
@@ -88,7 +88,7 @@ export default async function BarDashboardPage() {
                 </div>
               </div>
               {tab.notes && <p className="text-xs text-bone/60 mb-3">{tab.notes}</p>}
-              <p className="text-2xl font-mono text-ochre">{formatCents(tab.total_cents ?? 0)}</p>
+              <p className="text-2xl font-mono text-ochre">{formatJmd(tab.total_jmd ?? 0)}</p>
             </Link>
           ))}
         </div>
@@ -123,7 +123,7 @@ export default async function BarDashboardPage() {
                       <td className="px-4 py-3 text-right font-mono text-bone">
                         {tab.status === "voided"
                           ? <span className="text-bone/50">voided</span>
-                          : formatCents(tab.total_cents ?? 0)}
+                          : formatJmd(tab.total_jmd ?? 0)}
                       </td>
                     </tr>
                   ))}
@@ -131,7 +131,7 @@ export default async function BarDashboardPage() {
               <tfoot className="border-t border-bone/10 bg-bone/3">
                 <tr>
                   <td colSpan={3} className="px-4 py-3 text-xs font-semibold text-bone/50">Day Total</td>
-                  <td className="px-4 py-3 text-right font-mono font-bold text-bone">{formatCents(todayRevenue)}</td>
+                  <td className="px-4 py-3 text-right font-mono font-bold text-bone">{formatJmd(todayRevenue)}</td>
                 </tr>
               </tfoot>
             </table>

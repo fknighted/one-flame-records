@@ -567,14 +567,14 @@ export type Database = {
           bottle_parent_id: string | null
           bottle_yield: number | null
           category: string
-          cost_cents: number | null
+          cost_jmd: number | null
           created_at: string
           menu_section: string | null
           description: string | null
           id: string
           is_active: boolean
           name: string
-          price_cents: number
+          price_jmd: number
           reorder_level: number | null
           sort_order: number | null
           stock_quantity: number | null
@@ -585,14 +585,14 @@ export type Database = {
           bottle_parent_id?: string | null
           bottle_yield?: number | null
           category?: string
-          cost_cents?: number | null
+          cost_jmd?: number | null
           created_at?: string
           menu_section?: string | null
           description?: string | null
           id?: string
           is_active?: boolean
           name: string
-          price_cents: number
+          price_jmd: number
           reorder_level?: number | null
           sort_order?: number | null
           stock_quantity?: number | null
@@ -603,14 +603,14 @@ export type Database = {
           bottle_parent_id?: string | null
           bottle_yield?: number | null
           category?: string
-          cost_cents?: number | null
+          cost_jmd?: number | null
           created_at?: string
           menu_section?: string | null
           description?: string | null
           id?: string
           is_active?: boolean
           name?: string
-          price_cents?: number
+          price_jmd?: number
           reorder_level?: number | null
           sort_order?: number | null
           stock_quantity?: number | null
@@ -621,39 +621,39 @@ export type Database = {
       pos_stock_purchases: {
         Row: {
           added_by: string | null
-          container_cost_cents: number | null
+          container_cost_jmd: number | null
           containers: number | null
           created_at: string
           id: string
           note: string | null
           pos_item_id: string
           quantity_added: number
-          total_cost_cents: number
-          unit_cost_cents: number
+          total_cost_jmd: number
+          unit_cost_jmd: number
         }
         Insert: {
           added_by?: string | null
-          container_cost_cents?: number | null
+          container_cost_jmd?: number | null
           containers?: number | null
           created_at?: string
           id?: string
           note?: string | null
           pos_item_id: string
           quantity_added: number
-          total_cost_cents: number
-          unit_cost_cents: number
+          total_cost_jmd: number
+          unit_cost_jmd: number
         }
         Update: {
           added_by?: string | null
-          container_cost_cents?: number | null
+          container_cost_jmd?: number | null
           containers?: number | null
           created_at?: string
           id?: string
           note?: string | null
           pos_item_id?: string
           quantity_added?: number
-          total_cost_cents?: number
-          unit_cost_cents?: number
+          total_cost_jmd?: number
+          unit_cost_jmd?: number
         }
         Relationships: [
           {
@@ -685,36 +685,36 @@ export type Database = {
       }
       pos_voids: {
         Row: {
-          cost_cents: number | null
+          cost_jmd: number | null
           created_at: string
           id: string
           name: string
           pos_item_id: string | null
-          price_cents: number
+          price_jmd: number
           quantity: number
           reason: string | null
           tab_id: string | null
           voided_by: string | null
         }
         Insert: {
-          cost_cents?: number | null
+          cost_jmd?: number | null
           created_at?: string
           id?: string
           name: string
           pos_item_id?: string | null
-          price_cents: number
+          price_jmd: number
           quantity: number
           reason?: string | null
           tab_id?: string | null
           voided_by?: string | null
         }
         Update: {
-          cost_cents?: number | null
+          cost_jmd?: number | null
           created_at?: string
           id?: string
           name?: string
           pos_item_id?: string | null
-          price_cents?: number
+          price_jmd?: number
           quantity?: number
           reason?: string | null
           tab_id?: string | null
@@ -739,35 +739,35 @@ export type Database = {
       }
       pos_tab_items: {
         Row: {
-          cost_cents: number | null
+          cost_jmd: number | null
           created_at: string
           id: string
           name: string
           note: string | null
           pos_item_id: string | null
-          price_cents: number
+          price_jmd: number
           quantity: number
           tab_id: string
         }
         Insert: {
-          cost_cents?: number | null
+          cost_jmd?: number | null
           created_at?: string
           id?: string
           name: string
           note?: string | null
           pos_item_id?: string | null
-          price_cents: number
+          price_jmd: number
           quantity?: number
           tab_id: string
         }
         Update: {
-          cost_cents?: number | null
+          cost_jmd?: number | null
           created_at?: string
           id?: string
           name?: string
           note?: string | null
           pos_item_id?: string | null
-          price_cents?: number
+          price_jmd?: number
           quantity?: number
           tab_id?: string
         }
@@ -800,8 +800,8 @@ export type Database = {
           payment_method: string | null
           regular_id: string | null
           status: string
-          tip_cents: number
-          total_cents: number
+          tip_jmd: number
+          total_jmd: number
           updated_at: string
         }
         Insert: {
@@ -815,8 +815,8 @@ export type Database = {
           payment_method?: string | null
           regular_id?: string | null
           status?: string
-          tip_cents?: number
-          total_cents?: number
+          tip_jmd?: number
+          total_jmd?: number
           updated_at?: string
         }
         Update: {
@@ -830,8 +830,8 @@ export type Database = {
           payment_method?: string | null
           regular_id?: string | null
           status?: string
-          tip_cents?: number
-          total_cents?: number
+          tip_jmd?: number
+          total_jmd?: number
           updated_at?: string
         }
         Relationships: [
@@ -1190,7 +1190,7 @@ export type Database = {
     }
     Functions: {
       add_pos_item_stock: {
-        Args: { p_item_id: string; p_qty: number; p_unit_cost_cents: number }
+        Args: { p_item_id: string; p_qty: number; p_unit_cost_jmd: number }
         Returns: number
       }
       admin_artist_counts: {
@@ -1203,15 +1203,15 @@ export type Database = {
       }
       bar_sales_payment_summary: {
         Args: { p_start: string | null }
-        Returns: { payment_method: string; tab_count: number; revenue_cents: number }[]
+        Returns: { payment_method: string; tab_count: number; revenue_jmd: number }[]
       }
       bar_sales_by_category: {
         Args: { p_start: string | null }
-        Returns: { category: string; qty: number; revenue_cents: number; cost_cents: number }[]
+        Returns: { category: string; qty: number; revenue_jmd: number; cost_jmd: number }[]
       }
       bar_sales_top_items: {
         Args: { p_start: string | null; p_limit?: number }
-        Returns: { name: string; category: string; qty: number; revenue_cents: number; cost_cents: number }[]
+        Returns: { name: string; category: string; qty: number; revenue_jmd: number; cost_jmd: number }[]
       }
       current_artist_id: { Args: never; Returns: string }
       adjust_member_minutes: {

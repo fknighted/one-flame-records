@@ -126,7 +126,8 @@ Forms use `useActionState` for inline error display. Server Actions have a 10 MB
 
 The Flames Lounge POS lives at `/bar` (bartenders) and `/admin/bar/*` (label admin). Key patterns:
 
-- **Prices are in cents** — `price_cents` is JMD × 100 (e.g. $200 JMD = `20000`).
+- **Money is whole JMD dollars** — owner decision 2026-08-09 (`docs/decisions.md`). No price, cost, or tip is ever a fraction of a dollar. `game_sessions.price_jmd` is the correct model; **do not migrate it to cents.**
+- **Cents are being removed** — `price_cents` / `cost_cents` / `total_cents` / `tip_cents` / `unit_cost_cents` are *legacy* (JMD × 100, e.g. $200 = `20000`) and are scheduled for conversion to dollar columns; see `docs/next-session-prompt.md` Priority 1. Until that migration ships they remain **authoritative** — keep treating them as cents. Do not add new `_cents` columns.
 - **Jamaica timezone** — all "today" queries must use `jamaicaMidnight()` from `src/lib/bar/pos.ts`. Jamaica is UTC-5 year-round (no DST); midnight Jamaica = 05:00 UTC. Never use `new Date().setHours(0,0,0,0)` for bar queries (that gives UTC midnight).
 - **Time display** — use `jamaicaTime()` / `jamaicaDateTime()` from `src/lib/bar/pos.ts` for all bar timestamps.
 - **is_bartender flag** — artists can hold both portal and bar access. The proxy and `requireBarStaff()` accept `is_bartender = true` alongside `role = 'bartender'`. Grant via Admin → Bar → Staff → "Promote Existing Artist". Revoke via the same page (sets flag to `false`, does not ban the artist).

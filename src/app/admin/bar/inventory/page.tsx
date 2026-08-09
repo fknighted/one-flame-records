@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { createServiceClient } from "@/lib/supabase/server";
-import { formatCents, marginPct, SECTION_LABELS, SECTION_ORDER, resolveSection, jamaicaMidnight } from "@/lib/bar/pos";
+import { formatJmd, marginPct, SECTION_LABELS, SECTION_ORDER, resolveSection, jamaicaMidnight } from "@/lib/bar/pos";
 import { updateStock, addStock } from "./actions";
 import DeleteMenuItemButton from "@/app/admin/bar/items/DeleteMenuItemButton";
 import InventoryAddRow, { type InvRow } from "@/components/InventoryAddRow";
@@ -9,8 +9,8 @@ type Item = {
   id: string;
   name: string;
   category: string;
-  price_cents: number;
-  cost_cents: number | null;
+  price_jmd: number;
+  cost_jmd: number | null;
   stock_quantity: number | null;
   reorder_level: number | null;
   is_active: boolean;
@@ -28,7 +28,7 @@ export default async function InventoryPage() {
   const [{ data: items }, { data: todayTabs }] = await Promise.all([
     supabase
       .from("pos_items")
-      .select("id, name, category, price_cents, cost_cents, stock_quantity, reorder_level, is_active, bottle_group, bottle_yield, bottle_parent_id, menu_section")
+      .select("id, name, category, price_jmd, cost_jmd, stock_quantity, reorder_level, is_active, bottle_group, bottle_yield, bottle_parent_id, menu_section")
       .order("sort_order", { ascending: true, nullsFirst: false })
       .order("name"),
     supabase
@@ -61,7 +61,7 @@ export default async function InventoryPage() {
     stock: i.stock_quantity,
     threshold: i.reorder_level ?? 5,
     bottleYield: i.bottle_yield,
-    priceCents: i.price_cents,
+    priceJmd: i.price_jmd,
   });
 
   return (
@@ -137,7 +137,7 @@ export default async function InventoryPage() {
                   const threshold = item.reorder_level ?? 5;
                   const low = stock !== null && stock < threshold;
                   const isBottle = !!item.bottle_parent_id; // whole-bottle SKU: stock/cost derive from its shot parent
-                  const margin = marginPct(item.price_cents, item.cost_cents);
+                  const margin = marginPct(item.price_jmd, item.cost_jmd);
                   return (
                     <tr key={item.id} className={`hover:bg-bone/3 transition-colors ${!item.is_active ? "opacity-40" : ""}`}>
                       <td className="px-4 py-3 text-bone font-medium">
@@ -146,14 +146,14 @@ export default async function InventoryPage() {
                           <span className="ml-2 text-[10px] font-semibold uppercase tracking-wider text-bone/60 border border-bone/20 rounded px-1">off</span>
                         )}
                       </td>
-                      <td className="hidden sm:table-cell px-4 py-3 text-right font-mono text-bone/60">{formatCents(item.price_cents)}</td>
+                      <td className="hidden sm:table-cell px-4 py-3 text-right font-mono text-bone/60">{formatJmd(item.price_jmd)}</td>
                       <td className="px-4 py-3 text-right font-mono">
                         {isBottle ? (
                           <span className="text-bone/40 text-xs">from shots</span>
-                        ) : item.cost_cents == null ? (
+                        ) : item.cost_jmd == null ? (
                           <Link href={`/admin/bar/items/${item.id}/edit`} className="text-ochre/80 hover:text-ochre text-xs">set cost</Link>
                         ) : (
-                          <span className="text-bone/60">{formatCents(item.cost_cents)}</span>
+                          <span className="text-bone/60">{formatJmd(item.cost_jmd)}</span>
                         )}
                       </td>
                       <td className="hidden sm:table-cell px-4 py-3 text-right font-mono">

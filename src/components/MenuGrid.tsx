@@ -3,7 +3,7 @@
 import { useActionState, useState } from "react";
 import type { Database } from "@/types/supabase";
 import { addItemToTab } from "@/app/bar/tabs/[id]/actions";
-import { formatCents, CATEGORY_ORDER, CATEGORY_LABELS, SECTION_ORDER, SECTION_LABELS, resolveSection } from "@/lib/bar/pos";
+import { formatJmd, CATEGORY_ORDER, CATEGORY_LABELS, SECTION_ORDER, SECTION_LABELS, resolveSection } from "@/lib/bar/pos";
 
 type PosItem = Database["public"]["Tables"]["pos_items"]["Row"];
 
@@ -32,7 +32,7 @@ function AddButton({ item, tabId, disabled, badge }: { item: PosItem; tabId: str
       >
         <span className="text-bone text-sm font-medium leading-tight line-clamp-2">{item.name}</span>
         <div className="flex items-center justify-between mt-1">
-          <span className="text-ochre text-sm font-mono font-semibold">{formatCents(item.price_cents)}</span>
+          <span className="text-ochre text-sm font-mono font-semibold">{formatJmd(item.price_jmd)}</span>
           {badge && <span className="text-bone/50 text-[10px] uppercase tracking-wider">{badge}</span>}
         </div>
         {state?.error && (
