@@ -41,10 +41,11 @@ export function jamaicaDateTime(isoString: string): string {
   });
 }
 
-// JMD is a whole-dollar currency in practice — cents are noise. Round to the
-// nearest dollar and group thousands for readability (e.g. 218_180 → "$2,182").
-export function formatCents(cents: number): string {
-  return "$" + Math.round(cents / 100).toLocaleString("en-US");
+// Money is stored and handled as whole JMD dollars (owner decision 2026-08-09,
+// docs/decisions.md). Group thousands for readability (e.g. 2182 → "$2,182").
+// Replaced the old formatCents; there is no ÷100 in the money path any more.
+export function formatJmd(dollars: number): string {
+  return "$" + Math.round(dollars).toLocaleString("en-US");
 }
 
 /** Default number of shots in one bottle of spirit (per-item bottle_yield overrides this). */
@@ -53,10 +54,11 @@ export const DEFAULT_SHOTS_PER_BOTTLE = 16;
 /**
  * Gross margin as a whole-number percentage: (price − cost) / price × 100.
  * Returns null when cost is unknown or price is 0 (margin is meaningless).
+ * Unit-agnostic — the ratio is the same in dollars as it was in cents.
  */
-export function marginPct(priceCents: number, costCents: number | null): number | null {
-  if (costCents == null || priceCents <= 0) return null;
-  return Math.round(((priceCents - costCents) / priceCents) * 100);
+export function marginPct(priceJmd: number, costJmd: number | null): number | null {
+  if (costJmd == null || priceJmd <= 0) return null;
+  return Math.round(((priceJmd - costJmd) / priceJmd) * 100);
 }
 
 export const CATEGORY_LABELS: Record<string, string> = {

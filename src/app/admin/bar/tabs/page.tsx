@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { createServiceClient } from "@/lib/supabase/server";
-import { formatCents, jamaicaDateTime } from "@/lib/bar/pos";
+import { formatJmd, jamaicaDateTime } from "@/lib/bar/pos";
 
 const STATUS_LABELS: Record<string, string> = {
   open:   "Open",
@@ -34,7 +34,7 @@ export default async function OrderHistoryPage({
 
   const totalRevenue = (tabs ?? [])
     .filter((t) => t.status === "closed")
-    .reduce((sum, t) => sum + (t.total_cents ?? 0), 0);
+    .reduce((sum, t) => sum + (t.total_jmd ?? 0), 0);
 
   return (
     <div className="space-y-8 max-w-4xl">
@@ -68,7 +68,7 @@ export default async function OrderHistoryPage({
 
         {totalRevenue > 0 && (
           <span className="ml-auto text-xs text-bone/50 self-center">
-            Total shown: <span className="text-bone font-mono">{formatCents(totalRevenue)}</span>
+            Total shown: <span className="text-bone font-mono">{formatJmd(totalRevenue)}</span>
           </span>
         )}
       </div>
@@ -111,7 +111,7 @@ export default async function OrderHistoryPage({
                     {tab.payment_method ? PAYMENT_LABELS[tab.payment_method] : "—"}
                   </td>
                   <td className="px-4 py-3 text-right font-mono text-bone">
-                    {formatCents(tab.total_cents ?? 0)}
+                    {formatJmd(tab.total_jmd ?? 0)}
                   </td>
                 </tr>
               ))}

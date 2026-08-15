@@ -1,6 +1,6 @@
 import { createServiceClient } from "@/lib/supabase/server";
 import { requireBarStaff } from "@/lib/auth";
-import { jamaicaMidnight, jamaicaTime, formatCents } from "@/lib/bar/pos";
+import { jamaicaMidnight, jamaicaTime, formatJmd } from "@/lib/bar/pos";
 import StartSessionForm from "./StartSessionForm";
 import EndSessionButton from "./EndSessionButton";
 import SessionTimer from "./SessionTimer";
@@ -85,15 +85,15 @@ export default async function SessionsPage() {
       <div className="grid grid-cols-3 gap-3">
         <div className="border border-bone/10 rounded-lg p-3">
           <p className="text-[10px] text-bone/60 uppercase tracking-wider mb-1">Today</p>
-          <p className="text-xl font-display font-bold text-ochre">{formatCents(todayRevenue * 100)}</p>
+          <p className="text-xl font-display font-bold text-ochre">{formatJmd(todayRevenue)}</p>
         </div>
         <div className="border border-bone/10 rounded-lg p-3">
           <p className="text-[10px] text-bone/60 uppercase tracking-wider mb-1">This Week</p>
-          <p className="text-xl font-display font-bold text-bone">{formatCents(weekRevenue * 100)}</p>
+          <p className="text-xl font-display font-bold text-bone">{formatJmd(weekRevenue)}</p>
         </div>
         <div className="border border-bone/10 rounded-lg p-3">
           <p className="text-[10px] text-bone/60 uppercase tracking-wider mb-1">This Month</p>
-          <p className="text-xl font-display font-bold text-bone">{formatCents(monthRevenue * 100)}</p>
+          <p className="text-xl font-display font-bold text-bone">{formatJmd(monthRevenue)}</p>
         </div>
       </div>
 
@@ -136,7 +136,7 @@ export default async function SessionsPage() {
           </h2>
           {todayRevenue > 0 && (
             <span className="text-xs font-mono text-ochre font-semibold">
-              {formatCents(todayRevenue * 100)}
+              {formatJmd(todayRevenue)}
             </span>
           )}
         </div>
@@ -165,7 +165,7 @@ export default async function SessionsPage() {
                     <td className="px-4 py-3 text-right text-bone/50 text-xs font-mono">{jamaicaTime(s.started_at)}</td>
                     <td className="px-4 py-3 text-right text-bone/50 text-xs font-mono">{s.ended_at ? jamaicaTime(s.ended_at) : "—"}</td>
                     <td className="px-4 py-3 text-right font-mono text-ochre">
-                      {s.price_jmd ? formatCents(s.price_jmd * 100) : <span className="text-bone/50">—</span>}
+                      {s.price_jmd ? formatJmd(s.price_jmd) : <span className="text-bone/50">—</span>}
                     </td>
                   </tr>
                 ))}
@@ -173,7 +173,7 @@ export default async function SessionsPage() {
               <tfoot className="border-t border-bone/10 bg-bone/3">
                 <tr>
                   <td colSpan={4} className="px-4 py-3 text-xs font-semibold text-bone/50">Day Total</td>
-                  <td className="px-4 py-3 text-right font-mono font-bold text-bone">{formatCents(todayRevenue * 100)}</td>
+                  <td className="px-4 py-3 text-right font-mono font-bold text-bone">{formatJmd(todayRevenue)}</td>
                 </tr>
               </tfoot>
             </table>

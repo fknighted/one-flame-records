@@ -1,7 +1,7 @@
 import Link from "next/link";
 import * as Sentry from "@sentry/nextjs";
 import { createServiceClient } from "@/lib/supabase/server";
-import { formatCents, jamaicaMidnight, jamaicaTime, jamaicaDateTime } from "@/lib/bar/pos";
+import { formatJmd, jamaicaMidnight, jamaicaTime, jamaicaDateTime } from "@/lib/bar/pos";
 
 const STATUS_LABELS: Record<string, string> = {
   open:   "Open",
@@ -27,28 +27,28 @@ export default async function BarOverviewPage() {
     { count: activeSessions },
     { data: todayVoids },
   ] = await Promise.all([
-    supabase.from("pos_tabs").select("id, name, total_cents, status, created_at").gte("created_at", todayStart.toISOString()).order("created_at", { ascending: false }),
+    supabase.from("pos_tabs").select("id, name, total_jmd, status, created_at").gte("created_at", todayStart.toISOString()).order("created_at", { ascending: false }),
     // All still-open / away (customer left, unpaid) tabs — outstanding money, regardless of day.
-    supabase.from("pos_tabs").select("id, name, total_cents, status, created_at").in("status", ["open", "away"]).order("created_at", { ascending: true }),
-    supabase.from("pos_tabs").select("id, total_cents").eq("status", "closed").gte("closed_at", weekStart.toISOString()),
-    supabase.from("pos_tabs").select("id, total_cents").eq("status", "closed").gte("closed_at", monthStart.toISOString()),
+    supabase.from("pos_tabs").select("id, name, total_jmd, status, created_at").in("status", ["open", "away"]).order("created_at", { ascending: true }),
+    supabase.from("pos_tabs").select("id, total_jmd").eq("status", "closed").gte("closed_at", weekStart.toISOString()),
+    supabase.from("pos_tabs").select("id, total_jmd").eq("status", "closed").gte("closed_at", monthStart.toISOString()),
     supabase.from("pos_items").select("id", { count: "exact", head: true }).eq("is_active", true),
     supabase.from("gamer_members").select("id", { count: "exact", head: true }).eq("status", "active"),
     supabase.from("game_sessions").select("id", { count: "exact", head: true }).is("ended_at", null),
-    supabase.from("pos_voids").select("quantity, price_cents").gte("created_at", todayStart.toISOString()),
+    supabase.from("pos_voids").select("quantity, price_jmd").gte("created_at", todayStart.toISOString()),
   ]);
 
   const openList = openTabs ?? [];
-  const openTotal = openList.reduce((sum, t) => sum + (t.total_cents ?? 0), 0);
+  const openTotal = openList.reduce((sum, t) => sum + (t.total_jmd ?? 0), 0);
 
   const voidsToday = todayVoids ?? [];
   const voidCountToday = voidsToday.reduce((sum, v) => sum + (v.quantity ?? 1), 0);
-  const voidValueToday = voidsToday.reduce((sum, v) => sum + (v.price_cents ?? 0) * (v.quantity ?? 1), 0);
+  const voidValueToday = voidsToday.reduce((sum, v) => sum + (v.price_jmd ?? 0) * (v.quantity ?? 1), 0);
 
   const todayClosedTabs = (todayAllTabs ?? []).filter(t => t.status === "closed");
-  const todayRevenue  = todayClosedTabs.reduce((sum, t) => sum + (t.total_cents ?? 0), 0);
-  const weekRevenue   = (weekClosed  ?? []).reduce((sum, t) => sum + (t.total_cents ?? 0), 0);
-  const monthRevenue  = (monthClosed ?? []).reduce((sum, t) => sum + (t.total_cents ?? 0), 0);
+  const todayRevenue  = todayClosedTabs.reduce((sum, t) => sum + (t.total_jmd ?? 0), 0);
+  const weekRevenue   = (weekClosed  ?? []).reduce((sum, t) => sum + (t.total_jmd ?? 0), 0);
+  const monthRevenue  = (monthClosed ?? []).reduce((sum, t) => sum + (t.total_jmd ?? 0), 0);
 
   // Cost of goods sold = Σ(quantity × cost snapshotted at sale) over each window's closed tabs.
   // Sessions revenue (game_sessions) is a separate stream and is excluded here, as it is from revenue above.
@@ -62,11 +62,11 @@ export default async function BarOverviewPage() {
   if (allTabIds.length > 0) {
     const { data: lineItems, error } = await supabase
       .from("pos_tab_items")
-      .select("tab_id, quantity, cost_cents")
+      .select("tab_id, quantity, cost_jmd")
       .in("tab_id", allTabIds);
     costError = error;
     for (const li of lineItems ?? []) {
-      costByTab[li.tab_id] = (costByTab[li.tab_id] ?? 0) + (li.quantity ?? 1) * (li.cost_cents ?? 0);
+      costByTab[li.tab_id] = (costByTab[li.tab_id] ?? 0) + (li.quantity ?? 1) * (li.cost_jmd ?? 0);
     }
   }
 
@@ -106,17 +106,17 @@ export default async function BarOverviewPage() {
           return (
             <div key={w.label} className="border border-bone/10 rounded-lg p-4">
               <p className="text-xs text-bone/60 mb-1">{w.label}</p>
-              <p className="text-2xl font-display font-bold text-bone">{formatCents(w.revenue)}</p>
+              <p className="text-2xl font-display font-bold text-bone">{formatJmd(w.revenue)}</p>
               <p className="text-[11px] text-bone/40 mt-0.5">revenue</p>
               <div className="mt-3 pt-3 border-t border-bone/10 space-y-1">
                 <div className="flex justify-between text-xs">
                   <span className="text-bone/50">Cost</span>
-                  <span className="font-mono text-bone/60">{formatCents(w.cost)}</span>
+                  <span className="font-mono text-bone/60">{formatJmd(w.cost)}</span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-bone/70">Profit</span>
                   <span className={`font-mono font-bold ${profit < 0 ? "text-red-400" : "text-sage"}`}>
-                    {formatCents(profit)}{margin != null && <span className="text-bone/40 font-normal"> · {margin}%</span>}
+                    {formatJmd(profit)}{margin != null && <span className="text-bone/40 font-normal"> · {margin}%</span>}
                   </span>
                 </div>
               </div>
@@ -134,7 +134,7 @@ export default async function BarOverviewPage() {
           { label: "Active Sessions", value: activeSessions ?? 0,  href: "/bar/sessions",        sub: undefined as string | undefined },
           { label: "Menu Items",      value: totalItems ?? 0,       href: "/admin/bar/inventory", sub: undefined },
           { label: "Gamer Members",   value: activeMembers ?? 0,    href: "/admin/bar/members",   sub: undefined },
-          { label: "Canceled Today",  value: voidCountToday,        href: "/admin/bar/sales",     sub: formatCents(voidValueToday) },
+          { label: "Canceled Today",  value: voidCountToday,        href: "/admin/bar/sales",     sub: formatJmd(voidValueToday) },
         ].map((s) => (
           <Link
             key={s.label}
@@ -153,7 +153,7 @@ export default async function BarOverviewPage() {
         <div className="flex items-baseline justify-between">
           <h2 className="text-xs font-semibold uppercase tracking-widest text-bone/52">Open Tabs ({openList.length})</h2>
           <span className="text-sm text-bone/60">
-            Outstanding <span className="font-mono font-bold text-ochre">{formatCents(openTotal)}</span>
+            Outstanding <span className="font-mono font-bold text-ochre">{formatJmd(openTotal)}</span>
           </span>
         </div>
 
@@ -185,14 +185,14 @@ export default async function BarOverviewPage() {
                         {STATUS_LABELS[tab.status] ?? tab.status}
                       </span>
                     </td>
-                    <td className="px-4 py-3 text-right font-mono text-bone">{formatCents(tab.total_cents ?? 0)}</td>
+                    <td className="px-4 py-3 text-right font-mono text-bone">{formatJmd(tab.total_jmd ?? 0)}</td>
                   </tr>
                 ))}
               </tbody>
               <tfoot className="border-t border-bone/10 bg-bone/3">
                 <tr>
                   <td colSpan={3} className="px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Outstanding</td>
-                  <td className="px-4 py-3 text-right font-mono font-bold text-ochre">{formatCents(openTotal)}</td>
+                  <td className="px-4 py-3 text-right font-mono font-bold text-ochre">{formatJmd(openTotal)}</td>
                 </tr>
               </tfoot>
             </table>
@@ -242,7 +242,7 @@ export default async function BarOverviewPage() {
                       </span>
                     </td>
                     <td className="px-4 py-3 text-right font-mono text-bone">
-                      {formatCents(tab.total_cents ?? 0)}
+                      {formatJmd(tab.total_jmd ?? 0)}
                     </td>
                   </tr>
                 ))}

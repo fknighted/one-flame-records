@@ -2,7 +2,7 @@
 
 import { useActionState, useState } from "react";
 import { closeTab, voidTab, markTabAway, reopenTab } from "./actions";
-import { formatCents } from "@/lib/bar/pos";
+import { formatJmd } from "@/lib/bar/pos";
 
 interface Props {
   tabId: string;
@@ -21,8 +21,9 @@ export default function TabControls({ tabId, total, tabName, status }: Props) {
   const [awayState,  awayAction,  awayPending]  = useActionState(markTabAway, null);
   const [reopenState, reopenAction, reopenPending] = useActionState(reopenTab, null);
 
-  const tipCents   = Math.max(0, Math.round(Number(tipInput || "0") * 100));
-  const grandTotal = total + tipCents;
+  // Tips are whole dollars, same as every other amount — no conversion.
+  const tipJmd     = Math.max(0, Math.round(Number(tipInput || "0")));
+  const grandTotal = total + tipJmd;
 
   if (showVoid) {
     return (
@@ -59,7 +60,7 @@ export default function TabControls({ tabId, total, tabName, status }: Props) {
       <div className="space-y-4">
         <div className="text-center space-y-1">
           <p className="text-bone font-semibold">Close tab for {tabName}?</p>
-          <p className="text-2xl font-mono text-ochre">{formatCents(total)}</p>
+          <p className="text-2xl font-mono text-ochre">{formatJmd(total)}</p>
           <p className="text-xs text-bone/60">This cannot be undone once payment is recorded.</p>
         </div>
         <div className="flex gap-2">
@@ -86,9 +87,9 @@ export default function TabControls({ tabId, total, tabName, status }: Props) {
     return (
       <form action={closeAction} className="space-y-3">
         <input type="hidden" name="tab_id" value={tabId} />
-        <input type="hidden" name="tip_cents" value={tipCents} />
+        <input type="hidden" name="tip_jmd" value={tipJmd} />
         <p className="text-sm font-semibold text-bone text-center">
-          Total: <span className="text-ochre">{formatCents(total)}</span>
+          Total: <span className="text-ochre">{formatJmd(total)}</span>
         </p>
         <div className="flex items-center gap-2">
           <label className="text-xs text-bone/50 shrink-0">Tip (JMD$)</label>
@@ -102,9 +103,9 @@ export default function TabControls({ tabId, total, tabName, status }: Props) {
             className="flex-1 bg-bone/5 border border-bone/20 rounded px-2 py-1 text-bone text-sm text-right font-mono focus:outline-none focus:border-ochre/50"
           />
         </div>
-        {tipCents > 0 && (
+        {tipJmd > 0 && (
           <p className="text-xs text-bone/50 text-center">
-            With tip: <span className="text-ochre font-semibold">{formatCents(grandTotal)}</span>
+            With tip: <span className="text-ochre font-semibold">{formatJmd(grandTotal)}</span>
           </p>
         )}
         <p className="text-xs text-bone/50 text-center">How was this paid?</p>
@@ -151,7 +152,7 @@ export default function TabControls({ tabId, total, tabName, status }: Props) {
           onClick={() => setShowConfirm(true)}
           className="w-full bg-ochre text-ink font-semibold py-2.5 rounded-lg text-sm hover:bg-ochre/90 active:scale-[0.98] transition-all"
         >
-          Collect Payment — {formatCents(total)}
+          Collect Payment — {formatJmd(total)}
         </button>
         <div className="flex gap-2">
           <form action={reopenAction} className="flex-1">
@@ -203,7 +204,7 @@ export default function TabControls({ tabId, total, tabName, status }: Props) {
           onClick={() => setShowConfirm(true)}
           className="flex-1 bg-ochre text-ink font-semibold py-2.5 rounded-lg text-sm hover:bg-ochre/90 active:scale-[0.98] transition-all"
         >
-          Close Tab — {formatCents(total)}
+          Close Tab — {formatJmd(total)}
         </button>
       </div>
     </div>

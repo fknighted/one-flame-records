@@ -7,10 +7,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const supabase = createServiceClient();
 
+  // The service client bypasses RLS, so the news query must reproduce the
+  // public post page's predicate exactly — is_published = true AND
+  // published_at <= now — or the sitemap advertises URLs that 404.
+  const now = new Date().toISOString();
+
   const [{ data: artists }, { data: releases }, { data: newsPosts }] = await Promise.all([
     supabase.from("artists").select("slug, updated_at").eq("status", "active"),
     supabase.from("releases").select("slug, updated_at"),
-    supabase.from("news_posts").select("slug, published_at").eq("is_published", true),
+    supabase
+      .from("news_posts")
+      .select("slug, published_at")
+      .eq("is_published", true)
+      .lte("published_at", now),
   ]);
 
   const staticRoutes: MetadataRoute.Sitemap = [

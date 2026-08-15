@@ -7,10 +7,16 @@ import { requireAdmin } from "@/lib/auth";
 
 export type ActionState = { error: string } | null;
 
-function parseCents(value: string): number | null {
+/**
+ * Parse a whole-dollar money input. Money is whole JMD dollars (docs/decisions.md),
+ * so a fractional amount is REJECTED rather than rounded — silently rounding is how
+ * sub-dollar values got into the data in the first place. "250" and "250.00" are
+ * both fine; "250.50" is not.
+ */
+function parseJmd(value: string): number | null {
   const dollars = parseFloat(value);
-  if (isNaN(dollars) || dollars < 0) return null;
-  return Math.round(dollars * 100);
+  if (isNaN(dollars) || dollars < 0 || !Number.isInteger(dollars)) return null;
+  return dollars;
 }
 
 export async function createMenuItem(
@@ -33,10 +39,10 @@ export async function createMenuItem(
   if (!name)     return { error: "Name is required." };
   if (!category) return { error: "Category is required." };
 
-  const price_cents   = parseCents(priceStr);
-  if (price_cents === null) return { error: "Enter a valid price (e.g. 5.00)." };
+  const price_jmd   = parseJmd(priceStr);
+  if (price_jmd === null) return { error: "Enter a valid whole-dollar price (e.g. 250)." };
 
-  const cost_cents    = costStr ? parseCents(costStr) : null;
+  const cost_jmd    = costStr ? parseJmd(costStr) : null;
   const sort_order    = sortStr ? parseInt(sortStr, 10) : null;
   const reorder_level = reorderStr ? parseInt(reorderStr, 10) : null;
   const bottle_yield  = bottleYldStr ? parseInt(bottleYldStr, 10) : null;
@@ -45,8 +51,8 @@ export async function createMenuItem(
   const { error } = await supabase.from("pos_items").insert({
     name,
     category,
-    price_cents,
-    cost_cents,
+    price_jmd,
+    cost_jmd,
     description,
     sort_order,
     reorder_level,
@@ -83,10 +89,10 @@ export async function updateMenuItem(
   if (!id)   return { error: "ID missing." };
   if (!name) return { error: "Name is required." };
 
-  const price_cents   = parseCents(priceStr);
-  if (price_cents === null) return { error: "Enter a valid price (e.g. 5.00)." };
+  const price_jmd   = parseJmd(priceStr);
+  if (price_jmd === null) return { error: "Enter a valid whole-dollar price (e.g. 250)." };
 
-  const cost_cents    = costStr ? parseCents(costStr) : null;
+  const cost_jmd    = costStr ? parseJmd(costStr) : null;
   const sort_order    = sortStr ? parseInt(sortStr, 10) : null;
   const reorder_level = reorderStr ? parseInt(reorderStr, 10) : null;
   const bottle_yield  = bottleYldStr ? parseInt(bottleYldStr, 10) : null;
@@ -94,7 +100,7 @@ export async function updateMenuItem(
   const supabase = createServiceClient();
   const { error } = await supabase
     .from("pos_items")
-    .update({ name, category, price_cents, cost_cents, description, sort_order, reorder_level, bottle_group: bottleGroup, bottle_yield, menu_section: menuSection, is_active })
+    .update({ name, category, price_jmd, cost_jmd, description, sort_order, reorder_level, bottle_group: bottleGroup, bottle_yield, menu_section: menuSection, is_active })
     .eq("id", id);
 
   if (error) return { error: `Failed to update item: ${error.message}` };

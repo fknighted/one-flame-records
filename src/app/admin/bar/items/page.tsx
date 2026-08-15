@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { createServiceClient } from "@/lib/supabase/server";
 import type { Tables } from "@/types/supabase";
-import { formatCents, CATEGORY_LABELS } from "@/lib/bar/pos";
+import { formatJmd, CATEGORY_LABELS } from "@/lib/bar/pos";
 import DeleteMenuItemButton from "./DeleteMenuItemButton";
 
 const CATEGORIES = [
@@ -90,7 +90,7 @@ export default async function MenuItemsPage({
                   </td>
                   <td className="px-4 py-3 text-bone/60">{CATEGORY_LABELS[item.category] ?? item.category}</td>
                   <td className="px-4 py-3 text-right text-bone font-mono">
-                    {formatCents(item.price_cents)}
+                    {formatJmd(item.price_jmd)}
                   </td>
                   <td className="px-4 py-3 text-center">
                     <span className={[

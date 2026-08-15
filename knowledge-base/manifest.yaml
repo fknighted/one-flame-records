@@ -1,0 +1,144 @@
+product: one-flame-records
+title: One Flame Records
+domains:
+  - oneflamerecords.com
+  - www.oneflamerecords.com
+canonical_domain: www.oneflamerecords.com
+source_project: Projects/one flame app
+generated: 2026-08-11
+verified: 2026-08-11
+schema: Knowledge Bases/README.md
+notes: >-
+  Public site is a label showcase with no e-commerce. Catalogue is sparse as of
+  the generated date: 9 artists, 0 published releases, 1 video, 0 news posts.
+  No opening hours, phone number, street address or menu prices are published
+  anywhere. See _sources.md for unresolved questions.
+
+files:
+  - slug: 00-overview
+    file: 00-overview.md
+    title: One Flame Records overview
+    audience: customer
+    confidence: verified
+    intent: [overview, about, orientation]
+    summary: What the label is, where it is, and what a visitor can do on the website.
+
+  - slug: brand-and-voice
+    file: brand-and-voice.md
+    title: Brand and voice
+    audience: internal
+    confidence: verified
+    intent: [brand, voice, tone, style]
+    summary: How the assistant should sound, plus the label's stated positioning and tone rules.
+
+  - slug: artists-and-roster
+    file: artists-and-roster.md
+    title: Artists and roster
+    audience: customer
+    confidence: verified
+    intent: [catalog, artists, roster]
+    summary: The nine artists on the public roster and what an artist page contains.
+
+  - slug: releases-and-videos
+    file: releases-and-videos.md
+    title: Releases, videos and news
+    audience: customer
+    confidence: verified
+    intent: [catalog, releases, videos, music, news]
+    summary: The state of the discography, video and news sections, and the newsletter.
+
+  - slug: flames-lounge
+    file: flames-lounge.md
+    title: Flames Lounge
+    audience: customer
+    confidence: verified
+    intent: [venue, lounge, food, events, studio]
+    summary: The Montego Bay venue - outdoor studio, gaming, food menu, and live events.
+
+  - slug: gaming-membership
+    file: gaming-membership.md
+    title: Gaming membership at Flames Lounge
+    audience: customer
+    confidence: verified
+    intent: [gaming, membership, signup, loyalty]
+    summary: How to get a free gamer account, what it gives you, and the venue session rates.
+
+  - slug: signing-and-submissions
+    file: signing-and-submissions.md
+    title: Signing and artist submissions
+    audience: customer
+    confidence: verified
+    intent: [signing, submissions, demo, artists]
+    summary: The three-step submission process, genres accepted, and the two-week reply aim.
+
+  - slug: accounts-and-access
+    file: accounts-and-access.md
+    title: Accounts, login and access
+    audience: customer
+    confidence: verified
+    intent: [accounts, login, access, roles]
+    summary: Who gets an account, how login and password reset work, and what each role reaches.
+
+  - slug: artist-portal
+    file: artist-portal.md
+    title: The artist portal
+    audience: customer
+    confidence: verified
+    intent: [accounts, artists, portal, video]
+    summary: What signed artists can do in their private portal, including AI video requests.
+
+  - slug: pricing-and-payments
+    file: pricing-and-payments.md
+    title: Pricing and payments
+    audience: customer
+    confidence: verified
+    intent: [pricing, billing, payments]
+    summary: Nothing is sold online; what is free and what is paid for in person at the Lounge.
+
+  - slug: contact-and-support
+    file: contact-and-support.md
+    title: Contact and support
+    audience: customer
+    confidence: verified
+    intent: [contact, support, newsletter]
+    summary: The contact form, its four reasons, the published email address, and newsletter opt-out.
+
+  - slug: policies
+    file: policies.md
+    title: Privacy, terms and data
+    audience: customer
+    confidence: verified
+    intent: [policy, legal, privacy, terms]
+    summary: What the published Privacy Policy and Terms of Service actually say.
+
+  - slug: troubleshooting
+    file: troubleshooting.md
+    title: Troubleshooting
+    audience: customer
+    confidence: verified
+    intent: [support, troubleshooting, errors]
+    summary: Real failure modes - missing pages, undelivered emails, blocked forms - and remedies.
+
+  - slug: faq
+    file: faq.md
+    title: Frequently asked questions
+    audience: customer
+    confidence: verified
+    intent: [faq, overview, support]
+    summary: Short answers to the questions the site's own copy implies people ask most.
+
+  - slug: escalation-and-limits
+    file: escalation-and-limits.md
+    title: Escalation and limits
+    audience: internal
+    confidence: verified
+    intent: [guardrails, escalation, limits]
+    summary: Master guardrail - what the bot must never claim and exactly when to hand to a human.
+
+  - slug: glossary
+    file: glossary.md
+    title: Glossary
+    audience: internal
+    confidence: verified
+    intent: [glossary, vocabulary, terminology]
+    summary: Product and Jamaican music vocabulary a voice agent must recognise when spoken.

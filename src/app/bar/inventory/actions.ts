@@ -7,11 +7,17 @@ import { applyStockPurchase } from "@/lib/bar/inventory";
 
 export type ActionState = { error: string } | { ok: string } | null;
 
-function parseCents(value: string | null): number | null {
+/**
+ * Parse a whole-dollar money input. Money is whole JMD dollars (docs/decisions.md),
+ * so a fractional amount is REJECTED rather than rounded — silently rounding is how
+ * sub-dollar values got into the data in the first place. "250" and "250.00" are
+ * both fine; "250.50" is not.
+ */
+function parseJmd(value: string | null): number | null {
   if (!value) return null;
   const dollars = parseFloat(value);
-  if (isNaN(dollars) || dollars < 0) return null;
-  return Math.round(dollars * 100);
+  if (isNaN(dollars) || dollars < 0 || !Number.isInteger(dollars)) return null;
+  return dollars;
 }
 
 /**
@@ -48,7 +54,7 @@ export async function addStock(
         addedBy,
         mode: "bottle",
         containers: parseInt(formData.get("containers") as string, 10),
-        containerCostCents: parseCents(formData.get("container_cost") as string) ?? NaN,
+        containerCostJmd: parseJmd(formData.get("container_cost") as string) ?? NaN,
         bottleYield: Number.isInteger(yieldOverride) && yieldOverride > 0 ? yieldOverride : item.bottle_yield!,
       })
     : await applyStockPurchase({
@@ -56,7 +62,7 @@ export async function addStock(
         addedBy,
         mode: "unit",
         quantity: parseInt(formData.get("quantity") as string, 10),
-        unitCostCents: parseCents(formData.get("unit_cost") as string) ?? NaN,
+        unitCostJmd: parseJmd(formData.get("unit_cost") as string) ?? NaN,
       });
 
   if (!result.ok) return { error: result.error };

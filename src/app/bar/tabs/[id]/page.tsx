@@ -4,7 +4,7 @@ import { requireBarStaff } from "@/lib/auth";
 import MenuGrid from "@/components/MenuGrid";
 import TabControls from "./TabControls";
 import QuantityControls from "./QuantityControls";
-import { formatCents } from "@/lib/bar/pos";
+import { formatJmd } from "@/lib/bar/pos";
 import SaveAsRegularButton from "./SaveAsRegularButton";
 import CustomItemForm from "./CustomItemForm";
 
@@ -38,7 +38,7 @@ export default async function TabPage({ params }: { params: Promise<{ id: string
           {!tab.regular_id && isOpen && <SaveAsRegularButton tabId={id} />}
         </div>
         <div className="text-right">
-          <p className="text-2xl font-mono text-ochre font-semibold">{formatCents(tab.total_cents)}</p>
+          <p className="text-2xl font-mono text-ochre font-semibold">{formatJmd(tab.total_jmd)}</p>
           {isAway ? (
             <span className="inline-block text-xs font-semibold text-ochre bg-ochre/10 border border-ochre/20 rounded-full px-2 py-0.5">
               Customer Left
@@ -73,7 +73,7 @@ export default async function TabPage({ params }: { params: Promise<{ id: string
             <div className="pt-3 border-t border-bone/10 mt-3">
               <TabControls
                 tabId={id}
-                total={tab.total_cents}
+                total={tab.total_jmd}
                 tabName={tab.name}
                 status={tab.status as "open" | "away"}
               />
@@ -117,7 +117,7 @@ function TabItem({
   tabId,
   isOpen,
 }: {
-  item: { id: string; name: string; price_cents: number; quantity: number; note: string | null };
+  item: { id: string; name: string; price_jmd: number; quantity: number; note: string | null };
   tabId: string;
   isOpen: boolean;
 }) {
@@ -127,7 +127,7 @@ function TabItem({
         <p className="text-bone text-sm font-medium truncate">{item.name}</p>
         {item.note && <p className="text-bone/60 text-xs">{item.note}</p>}
       </div>
-      <span className="text-ochre font-mono text-sm shrink-0">{formatCents(item.price_cents * item.quantity)}</span>
+      <span className="text-ochre font-mono text-sm shrink-0">{formatJmd(item.price_jmd * item.quantity)}</span>
       {isOpen && <QuantityControls tabItemId={item.id} tabId={tabId} quantity={item.quantity} />}
     </div>
   );

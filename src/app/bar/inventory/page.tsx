@@ -15,7 +15,7 @@ type Item = {
   bottle_group: string | null;
   bottle_yield: number | null;
   bottle_parent_id: string | null;
-  price_cents: number;
+  price_jmd: number;
 };
 
 export default async function BarInventoryPage() {
@@ -24,7 +24,7 @@ export default async function BarInventoryPage() {
 
   const { data: items } = await supabase
     .from("pos_items")
-    .select("id, name, category, menu_section, stock_quantity, reorder_level, bottle_group, bottle_yield, bottle_parent_id, price_cents")
+    .select("id, name, category, menu_section, stock_quantity, reorder_level, bottle_group, bottle_yield, bottle_parent_id, price_jmd")
     .eq("is_active", true)
     .order("sort_order", { ascending: true, nullsFirst: false })
     .order("name");
@@ -41,7 +41,7 @@ export default async function BarInventoryPage() {
     stock: i.stock_quantity,
     threshold: i.reorder_level ?? 5,
     bottleYield: i.bottle_yield,
-    priceCents: i.price_cents,
+    priceJmd: i.price_jmd,
   });
 
   return (
