@@ -78,7 +78,7 @@ export default async function SearchPage({
                 defaultValue={query}
                 placeholder="Artists, releases, news…"
                 autoFocus
-                className="flex-1 bg-bone/10 border border-bone/20 rounded-lg px-4 py-3 text-bone placeholder:text-bone/30 focus:outline-none focus:border-ochre/60 text-base"
+                className="flex-1 bg-bone/10 border border-bone/50 rounded-lg px-4 py-3 text-bone placeholder:text-bone/30 focus:outline-2 focus:outline-ochre focus:border-ochre/60 text-base"
               />
               <button
                 type="submit"

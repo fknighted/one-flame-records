@@ -10,6 +10,14 @@ count-aggregation RPCs (`1cb2ae1`), the three session-41 code-review bug fixes (
 whole-dollar money display (`b3c20cf`), and bar sales aggregation RPCs verified against prod
 (`2d087ed`). Detailed recent history is in `docs/session-handoffs/`.
 
+## Priority 0 — Review, commit and deploy the 2026-10-05 delegated fixes
+
+Uncommitted in the working tree: false About timeline removed, Lounge stock photo
+removed, contrast and form-focus fixes. See `docs/session-handoffs/2026-10-05.md`.
+After deploy: `curl -s https://www.oneflamerecords.com/about | grep -ci "ten million\|distribution deal"`
+should print 0, and the live `/flames-lounge` HTML must not contain `flames-lounge-hero.jpg`.
+A real Flames Lounge photo is still needed for the hero.
+
 ## Priority 1 — Money: cents → whole dollars — ✅ SHIPPED 2026-08-15
 
 Applied to production with the bar closed, and verified. Sequence run:

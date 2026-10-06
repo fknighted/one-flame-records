@@ -47,7 +47,7 @@ export default async function BarMembersPage({
           defaultValue={q}
           type="search"
           placeholder="Search by name or email…"
-          className="flex-1 bg-bone/5 border border-bone/15 rounded-lg px-4 py-2.5 text-bone placeholder:text-bone/50 text-sm focus:outline-none focus:border-ochre/50"
+          className="flex-1 bg-bone/5 border border-bone/45 rounded-lg px-4 py-2.5 text-bone placeholder:text-bone/50 text-sm focus:outline-2 focus:outline-ochre focus:border-ochre/50"
         />
         <button
           type="submit"

@@ -51,7 +51,7 @@ export default function AssetUploadForm() {
           name="kind"
           value={selectedKind}
           onChange={(e) => setSelectedKind(e.target.value)}
-          className="w-full rounded border border-bone/20 bg-ink px-3 py-2 text-sm text-bone focus:border-ochre focus:outline-none"
+          className="w-full rounded border border-bone/45 bg-ink px-3 py-2 text-sm text-bone focus:border-ochre focus:outline-2 focus:outline-ochre"
         >
           {KINDS.map((k) => (
             <option key={k.value} value={k.value}>
@@ -70,7 +70,7 @@ export default function AssetUploadForm() {
           type="text"
           required
           placeholder="Track or file name"
-          className="w-full rounded border border-bone/20 bg-ink px-3 py-2 text-sm text-bone placeholder:text-bone/30 focus:border-ochre focus:outline-none"
+          className="w-full rounded border border-bone/45 bg-ink px-3 py-2 text-sm text-bone placeholder:text-bone/30 focus:border-ochre focus:outline-2 focus:outline-ochre"
         />
       </div>
 
@@ -83,7 +83,7 @@ export default function AssetUploadForm() {
           name="notes"
           rows={3}
           placeholder="BPM, key, or any notes for the label…"
-          className="w-full resize-none rounded border border-bone/20 bg-ink px-3 py-2 text-sm text-bone placeholder:text-bone/30 focus:border-ochre focus:outline-none"
+          className="w-full resize-none rounded border border-bone/45 bg-ink px-3 py-2 text-sm text-bone placeholder:text-bone/30 focus:border-ochre focus:outline-2 focus:outline-ochre"
         />
       </div>
 

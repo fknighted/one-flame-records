@@ -64,7 +64,7 @@ function buildPrompt(purpose: Purpose, style: string, name: string, notes: strin
   return `${base}${extra}. ${suffix}`.trim();
 }
 
-const INPUT = "w-full bg-bone/5 border border-bone/15 rounded px-3 py-2 text-sm text-bone placeholder:text-bone/50 focus:outline-none focus:border-ochre/60";
+const INPUT = "w-full bg-bone/5 border border-bone/45 rounded px-3 py-2 text-sm text-bone placeholder:text-bone/50 focus:outline-2 focus:outline-ochre focus:border-ochre/60";
 const LABEL = "block text-xs text-bone/50 mb-1.5";
 
 type RefMode = "none" | "artist" | "upload";
@@ -455,7 +455,7 @@ export default function ImageGeneratorForm({
                 <select
                   value={applyTarget}
                   onChange={e => setApplyTarget(e.target.value)}
-                  className="rounded border border-bone/15 bg-ink px-3 py-2 text-sm text-bone focus:outline-none focus:border-ochre/60"
+                  className="rounded border border-bone/45 bg-ink px-3 py-2 text-sm text-bone focus:outline-2 focus:outline-ochre focus:border-ochre/60"
                 >
                   <option value="">
                     Select {purpose === "artist_photo" ? "artist" : purpose === "release_cover" ? "release" : "post"}…

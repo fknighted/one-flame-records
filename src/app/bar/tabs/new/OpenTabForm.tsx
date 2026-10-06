@@ -47,7 +47,7 @@ export default function OpenTabForm({ regulars }: { regulars: Regular[] }) {
           value={nameInput}
           onChange={e => handleNameChange(e.target.value)}
           placeholder={hasRegulars ? "Type a name or pick a regular…" : "e.g. Table 3, Jay, Walk-in"}
-          className="w-full bg-bone/5 border border-bone/15 rounded-lg px-4 py-3 text-bone placeholder:text-bone/60 text-base focus:outline-none focus:border-ochre/50 transition-colors"
+          className="w-full bg-bone/5 border border-bone/45 rounded-lg px-4 py-3 text-bone placeholder:text-bone/60 text-base focus:outline-2 focus:outline-ochre focus:border-ochre/50 transition-colors"
         />
         {hasRegulars && (
           <datalist id="regulars-list">
@@ -74,7 +74,7 @@ export default function OpenTabForm({ regulars }: { regulars: Regular[] }) {
           name="notes"
           type="text"
           placeholder="e.g. VIP, allergies, seat number"
-          className="w-full bg-bone/5 border border-bone/15 rounded-lg px-4 py-3 text-bone placeholder:text-bone/60 text-base focus:outline-none focus:border-ochre/50 transition-colors"
+          className="w-full bg-bone/5 border border-bone/45 rounded-lg px-4 py-3 text-bone placeholder:text-bone/60 text-base focus:outline-2 focus:outline-ochre focus:border-ochre/50 transition-colors"
         />
       </div>
 

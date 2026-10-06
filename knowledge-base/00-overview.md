@@ -34,7 +34,7 @@ The public website has these areas:
 - **Videos** — music videos and other clips from the roster.
 - **News** — posts from the label.
 - **Flames Lounge** — the Montego Bay venue and creative space. See [[flames-lounge]].
-- **About** — the label's story and timeline. 
+- **About** — the label's story and what it stands for.
 - **Contact** — a form for enquiries. See [[contact-and-support]].
 - **Sign with us** — how artists submit music. See [[signing-and-submissions]].
 - **Search** — a search box covering artists, releases and news.

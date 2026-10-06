@@ -16,6 +16,7 @@ sources:
   - https://www.oneflamerecords.com/
   - https://www.oneflamerecords.com/sign
   - https://www.oneflamerecords.com/flames-lounge
+  - Owner confirmation (Frank), 2026-10-05 — label handles; About-page timeline not true
 ---
 
 ## Short answer
@@ -46,7 +47,7 @@ Each answer below has a fuller version in its own document — follow the links 
 
 **How do I join the gaming lounge?** Use the "Join as a Gamer" page. It is free and needs only your name and email. See [[gaming-membership]].
 
-**Where are you based?** Montego Bay, Jamaica. The label was founded there in 2018.
+**Where are you based?** Montego Bay, Jamaica.
 
 **Do you use tracking cookies?** No. The Privacy Policy states the site uses no tracking cookies and no third-party advertising pixels. See [[policies]].
 

@@ -77,7 +77,7 @@ export default function SetPasswordPage() {
               minLength={8}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full rounded border border-ink/20 bg-cream px-3 py-2.5 text-sm text-ink placeholder:text-ink/30 focus:border-oxblood focus:outline-none"
+              className="w-full rounded border border-ink/50 bg-cream px-3 py-2.5 text-sm text-ink placeholder:text-ink/30 focus:border-oxblood focus:outline-2 focus:outline-oxblood"
               placeholder="At least 8 characters"
             />
           </div>
@@ -91,7 +91,7 @@ export default function SetPasswordPage() {
               required
               value={confirm}
               onChange={(e) => setConfirm(e.target.value)}
-              className="w-full rounded border border-ink/20 bg-cream px-3 py-2.5 text-sm text-ink placeholder:text-ink/30 focus:border-oxblood focus:outline-none"
+              className="w-full rounded border border-ink/50 bg-cream px-3 py-2.5 text-sm text-ink placeholder:text-ink/30 focus:border-oxblood focus:outline-2 focus:outline-oxblood"
               placeholder="Repeat password"
             />
           </div>

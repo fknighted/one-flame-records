@@ -51,7 +51,7 @@ export default function StartSessionForm({ members }: { members: Member[] }) {
         <select
           id="member_id"
           name="member_id"
-          className="w-full bg-bone/5 border border-bone/15 rounded-lg px-3 py-2.5 text-bone text-sm focus:outline-none focus:border-ochre/50"
+          className="w-full bg-bone/5 border border-bone/45 rounded-lg px-3 py-2.5 text-bone text-sm focus:outline-2 focus:outline-ochre focus:border-ochre/50"
         >
           <option value="">Drop-in (no account)</option>
           {members.map(m => (
@@ -68,7 +68,7 @@ export default function StartSessionForm({ members }: { members: Member[] }) {
           id="station"
           name="station"
           defaultValue=""
-          className="w-full bg-bone/5 border border-bone/15 rounded-lg px-3 py-2.5 text-bone text-sm focus:outline-none focus:border-ochre/50"
+          className="w-full bg-bone/5 border border-bone/45 rounded-lg px-3 py-2.5 text-bone text-sm focus:outline-2 focus:outline-ochre focus:border-ochre/50"
         >
           <option value="">— Select station —</option>
           <option value="Xbox 1">Xbox 1</option>

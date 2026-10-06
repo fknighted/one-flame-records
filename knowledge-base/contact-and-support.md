@@ -17,6 +17,7 @@ sources:
   - https://www.oneflamerecords.com/contact
   - https://www.oneflamerecords.com/privacy
   - Projects/one flame app/src/app/(public)/contact/actions.ts
+  - Owner confirmation (Frank), 2026-10-05 — label handles; About-page timeline not true
 ---
 
 ## Short answer
@@ -36,7 +37,7 @@ The form's own note reads: "For press, sync licensing, or artist submissions —
 
 **Email.** The Privacy Policy and Terms of Service both give contact at oneflamerecords dot com for questions about those policies, for unsubscribing, and for requests to access, correct or delete your personal data.
 
-**Social.** Flames Lounge is on Instagram and TikTok as @flamesmobay. There is no separate label social account published on the site.
+**Social.** The label is on Instagram and YouTube as @oneflamerecords (confirmed by the owner on 2026-10-05; both are linked in the site footer). Flames Lounge has its own accounts on Instagram and TikTok as @flamesmobay.
 
 **Newsletter.** Every public page has a "Stay in the loop" subscription box that takes an email address and sends new releases, events and label news. To stop receiving it, use the unsubscribe link in any email the label sends, or email the address above. The site also has an unsubscribe page where you enter your email address directly.
 

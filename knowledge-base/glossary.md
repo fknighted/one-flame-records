@@ -16,6 +16,7 @@ sources:
   - https://www.oneflamerecords.com/flames-lounge
   - https://www.oneflamerecords.com/sign
   - Projects/one flame app/CLAUDE.md
+  - Owner confirmation (Frank), 2026-10-05 — label handles; About-page timeline not true
 ---
 
 ## Short answer
@@ -24,7 +25,7 @@ These are the words visitors and staff use around One Flame Records. Recognise t
 
 ## Details
 
-**One Flame Records** — the label. Independent, reggae and dancehall, Montego Bay, Jamaica, founded 2018.
+**One Flame Records** — the label. Independent, reggae and dancehall, Montego Bay, Jamaica. Its social handle on Instagram and YouTube is @oneflamerecords, said as "one flame records".
 
 **Flames Lounge** — the label's creative and social space in Montego Bay. Sometimes said as just "the Lounge" or "Flames". Its social handle is @flamesmobay, said as "flames mo-bay".
 

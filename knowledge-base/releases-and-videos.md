@@ -17,6 +17,7 @@ sources:
   - https://www.oneflamerecords.com/releases
   - https://www.oneflamerecords.com/videos
   - https://www.oneflamerecords.com/news
+  - Owner confirmation (Frank), 2026-10-05 — label handles; About-page timeline not true
 ---
 
 ## Short answer
@@ -39,7 +40,7 @@ The Releases page is the label's discography, and as of the eleventh of August 2
 
 **When is the next release out?** No release date has been announced publicly. The Releases page says releases are coming soon. Subscribe to the newsletter to be told when something lands.
 
-**Where can I stream One Flame music?** Release pages carry streaming links when a release is published. The About page says distribution is worldwide across major platforms. No specific platform links are live yet.
+**Where can I stream One Flame music?** Release pages carry streaming links when a release is published. No specific platform links are live yet. The label's YouTube channel is @oneflamerecords.
 
 **Can I download music from the site?** Some artist pages include audio the artist has chosen to make public, with a download control. That is at the artist's and label's discretion, not a general download service.
 
@@ -51,4 +52,5 @@ Escalate any request for promotional copies, press assets, embargo dates or rele
 
 - Do not announce a release, title, tracklist or release date. None are published.
 - Do not name streaming platforms the label is on. The site does not list any yet.
-- Do not claim a stream, sales or chart figure for a specific record. The About page's "ten million combined streams" refers to the whole catalogue in 2024 and is the label's own statement.
+- Do not give any stream, sales or chart figure, for a single record or for the whole catalogue. The label has confirmed none. A "ten million combined streams" line once appeared on the About page; the owner confirmed on 2026-10-05 that it was not true, and it has been removed.
+- Do not give a founding year or a release history. None has been confirmed.

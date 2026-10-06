@@ -36,7 +36,7 @@ export default function InviteGamerPage() {
             type="text"
             autoFocus
             placeholder="e.g. Jay King"
-            className="w-full bg-bone/5 border border-bone/15 rounded-lg px-4 py-3 text-bone placeholder:text-bone/60 text-base focus:outline-none focus:border-ochre/50 transition-colors"
+            className="w-full bg-bone/5 border border-bone/45 rounded-lg px-4 py-3 text-bone placeholder:text-bone/60 text-base focus:outline-2 focus:outline-ochre focus:border-ochre/50 transition-colors"
           />
         </div>
 
@@ -49,7 +49,7 @@ export default function InviteGamerPage() {
             name="email"
             type="email"
             placeholder="gamer@email.com"
-            className="w-full bg-bone/5 border border-bone/15 rounded-lg px-4 py-3 text-bone placeholder:text-bone/60 text-base focus:outline-none focus:border-ochre/50 transition-colors"
+            className="w-full bg-bone/5 border border-bone/45 rounded-lg px-4 py-3 text-bone placeholder:text-bone/60 text-base focus:outline-2 focus:outline-ochre focus:border-ochre/50 transition-colors"
           />
         </div>
 

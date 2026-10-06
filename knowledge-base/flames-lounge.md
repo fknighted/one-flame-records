@@ -17,6 +17,7 @@ voice_safe: true
 sources:
   - https://www.oneflamerecords.com/flames-lounge
   - Projects/one flame app/src/app/(public)/flames-lounge/page.tsx
+  - Owner confirmation (Frank), 2026-10-05 — label handles; About-page timeline not true
 ---
 
 ## Short answer
@@ -43,7 +44,7 @@ The site adds that beverages are available and to ask your server for the day's 
 
 **Live events.** The Lounge hosts open mic nights, artist showcases, DJ nights, listening sessions, watch parties, and private hire. No dated events are currently listed on the site.
 
-**Social.** The Lounge is on Instagram and TikTok as @flamesmobay.
+**Social.** The Lounge is on Instagram and TikTok as @flamesmobay. The label itself is separate: @oneflamerecords on Instagram and YouTube.
 
 Photographs of the space are marked "photos coming soon" on the site.
 

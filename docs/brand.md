@@ -33,7 +33,7 @@ Usage rules:
 - **Body text on ink:** `text-bone` (the warm off-white, not pure `#FFF`)
 - **Headlines anywhere:** `text-oxblood`
 - **Links:** `text-oxblood` with `underline-offset-4 hover:text-ochre`
-- **Buttons (primary):** `bg-oxblood text-bone hover:bg-ochre`
+- **Buttons (primary):** `bg-oxblood text-bone hover:bg-ochre hover:text-ink` — the text must switch to ink on the ochre hover; bone on ochre is 2.7:1 and fails (fixed 2026-10-05)
 - **Buttons (ghost):** transparent with `border border-oxblood text-oxblood hover:bg-oxblood hover:text-bone`
 - **Badges (e.g. "New release"):** `bg-ochre text-ink`
 

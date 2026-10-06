@@ -17,7 +17,7 @@ Post-launch performance + correctness cleanup. Remaining backlog is small; see N
 ## Blockers
 
 - **TikTok auto-posting** — Make.com has no TikTok video upload module. Manual for now.
-- **Flames Lounge gallery / logos** — gallery grid + logo assets still placeholder; needs owner-provided assets.
+- **Flames Lounge gallery / logos / hero** — gallery grid + logo assets still placeholder; needs owner-provided assets. Since 2026-10-05 the hero has no photo at all (the stock Unsplash bar photo was removed) — a real Lounge photo is needed.
 - **`pos_items.cost_cents`** — most items have no cost entered → bar profit overstated until the owner enters costs (data entry, not code).
 
 ## Next session
@@ -50,6 +50,14 @@ _Done 2026-07-17 (see session log): session-41 code-review bugs; whole-dollar mo
 Append a new entry at the top of this section after every session. Date, summary, files touched, what's next. Keep it tight — full reasoning belongs in `decisions.md`.
 
 > **Note:** Sessions 2026-07-16 through 2026-07-17-2 (bar cost/profit, full-site audit, public-page caching) were logged in `docs/session-handoffs/` and the auto-memory index rather than here. This log resumes at 2026-07-17.
+
+### 2026-10-05 (Delegated: false About timeline removed, Lounge stock photo removed, contrast + form focus fixes)
+
+**Did:** Dispatched implementer for delegation `remove-the-false-about-page-timeline-and-fix-the-one-flame-s` (all five phases). Uncommitted — awaiting Frank's review, commit and deploy. (1) **About page** — Frank confirmed 2026-10-05 the founding story and "ten million combined streams" are not true. Removed the whole `TIMELINE` (founded 2018, first release + radio 2019, distribution deal 2020, studio expansion, video production, roster growth, ten million streams 2024) and its section, plus the body sentence "Distribution is worldwide." No replacement copy — nothing new is claimed. Knowledge base cleaned to match (founding year out of `glossary.md` and `faq.md`; streams line in `releases-and-videos.md` now a do-not-say; `_sources.md` questions 13–16 marked resolved). (2) **Flames Lounge hero** — `public/flames-lounge-hero.jpg` (Unsplash photo of another bar) no longer rendered; hero is now the brand-palette ground + existing flame glow + a faint `FlameGlyph` mark. **A real Lounge photo is still needed.** The jpg file itself was left in `public/` (deleting needs Frank's say-so). (3) **Handles** — `@oneflamerecords` (Instagram, YouTube) recorded as the label's in the knowledge base, `@flamesmobay` as the Lounge's. (4) **Contrast** — `SectionHeader` dark eyebrow forest → sage (2.34 → 6.52:1); oxblood buttons hover to ochre now switch text to ink (2.69 → 5.72:1) on About and Contact; Lounge pillar icons and menu labels oxblood → rose `#E0907F` (2.29/2.22 → 7.92/7.68:1); Lounge "Contact us" hover text bone → ink (2.69 → 5.72:1). (5) **Form fields** — all 69 field class strings that used `focus:outline-none` now show a 2px focus outline (ochre on ink 5.72:1, oxblood on cream 6.65:1); field borders raised to 3:1 (ink world `bone/15|20` → `bone/45`, `bone/50` for `bg-bone/10` fills; cream world `ink/15|20` → `ink/50`; filter selects `oxblood/20` → `oxblood/65`; portal read-only fields `bone/8` → `bone/45`).
+**Touched:** `src/app/(public)/about/page.tsx`, `src/app/(public)/flames-lounge/page.tsx`, `src/components/SectionHeader.tsx`, `src/components/ContactForm.tsx`, 39 further form files (class strings only; 43 `src/` files in all), `knowledge-base/` (7 files), `docs/brand.md` (primary button recipe), `docs/audits/evidence/` (7 screenshots, new).
+**Verified:** `npm run typecheck` exit 0; `npm run build` exit 0 (82 pages); `npm run lint` exit 1 with 7 errors / 31 warnings — identical before and after on every changed file (pre-existing: `react-hooks/set-state-in-effect`, `react/no-unescaped-entities`). Local `next start` + headless Chromium with all non-localhost requests blocked: `/about` text has no "ten million", "Distribution deal", 2018, radio or Timeline; `/flames-lounge` HTML has no `flames-lounge-hero`; computed colours re-measured in the browser match the offline ratios. Full before/after table in `docs/session-handoffs/2026-10-05.md`.
+**NOT verified:** the live site — the delegation's curl checks on www.oneflamerecords.com need a deploy. Admin/portal/bar forms were not rendered (need logins); their fixes are class-string changes checked in the built CSS only.
+**Next:** Frank reviews the diff, commits, deploys; then curl the live `/about` and `/flames-lounge`. Supply a real Lounge photo. Remaining contrast failures outside this delegation are listed in the handoff.
 
 ### 2026-07-17 (Session-41 bug fixes, whole-dollar money, bar sales RPCs)
 

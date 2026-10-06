@@ -187,7 +187,7 @@ export default async function InventoryPage() {
                             min="0"
                             defaultValue={stock ?? ""}
                             placeholder="—"
-                            className="w-16 rounded border border-bone/20 bg-transparent text-bone text-xs text-right px-2 py-1 focus:outline-none focus:border-ochre/60"
+                            className="w-16 rounded border border-bone/45 bg-transparent text-bone text-xs text-right px-2 py-1 focus:outline-2 focus:outline-ochre focus:border-ochre/60"
                           />
                           <button
                             type="submit"

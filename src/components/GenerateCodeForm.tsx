@@ -24,7 +24,7 @@ export default function GenerateCodeForm({
             type="text"
             placeholder="Label (e.g. Business card v1)"
             defaultValue={defaultLabel}
-            className="flex-1 bg-bone/10 border border-bone/20 rounded px-3 py-2 text-sm text-bone placeholder:text-bone/40 focus:outline-none focus:border-ochre"
+            className="flex-1 bg-bone/10 border border-bone/50 rounded px-3 py-2 text-sm text-bone placeholder:text-bone/40 focus:outline-2 focus:outline-ochre focus:border-ochre"
           />
           <button
             type="submit"

@@ -6,51 +6,6 @@ export const metadata: Metadata = {
     "One Flame Records is an independent reggae and dancehall label pressed in Montego Bay, Jamaica. The story, the philosophy, and the people behind it.",
 };
 
-const TIMELINE = [
-  {
-    year: "2018",
-    event: "Founded",
-    detail:
-      "One Flame Records is established in Montego Bay by a small group of musicians and producers tired of watching Jamaican talent sign away their masters to overseas labels.",
-  },
-  {
-    year: "2019",
-    event: "First release",
-    detail:
-      "The label's debut catalogue — four singles across two artists — lands on streaming platforms and earns rotation on local radio within the first month.",
-  },
-  {
-    year: "2020",
-    event: "Distribution deal",
-    detail:
-      "A non-exclusive international distribution agreement puts One Flame releases on every major platform worldwide while keeping rights firmly in Montego Bay.",
-  },
-  {
-    year: "2021",
-    event: "Studio expansion",
-    detail:
-      "The original recording room doubles in size. A dedicated mixing suite is added, allowing the label to bring post-production fully in-house for the first time.",
-  },
-  {
-    year: "2022",
-    event: "Video production",
-    detail:
-      "One Flame begins producing its own music videos — real locations, natural light, no green screens. The visual identity of the label takes shape alongside the sound.",
-  },
-  {
-    year: "2023",
-    event: "Roster grows",
-    detail:
-      "Five artists signed. The roster spans traditional roots reggae, contemporary dancehall, and a handful of artists who resist either category.",
-  },
-  {
-    year: "2024",
-    event: "Ten million streams",
-    detail:
-      "The catalogue crosses ten million combined streams. Not a boast — a marker. The music is finding people without the help of a major.",
-  },
-];
-
 export default function AboutPage() {
   return (
     <div className="mx-auto max-w-3xl px-4 sm:px-6 py-16 sm:py-24">
@@ -96,38 +51,10 @@ export default function AboutPage() {
           the real thing.
         </p>
         <p>
-          Distribution is worldwide. The deal structure keeps rights where they
-          belong — with the artists. We take a cut of what we help create, not a
-          permanent stake in what someone built before they walked through the door.
+          Rights stay where they belong — with the artists. We take a cut of
+          what we help create, not a permanent stake in what someone built before
+          they walked through the door.
         </p>
-      </div>
-
-      {/* Divider */}
-      <div className="h-px bg-oxblood/15 mb-16" />
-
-      {/* Timeline */}
-      <div className="mb-16">
-        <h2 className="font-display font-bold text-oxblood text-2xl mb-1">Timeline</h2>
-        <div className="mt-2 h-px w-10 bg-oxblood mb-10" />
-
-        <ol className="relative border-l border-oxblood/20 space-y-0">
-          {TIMELINE.map(({ year, event, detail }, i) => (
-            <li key={i} className="pl-6 sm:pl-8 pb-8 sm:pb-10 last:pb-0 relative">
-              {/* Dot */}
-              <span className="absolute -left-[5px] top-[6px] w-2.5 h-2.5 rounded-full bg-oxblood" />
-
-              <div className="flex flex-wrap items-baseline gap-x-3 gap-y-0.5 mb-1.5">
-                <span className="font-display font-bold text-oxblood text-lg leading-none">
-                  {event}
-                </span>
-                <span className="text-xs font-semibold uppercase tracking-[0.12em] text-ink/40">
-                  {year}
-                </span>
-              </div>
-              <p className="text-sm text-ink/65 leading-relaxed">{detail}</p>
-            </li>
-          ))}
-        </ol>
       </div>
 
       {/* Divider */}
@@ -145,7 +72,7 @@ export default function AboutPage() {
         </p>
         <a
           href="/contact"
-          className="inline-block rounded bg-oxblood px-6 py-3 text-sm font-semibold text-bone hover:bg-ochre transition-colors"
+          className="inline-block rounded bg-oxblood px-6 py-3 text-sm font-semibold text-bone hover:bg-ochre hover:text-ink transition-colors"
         >
           Get in touch
         </a>

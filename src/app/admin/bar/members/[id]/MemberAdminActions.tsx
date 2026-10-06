@@ -5,7 +5,7 @@ import { adjustBalance, toggleMemberStatus } from "./actions";
 import type { Tables } from "@/types/supabase";
 import { useToast } from "@/components/ToastProvider";
 
-const INPUT = "bg-bone/5 border border-bone/15 rounded px-3 py-2 text-sm text-bone placeholder:text-bone/50 focus:outline-none focus:border-ochre/60";
+const INPUT = "bg-bone/5 border border-bone/45 rounded px-3 py-2 text-sm text-bone placeholder:text-bone/50 focus:outline-2 focus:outline-ochre focus:border-ochre/60";
 
 export default function MemberAdminActions({ member }: { member: Tables<"gamer_members"> }) {
   const [adjustState, adjustAction, adjustPending] = useActionState(adjustBalance, null);

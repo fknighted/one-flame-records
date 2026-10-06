@@ -4,7 +4,7 @@ import { useActionState } from "react";
 import { submitApplication, type SignupState } from "@/app/(public)/signup/[code]/actions";
 
 const inputClass =
-  "w-full border border-ink/20 rounded px-3 py-2 text-sm text-ink bg-cream placeholder:text-ink/40 focus:outline-none focus:border-oxblood";
+  "w-full border border-ink/50 rounded px-3 py-2 text-sm text-ink bg-cream placeholder:text-ink/40 focus:outline-2 focus:outline-oxblood focus:border-oxblood";
 const labelClass = "block text-xs font-semibold text-ink/60 uppercase tracking-wider mb-1";
 
 export default function SignupForm({ codeId }: { codeId: string }) {

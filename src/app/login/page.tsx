@@ -92,7 +92,7 @@ export default function LoginPage() {
                 type="email"
                 required
                 autoComplete="email"
-                className="w-full rounded border border-ink/20 bg-bone px-3 py-2 text-sm text-ink placeholder-ink/40 focus:border-oxblood focus:outline-none focus:ring-1 focus:ring-oxblood"
+                className="w-full rounded border border-ink/50 bg-bone px-3 py-2 text-sm text-ink placeholder-ink/40 focus:border-oxblood focus:outline-2 focus:outline-oxblood focus:ring-1 focus:ring-oxblood"
                 placeholder="you@example.com"
               />
             </div>
@@ -110,7 +110,7 @@ export default function LoginPage() {
                 type="password"
                 required
                 autoComplete="current-password"
-                className="w-full rounded border border-ink/20 bg-bone px-3 py-2 text-sm text-ink placeholder-ink/40 focus:border-oxblood focus:outline-none focus:ring-1 focus:ring-oxblood"
+                className="w-full rounded border border-ink/50 bg-bone px-3 py-2 text-sm text-ink placeholder-ink/40 focus:border-oxblood focus:outline-2 focus:outline-oxblood focus:ring-1 focus:ring-oxblood"
               />
             </div>
 
@@ -166,7 +166,7 @@ export default function LoginPage() {
                     type="email"
                     required
                     autoComplete="email"
-                    className="w-full rounded border border-ink/20 bg-bone px-3 py-2 text-sm text-ink placeholder-ink/40 focus:border-oxblood focus:outline-none focus:ring-1 focus:ring-oxblood"
+                    className="w-full rounded border border-ink/50 bg-bone px-3 py-2 text-sm text-ink placeholder-ink/40 focus:border-oxblood focus:outline-2 focus:outline-oxblood focus:ring-1 focus:ring-oxblood"
                     placeholder="you@example.com"
                   />
                 </div>

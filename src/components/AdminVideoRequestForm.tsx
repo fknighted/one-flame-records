@@ -174,7 +174,7 @@ export function AdminVideoRequestForm({ assets, defaultAssetId, referenceImages,
               setCreativeBrief(asset.notes);
             }
           }}
-          className="w-full rounded border border-bone/20 bg-bone/5 px-3 py-2 text-bone text-sm focus:outline-none focus:border-ochre"
+          className="w-full rounded border border-bone/45 bg-bone/5 px-3 py-2 text-bone text-sm focus:outline-2 focus:outline-ochre focus:border-ochre"
         >
           <option value="">Select an asset…</option>
           {assets.map((a) => (
@@ -202,7 +202,7 @@ export function AdminVideoRequestForm({ assets, defaultAssetId, referenceImages,
           name="style_preset"
           defaultValue={STYLE_PRESETS[0]}
           onChange={(e) => { setSelectedStylePreset(e.target.value); setEditableScenes(null); }}
-          className="w-full rounded border border-bone/20 bg-bone/5 px-3 py-2 text-bone text-sm focus:outline-none focus:border-ochre"
+          className="w-full rounded border border-bone/45 bg-bone/5 px-3 py-2 text-bone text-sm focus:outline-2 focus:outline-ochre focus:border-ochre"
         >
           {STYLE_PRESETS.map((s) => (
             <option key={s} value={s}>{s}</option>
@@ -315,7 +315,7 @@ export function AdminVideoRequestForm({ assets, defaultAssetId, referenceImages,
           value={creativeBrief}
           onChange={(e) => { setCreativeBrief(e.target.value); setEditableScenes(null); }}
           placeholder="Mood, story arc, locations, visual references, anything you want Claude to factor in…"
-          className="w-full rounded border border-bone/20 bg-bone/5 px-3 py-2 text-bone text-sm placeholder:text-bone/60 focus:outline-none focus:border-ochre resize-y"
+          className="w-full rounded border border-bone/45 bg-bone/5 px-3 py-2 text-bone text-sm placeholder:text-bone/60 focus:outline-2 focus:outline-ochre focus:border-ochre resize-y"
         />
       </div>
 
@@ -344,7 +344,7 @@ export function AdminVideoRequestForm({ assets, defaultAssetId, referenceImages,
           value={lyrics}
           onChange={(e) => { setLyrics(e.target.value); setEditableScenes(null); }}
           placeholder="Leave blank to auto-transcribe from the audio…"
-          className="w-full rounded border border-bone/20 bg-bone/5 px-3 py-2 text-bone text-sm placeholder:text-bone/60 focus:outline-none focus:border-ochre resize-y font-mono"
+          className="w-full rounded border border-bone/45 bg-bone/5 px-3 py-2 text-bone text-sm placeholder:text-bone/60 focus:outline-2 focus:outline-ochre focus:border-ochre resize-y font-mono"
         />
       </div>
 
@@ -393,7 +393,7 @@ export function AdminVideoRequestForm({ assets, defaultAssetId, referenceImages,
                     );
                     setEditableScenes(updated);
                   }}
-                  className="w-full text-xs text-bone/80 leading-relaxed bg-transparent border border-bone/15 rounded px-2 py-1.5 focus:outline-none focus:border-ochre resize-y"
+                  className="w-full text-xs text-bone/80 leading-relaxed bg-transparent border border-bone/45 rounded px-2 py-1.5 focus:outline-2 focus:outline-ochre focus:border-ochre resize-y"
                 />
                 {referenceImages.length > 0 && (
                   <div className="mt-2">

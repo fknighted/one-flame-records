@@ -40,7 +40,7 @@ export default function VideosFilter({ artists }: Props) {
         <select
           value={currentArtist}
           onChange={(e) => push("artist", e.target.value)}
-          className="rounded border border-oxblood/20 bg-cream text-sm text-ink px-3 py-1.5 focus:border-oxblood focus:outline-none focus:ring-1 focus:ring-oxblood"
+          className="rounded border border-oxblood/65 bg-cream text-sm text-ink px-3 py-1.5 focus:border-oxblood focus:outline-2 focus:outline-oxblood focus:ring-1 focus:ring-oxblood"
           aria-label="Filter by artist"
         >
           <option value="">All artists</option>

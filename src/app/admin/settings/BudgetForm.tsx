@@ -31,7 +31,7 @@ export function BudgetForm({ currentBudget }: { currentBudget: number }) {
             min="0"
             step="10"
             required
-            className="w-full rounded border border-bone/20 bg-bone/5 pl-7 pr-3 py-2 text-bone text-sm focus:outline-none focus:border-ochre"
+            className="w-full rounded border border-bone/45 bg-bone/5 pl-7 pr-3 py-2 text-bone text-sm focus:outline-2 focus:outline-ochre focus:border-ochre"
           />
         </div>
       </div>

@@ -29,7 +29,7 @@ const KIND_OPTIONS = [
 ];
 
 const INPUT =
-  "w-full bg-bone/5 border border-bone/15 rounded px-3 py-2 text-sm text-bone placeholder:text-bone/50 focus:outline-none focus:border-ochre/60";
+  "w-full bg-bone/5 border border-bone/45 rounded px-3 py-2 text-sm text-bone placeholder:text-bone/50 focus:outline-2 focus:outline-ochre focus:border-ochre/60";
 const LABEL = "block text-xs text-bone/50 mb-1";
 const SECTION_HEADING =
   "text-xs font-sans uppercase tracking-widest text-bone/52 pb-2 border-b border-bone/10";

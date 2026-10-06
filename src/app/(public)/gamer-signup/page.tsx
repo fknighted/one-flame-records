@@ -67,7 +67,7 @@ export default function GamerSignupPage() {
               type="text"
               autoFocus
               placeholder="e.g. Jay King"
-              className="w-full bg-white border border-ink/15 rounded-xl px-4 py-3 text-ink placeholder:text-ink/25 text-base focus:outline-none focus:border-oxblood/50 transition-colors"
+              className="w-full bg-white border border-ink/50 rounded-xl px-4 py-3 text-ink placeholder:text-ink/25 text-base focus:outline-2 focus:outline-oxblood focus:border-oxblood/50 transition-colors"
             />
           </div>
 
@@ -80,7 +80,7 @@ export default function GamerSignupPage() {
               name="email"
               type="email"
               placeholder="you@email.com"
-              className="w-full bg-white border border-ink/15 rounded-xl px-4 py-3 text-ink placeholder:text-ink/25 text-base focus:outline-none focus:border-oxblood/50 transition-colors"
+              className="w-full bg-white border border-ink/50 rounded-xl px-4 py-3 text-ink placeholder:text-ink/25 text-base focus:outline-2 focus:outline-oxblood focus:border-oxblood/50 transition-colors"
             />
           </div>
 

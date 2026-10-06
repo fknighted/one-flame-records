@@ -11,7 +11,7 @@ export default function SectionHeader({ title, eyebrow, action, dark = false }: 
       <div>
         {eyebrow && (
           <p className={`text-[11px] font-semibold uppercase tracking-[0.22em] mb-1.5 ${
-            dark ? "text-forest" : "text-forest"
+            dark ? "text-sage" : "text-forest"
           }`}>
             {eyebrow}
           </p>

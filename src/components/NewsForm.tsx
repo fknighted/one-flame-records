@@ -8,7 +8,7 @@ type Post = Tables<"news_posts">;
 type ActionState = { error: string } | null;
 
 const INPUT =
-  "w-full bg-bone/5 border border-bone/15 rounded px-3 py-2 text-sm text-bone placeholder:text-bone/30 focus:outline-none focus:border-ochre/60";
+  "w-full bg-bone/5 border border-bone/45 rounded px-3 py-2 text-sm text-bone placeholder:text-bone/30 focus:outline-2 focus:outline-ochre focus:border-ochre/60";
 const LABEL = "block text-xs text-bone/50 mb-1";
 
 function slugify(text: string): string {

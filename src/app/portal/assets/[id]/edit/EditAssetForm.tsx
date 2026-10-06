@@ -28,7 +28,7 @@ export default function EditAssetForm({
         <select
           name="kind"
           defaultValue={asset.kind}
-          className="w-full bg-bone/5 border border-bone/20 rounded px-3 py-2 text-bone text-sm focus:outline-none focus:border-ochre/50"
+          className="w-full bg-bone/5 border border-bone/45 rounded px-3 py-2 text-bone text-sm focus:outline-2 focus:outline-ochre focus:border-ochre/50"
         >
           {KIND_OPTIONS.map(opt => (
             <option key={opt.value} value={opt.value}>{opt.label}</option>
@@ -44,7 +44,7 @@ export default function EditAssetForm({
           name="title"
           defaultValue={asset.title}
           required
-          className="w-full bg-bone/5 border border-bone/20 rounded px-3 py-2 text-bone text-sm focus:outline-none focus:border-ochre/50"
+          className="w-full bg-bone/5 border border-bone/45 rounded px-3 py-2 text-bone text-sm focus:outline-2 focus:outline-ochre focus:border-ochre/50"
         />
       </div>
 
@@ -57,7 +57,7 @@ export default function EditAssetForm({
           name="notes"
           defaultValue={asset.notes ?? ""}
           rows={3}
-          className="w-full bg-bone/5 border border-bone/20 rounded px-3 py-2 text-bone text-sm focus:outline-none focus:border-ochre/50 resize-none"
+          className="w-full bg-bone/5 border border-bone/45 rounded px-3 py-2 text-bone text-sm focus:outline-2 focus:outline-ochre focus:border-ochre/50 resize-none"
         />
       </div>
 

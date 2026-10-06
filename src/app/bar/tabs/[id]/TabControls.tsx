@@ -100,7 +100,7 @@ export default function TabControls({ tabId, total, tabName, status }: Props) {
             placeholder="0"
             value={tipInput}
             onChange={e => setTipInput(e.target.value)}
-            className="flex-1 bg-bone/5 border border-bone/20 rounded px-2 py-1 text-bone text-sm text-right font-mono focus:outline-none focus:border-ochre/50"
+            className="flex-1 bg-bone/5 border border-bone/45 rounded px-2 py-1 text-bone text-sm text-right font-mono focus:outline-2 focus:outline-ochre focus:border-ochre/50"
           />
         </div>
         {tipJmd > 0 && (

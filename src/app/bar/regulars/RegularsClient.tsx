@@ -16,19 +16,19 @@ function AddForm() {
           name="name"
           required
           placeholder="Name *"
-          className="bg-bone/5 border border-bone/15 rounded-lg px-3 py-2 text-bone placeholder:text-bone/60 text-sm focus:outline-none focus:border-ochre/50"
+          className="bg-bone/5 border border-bone/45 rounded-lg px-3 py-2 text-bone placeholder:text-bone/60 text-sm focus:outline-2 focus:outline-ochre focus:border-ochre/50"
         />
         <input
           name="phone"
           type="tel"
           placeholder="Phone (optional)"
-          className="bg-bone/5 border border-bone/15 rounded-lg px-3 py-2 text-bone placeholder:text-bone/60 text-sm focus:outline-none focus:border-ochre/50"
+          className="bg-bone/5 border border-bone/45 rounded-lg px-3 py-2 text-bone placeholder:text-bone/60 text-sm focus:outline-2 focus:outline-ochre focus:border-ochre/50"
         />
       </div>
       <input
         name="notes"
         placeholder="Notes (optional — e.g. usual order, seat preference)"
-        className="w-full bg-bone/5 border border-bone/15 rounded-lg px-3 py-2 text-bone placeholder:text-bone/60 text-sm focus:outline-none focus:border-ochre/50"
+        className="w-full bg-bone/5 border border-bone/45 rounded-lg px-3 py-2 text-bone placeholder:text-bone/60 text-sm focus:outline-2 focus:outline-ochre focus:border-ochre/50"
       />
       <button
         type="submit"
@@ -64,21 +64,21 @@ function RegularRow({ regular }: { regular: Regular }) {
                 name="name"
                 defaultValue={regular.name}
                 required
-                className="bg-bone/5 border border-bone/15 rounded px-3 py-1.5 text-bone text-sm focus:outline-none focus:border-ochre/50"
+                className="bg-bone/5 border border-bone/45 rounded px-3 py-1.5 text-bone text-sm focus:outline-2 focus:outline-ochre focus:border-ochre/50"
               />
               <input
                 name="phone"
                 type="tel"
                 defaultValue={regular.phone ?? ""}
                 placeholder="Phone"
-                className="bg-bone/5 border border-bone/15 rounded px-3 py-1.5 text-bone text-sm focus:outline-none focus:border-ochre/50"
+                className="bg-bone/5 border border-bone/45 rounded px-3 py-1.5 text-bone text-sm focus:outline-2 focus:outline-ochre focus:border-ochre/50"
               />
             </div>
             <input
               name="notes"
               defaultValue={regular.notes ?? ""}
               placeholder="Notes"
-              className="w-full bg-bone/5 border border-bone/15 rounded px-3 py-1.5 text-bone text-sm focus:outline-none focus:border-ochre/50"
+              className="w-full bg-bone/5 border border-bone/45 rounded px-3 py-1.5 text-bone text-sm focus:outline-2 focus:outline-ochre focus:border-ochre/50"
             />
             <div className="flex gap-2">
               <button

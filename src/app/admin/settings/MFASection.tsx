@@ -134,7 +134,7 @@ export default function MFASection() {
               placeholder="000000"
               value={code}
               onChange={e => setCode(e.target.value.replace(/\D/g, ""))}
-              className="w-28 bg-bone/5 border border-bone/20 rounded px-3 py-2 text-bone text-sm font-mono text-center focus:outline-none focus:border-ochre/50"
+              className="w-28 bg-bone/5 border border-bone/45 rounded px-3 py-2 text-bone text-sm font-mono text-center focus:outline-2 focus:outline-ochre focus:border-ochre/50"
             />
             <button
               onClick={verifyCode}

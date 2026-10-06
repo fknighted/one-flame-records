@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import Image from "next/image";
 import { createServiceClient } from "@/lib/supabase/server";
 
 // Public lounge page — cookieless service-client read filtered to is_public
@@ -198,18 +197,10 @@ export default async function FlamesLoungePage() {
       />
       {/* ── Hero ── */}
       <section className="relative overflow-hidden bg-[#0A0806] min-h-[85vh] flex flex-col justify-end">
-        {/* Hero photo */}
-        <Image
-          src="/flames-lounge-hero.jpg"
-          alt="Outdoor bar at dusk — the mood of Flames Lounge"
-          fill
-          priority
-          className="object-cover object-center"
-          sizes="100vw"
-        />
-
-        {/* Dark overlay */}
-        <div className="absolute inset-0 bg-[#0A0806]/65" />
+        {/* No real Lounge photo exists yet. Until the owner supplies one, the hero
+            is drawn from the brand palette only — never a stock or generated image
+            presented as the Lounge. */}
+        <FlameGlyph className="pointer-events-none absolute right-[-3rem] bottom-[-4rem] hidden sm:block h-[115%] w-auto opacity-[0.14]" />
 
         {/* Flame glow */}
         <div
@@ -297,7 +288,7 @@ export default async function FlamesLoungePage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-px bg-[#F5EDD8]/[0.06] rounded-xl overflow-hidden">
             {PILLARS.map(({ icon, title, body }) => (
               <div key={title} className="bg-[#0D0B09] p-8 sm:p-10">
-                <div className="text-[#8B2A1F] mb-5">{icon}</div>
+                <div className="text-[#E0907F] mb-5">{icon}</div>
                 <h3 className="font-display font-bold text-[#F5EDD8] text-xl mb-3">{title}</h3>
                 <p className="text-[#F5EDD8]/50 leading-relaxed text-sm">{body}</p>
               </div>
@@ -361,7 +352,7 @@ export default async function FlamesLoungePage() {
             <div className="space-y-8">
               {MENU.map(({ category, items }) => (
                 <div key={category}>
-                  <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#8B2A1F] mb-4">
+                  <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#E0907F] mb-4">
                     {category}
                   </p>
                   <div className="space-y-4">
@@ -554,7 +545,7 @@ export default async function FlamesLoungePage() {
             </div>
             <Link
               href="/contact"
-              className="shrink-0 inline-block rounded bg-[#F5EDD8] px-8 py-3.5 text-sm font-semibold text-[#8B2A1F] hover:bg-[#B8893B] hover:text-[#F5EDD8] transition-colors"
+              className="shrink-0 inline-block rounded bg-[#F5EDD8] px-8 py-3.5 text-sm font-semibold text-[#8B2A1F] hover:bg-[#B8893B] hover:text-[#1A1612] transition-colors"
             >
               Contact us
             </Link>

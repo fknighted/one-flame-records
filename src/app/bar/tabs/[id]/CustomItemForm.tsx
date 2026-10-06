@@ -23,7 +23,7 @@ export default function CustomItemForm({ tabId }: { tabId: string }) {
           name="name"
           type="text"
           placeholder="Description (optional)"
-          className="flex-1 min-w-0 bg-bone/5 border border-bone/15 rounded px-3 py-2 text-bone placeholder:text-bone/60 text-sm focus:outline-none focus:border-ochre/50"
+          className="flex-1 min-w-0 bg-bone/5 border border-bone/45 rounded px-3 py-2 text-bone placeholder:text-bone/60 text-sm focus:outline-2 focus:outline-ochre focus:border-ochre/50"
         />
         <input
           name="price"
@@ -32,7 +32,7 @@ export default function CustomItemForm({ tabId }: { tabId: string }) {
           step="1"
           placeholder="J$0"
           required
-          className="w-24 bg-bone/5 border border-bone/15 rounded px-3 py-2 text-bone placeholder:text-bone/60 text-sm focus:outline-none focus:border-ochre/50 text-right"
+          className="w-24 bg-bone/5 border border-bone/45 rounded px-3 py-2 text-bone placeholder:text-bone/60 text-sm focus:outline-2 focus:outline-ochre focus:border-ochre/50 text-right"
         />
         <button
           type="submit"

@@ -13,7 +13,7 @@ export type StockTarget = {
 };
 
 const INPUT =
-  "w-full bg-bone/5 border border-bone/15 rounded px-2.5 py-1.5 text-sm text-bone placeholder:text-bone/30 focus:outline-none focus:border-ochre/60";
+  "w-full bg-bone/5 border border-bone/45 rounded px-2.5 py-1.5 text-sm text-bone placeholder:text-bone/30 focus:outline-2 focus:outline-ochre focus:border-ochre/60";
 const LABEL = "block text-[11px] text-bone/50 mb-1";
 
 /**

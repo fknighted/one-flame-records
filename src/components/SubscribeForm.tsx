@@ -40,7 +40,7 @@ export default function SubscribeForm() {
           onChange={(e) => setEmail(e.target.value)}
           placeholder="your@email.com"
           required
-          className="flex-1 min-w-0 rounded bg-bone/5 border border-bone/15 px-3 py-2 text-sm text-bone placeholder:text-bone/30 focus:outline-none focus:border-ochre/50"
+          className="flex-1 min-w-0 rounded bg-bone/5 border border-bone/45 px-3 py-2 text-sm text-bone placeholder:text-bone/30 focus:outline-2 focus:outline-ochre focus:border-ochre/50"
         />
         <button
           type="submit"

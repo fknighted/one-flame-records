@@ -53,7 +53,7 @@ export default function AdminAssetUploadForm({ artistId }: { artistId: string })
           name="kind"
           value={selectedKind}
           onChange={(e) => { setSelectedKind(e.target.value); setUploaded(false); }}
-          className="w-full rounded border border-bone/20 bg-ink px-3 py-2 text-sm text-bone focus:border-ochre focus:outline-none"
+          className="w-full rounded border border-bone/45 bg-ink px-3 py-2 text-sm text-bone focus:border-ochre focus:outline-2 focus:outline-ochre"
         >
           {KINDS.map((k) => (
             <option key={k.value} value={k.value}>
@@ -72,7 +72,7 @@ export default function AdminAssetUploadForm({ artistId }: { artistId: string })
           type="text"
           required
           placeholder="Track or file name"
-          className="w-full rounded border border-bone/20 bg-ink px-3 py-2 text-sm text-bone placeholder:text-bone/50 focus:border-ochre focus:outline-none"
+          className="w-full rounded border border-bone/45 bg-ink px-3 py-2 text-sm text-bone placeholder:text-bone/50 focus:border-ochre focus:outline-2 focus:outline-ochre"
         />
       </div>
 
@@ -84,7 +84,7 @@ export default function AdminAssetUploadForm({ artistId }: { artistId: string })
           name="notes"
           rows={3}
           placeholder="BPM, key, or any notes for the pipeline…"
-          className="w-full resize-none rounded border border-bone/20 bg-ink px-3 py-2 text-sm text-bone placeholder:text-bone/50 focus:border-ochre focus:outline-none"
+          className="w-full resize-none rounded border border-bone/45 bg-ink px-3 py-2 text-sm text-bone placeholder:text-bone/50 focus:border-ochre focus:outline-2 focus:outline-ochre"
         />
       </div>
 

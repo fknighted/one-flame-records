@@ -59,7 +59,8 @@ Generated 2026-08-11. Everything below was actually read, not assumed.
 | Published videos | 1 — "Speechless" by Kahlic |
 | Published news posts | 0 — "No posts yet" |
 | Published email | contact@oneflamerecords.com (Privacy + Terms) |
-| Social | @flamesmobay (Instagram, TikTok) — Lounge only |
+| Social (label) | @oneflamerecords (Instagram, YouTube) — linked in the site footer; confirmed as the label's by Frank, 2026-10-05 |
+| Social (Lounge) | @flamesmobay (Instagram, TikTok) |
 | Payments on site | none — no Stripe or any payment provider in the codebase |
 | Gaming session rates | J$300 / 30 min, J$600 / 60 min (code constant, not on the site) |
 | Submission reply aim | "within two weeks" |
@@ -121,13 +122,17 @@ has to refuse.
     nothing is sold online, but the Lounge takes money in person.
 12. **Deal terms for artists.** "You keep your publishing" is the only published term.
     The bot will be asked about splits, length and advances and must refuse every time.
-13. **Releases.** Zero published, against an About page claiming a 2019 debut catalogue
-    and ten million streams by 2024. That gap is visible to any visitor and will be asked
-    about. Either publish the catalogue or expect the question.
-14. **Streaming platform links.** The About page says distribution is worldwide, but no
-    Spotify, Apple Music or YouTube link exists anywhere on the site.
-15. **Label social accounts.** Only `@flamesmobay` (the Lounge) is published. Does the
-    label itself have accounts the bot should point to?
-16. **Is the About-page timeline factually accurate** (founded 2018, distribution deal
-    2020, ten million streams 2024)? It reads as authored marketing copy. The bot will
-    repeat it as fact. Confirm, or soften the copy.
+13. **Releases.** Zero published. *Resolved in part 2026-10-05:* the About page no
+    longer claims a 2019 debut catalogue or any stream count (see 16).
+14. **Streaming platform links.** No Spotify or Apple Music link exists anywhere on the
+    site. *2026-10-05:* the About page's "distribution is worldwide" line was removed
+    with the timeline; which platforms the label is on is still unconfirmed.
+15. **Label social accounts.** *Resolved 2026-10-05:* Frank confirmed `@oneflamerecords`
+    on Instagram and YouTube are the label's (already linked in the site footer).
+    `@flamesmobay` is the Lounge's.
+16. **About-page timeline.** *Resolved 2026-10-05:* Frank confirmed the founding story
+    and "ten million combined streams" are not true. The whole timeline (founded 2018,
+    first release and radio play 2019, distribution deal 2020, studio expansion, video
+    production, roster growth, ten million streams 2024) was removed from the page and
+    from this knowledge base. No founding year, release history or stream figure is
+    confirmed; the bot must not give one.
