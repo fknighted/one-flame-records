@@ -194,7 +194,7 @@ Brand tokens (`--color-oxblood`, `--color-cream`, etc.) are defined in `src/app/
 
 ## Brand quick reference
 
-Full system in `docs/brand.md`. The essentials:
+For brand, colours, type, copy rules and social posts, read `design-system/README.md` (current; `docs/brand.md` is out of date). The essentials:
 
 - **Oxblood** `#8B2A1F` — headlines, the flame
 - **Forest** `#3F5A3A` — accents, inner flame

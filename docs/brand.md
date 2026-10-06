@@ -1,3 +1,5 @@
+> **Out of date.** The current brand, colours, type, copy rules and social posts are in [`design-system/README.md`](../design-system/README.md); where this file disagrees, follow `design-system/`.
+
 # Brand system
 
 The visual and verbal identity for One Flame Records. Reference this any time you're touching styling or copy.

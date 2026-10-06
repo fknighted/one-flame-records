@@ -1,0 +1,52 @@
+{
+  "palette": {
+    "primary": "#8B2A1F",
+    "secondary": "#3F5A3A",
+    "accent": "#B8893B",
+    "background": "#ECE2C8",
+    "text": "#1A1612"
+  },
+  "extraColors": [
+    {
+      "name": "Bone",
+      "hex": "#F5EDD8"
+    },
+    {
+      "name": "Rose",
+      "hex": "#E0907F"
+    },
+    {
+      "name": "Sage",
+      "hex": "#82A57A"
+    }
+  ],
+  "typography": {
+    "headingFont": "Fraunces",
+    "bodyFont": "Inter",
+    "notes": "Fraunces carries the headline voice; Inter is for everything read at length. Warm, printed feel — never a tech-startup sans stack."
+  },
+  "logos": [],
+  "imagery": {
+    "direction": "Warm, filmic and analogue — the palette of aged print rather than a screen. Jamaican light, real rooms, real studios. Grain over gloss.",
+    "subjects": [
+      "artists in the studio and on stage",
+      "physical media and artwork",
+      "Jamaican settings"
+    ],
+    "avoid": [
+      "cold blue-grey tech aesthetics",
+      "generic gradient backgrounds",
+      "AI-obvious plastic skin and hands"
+    ]
+  },
+  "dos": [
+    "Name the artist and the release exactly as credited",
+    "Use the release date only once it is confirmed",
+    "Credit producers and features where they are known"
+  ],
+  "donts": [
+    "Never announce a date, title or feature that is not confirmed",
+    "Never invent chart positions, streams or sales figures",
+    "Never speak for an artist in the first person"
+  ]
+}
