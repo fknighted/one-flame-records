@@ -96,7 +96,7 @@ const PILLARS = [
   {
     icon: <GameIcon />,
     title: "Gaming Lounge",
-    body: "Unwind between sessions. Our gaming setup lets you switch off and recharge — whether you're an artist on a break or just here for the vibes.",
+    body: "Unwind between sessions. Our gaming setup lets you switch off and recharge — whether you're an artist on a break or just here to hang out.",
   },
   {
     icon: <FoodIcon />,

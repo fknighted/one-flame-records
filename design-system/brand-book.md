@@ -29,7 +29,7 @@ Real copy to model on:
 
 > Walk-in welcome — no reservation needed.
 
-One line on the live Lounge page breaks these rules ("just here for the vibes"). Do not copy it.
+A Lounge line that broke these rules ("just here for the vibes") was rewritten on 2026-10-05 as "just here to hang out". Do not bring the old wording back.
 
 ## Two worlds, one palette
 
@@ -95,7 +95,7 @@ The app has two environments. They are surfaces, not a light and dark theme: eve
 - Real photographs only: the label's artists, its shows and its own spaces. Warm white balance, natural or available light, real places, grain over gloss. Black-and-white works well on ink.
 - The one real brand photo in the code is the home hero, a night performance at an outdoor Montego Bay venue (Imagery group). It always sits under an `ink` layer at 72% with a soft oxblood glow, so bone text reads on it.
 - Artist photos and release covers come from the label's own uploads (not in this system). Show artist photos square, with an ink gradient from the bottom and the stage name in `display` bold `bone`.
-- There are no real photos of Flames Lounge yet. The stock photo of another bar was removed from the Lounge page on 2026-10-05; the hero is now drawn from the palette only — the `lounge-night` ground, a soft oxblood glow and a large faint flame mark (14% opacity, hidden on phones). When the owner supplies a real photo, it goes in that spot. Never use a stock or AI image as if it were the Lounge. The old file `public/flames-lounge-hero.jpg` is still in the repository, unused; do not use it.
+- There are no real photos of Flames Lounge yet. The stock photo of another bar was removed from the Lounge page on 2026-10-05; the hero is now drawn from the palette only — the `lounge-night` ground, a soft oxblood glow and a large faint flame mark (14% opacity, hidden on phones). When the owner supplies a real photo, it goes in that spot. Never use a stock or AI image as if it were the Lounge. The old file `public/flames-lounge-hero.jpg` was deleted from the repository on 2026-10-05; do not bring it back.
 - The app can generate images and music videos with AI. Never present a generated image as a real photo of an artist, a show or the Lounge. Generated people must be Jamaican, described by visible detail and setting, per the label's video rules.
 - Avoid tourism imagery: palm-tree postcards, beach paradise, theme-park Jamaica.
 

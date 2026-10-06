@@ -6,7 +6,7 @@ Real photography the brand uses. There is only one so far.
 
 - `hero-bg.jpg` — a night performance at an outdoor Montego Bay venue: string lights, a hand drum, an audience on benches. Shot on a DJI camera. The home page hero, resized here to 1600 × 1200 (the app's copy in `public/` is 1920 × 1440). Always shown under an `ink` layer at 72% with a soft oxblood glow, so `bone` text reads on it.
 
-Not included: the old Flames Lounge hero (`public/flames-lounge-hero.jpg`) is a stock photo of a different bar, from Unsplash. It was taken off the Lounge page on 2026-10-05 and the file is now unused. Never present it, or any stock or AI-generated image, as Flames Lounge, an artist or a show. There are no real Lounge photos yet.
+Not included: the old Flames Lounge hero (`public/flames-lounge-hero.jpg`) is a stock photo of a different bar, from Unsplash. It was taken off the Lounge page on 2026-10-05 and the file was deleted from the repository the same day. Never present it, or any stock or AI-generated image, as Flames Lounge, an artist or a show. There are no real Lounge photos yet.
 
 Artist photos and release covers live in the label's own storage, uploaded through the portal and admin, not in the repository.
 
