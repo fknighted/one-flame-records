@@ -45,7 +45,7 @@ export default function ContactForm() {
           type="text"
           required
           autoComplete="name"
-          className="w-full rounded border border-ink/50 bg-bone px-3 py-2.5 text-sm text-ink placeholder-ink/40 focus:border-oxblood focus:outline-2 focus:outline-oxblood focus:ring-1 focus:ring-oxblood"
+          className="w-full rounded border border-ink/60 bg-bone px-3 py-2.5 text-sm text-ink placeholder-ink/40 focus:border-oxblood focus:outline-2 focus:outline-oxblood focus:ring-1 focus:ring-oxblood"
           placeholder="Your name"
         />
       </div>
@@ -60,7 +60,7 @@ export default function ContactForm() {
           type="email"
           required
           autoComplete="email"
-          className="w-full rounded border border-ink/50 bg-bone px-3 py-2.5 text-sm text-ink placeholder-ink/40 focus:border-oxblood focus:outline-2 focus:outline-oxblood focus:ring-1 focus:ring-oxblood"
+          className="w-full rounded border border-ink/60 bg-bone px-3 py-2.5 text-sm text-ink placeholder-ink/40 focus:border-oxblood focus:outline-2 focus:outline-oxblood focus:ring-1 focus:ring-oxblood"
           placeholder="you@example.com"
         />
       </div>
@@ -73,7 +73,7 @@ export default function ContactForm() {
           id="reason"
           name="reason"
           defaultValue="general"
-          className="w-full rounded border border-ink/50 bg-bone px-3 py-2.5 text-sm text-ink focus:border-oxblood focus:outline-2 focus:outline-oxblood focus:ring-1 focus:ring-oxblood"
+          className="w-full rounded border border-ink/60 bg-bone px-3 py-2.5 text-sm text-ink focus:border-oxblood focus:outline-2 focus:outline-oxblood focus:ring-1 focus:ring-oxblood"
         >
           <option value="general">General enquiry</option>
           <option value="press">Press &amp; media</option>
@@ -91,7 +91,7 @@ export default function ContactForm() {
           name="message"
           required
           rows={6}
-          className="w-full rounded border border-ink/50 bg-bone px-3 py-2.5 text-sm text-ink placeholder-ink/40 focus:border-oxblood focus:outline-2 focus:outline-oxblood focus:ring-1 focus:ring-oxblood resize-none"
+          className="w-full rounded border border-ink/60 bg-bone px-3 py-2.5 text-sm text-ink placeholder-ink/40 focus:border-oxblood focus:outline-2 focus:outline-oxblood focus:ring-1 focus:ring-oxblood resize-none"
           placeholder="Tell us what's on your mind."
         />
       </div>
