@@ -10,4 +10,4 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 ## Brand and design
 
-For brand, colours, type, copy rules and social posts, read `design-system/README.md`. `docs/brand.md` is out of date.
+For brand, colours, type, copy rules and social posts, read `design-system/README.md`. `docs/brand.md` is a short pointer to it.

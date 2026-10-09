@@ -656,3 +656,13 @@ and the ×100 shims must be deleted, not left as no-ops.
 **Alternatives considered:** Hiding menus alone would leave paid server actions/workers reachable. Deleting historical data would unnecessarily destroy music and video work. Reusing the old production stack would conflict with the new studio plan.
 
 **Consequences:** Code retirement is local until an explicitly authorized release. No hosted job inspection/cancellation, provider account change, database migration or media deletion occurred. A separate music-making studio was not identified; that scope and wider creative-tool retirement remain unconfirmed. New campaign studio integration is separate. Historical pipeline docs are marked superseded.
+
+## 2026-10-08 — Sound System replaces the record-sleeve look
+
+**Context:** The site, studio screens and Content Studio kit still used the cream, oxblood and Fraunces record-sleeve look. Frank was shown the "One Flame Sound System" concept (version 8) beside other directions.
+
+**Decision:** On 2026-10-08 Frank chose the Sound System direction (option B). On 2026-10-09 it shipped across the public site, the studio screens (portal, admin, bar till, gamer portal) and the Content Studio kit, replacing the record-sleeve look. Palette: black `#0F0D0B`, yellow `#F2C230`, red `#C8321F`, paper `#FFF7E6`, green `#2F6B3A`. Type: Big Shoulders Display and Archivo. The brand now lives in `design-system/` (start with `design-system/brand-book.md`); `docs/brand.md` is a short pointer. Release record: `docs/session-handoffs/2026-10-09-sound-system-release.md`.
+
+**Alternatives considered:** The other concept directions shown on 2026-10-08, and keeping the record-sleeve look. Not recorded in more detail here.
+
+**Consequences:** Older entries above that mention cream, ink, oxblood, ochre or Fraunces describe the look at the time and are not rewritten. The logo keeps its own oxblood and olive colours. Transactional email templates in `src/lib/email/templates/` were not part of this check and may still use the old colours.

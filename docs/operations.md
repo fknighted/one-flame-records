@@ -67,7 +67,7 @@ Pushing to `main` deploys to production via Vercel. Always preview-deploy first:
 
 1. Work on a branch.
 2. Open a PR. Vercel auto-deploys a preview URL.
-3. Test on the preview URL. Check both themes (cream and ink) and at least one workflow end-to-end.
+3. Test on the preview URL. Check both looks (the loud public Sound System site and the calm studio screens) and at least one workflow end-to-end.
 4. Merge to `main`. Production deploys in ~90 seconds.
 
 If a deploy breaks production, roll back from the Vercel dashboard — it's a single click to redeploy the previous successful build. Then investigate.

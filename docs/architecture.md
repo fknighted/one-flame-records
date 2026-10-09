@@ -216,7 +216,7 @@ App Router structure. Route groups in parentheses don't appear in URLs.
 
 ```
 src/app/
-├── (public)/                          ← cream theme layout
+├── (public)/                          ← Sound System public layout (black, yellow, red, paper blocks)
 │   ├── page.tsx                       / (hero, artists, releases, videos, news, CTA)
 │   ├── artists/
 │   │   ├── page.tsx                   /artists
@@ -231,7 +231,7 @@ src/app/
 │   ├── sign/page.tsx                  /sign (A&R intake)
 │   ├── about/page.tsx                 /about
 │   └── contact/page.tsx               /contact
-├── portal/                            ← ink theme, requires artist auth
+├── portal/                            ← studio look, requires artist auth
 │   ├── page.tsx                       /portal (dashboard)
 │   ├── profile/page.tsx               /portal/profile
 │   ├── assets/page.tsx                /portal/assets (public/private toggle)
@@ -240,7 +240,7 @@ src/app/
 │       ├── page.tsx                   /portal/videos (job library, public/private toggle)
 │       ├── [job_id]/page.tsx          /portal/videos/<id> (detail, pipeline progress)
 │       └── new/page.tsx               /portal/videos/new
-├── admin/                             ← ink theme, requires admin auth
+├── admin/                             ← studio look, requires admin auth
 │   ├── layout.tsx
 │   ├── page.tsx                       /admin (overview)
 │   ├── artists/

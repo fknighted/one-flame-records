@@ -37,7 +37,7 @@ docs/
 ├── next-session-prompt.md ← short "pick this up next" brief
 ├── decisions.md           ← append-only architectural decision log
 ├── architecture.md        ← data model, RLS, routes, env vars
-├── brand.md               ← palette, typography, voice, components
+├── brand.md               ← short pointer to design-system/
 ├── video-pipeline.md      ← Inngest design, model interface
 ├── operations.md          ← runbook for common admin tasks
 ├── Creative Systems Overview.md  ← full reference doc (for ChatGPT/Claude Web upload)
@@ -50,10 +50,10 @@ Source:
 src/
 ├── app/
 │   ├── (public)/      ← Sound System public site (home, artists, releases, videos, news, about, contact, signup, flames-lounge, gamer-signup)
-│   ├── admin/         ← ink-theme label admin (artists, releases, videos, news, applications, bar/*)
-│   ├── portal/        ← ink-theme artist portal (profile, assets, releases, videos)
-│   ├── bar/           ← ink-theme bartender POS (tabs, inventory, sessions, members)
-│   ├── gamer/         ← ink-theme gamer portal (dashboard, session history)
+│   ├── admin/         ← studio-look label admin (artists, releases, videos, news, applications, bar/*)
+│   ├── portal/        ← studio-look artist portal (profile, assets, releases, videos)
+│   ├── bar/           ← studio-look bartender POS (tabs, inventory, sessions, members)
+│   ├── gamer/         ← studio-look gamer portal (dashboard, session history)
 │   ├── login/         ← shared login page
 │   ├── auth/          ← callback, portal-invite, set-password pages
 │   └── api/inngest/   ← Inngest webhook route handler
@@ -171,7 +171,7 @@ Current work and verification: `/Users/frankknight/Claude OS/Delegations/remove-
 
 ## Brand quick reference
 
-For brand, colours, type, copy rules and social posts, read `design-system/README.md` (current; `docs/brand.md` is out of date). The essentials:
+For brand, colours, type, copy rules and social posts, read `design-system/README.md` (the source of truth; `docs/brand.md` only points there). The essentials:
 
 - **Sound black** `#0F0D0B` — the ground for every screen
 - **Poster yellow** `#F2C230` — headline blocks, the one main button, money

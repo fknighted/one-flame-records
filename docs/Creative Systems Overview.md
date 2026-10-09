@@ -86,47 +86,48 @@ The platform is currently **live and operational**. All five portals are complet
 
 ### Other
 - **Spotify Web API** (`src/lib/spotify.ts`) — fetches artist/album data for public pages.
-- **next/font** — Fraunces (display/headlines) and Inter (body) loaded via the font subsystem for performance.
+- **next/font** — Big Shoulders Display (headlines, names, numbers) and Archivo (everything read) loaded via the font subsystem for performance.
 
 ---
 
 ## 3. Design System
 
-### Two Visual Worlds
+### One Palette, Two Moods (Sound System, since 2026-10-09)
 
-The platform splits into two completely separate visual environments. They are never mixed on the same page.
+The platform uses one palette in two moods. They are never mixed on the same page. The source of truth is `design-system/` (start with `design-system/brand-book.md`).
 
-| World | Where | Background | Feel |
-|-------|-------|------------|------|
-| **Cream** | Public site | `#ECE2C8` | Printed record sleeve. Paper grain. Restrained ink. |
-| **Ink** | Portal, Admin, Bar, Gamer | `#1A1612` | Studio mode. Dark background so media pops. |
+| Mood | Where | Ground | Feel |
+|------|-------|--------|------|
+| **Poster** | Public site | Sound black `#0F0D0B` with full-width yellow, red and paper blocks | A Montego Bay dance poster. Big stacked headlines, flat colour, no gradients or soft shadows. |
+| **Studio** | Portal, Admin, Bar, Gamer | Sound black, lifted panels `#16130F` | Calm, readable for hours at night. Same palette, `studio-*` classes in `src/app/studio.css`. |
 
-Theme is applied via a wrapper class on the route group layout (`bg-cream` or `bg-ink`), not a runtime context or toggle.
+The mood is set by the route group layout, not a runtime context or toggle.
 
-### Color Tokens (defined in `src/app/globals.css` `@theme inline` block)
+### Color Tokens (defined in `src/app/globals.css` `@theme inline` block; full list in `design-system/tokens.md`)
 
 | Token | Hex | Role |
 |-------|-----|------|
-| `--color-oxblood` | `#8B2A1F` | Headlines, the flame mark, primary ink |
-| `--color-forest` | `#3F5A3A` | Secondary ink, inner flame, accent |
-| `--color-cream` | `#ECE2C8` | Public site background |
-| `--color-ink` | `#1A1612` | Portal/admin background |
-| `--color-bone` | `#F5EDD8` | Body text on ink backgrounds |
-| `--color-ochre` | `#B8893B` | CTA buttons, badges, hover states — use sparingly |
+| `black` | `#0F0D0B` | The ground for every screen |
+| `yellow` | `#F2C230` | Lead colour: headline blocks, the one main button, money |
+| `red` | `#C8321F` | Second block: artist pages, release tags, the Lounge |
+| `paper` | `#FFF7E6` | Long reading, forms, and main text on black |
+| `green` | `#2F6B3A` | Small doses only: open, live, paid, done |
+
+The logo keeps its own oxblood and olive colours; use the light logo on black or red.
 
 ### Typography
 
 Loaded via `next/font`:
-- **Fraunces** — display/headlines (chunky retro slab serif, vintage reggae sleeve aesthetic)
-- **Inter** — body text
+- **Big Shoulders Display** (`font-poster`) — headlines, names and numbers, uppercase
+- **Archivo** (`font-text`) — everything people read
 
-### Paper Grain Overlay (Public Site Only)
+### Texture
 
-A fixed `<div>` in the public layout renders a fractal noise SVG at `opacity-[0.055]` with `mix-blend-multiply`. This gives the cream pages a subtle printed-paper texture. It is `pointer-events-none` and `z-50` so it overlays everything without blocking interaction. It does NOT appear on ink-theme pages.
+The old paper-grain overlay is gone. The only pattern is the speaker grille, used beside a photo or along a headline block, never over a photo or text.
 
 ### Brand Voice
 
-Confident, grounded, specific. "Pressed in Montego Bay." Never corporate, never theme-park Jamaican. Copy feels like the back of a record sleeve, not a tourism ad.
+Confident, grounded, specific. "Pressed in Montego Bay." Never corporate, never theme-park Jamaican. Copy reads like a dance-poster flyer or the back of a record sleeve, not a tourism ad.
 
 ---
 
@@ -136,11 +137,11 @@ Confident, grounded, specific. "Pressed in Montego Bay." Never corporate, never 
 /
 ├── src/
 │   ├── app/
-│   │   ├── (public)/          ← cream theme — public site
-│   │   ├── admin/             ← ink theme — label admin
-│   │   ├── portal/            ← ink theme — artist portal
-│   │   ├── bar/               ← ink theme — bartender POS
-│   │   ├── gamer/             ← ink theme — gamer portal
+│   │   ├── (public)/          ← Sound System public site
+│   │   ├── admin/             ← studio look — label admin
+│   │   ├── portal/            ← studio look — artist portal
+│   │   ├── bar/               ← studio look — bartender POS
+│   │   ├── gamer/             ← studio look — gamer portal
 │   │   ├── login/             ← shared login page
 │   │   ├── auth/              ← callback, portal-invite, set-password
 │   │   ├── signup/[code]/     ← QR landing page (public)
@@ -439,7 +440,7 @@ No public access. Final video outputs from the AI pipeline. Path: `videos/{job_i
 
 ## 9. Route Map
 
-### Public Routes — `src/app/(public)/` (cream theme, no auth)
+### Public Routes — `src/app/(public)/` (Sound System look, no auth)
 
 | Route | File | Purpose |
 |-------|------|---------|
@@ -458,7 +459,7 @@ No public access. Final video outputs from the AI pipeline. Path: `videos/{job_i
 | `/flames-lounge` | `flames-lounge/page.tsx` | Lounge info / drinks menu preview |
 | `/gamer-signup` | `gamer-signup/page.tsx` | Gaming membership signup |
 
-### Artist Portal — `src/app/portal/` (ink theme, requires `role = 'artist'`)
+### Artist Portal — `src/app/portal/` (studio look, requires `role = 'artist'`)
 
 | Route | Purpose |
 |-------|---------|
@@ -470,7 +471,7 @@ No public access. Final video outputs from the AI pipeline. Path: `videos/{job_i
 | `/portal/videos/new` | Request a new AI video |
 | `/portal/videos/[id]` | Job detail: pipeline progress, clip previews, final video |
 
-### Admin Panel — `src/app/admin/` (ink theme, requires `role = 'admin'`)
+### Admin Panel — `src/app/admin/` (studio look, requires `role = 'admin'`)
 
 | Route | Purpose |
 |-------|---------|
@@ -498,7 +499,7 @@ No public access. Final video outputs from the AI pipeline. Path: `videos/{job_i
 | `/admin/bar/staff` | Bartender management + promote artist |
 | `/admin/settings` | Monthly budget cap for AI image generation |
 
-### Bar POS — `src/app/bar/` (ink theme, requires bar staff)
+### Bar POS — `src/app/bar/` (studio look, requires bar staff)
 
 | Route | Purpose |
 |-------|---------|
@@ -509,7 +510,7 @@ No public access. Final video outputs from the AI pipeline. Path: `videos/{job_i
 | `/bar/sessions` | Game session management |
 | `/bar/members` | Gamer membership lookup |
 
-### Gamer Portal — `src/app/gamer/` (ink theme, requires `role = 'gamer'`)
+### Gamer Portal — `src/app/gamer/` (studio look, requires `role = 'gamer'`)
 
 | Route | Purpose |
 |-------|---------|
@@ -863,7 +864,7 @@ interface SendEmailOptions {
 }
 ```
 
-Emails are plain inline HTML with the ink theme (dark background, bone text, ochre CTAs). No template engine — HTML strings are composed at call site.
+Emails share one layout, `src/lib/email/layout.ts` (Sound System since 2026-10-09: black header with the light PNG logo, paper reading area, red bar under the heading, one yellow button). Supabase auth emails use matching HTML from `docs/email/supabase-auth/`.
 
 **Where emails are sent:**
 1. A&R application confirmation (to applicant on QR signup submit)
