@@ -8,10 +8,18 @@ const nextConfig: NextConfig = {
       bodySizeLimit: "10mb",
     },
   },
-  // Public gamer sign-up was removed on 2026-10-09; gamer accounts are now
-  // created by bar staff only. Old links land on the Lounge page.
+  // Gamer features were removed on 2026-10-09 (database tables kept). Old gamer
+  // and member-management links land on the nearest live page.
   async redirects() {
-    return [{ source: "/gamer-signup", destination: "/flames-lounge", permanent: false }];
+    return [
+      { source: "/gamer-signup", destination: "/flames-lounge", permanent: false },
+      { source: "/gamer", destination: "/", permanent: false },
+      { source: "/gamer/:path*", destination: "/", permanent: false },
+      { source: "/bar/members", destination: "/bar", permanent: false },
+      { source: "/bar/members/:path*", destination: "/bar", permanent: false },
+      { source: "/admin/bar/members", destination: "/admin/bar", permanent: false },
+      { source: "/admin/bar/members/:path*", destination: "/admin/bar", permanent: false },
+    ];
   },
   images: {
     remotePatterns: [

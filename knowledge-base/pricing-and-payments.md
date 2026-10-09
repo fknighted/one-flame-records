@@ -48,7 +48,7 @@ All amounts at the venue are in Jamaican dollars and are whole dollars — no ce
 
 **Do you accept card at Flames Lounge?** Accepted payment methods at the venue are not published on the website. Ask at the Lounge.
 
-**Is there a membership fee for the gaming account?** No. The account is free. You pay only for the gaming time you use.
+**Is there a membership fee for gaming?** There are no gaming memberships or accounts. You pay at the Lounge counter for the session you play.
 
 ## Escalate
 

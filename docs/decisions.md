@@ -677,3 +677,13 @@ and the ×100 shims must be deleted, not left as no-ops.
 
 **Consequences:** No database change; existing `gamer_members` rows and the `gamer` role stay. The customer knowledge base now tells people to ask Lounge staff. Restoring self sign-up means bringing back the page and action from git history.
 
+
+## 2026-10-09 — Remove all gamer features
+
+**Context:** Frank decided on 2026-10-09 to drop gamer accounts entirely while keeping the bar unchanged. Hosted data check that day: 0 `gamer_members` rows, 0 profiles with role `gamer`, 0 game sessions linked to a member, so no customer is affected.
+
+**Decision:** Delete the gamer portal (`src/app/gamer/`) and the staff member screens (`src/app/bar/members/`, `src/app/admin/bar/members/`), their nav links and the active-members card. `/gamer*`, `/bar/members*` and `/admin/bar/members*` redirect (temporary) to `/`, `/bar` and `/admin/bar`. The proxy no longer has a gamer route; a profile with role `gamer` is treated like any unrecognised role. Walk-in game sessions stay, but the member selector, member query and balance deduction are gone; `member_id` is always null. Public copy, privacy policy and the customer knowledge base now say gaming is walk-in only (`gaming-membership.md` became `gaming-at-flames-lounge.md`). The "Game Time" menu category stays.
+
+**Alternatives considered:** Keeping the portal for existing members: rejected because there are none.
+
+**Consequences:** No schema change: the `gamer_members`, balance tables, `gamer` role constraint, migrations and `src/types/supabase.ts` are untouched. To restore, revert the removal commit or restore the deleted folders and edits from git history, then re-add the proxy route and nav links.

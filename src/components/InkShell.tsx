@@ -11,7 +11,7 @@ interface Props {
   pendingApps?: number;
   isBartender?: boolean;
   children: React.ReactNode;
-  mode?: "admin" | "portal" | "bar" | "gamer";
+  mode?: "admin" | "portal" | "bar";
 }
 
 type NavItem = { href: string; label: string; badge?: number };
@@ -44,7 +44,6 @@ const ADMIN_NAV: NavGroup[] = [
       { href: "/admin/bar/sales",     label: "Sales" },
       { href: "/admin/bar/inventory", label: "Inventory" },
       { href: "/admin/bar/tabs",    label: "Order History" },
-      { href: "/admin/bar/members", label: "Gamer Members" },
       { href: "/admin/bar/staff",   label: "Bar Staff" },
       { href: "/bar",               label: "Bar POS →" },
     ],
@@ -73,20 +72,10 @@ const BAR_NAV: NavGroup[] = [
     label: "Gaming",
     items: [
       { href: "/bar/sessions", label: "Sessions" },
-      { href: "/bar/members",  label: "Members" },
     ],
   },
   {
     items: [{ href: "/bar/inventory", label: "Inventory" }],
-  },
-];
-
-const GAMER_NAV: NavGroup[] = [
-  {
-    items: [
-      { href: "/gamer",          label: "Dashboard" },
-      { href: "/gamer/sessions", label: "My Sessions" },
-    ],
   },
 ];
 
@@ -163,7 +152,6 @@ export default function InkShell({ displayName, pendingApps, isBartender, childr
   const baseGroups =
     mode === "admin" ? ADMIN_NAV :
     mode === "bar"   ? BAR_NAV   :
-    mode === "gamer" ? GAMER_NAV :
     PORTAL_NAV;
 
   const groups: NavGroup[] =
@@ -174,7 +162,6 @@ export default function InkShell({ displayName, pendingApps, isBartender, childr
   const homeHref =
     mode === "admin" ? "/" :
     mode === "bar"   ? "/bar" :
-    mode === "gamer" ? "/gamer" :
     "/portal";
 
   // Inject pendingApps badge into Applications item

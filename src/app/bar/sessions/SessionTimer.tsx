@@ -13,7 +13,6 @@ type ActiveSession = {
   station: string | null;
   duration_type: string | null;
   price_jmd: number | null;
-  member_name: string | null;
 };
 
 function formatCountdown(secondsLeft: number): string {
@@ -42,12 +41,12 @@ function SessionRow({ session }: { session: ActiveSession }) {
       // Request browser notification if permission already granted
       if (typeof window !== "undefined" && "Notification" in window && Notification.permission === "granted") {
         new Notification("Session Ended", {
-          body: `${session.member_name ?? session.station ?? "Session"} time is up!`,
+          body: `${session.station ?? "Session"} time is up!`,
           icon: "/icon-192.png",
         });
       }
     }
-  }, [durationMins, notified, session.started_at, session.member_name, session.station]);
+  }, [durationMins, notified, session.started_at, session.station]);
 
   useEffect(() => {
     if (durationMins === null) return;
@@ -64,7 +63,7 @@ function SessionRow({ session }: { session: ActiveSession }) {
     }`}>
       <div className="flex-1 min-w-0">
         <p className="text-paper font-semibold text-[15px] [overflow-wrap:anywhere]">
-          {session.member_name ?? "Drop-in"}
+          Drop-in
           {session.station && <span className="text-muted ml-2 font-normal">· {session.station}</span>}
           {session.price_jmd && (
             <span className="ml-2 studio-money text-[18px]">

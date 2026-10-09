@@ -4,13 +4,14 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What we're building
 
-A web platform for One Flame Records, a Jamaican record label based in Montego Bay. Three audiences:
+A web platform for One Flame Records, a Jamaican record label based in Montego Bay. Four audiences:
 
 1. **The public** — discover the label, artists, releases, and videos via the public site (oneflamerecords.com).
 2. **Signed artists** — log in to a portal to manage their profile, upload demos and instrumentals, and access saved videos.
 3. **The label (admin)** — manage artists, releases, videos, news, and approve new signups via QR application.
 4. **Bartenders** — log in to `/bar` to run the Flames Lounge POS (tabs, menu items, game sessions). Artists can also be bartenders via `profiles.is_bartender = true` flag.
-5. **Gamers** — log in to `/gamer` to view their Flames Lounge gaming membership, balance, and session history.
+
+> Gamer accounts, the gamer portal and member screens were removed on 2026-10-09 (`docs/decisions.md`). Gaming is walk-in only; the database tables stay.
 
 ## Stack
 
@@ -52,8 +53,7 @@ src/
 │   ├── (public)/      ← Sound System public site (home, artists, releases, videos, news, about, contact, signup, flames-lounge)
 │   ├── admin/         ← studio-look label admin (artists, releases, videos, news, applications, bar/*)
 │   ├── portal/        ← studio-look artist portal (profile, assets, releases, videos)
-│   ├── bar/           ← studio-look bartender POS (tabs, inventory, sessions, members)
-│   ├── gamer/         ← studio-look gamer portal (dashboard, session history)
+│   ├── bar/           ← studio-look bartender POS (tabs, inventory, sessions)
 │   ├── login/         ← shared login page
 │   ├── auth/          ← callback, portal-invite, set-password pages
 │   └── api/inngest/   ← Inngest webhook route handler

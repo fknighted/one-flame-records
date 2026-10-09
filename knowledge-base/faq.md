@@ -45,7 +45,7 @@ Each answer below has a fuller version in its own document — follow the links 
 
 **Can I book the space for an event?** Yes, private hire is offered. Start with the contact form.
 
-**How do I join the gaming lounge?** Ask staff at Flames Lounge to set up a gamer account; they need your name and email. There is no online sign-up. See [[gaming-membership]].
+**How do I join the gaming lounge?** Just ask at the Flames Lounge counter; gaming is walk-in only. There are no gaming accounts, memberships or online sign-up. See [[gaming-at-flames-lounge]].
 
 **Where are you based?** Montego Bay, Jamaica.
 

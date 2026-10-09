@@ -3,14 +3,12 @@
 import { useActionState } from "react";
 import { startSession } from "./actions";
 
-type Member = { id: string; display_name: string };
-
 const DURATIONS = [
   { value: "half_hour", label: "½ Hour",  sublabel: "$300 JMD", minutes: 30 },
   { value: "one_hour",  label: "1 Hour",  sublabel: "$600 JMD", minutes: 60 },
 ] as const;
 
-export default function StartSessionForm({ members }: { members: Member[] }) {
+export default function StartSessionForm() {
   const [state, formAction, pending] = useActionState(startSession, null);
 
   return (
@@ -43,22 +41,6 @@ export default function StartSessionForm({ members }: { members: Member[] }) {
           ))}
         </div>
       </fieldset>
-
-      <div>
-        <label htmlFor="member_id" className="studio-field-label">
-          Member <span className="text-muted font-normal">(optional)</span>
-        </label>
-        <select
-          id="member_id"
-          name="member_id"
-          className="studio-field"
-        >
-          <option value="">Drop-in (no account)</option>
-          {members.map(m => (
-            <option key={m.id} value={m.id}>{m.display_name}</option>
-          ))}
-        </select>
-      </div>
 
       <div>
         <label htmlFor="station" className="studio-field-label">

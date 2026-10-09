@@ -5,12 +5,6 @@ import StartSessionForm from "./StartSessionForm";
 import EndSessionButton from "./EndSessionButton";
 import SessionTimer from "./SessionTimer";
 
-function getName(m: { display_name: string } | { display_name: string }[] | null | undefined) {
-  if (!m) return null;
-  const r = Array.isArray(m) ? m[0] : m as { display_name: string };
-  return r?.display_name ?? null;
-}
-
 export default async function SessionsPage() {
   await requireBarStaff();
   const supabase = createServiceClient();
@@ -31,16 +25,15 @@ export default async function SessionsPage() {
     { data: todaySessions },
     { data: weekSessions },
     { data: monthSessions },
-    { data: members },
   ] = await Promise.all([
     supabase
       .from("game_sessions")
-      .select("id, started_at, station, duration_type, price_jmd, member_id, gamer_members(display_name)")
+      .select("id, started_at, station, duration_type, price_jmd")
       .is("ended_at", null)
       .order("started_at"),
     supabase
       .from("game_sessions")
-      .select("id, started_at, ended_at, duration_type, price_jmd, station, gamer_members(display_name)")
+      .select("id, started_at, ended_at, duration_type, price_jmd, station")
       .not("ended_at", "is", null)
       .gte("ended_at", todayStart.toISOString())
       .order("ended_at", { ascending: false }),
@@ -54,11 +47,6 @@ export default async function SessionsPage() {
       .select("price_jmd")
       .not("ended_at", "is", null)
       .gte("ended_at", monthStart.toISOString()),
-    supabase
-      .from("gamer_members")
-      .select("id, display_name")
-      .eq("status", "active")
-      .order("display_name"),
   ]);
 
   const todayRevenue = (todaySessions ?? []).reduce((s, r) => s + (r.price_jmd ?? 0), 0);
@@ -72,7 +60,6 @@ export default async function SessionsPage() {
     station:       s.station,
     duration_type: s.duration_type,
     price_jmd:     s.price_jmd,
-    member_name:   getName(s.gamer_members),
   }));
 
   return (
@@ -116,7 +103,7 @@ export default async function SessionsPage() {
                 <div key={s.id} className="studio-card flex items-center gap-3 !py-2.5">
                   <div className="flex-1 min-w-0">
                     <p className="text-paper text-[14px] [overflow-wrap:anywhere]">
-                      {getName(s.gamer_members) ?? "Drop-in"}
+                      Drop-in
                       {s.station && <span className="ml-1">· {s.station}</span>}
                     </p>
                   </div>
@@ -150,7 +137,6 @@ export default async function SessionsPage() {
             <table className="studio-table min-w-[420px]">
               <thead>
                 <tr>
-                  <th>Member</th>
                   <th>Station</th>
                   <th className="is-num">Start</th>
                   <th className="is-num">End</th>
@@ -160,7 +146,6 @@ export default async function SessionsPage() {
               <tbody>
                 {todaySessions.map(s => (
                   <tr key={s.id}>
-                    <td className="font-semibold [overflow-wrap:anywhere]">{getName(s.gamer_members) ?? <span className="text-muted font-normal">Drop-in</span>}</td>
                     <td className="text-muted">{s.station ?? "—"}</td>
                     <td className="is-num studio-figures text-muted">{jamaicaTime(s.started_at)}</td>
                     <td className="is-num studio-figures text-muted">{s.ended_at ? jamaicaTime(s.ended_at) : "—"}</td>
@@ -172,7 +157,7 @@ export default async function SessionsPage() {
               </tbody>
               <tfoot>
                 <tr>
-                  <td colSpan={4} className="px-4 py-3 text-[13px] font-semibold text-muted border-t border-line">Day Total</td>
+                  <td colSpan={3} className="px-4 py-3 text-[13px] font-semibold text-muted border-t border-line">Day Total</td>
                   <td className="is-num px-4 py-3 border-t border-line"><span className="studio-money">{formatJmd(todayRevenue)}</span></td>
                 </tr>
               </tfoot>
@@ -186,7 +171,7 @@ export default async function SessionsPage() {
         <h2 className="studio-label mb-3">
           Start Session
         </h2>
-        <StartSessionForm members={members ?? []} />
+        <StartSessionForm />
       </section>
     </div>
   );

@@ -1,7 +1,6 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import * as Sentry from "@sentry/nextjs";
 import { createServiceClient } from "@/lib/supabase/server";
 import { createClient } from "@/lib/supabase/server";
 import { requireBarStaff } from "@/lib/auth";
@@ -19,7 +18,6 @@ export async function startSession(
 ): Promise<ActionState> {
   await requireBarStaff();
 
-  const memberId     = (formData.get("member_id") as string) || null;
   const station      = (formData.get("station") as string)?.trim() || null;
   const tabItemId    = (formData.get("tab_item_id") as string) || null;
   const durationType = (formData.get("duration_type") as string) || null;
@@ -35,7 +33,7 @@ export async function startSession(
   const { data: { user } } = await session.auth.getUser();
 
   const { error } = await supabase.from("game_sessions").insert({
-    member_id:     memberId,
+    member_id:     null,
     tab_item_id:   tabItemId,
     started_by:    user?.id ?? null,
     station,
@@ -62,7 +60,7 @@ export async function endSession(
 
   const { data: gs } = await supabase
     .from("game_sessions")
-    .select("started_at, member_id")
+    .select("started_at")
     .eq("id", sessionId)
     .is("ended_at", null)
     .single();
@@ -80,34 +78,6 @@ export async function endSession(
   }).eq("id", sessionId);
 
   if (updateError) return { error: `Failed to end session: ${updateError.message}` };
-
-  // Deduct from member balance if linked. Atomic (single UPDATE, floored at 0)
-  // so a concurrent top-up or another station ending can't clobber it.
-  if (gs.member_id) {
-    const { data: newBalance, error: balanceError } = await supabase.rpc("adjust_member_minutes", {
-      p_member_id: gs.member_id,
-      p_delta:     -durationMinutes,
-    });
-    if (balanceError) {
-      Sentry.captureException(balanceError, { tags: { area: "gamer-balance" }, extra: { memberId: gs.member_id, action: "endSession" } });
-      return { error: `Session ended but balance not deducted: ${balanceError.message}` };
-    }
-
-    // Only log the ledger entry if a member row was actually adjusted.
-    if (newBalance !== null) {
-      const { data: { user: barUser } } = await (await createClient()).auth.getUser();
-      const { error: ledgerError } = await supabase.from("gamer_balance_transactions").insert({
-        member_id:      gs.member_id,
-        type:           "session",
-        amount_minutes: -durationMinutes,
-        reason:         `Game session (${durationMinutes}m)`,
-        created_by:     barUser?.id ?? null,
-      });
-      if (ledgerError) {
-        Sentry.captureException(ledgerError, { tags: { area: "gamer-balance-ledger" }, extra: { memberId: gs.member_id, action: "endSession" } });
-      }
-    }
-  }
 
   revalidatePath("/bar/sessions");
   return null;

@@ -29,7 +29,7 @@ Most problems on the One Flame Records site fall into three groups: a page that 
 
 **A page looks empty.** Releases and News have nothing published yet, and the Lounge photo gallery is marked "photos coming soon". That is not a fault. See [[releases-and-videos]].
 
-**No signup or invitation email arrived.** Check spam and promotions folders first. For a gaming account, ask staff at the Lounge to check the email address they entered. If the address is already registered you will be told so; use the login page's password reset instead.
+**No signup or invitation email arrived.** Check spam and promotions folders first. If the address is already registered you will be told so; use the login page's password reset instead.
 
 **The contact form will not send.** Name, email address and message are all required, and the email address must be valid. If it still fails you will see "Failed to send your message. Please try again." — the message did not reach the label, so try again shortly or use the published email address.
 

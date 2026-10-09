@@ -23,7 +23,7 @@
 15. [AI Campaign Pipeline](#15-ai-campaign-pipeline)
 16. [Social Posting via Make.com](#16-social-posting-via-makecom)
 17. [Flames Lounge Bar POS](#17-flames-lounge-bar-pos)
-18. [Gamer Portal](#18-gamer-portal)
+18. [Gamer Portal (removed)](#18-gamer-portal-removed)
 19. [Email System](#19-email-system)
 20. [Durable Workflows with Inngest](#20-durable-workflows-with-inngest)
 21. [Error Tracking — Sentry](#21-error-tracking--sentry)
@@ -37,7 +37,7 @@
 
 ## 1. What This Platform Is
 
-**One Flame Records** is an independent reggae and dancehall record label based in Montego Bay, Jamaica. This web platform (`oneflamerecords.com`) serves five distinct audiences through a single Next.js application:
+**One Flame Records** is an independent reggae and dancehall record label based in Montego Bay, Jamaica. This web platform (`oneflamerecords.com`) serves four distinct audiences through a single Next.js application:
 
 | Audience | Entry Route | What They Do |
 |----------|-------------|--------------|
@@ -45,9 +45,8 @@
 | **Signed Artists** | `/portal` | Manage their profile, upload demos/instrumentals, request AI-generated music videos |
 | **Label Admin** | `/admin` | Manage everything: artists, releases, videos, news, campaigns, QR signups, bar operations |
 | **Bartenders** | `/bar` | Run the Flames Lounge POS — open tabs, add items, close tabs, manage game sessions |
-| **Gamers** | `/gamer` | View their Flames Lounge gaming membership, balance, and session history |
 
-The platform is currently **live and operational**. All five portals are complete. The bar has run real tabs. AI video generation is active. Content (artists, releases, news) is being entered via admin.
+The platform is currently **live and operational**. All four portals are complete. The gamer portal and gamer accounts were removed on 2026-10-09; gaming is walk-in only. The bar has run real tabs. AI video generation is active. Content (artists, releases, news) is being entered via admin.
 
 ---
 
@@ -99,7 +98,7 @@ The platform uses one palette in two moods. They are never mixed on the same pag
 | Mood | Where | Ground | Feel |
 |------|-------|--------|------|
 | **Poster** | Public site | Sound black `#0F0D0B` with full-width yellow, red and paper blocks | A Montego Bay dance poster. Big stacked headlines, flat colour, no gradients or soft shadows. |
-| **Studio** | Portal, Admin, Bar, Gamer | Sound black, lifted panels `#16130F` | Calm, readable for hours at night. Same palette, `studio-*` classes in `src/app/studio.css`. |
+| **Studio** | Portal, Admin, Bar | Sound black, lifted panels `#16130F` | Calm, readable for hours at night. Same palette, `studio-*` classes in `src/app/studio.css`. |
 
 The mood is set by the route group layout, not a runtime context or toggle.
 
@@ -141,7 +140,6 @@ Confident, grounded, specific. "Pressed in Montego Bay." Never corporate, never 
 │   │   ├── admin/             ← studio look — label admin
 │   │   ├── portal/            ← studio look — artist portal
 │   │   ├── bar/               ← studio look — bartender POS
-│   │   ├── gamer/             ← studio look — gamer portal
 │   │   ├── login/             ← shared login page
 │   │   ├── auth/              ← callback, portal-invite, set-password
 │   │   ├── signup/[code]/     ← QR landing page (public)
@@ -179,7 +177,7 @@ Confident, grounded, specific. "Pressed in Montego Bay." Never corporate, never 
 ## 5. Authentication & Authorization
 
 ### Auth Provider
-Supabase Auth. A single auth instance handles all five user types (admin, artist, bartender, gamer, public). Role differentiation is done via the `profiles` table, not separate auth systems.
+Supabase Auth. A single auth instance handles all four user types (admin, artist, bartender, public). Role differentiation is done via the `profiles` table, not separate auth systems.
 
 ### Login Flow
 1. User visits `/login` (shared for all roles).
@@ -192,14 +190,13 @@ The route protection middleware lives at `src/proxy.ts` (not `src/middleware.ts`
 
 **What it does:**
 1. Calls `updateSession()` from `src/lib/supabase/middleware.ts` to refresh the Supabase session cookie.
-2. Checks if the path starts with `/admin`, `/portal`, `/bar`, or `/gamer`.
+2. Checks if the path starts with `/admin`, `/portal`, or `/bar`.
 3. If the route is protected and there is no user → redirect to `/login?next=<path>`.
 4. If there is a user, looks up `profiles.role` and `profiles.is_bartender` using the **service role client** (inline, not imported from `server.ts` — `server.ts` uses `next/headers` which is incompatible with Edge Runtime).
 5. Enforces role-based access:
    - `/admin` requires `role = 'admin'`
    - `/portal` requires `role = 'artist'`
    - `/bar` requires `role = 'admin'` OR `role = 'bartender'` OR `is_bartender = true`
-   - `/gamer` requires `role = 'gamer'` OR `role = 'admin'`
 6. Wrong-role access → redirect to `roleHome(role)` (the user's correct home).
 
 **Critical constraint:** Never import from `src/lib/supabase/server.ts` inside `proxy.ts`. That file imports `next/headers`, which is incompatible with Edge Runtime where the middleware executes.
@@ -211,7 +208,7 @@ The route protection middleware lives at `src/proxy.ts` (not `src/middleware.ts`
 | `admin` | `/admin` | Everything |
 | `artist` | `/portal` | Artist portal; bar if `is_bartender = true` |
 | `bartender` | `/bar` | Bar POS only |
-| `gamer` | `/gamer` | Gamer portal only |
+| `gamer` (retired 2026-10-09) | `/login` | No portal; treated as an unrecognised role. The value stays allowed in the database. |
 
 ### Server-Side Auth Guards
 - `requireAdmin()` in `src/lib/auth.ts` — call at the top of any Server Action that mutates data. Throws if the caller is not an authenticated admin. Used in all admin Server Actions.
@@ -507,14 +504,6 @@ No public access. Final video outputs from the AI pipeline. Path: `videos/{job_i
 | `/bar/tabs/[id]` | Active tab: add items, close tab |
 | `/bar/menu` | View menu (read-only for bartenders) |
 | `/bar/sessions` | Game session management |
-| `/bar/members` | Gamer membership lookup |
-
-### Gamer Portal — `src/app/gamer/` (studio look, requires `role = 'gamer'`)
-
-| Route | Purpose |
-|-------|---------|
-| `/gamer` | Dashboard: balance, membership info |
-| `/gamer/sessions` | Session history |
 
 ### Auth Routes
 
@@ -837,16 +826,9 @@ All bar pages import from here. Never duplicate:
 
 ---
 
-## 18. Gamer Portal
+## 18. Gamer Portal (removed)
 
-Gamer accounts are created by bar staff (`/bar/members/new`); the public `/gamer-signup` page was removed on 2026-10-09 and now redirects to `/flames-lounge`.
-
-`/gamer` — dashboard showing:
-- Membership info (name, member since)
-- Current balance
-- Recent `gamer_transactions` (credits from top-ups, debits from sessions)
-
-Session history links to `/gamer/sessions`.
+Removed on 2026-10-09. The gamer portal, staff member screens and member selector on game sessions are gone. `/gamer*` redirects to `/`, `/bar/members*` to `/bar`, `/admin/bar/members*` to `/admin/bar`, and `/gamer-signup` to `/flames-lounge`. Walk-in game sessions still work. The `gamer_members` and balance tables, the `gamer` role value and all migrations are kept unchanged. See `docs/decisions.md`.
 
 ---
 

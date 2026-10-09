@@ -2,6 +2,8 @@
 
 Generated 2026-08-11. Everything below was actually read, not assumed.
 
+Update 2026-10-09: all gamer features were removed from the app. `gaming-membership.md` became `gaming-at-flames-lounge.md` (walk-in only, sourced from `src/app/bar/sessions/actions.ts` and `StartSessionForm.tsx`); the old `bar/members/new/actions.ts` source no longer exists.
+
 ## Live URLs fetched
 
 - `https://oneflamerecords.com` — redirects 200 to `https://www.oneflamerecords.com/`
@@ -45,7 +47,7 @@ Generated 2026-08-11. Everything below was actually read, not assumed.
 - `.../20260513140946_initial_schema.sql`
 - `.../20260514000000_cost_limiter.sql`
 - `.../20260702000002_game_sessions_pricing.sql`
-- `.../20260716000010_gamer_balance_and_signup_throttle.sql`
+- `.../20260716000010_gamer_balance_and_signup_throttle.sql`  (historic; gamer features removed 2026-10-09, tables kept)
 - `.../20260809000001_money_cents_to_dollars.sql`
 
 ## Facts confirmed against live site

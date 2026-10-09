@@ -55,13 +55,13 @@ files:
     intent: [venue, lounge, food, events, studio]
     summary: The Montego Bay venue - outdoor studio, gaming, food menu, and live events.
 
-  - slug: gaming-membership
-    file: gaming-membership.md
-    title: Gaming membership at Flames Lounge
+  - slug: gaming-at-flames-lounge
+    file: gaming-at-flames-lounge.md
+    title: Gaming at Flames Lounge
     audience: customer
     confidence: verified
-    intent: [gaming, membership, signup, loyalty]
-    summary: How to get a free gamer account, what it gives you, and the venue session rates.
+    intent: [gaming, game time, walk-in, session rates]
+    summary: Gaming is walk-in only at the Lounge counter (no accounts, memberships or balances), plus the venue session rates.
 
   - slug: signing-and-submissions
     file: signing-and-submissions.md

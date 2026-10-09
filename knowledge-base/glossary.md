@@ -5,7 +5,7 @@ product: one-flame-records
 domain: oneflamerecords.com
 audience: internal
 intent: [glossary, vocabulary, terminology]
-keywords: [what does that mean, flames lounge, fritters, roster, sync licensing, bashment, gamer account]
+keywords: [what does that mean, flames lounge, fritters, roster, sync licensing, bashment]
 answers:
   - "What do One Flame Records' own terms mean?"
   - "What is a fritter, a roster, or sync licensing?"
@@ -44,8 +44,6 @@ These are the words visitors and staff use around One Flame Records. Recognise t
 **Instrumental** — a backing track with no vocal, one of the asset types artists upload.
 
 **Session** — at the Lounge, a block of paid gaming time. In music, a recording session. Check which the user means.
-
-**Game time credit** — the balance, held in minutes, on a Flames Lounge gaming account.
 
 **Artist portal** — the private area signed artists log into. Not open to the public.
 

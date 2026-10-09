@@ -30,7 +30,7 @@ The site describes the Lounge as "where artists come to record, decompress, eat 
 
 **Outdoor recording studio.** A full professional setup in the open air — microphones, monitors and mixing — described as "all the gear, none of the four walls."
 
-**Gaming lounge.** A place to switch off between sessions. Members can hold a gaming account. See [[gaming-membership]].
+**Gaming lounge.** A place to switch off between sessions. Gaming is walk-in only, paid at the counter. See [[gaming-at-flames-lounge]].
 
 **Food and drink.** Cooked to order. The published menu lists:
 

@@ -41,7 +41,7 @@ The public website has these areas:
 
 There is no online shop. Nothing is sold through the website. See [[pricing-and-payments]].
 
-Signed artists, label staff, bar staff and gaming members log in to private areas. See [[accounts-and-access]].
+Signed artists, label staff, and bar staff log in to private areas. See [[accounts-and-access]].
 
 ## Common questions
 

@@ -25,7 +25,7 @@ One Flame Records publishes a Privacy Policy and Terms of Service on its website
 
 ## Details
 
-**What is collected.** Name and email when you subscribe, submit a contact form, or sign up as a gaming member; artist application details including links and any materials submitted; and the contents of contact-form messages.
+**What is collected.** Name and email when you subscribe, submit a contact form; artist application details including links and any materials submitted; and the contents of contact-form messages.
 
 **What is not collected.** The Privacy Policy states plainly: no payment information is collected directly, and no tracking cookies or third-party advertising pixels are used.
 

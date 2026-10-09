@@ -86,7 +86,7 @@ function TikTokIcon() {
 
 const HERO_LIST = [
   { name: "Outdoor studio", note: "Record where the label works" },
-  { name: "Gaming lounge", note: "Members and walk-ins" },
+  { name: "Gaming lounge", note: "Walk-ins" },
   { name: "Kitchen", note: "Jamaican food" },
   { name: "Bar", note: "Drinks and a tab" },
 ];

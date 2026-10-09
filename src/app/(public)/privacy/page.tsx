@@ -53,8 +53,7 @@ export default function PrivacyPage() {
             <ul className="list-disc pl-5 space-y-2 type-body max-w-[66ch]">
               <li>
                 <strong className="text-black">Name and email address</strong>{" "}
-                — when you subscribe to our newsletter, submit a contact form, or
-                sign up as a gamer member at Flames Lounge.
+                — when you subscribe to our newsletter, or submit a contact form.
               </li>
               <li>
                 <strong className="text-black">Artist application details</strong>{" "}
@@ -86,9 +85,6 @@ export default function PrivacyPage() {
               </li>
               <li>
                 To process and review artist applications.
-              </li>
-              <li>
-                To manage your Flames Lounge gaming membership, if applicable.
               </li>
             </ul>
             <p className="type-body max-w-[66ch] mt-3">

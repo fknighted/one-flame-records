@@ -23,7 +23,6 @@ export default async function BarOverviewPage() {
     { data: weekClosed,    error: e3 },
     { data: monthClosed,   error: e4 },
     { count: totalItems },
-    { count: activeMembers },
     { count: activeSessions },
     { data: todayVoids },
   ] = await Promise.all([
@@ -33,7 +32,6 @@ export default async function BarOverviewPage() {
     supabase.from("pos_tabs").select("id, total_jmd").eq("status", "closed").gte("closed_at", weekStart.toISOString()),
     supabase.from("pos_tabs").select("id, total_jmd").eq("status", "closed").gte("closed_at", monthStart.toISOString()),
     supabase.from("pos_items").select("id", { count: "exact", head: true }).eq("is_active", true),
-    supabase.from("gamer_members").select("id", { count: "exact", head: true }).eq("status", "active"),
     supabase.from("game_sessions").select("id", { count: "exact", head: true }).is("ended_at", null),
     supabase.from("pos_voids").select("quantity, price_jmd").gte("created_at", todayStart.toISOString()),
   ]);
@@ -129,11 +127,10 @@ export default async function BarOverviewPage() {
       </p>
 
       {/* Secondary stats */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
         {[
           { label: "Active Sessions", value: activeSessions ?? 0,  href: "/bar/sessions",        sub: undefined as string | undefined },
           { label: "Menu Items",      value: totalItems ?? 0,       href: "/admin/bar/inventory", sub: undefined },
-          { label: "Gamer Members",   value: activeMembers ?? 0,    href: "/admin/bar/members",   sub: undefined },
           { label: "Canceled Today",  value: voidCountToday,        href: "/admin/bar/sales",     sub: formatJmd(voidValueToday) },
         ].map((s) => (
           <Link

@@ -21,24 +21,24 @@ sources:
 
 ## Short answer
 
-Most of the One Flame Records website is open to everyone with no account at all. Accounts exist only for signed artists, label staff, Lounge staff and gaming members, and they are created by invitation — gaming accounts included, which Lounge staff set up. If you have an account you sign in from the login page with your email address and password, and there is a "forgot password" link there if you need a reset link sent to you.
+Most of the One Flame Records website is open to everyone with no account at all. Accounts exist only for signed artists, label staff, and Lounge staff, and they are created by invitation. There are no gaming accounts. If you have an account you sign in from the login page with your email address and password, and there is a "forgot password" link there if you need a reset link sent to you.
 
 ## Details
 
-There are four kinds of account, and each lands on its own area after signing in:
+There are three kinds of account, and each lands on its own area after signing in:
 
 - **Signed artist** — an artist portal with a dashboard, releases, uploaded assets, generated videos and a profile page. See [[artist-portal]].
 - **Label administrator** — the label's own management tools.
 - **Lounge staff** — the till and gaming system used inside Flames Lounge.
-- **Gaming member** — a dashboard showing game time balance and session history. See [[gaming-membership]].
+Gaming at the Lounge is walk-in and needs no account. See [[gaming-at-flames-lounge]].
 
 The site routes you automatically to the right area based on your account, so there is one login page for everyone.
 
-**Getting an account.** Artist and staff accounts are created by the label and sent as an email invitation. Gaming accounts are set up by Lounge staff at the venue; the online gamer sign-up page was removed on 9 October 2026. There is no general public sign-up, and browsing the site does not need one.
+**Getting an account.** Artist and staff accounts are created by the label and sent as an email invitation. Gaming accounts and memberships were removed on 9 October 2026. There is no general public sign-up, and browsing the site does not need one.
 
 **Setting a password.** Invitations and password resets both send an email containing a link. Following that link opens a page where you set your password, and you are then taken to the area your account belongs to.
 
-**Two-step verification** is available to label administrators using an authenticator app. It is not offered to artists or gaming members.
+**Two-step verification** is available to label administrators using an authenticator app. It is not offered to artists.
 
 ## Common questions
 
@@ -50,7 +50,7 @@ The site routes you automatically to the right area based on your account, so th
 
 ## Escalate
 
-Escalate all account access problems that survive a password reset: locked accounts, wrong role, missing invitations, or a member who cannot reach their dashboard. The assistant cannot see, create, verify or reset any account.
+Escalate all account access problems that survive a password reset: locked accounts, wrong role, missing invitations, or a person who cannot reach their dashboard. The assistant cannot see, create, verify or reset any account.
 
 ## Do not say
 

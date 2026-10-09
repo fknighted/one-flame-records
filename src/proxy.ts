@@ -15,8 +15,7 @@ function roleHome(role: string | undefined): string {
   if (role === "admin")      return "/admin";
   if (role === "bartender")  return "/bar";
   if (role === "artist")     return "/portal";
-  if (role === "gamer")      return "/gamer";
-  // No profiles row or unrecognised role — send to login to break any redirect loop
+  // No profiles row or unrecognised role (including the retired "gamer" role) — send to login to break any redirect loop
   return "/login";
 }
 
@@ -27,10 +26,8 @@ export async function proxy(request: NextRequest) {
   const isAdminRoute  = pathname.startsWith("/admin");
   const isPortalRoute = pathname.startsWith("/portal");
   const isBarRoute    = pathname.startsWith("/bar");
-  // Use exact match + prefix-with-slash so only /gamer and /gamer/* match
-  const isGamerRoute  = pathname === "/gamer" || pathname.startsWith("/gamer/");
 
-  if (!isAdminRoute && !isPortalRoute && !isBarRoute && !isGamerRoute) {
+  if (!isAdminRoute && !isPortalRoute && !isBarRoute) {
     return supabaseResponse;
   }
 
@@ -59,7 +56,6 @@ export async function proxy(request: NextRequest) {
   if (isAdminRoute  && role !== "admin")                                           return redirect(roleHome(role));
   if (isPortalRoute && role !== "artist")                                          return redirect(roleHome(role));
   if (isBarRoute    && role !== "admin" && role !== "bartender" && !isBartender)   return redirect(roleHome(role));
-  if (isGamerRoute  && role !== "gamer" && role !== "admin")                       return redirect(roleHome(role));
 
   return supabaseResponse;
 }
