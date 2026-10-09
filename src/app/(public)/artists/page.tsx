@@ -26,7 +26,7 @@ export default async function ArtistsPage() {
 
   return (
     <section className="bg-black">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 py-14 sm:py-[88px]">
+      <div className={`mx-auto max-w-6xl px-4 sm:px-6 py-14 ${count > 0 ? "sm:py-[88px]" : ""}`}>
         <SectionHeader
           as="h1"
           title="The roster"
@@ -39,7 +39,7 @@ export default async function ArtistsPage() {
           }
         />
         {artists && artists.length > 0 ? (
-          <div className="grid grid-cols-2 gap-2 md:grid-cols-3 lg:grid-cols-4">
+          <div className="grid grid-cols-2 gap-2 md:grid-cols-3 lg:grid-cols-4 [&>*:last-child:nth-child(odd)]:col-span-2 [&>*:last-child:nth-child(odd)]:aspect-[2/1] md:[&>*:last-child:nth-child(odd)]:col-span-1 md:[&>*:last-child:nth-child(odd)]:aspect-square">
             {artists.map((artist, i) => (
               <ArtistCard
                 key={artist.id}

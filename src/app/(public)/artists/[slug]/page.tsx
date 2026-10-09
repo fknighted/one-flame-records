@@ -210,6 +210,8 @@ export default async function ArtistDetailPage({ params }: Props) {
   };
 
   const initial = Array.from(artist.stage_name.trim())[0] ?? "";
+  const hasMore =
+    (releases?.length ?? 0) + (videos?.length ?? 0) + jobsWithUrls.length + publicPhotos.length + publicMusic.length > 0;
   const longName = artist.stage_name.length > 14;
   const musicDuration = (seconds: number) =>
     `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, "0")}`;
@@ -224,13 +226,28 @@ export default async function ArtistDetailPage({ params }: Props) {
       {/* Name block (red) and info panel (paper) */}
       <section className="grid md:grid-cols-[1fr_1.2fr]">
         <div className="bg-red text-paper min-w-0">
-          <div className="relative overflow-hidden min-h-[300px] p-[26px] grid content-end">
-            <span
-              aria-hidden="true"
-              className="absolute -right-5 -top-[30px] font-poster font-black uppercase text-[200px] sm:text-[300px] leading-[0.8] text-black/20 select-none"
-            >
-              {initial}
-            </span>
+          <div
+            className={`relative overflow-hidden px-4 py-[26px] sm:p-[26px] ${
+              artist.photo_url
+                ? "min-h-[300px] grid content-end"
+                : "min-h-[220px] md:min-h-[300px] flex flex-col justify-between gap-6"
+            }`}
+          >
+            {artist.photo_url ? (
+              <span
+                aria-hidden="true"
+                className="pointer-events-none absolute -right-5 -top-[30px] font-poster font-black uppercase text-[200px] sm:text-[300px] leading-[0.8] text-black/20 select-none"
+              >
+                {initial}
+              </span>
+            ) : (
+              <span
+                aria-hidden="true"
+                className="relative font-poster font-black uppercase text-[clamp(54px,18vw,96px)] leading-[0.75] text-black/70 select-none"
+              >
+                {initial}
+              </span>
+            )}
             <h1
               className={`relative font-poster font-black uppercase leading-[0.8] [overflow-wrap:anywhere] ${
                 longName ? "text-[clamp(44px,8vw,80px)]" : "text-[clamp(64px,10vw,124px)]"
@@ -254,7 +271,7 @@ export default async function ArtistDetailPage({ params }: Props) {
           )}
         </div>
 
-        <div className="bg-paper text-black p-[22px] sm:p-8 md:min-h-[300px] grid gap-5 content-start min-w-0">
+        <div className="bg-paper text-black px-4 py-[22px] sm:p-8 md:min-h-[300px] grid gap-5 content-start min-w-0">
           <div className="flex flex-wrap gap-2">
             <span className={PILL}>Signed to One Flame</span>
             {artist.hometown && <span className={PILL}>{artist.hometown}</span>}
@@ -302,7 +319,7 @@ export default async function ArtistDetailPage({ params }: Props) {
 
           {activeSocials.length > 0 && (
             <div>
-              <h2 className="type-label text-black mb-3">Follow</h2>
+              <h2 className="type-label text-black mb-1">Follow</h2>
               <div className="flex flex-wrap gap-x-5 gap-y-2">
                 {activeSocials.map(({ key, label, buildUrl }) => (
                   <a
@@ -322,7 +339,7 @@ export default async function ArtistDetailPage({ params }: Props) {
       </section>
 
       {/* Releases, videos, photos, music on black */}
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 py-14 sm:py-[88px] space-y-14 sm:space-y-[88px]">
+      <div className={`mx-auto max-w-6xl px-4 sm:px-6 ${hasMore ? "py-14" : "py-8"} sm:py-[88px] space-y-14 sm:space-y-[88px]`}>
         {releases && releases.length > 0 && (
           <section>
             <SectionHeader title="Releases" />

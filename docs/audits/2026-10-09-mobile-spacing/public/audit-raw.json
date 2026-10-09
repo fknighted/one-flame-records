@@ -1,0 +1,4506 @@
+{
+ "404": {
+  "scrollW": 390,
+  "overflowX": false,
+  "gutter": [],
+  "offscreen": [],
+  "tap": [],
+  "smallFont": [
+   {
+    "e": "p.type-label.text-yellow.mb-3",
+    "t": "404",
+    "fs": 13
+   }
+  ],
+  "headings": [
+   {
+    "t": "Page not found.",
+    "fs": "36px",
+    "lines": 1,
+    "lastWord": "found.",
+    "orphan": false,
+    "over": false
+   }
+  ],
+  "sections": [
+   {
+    "e": "img.block.mb-8",
+    "pt": 0,
+    "pb": 0,
+    "pl": 0,
+    "pr": 0,
+    "h": 96,
+    "bg": "rgba(0, 0, 0, 0)"
+   },
+   {
+    "e": "p.type-label.text-yellow.mb-3",
+    "pt": 0,
+    "pb": 0,
+    "pl": 0,
+    "pr": 0,
+    "h": 16,
+    "bg": "rgba(0, 0, 0, 0)"
+   },
+   {
+    "e": "h1.type-headline.[overflow-wrap:anywhere]",
+    "pt": 0,
+    "pb": 0,
+    "pl": 0,
+    "pr": 0,
+    "h": 31,
+    "bg": "rgba(0, 0, 0, 0)"
+   },
+   {
+    "e": "div.section-bar.my-6",
+    "pt": 0,
+    "pb": 0,
+    "pl": 0,
+    "pr": 0,
+    "h": 8,
+    "bg": "rgb(200, 50, 31)"
+   },
+   {
+    "e": "p.type-body.text-paper.max-w-[40ch]",
+    "pt": 0,
+    "pb": 0,
+    "pl": 0,
+    "pr": 0,
+    "h": 54,
+    "bg": "rgba(0, 0, 0, 0)"
+   },
+   {
+    "e": "div.flex.flex-wrap.items-center",
+    "pt": 0,
+    "pb": 0,
+    "pl": 0,
+    "pr": 0,
+    "h": 46,
+    "bg": "rgba(0, 0, 0, 0)"
+   }
+  ],
+  "imgs": [],
+  "overlaps": [],
+  "headerPos": null,
+  "headerH": null,
+  "docH": 844,
+  "status": 404
+ },
+ "slugs": [
+  "/artists/bawlinz-1781571125557",
+  "/artists/fola-boss",
+  "/artists/kahlic",
+  "/artists/layd-d",
+  "/artists/layshaunex",
+  "/artists/mystique-fyre",
+  "/artists/phayroh",
+  "/artists/twiggy",
+  "/artists/vyperxstudiobeat"
+ ],
+ "home": {
+  "scrollW": 390,
+  "overflowX": false,
+  "gutter": [],
+  "offscreen": [],
+  "tap": [
+   {
+    "e": "a.flex.items-center.shrink-0",
+    "t": "",
+    "w": 89,
+    "h": 40,
+    "inline": false
+   },
+   {
+    "e": "button.lg:hidden.min-h-[40px].px-3",
+    "t": "Menu",
+    "w": 73,
+    "h": 40,
+    "inline": false
+   },
+   {
+    "e": "a.type-label.text-yellow.underline",
+    "t": "All artists",
+    "w": 96,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-label.text-yellow.underline",
+    "t": "All videos",
+    "w": 88,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "About",
+    "w": 36,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Sign with us",
+    "w": 72,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Contact",
+    "w": 47,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Artists",
+    "w": 39,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Releases",
+    "w": 56,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Videos",
+    "w": 42,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Privacy",
+    "w": 45,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Terms",
+    "w": 37,
+    "h": 14,
+    "inline": true
+   }
+  ],
+  "smallFont": [
+   {
+    "e": "button.lg:hidden.min-h-[40px].px-3",
+    "t": "Menu",
+    "fs": 13
+   },
+   {
+    "e": "a.type-label.text-yellow.underline",
+    "t": "All artists",
+    "fs": 13
+   },
+   {
+    "e": "small.block.mt-1.font-text",
+    "t": "Signed to One Flame",
+    "fs": 12
+   },
+   {
+    "e": "small.block.mt-1.font-text",
+    "t": "Kingston",
+    "fs": 12
+   },
+   {
+    "e": "small.block.mt-1.font-text",
+    "t": "Montego Bay",
+    "fs": 12
+   },
+   {
+    "e": "small.block.mt-1.font-text",
+    "t": "Signed to One Flame",
+    "fs": 12
+   },
+   {
+    "e": "small.block.mt-1.font-text",
+    "t": "Montego Bay",
+    "fs": 12
+   },
+   {
+    "e": "small.block.mt-1.font-text",
+    "t": "Signed to One Flame",
+    "fs": 12
+   },
+   {
+    "e": "small.block.mt-1.font-text",
+    "t": "Montego Bay",
+    "fs": 12
+   },
+   {
+    "e": "small.block.mt-1.font-text",
+    "t": "Montego Bay",
+    "fs": 12
+   },
+   {
+    "e": "small.block.mt-1.font-text",
+    "t": "Signed to One Flame",
+    "fs": 12
+   },
+   {
+    "e": "a.type-label.text-yellow.underline",
+    "t": "All videos",
+    "fs": 13
+   },
+   {
+    "e": "p.mt-1.type-small.text-muted",
+    "t": "Kahlic",
+    "fs": 13
+   },
+   {
+    "e": "p.type-small.text-muted.mt-4",
+    "t": "Montego Bay, Jamaica",
+    "fs": 13
+   },
+   {
+    "e": "p.type-label.text-paper.mb-3",
+    "t": "Label",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "About",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Sign with us",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Contact",
+    "fs": 13
+   },
+   {
+    "e": "p.type-label.text-paper.mb-3",
+    "t": "Music",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Artists",
+    "fs": 13
+   }
+  ],
+  "headings": [
+   {
+    "t": "Pressed in Montego Bay.",
+    "fs": "56px",
+    "lines": 2,
+    "lastWord": "Bay.",
+    "orphan": true,
+    "over": false
+   },
+   {
+    "t": "The roster",
+    "fs": "36px",
+    "lines": 1,
+    "lastWord": "roster",
+    "orphan": false,
+    "over": false
+   },
+   {
+    "t": "Latest videos",
+    "fs": "36px",
+    "lines": 1,
+    "lastWord": "videos",
+    "orphan": false,
+    "over": false
+   },
+   {
+    "t": "Flames Lounge",
+    "fs": "36px",
+    "lines": 1,
+    "lastWord": "Lounge",
+    "orphan": false,
+    "over": false
+   },
+   {
+    "t": "Sign with One Flame.",
+    "fs": "36px",
+    "lines": 1,
+    "lastWord": "Flame.",
+    "orphan": false,
+    "over": false
+   },
+   {
+    "t": "Stay in the loop.",
+    "fs": "36px",
+    "lines": 1,
+    "lastWord": "loop.",
+    "orphan": false,
+    "over": false
+   }
+  ],
+  "sections": [
+   {
+    "e": "header.sticky.top-0.z-40",
+    "pt": 0,
+    "pb": 0,
+    "pl": 0,
+    "pr": 0,
+    "h": 68,
+    "bg": "rgb(15, 13, 11)"
+   },
+   {
+    "e": "section.grid.md:grid-cols-[1.15fr_1fr]",
+    "pt": 0,
+    "pb": 0,
+    "pl": 0,
+    "pr": 0,
+    "h": 586,
+    "bg": "rgba(0, 0, 0, 0)"
+   },
+   {
+    "e": "section.bg-black",
+    "pt": 0,
+    "pb": 0,
+    "pl": 0,
+    "pr": 0,
+    "h": 1098,
+    "bg": "rgb(15, 13, 11)"
+   },
+   {
+    "e": "section.bg-black",
+    "pt": 0,
+    "pb": 0,
+    "pl": 0,
+    "pr": 0,
+    "h": 448,
+    "bg": "rgb(15, 13, 11)"
+   },
+   {
+    "e": "span.grille.block.w-full",
+    "pt": 0,
+    "pb": 0,
+    "pl": 0,
+    "pr": 0,
+    "h": 42,
+    "bg": "rgb(15, 13, 11)"
+   },
+   {
+    "e": "section.bg-red.text-paper",
+    "pt": 0,
+    "pb": 0,
+    "pl": 0,
+    "pr": 0,
+    "h": 283,
+    "bg": "rgb(200, 50, 31)"
+   },
+   {
+    "e": "section.bg-paper.text-black.border-b-4",
+    "pt": 0,
+    "pb": 0,
+    "pl": 0,
+    "pr": 0,
+    "h": 303,
+    "bg": "rgb(255, 247, 230)"
+   },
+   {
+    "e": "footer.bg-black.text-muted.mt-auto",
+    "pt": 0,
+    "pb": 0,
+    "pl": 0,
+    "pr": 0,
+    "h": 941,
+    "bg": "rgb(15, 13, 11)"
+   }
+  ],
+  "imgs": [],
+  "overlaps": [],
+  "headerPos": "sticky",
+  "headerH": 68,
+  "docH": 3768,
+  "status": 200
+ },
+ "artists": {
+  "scrollW": 390,
+  "overflowX": false,
+  "gutter": [],
+  "offscreen": [],
+  "tap": [
+   {
+    "e": "a.flex.items-center.shrink-0",
+    "t": "",
+    "w": 89,
+    "h": 40,
+    "inline": false
+   },
+   {
+    "e": "button.lg:hidden.min-h-[40px].px-3",
+    "t": "Menu",
+    "w": 73,
+    "h": 40,
+    "inline": false
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "About",
+    "w": 36,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Sign with us",
+    "w": 72,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Contact",
+    "w": 47,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Artists",
+    "w": 39,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Releases",
+    "w": 56,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Videos",
+    "w": 42,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Privacy",
+    "w": 45,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Terms",
+    "w": 37,
+    "h": 14,
+    "inline": true
+   }
+  ],
+  "smallFont": [
+   {
+    "e": "button.lg:hidden.min-h-[40px].px-3",
+    "t": "Menu",
+    "fs": 13
+   },
+   {
+    "e": "p.type-label.text-muted",
+    "t": "9 artists",
+    "fs": 13
+   },
+   {
+    "e": "small.block.mt-1.font-text",
+    "t": "Signed to One Flame",
+    "fs": 12
+   },
+   {
+    "e": "small.block.mt-1.font-text",
+    "t": "Kingston",
+    "fs": 12
+   },
+   {
+    "e": "small.block.mt-1.font-text",
+    "t": "Montego Bay",
+    "fs": 12
+   },
+   {
+    "e": "small.block.mt-1.font-text",
+    "t": "Signed to One Flame",
+    "fs": 12
+   },
+   {
+    "e": "small.block.mt-1.font-text",
+    "t": "Montego Bay",
+    "fs": 12
+   },
+   {
+    "e": "small.block.mt-1.font-text",
+    "t": "Signed to One Flame",
+    "fs": 12
+   },
+   {
+    "e": "small.block.mt-1.font-text",
+    "t": "Montego Bay",
+    "fs": 12
+   },
+   {
+    "e": "small.block.mt-1.font-text",
+    "t": "Montego Bay",
+    "fs": 12
+   },
+   {
+    "e": "small.block.mt-1.font-text",
+    "t": "Signed to One Flame",
+    "fs": 12
+   },
+   {
+    "e": "p.type-small.text-muted.mt-4",
+    "t": "Montego Bay, Jamaica",
+    "fs": 13
+   },
+   {
+    "e": "p.type-label.text-paper.mb-3",
+    "t": "Label",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "About",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Sign with us",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Contact",
+    "fs": 13
+   },
+   {
+    "e": "p.type-label.text-paper.mb-3",
+    "t": "Music",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Artists",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Releases",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Videos",
+    "fs": 13
+   }
+  ],
+  "headings": [
+   {
+    "t": "The roster",
+    "fs": "36px",
+    "lines": 1,
+    "lastWord": "roster",
+    "orphan": false,
+    "over": false
+   },
+   {
+    "t": "Stay in the loop.",
+    "fs": "36px",
+    "lines": 1,
+    "lastWord": "loop.",
+    "orphan": false,
+    "over": false
+   }
+  ],
+  "sections": [
+   {
+    "e": "header.sticky.top-0.z-40",
+    "pt": 0,
+    "pb": 0,
+    "pl": 0,
+    "pr": 0,
+    "h": 68,
+    "bg": "rgb(15, 13, 11)"
+   },
+   {
+    "e": "section.bg-black",
+    "pt": 0,
+    "pb": 0,
+    "pl": 0,
+    "pr": 0,
+    "h": 1098,
+    "bg": "rgb(15, 13, 11)"
+   },
+   {
+    "e": "footer.bg-black.text-muted.mt-auto",
+    "pt": 0,
+    "pb": 0,
+    "pl": 0,
+    "pr": 0,
+    "h": 941,
+    "bg": "rgb(15, 13, 11)"
+   }
+  ],
+  "imgs": [],
+  "overlaps": [],
+  "headerPos": "sticky",
+  "headerH": 68,
+  "docH": 2107,
+  "status": 200
+ },
+ "releases": {
+  "scrollW": 390,
+  "overflowX": false,
+  "gutter": [
+   {
+    "e": "button.min-h-[44px].px-3.border-2",
+    "t": "mixtape",
+    "l": 317,
+    "rr": -22
+   },
+   {
+    "e": "button.min-h-[44px].px-3.border-2",
+    "t": "Newest",
+    "l": 620,
+    "rr": -322
+   },
+   {
+    "e": "button.min-h-[44px].px-3.border-2",
+    "t": "Oldest",
+    "l": 720,
+    "rr": -418
+   },
+   {
+    "e": "button.min-h-[44px].px-3.border-2",
+    "t": "A\u2013Z",
+    "l": 816,
+    "rr": -482
+   }
+  ],
+  "offscreen": [
+   {
+    "e": "button.min-h-[44px].px-3.border-2",
+    "t": "mixtape",
+    "l": 317,
+    "right": 412
+   },
+   {
+    "e": "button.min-h-[44px].px-3.border-2",
+    "t": "Newest",
+    "l": 620,
+    "right": 712
+   },
+   {
+    "e": "button.min-h-[44px].px-3.border-2",
+    "t": "Oldest",
+    "l": 720,
+    "right": 808
+   },
+   {
+    "e": "button.min-h-[44px].px-3.border-2",
+    "t": "A\u2013Z",
+    "l": 816,
+    "right": 872
+   }
+  ],
+  "tap": [
+   {
+    "e": "a.flex.items-center.shrink-0",
+    "t": "",
+    "w": 89,
+    "h": 40,
+    "inline": false
+   },
+   {
+    "e": "button.lg:hidden.min-h-[40px].px-3",
+    "t": "Menu",
+    "w": 73,
+    "h": 40,
+    "inline": false
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "About",
+    "w": 36,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Sign with us",
+    "w": 72,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Contact",
+    "w": 47,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Artists",
+    "w": 39,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Releases",
+    "w": 56,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Videos",
+    "w": 42,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Privacy",
+    "w": 45,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Terms",
+    "w": 37,
+    "h": 14,
+    "inline": true
+   }
+  ],
+  "smallFont": [
+   {
+    "e": "button.lg:hidden.min-h-[40px].px-3",
+    "t": "Menu",
+    "fs": 13
+   },
+   {
+    "e": "p.type-small.text-muted",
+    "t": "0 releases",
+    "fs": 13
+   },
+   {
+    "e": "button.min-h-[44px].px-3.border-2",
+    "t": "All",
+    "fs": 13
+   },
+   {
+    "e": "button.min-h-[44px].px-3.border-2",
+    "t": "single",
+    "fs": 13
+   },
+   {
+    "e": "button.min-h-[44px].px-3.border-2",
+    "t": "ep",
+    "fs": 13
+   },
+   {
+    "e": "button.min-h-[44px].px-3.border-2",
+    "t": "album",
+    "fs": 13
+   },
+   {
+    "e": "button.min-h-[44px].px-3.border-2",
+    "t": "mixtape",
+    "fs": 13
+   },
+   {
+    "e": "button.min-h-[44px].px-3.border-2",
+    "t": "Newest",
+    "fs": 13
+   },
+   {
+    "e": "button.min-h-[44px].px-3.border-2",
+    "t": "Oldest",
+    "fs": 13
+   },
+   {
+    "e": "button.min-h-[44px].px-3.border-2",
+    "t": "A\u2013Z",
+    "fs": 13
+   },
+   {
+    "e": "p.type-small.text-muted.mt-4",
+    "t": "Montego Bay, Jamaica",
+    "fs": 13
+   },
+   {
+    "e": "p.type-label.text-paper.mb-3",
+    "t": "Label",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "About",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Sign with us",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Contact",
+    "fs": 13
+   },
+   {
+    "e": "p.type-label.text-paper.mb-3",
+    "t": "Music",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Artists",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Releases",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Videos",
+    "fs": 13
+   },
+   {
+    "e": "p.type-label.text-paper.mb-3",
+    "t": "Legal",
+    "fs": 13
+   }
+  ],
+  "headings": [
+   {
+    "t": "Releases",
+    "fs": "36px",
+    "lines": 1,
+    "lastWord": "Releases",
+    "orphan": false,
+    "over": false
+   },
+   {
+    "t": "Stay in the loop.",
+    "fs": "36px",
+    "lines": 1,
+    "lastWord": "loop.",
+    "orphan": false,
+    "over": false
+   }
+  ],
+  "sections": [
+   {
+    "e": "header.sticky.top-0.z-40",
+    "pt": 0,
+    "pb": 0,
+    "pl": 0,
+    "pr": 0,
+    "h": 68,
+    "bg": "rgb(15, 13, 11)"
+   },
+   {
+    "e": "section.bg-black",
+    "pt": 0,
+    "pb": 0,
+    "pl": 0,
+    "pr": 0,
+    "h": 143,
+    "bg": "rgb(15, 13, 11)"
+   },
+   {
+    "e": "section.bg-black.border-y.border-line",
+    "pt": 0,
+    "pb": 0,
+    "pl": 0,
+    "pr": 0,
+    "h": 70,
+    "bg": "rgb(15, 13, 11)"
+   },
+   {
+    "e": "section.bg-black",
+    "pt": 0,
+    "pb": 0,
+    "pl": 0,
+    "pr": 0,
+    "h": 313,
+    "bg": "rgb(15, 13, 11)"
+   },
+   {
+    "e": "footer.bg-black.text-muted.mt-auto",
+    "pt": 0,
+    "pb": 0,
+    "pl": 0,
+    "pr": 0,
+    "h": 941,
+    "bg": "rgb(15, 13, 11)"
+   }
+  ],
+  "imgs": [],
+  "overlaps": [],
+  "headerPos": "sticky",
+  "headerH": 68,
+  "docH": 1534,
+  "status": 200
+ },
+ "videos": {
+  "scrollW": 390,
+  "overflowX": false,
+  "gutter": [
+   {
+    "e": "button.min-h-[44px].px-3.border-2",
+    "t": "Music Video",
+    "l": 261,
+    "rr": 2
+   },
+   {
+    "e": "button.min-h-[44px].px-3.border-2",
+    "t": "Lyric",
+    "l": 396,
+    "rr": -78
+   },
+   {
+    "e": "button.min-h-[44px].px-3.border-2",
+    "t": "Live",
+    "l": 476,
+    "rr": -148
+   },
+   {
+    "e": "button.min-h-[44px].px-3.border-2",
+    "t": "Behind the Scenes",
+    "l": 546,
+    "rr": -340
+   }
+  ],
+  "offscreen": [
+   {
+    "e": "button.min-h-[44px].px-3.border-2",
+    "t": "Lyric",
+    "l": 396,
+    "right": 468
+   },
+   {
+    "e": "button.min-h-[44px].px-3.border-2",
+    "t": "Live",
+    "l": 476,
+    "right": 538
+   },
+   {
+    "e": "button.min-h-[44px].px-3.border-2",
+    "t": "Behind the Scenes",
+    "l": 546,
+    "right": 730
+   }
+  ],
+  "tap": [
+   {
+    "e": "a.flex.items-center.shrink-0",
+    "t": "",
+    "w": 89,
+    "h": 40,
+    "inline": false
+   },
+   {
+    "e": "button.lg:hidden.min-h-[40px].px-3",
+    "t": "Menu",
+    "w": 73,
+    "h": 40,
+    "inline": false
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "About",
+    "w": 36,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Sign with us",
+    "w": 72,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Contact",
+    "w": 47,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Artists",
+    "w": 39,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Releases",
+    "w": 56,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Videos",
+    "w": 42,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Privacy",
+    "w": 45,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Terms",
+    "w": 37,
+    "h": 14,
+    "inline": true
+   }
+  ],
+  "smallFont": [
+   {
+    "e": "button.lg:hidden.min-h-[40px].px-3",
+    "t": "Menu",
+    "fs": 13
+   },
+   {
+    "e": "button.min-h-[44px].px-3.border-2",
+    "t": "All",
+    "fs": 13
+   },
+   {
+    "e": "button.min-h-[44px].px-3.border-2",
+    "t": "Music Video",
+    "fs": 13
+   },
+   {
+    "e": "button.min-h-[44px].px-3.border-2",
+    "t": "Lyric",
+    "fs": 13
+   },
+   {
+    "e": "button.min-h-[44px].px-3.border-2",
+    "t": "Live",
+    "fs": 13
+   },
+   {
+    "e": "button.min-h-[44px].px-3.border-2",
+    "t": "Behind the Scenes",
+    "fs": 13
+   },
+   {
+    "e": "p.mt-1.type-small.text-muted",
+    "t": "Kahlic",
+    "fs": 13
+   },
+   {
+    "e": "p.type-small.text-muted.mt-4",
+    "t": "Montego Bay, Jamaica",
+    "fs": 13
+   },
+   {
+    "e": "p.type-label.text-paper.mb-3",
+    "t": "Label",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "About",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Sign with us",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Contact",
+    "fs": 13
+   },
+   {
+    "e": "p.type-label.text-paper.mb-3",
+    "t": "Music",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Artists",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Releases",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Videos",
+    "fs": 13
+   },
+   {
+    "e": "p.type-label.text-paper.mb-3",
+    "t": "Legal",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Privacy",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Terms",
+    "fs": 13
+   },
+   {
+    "e": "p.type-caption.text-muted",
+    "t": "\u00a9 2026 One Flame Records. All ",
+    "fs": 12
+   }
+  ],
+  "headings": [
+   {
+    "t": "Videos",
+    "fs": "36px",
+    "lines": 1,
+    "lastWord": "Videos",
+    "orphan": false,
+    "over": false
+   },
+   {
+    "t": "Stay in the loop.",
+    "fs": "36px",
+    "lines": 1,
+    "lastWord": "loop.",
+    "orphan": false,
+    "over": false
+   }
+  ],
+  "sections": [
+   {
+    "e": "header.sticky.top-0.z-40",
+    "pt": 0,
+    "pb": 0,
+    "pl": 0,
+    "pr": 0,
+    "h": 68,
+    "bg": "rgb(15, 13, 11)"
+   },
+   {
+    "e": "section.bg-black",
+    "pt": 0,
+    "pb": 0,
+    "pl": 0,
+    "pr": 0,
+    "h": 143,
+    "bg": "rgb(15, 13, 11)"
+   },
+   {
+    "e": "section.bg-black.border-y.border-line",
+    "pt": 0,
+    "pb": 0,
+    "pl": 0,
+    "pr": 0,
+    "h": 70,
+    "bg": "rgb(15, 13, 11)"
+   },
+   {
+    "e": "section.bg-black",
+    "pt": 0,
+    "pb": 0,
+    "pl": 0,
+    "pr": 0,
+    "h": 370,
+    "bg": "rgb(15, 13, 11)"
+   },
+   {
+    "e": "footer.bg-black.text-muted.mt-auto",
+    "pt": 0,
+    "pb": 0,
+    "pl": 0,
+    "pr": 0,
+    "h": 941,
+    "bg": "rgb(15, 13, 11)"
+   }
+  ],
+  "imgs": [],
+  "overlaps": [],
+  "headerPos": "sticky",
+  "headerH": 68,
+  "docH": 1591,
+  "status": 200
+ },
+ "news": {
+  "scrollW": 390,
+  "overflowX": false,
+  "gutter": [],
+  "offscreen": [],
+  "tap": [
+   {
+    "e": "a.flex.items-center.shrink-0",
+    "t": "",
+    "w": 89,
+    "h": 40,
+    "inline": false
+   },
+   {
+    "e": "button.lg:hidden.min-h-[40px].px-3",
+    "t": "Menu",
+    "w": 73,
+    "h": 40,
+    "inline": false
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "About",
+    "w": 36,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Sign with us",
+    "w": 72,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Contact",
+    "w": 47,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Artists",
+    "w": 39,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Releases",
+    "w": 56,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Videos",
+    "w": 42,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Privacy",
+    "w": 45,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Terms",
+    "w": 37,
+    "h": 14,
+    "inline": true
+   }
+  ],
+  "smallFont": [
+   {
+    "e": "button.lg:hidden.min-h-[40px].px-3",
+    "t": "Menu",
+    "fs": 13
+   },
+   {
+    "e": "p.type-small.text-muted.mt-4",
+    "t": "Montego Bay, Jamaica",
+    "fs": 13
+   },
+   {
+    "e": "p.type-label.text-paper.mb-3",
+    "t": "Label",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "About",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Sign with us",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Contact",
+    "fs": 13
+   },
+   {
+    "e": "p.type-label.text-paper.mb-3",
+    "t": "Music",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Artists",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Releases",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Videos",
+    "fs": 13
+   },
+   {
+    "e": "p.type-label.text-paper.mb-3",
+    "t": "Legal",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Privacy",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Terms",
+    "fs": 13
+   },
+   {
+    "e": "p.type-caption.text-muted",
+    "t": "\u00a9 2026 One Flame Records. All ",
+    "fs": 12
+   }
+  ],
+  "headings": [
+   {
+    "t": "News",
+    "fs": "36px",
+    "lines": 1,
+    "lastWord": "News",
+    "orphan": false,
+    "over": false
+   },
+   {
+    "t": "Stay in the loop.",
+    "fs": "36px",
+    "lines": 1,
+    "lastWord": "loop.",
+    "orphan": false,
+    "over": false
+   }
+  ],
+  "sections": [
+   {
+    "e": "header.sticky.top-0.z-40",
+    "pt": 0,
+    "pb": 0,
+    "pl": 0,
+    "pr": 0,
+    "h": 68,
+    "bg": "rgb(15, 13, 11)"
+   },
+   {
+    "e": "section.bg-black",
+    "pt": 0,
+    "pb": 0,
+    "pl": 0,
+    "pr": 0,
+    "h": 143,
+    "bg": "rgb(15, 13, 11)"
+   },
+   {
+    "e": "section.bg-black",
+    "pt": 0,
+    "pb": 0,
+    "pl": 0,
+    "pr": 0,
+    "h": 313,
+    "bg": "rgb(15, 13, 11)"
+   },
+   {
+    "e": "footer.bg-black.text-muted.mt-auto",
+    "pt": 0,
+    "pb": 0,
+    "pl": 0,
+    "pr": 0,
+    "h": 941,
+    "bg": "rgb(15, 13, 11)"
+   }
+  ],
+  "imgs": [],
+  "overlaps": [],
+  "headerPos": "sticky",
+  "headerH": 68,
+  "docH": 1464,
+  "status": 200
+ },
+ "flames-lounge": {
+  "scrollW": 390,
+  "overflowX": false,
+  "gutter": [],
+  "offscreen": [],
+  "tap": [
+   {
+    "e": "a.flex.items-center.shrink-0",
+    "t": "",
+    "w": 89,
+    "h": 40,
+    "inline": false
+   },
+   {
+    "e": "button.lg:hidden.min-h-[40px].px-3",
+    "t": "Menu",
+    "w": 73,
+    "h": 40,
+    "inline": false
+   },
+   {
+    "e": "a.text-yellow.underline.underline-offset-4",
+    "t": "Visit the label",
+    "w": 325,
+    "h": 43,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "About",
+    "w": 36,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Sign with us",
+    "w": 72,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Contact",
+    "w": 47,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Artists",
+    "w": 39,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Releases",
+    "w": 56,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Videos",
+    "w": 42,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Privacy",
+    "w": 45,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Terms",
+    "w": 37,
+    "h": 14,
+    "inline": true
+   }
+  ],
+  "smallFont": [
+   {
+    "e": "button.lg:hidden.min-h-[40px].px-3",
+    "t": "Menu",
+    "fs": 13
+   },
+   {
+    "e": "span.type-small.text-muted",
+    "t": "Record where the label works",
+    "fs": 13
+   },
+   {
+    "e": "span.type-small.text-muted",
+    "t": "Walk-ins",
+    "fs": 13
+   },
+   {
+    "e": "span.type-small.text-muted",
+    "t": "Jamaican food",
+    "fs": 13
+   },
+   {
+    "e": "span.type-small.text-muted",
+    "t": "Drinks and a tab",
+    "fs": 13
+   },
+   {
+    "e": "a.inline-flex.min-h-[46px].items-center",
+    "t": "Follow @flamesmobay on Instagr",
+    "fs": 13
+   },
+   {
+    "e": "p.type-label.text-yellow.mb-2",
+    "t": "Fritters",
+    "fs": 13
+   },
+   {
+    "e": "p.type-small.text-muted.mt-1",
+    "t": "Crispy Jamaican-style, made fr",
+    "fs": 13
+   },
+   {
+    "e": "p.type-small.text-muted.mt-1",
+    "t": "Spiced, smoky, and perfectly s",
+    "fs": 13
+   },
+   {
+    "e": "p.type-small.text-muted.mt-1",
+    "t": "Garden-fresh, light and crispy",
+    "fs": 13
+   },
+   {
+    "e": "p.type-label.text-yellow.mb-2",
+    "t": "Sides",
+    "fs": 13
+   },
+   {
+    "e": "p.type-small.text-muted.mt-1",
+    "t": "Seasonal veg, lightly seasoned",
+    "fs": 13
+   },
+   {
+    "e": "p.type-small.text-muted.mt-1",
+    "t": "House-made dipping sauces \u2014 as",
+    "fs": 13
+   },
+   {
+    "e": "p.type-small.text-muted",
+    "t": "Beverages available \u2014 ask your",
+    "fs": 13
+   },
+   {
+    "e": "span.type-label",
+    "t": "@flamesmobay",
+    "fs": 13
+   },
+   {
+    "e": "p.type-small.text-muted.mt-4",
+    "t": "Montego Bay, Jamaica",
+    "fs": 13
+   },
+   {
+    "e": "p.type-label.text-paper.mb-3",
+    "t": "Label",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "About",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Sign with us",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Contact",
+    "fs": 13
+   }
+  ],
+  "headings": [
+   {
+    "t": "FlamesLounge",
+    "fs": "56px",
+    "lines": 2,
+    "lastWord": "FlamesLounge",
+    "orphan": false,
+    "over": false
+   },
+   {
+    "t": "Where the music meets the moment.",
+    "fs": "32px",
+    "lines": 2,
+    "lastWord": "moment.",
+    "orphan": false,
+    "over": false
+   },
+   {
+    "t": "What we offer",
+    "fs": "36px",
+    "lines": 1,
+    "lastWord": "offer",
+    "orphan": false,
+    "over": false
+   },
+   {
+    "t": "Outdoor Recording Studio",
+    "fs": "32px",
+    "lines": 2,
+    "lastWord": "Studio",
+    "orphan": true,
+    "over": false
+   },
+   {
+    "t": "Gaming Lounge",
+    "fs": "32px",
+    "lines": 1,
+    "lastWord": "Lounge",
+    "orphan": false,
+    "over": false
+   },
+   {
+    "t": "Food & Beverages",
+    "fs": "32px",
+    "lines": 1,
+    "lastWord": "Beverages",
+    "orphan": false,
+    "over": false
+   },
+   {
+    "t": "Live Events",
+    "fs": "32px",
+    "lines": 1,
+    "lastWord": "Events",
+    "orphan": false,
+    "over": false
+   },
+   {
+    "t": "A full studio. Open skies.",
+    "fs": "36px",
+    "lines": 2,
+    "lastWord": "skies.",
+    "orphan": true,
+    "over": false
+   },
+   {
+    "t": "Jamaican flavour, made fresh.",
+    "fs": "36px",
+    "lines": 2,
+    "lastWord": "fresh.",
+    "orphan": true,
+    "over": false
+   },
+   {
+    "t": "Events & programming",
+    "fs": "36px",
+    "lines": 1,
+    "lastWord": "programming",
+    "orphan": false,
+    "over": false
+   },
+   {
+    "t": "The space",
+    "fs": "36px",
+    "lines": 1,
+    "lastWord": "space",
+    "orphan": false,
+    "over": false
+   },
+   {
+    "t": "Come through.",
+    "fs": "36px",
+    "lines": 1,
+    "lastWord": "through.",
+    "orphan": false,
+    "over": false
+   },
+   {
+    "t": "Stay in the loop.",
+    "fs": "36px",
+    "lines": 1,
+    "lastWord": "loop.",
+    "orphan": false,
+    "over": false
+   }
+  ],
+  "sections": [
+   {
+    "e": "header.sticky.top-0.z-40",
+    "pt": 0,
+    "pb": 0,
+    "pl": 0,
+    "pr": 0,
+    "h": 68,
+    "bg": "rgb(15, 13, 11)"
+   },
+   {
+    "e": "section.grid.lg:grid-cols-[1.1fr_1fr].bg-black",
+    "pt": 0,
+    "pb": 0,
+    "pl": 0,
+    "pr": 0,
+    "h": 830,
+    "bg": "rgb(15, 13, 11)"
+   },
+   {
+    "e": "section.bg-black",
+    "pt": 0,
+    "pb": 0,
+    "pl": 0,
+    "pr": 0,
+    "h": 491,
+    "bg": "rgb(15, 13, 11)"
+   },
+   {
+    "e": "section.bg-black",
+    "pt": 0,
+    "pb": 0,
+    "pl": 0,
+    "pr": 0,
+    "h": 1186,
+    "bg": "rgb(15, 13, 11)"
+   },
+   {
+    "e": "section.bg-yellow.text-black",
+    "pt": 0,
+    "pb": 0,
+    "pl": 0,
+    "pr": 0,
+    "h": 609,
+    "bg": "rgb(242, 194, 48)"
+   },
+   {
+    "e": "section.bg-black",
+    "pt": 0,
+    "pb": 0,
+    "pl": 0,
+    "pr": 0,
+    "h": 887,
+    "bg": "rgb(15, 13, 11)"
+   },
+   {
+    "e": "section.bg-black.border-t-4.border-line",
+    "pt": 0,
+    "pb": 0,
+    "pl": 0,
+    "pr": 0,
+    "h": 837,
+    "bg": "rgb(15, 13, 11)"
+   },
+   {
+    "e": "section.bg-black",
+    "pt": 0,
+    "pb": 0,
+    "pl": 0,
+    "pr": 0,
+    "h": 362,
+    "bg": "rgb(15, 13, 11)"
+   },
+   {
+    "e": "section.bg-red.text-paper",
+    "pt": 0,
+    "pb": 0,
+    "pl": 0,
+    "pr": 0,
+    "h": 375,
+    "bg": "rgb(200, 50, 31)"
+   },
+   {
+    "e": "footer.bg-black.text-muted.mt-auto",
+    "pt": 0,
+    "pb": 0,
+    "pl": 0,
+    "pr": 0,
+    "h": 941,
+    "bg": "rgb(15, 13, 11)"
+   }
+  ],
+  "imgs": [],
+  "overlaps": [],
+  "headerPos": "sticky",
+  "headerH": 68,
+  "docH": 6585,
+  "status": 200
+ },
+ "about": {
+  "scrollW": 390,
+  "overflowX": false,
+  "gutter": [],
+  "offscreen": [],
+  "tap": [
+   {
+    "e": "a.flex.items-center.shrink-0",
+    "t": "",
+    "w": 89,
+    "h": 40,
+    "inline": false
+   },
+   {
+    "e": "button.lg:hidden.min-h-[40px].px-3",
+    "t": "Menu",
+    "w": 73,
+    "h": 40,
+    "inline": false
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "About",
+    "w": 36,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Sign with us",
+    "w": 72,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Contact",
+    "w": 47,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Artists",
+    "w": 39,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Releases",
+    "w": 56,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Videos",
+    "w": 42,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Privacy",
+    "w": 45,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Terms",
+    "w": 37,
+    "h": 14,
+    "inline": true
+   }
+  ],
+  "smallFont": [
+   {
+    "e": "button.lg:hidden.min-h-[40px].px-3",
+    "t": "Menu",
+    "fs": 13
+   },
+   {
+    "e": "p.type-small.text-muted.mt-4",
+    "t": "Montego Bay, Jamaica",
+    "fs": 13
+   },
+   {
+    "e": "p.type-label.text-paper.mb-3",
+    "t": "Label",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "About",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Sign with us",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Contact",
+    "fs": 13
+   },
+   {
+    "e": "p.type-label.text-paper.mb-3",
+    "t": "Music",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Artists",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Releases",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Videos",
+    "fs": 13
+   },
+   {
+    "e": "p.type-label.text-paper.mb-3",
+    "t": "Legal",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Privacy",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Terms",
+    "fs": 13
+   },
+   {
+    "e": "p.type-caption.text-muted",
+    "t": "\u00a9 2026 One Flame Records. All ",
+    "fs": 12
+   }
+  ],
+  "headings": [
+   {
+    "t": "One flame is enough.",
+    "fs": "36px",
+    "lines": 1,
+    "lastWord": "enough.",
+    "orphan": false,
+    "over": false
+   },
+   {
+    "t": "Work with us.",
+    "fs": "36px",
+    "lines": 1,
+    "lastWord": "us.",
+    "orphan": false,
+    "over": false
+   },
+   {
+    "t": "Stay in the loop.",
+    "fs": "36px",
+    "lines": 1,
+    "lastWord": "loop.",
+    "orphan": false,
+    "over": false
+   }
+  ],
+  "sections": [
+   {
+    "e": "header.sticky.top-0.z-40",
+    "pt": 0,
+    "pb": 0,
+    "pl": 0,
+    "pr": 0,
+    "h": 68,
+    "bg": "rgb(15, 13, 11)"
+   },
+   {
+    "e": "section.bg-black",
+    "pt": 0,
+    "pb": 0,
+    "pl": 0,
+    "pr": 0,
+    "h": 356,
+    "bg": "rgb(15, 13, 11)"
+   },
+   {
+    "e": "section.bg-paper.text-black",
+    "pt": 0,
+    "pb": 0,
+    "pl": 0,
+    "pr": 0,
+    "h": 1294,
+    "bg": "rgb(255, 247, 230)"
+   },
+   {
+    "e": "footer.bg-black.text-muted.mt-auto",
+    "pt": 0,
+    "pb": 0,
+    "pl": 0,
+    "pr": 0,
+    "h": 941,
+    "bg": "rgb(15, 13, 11)"
+   }
+  ],
+  "imgs": [],
+  "overlaps": [],
+  "headerPos": "sticky",
+  "headerH": 68,
+  "docH": 2658,
+  "status": 200
+ },
+ "contact": {
+  "scrollW": 390,
+  "overflowX": false,
+  "gutter": [],
+  "offscreen": [],
+  "tap": [
+   {
+    "e": "a.flex.items-center.shrink-0",
+    "t": "",
+    "w": 89,
+    "h": 40,
+    "inline": false
+   },
+   {
+    "e": "button.lg:hidden.min-h-[40px].px-3",
+    "t": "Menu",
+    "w": 73,
+    "h": 40,
+    "inline": false
+   },
+   {
+    "e": "input.sr-only",
+    "t": "text",
+    "w": 1,
+    "h": 1,
+    "inline": false
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "About",
+    "w": 36,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Sign with us",
+    "w": 72,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Contact",
+    "w": 47,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Artists",
+    "w": 39,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Releases",
+    "w": 56,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Videos",
+    "w": 42,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Privacy",
+    "w": 45,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Terms",
+    "w": 37,
+    "h": 14,
+    "inline": true
+   }
+  ],
+  "smallFont": [
+   {
+    "e": "button.lg:hidden.min-h-[40px].px-3",
+    "t": "Menu",
+    "fs": 13
+   },
+   {
+    "e": "p.type-small.text-muted.mt-4",
+    "t": "Montego Bay, Jamaica",
+    "fs": 13
+   },
+   {
+    "e": "p.type-label.text-paper.mb-3",
+    "t": "Label",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "About",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Sign with us",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Contact",
+    "fs": 13
+   },
+   {
+    "e": "p.type-label.text-paper.mb-3",
+    "t": "Music",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Artists",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Releases",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Videos",
+    "fs": 13
+   },
+   {
+    "e": "p.type-label.text-paper.mb-3",
+    "t": "Legal",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Privacy",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Terms",
+    "fs": 13
+   },
+   {
+    "e": "p.type-caption.text-muted",
+    "t": "\u00a9 2026 One Flame Records. All ",
+    "fs": 12
+   }
+  ],
+  "headings": [
+   {
+    "t": "Contact",
+    "fs": "36px",
+    "lines": 1,
+    "lastWord": "Contact",
+    "orphan": false,
+    "over": false
+   },
+   {
+    "t": "Stay in the loop.",
+    "fs": "36px",
+    "lines": 1,
+    "lastWord": "loop.",
+    "orphan": false,
+    "over": false
+   }
+  ],
+  "sections": [
+   {
+    "e": "header.sticky.top-0.z-40",
+    "pt": 0,
+    "pb": 0,
+    "pl": 0,
+    "pr": 0,
+    "h": 68,
+    "bg": "rgb(15, 13, 11)"
+   },
+   {
+    "e": "section.bg-black",
+    "pt": 0,
+    "pb": 0,
+    "pl": 0,
+    "pr": 0,
+    "h": 923,
+    "bg": "rgb(15, 13, 11)"
+   },
+   {
+    "e": "footer.bg-black.text-muted.mt-auto",
+    "pt": 0,
+    "pb": 0,
+    "pl": 0,
+    "pr": 0,
+    "h": 941,
+    "bg": "rgb(15, 13, 11)"
+   }
+  ],
+  "imgs": [],
+  "overlaps": [],
+  "headerPos": "sticky",
+  "headerH": 68,
+  "docH": 1932,
+  "status": 200
+ },
+ "sign": {
+  "scrollW": 390,
+  "overflowX": false,
+  "gutter": [],
+  "offscreen": [],
+  "tap": [
+   {
+    "e": "a.flex.items-center.shrink-0",
+    "t": "",
+    "w": 89,
+    "h": 40,
+    "inline": false
+   },
+   {
+    "e": "button.lg:hidden.min-h-[40px].px-3",
+    "t": "Menu",
+    "w": 73,
+    "h": 40,
+    "inline": false
+   },
+   {
+    "e": "a.type-label.text-black.underline",
+    "t": "Our roster",
+    "w": 98,
+    "h": 16,
+    "inline": false
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "About",
+    "w": 36,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Sign with us",
+    "w": 72,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Contact",
+    "w": 47,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Artists",
+    "w": 39,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Releases",
+    "w": 56,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Videos",
+    "w": 42,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Privacy",
+    "w": 45,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Terms",
+    "w": 37,
+    "h": 14,
+    "inline": true
+   }
+  ],
+  "smallFont": [
+   {
+    "e": "button.lg:hidden.min-h-[40px].px-3",
+    "t": "Menu",
+    "fs": 13
+   },
+   {
+    "e": "a.type-label.text-black.underline",
+    "t": "Our roster",
+    "fs": 13
+   },
+   {
+    "e": "h3.type-label.mb-4",
+    "t": "Genres we work with",
+    "fs": 13
+   },
+   {
+    "e": "p.type-label.mb-3",
+    "t": "Montego Bay, Jamaica",
+    "fs": 13
+   },
+   {
+    "e": "p.type-small.text-muted.mt-4",
+    "t": "Montego Bay, Jamaica",
+    "fs": 13
+   },
+   {
+    "e": "p.type-label.text-paper.mb-3",
+    "t": "Label",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "About",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Sign with us",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Contact",
+    "fs": 13
+   },
+   {
+    "e": "p.type-label.text-paper.mb-3",
+    "t": "Music",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Artists",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Releases",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Videos",
+    "fs": 13
+   },
+   {
+    "e": "p.type-label.text-paper.mb-3",
+    "t": "Legal",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Privacy",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Terms",
+    "fs": 13
+   },
+   {
+    "e": "p.type-caption.text-muted",
+    "t": "\u00a9 2026 One Flame Records. All ",
+    "fs": 12
+   }
+  ],
+  "headings": [
+   {
+    "t": "Sign with One Flame.",
+    "fs": "56px",
+    "lines": 2,
+    "lastWord": "Flame.",
+    "orphan": true,
+    "over": false
+   },
+   {
+    "t": "Rooted music. Real stories.",
+    "fs": "36px",
+    "lines": 2,
+    "lastWord": "stories.",
+    "orphan": false,
+    "over": false
+   },
+   {
+    "t": "Genres we work with",
+    "fs": "13px",
+    "lines": 1,
+    "lastWord": "with",
+    "orphan": false,
+    "over": false
+   },
+   {
+    "t": "Simple. Three steps.",
+    "fs": "36px",
+    "lines": 1,
+    "lastWord": "steps.",
+    "orphan": false,
+    "over": false
+   },
+   {
+    "t": "Get in touch",
+    "fs": "32px",
+    "lines": 1,
+    "lastWord": "touch",
+    "orphan": false,
+    "over": false
+   },
+   {
+    "t": "We review your music",
+    "fs": "32px",
+    "lines": 1,
+    "lastWord": "music",
+    "orphan": false,
+    "over": false
+   },
+   {
+    "t": "Conversation, not a contract",
+    "fs": "32px",
+    "lines": 2,
+    "lastWord": "contract",
+    "orphan": false,
+    "over": false
+   },
+   {
+    "t": "Ready to talk?",
+    "fs": "36px",
+    "lines": 1,
+    "lastWord": "talk?",
+    "orphan": false,
+    "over": false
+   },
+   {
+    "t": "Stay in the loop.",
+    "fs": "36px",
+    "lines": 1,
+    "lastWord": "loop.",
+    "orphan": false,
+    "over": false
+   }
+  ],
+  "sections": [
+   {
+    "e": "header.sticky.top-0.z-40",
+    "pt": 0,
+    "pb": 0,
+    "pl": 0,
+    "pr": 0,
+    "h": 68,
+    "bg": "rgb(15, 13, 11)"
+   },
+   {
+    "e": "section.relative.bg-yellow.text-black",
+    "pt": 0,
+    "pb": 0,
+    "pl": 0,
+    "pr": 0,
+    "h": 587,
+    "bg": "rgb(242, 194, 48)"
+   },
+   {
+    "e": "section.bg-paper.text-black",
+    "pt": 0,
+    "pb": 0,
+    "pl": 0,
+    "pr": 0,
+    "h": 956,
+    "bg": "rgb(255, 247, 230)"
+   },
+   {
+    "e": "section.bg-black.text-paper",
+    "pt": 0,
+    "pb": 0,
+    "pl": 0,
+    "pr": 0,
+    "h": 959,
+    "bg": "rgb(15, 13, 11)"
+   },
+   {
+    "e": "section.bg-red.text-paper",
+    "pt": 0,
+    "pb": 0,
+    "pl": 0,
+    "pr": 0,
+    "h": 315,
+    "bg": "rgb(200, 50, 31)"
+   },
+   {
+    "e": "footer.bg-black.text-muted.mt-auto",
+    "pt": 0,
+    "pb": 0,
+    "pl": 0,
+    "pr": 0,
+    "h": 941,
+    "bg": "rgb(15, 13, 11)"
+   }
+  ],
+  "imgs": [],
+  "overlaps": [],
+  "headerPos": "sticky",
+  "headerH": 68,
+  "docH": 3826,
+  "status": 200
+ },
+ "search": {
+  "scrollW": 390,
+  "overflowX": false,
+  "gutter": [],
+  "offscreen": [],
+  "tap": [
+   {
+    "e": "a.flex.items-center.shrink-0",
+    "t": "",
+    "w": 89,
+    "h": 40,
+    "inline": false
+   },
+   {
+    "e": "button.lg:hidden.min-h-[40px].px-3",
+    "t": "Menu",
+    "w": 73,
+    "h": 40,
+    "inline": false
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "About",
+    "w": 36,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Sign with us",
+    "w": 72,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Contact",
+    "w": 47,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Artists",
+    "w": 39,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Releases",
+    "w": 56,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Videos",
+    "w": 42,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Privacy",
+    "w": 45,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Terms",
+    "w": 37,
+    "h": 14,
+    "inline": true
+   }
+  ],
+  "smallFont": [
+   {
+    "e": "button.lg:hidden.min-h-[40px].px-3",
+    "t": "Menu",
+    "fs": 13
+   },
+   {
+    "e": "p.type-small.mt-1",
+    "t": "Montego Bay",
+    "fs": 13
+   },
+   {
+    "e": "p.type-small.text-muted.mt-4",
+    "t": "Montego Bay, Jamaica",
+    "fs": 13
+   },
+   {
+    "e": "p.type-label.text-paper.mb-3",
+    "t": "Label",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "About",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Sign with us",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Contact",
+    "fs": 13
+   },
+   {
+    "e": "p.type-label.text-paper.mb-3",
+    "t": "Music",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Artists",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Releases",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Videos",
+    "fs": 13
+   },
+   {
+    "e": "p.type-label.text-paper.mb-3",
+    "t": "Legal",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Privacy",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Terms",
+    "fs": 13
+   },
+   {
+    "e": "p.type-caption.text-muted",
+    "t": "\u00a9 2026 One Flame Records. All ",
+    "fs": 12
+   }
+  ],
+  "headings": [
+   {
+    "t": "Search",
+    "fs": "36px",
+    "lines": 1,
+    "lastWord": "Search",
+    "orphan": false,
+    "over": false
+   },
+   {
+    "t": "Artists",
+    "fs": "32px",
+    "lines": 1,
+    "lastWord": "Artists",
+    "orphan": false,
+    "over": false
+   },
+   {
+    "t": "Stay in the loop.",
+    "fs": "36px",
+    "lines": 1,
+    "lastWord": "loop.",
+    "orphan": false,
+    "over": false
+   }
+  ],
+  "sections": [
+   {
+    "e": "header.sticky.top-0.z-40",
+    "pt": 0,
+    "pb": 0,
+    "pl": 0,
+    "pr": 0,
+    "h": 68,
+    "bg": "rgb(15, 13, 11)"
+   },
+   {
+    "e": "section.bg-black",
+    "pt": 0,
+    "pb": 0,
+    "pl": 0,
+    "pr": 0,
+    "h": 279,
+    "bg": "rgb(15, 13, 11)"
+   },
+   {
+    "e": "section.bg-black",
+    "pt": 0,
+    "pb": 0,
+    "pl": 0,
+    "pr": 0,
+    "h": 194,
+    "bg": "rgb(15, 13, 11)"
+   },
+   {
+    "e": "footer.bg-black.text-muted.mt-auto",
+    "pt": 0,
+    "pb": 0,
+    "pl": 0,
+    "pr": 0,
+    "h": 941,
+    "bg": "rgb(15, 13, 11)"
+   }
+  ],
+  "imgs": [],
+  "overlaps": [],
+  "headerPos": "sticky",
+  "headerH": 68,
+  "docH": 1482,
+  "status": 200
+ },
+ "privacy": {
+  "scrollW": 390,
+  "overflowX": false,
+  "gutter": [],
+  "offscreen": [],
+  "tap": [
+   {
+    "e": "a.flex.items-center.shrink-0",
+    "t": "",
+    "w": 89,
+    "h": 40,
+    "inline": false
+   },
+   {
+    "e": "button.lg:hidden.min-h-[40px].px-3",
+    "t": "Menu",
+    "w": 73,
+    "h": 40,
+    "inline": false
+   },
+   {
+    "e": "a.text-red.underline.underline-offset-4",
+    "t": "contact@oneflamerecords.c",
+    "w": 239,
+    "h": 19,
+    "inline": true
+   },
+   {
+    "e": "a.text-red.underline.underline-offset-4",
+    "t": "contact@oneflamerecords.c",
+    "w": 239,
+    "h": 19,
+    "inline": true
+   },
+   {
+    "e": "a.text-red.underline.underline-offset-4",
+    "t": "contact@oneflamerecords.c",
+    "w": 239,
+    "h": 19,
+    "inline": true
+   },
+   {
+    "e": "a.type-label.text-red.underline",
+    "t": "Back to home",
+    "w": 113,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "About",
+    "w": 36,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Sign with us",
+    "w": 72,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Contact",
+    "w": 47,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Artists",
+    "w": 39,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Releases",
+    "w": 56,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Videos",
+    "w": 42,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Privacy",
+    "w": 45,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Terms",
+    "w": 37,
+    "h": 14,
+    "inline": true
+   }
+  ],
+  "smallFont": [
+   {
+    "e": "button.lg:hidden.min-h-[40px].px-3",
+    "t": "Menu",
+    "fs": 13
+   },
+   {
+    "e": "p.type-label.text-yellow.mb-3",
+    "t": "Legal",
+    "fs": 13
+   },
+   {
+    "e": "p.type-label",
+    "t": "Effective date: June 2026",
+    "fs": 13
+   },
+   {
+    "e": "a.type-label.text-red.underline",
+    "t": "Back to home",
+    "fs": 13
+   },
+   {
+    "e": "p.type-small.text-muted.mt-4",
+    "t": "Montego Bay, Jamaica",
+    "fs": 13
+   },
+   {
+    "e": "p.type-label.text-paper.mb-3",
+    "t": "Label",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "About",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Sign with us",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Contact",
+    "fs": 13
+   },
+   {
+    "e": "p.type-label.text-paper.mb-3",
+    "t": "Music",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Artists",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Releases",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Videos",
+    "fs": 13
+   },
+   {
+    "e": "p.type-label.text-paper.mb-3",
+    "t": "Legal",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Privacy",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Terms",
+    "fs": 13
+   },
+   {
+    "e": "p.type-caption.text-muted",
+    "t": "\u00a9 2026 One Flame Records. All ",
+    "fs": 12
+   }
+  ],
+  "headings": [
+   {
+    "t": "Privacy Policy",
+    "fs": "36px",
+    "lines": 1,
+    "lastWord": "Policy",
+    "orphan": false,
+    "over": false
+   },
+   {
+    "t": "Who we are",
+    "fs": "32px",
+    "lines": 1,
+    "lastWord": "are",
+    "orphan": false,
+    "over": false
+   },
+   {
+    "t": "What data we collect",
+    "fs": "32px",
+    "lines": 1,
+    "lastWord": "collect",
+    "orphan": false,
+    "over": false
+   },
+   {
+    "t": "How we use your data",
+    "fs": "32px",
+    "lines": 1,
+    "lastWord": "data",
+    "orphan": false,
+    "over": false
+   },
+   {
+    "t": "Data storage",
+    "fs": "32px",
+    "lines": 1,
+    "lastWord": "storage",
+    "orphan": false,
+    "over": false
+   },
+   {
+    "t": "Newsletter communications",
+    "fs": "32px",
+    "lines": 2,
+    "lastWord": "communications",
+    "orphan": false,
+    "over": false
+   },
+   {
+    "t": "Your rights",
+    "fs": "32px",
+    "lines": 1,
+    "lastWord": "rights",
+    "orphan": false,
+    "over": false
+   },
+   {
+    "t": "Changes to this policy",
+    "fs": "32px",
+    "lines": 1,
+    "lastWord": "policy",
+    "orphan": false,
+    "over": false
+   },
+   {
+    "t": "Stay in the loop.",
+    "fs": "36px",
+    "lines": 1,
+    "lastWord": "loop.",
+    "orphan": false,
+    "over": false
+   }
+  ],
+  "sections": [
+   {
+    "e": "header.sticky.top-0.z-40",
+    "pt": 0,
+    "pb": 0,
+    "pl": 0,
+    "pr": 0,
+    "h": 68,
+    "bg": "rgb(15, 13, 11)"
+   },
+   {
+    "e": "section.bg-black.text-paper",
+    "pt": 0,
+    "pb": 0,
+    "pl": 0,
+    "pr": 0,
+    "h": 170,
+    "bg": "rgb(15, 13, 11)"
+   },
+   {
+    "e": "section.bg-paper.text-black",
+    "pt": 0,
+    "pb": 0,
+    "pl": 0,
+    "pr": 0,
+    "h": 2299,
+    "bg": "rgb(255, 247, 230)"
+   },
+   {
+    "e": "footer.bg-black.text-muted.mt-auto",
+    "pt": 0,
+    "pb": 0,
+    "pl": 0,
+    "pr": 0,
+    "h": 941,
+    "bg": "rgb(15, 13, 11)"
+   }
+  ],
+  "imgs": [],
+  "overlaps": [],
+  "headerPos": "sticky",
+  "headerH": 68,
+  "docH": 3478,
+  "status": 200
+ },
+ "terms": {
+  "scrollW": 390,
+  "overflowX": false,
+  "gutter": [],
+  "offscreen": [],
+  "tap": [
+   {
+    "e": "a.flex.items-center.shrink-0",
+    "t": "",
+    "w": 89,
+    "h": 40,
+    "inline": false
+   },
+   {
+    "e": "button.lg:hidden.min-h-[40px].px-3",
+    "t": "Menu",
+    "w": 73,
+    "h": 40,
+    "inline": false
+   },
+   {
+    "e": "a.text-red.underline.underline-offset-4",
+    "t": "contact@oneflamerecords.c",
+    "w": 239,
+    "h": 19,
+    "inline": true
+   },
+   {
+    "e": "a.text-red.underline.underline-offset-4",
+    "t": "contact@oneflamerecords.c",
+    "w": 239,
+    "h": 19,
+    "inline": true
+   },
+   {
+    "e": "a.type-label.text-red.underline",
+    "t": "Back to home",
+    "w": 113,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "About",
+    "w": 36,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Sign with us",
+    "w": 72,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Contact",
+    "w": 47,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Artists",
+    "w": 39,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Releases",
+    "w": 56,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Videos",
+    "w": 42,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Privacy",
+    "w": 45,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Terms",
+    "w": 37,
+    "h": 14,
+    "inline": true
+   }
+  ],
+  "smallFont": [
+   {
+    "e": "button.lg:hidden.min-h-[40px].px-3",
+    "t": "Menu",
+    "fs": 13
+   },
+   {
+    "e": "p.type-label.text-yellow.mb-3",
+    "t": "Legal",
+    "fs": 13
+   },
+   {
+    "e": "p.type-label",
+    "t": "Effective date: June 2026",
+    "fs": 13
+   },
+   {
+    "e": "a.type-label.text-red.underline",
+    "t": "Back to home",
+    "fs": 13
+   },
+   {
+    "e": "p.type-small.text-muted.mt-4",
+    "t": "Montego Bay, Jamaica",
+    "fs": 13
+   },
+   {
+    "e": "p.type-label.text-paper.mb-3",
+    "t": "Label",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "About",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Sign with us",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Contact",
+    "fs": 13
+   },
+   {
+    "e": "p.type-label.text-paper.mb-3",
+    "t": "Music",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Artists",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Releases",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Videos",
+    "fs": 13
+   },
+   {
+    "e": "p.type-label.text-paper.mb-3",
+    "t": "Legal",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Privacy",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Terms",
+    "fs": 13
+   },
+   {
+    "e": "p.type-caption.text-muted",
+    "t": "\u00a9 2026 One Flame Records. All ",
+    "fs": 12
+   }
+  ],
+  "headings": [
+   {
+    "t": "Terms of Service",
+    "fs": "36px",
+    "lines": 1,
+    "lastWord": "Service",
+    "orphan": false,
+    "over": false
+   },
+   {
+    "t": "Acceptance of terms",
+    "fs": "32px",
+    "lines": 1,
+    "lastWord": "terms",
+    "orphan": false,
+    "over": false
+   },
+   {
+    "t": "Use of the website",
+    "fs": "32px",
+    "lines": 1,
+    "lastWord": "website",
+    "orphan": false,
+    "over": false
+   },
+   {
+    "t": "Intellectual property",
+    "fs": "32px",
+    "lines": 1,
+    "lastWord": "property",
+    "orphan": false,
+    "over": false
+   },
+   {
+    "t": "Artist submissions",
+    "fs": "32px",
+    "lines": 1,
+    "lastWord": "submissions",
+    "orphan": false,
+    "over": false
+   },
+   {
+    "t": "Newsletter",
+    "fs": "32px",
+    "lines": 1,
+    "lastWord": "Newsletter",
+    "orphan": false,
+    "over": false
+   },
+   {
+    "t": "Disclaimer of warranties",
+    "fs": "32px",
+    "lines": 1,
+    "lastWord": "warranties",
+    "orphan": false,
+    "over": false
+   },
+   {
+    "t": "Limitation of liability",
+    "fs": "32px",
+    "lines": 1,
+    "lastWord": "liability",
+    "orphan": false,
+    "over": false
+   },
+   {
+    "t": "Governing law",
+    "fs": "32px",
+    "lines": 1,
+    "lastWord": "law",
+    "orphan": false,
+    "over": false
+   },
+   {
+    "t": "Changes to these terms",
+    "fs": "32px",
+    "lines": 1,
+    "lastWord": "terms",
+    "orphan": false,
+    "over": false
+   },
+   {
+    "t": "Contact",
+    "fs": "32px",
+    "lines": 1,
+    "lastWord": "Contact",
+    "orphan": false,
+    "over": false
+   },
+   {
+    "t": "Stay in the loop.",
+    "fs": "36px",
+    "lines": 1,
+    "lastWord": "loop.",
+    "orphan": false,
+    "over": false
+   }
+  ],
+  "sections": [
+   {
+    "e": "header.sticky.top-0.z-40",
+    "pt": 0,
+    "pb": 0,
+    "pl": 0,
+    "pr": 0,
+    "h": 68,
+    "bg": "rgb(15, 13, 11)"
+   },
+   {
+    "e": "section.bg-black.text-paper",
+    "pt": 0,
+    "pb": 0,
+    "pl": 0,
+    "pr": 0,
+    "h": 170,
+    "bg": "rgb(15, 13, 11)"
+   },
+   {
+    "e": "section.bg-paper.text-black",
+    "pt": 0,
+    "pb": 0,
+    "pl": 0,
+    "pr": 0,
+    "h": 2892,
+    "bg": "rgb(255, 247, 230)"
+   },
+   {
+    "e": "footer.bg-black.text-muted.mt-auto",
+    "pt": 0,
+    "pb": 0,
+    "pl": 0,
+    "pr": 0,
+    "h": 941,
+    "bg": "rgb(15, 13, 11)"
+   }
+  ],
+  "imgs": [],
+  "overlaps": [],
+  "headerPos": "sticky",
+  "headerH": 68,
+  "docH": 4071,
+  "status": 200
+ },
+ "unsubscribe": {
+  "scrollW": 390,
+  "overflowX": false,
+  "gutter": [],
+  "offscreen": [],
+  "tap": [
+   {
+    "e": "a.flex.items-center.shrink-0",
+    "t": "",
+    "w": 89,
+    "h": 40,
+    "inline": false
+   },
+   {
+    "e": "button.lg:hidden.min-h-[40px].px-3",
+    "t": "Menu",
+    "w": 73,
+    "h": 40,
+    "inline": false
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "About",
+    "w": 36,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Sign with us",
+    "w": 72,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Contact",
+    "w": 47,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Artists",
+    "w": 39,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Releases",
+    "w": 56,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Videos",
+    "w": 42,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Privacy",
+    "w": 45,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Terms",
+    "w": 37,
+    "h": 14,
+    "inline": true
+   }
+  ],
+  "smallFont": [
+   {
+    "e": "button.lg:hidden.min-h-[40px].px-3",
+    "t": "Menu",
+    "fs": 13
+   },
+   {
+    "e": "p.type-small.text-muted.mt-4",
+    "t": "Montego Bay, Jamaica",
+    "fs": 13
+   },
+   {
+    "e": "p.type-label.text-paper.mb-3",
+    "t": "Label",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "About",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Sign with us",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Contact",
+    "fs": 13
+   },
+   {
+    "e": "p.type-label.text-paper.mb-3",
+    "t": "Music",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Artists",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Releases",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Videos",
+    "fs": 13
+   },
+   {
+    "e": "p.type-label.text-paper.mb-3",
+    "t": "Legal",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Privacy",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Terms",
+    "fs": 13
+   },
+   {
+    "e": "p.type-caption.text-muted",
+    "t": "\u00a9 2026 One Flame Records. All ",
+    "fs": 12
+   }
+  ],
+  "headings": [
+   {
+    "t": "Invalid unsubscribe link",
+    "fs": "32px",
+    "lines": 1,
+    "lastWord": "link",
+    "orphan": false,
+    "over": false
+   },
+   {
+    "t": "Stay in the loop.",
+    "fs": "36px",
+    "lines": 1,
+    "lastWord": "loop.",
+    "orphan": false,
+    "over": false
+   }
+  ],
+  "sections": [
+   {
+    "e": "header.sticky.top-0.z-40",
+    "pt": 0,
+    "pb": 0,
+    "pl": 0,
+    "pr": 0,
+    "h": 68,
+    "bg": "rgb(15, 13, 11)"
+   },
+   {
+    "e": "div.mx-auto.max-w-xl.px-4",
+    "pt": 56,
+    "pb": 56,
+    "pl": 16,
+    "pr": 16,
+    "h": 249,
+    "bg": "rgba(0, 0, 0, 0)"
+   },
+   {
+    "e": "footer.bg-black.text-muted.mt-auto",
+    "pt": 0,
+    "pb": 0,
+    "pl": 0,
+    "pr": 0,
+    "h": 941,
+    "bg": "rgb(15, 13, 11)"
+   }
+  ],
+  "imgs": [],
+  "overlaps": [],
+  "headerPos": "sticky",
+  "headerH": 68,
+  "docH": 1258,
+  "status": 200
+ },
+ "artist-bawlinz-1781571125557": {
+  "scrollW": 390,
+  "overflowX": false,
+  "gutter": [
+   {
+    "e": "span.absolute.-right-5.-top-[30px]",
+    "t": "B",
+    "l": 316,
+    "rr": -20
+   }
+  ],
+  "offscreen": [
+   {
+    "e": "span.absolute.-right-5.-top-[30px]",
+    "t": "B",
+    "l": 316,
+    "right": 410
+   }
+  ],
+  "tap": [
+   {
+    "e": "a.flex.items-center.shrink-0",
+    "t": "",
+    "w": 89,
+    "h": 40,
+    "inline": false
+   },
+   {
+    "e": "button.lg:hidden.min-h-[40px].px-3",
+    "t": "Menu",
+    "w": 73,
+    "h": 40,
+    "inline": false
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "About",
+    "w": 36,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Sign with us",
+    "w": 72,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Contact",
+    "w": 47,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Artists",
+    "w": 39,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Releases",
+    "w": 56,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Videos",
+    "w": 42,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Privacy",
+    "w": 45,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Terms",
+    "w": 37,
+    "h": 14,
+    "inline": true
+   }
+  ],
+  "smallFont": [
+   {
+    "e": "button.lg:hidden.min-h-[40px].px-3",
+    "t": "Menu",
+    "fs": 13
+   },
+   {
+    "e": "span.border-2.border-black.px-2.5",
+    "t": "Signed to One Flame",
+    "fs": 13
+   },
+   {
+    "e": "span.border-2.border-black.px-2.5",
+    "t": "Dancehall mix",
+    "fs": 13
+   },
+   {
+    "e": "a.type-label.text-yellow.underline",
+    "t": "All artists",
+    "fs": 13
+   },
+   {
+    "e": "p.type-small.text-muted.mt-4",
+    "t": "Montego Bay, Jamaica",
+    "fs": 13
+   },
+   {
+    "e": "p.type-label.text-paper.mb-3",
+    "t": "Label",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "About",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Sign with us",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Contact",
+    "fs": 13
+   },
+   {
+    "e": "p.type-label.text-paper.mb-3",
+    "t": "Music",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Artists",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Releases",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Videos",
+    "fs": 13
+   },
+   {
+    "e": "p.type-label.text-paper.mb-3",
+    "t": "Legal",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Privacy",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Terms",
+    "fs": 13
+   },
+   {
+    "e": "p.type-caption.text-muted",
+    "t": "\u00a9 2026 One Flame Records. All ",
+    "fs": 12
+   }
+  ],
+  "headings": [
+   {
+    "t": "Bawlinz",
+    "fs": "64px",
+    "lines": 1,
+    "lastWord": "Bawlinz",
+    "orphan": false,
+    "over": false
+   },
+   {
+    "t": "Stay in the loop.",
+    "fs": "36px",
+    "lines": 1,
+    "lastWord": "loop.",
+    "orphan": false,
+    "over": false
+   }
+  ],
+  "sections": [
+   {
+    "e": "header.sticky.top-0.z-40",
+    "pt": 0,
+    "pb": 0,
+    "pl": 0,
+    "pr": 0,
+    "h": 68,
+    "bg": "rgb(15, 13, 11)"
+   },
+   {
+    "e": "section.grid.md:grid-cols-[1fr_1.2fr]",
+    "pt": 0,
+    "pb": 0,
+    "pl": 0,
+    "pr": 0,
+    "h": 374,
+    "bg": "rgba(0, 0, 0, 0)"
+   },
+   {
+    "e": "div.mx-auto.max-w-6xl.px-4",
+    "pt": 56,
+    "pb": 56,
+    "pl": 16,
+    "pr": 16,
+    "h": 156,
+    "bg": "rgba(0, 0, 0, 0)"
+   },
+   {
+    "e": "footer.bg-black.text-muted.mt-auto",
+    "pt": 0,
+    "pb": 0,
+    "pl": 0,
+    "pr": 0,
+    "h": 941,
+    "bg": "rgb(15, 13, 11)"
+   }
+  ],
+  "imgs": [],
+  "overlaps": [
+   [
+    "button.lg:hidden.min-h-[40px].px-3",
+    "Menu",
+    "span.absolute.-right-5.-top-[30px]",
+    "B",
+    59,
+    14
+   ]
+  ],
+  "headerPos": "sticky",
+  "headerH": 68,
+  "docH": 1538,
+  "status": 200
+ },
+ "artist-fola-boss": {
+  "scrollW": 390,
+  "overflowX": false,
+  "gutter": [
+   {
+    "e": "span.absolute.-right-5.-top-[30px]",
+    "t": "F",
+    "l": 329,
+    "rr": -20
+   }
+  ],
+  "offscreen": [
+   {
+    "e": "span.absolute.-right-5.-top-[30px]",
+    "t": "F",
+    "l": 329,
+    "right": 410
+   }
+  ],
+  "tap": [
+   {
+    "e": "a.flex.items-center.shrink-0",
+    "t": "",
+    "w": 89,
+    "h": 40,
+    "inline": false
+   },
+   {
+    "e": "button.lg:hidden.min-h-[40px].px-3",
+    "t": "Menu",
+    "w": 73,
+    "h": 40,
+    "inline": false
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "About",
+    "w": 36,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Sign with us",
+    "w": 72,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Contact",
+    "w": 47,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Artists",
+    "w": 39,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Releases",
+    "w": 56,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Videos",
+    "w": 42,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Privacy",
+    "w": 45,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Terms",
+    "w": 37,
+    "h": 14,
+    "inline": true
+   }
+  ],
+  "smallFont": [
+   {
+    "e": "button.lg:hidden.min-h-[40px].px-3",
+    "t": "Menu",
+    "fs": 13
+   },
+   {
+    "e": "span.border-2.border-black.px-2.5",
+    "t": "Signed to One Flame",
+    "fs": 13
+   },
+   {
+    "e": "span.border-2.border-black.px-2.5",
+    "t": "Kingston",
+    "fs": 13
+   },
+   {
+    "e": "span.border-2.border-black.px-2.5",
+    "t": "Roots",
+    "fs": 13
+   },
+   {
+    "e": "h2.type-label.text-black.mb-3",
+    "t": "Follow",
+    "fs": 13
+   },
+   {
+    "e": "a.type-label.text-red.underline",
+    "t": "Instagram",
+    "fs": 13
+   },
+   {
+    "e": "a.type-label.text-yellow.underline",
+    "t": "All artists",
+    "fs": 13
+   },
+   {
+    "e": "p.type-small.text-muted.mt-4",
+    "t": "Montego Bay, Jamaica",
+    "fs": 13
+   },
+   {
+    "e": "p.type-label.text-paper.mb-3",
+    "t": "Label",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "About",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Sign with us",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Contact",
+    "fs": 13
+   },
+   {
+    "e": "p.type-label.text-paper.mb-3",
+    "t": "Music",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Artists",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Releases",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Videos",
+    "fs": 13
+   },
+   {
+    "e": "p.type-label.text-paper.mb-3",
+    "t": "Legal",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Privacy",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Terms",
+    "fs": 13
+   },
+   {
+    "e": "p.type-caption.text-muted",
+    "t": "\u00a9 2026 One Flame Records. All ",
+    "fs": 12
+   }
+  ],
+  "headings": [
+   {
+    "t": "Fola boss",
+    "fs": "64px",
+    "lines": 1,
+    "lastWord": "boss",
+    "orphan": false,
+    "over": false
+   },
+   {
+    "t": "Follow",
+    "fs": "13px",
+    "lines": 1,
+    "lastWord": "Follow",
+    "orphan": false,
+    "over": false
+   },
+   {
+    "t": "Stay in the loop.",
+    "fs": "36px",
+    "lines": 1,
+    "lastWord": "loop.",
+    "orphan": false,
+    "over": false
+   }
+  ],
+  "sections": [
+   {
+    "e": "header.sticky.top-0.z-40",
+    "pt": 0,
+    "pb": 0,
+    "pl": 0,
+    "pr": 0,
+    "h": 68,
+    "bg": "rgb(15, 13, 11)"
+   },
+   {
+    "e": "section.grid.md:grid-cols-[1fr_1.2fr]",
+    "pt": 0,
+    "pb": 0,
+    "pl": 0,
+    "pr": 0,
+    "h": 465,
+    "bg": "rgba(0, 0, 0, 0)"
+   },
+   {
+    "e": "div.mx-auto.max-w-6xl.px-4",
+    "pt": 56,
+    "pb": 56,
+    "pl": 16,
+    "pr": 16,
+    "h": 156,
+    "bg": "rgba(0, 0, 0, 0)"
+   },
+   {
+    "e": "footer.bg-black.text-muted.mt-auto",
+    "pt": 0,
+    "pb": 0,
+    "pl": 0,
+    "pr": 0,
+    "h": 941,
+    "bg": "rgb(15, 13, 11)"
+   }
+  ],
+  "imgs": [],
+  "overlaps": [
+   [
+    "button.lg:hidden.min-h-[40px].px-3",
+    "Menu",
+    "span.absolute.-right-5.-top-[30px]",
+    "F",
+    45,
+    14
+   ]
+  ],
+  "headerPos": "sticky",
+  "headerH": 68,
+  "docH": 1630,
+  "status": 200
+ },
+ "menu": {
+  "scrollW": 390,
+  "overflowX": false,
+  "gutter": [],
+  "offscreen": [],
+  "tap": [
+   {
+    "e": "a.flex.items-center.shrink-0",
+    "t": "",
+    "w": 89,
+    "h": 40,
+    "inline": false
+   },
+   {
+    "e": "button.lg:hidden.min-h-[40px].px-3",
+    "t": "Close",
+    "w": 78,
+    "h": 40,
+    "inline": false
+   },
+   {
+    "e": "a.type-label.text-yellow.underline",
+    "t": "All artists",
+    "w": 96,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-label.text-yellow.underline",
+    "t": "All videos",
+    "w": 88,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "About",
+    "w": 36,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Sign with us",
+    "w": 72,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Contact",
+    "w": 47,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Artists",
+    "w": 39,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Releases",
+    "w": 56,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Videos",
+    "w": 42,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Privacy",
+    "w": 45,
+    "h": 14,
+    "inline": true
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Terms",
+    "w": 37,
+    "h": 14,
+    "inline": true
+   }
+  ],
+  "smallFont": [
+   {
+    "e": "button.lg:hidden.min-h-[40px].px-3",
+    "t": "Close",
+    "fs": 13
+   },
+   {
+    "e": "a.type-label.text-yellow.underline",
+    "t": "All artists",
+    "fs": 13
+   },
+   {
+    "e": "small.block.mt-1.font-text",
+    "t": "Signed to One Flame",
+    "fs": 12
+   },
+   {
+    "e": "small.block.mt-1.font-text",
+    "t": "Kingston",
+    "fs": 12
+   },
+   {
+    "e": "small.block.mt-1.font-text",
+    "t": "Montego Bay",
+    "fs": 12
+   },
+   {
+    "e": "small.block.mt-1.font-text",
+    "t": "Signed to One Flame",
+    "fs": 12
+   },
+   {
+    "e": "small.block.mt-1.font-text",
+    "t": "Montego Bay",
+    "fs": 12
+   },
+   {
+    "e": "small.block.mt-1.font-text",
+    "t": "Signed to One Flame",
+    "fs": 12
+   },
+   {
+    "e": "small.block.mt-1.font-text",
+    "t": "Montego Bay",
+    "fs": 12
+   },
+   {
+    "e": "small.block.mt-1.font-text",
+    "t": "Montego Bay",
+    "fs": 12
+   },
+   {
+    "e": "small.block.mt-1.font-text",
+    "t": "Signed to One Flame",
+    "fs": 12
+   },
+   {
+    "e": "a.type-label.text-yellow.underline",
+    "t": "All videos",
+    "fs": 13
+   },
+   {
+    "e": "p.mt-1.type-small.text-muted",
+    "t": "Kahlic",
+    "fs": 13
+   },
+   {
+    "e": "p.type-small.text-muted.mt-4",
+    "t": "Montego Bay, Jamaica",
+    "fs": 13
+   },
+   {
+    "e": "p.type-label.text-paper.mb-3",
+    "t": "Label",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "About",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Sign with us",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Contact",
+    "fs": 13
+   },
+   {
+    "e": "p.type-label.text-paper.mb-3",
+    "t": "Music",
+    "fs": 13
+   },
+   {
+    "e": "a.type-small.text-muted.underline-offset-4",
+    "t": "Artists",
+    "fs": 13
+   }
+  ],
+  "headings": [
+   {
+    "t": "Pressed in Montego Bay.",
+    "fs": "56px",
+    "lines": 2,
+    "lastWord": "Bay.",
+    "orphan": true,
+    "over": false
+   },
+   {
+    "t": "The roster",
+    "fs": "36px",
+    "lines": 1,
+    "lastWord": "roster",
+    "orphan": false,
+    "over": false
+   },
+   {
+    "t": "Latest videos",
+    "fs": "36px",
+    "lines": 1,
+    "lastWord": "videos",
+    "orphan": false,
+    "over": false
+   },
+   {
+    "t": "Flames Lounge",
+    "fs": "36px",
+    "lines": 1,
+    "lastWord": "Lounge",
+    "orphan": false,
+    "over": false
+   },
+   {
+    "t": "Sign with One Flame.",
+    "fs": "36px",
+    "lines": 1,
+    "lastWord": "Flame.",
+    "orphan": false,
+    "over": false
+   },
+   {
+    "t": "Stay in the loop.",
+    "fs": "36px",
+    "lines": 1,
+    "lastWord": "loop.",
+    "orphan": false,
+    "over": false
+   }
+  ],
+  "sections": [
+   {
+    "e": "header.sticky.top-0.z-40",
+    "pt": 0,
+    "pb": 0,
+    "pl": 0,
+    "pr": 0,
+    "h": 550,
+    "bg": "rgb(15, 13, 11)"
+   },
+   {
+    "e": "section.grid.md:grid-cols-[1.15fr_1fr]",
+    "pt": 0,
+    "pb": 0,
+    "pl": 0,
+    "pr": 0,
+    "h": 586,
+    "bg": "rgba(0, 0, 0, 0)"
+   },
+   {
+    "e": "section.bg-black",
+    "pt": 0,
+    "pb": 0,
+    "pl": 0,
+    "pr": 0,
+    "h": 1098,
+    "bg": "rgb(15, 13, 11)"
+   },
+   {
+    "e": "section.bg-black",
+    "pt": 0,
+    "pb": 0,
+    "pl": 0,
+    "pr": 0,
+    "h": 448,
+    "bg": "rgb(15, 13, 11)"
+   },
+   {
+    "e": "span.grille.block.w-full",
+    "pt": 0,
+    "pb": 0,
+    "pl": 0,
+    "pr": 0,
+    "h": 42,
+    "bg": "rgb(15, 13, 11)"
+   },
+   {
+    "e": "section.bg-red.text-paper",
+    "pt": 0,
+    "pb": 0,
+    "pl": 0,
+    "pr": 0,
+    "h": 283,
+    "bg": "rgb(200, 50, 31)"
+   },
+   {
+    "e": "section.bg-paper.text-black.border-b-4",
+    "pt": 0,
+    "pb": 0,
+    "pl": 0,
+    "pr": 0,
+    "h": 303,
+    "bg": "rgb(255, 247, 230)"
+   },
+   {
+    "e": "footer.bg-black.text-muted.mt-auto",
+    "pt": 0,
+    "pb": 0,
+    "pl": 0,
+    "pr": 0,
+    "h": 941,
+    "bg": "rgb(15, 13, 11)"
+   }
+  ],
+  "imgs": [],
+  "overlaps": [],
+  "headerPos": "sticky",
+  "headerH": 550,
+  "docH": 4250
+ }
+}

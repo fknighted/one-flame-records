@@ -110,7 +110,7 @@ export default async function VideosPage({
 
       {/* ── Grid ── */}
       <section className="bg-black">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 py-14 sm:py-[88px] space-y-14 sm:space-y-[88px]">
+        <div className={`mx-auto max-w-6xl px-4 sm:px-6 py-14 space-y-14 ${(videos && videos.length > 0) || jobsWithUrls.length > 0 ? "sm:py-[88px] sm:space-y-[88px]" : ""}`}>
           {/* Music Videos */}
           <div>
             {jobsWithUrls.length > 0 && <SectionHeader title="Music Videos" />}

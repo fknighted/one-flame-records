@@ -130,7 +130,7 @@ export default async function HomePage() {
                 </Link>
               }
             />
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-2">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 [&>*:last-child:nth-child(odd)]:col-span-2 [&>*:last-child:nth-child(odd)]:aspect-[2/1] lg:[&>*:last-child:nth-child(odd)]:col-span-1 lg:[&>*:last-child:nth-child(odd)]:aspect-square">
               {featuredArtists.map((artist, i) => (
                 <ArtistCard
                   key={artist.id}
@@ -149,7 +149,7 @@ export default async function HomePage() {
       {/* ── Latest releases: small paper posters ── */}
       {releases && releases.length > 0 && (
         <section className="bg-black">
-          <div className="mx-auto max-w-6xl px-4 sm:px-6 py-14 sm:py-[88px]">
+          <div className="mx-auto max-w-6xl px-4 sm:px-6 py-14 sm:py-[88px] [.bg-black+.bg-black_&]:pt-0 sm:[.bg-black+.bg-black_&]:pt-0">
             <SectionHeader
               title="Latest releases"
               action={
@@ -183,7 +183,7 @@ export default async function HomePage() {
       {/* ── Videos: thumbnails stay unprinted ── */}
       {videos && videos.length > 0 && (
         <section className="bg-black">
-          <div className="mx-auto max-w-6xl px-4 sm:px-6 py-14 sm:py-[88px]">
+          <div className="mx-auto max-w-6xl px-4 sm:px-6 py-14 sm:py-[88px] [.bg-black+.bg-black_&]:pt-0 sm:[.bg-black+.bg-black_&]:pt-0">
             <SectionHeader
               title="Latest videos"
               action={
@@ -219,7 +219,7 @@ export default async function HomePage() {
       {/* ── Latest news: paper cards with a red tag band ── */}
       {newsPosts && newsPosts.length > 0 && (
         <section className="bg-black">
-          <div className="mx-auto max-w-6xl px-4 sm:px-6 py-14 sm:py-[88px]">
+          <div className="mx-auto max-w-6xl px-4 sm:px-6 py-14 sm:py-[88px] [.bg-black+.bg-black_&]:pt-0 sm:[.bg-black+.bg-black_&]:pt-0">
             <SectionHeader
               title="Latest news"
               action={

@@ -50,9 +50,9 @@ export default function ReleasesFilter({ artists }: Props) {
   );
 
   return (
-    <div className="flex items-center gap-x-5 gap-y-2 overflow-x-auto p-1 -m-1 sm:flex-wrap sm:overflow-visible">
+    <div className="flex flex-wrap items-center gap-x-5 gap-y-2 p-1 -m-1">
       {/* Type pills */}
-      <div className="flex shrink-0 gap-2 sm:flex-wrap" role="group" aria-label="Filter by type">
+      <div className="flex flex-wrap gap-2" role="group" aria-label="Filter by type">
         <button
           type="button"
           onClick={() => push("type", "")}
@@ -82,7 +82,7 @@ export default function ReleasesFilter({ artists }: Props) {
         <select
           value={currentArtist}
           onChange={(e) => push("artist", e.target.value)}
-          className={`${SELECT} shrink-0`}
+          className={SELECT}
           aria-label="Filter by artist"
         >
           <option value="">All artists</option>
@@ -95,7 +95,7 @@ export default function ReleasesFilter({ artists }: Props) {
       )}
 
       {/* Sort chips */}
-      <div className="sm:ml-auto flex shrink-0 gap-2" role="group" aria-label="Sort releases">
+      <div className="sm:ml-auto flex flex-wrap gap-2" role="group" aria-label="Sort releases">
         {SORTS.map(({ value, label }) => (
           <button
             type="button"

@@ -60,7 +60,7 @@ export default function SignPage() {
             </LinkButton>
             <Link
               href="/artists"
-              className="type-label text-black underline underline-offset-4 focus-on-yellow"
+              className="type-label inline-flex min-h-[44px] items-center text-black underline underline-offset-4 focus-on-yellow"
             >
               Our roster
             </Link>

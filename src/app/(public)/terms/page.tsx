@@ -25,7 +25,7 @@ export default function TermsPage() {
           <p className="type-label">Effective date: June 2026</p>
 
           <div>
-            <h2 className="type-title mb-3">
+            <h2 className="type-title mb-4">
               Acceptance of terms
             </h2>
             <p className="type-body max-w-[66ch]">
@@ -37,7 +37,7 @@ export default function TermsPage() {
           </div>
 
           <div>
-            <h2 className="type-title mb-3">
+            <h2 className="type-title mb-4">
               Use of the website
             </h2>
             <p className="type-body max-w-[66ch] mb-3">
@@ -65,7 +65,7 @@ export default function TermsPage() {
           </div>
 
           <div>
-            <h2 className="type-title mb-3">
+            <h2 className="type-title mb-4">
               Intellectual property
             </h2>
             <p className="type-body max-w-[66ch]">
@@ -80,7 +80,7 @@ export default function TermsPage() {
           </div>
 
           <div>
-            <h2 className="type-title mb-3">
+            <h2 className="type-title mb-4">
               Artist submissions
             </h2>
             <p className="type-body max-w-[66ch]">
@@ -95,7 +95,7 @@ export default function TermsPage() {
           </div>
 
           <div>
-            <h2 className="type-title mb-3">
+            <h2 className="type-title mb-4">
               Newsletter
             </h2>
             <p className="type-body max-w-[66ch]">
@@ -105,7 +105,7 @@ export default function TermsPage() {
               link in any email or by contacting us at{" "}
               <a
                 href="mailto:contact@oneflamerecords.com"
-                className="text-red underline underline-offset-4 focus-on-paper [overflow-wrap:anywhere]"
+                className="inline-block py-3 text-red underline underline-offset-4 focus-on-paper [overflow-wrap:anywhere]"
               >
                 contact@oneflamerecords.com
               </a>
@@ -114,7 +114,7 @@ export default function TermsPage() {
           </div>
 
           <div>
-            <h2 className="type-title mb-3">
+            <h2 className="type-title mb-4">
               Disclaimer of warranties
             </h2>
             <p className="type-body max-w-[66ch]">
@@ -127,7 +127,7 @@ export default function TermsPage() {
           </div>
 
           <div>
-            <h2 className="type-title mb-3">
+            <h2 className="type-title mb-4">
               Limitation of liability
             </h2>
             <p className="type-body max-w-[66ch]">
@@ -139,7 +139,7 @@ export default function TermsPage() {
           </div>
 
           <div>
-            <h2 className="type-title mb-3">
+            <h2 className="type-title mb-4">
               Governing law
             </h2>
             <p className="type-body max-w-[66ch]">
@@ -151,7 +151,7 @@ export default function TermsPage() {
           </div>
 
           <div>
-            <h2 className="type-title mb-3">
+            <h2 className="type-title mb-4">
               Changes to these terms
             </h2>
             <p className="type-body max-w-[66ch]">
@@ -163,14 +163,14 @@ export default function TermsPage() {
           </div>
 
           <div>
-            <h2 className="type-title mb-3">
+            <h2 className="type-title mb-4">
               Contact
             </h2>
             <p className="type-body max-w-[66ch]">
               For questions about these terms, contact us at{" "}
               <a
                 href="mailto:contact@oneflamerecords.com"
-                className="text-red underline underline-offset-4 focus-on-paper [overflow-wrap:anywhere]"
+                className="inline-block py-3 text-red underline underline-offset-4 focus-on-paper [overflow-wrap:anywhere]"
               >
                 contact@oneflamerecords.com
               </a>
@@ -181,7 +181,7 @@ export default function TermsPage() {
           <div className="pt-4 border-t-2 border-black">
             <Link
               href="/"
-              className="type-label text-red underline underline-offset-4 focus-on-paper"
+              className="type-label inline-flex min-h-[44px] items-center text-red underline underline-offset-4 focus-on-paper"
             >
               Back to home
             </Link>

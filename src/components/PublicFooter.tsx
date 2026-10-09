@@ -20,13 +20,13 @@ const LEGAL_LINKS = [
 ];
 
 // Footer links on black: muted text (12.2:1), yellow on hover, yellow focus ring.
-const LINK = "type-small text-muted underline-offset-4 hover:text-yellow hover:underline focus-on-black";
+const LINK = "inline-flex min-h-[44px] items-center type-small text-muted underline-offset-4 hover:text-yellow hover:underline focus-on-black";
 
 function LinkList({ title, links }: { title: string; links: { href: string; label: string }[] }) {
   return (
     <div>
       <p className="type-label text-paper mb-3">{title}</p>
-      <ul className="space-y-2.5">
+      <ul>
         {links.map(({ href, label }) => (
           <li key={href}>
             <Link href={href} className={LINK}>
@@ -43,7 +43,7 @@ export default function PublicFooter() {
   return (
     <footer className="bg-black text-muted mt-auto">
       {/* Newsletter: forms sit on paper */}
-      <div id="subscribe" className="bg-paper text-black scroll-mt-24">
+      <div id="subscribe" className="bg-paper text-black scroll-mt-24 border-t-4 border-yellow">
         <div className="mx-auto max-w-6xl px-4 sm:px-6 py-10 grid gap-5 md:grid-cols-2 md:items-end">
           <div className="min-w-0">
             <h2 className="type-headline">Stay in the loop.</h2>
@@ -79,7 +79,7 @@ export default function PublicFooter() {
             &copy; 2026 One Flame Records. All rights reserved.
           </p>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 -ml-3">
             <a
               href="https://instagram.com/oneflamerecords"
               target="_blank"

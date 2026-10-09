@@ -101,7 +101,7 @@ export default async function ReleasesPage({ searchParams }: { searchParams: Sea
 
       {/* ── Grid ── */}
       <section className="bg-black">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 py-14 sm:py-[88px]">
+        <div className={`mx-auto max-w-6xl px-4 sm:px-6 py-14 ${releases.length > 0 ? "sm:py-[88px]" : ""}`}>
           {releases.length > 0 ? (
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2">
               {releases.map((r) => (

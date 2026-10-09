@@ -39,7 +39,7 @@ export default function SectionHeader({ title, action, variant, as = "h2" }: Pro
         </Tag>
         <span aria-hidden="true" className="section-bar mt-2" />
       </div>
-      {action && <div className="shrink-0">{action}</div>}
+      {action && <div className="shrink-0 [&_a]:inline-flex [&_a]:min-h-[44px] [&_a]:items-center">{action}</div>}
     </div>
   );
 }

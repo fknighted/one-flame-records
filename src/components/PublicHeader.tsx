@@ -29,7 +29,7 @@ export default function PublicHeader() {
         {/* Logo: plain light horizontal lockup on black */}
         <Link
           href="/"
-          className="flex items-center shrink-0 focus-on-black"
+          className="flex items-center shrink-0 min-h-[44px] focus-on-black"
           onClick={() => setOpen(false)}
         >
           <LogoMark variant="horizontal" ground="black" height={40} className="h-10 w-auto lg:h-12" priority />
@@ -56,7 +56,7 @@ export default function PublicHeader() {
         {/* Phone: outlined yellow Menu button */}
         <button
           type="button"
-          className="lg:hidden min-h-[40px] px-3 border-2 border-yellow text-yellow type-label hover:bg-yellow hover:text-black focus-on-black"
+          className="lg:hidden min-h-[46px] px-3 border-2 border-yellow text-yellow type-label hover:bg-yellow hover:text-black focus-on-black"
           onClick={() => setOpen((v) => !v)}
           aria-expanded={open}
           aria-controls="mobile-menu"
@@ -69,7 +69,7 @@ export default function PublicHeader() {
       {open && (
         <nav
           id="mobile-menu"
-          className="lg:hidden bg-black border-t-2 border-line px-4 sm:px-6 pt-2 pb-6 max-h-[calc(100dvh-72px)] overflow-y-auto"
+          className="lg:hidden bg-black border-t-2 border-line px-4 sm:px-6 pt-2 pb-6 max-h-[calc(100dvh-78px)] overflow-y-auto"
           aria-label="Mobile"
         >
           {[...NAV, { href: "/search", label: "Search" }].map(({ href, label }) => (

@@ -241,7 +241,7 @@ export default async function FlamesLoungePage() {
 
       {/* About */}
       <section className="bg-black">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 py-14 sm:py-[88px]">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 pt-10 pb-14 sm:py-[88px]">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-start">
             <div className="min-w-0">
               <SectionHeader title="Where the music meets the moment." />
@@ -254,7 +254,7 @@ export default async function FlamesLoungePage() {
               </p>
               <p className="type-body-sm text-muted mt-4">
                 Part of the One Flame Records family.{" "}
-                <Link href="/" className="text-yellow underline underline-offset-4 focus-on-black">
+                <Link href="/" className="inline-flex min-h-[44px] items-center text-yellow underline underline-offset-4 focus-on-black">
                   Visit the label
                 </Link>
               </p>
@@ -292,7 +292,7 @@ export default async function FlamesLoungePage() {
             </p>
           </div>
           {/* Red block where a studio photo will go. */}
-          <div aria-hidden="true" className="bg-red min-h-[220px] grid place-items-center">
+          <div aria-hidden="true" className="bg-red min-h-[160px] md:min-h-[220px] grid place-items-center">
             <LogoMark variant="flame" ground="red" height={72} alt="" />
           </div>
         </div>
@@ -336,7 +336,7 @@ export default async function FlamesLoungePage() {
 
       {/* Events */}
       <section className="bg-black border-t-4 border-line">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 py-14 sm:py-[88px]">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 pt-10 pb-14 sm:py-[88px]">
           <SectionHeader title="Events & programming" />
           <p className="type-body text-paper max-w-[66ch] mb-8">
             The Lounge is a live venue. Open mics, DJ nights, artist showcases,
@@ -397,7 +397,7 @@ export default async function FlamesLoungePage() {
 
       {/* The space: no photos yet */}
       <section className="bg-black">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 py-14 sm:py-[88px]">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 pt-0 pb-14 sm:py-[88px]">
           <SectionHeader title="The space" />
           <EmptyState
             title="Photos of the space are on the way."
@@ -416,7 +416,7 @@ export default async function FlamesLoungePage() {
               <p className="type-body mt-4 max-w-[46ch]">
                 Montego Bay, Jamaica. Walk-in welcome, no reservation needed.
               </p>
-              <div className="mt-6 flex flex-wrap items-center gap-x-2 gap-y-2">
+              <div className="mt-6 -ml-3 flex flex-wrap items-center gap-x-2 gap-y-2">
                 <a
                   href="https://instagram.com/flamesmobay"
                   target="_blank"

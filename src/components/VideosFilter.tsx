@@ -49,12 +49,12 @@ export default function VideosFilter({ artists }: Props) {
   );
 
   return (
-    <div className="flex items-center gap-3 overflow-x-auto p-1 -m-1 sm:flex-wrap sm:overflow-visible">
+    <div className="flex flex-wrap items-center gap-2 p-1 -m-1">
       {artists.length > 0 && (
         <select
           value={currentArtist}
           onChange={(e) => push("artist", e.target.value)}
-          className={`${SELECT} shrink-0`}
+          className={SELECT}
           aria-label="Filter by artist"
         >
           <option value="">All artists</option>
@@ -66,7 +66,7 @@ export default function VideosFilter({ artists }: Props) {
         </select>
       )}
 
-      <div className="flex shrink-0 gap-2 sm:flex-wrap" role="group" aria-label="Filter by kind">
+      <div className="flex flex-wrap gap-2" role="group" aria-label="Filter by kind">
         <button
           type="button"
           onClick={() => push("kind", "")}

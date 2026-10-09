@@ -25,7 +25,7 @@ export default function PrivacyPage() {
           <p className="type-label">Effective date: June 2026</p>
 
           <div>
-            <h2 className="type-title mb-3">
+            <h2 className="type-title mb-4">
               Who we are
             </h2>
             <p className="type-body max-w-[66ch]">
@@ -34,7 +34,7 @@ export default function PrivacyPage() {
               have any questions about this policy, please contact us at{" "}
               <a
                 href="mailto:contact@oneflamerecords.com"
-                className="text-red underline underline-offset-4 focus-on-paper [overflow-wrap:anywhere]"
+                className="inline-block py-3 text-red underline underline-offset-4 focus-on-paper [overflow-wrap:anywhere]"
               >
                 contact@oneflamerecords.com
               </a>
@@ -43,7 +43,7 @@ export default function PrivacyPage() {
           </div>
 
           <div>
-            <h2 className="type-title mb-3">
+            <h2 className="type-title mb-4">
               What data we collect
             </h2>
             <p className="type-body max-w-[66ch] mb-3">
@@ -72,7 +72,7 @@ export default function PrivacyPage() {
           </div>
 
           <div>
-            <h2 className="type-title mb-3">
+            <h2 className="type-title mb-4">
               How we use your data
             </h2>
             <ul className="list-disc pl-5 space-y-2 type-body max-w-[66ch]">
@@ -94,7 +94,7 @@ export default function PrivacyPage() {
           </div>
 
           <div>
-            <h2 className="type-title mb-3">
+            <h2 className="type-title mb-4">
               Data storage
             </h2>
             <p className="type-body max-w-[66ch]">
@@ -107,7 +107,7 @@ export default function PrivacyPage() {
           </div>
 
           <div>
-            <h2 className="type-title mb-3">
+            <h2 className="type-title mb-4">
               Newsletter communications
             </h2>
             <p className="type-body max-w-[66ch]">
@@ -116,7 +116,7 @@ export default function PrivacyPage() {
               by contacting us directly at{" "}
               <a
                 href="mailto:contact@oneflamerecords.com"
-                className="text-red underline underline-offset-4 focus-on-paper [overflow-wrap:anywhere]"
+                className="inline-block py-3 text-red underline underline-offset-4 focus-on-paper [overflow-wrap:anywhere]"
               >
                 contact@oneflamerecords.com
               </a>
@@ -125,7 +125,7 @@ export default function PrivacyPage() {
           </div>
 
           <div>
-            <h2 className="type-title mb-3">
+            <h2 className="type-title mb-4">
               Your rights
             </h2>
             <p className="type-body max-w-[66ch]">
@@ -134,7 +134,7 @@ export default function PrivacyPage() {
               request, contact us at{" "}
               <a
                 href="mailto:contact@oneflamerecords.com"
-                className="text-red underline underline-offset-4 focus-on-paper [overflow-wrap:anywhere]"
+                className="inline-block py-3 text-red underline underline-offset-4 focus-on-paper [overflow-wrap:anywhere]"
               >
                 contact@oneflamerecords.com
               </a>
@@ -143,7 +143,7 @@ export default function PrivacyPage() {
           </div>
 
           <div>
-            <h2 className="type-title mb-3">
+            <h2 className="type-title mb-4">
               Changes to this policy
             </h2>
             <p className="type-body max-w-[66ch]">
@@ -157,7 +157,7 @@ export default function PrivacyPage() {
           <div className="pt-4 border-t-2 border-black">
             <Link
               href="/"
-              className="type-label text-red underline underline-offset-4 focus-on-paper"
+              className="type-label inline-flex min-h-[44px] items-center text-red underline underline-offset-4 focus-on-paper"
             >
               Back to home
             </Link>

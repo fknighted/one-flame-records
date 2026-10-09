@@ -69,7 +69,7 @@ export default async function NewsPage({
 
       {/* ── Posts grid ── */}
       <section className="bg-black">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 py-14 sm:py-[88px]">
+        <div className={`mx-auto max-w-6xl px-4 sm:px-6 py-14 ${posts && posts.length > 0 ? "sm:py-[88px]" : ""}`}>
           {posts && posts.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
               {posts.map((post, i) => {
