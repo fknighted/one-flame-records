@@ -1,0 +1,7 @@
+# Live verification, One Flame Records, 2026-10-09 (independent check, nothing changed)
+
+1. PASS - origin/main top: 8dd1855, 681d391, then 807859f. Files in both commits sit under design-system/, brand/, src/, public/brand/, docs/ (incl. docs/audits/2026-10-08-sound-system). No .env, mix-exports or 2026-10-06 security file matched. (CLAUDE.md/AGENTS.md not individually listed; nothing outside scope seen.)
+2. PASS - dpl_DCc614NppGdrhHGhoeRzoAGkkukx: Ready, target production, newest prod deploy, build log "Commit: 8dd1855". Aliases include oneflamerecords.com and www. Apex answers 307 to www; www serves 200. Rollback: dpl_CcwWUZi6Ezs3jSrC1SPuaKfT15Xr (not re-inspected).
+3. PASS - www returned 200 for all 16 paths (/, /artists, /releases, /videos, /news, /flames-lounge, /about, /contact, /sign, /gamer-signup, /privacy, /terms, /login, /robots.txt, /sitemap.xml, /opengraph-image); artist page /artists/fola-boss rendered. Fonts at 1280 and 375: Archivo and Big Shoulders only. scrollWidth equals clientWidth at 375 on all four pages. Live CSS has --color-yellow, no --color-oxblood. Console errors: none (home, lounge, artist, login). Screenshots: home/lounge/artist/login at -1280 and -375 in this folder. Font check sampled first 400 elements per page.
+4. PASS - /admin, /portal, /bar, /gamer each 307 to /login?next=<path> on www (apex first 307s to www).
+5. PASS - newest Content Studio prod deploy content-studio-qo3fxi3tc: Building at first look, Ready (40s) on recheck. /api/ops/health 200. Commit sha of that deploy not confirmed.
