@@ -1,3 +1,21 @@
+# Full legacy studio removal — October 8, 2026
+
+All legacy studio navigation, production pages/actions/workers and contextual AI buttons are removed. Saved media and normal catalog/upload/YouTube functions remain. Independent source review, offline checks, type checking and build passed. Frank authorized commit, push and deployment; release evidence: [receipt](session-handoffs/2026-10-08-total-studio-removal.md). Current state belongs in [Delegations](/Users/frankknight/Claude OS/Delegations/remove-all-remaining-one-flame-studio-navigation-and-tools-a.md).
+
+# Current security release — October 6, 2026
+
+One Flame is live with the reviewed security fixes. A separate reviewer confirmed the serving release, website availability and sign-in protection. Production dependency checks for the reviewed candidate reported no findings.
+
+The hosted build uses Next.js 16.3.8; the reviewed lockfile includes Sharp 0.35.5. Public pages and the sharing image respond; signed-out admin access redirects to login. The hosted native image-processing binary was not separately inspected. The hosting command refreshed an ignored local login token without changing hosted credential settings.
+
+Five high development-tool warnings and seven pre-existing lint errors remain. This release does not claim a clean all-dependency or lint check. Real payments, trades, emails, customer submissions and paid generation were not tested.
+
+Recorded release: Vercel dpl_BM8C1XY7GTeB8ybot9jrry9Gtdfs. No commit or push was made for this release. Previous release recovery instructions are saved in the release receipt.
+
+[Release and rollback receipt](audits/2026-10-06-security-release.md) · [Independent live review](audits/2026-10-06-security-release-independent-review.md)
+
+Completion and any continuing commitments belong only in [Delegations](</Users/frankknight/Claude OS/Delegations/deploy-the-independently-reviewed-october-6-security-fixes-f-2.md>). This release does not renew authorization for later deployments or business actions.
+
 # Progress
 
 This is the living state of the build. Update at the end of every session.
@@ -8,7 +26,7 @@ This is the living state of the build. Update at the end of every session.
 
 - **Phase:** Bar POS operational + ongoing content + post-launch hardening/perf
 - **Status:** Phases 1–5 complete. Bar POS live with cost/profit tracking. A full-site audit (2026-07-16/17) shipped all Critical+High security/design/perf fixes; public-page caching and admin count-aggregation RPCs landed 2026-07-17. **Recent detailed session history lives in `docs/session-handoffs/` (2026-07-16, 2026-07-17, 2026-07-17-2) and the auto-memory index** — the session log below jumps from session 41 to 2026-07-17.
-- **Last updated:** 2026-07-17
+- **Last updated:** 2026-10-06 (security release); July product summary below is historical.
 
 ## Active focus
 
@@ -20,7 +38,9 @@ Post-launch performance + correctness cleanup. Remaining backlog is small; see N
 - **Flames Lounge gallery / logos / hero** — gallery grid + logo assets still placeholder; needs owner-provided assets. Since 2026-10-05 the hero has no photo at all (the stock Unsplash bar photo was removed) — a real Lounge photo is needed.
 - **`pos_items.cost_cents`** — most items have no cost entered → bar profit overstated until the owner enters costs (data entry, not code).
 
-## Next session
+## Historical July next-session suggestions
+
+These are historical suggestions, not current commitments. Current decisions in decisions.md and the root Delegations ledger take precedence, including the later whole-dollar money decision.
 
 ### Priority 1 — `game_sessions.price_jmd` → cents
 - Last remaining break of the "money is cents" invariant (currently stored in whole dollars, compensated with ×100 shims). Migrate the column to cents, remove the shims, update reads/writes. Money change — verify against prod (the service-role verification-script approach from 2026-07-17 works well).
@@ -46,6 +66,16 @@ _Done 2026-07-17 (see session log): session-41 code-review bugs; whole-dollar mo
 ---
 
 ## Session log
+
+### Historical October 6 release-preparation receipt — superseded by confirmed release above
+
+Frank authorized production deployment. Reviewed dependency patches were released directly through Vercel; website aliases now serve the Ready release recorded in [security release receipt](audits/2026-10-06-security-release.md). Public pages and sharing image respond; signed-out admin/bar/portal redirect to login. No payment, generation, messaging or database operation was tested. Existing lint errors and unpatched development tooling warnings remain. No commit or push; deployed package provenance is recorded by manifest hashes. Root release delegation owns separate review and completion.
+
+
+### Historical October 6 local candidate — superseded by confirmed release above
+
+Updated Next and its lint package to16.3.8, Sharp to0.35.5, and refreshed package dependencies within the existing allowed ranges. The production-only security scan is clear. The full scan retains five linked, development-only warnings from unpatched braces. Type checking and an isolated production build pass. Lint still fails with the seven known errors and43 warnings. No application source, database, hosted release or account setting changed. Detailed versions, checks and limits: [security-remediation-2026-10-06.md](security-remediation-2026-10-06.md). The root Delegations ledger holds the remaining review/release work; this is not a completed live fix.
+
 
 Append a new entry at the top of this section after every session. Date, summary, files touched, what's next. Keep it tight — full reasoning belongs in `decisions.md`.
 

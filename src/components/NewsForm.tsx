@@ -119,14 +119,6 @@ export default function NewsForm({
       <div>
         <div className="flex items-center justify-between mb-1">
           <label className={LABEL} style={{ marginBottom: 0 }}>Body (Markdown)</label>
-          {mode === "edit" && post?.id && (
-            <Link
-              href={`/admin/ai-studio/copy?purpose=news_post&return=/admin/news/${post.id}/edit`}
-              className="text-xs text-ochre/60 hover:text-ochre transition-colors"
-            >
-              Draft with Claude →
-            </Link>
-          )}
         </div>
         <textarea
           className={`${INPUT} font-mono text-xs leading-relaxed`}
@@ -141,14 +133,6 @@ export default function NewsForm({
       <div>
         <div className="flex items-center justify-between mb-1">
           <label className={LABEL} style={{ marginBottom: 0 }}>Cover image</label>
-          {mode === "edit" && post?.id && (
-            <Link
-              href={`/admin/ai-studio/images?purpose=news_cover&return=/admin/news/${post.id}/edit`}
-              className="text-xs text-ochre/60 hover:text-ochre transition-colors"
-            >
-              Generate with AI →
-            </Link>
-          )}
         </div>
         {coverPreview && (
           <img

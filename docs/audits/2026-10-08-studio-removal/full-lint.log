@@ -1,0 +1,153 @@
+
+> oneflame-records@0.1.0 lint
+> eslint
+
+
+/Users/frankknight/Claude OS/Projects/one flame app/src/app/(public)/artists/[slug]/page.tsx
+  397:21  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+/Users/frankknight/Claude OS/Projects/one flame app/src/app/(public)/unsubscribe/UnsubscribeForm.tsx
+  18:14  error  `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+  20:51  error  `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+
+/Users/frankknight/Claude OS/Projects/one flame app/src/app/(public)/unsubscribe/page.tsx
+  22:28  error  `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+
+/Users/frankknight/Claude OS/Projects/one flame app/src/app/admin/artists/[id]/assets/actions.ts
+  71:58  warning  '_formData' is defined but never used  @typescript-eslint/no-unused-vars
+  90:52  warning  '_formData' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/frankknight/Claude OS/Projects/one flame app/src/app/admin/artists/[id]/videos/actions.ts
+  7:72  warning  '_formData' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/frankknight/Claude OS/Projects/one flame app/src/app/admin/campaigns/ideas/IdeasClient.tsx
+  28:27  warning  'onDismiss' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/frankknight/Claude OS/Projects/one flame app/src/app/admin/releases/page.tsx
+  75:25  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+/Users/frankknight/Claude OS/Projects/one flame app/src/app/admin/settings/MFASection.tsx
+  32:21  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+/Users/frankknight/Claude OS/Projects/one flame app/src/app/admin/settings/MFASection.tsx:32:21
+  30 |   }
+  31 |
+> 32 |   useEffect(() => { loadFactors(); }, []);
+     |                     ^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  33 |
+  34 |   async function startEnroll() {
+  35 |     setError(null);  react-hooks/set-state-in-effect
+
+/Users/frankknight/Claude OS/Projects/one flame app/src/app/admin/videos/actions.ts
+  24:3  warning  'contentType' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/frankknight/Claude OS/Projects/one flame app/src/app/admin/videos/page.tsx
+  77:25  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+/Users/frankknight/Claude OS/Projects/one flame app/src/app/auth/callback/page.tsx
+  23:11  warning  Do not use `window.location.href` to navigate to internal Next.js pages. Use `redirect()` in the render phase, or `useRouter().push()` in Client Components' event handlers instead. See: https://nextjs.org/docs/messages/no-location-assign-relative-destination  @next/next/no-location-assign-relative-destination
+  41:13  warning  Do not use `window.location.href` to navigate to internal Next.js pages. Use `redirect()` in the render phase, or `useRouter().push()` in Client Components' event handlers instead. See: https://nextjs.org/docs/messages/no-location-assign-relative-destination  @next/next/no-location-assign-relative-destination
+  48:9   warning  Do not use `window.location.href` to navigate to internal Next.js pages. Use `redirect()` in the render phase, or `useRouter().push()` in Client Components' event handlers instead. See: https://nextjs.org/docs/messages/no-location-assign-relative-destination  @next/next/no-location-assign-relative-destination
+  52:7   warning  Do not use `window.location.href` to navigate to internal Next.js pages. Use `redirect()` in the render phase, or `useRouter().push()` in Client Components' event handlers instead. See: https://nextjs.org/docs/messages/no-location-assign-relative-destination  @next/next/no-location-assign-relative-destination
+
+/Users/frankknight/Claude OS/Projects/one flame app/src/app/auth/set-password/page.tsx
+  46:27  warning  Do not use `window.location.href` to navigate to internal Next.js pages. Use `redirect()` in the render phase, or `useRouter().push()` in Client Components' event handlers instead. See: https://nextjs.org/docs/messages/no-location-assign-relative-destination  @next/next/no-location-assign-relative-destination
+  47:61  warning  Do not use `window.location.href` to navigate to internal Next.js pages. Use `redirect()` in the render phase, or `useRouter().push()` in Client Components' event handlers instead. See: https://nextjs.org/docs/messages/no-location-assign-relative-destination  @next/next/no-location-assign-relative-destination
+  48:33  warning  Do not use `window.location.href` to navigate to internal Next.js pages. Use `redirect()` in the render phase, or `useRouter().push()` in Client Components' event handlers instead. See: https://nextjs.org/docs/messages/no-location-assign-relative-destination  @next/next/no-location-assign-relative-destination
+  49:32  warning  Do not use `window.location.href` to navigate to internal Next.js pages. Use `redirect()` in the render phase, or `useRouter().push()` in Client Components' event handlers instead. See: https://nextjs.org/docs/messages/no-location-assign-relative-destination  @next/next/no-location-assign-relative-destination
+  50:10  warning  Do not use `window.location.href` to navigate to internal Next.js pages. Use `redirect()` in the render phase, or `useRouter().push()` in Client Components' event handlers instead. See: https://nextjs.org/docs/messages/no-location-assign-relative-destination  @next/next/no-location-assign-relative-destination
+
+/Users/frankknight/Claude OS/Projects/one flame app/src/app/bar/regulars/RegularsClient.tsx
+  53:48  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+/Users/frankknight/Claude OS/Projects/one flame app/src/app/bar/regulars/RegularsClient.tsx:53:48
+  51 |   // Close edit form automatically after a successful save
+  52 |   useEffect(() => {
+> 53 |     if (state === null && !pending && editing) setEditing(false);
+     |                                                ^^^^^^^^^^ Avoid calling setState() directly within an effect
+  54 |   }, [state, pending, editing]);
+  55 |
+  56 |   if (editing) {  react-hooks/set-state-in-effect
+
+/Users/frankknight/Claude OS/Projects/one flame app/src/app/bar/sessions/SessionTimer.tsx
+   54:5  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+/Users/frankknight/Claude OS/Projects/one flame app/src/app/bar/sessions/SessionTimer.tsx:54:5
+  52 |   useEffect(() => {
+  53 |     if (durationMins === null) return;
+> 54 |     tick();
+     |     ^^^^ Avoid calling setState() directly within an effect
+  55 |     const id = setInterval(tick, 1000);
+  56 |     return () => clearInterval(id);
+  57 |   }, [durationMins, tick]);                                                                             react-hooks/set-state-in-effect
+  106:7  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+/Users/frankknight/Claude OS/Projects/one flame app/src/app/bar/sessions/SessionTimer.tsx:106:7
+  104 |     if (typeof window === "undefined" || !("Notification" in window)) return;
+  105 |     if (Notification.permission === "default" && !permAsked) {
+> 106 |       setPermAsked(true);
+      |       ^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  107 |       Notification.requestPermission();
+  108 |     }
+  109 |   }, [permAsked]);  react-hooks/set-state-in-effect
+
+/Users/frankknight/Claude OS/Projects/one flame app/src/app/login/page.tsx
+  37:5  warning  Do not use `window.location.href` to navigate to internal Next.js pages. Use `redirect()` in the render phase, or `useRouter().push()` in Client Components' event handlers instead. See: https://nextjs.org/docs/messages/no-location-assign-relative-destination  @next/next/no-location-assign-relative-destination
+
+/Users/frankknight/Claude OS/Projects/one flame app/src/app/opengraph-image.tsx
+  27:10  warning  Unused eslint-disable directive (no problems were reported from '@next/next/no-img-element')
+
+/Users/frankknight/Claude OS/Projects/one flame app/src/app/portal/assets/actions.ts
+  158:58  warning  '_formData' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/frankknight/Claude OS/Projects/one flame app/src/app/portal/releases/ArtistLink.tsx
+  14:19  warning  Do not use `window.location.href` to navigate to internal Next.js pages. Use `redirect()` in the render phase, or `useRouter().push()` in Client Components' event handlers instead. See: https://nextjs.org/docs/messages/no-location-assign-relative-destination  @next/next/no-location-assign-relative-destination
+
+/Users/frankknight/Claude OS/Projects/one flame app/src/app/portal/videos/actions.ts
+  7:56  warning  '_formData' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/frankknight/Claude OS/Projects/one flame app/src/components/ArtistForm.tsx
+  202:15  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+/Users/frankknight/Claude OS/Projects/one flame app/src/components/LogoutButton.tsx
+  9:5  warning  Do not use `window.location.href` to navigate to internal Next.js pages. Use `redirect()` in the render phase, or `useRouter().push()` in Client Components' event handlers instead. See: https://nextjs.org/docs/messages/no-location-assign-relative-destination  @next/next/no-location-assign-relative-destination
+
+/Users/frankknight/Claude OS/Projects/one flame app/src/components/NewsForm.tsx
+  154:11  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+/Users/frankknight/Claude OS/Projects/one flame app/src/components/PortalProfileForm.tsx
+  120:13  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+/Users/frankknight/Claude OS/Projects/one flame app/src/components/ReleaseForm.tsx
+  186:13  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+/Users/frankknight/Claude OS/Projects/one flame app/src/components/VideoForm.tsx
+  175:19  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+✖ 35 problems (7 errors, 28 warnings)
+  0 errors and 1 warning potentially fixable with the `--fix` option.
+

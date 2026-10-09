@@ -39,6 +39,7 @@ export default async function AdminArtistVideosPage({ params }: Props) {
   const { data: jobs } = await supabase
     .from("video_jobs")
     .select("*")
+    .eq("status", "complete")
     .eq("artist_id", id)
     .order("created_at", { ascending: false })
     .returns<VideoJob[]>();
@@ -57,20 +58,14 @@ export default async function AdminArtistVideosPage({ params }: Props) {
             ← {artist.stage_name}
           </Link>
           <h1 className="font-display text-2xl text-bone mt-1">
-            Generated Videos — {artist.stage_name}
+            Saved Videos — {artist.stage_name}
           </h1>
         </div>
-        <Link
-          href={`/admin/artists/${id}/videos/new`}
-          className="rounded bg-oxblood px-4 py-2 text-sm font-medium text-bone hover:bg-oxblood/80 transition-colors"
-        >
-          + Request video
-        </Link>
       </div>
 
       {rows.length === 0 ? (
         <div className="border border-bone/10 rounded-lg p-10 text-center text-bone/50 text-sm">
-          No video jobs yet. Request one from an artist&apos;s asset.
+          No saved videos for this artist.
         </div>
       ) : (
         <div className="border border-bone/10 rounded-lg overflow-x-auto">
@@ -153,12 +148,7 @@ export default async function AdminArtistVideosPage({ params }: Props) {
                     </td>
                     <td className="px-4 py-3 text-right">
                       {job.status === "complete" && (
-                        <Link
-                          href={`/admin/jobs?job=${job.id}`}
-                          className="text-xs text-bone/50 hover:text-ochre transition-colors"
-                        >
-                          View →
-                        </Link>
+                        <a href={job.output_url ?? undefined} target="_blank" rel="noopener noreferrer" className="text-xs text-ochre hover:text-bone">Watch</a>
                       )}
                     </td>
                   </tr>

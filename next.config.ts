@@ -2,7 +2,7 @@ import type { NextConfig } from "next";
 import { withSentryConfig } from "@sentry/nextjs";
 
 const nextConfig: NextConfig = {
-  serverExternalPackages: ["music-metadata", "fluent-ffmpeg", "@ffmpeg-installer/ffmpeg"],
+  serverExternalPackages: ["music-metadata"],
   experimental: {
     serverActions: {
       bodySizeLimit: "10mb",

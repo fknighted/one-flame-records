@@ -1,3 +1,23 @@
+# Local video-studio removal — October 8, 2026
+
+The old video-production code is removed locally. Existing videos, songs and history remain; image/copy/campaign script tools remain. Hosted production is unchanged. Current review/release work is owned by the linked ledger; do not restore generation using historical priorities below. [Evidence](session-handoffs/2026-10-08-studio-removal.md).
+
+[Current work and review state](/Users/frankknight/Claude OS/Delegations/remove-the-old-one-flame-video-production-code-while-preserv.md)
+
+# Current security release — October 6, 2026
+
+One Flame is live with the reviewed security fixes. A separate reviewer confirmed the serving release, website availability and sign-in protection. Production dependency checks for the reviewed candidate reported no findings.
+
+The hosted build uses Next.js 16.3.8; the reviewed lockfile includes Sharp 0.35.5. Public pages and the sharing image respond; signed-out admin access redirects to login. The hosted native image-processing binary was not separately inspected. The hosting command refreshed an ignored local login token without changing hosted credential settings.
+
+Five high development-tool warnings and seven pre-existing lint errors remain. This release does not claim a clean all-dependency or lint check. Real payments, trades, emails, customer submissions and paid generation were not tested.
+
+Recorded release: Vercel dpl_BM8C1XY7GTeB8ybot9jrry9Gtdfs. No commit or push was made for this release. Previous release recovery instructions are saved in the release receipt.
+
+[Release and rollback receipt](audits/2026-10-06-security-release.md) · [Independent live review](audits/2026-10-06-security-release-independent-review.md)
+
+Completion and any continuing commitments belong only in [Delegations](</Users/frankknight/Claude OS/Delegations/deploy-the-independently-reviewed-october-6-security-fixes-f-2.md>). This release does not renew authorization for later deployments or business actions.
+
 # Next session — One Flame Records
 
 > Short, current "pick this up next" brief. Overwrite this each session.

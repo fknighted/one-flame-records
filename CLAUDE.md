@@ -7,8 +7,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 A web platform for One Flame Records, a Jamaican record label based in Montego Bay. Three audiences:
 
 1. **The public** — discover the label, artists, releases, and videos via the public site (oneflamerecords.com).
-2. **Signed artists** — log in to a portal to manage their profile, upload demos and instrumentals, and request automated music videos.
-3. **The label (admin)** — manage artists, releases, videos, campaigns, news, and approve new signups via QR application.
+2. **Signed artists** — log in to a portal to manage their profile, upload demos and instrumentals, and access saved videos.
+3. **The label (admin)** — manage artists, releases, videos, news, and approve new signups via QR application.
 4. **Bartenders** — log in to `/bar` to run the Flames Lounge POS (tabs, menu items, game sessions). Artists can also be bartenders via `profiles.is_bartender = true` flag.
 5. **Gamers** — log in to `/gamer` to view their Flames Lounge gaming membership, balance, and session history.
 
@@ -18,8 +18,7 @@ A web platform for One Flame Records, a Jamaican record label based in Montego B
 - **Tailwind CSS v4** — CSS-first config, brand tokens defined in `src/app/globals.css` `@theme inline` block (no `tailwind.config.ts`)
 - **Supabase** — Postgres, Auth, Storage, Row-Level Security
 - **Resend** — transactional email
-- **Inngest** — durable workflow orchestration for the video and campaign pipelines
-- **Anthropic SDK + OpenAI** — campaign copy and image generation inside Inngest functions
+- **Inngest** — durable YouTube uploads
 - **Make.com** — social posting webhook (Instagram, Facebook, TikTok) — not direct API calls
 - **Sentry** — error tracking (active in production)
 - **Vercel** — hosting; push to `main` triggers deploy
@@ -51,7 +50,7 @@ Source:
 src/
 ├── app/
 │   ├── (public)/      ← cream-theme public site (home, artists, releases, videos, news, about, contact, signup, flames-lounge, gamer-signup)
-│   ├── admin/         ← ink-theme label admin (artists, releases, videos, news, campaigns, applications, jobs, AI studio, bar/*)
+│   ├── admin/         ← ink-theme label admin (artists, releases, videos, news, applications, bar/*)
 │   ├── portal/        ← ink-theme artist portal (profile, assets, releases, videos)
 │   ├── bar/           ← ink-theme bartender POS (tabs, inventory, sessions, members)
 │   ├── gamer/         ← ink-theme gamer portal (dashboard, session history)
@@ -61,10 +60,8 @@ src/
 ├── components/        ← shared UI components (PascalCase)
 ├── lib/
 │   ├── supabase/      ← client.ts, server.ts, middleware.ts
-│   ├── inngest/       ← client.ts + functions/ (generate-video, generate-campaign, generate-campaign-video)
-│   ├── video/         ← provider adapters (kie, kling, higgsfield, runway, pika) + assemble + types
+│   ├── inngest/       ← client.ts + functions/ (hello, upload-to-youtube)
 │   ├── social/        ← meta.ts, tiktok.ts (fire Make.com webhook, do not call platform APIs directly)
-│   ├── audio/         ← analyze.ts, transcribe.ts
 │   ├── email/         ← send.ts + templates/
 │   ├── bar/           ← pos.ts (shared bar utilities: formatCents, jamaicaMidnight, CATEGORY_LABELS, etc.)
 │   ├── auth.ts        ← server-side role helpers (requireAdmin, requireBarStaff)
@@ -95,7 +92,7 @@ npm run lint
 npm run typecheck              # tsc --noEmit
 ```
 
-There are no automated tests. Type checking (`npm run typecheck`) is the primary correctness gate before shipping.
+Type checking (`npm run typecheck`) is the primary correctness gate. Run `node scripts/test-studio-retirement.mjs` for offline video-retirement regression checks; all services are mocked.
 
 ## Architecture: non-obvious decisions
 
@@ -134,33 +131,13 @@ The Flames Lounge POS lives at `/bar` (bartenders) and `/admin/bar/*` (label adm
 - **Shared bar utilities** (`src/lib/bar/pos.ts`) — `formatCents`, `jamaicaMidnight`, `jamaicaTime`, `jamaicaDateTime`, `CATEGORY_LABELS`, `CATEGORY_ORDER`. All bar pages import from here; never duplicate these.
 - **Categories** — `drink`, `beverage`, `food`, `snack`, `game_time`. The `pos_items_category_check` constraint must be updated in a migration before adding new categories.
 
-### Inngest pipeline
+### Production retirement — October 8, 2026
 
-- **`generate-video`** — artist or admin requests an AI music video; triggers `video/generate.requested`
-- **`generate-campaign`** — creates all content pieces for a campaign using Claude (plan) + Claude (copy/articles) + OpenAI `gpt-image-1` (images); triggers `campaign/generate.requested`
-- **`generate-campaign-video`** — generates video for a specific piece; triggers `campaign/video.requested`
+Frank authorized full removal of the legacy AI Studio and production navigation, followed by commit, push and deployment. The old image, copy, campaign, video-generation and production-job pages and workers are removed. Old artist video request URLs redirect to saved-video libraries. Only completed videos appear in those libraries.
 
-Inngest functions always use `createServiceClient()` and initialize Anthropic/OpenAI clients lazily inside `step.run()` to avoid build-time failures.
+Keep catalog editing, normal media uploads, saved songs/videos, visibility controls and the shared YouTube upload worker. Keep stored data, storage buckets and applied migrations. No database or media deletion is authorized. The physical recording-studio business offering is separate from these software tools.
 
-Claude responses in Inngest: always strip markdown code fences before `JSON.parse`. Normalize field names defensively (e.g. `angle ?? creative_angle ?? description`).
-
-### Video style presets and cultural authenticity
-
-`STYLE_PRESETS` arrays in `src/components/VideoRequestForm.tsx` and `src/components/AdminVideoRequestForm.tsx` must always be identical — 16 options as of session 39.
-
-Scene generation runs on **OpenAI `gpt-4o`** (switched from Anthropic — see `docs/decisions.md`). The system prompt in `src/lib/video/prompt-scenes.ts` (`buildSystemPrompt()`) contains a **mandatory cultural authenticity directive**: every human subject must be a Jamaican person described through visual specifics — skin tones from deep ebony through warm caramel, authentic Jamaican hairstyles, genuine Jamaican dress and settings. The directive instructs the model to describe subjects by visible appearance and cultural setting rather than by racial labels, because Kling/kie.ai content moderation flags explicit racial group designations. Do not remove or weaken the intent — it is a creative and cultural requirement from the label. Do not revert to explicit racial exclusion language — that breaks the video pipeline.
-
-### Social posting via Make.com
-
-Never call Instagram, Facebook, or TikTok APIs directly. All social posting fires a JSON payload to `SOCIAL_WEBHOOK_URL` (Make.com webhook) with fields: `platform`, `piece_id`, `content_type`, `caption`, `image_url`, `video_url`. Make.com routes by `platform` to the appropriate native module. TikTok video upload has no Make.com module — manual posting only.
-
-### Tailwind v4 — CSS-first
-
-Brand tokens (`--color-oxblood`, `--color-cream`, etc.) are defined in `src/app/globals.css` inside an `@theme inline` block. There is no `tailwind.config.ts`. The `docs/brand.md` doc shows a `tailwind.config.ts` excerpt that is illustrative only — ignore it.
-
-### Video provider abstraction
-
-`src/lib/video/` wraps multiple providers (kie, kling, higgsfield, runway, pika). The active provider is set by `DEFAULT_VIDEO_MODEL` env var. `kie` is the default — it proxies to Kling, Veo 3, Seedance, etc. via kie.ai.
+Current work and verification: `/Users/frankknight/Claude OS/Delegations/remove-all-remaining-one-flame-studio-navigation-and-tools-a.md`. Release evidence is recorded in `docs/session-handoffs/2026-10-08-total-studio-removal.md`.
 
 ## Conventions
 
@@ -214,13 +191,8 @@ Full list in `.env.example`.
 - `NEXT_PUBLIC_SITE_URL`
 - `RESEND_API_KEY`, `RESEND_FROM_EMAIL`, `ADMIN_EMAIL`
 - `INNGEST_EVENT_KEY`, `INNGEST_SIGNING_KEY`
-- `ANTHROPIC_API_KEY` — campaign copy generation
-- `OPENAI_API_KEY` — `gpt-image-1` image generation in campaign pipeline
 - `SOCIAL_WEBHOOK_URL` — Make.com webhook for all social posting
 - `NEXT_PUBLIC_SENTRY_DSN`, `SENTRY_ORG`, `SENTRY_PROJECT`, `SENTRY_AUTH_TOKEN`
-- `KIE_API_KEY` — default video model provider (kie.ai)
-- `DEFAULT_VIDEO_MODEL` — `kie` | `kling` | `higgsfield` | `runway` | `pika`
-
 ## Roles
 
 | Role | Home route | Access |

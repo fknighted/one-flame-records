@@ -20,10 +20,10 @@ export default async function EditArtistPage({
   const { id } = await params;
   const supabase = createServiceClient();
 
-  const [{ data: artist, error }, { count: assetCount }, { count: jobCount }] = await Promise.all([
+  const [{ data: artist, error }, { count: assetCount }, { count: videoCount }] = await Promise.all([
     supabase.from("artists").select("*").eq("id", id).single(),
     supabase.from("assets").select("id", { count: "exact", head: true }).eq("artist_id", id),
-    supabase.from("video_jobs").select("id", { count: "exact", head: true }).eq("artist_id", id),
+    supabase.from("video_jobs").select("id", { count: "exact", head: true }).eq("artist_id", id).eq("status", "complete"),
   ]);
 
   if (error || !artist) notFound();
@@ -93,7 +93,7 @@ export default async function EditArtistPage({
               {assetCount ?? 0} assets →
             </Link>
             <Link href={`/admin/artists/${id}/videos`} className="hover:text-ochre transition-colors">
-              {jobCount ?? 0} video jobs →
+              {videoCount ?? 0} saved videos →
             </Link>
             <a
               href={`/artists/${artist.slug}`}

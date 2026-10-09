@@ -41,7 +41,7 @@ export function renderWelcome(data: WelcomeData): {
             <tr>
               <td style="padding:10px 0;">
                 <p style="margin:0;font-size:13px;color:#B8893B;font-family:Arial,sans-serif;font-weight:600;">Videos</p>
-                <p style="margin:4px 0 0;font-size:13px;color:rgba(245,237,216,0.6);font-family:Arial,sans-serif;">Request AI-generated music videos for your tracks.</p>
+                <p style="margin:4px 0 0;font-size:13px;color:rgba(245,237,216,0.6);font-family:Arial,sans-serif;">Watch and manage your saved videos.</p>
               </td>
             </tr>
           </table>
@@ -62,7 +62,7 @@ You're now part of the label. Here's what you can do in your artist portal:
 
 Profile — Update your bio, photo, and social links.
 Assets — Upload instrumentals, demos, and reference files.
-Videos — Request AI-generated music videos for your tracks.
+Videos — Watch and manage your saved videos.
 
 Go to your portal: ${portalUrl}`;
 

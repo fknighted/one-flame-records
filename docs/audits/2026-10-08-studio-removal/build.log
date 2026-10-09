@@ -1,0 +1,139 @@
+
+> oneflame-records@0.1.0 build
+> next build
+
+▲ Next.js 16.3.8 (Turbopack)
+- Environments: .env.local
+[@sentry/nextjs] Importing `withSentryConfig` from `@sentry/nextjs` is deprecated and will stop working in v11. Import it from `@sentry/nextjs/config` instead:
+  import { withSentryConfig } from '@sentry/nextjs/config';
+[@sentry/nextjs] DEPRECATION WARNING: disableLogger is deprecated and will be removed in a future version. Use webpack.treeshake.removeDebugLogging instead. (Not supported with Turbopack.)
+[@sentry/nextjs] DEPRECATION WARNING: automaticVercelMonitors is deprecated and will be removed in a future version. Use webpack.automaticVercelMonitors instead. (Not supported with Turbopack.)
+✓ Running next.config.ts took 281ms
+- Experiments (use with caution):
+  · clientTraceMetadata
+  · serverActions
+
+  Creating an optimized production build ...
+[@sentry/nextjs] Importing `withSentryConfig` from `@sentry/nextjs` is deprecated and will stop working in v11. Import it from `@sentry/nextjs/config` instead:
+  import { withSentryConfig } from '@sentry/nextjs/config';
+[@sentry/nextjs] DEPRECATION WARNING: disableLogger is deprecated and will be removed in a future version. Use webpack.treeshake.removeDebugLogging instead. (Not supported with Turbopack.)
+[@sentry/nextjs] DEPRECATION WARNING: automaticVercelMonitors is deprecated and will be removed in a future version. Use webpack.automaticVercelMonitors instead. (Not supported with Turbopack.)
+✓ Compiled successfully in 5.9s
+  Running next.config.js provided runAfterProductionCompile ...
+✓ Completed runAfterProductionCompile in 426ms
+  Running TypeScript ...
+  Finished TypeScript in 7.4s ...
+  Collecting page data using 11 workers ...
+  Generating static pages using 11 workers (0/82) ...
+  Generating static pages using 11 workers (20/82) 
+  Generating static pages using 11 workers (40/82) 
+  Generating static pages using 11 workers (61/82) 
+✓ Generating static pages using 11 workers (82/82) in 2.4s
+  Finalizing page optimization ...
+
+Route (app)                          Revalidate  Expire
+┌ ○ /                                        2m      1y
+├ ○ /_not-found
+├ ○ /about
+├ ƒ /admin
+├ ƒ /admin/ai-studio
+├ ƒ /admin/ai-studio/copy
+├ ƒ /admin/ai-studio/images
+├ ƒ /admin/ai-studio/images/library
+├ ƒ /admin/applications
+├ ƒ /admin/applications/[id]
+├ ƒ /admin/artists
+├ ƒ /admin/artists/[id]/assets
+├ ƒ /admin/artists/[id]/edit
+├ ƒ /admin/artists/[id]/videos
+├ ƒ /admin/artists/[id]/videos/new
+├ ƒ /admin/artists/new
+├ ƒ /admin/bar
+├ ƒ /admin/bar/inventory
+├ ƒ /admin/bar/items
+├ ƒ /admin/bar/items/[id]/edit
+├ ƒ /admin/bar/items/new
+├ ƒ /admin/bar/members
+├ ƒ /admin/bar/members/[id]
+├ ƒ /admin/bar/sales
+├ ƒ /admin/bar/staff
+├ ƒ /admin/bar/tabs
+├ ƒ /admin/campaigns
+├ ƒ /admin/campaigns/[id]
+├ ƒ /admin/campaigns/ideas
+├ ƒ /admin/campaigns/new
+├ ƒ /admin/codes
+├ ƒ /admin/events
+├ ƒ /admin/events/[id]/edit
+├ ƒ /admin/events/new
+├ ƒ /admin/jobs
+├ ƒ /admin/jobs/[id]
+├ ƒ /admin/news
+├ ƒ /admin/news/[id]/edit
+├ ƒ /admin/news/new
+├ ƒ /admin/releases
+├ ƒ /admin/releases/[id]/edit
+├ ƒ /admin/releases/new
+├ ƒ /admin/settings
+├ ƒ /admin/settings/brand
+├ ƒ /admin/subscribers
+├ ƒ /admin/videos
+├ ƒ /admin/videos/[id]/edit
+├ ƒ /admin/videos/new
+├ ƒ /api/inngest
+├ ○ /artists                                 2m      1y
+├   /artists/[slug]
+│ ├ ● /artists/fola-boss                     2m      1y
+│ ├ ● /artists/layshaunex                    2m      1y
+│ ├ ● /artists/twiggy                        2m      1y
+│ └ ● [+6 more paths]
+├ ○ /auth/callback
+├ ○ /auth/portal-invite
+├ ○ /auth/set-password
+├ ƒ /bar
+├ ƒ /bar/inventory
+├ ƒ /bar/members
+├ ƒ /bar/members/[id]
+├ ƒ /bar/members/new
+├ ƒ /bar/regulars
+├ ƒ /bar/sessions
+├ ƒ /bar/tabs/[id]
+├ ƒ /bar/tabs/new
+├ ○ /contact
+├ ○ /flames-lounge                           2m      1y
+├ ƒ /gamer
+├ ○ /gamer-signup
+├ ƒ /gamer/sessions
+├ ○ /icon.png
+├ ○ /login
+├ ƒ /news
+├ ● /news/[slug]
+├ ○ /opengraph-image
+├ ƒ /portal
+├ ƒ /portal/assets
+├ ƒ /portal/assets/[id]/edit
+├ ƒ /portal/assets/new
+├ ƒ /portal/profile
+├ ƒ /portal/releases
+├ ƒ /portal/videos
+├ ƒ /portal/videos/[job_id]
+├ ƒ /portal/videos/new
+├ ○ /privacy
+├ ƒ /releases
+├ ● /releases/[slug]
+├ ○ /robots.txt
+├ ƒ /search
+├ ○ /sign
+├ ƒ /signup/[code]
+├ ○ /sitemap.xml
+├ ○ /terms
+├ ƒ /unsubscribe
+└ ƒ /videos
+
+
+ƒ Proxy (Middleware)
+
+○  (Static)   prerendered as static content
+●  (SSG)      prerendered as static HTML (uses generateStaticParams)
+ƒ  (Dynamic)  server-rendered on demand
+

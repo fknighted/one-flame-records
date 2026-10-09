@@ -68,7 +68,7 @@ export default async function PortalDashboardPage() {
     { data: recentJobs },
   ] = await Promise.all([
     supabase.from("assets").select("id", { count: "exact", head: true }),
-    supabase.from("video_jobs").select("id", { count: "exact", head: true }),
+    supabase.from("video_jobs").select("id", { count: "exact", head: true }).eq("status", "complete"),
     supabase
       .from("assets")
       .select("id, title, kind, created_at")
@@ -78,6 +78,7 @@ export default async function PortalDashboardPage() {
     supabase
       .from("video_jobs")
       .select("id, status, created_at, assets(title)")
+      .eq("status", "complete")
       .order("created_at", { ascending: false })
       .limit(3)
       .returns<JobRow[]>(),
@@ -85,7 +86,7 @@ export default async function PortalDashboardPage() {
 
   const STATS = [
     { label: "Assets", value: assetCount ?? 0, href: "/portal/assets" },
-    { label: "Video jobs", value: jobCount ?? 0, href: "/portal/videos" },
+    { label: "Saved videos", value: jobCount ?? 0, href: "/portal/videos" },
   ];
 
   const TILES = [
@@ -100,9 +101,9 @@ export default async function PortalDashboardPage() {
       ),
     },
     {
-      href: "/portal/videos/new",
-      label: "Request a video",
-      description: "Turn an instrumental into a music video automatically.",
+      href: "/portal/videos",
+      label: "Video library",
+      description: "Watch and manage your saved videos.",
       icon: (
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" aria-hidden="true">
           <polygon points="5,3 19,12 5,21" fill="currentColor" stroke="none" />
@@ -210,11 +211,11 @@ export default async function PortalDashboardPage() {
         )}
       </div>
 
-      {/* Recent video jobs */}
+      {/* Recent saved videos */}
       <div>
         <div className="flex items-center justify-between mb-3">
           <h2 className="text-[10px] font-semibold uppercase tracking-widest text-bone/50">
-            Video jobs
+            Saved videos
           </h2>
           <Link href="/portal/videos" className="text-xs text-ochre hover:text-ochre/70 transition-colors">
             View all →
@@ -222,13 +223,7 @@ export default async function PortalDashboardPage() {
         </div>
         {!recentJobs || recentJobs.length === 0 ? (
           <div className="rounded-lg border border-bone/10 p-6 text-center">
-            <p className="text-bone/60 text-sm">No video jobs yet.</p>
-            <Link
-              href="/portal/videos/new"
-              className="mt-2 inline-block text-xs text-ochre hover:text-ochre/80 transition-colors"
-            >
-              Request your first video →
-            </Link>
+            <p className="text-bone/60 text-sm">No saved videos yet.</p>
           </div>
         ) : (
           <div className="rounded-lg border border-bone/10 overflow-hidden">

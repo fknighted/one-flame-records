@@ -645,3 +645,14 @@ without Frank's explicit approval. Until the conversion ships, `_cents` columns
 remain authoritative and code must keep treating them as cents; a half-converted
 schema is the one genuinely dangerous state here. After it ships, `formatCents`
 and the ×100 shims must be deleted, not left as no-ops.
+
+
+## 2026-10-08 — Retire old video production while preserving the label catalog
+
+**Context:** Frank is building a new campaign studio and authorized removing the old production code on October 8.
+
+**Decision:** Remove artist/admin music-video production, retry/per-clip recreation and campaign video rendering. Preserve saved songs, completed videos, catalog/upload/visibility/YouTube flows and image/copy/campaign script preparation. Replace bookmarked production request/settings pages with library redirects. Remove unused generation packages while retaining current security versions.
+
+**Alternatives considered:** Hiding menus alone would leave paid server actions/workers reachable. Deleting historical data would unnecessarily destroy music and video work. Reusing the old production stack would conflict with the new studio plan.
+
+**Consequences:** Code retirement is local until an explicitly authorized release. No hosted job inspection/cancellation, provider account change, database migration or media deletion occurred. A separate music-making studio was not identified; that scope and wider creative-tool retirement remain unconfirmed. New campaign studio integration is separate. Historical pipeline docs are marked superseded.

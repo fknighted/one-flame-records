@@ -1,3 +1,11 @@
+> October 8 expanded removal: all legacy AI Studio/campaign/production-job tools and menus are retired. Only completed saved videos and shared YouTube uploads remain. The design below is historical. Current evidence: [release receipt](session-handoffs/2026-10-08-total-studio-removal.md).
+
+# Local production retirement — October 8, 2026
+
+Video-production actions, provider adapters and workers are removed locally. Saved job/media tables, private-assets/generated-videos/public-media storage, public catalog and upload/YouTube flows remain. Old request and brand-settings pages redirect. Campaign workers retain copy, images and scripts but never queue video rendering. No schema migration, database deletion, credential change or deployment was performed. The sections below describe retained data and historical implementation; old generation routes/services are superseded.
+
+[Current work and review state](/Users/frankknight/Claude OS/Delegations/remove-the-old-one-flame-video-production-code-while-preserv.md)
+
 # Architecture
 
 Reference document. Update in the same commit as any schema, route, or RLS change.
