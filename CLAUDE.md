@@ -49,7 +49,7 @@ Source:
 ```
 src/
 ├── app/
-│   ├── (public)/      ← Sound System public site (home, artists, releases, videos, news, about, contact, signup, flames-lounge, gamer-signup)
+│   ├── (public)/      ← Sound System public site (home, artists, releases, videos, news, about, contact, signup, flames-lounge)
 │   ├── admin/         ← studio-look label admin (artists, releases, videos, news, applications, bar/*)
 │   ├── portal/        ← studio-look artist portal (profile, assets, releases, videos)
 │   ├── bar/           ← studio-look bartender POS (tabs, inventory, sessions, members)

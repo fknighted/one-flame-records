@@ -27,7 +27,7 @@ export async function proxy(request: NextRequest) {
   const isAdminRoute  = pathname.startsWith("/admin");
   const isPortalRoute = pathname.startsWith("/portal");
   const isBarRoute    = pathname.startsWith("/bar");
-  // Use exact match + prefix-with-slash to avoid matching /gamer-signup (public page)
+  // Use exact match + prefix-with-slash so only /gamer and /gamer/* match
   const isGamerRoute  = pathname === "/gamer" || pathname.startsWith("/gamer/");
 
   if (!isAdminRoute && !isPortalRoute && !isBarRoute && !isGamerRoute) {

@@ -8,6 +8,11 @@ const nextConfig: NextConfig = {
       bodySizeLimit: "10mb",
     },
   },
+  // Public gamer sign-up was removed on 2026-10-09; gamer accounts are now
+  // created by bar staff only. Old links land on the Lounge page.
+  async redirects() {
+    return [{ source: "/gamer-signup", destination: "/flames-lounge", permanent: false }];
+  },
   images: {
     remotePatterns: [
       {

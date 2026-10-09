@@ -665,4 +665,15 @@ and the ×100 shims must be deleted, not left as no-ops.
 
 **Alternatives considered:** The other concept directions shown on 2026-10-08, and keeping the record-sleeve look. Not recorded in more detail here.
 
-**Consequences:** Older entries above that mention cream, ink, oxblood, ochre or Fraunces describe the look at the time and are not rewritten. The logo keeps its own oxblood and olive colours. Transactional email templates in `src/lib/email/templates/` were not part of this check and may still use the old colours.
+**Consequences:** Older entries above that mention cream, ink, oxblood, ochre or Fraunces describe the look at the time and are not rewritten. The logo keeps its own oxblood and olive colours. Transactional emails and the hosted Supabase auth emails moved to the same look on 2026-10-09 (`c260a0e`).
+
+## 2026-10-09 — Remove public gamer sign-up
+
+**Context:** Anyone could request a free gamer account from the public `/gamer-signup` page, which sent a Supabase invite. Frank said on 2026-10-09 it is no longer needed.
+
+**Decision:** Remove the page and its server action, and the two "Join as a Gamer" links on the Flames Lounge page. `/gamer-signup` redirects (temporary) to `/flames-lounge`. Gamer accounts are now created only by bar staff (`/bar/members/new`). The gamer portal (`/gamer`), existing gamer accounts, balances and sessions are unchanged.
+
+**Alternatives considered:** Hiding the links but keeping the page reachable; that would leave an unadvertised form able to create accounts and send invites.
+
+**Consequences:** No database change; existing `gamer_members` rows and the `gamer` role stay. The customer knowledge base now tells people to ask Lounge staff. Restoring self sign-up means bringing back the page and action from git history.
+

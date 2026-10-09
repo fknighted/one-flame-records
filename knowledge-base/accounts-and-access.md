@@ -21,7 +21,7 @@ sources:
 
 ## Short answer
 
-Most of the One Flame Records website is open to everyone with no account at all. Accounts exist only for signed artists, label staff, Lounge staff and gaming members, and they are created by invitation — except the free gaming account, which anyone can request. If you have an account you sign in from the login page with your email address and password, and there is a "forgot password" link there if you need a reset link sent to you.
+Most of the One Flame Records website is open to everyone with no account at all. Accounts exist only for signed artists, label staff, Lounge staff and gaming members, and they are created by invitation — gaming accounts included, which Lounge staff set up. If you have an account you sign in from the login page with your email address and password, and there is a "forgot password" link there if you need a reset link sent to you.
 
 ## Details
 
@@ -34,7 +34,7 @@ There are four kinds of account, and each lands on its own area after signing in
 
 The site routes you automatically to the right area based on your account, so there is one login page for everyone.
 
-**Getting an account.** Artist and staff accounts are created by the label and sent as an email invitation. Gaming members can request an account themselves from the "Join as a Gamer" page. There is no general public sign-up, and browsing the site does not need one.
+**Getting an account.** Artist and staff accounts are created by the label and sent as an email invitation. Gaming accounts are set up by Lounge staff at the venue; the online gamer sign-up page was removed on 9 October 2026. There is no general public sign-up, and browsing the site does not need one.
 
 **Setting a password.** Invitations and password resets both send an email containing a link. Following that link opens a page where you set your password, and you are then taken to the area your account belongs to.
 

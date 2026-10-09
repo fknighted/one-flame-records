@@ -17,7 +17,6 @@ Generated 2026-08-11. Everything below was actually read, not assumed.
 - `https://www.oneflamerecords.com/news`
 - `https://www.oneflamerecords.com/privacy`
 - `https://www.oneflamerecords.com/terms`
-- `https://www.oneflamerecords.com/gamer-signup`
 - `https://www.oneflamerecords.com/search?q=kahlic` (200)
 - `https://www.oneflamerecords.com/login` (200)
 - `https://www.oneflamerecords.com/sitemap.xml`
@@ -34,7 +33,6 @@ Generated 2026-08-11. Everything below was actually read, not assumed.
 - `Projects/one flame app/docs/brand.md`
 - `Projects/one flame app/src/app/(public)/` — route listing, all page directories
 - `Projects/one flame app/src/app/(public)/contact/actions.ts`
-- `Projects/one flame app/src/app/(public)/gamer-signup/actions.ts`
 - `Projects/one flame app/src/app/(public)/signup/[code]/actions.ts` and `page.tsx`
 - `Projects/one flame app/src/app/(public)/subscribe/actions.ts`
 - `Projects/one flame app/src/app/(public)/unsubscribe/actions.ts`

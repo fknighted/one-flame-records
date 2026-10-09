@@ -5,7 +5,6 @@ import LogoMark from "@/components/LogoMark";
 import SectionHeader from "@/components/SectionHeader";
 import SpeakerRings from "@/components/SpeakerRings";
 import EmptyState from "@/components/EmptyState";
-import PosterHeadline from "@/components/PosterHeadline";
 import { buttonClasses } from "@/lib/sound-system";
 import { createServiceClient } from "@/lib/supabase/server";
 
@@ -225,9 +224,6 @@ export default async function FlamesLoungePage() {
             ))}
           </div>
           <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
-            <LinkButton href="/gamer-signup" variant="lounge" ground="black">
-              Join as a Gamer
-            </LinkButton>
             <a
               href="https://instagram.com/flamesmobay"
               target="_blank"
@@ -396,22 +392,6 @@ export default async function FlamesLoungePage() {
               Get in touch
             </LinkButton>
           </div>
-        </div>
-      </section>
-
-      {/* Gamer membership */}
-      <section className="bg-paper text-black">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 py-14 sm:py-[88px] flex flex-col sm:flex-row sm:items-center justify-between gap-6">
-          <div className="min-w-0">
-            <PosterHeadline as="h2" size="headline">Get a gamer account</PosterHeadline>
-            <span aria-hidden="true" className="section-bar mt-2" />
-            <p className="type-body mt-4 max-w-[46ch]">
-              Track your sessions, build up game time credit, and skip the queue. Free to join.
-            </p>
-          </div>
-          <LinkButton href="/gamer-signup" variant="lounge" ground="paper" className="shrink-0">
-            Join as a Gamer
-          </LinkButton>
         </div>
       </section>
 

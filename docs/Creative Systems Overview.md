@@ -457,7 +457,6 @@ No public access. Final video outputs from the AI pipeline. Path: `videos/{job_i
 | `/contact` | `contact/page.tsx` | Contact info |
 | `/signup/[code]` | `signup/[code]/page.tsx` | QR code landing: application form |
 | `/flames-lounge` | `flames-lounge/page.tsx` | Lounge info / drinks menu preview |
-| `/gamer-signup` | `gamer-signup/page.tsx` | Gaming membership signup |
 
 ### Artist Portal — `src/app/portal/` (studio look, requires `role = 'artist'`)
 
@@ -840,7 +839,7 @@ All bar pages import from here. Never duplicate:
 
 ## 18. Gamer Portal
 
-Gamers sign up via `/gamer-signup` (public page). A `gamer_memberships` row is created with an initial balance.
+Gamer accounts are created by bar staff (`/bar/members/new`); the public `/gamer-signup` page was removed on 2026-10-09 and now redirects to `/flames-lounge`.
 
 `/gamer` — dashboard showing:
 - Membership info (name, member since)
