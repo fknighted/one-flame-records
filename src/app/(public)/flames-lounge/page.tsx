@@ -1,5 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import LinkButton from "@/components/LinkButton";
+import LogoMark from "@/components/LogoMark";
+import SectionHeader from "@/components/SectionHeader";
+import SpeakerRings from "@/components/SpeakerRings";
+import EmptyState from "@/components/EmptyState";
+import PosterHeadline from "@/components/PosterHeadline";
+import { buttonClasses } from "@/lib/sound-system";
 import { createServiceClient } from "@/lib/supabase/server";
 
 // Public lounge page — cookieless service-client read filtered to is_public
@@ -21,7 +28,7 @@ export const metadata: Metadata = {
 
 function StudioIcon() {
   return (
-    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
       <circle cx="12" cy="12" r="3" />
       <path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83" />
     </svg>
@@ -30,7 +37,7 @@ function StudioIcon() {
 
 function GameIcon() {
   return (
-    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
       <rect x="2" y="6" width="20" height="12" rx="4" />
       <path d="M12 12h.01M17 12h.01" />
       <path d="M7 10v4M5 12h4" />
@@ -40,7 +47,7 @@ function GameIcon() {
 
 function FoodIcon() {
   return (
-    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
       <path d="M18 8h1a4 4 0 0 1 0 8h-1" />
       <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z" />
       <line x1="6" y1="1" x2="6" y2="4" />
@@ -52,7 +59,7 @@ function FoodIcon() {
 
 function EventIcon() {
   return (
-    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
       <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
     </svg>
   );
@@ -76,16 +83,14 @@ function TikTokIcon() {
   );
 }
 
-function FlameGlyph({ className }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 20 28" className={className} aria-hidden="true">
-      <path d="M10 1C10 1 4 9 4 16C4 19.8 6.3 23.1 10 25C13.7 23.1 16 19.8 16 16C16 9 10 1 10 1Z" fill="#8B2A1F" />
-      <path d="M10 14C10 14 7.5 17.5 7.5 19.5C7.5 21.4 8.6 23 10 24C11.4 23 12.5 21.4 12.5 19.5C12.5 17.5 10 14 10 14Z" fill="#3F5A3A" />
-    </svg>
-  );
-}
-
 // ── Data ──────────────────────────────────────────────────────────────────────
+
+const HERO_LIST = [
+  { name: "Outdoor studio", note: "Record where the label works" },
+  { name: "Gaming lounge", note: "Members and walk-ins" },
+  { name: "Kitchen", note: "Jamaican food" },
+  { name: "Bar", note: "Drinks and a tab" },
+];
 
 const PILLARS = [
   {
@@ -189,89 +194,72 @@ export default async function FlamesLoungePage() {
     },
   };
 
+
   return (
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\u003c") }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "<") }}
       />
-      {/* ── Hero ── */}
-      <section className="relative overflow-hidden bg-[#0A0806] min-h-[85vh] flex flex-col justify-end">
-        {/* No real Lounge photo exists yet. Until the owner supplies one, the hero
-            is drawn from the brand palette only — never a stock or generated image
-            presented as the Lounge. */}
-        <FlameGlyph className="pointer-events-none absolute right-[-3rem] bottom-[-4rem] hidden sm:block h-[115%] w-auto opacity-[0.14]" />
 
-        {/* Flame glow */}
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0"
-          style={{
-            background:
-              "radial-gradient(ellipse 60% 50% at 20% 70%, rgba(139,42,31,0.35) 0%, transparent 65%), radial-gradient(ellipse 40% 40% at 80% 30%, rgba(184,137,59,0.10) 0%, transparent 60%)",
-          }}
-        />
-
-        <div className="relative mx-auto max-w-6xl px-4 sm:px-6 pb-20 pt-32 w-full">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#B8893B] mb-5">
-            Montego Bay · Jamaica
-          </p>
-          <h1 className="font-display font-bold text-[#F5EDD8] text-[clamp(3rem,8vw,6rem)] leading-[0.96] tracking-tight max-w-2xl">
-            Flames<br />Lounge
+      {/* Hero: black panel with a yellow rule, red block where a photo will go.
+          No real Lounge photo exists yet; never a stock or generated image. */}
+      <section className="grid lg:grid-cols-[1.1fr_1fr] bg-black">
+        <div className="min-w-0 px-4 sm:px-6 py-10 sm:py-14 grid gap-5 content-start border-b-4 border-yellow lg:border-b-0 lg:border-r-4">
+          <h1 className="type-poster text-paper">
+            Flames
+            <span className="block text-yellow">Lounge</span>
           </h1>
-          <div className="mt-6 h-px w-20 bg-[#8B2A1F]" />
-          <p className="mt-6 text-lg text-[#F5EDD8]/55 max-w-md leading-relaxed">
-            Montego Bay&apos;s creative space — outdoor studio, gaming, Jamaican food,
-            and live events. Part of the One Flame Records family.
+          <p className="type-lead text-paper max-w-[40ch]">
+            Montego Bay&apos;s creative space, part of One Flame Records. Walk-in welcome, no reservation needed.
           </p>
-
-          {/* Social links */}
-          <div className="mt-8 flex items-center gap-4">
+          <div>
+            {HERO_LIST.map(({ name, note }) => (
+              <div
+                key={name}
+                className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1 py-3 border-b-2 border-line"
+              >
+                <span className="type-title-sm text-paper">{name}</span>
+                <span className="type-small text-muted">{note}</span>
+              </div>
+            ))}
+          </div>
+          <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
+            <LinkButton href="/gamer-signup" variant="lounge" ground="black">
+              Join as a Gamer
+            </LinkButton>
             <a
               href="https://instagram.com/flamesmobay"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-2 text-sm text-[#F5EDD8]/50 hover:text-[#B8893B] transition-colors"
+              className="inline-flex min-h-[46px] items-center type-label text-yellow underline underline-offset-4 focus-on-black"
             >
-              <InstagramIcon />
-              <span>@flamesmobay</span>
-            </a>
-            <a
-              href="https://tiktok.com/@flamesmobay"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-2 text-sm text-[#F5EDD8]/50 hover:text-[#B8893B] transition-colors"
-            >
-              <TikTokIcon />
-              <span>@flamesmobay</span>
+              Follow @flamesmobay on Instagram
             </a>
           </div>
         </div>
+        <div aria-hidden="true" className="relative min-h-[260px] bg-red grid place-items-center overflow-hidden">
+          <SpeakerRings ground="red" size={190} />
+        </div>
       </section>
 
-      {/* ── About strip ── */}
-      <section className="bg-[#111009]">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 py-16 sm:py-20">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
-            <div>
-              <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#3F5A3A] mb-4">
-                About the Lounge
-              </p>
-              <h2 className="font-display font-bold text-[#F5EDD8] text-[clamp(1.8rem,3.5vw,2.75rem)] leading-tight">
-                Where the music meets the moment.
-              </h2>
-              <div className="mt-4 h-px w-14 bg-[#8B2A1F]" />
+      {/* About */}
+      <section className="bg-black">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 py-14 sm:py-[88px]">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-start">
+            <div className="min-w-0">
+              <SectionHeader title="Where the music meets the moment." />
             </div>
-            <div>
-              <p className="text-[#F5EDD8]/55 leading-relaxed">
+            <div className="min-w-0">
+              <p className="type-body text-paper max-w-[66ch]">
                 Flames Lounge is the creative and social hub connected to One Flame Records.
                 It&apos;s where artists come to record, decompress, eat well, and connect —
                 and where the community comes to be part of something real. Walk in, feel it, stay a while.
               </p>
-              <p className="mt-4 text-[#F5EDD8]/40 text-sm">
+              <p className="type-body-sm text-muted mt-4">
                 Part of the One Flame Records family.{" "}
-                <Link href="/" className="text-[#B8893B] hover:text-[#F5EDD8] transition-colors">
-                  Visit the label →
+                <Link href="/" className="text-yellow underline underline-offset-4 focus-on-black">
+                  Visit the label
                 </Link>
               </p>
             </div>
@@ -279,96 +267,70 @@ export default async function FlamesLoungePage() {
         </div>
       </section>
 
-      {/* ── Four pillars ── */}
-      <section className="bg-[#0D0B09]">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 py-16 sm:py-24">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#3F5A3A] mb-10">
-            What we offer
-          </p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-px bg-[#F5EDD8]/[0.06] rounded-xl overflow-hidden">
+      {/* What we offer */}
+      <section className="bg-black">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 pb-14 sm:pb-[88px]">
+          <SectionHeader title="What we offer" />
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
             {PILLARS.map(({ icon, title, body }) => (
-              <div key={title} className="bg-[#0D0B09] p-8 sm:p-10">
-                <div className="text-[#E0907F] mb-5">{icon}</div>
-                <h3 className="font-display font-bold text-[#F5EDD8] text-xl mb-3">{title}</h3>
-                <p className="text-[#F5EDD8]/50 leading-relaxed text-sm">{body}</p>
+              <div key={title} className="min-w-0 bg-panel border border-line p-6 sm:p-8">
+                <div className="text-yellow mb-4">{icon}</div>
+                <h3 className="type-title text-paper mb-3 [overflow-wrap:anywhere]">{title}</h3>
+                <p className="type-body-sm text-muted">{body}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ── Outdoor studio feature ── */}
-      <section className="bg-[#0A0806]">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 py-16 sm:py-24">
-          <div className="rounded-2xl overflow-hidden border border-[#8B2A1F]/20 bg-gradient-to-br from-[#1A0C07] to-[#0D0B09] p-8 sm:p-14">
-            <div className="max-w-2xl">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#B8893B] mb-4">
-                Record outdoors
-              </p>
-              <h2 className="font-display font-bold text-[#F5EDD8] text-[clamp(2rem,4vw,3.25rem)] leading-tight">
-                A full studio.<br />Open skies.
-              </h2>
-              <div className="mt-5 h-px w-14 bg-[#8B2A1F]" />
-              <p className="mt-6 text-[#F5EDD8]/55 leading-relaxed max-w-lg">
-                Professional microphones, studio monitors, and mixing capability —
-                all set up outdoors in Montego Bay. There&apos;s nothing like recording
-                with the Caribbean air and the sounds of the city around you.
-                Come make something real.
-              </p>
-            </div>
-
-            {/* Placeholder image block */}
-            <div className="mt-10 rounded-xl bg-[#F5EDD8]/[0.03] border border-[#F5EDD8]/[0.06] aspect-[16/6] flex items-center justify-center">
-              <div className="text-center">
-                <FlameGlyph className="w-10 h-auto mx-auto opacity-10 mb-3" />
-                <p className="text-[#F5EDD8]/15 text-xs uppercase tracking-wider">Photo coming soon</p>
-              </div>
-            </div>
+      {/* Outdoor studio feature */}
+      <section className="bg-yellow text-black">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 py-14 sm:py-[88px] grid md:grid-cols-2 gap-8 items-stretch">
+          <div className="min-w-0">
+            <SectionHeader title="A full studio. Open skies." variant="light" />
+            <p className="type-body max-w-[66ch]">
+              Professional microphones, studio monitors, and mixing capability —
+              all set up outdoors in Montego Bay. There&apos;s nothing like recording
+              with the Caribbean air and the sounds of the city around you.
+              Come make something real.
+            </p>
+          </div>
+          {/* Red block where a studio photo will go. */}
+          <div aria-hidden="true" className="bg-red min-h-[220px] grid place-items-center">
+            <LogoMark variant="flame" ground="red" height={72} alt="" />
           </div>
         </div>
       </section>
 
-      {/* ── Menu ── */}
-      <section className="bg-[#111009]">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 py-16 sm:py-24">
+      {/* Menu */}
+      <section className="bg-black">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 py-14 sm:py-[88px]">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
-            {/* Header */}
-            <div className="md:sticky md:top-24">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#3F5A3A] mb-4">
-                The Kitchen
-              </p>
-              <h2 className="font-display font-bold text-[#F5EDD8] text-[clamp(2rem,4vw,3rem)] leading-tight">
-                Jamaican flavour,<br />made fresh.
-              </h2>
-              <div className="mt-5 h-px w-14 bg-[#8B2A1F]" />
-              <p className="mt-5 text-[#F5EDD8]/50 leading-relaxed">
+            <div className="min-w-0 md:sticky md:top-24">
+              <SectionHeader title="Jamaican flavour, made fresh." />
+              <p className="type-body text-paper max-w-[66ch]">
                 We cook to order. Our fritters are Jamaican-style — crispy outside,
                 full of flavour inside — served with our signature dipping sauces.
                 Walk-in, sit down, eat well.
               </p>
             </div>
 
-            {/* Menu items */}
-            <div className="space-y-8">
+            <div className="min-w-0 space-y-8">
               {MENU.map(({ category, items }) => (
                 <div key={category}>
-                  <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#E0907F] mb-4">
-                    {category}
-                  </p>
-                  <div className="space-y-4">
+                  <p className="type-label text-yellow mb-2">{category}</p>
+                  <div>
                     {items.map(({ name, description }) => (
-                      <div key={name} className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-1 sm:gap-4 pb-4 border-b border-[#F5EDD8]/[0.06]">
-                        <div>
-                          <p className="font-display font-semibold text-[#F5EDD8] text-base">{name}</p>
-                          <p className="text-sm text-[#F5EDD8]/40 mt-0.5">{description}</p>
-                        </div>
+                      <div key={name} className="py-3 border-b-2 border-line">
+                        <p className="type-title-sm text-paper [overflow-wrap:anywhere]">{name}</p>
+                        <p className="type-small text-muted mt-1">{description}</p>
                       </div>
                     ))}
                   </div>
                 </div>
               ))}
 
-              <p className="text-xs text-[#F5EDD8]/25 italic">
+              <p className="type-small text-muted">
                 Beverages available — ask your server for today&apos;s selection.
               </p>
             </div>
@@ -376,40 +338,30 @@ export default async function FlamesLoungePage() {
         </div>
       </section>
 
-      {/* ── Events ── */}
-      <section className="bg-[#0D0B09]">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 py-16 sm:py-24">
-          <div className="text-center mb-12">
-            <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#3F5A3A] mb-4">
-              Happening here
-            </p>
-            <h2 className="font-display font-bold text-[#F5EDD8] text-[clamp(2rem,4vw,3rem)] leading-tight">
-              Events & programming
-            </h2>
-            <div className="mt-4 h-px w-14 bg-[#8B2A1F] mx-auto" />
-            <p className="mt-5 text-[#F5EDD8]/50 max-w-lg mx-auto leading-relaxed">
-              The Lounge is a live venue. Open mics, DJ nights, artist showcases,
-              private hire — if you want to make it happen, this is the place.
-            </p>
-          </div>
+      {/* Events */}
+      <section className="bg-black border-t-4 border-line">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 py-14 sm:py-[88px]">
+          <SectionHeader title="Events & programming" />
+          <p className="type-body text-paper max-w-[66ch] mb-8">
+            The Lounge is a live venue. Open mics, DJ nights, artist showcases,
+            private hire — if you want to make it happen, this is the place.
+          </p>
 
           {(upcomingEvents ?? []).length > 0 ? (
-            <div className="space-y-3 max-w-2xl mx-auto">
+            <div className="grid gap-2 max-w-3xl">
               {(upcomingEvents ?? []).map((event) => (
                 <div
                   key={event.id}
-                  className="rounded-lg border border-[#F5EDD8]/[0.09] bg-[#F5EDD8]/[0.02] px-6 py-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4"
+                  className="bg-panel border border-line px-5 py-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4"
                 >
-                  <div>
-                    <p className="font-display font-semibold text-[#F5EDD8] text-base leading-snug">
-                      {event.title}
-                    </p>
-                    <p className="text-sm text-[#F5EDD8]/45 mt-1">
+                  <div className="min-w-0">
+                    <p className="type-title text-paper [overflow-wrap:anywhere]">{event.title}</p>
+                    <p className="type-body-sm text-muted mt-1">
                       {formatEventDate(event.event_date)}
                       {" · "}
                       {formatEventTime(event.event_date)}
                     </p>
-                    <span className="inline-block mt-2 text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#8B2A1F]/20 text-[#B8893B]">
+                    <span className="inline-block mt-2 bg-red text-paper type-label px-2 py-1">
                       {EVENT_TYPE_LABELS[event.type] ?? event.type}
                     </span>
                   </div>
@@ -418,7 +370,7 @@ export default async function FlamesLoungePage() {
                       href={event.tickets_url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="shrink-0 rounded border border-[#B8893B]/50 px-5 py-2 text-sm font-semibold text-[#B8893B] hover:border-[#B8893B] hover:bg-[#B8893B]/10 transition-colors"
+                      className={buttonClasses("outline", "black", "shrink-0")}
                     >
                       Get tickets
                     </a>
@@ -427,107 +379,70 @@ export default async function FlamesLoungePage() {
               ))}
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
               {EVENT_TYPES_LIST.map((label) => (
-                <div
-                  key={label}
-                  className="rounded-lg border border-[#F5EDD8]/[0.07] bg-[#F5EDD8]/[0.02] px-5 py-4 text-center hover:border-[#8B2A1F]/40 hover:bg-[#8B2A1F]/[0.04] transition-colors"
-                >
-                  <p className="font-display font-semibold text-[#F5EDD8] text-sm sm:text-base">{label}</p>
+                <div key={label} className="bg-panel border-2 border-line px-5 py-4">
+                  <p className="type-title-sm text-paper [overflow-wrap:anywhere]">{label}</p>
                 </div>
               ))}
             </div>
           )}
 
-          <div className="mt-10 text-center">
-            <p className="text-[#F5EDD8]/40 text-sm mb-4">
+          <div className="mt-10">
+            <p className="type-body text-paper mb-4">
               Want to host a private event or artist showcase?
             </p>
-            <Link
-              href="/contact"
-              className="inline-block rounded border border-[#8B2A1F]/50 px-7 py-3 text-sm font-semibold text-[#F5EDD8]/80 hover:border-[#8B2A1F] hover:text-[#F5EDD8] hover:bg-[#8B2A1F]/10 transition-colors"
-            >
+            <LinkButton href="/contact" variant="outline" ground="black">
               Get in touch
-            </Link>
+            </LinkButton>
           </div>
         </div>
       </section>
 
-      {/* ── Gamer membership CTA ── */}
-      <section className="bg-[#0D0B09] border-t border-[#F5EDD8]/[0.05]">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 py-14 sm:py-20 flex flex-col sm:flex-row items-center justify-between gap-6">
-          <div>
-            <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#3F5A3A] mb-2">
-              Gaming Lounge
-            </p>
-            <h2 className="font-display font-bold text-[#F5EDD8] text-2xl sm:text-3xl">
-              Get a gamer account
-            </h2>
-            <p className="mt-2 text-[#F5EDD8]/50 max-w-sm text-sm leading-relaxed">
+      {/* Gamer membership */}
+      <section className="bg-paper text-black">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 py-14 sm:py-[88px] flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+          <div className="min-w-0">
+            <PosterHeadline as="h2" size="headline">Get a gamer account</PosterHeadline>
+            <span aria-hidden="true" className="section-bar mt-2" />
+            <p className="type-body mt-4 max-w-[46ch]">
               Track your sessions, build up game time credit, and skip the queue. Free to join.
             </p>
           </div>
-          <Link
-            href="/gamer-signup"
-            className="shrink-0 rounded-lg bg-[#B8893B] text-[#1A1612] font-semibold px-7 py-3.5 text-sm hover:bg-[#B8893B]/90 transition-colors"
-          >
+          <LinkButton href="/gamer-signup" variant="lounge" ground="paper" className="shrink-0">
             Join as a Gamer
-          </Link>
+          </LinkButton>
         </div>
       </section>
 
-      {/* ── Image gallery placeholder ── */}
-      <section className="bg-[#0A0806]">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 py-16 sm:py-20">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#3F5A3A] mb-8">
-            The space
-          </p>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
-            {[...Array(8)].map((_, i) => (
-              <div
-                key={i}
-                className={`rounded-lg bg-[#F5EDD8]/[0.03] border border-[#F5EDD8]/[0.05] flex items-center justify-center ${
-                  i === 0 ? "md:col-span-2 md:row-span-2 aspect-square" : "aspect-square"
-                }`}
-              >
-                <FlameGlyph className="w-6 h-auto opacity-[0.07]" />
-              </div>
-            ))}
-          </div>
-          <p className="mt-4 text-[#F5EDD8]/20 text-xs text-center">Photos coming soon</p>
+      {/* The space: no photos yet */}
+      <section className="bg-black">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 py-14 sm:py-[88px]">
+          <SectionHeader title="The space" />
+          <EmptyState
+            title="Photos of the space are on the way."
+            body="Follow @flamesmobay on Instagram and TikTok to see the Lounge."
+          />
         </div>
       </section>
 
-      {/* ── Find us ── */}
-      <section
-        className="relative overflow-hidden"
-        style={{ backgroundColor: "#8B2A1F" }}
-      >
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0"
-          style={{
-            background:
-              "radial-gradient(ellipse 80% 100% at 50% 100%, rgba(0,0,0,0.35) 0%, transparent 70%)",
-          }}
-        />
-        <div className="relative mx-auto max-w-6xl px-4 sm:px-6 py-16 sm:py-20">
+      {/* Find us */}
+      <section className="bg-red text-paper">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 py-14 sm:py-[88px]">
           <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
-            <div>
-              <h2 className="font-display font-bold text-[#F5EDD8] text-[clamp(2rem,4vw,3rem)] leading-tight">
-                Come through.
-              </h2>
-              <p className="mt-3 text-[#F5EDD8]/70 max-w-md leading-relaxed">
-                Montego Bay, Jamaica. Walk-in welcome — no reservation needed.
-                Hours coming soon.
+            <div className="min-w-0">
+              <h2 className="type-headline">Come through.</h2>
+              <span aria-hidden="true" className="block mt-2 h-2 w-[72px] bg-paper" />
+              <p className="type-body mt-4 max-w-[46ch]">
+                Montego Bay, Jamaica. Walk-in welcome, no reservation needed.
               </p>
-              <div className="mt-6 flex items-center gap-5">
+              <div className="mt-6 flex flex-wrap items-center gap-x-2 gap-y-2">
                 <a
                   href="https://instagram.com/flamesmobay"
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Flames Lounge on Instagram"
-                  className="text-[#F5EDD8]/60 hover:text-[#F5EDD8] transition-colors"
+                  className="inline-grid place-items-center min-h-[44px] min-w-[44px] text-paper focus-on-red"
                 >
                   <InstagramIcon />
                 </a>
@@ -536,19 +451,16 @@ export default async function FlamesLoungePage() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Flames Lounge on TikTok"
-                  className="text-[#F5EDD8]/60 hover:text-[#F5EDD8] transition-colors"
+                  className="inline-grid place-items-center min-h-[44px] min-w-[44px] text-paper focus-on-red"
                 >
                   <TikTokIcon />
                 </a>
-                <span className="text-[#F5EDD8]/40 text-sm">@flamesmobay</span>
+                <span className="type-label">@flamesmobay</span>
               </div>
             </div>
-            <Link
-              href="/contact"
-              className="shrink-0 inline-block rounded bg-[#F5EDD8] px-8 py-3.5 text-sm font-semibold text-[#8B2A1F] hover:bg-[#B8893B] hover:text-[#1A1612] transition-colors"
-            >
+            <LinkButton href="/contact" variant="dark" ground="red" className="shrink-0">
               Contact us
-            </Link>
+            </LinkButton>
           </div>
         </div>
       </section>

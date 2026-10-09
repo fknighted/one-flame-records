@@ -17,49 +17,48 @@ export default async function SubscribersPage() {
   return (
     <div className="space-y-10 max-w-3xl">
       <div>
-        <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-sage mb-2">Community</p>
-        <h1 className="font-display font-bold text-bone text-3xl">Subscribers</h1>
-        <div className="mt-3 h-px w-16 bg-bone/20" />
+        <p className="studio-label mb-2">Community</p>
+        <h1 className="studio-page-title">Subscribers</h1>
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
         {[
           { label: "Total subscribers", value: total ?? 0 },
           { label: "Active", value: active ?? 0 },
           { label: "Unsubscribed", value: (total ?? 0) - (active ?? 0) },
         ].map(({ label, value }) => (
-          <div key={label} className="rounded-lg border border-bone/10 p-4">
-            <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-bone/52 mb-1">{label}</p>
-            <p className="font-display font-bold text-bone text-2xl">{value}</p>
+          <div key={label} className="studio-stat">
+            <p className="studio-stat-label">{label}</p>
+            <p className="studio-stat-value">{value}</p>
           </div>
         ))}
       </div>
 
       {/* Send newsletter */}
       <div>
-        <h2 className="font-display font-bold text-bone text-xl mb-4">Send Newsletter</h2>
+        <h2 className="studio-section-title mb-4">Send Newsletter</h2>
         <NewsletterForm activeCount={active ?? 0} />
       </div>
 
       {/* Recent subscribers */}
       {(recent ?? []).length > 0 && (
         <div>
-          <h2 className="font-display font-bold text-bone text-xl mb-4">Recent Subscribers</h2>
-          <div className="rounded-lg border border-bone/10 overflow-hidden">
+          <h2 className="studio-section-title mb-4">Recent Subscribers</h2>
+          <div className="studio-card p-0">
             {(recent ?? []).map((s, i) => (
               <div
                 key={s.email}
-                className={`flex items-center justify-between px-4 py-3 text-sm ${i > 0 ? "border-t border-bone/8" : ""}`}
+                className={`flex flex-wrap items-center justify-between gap-x-4 gap-y-1 px-4 py-3 ${i > 0 ? "border-t border-line" : ""}`}
               >
-                <span className="text-bone/80 font-mono text-xs">{s.email}</span>
+                <span className="text-paper min-w-0 [overflow-wrap:anywhere]">{s.email}</span>
                 <div className="flex items-center gap-4 shrink-0">
-                  <span className={`text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full ${
-                    s.status === "active" ? "bg-forest/15 text-sage" : "bg-bone/10 text-bone/60"
+                  <span className={`studio-chip ${
+                    s.status === "active" ? "studio-chip-ok" : "studio-chip-neutral"
                   }`}>
                     {s.status}
                   </span>
-                  <span className="text-bone/50 text-xs">{formatDate(s.created_at)}</span>
+                  <span className="text-muted text-[15px]">{formatDate(s.created_at)}</span>
                 </div>
               </div>
             ))}

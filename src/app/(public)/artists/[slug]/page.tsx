@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
@@ -6,6 +5,8 @@ import { createServiceClient } from "@/lib/supabase/server";
 import ReleaseCard from "@/components/ReleaseCard";
 import VideoEmbed from "@/components/VideoEmbed";
 import SectionHeader from "@/components/SectionHeader";
+import PrintedPhoto from "@/components/PrintedPhoto";
+import { buttonClasses } from "@/lib/sound-system";
 import type { Tables } from "@/types/supabase";
 import { buildSpotifyEmbedUrl } from "@/lib/spotify";
 
@@ -110,13 +111,15 @@ const SOCIAL_SERVICES: { key: keyof SocialData; label: string; buildUrl: (val: s
 function BioParagraphs({ bio }: { bio: string }) {
   const paras = bio.split(/\n\n+/).filter(Boolean);
   return (
-    <div className="space-y-4 text-ink/80 leading-relaxed text-[1.05rem]">
+    <div className="space-y-4 type-body max-w-[66ch]">
       {paras.map((p, i) => (
-        <p key={i}>{p}</p>
+        <p key={i} className="[overflow-wrap:anywhere]">{p}</p>
       ))}
     </div>
   );
 }
+
+const PILL = "border-2 border-black px-2.5 py-[3px] font-bold text-[13px] [overflow-wrap:anywhere]";
 
 export default async function ArtistDetailPage({ params }: Props) {
   const { slug } = await params;
@@ -206,118 +209,124 @@ export default async function ArtistDetailPage({ params }: Props) {
     foundingLocation: { "@type": "Place", name: artist.hometown ?? "Jamaica" },
   };
 
+  const initial = Array.from(artist.stage_name.trim())[0] ?? "";
+  const longName = artist.stage_name.length > 14;
+  const musicDuration = (seconds: number) =>
+    `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, "0")}`;
+
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\u003c") }}
       />
-      {/* ── Hero ── */}
-      <div className="relative w-full aspect-[2/1] sm:aspect-[3/1] bg-ink overflow-hidden">
-        {artist.photo_url ? (
-          <Image
-            src={artist.photo_url}
-            alt={artist.stage_name}
-            fill
-            className="object-cover object-top"
-            priority
-            sizes="100vw"
-          />
-        ) : (
-          <div className="absolute inset-0 flex items-center justify-center opacity-10">
-            <svg viewBox="0 0 20 28" className="w-24 h-auto" aria-hidden="true">
-              <path d="M10 1C10 1 4 9 4 16C4 19.8 6.3 23.1 10 25C13.7 23.1 16 19.8 16 16C16 9 10 1 10 1Z" fill="#ECE2C8" />
-            </svg>
+
+      {/* Name block (red) and info panel (paper) */}
+      <section className="grid md:grid-cols-[1fr_1.2fr]">
+        <div className="bg-red text-paper min-w-0">
+          <div className="relative overflow-hidden min-h-[300px] p-[26px] grid content-end">
+            <span
+              aria-hidden="true"
+              className="absolute -right-5 -top-[30px] font-poster font-black uppercase text-[200px] sm:text-[300px] leading-[0.8] text-black/20 select-none"
+            >
+              {initial}
+            </span>
+            <h1
+              className={`relative font-poster font-black uppercase leading-[0.8] [overflow-wrap:anywhere] ${
+                longName ? "text-[clamp(44px,8vw,80px)]" : "text-[clamp(64px,10vw,124px)]"
+              }`}
+            >
+              {artist.stage_name}
+            </h1>
           </div>
-        )}
-        {/* Gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-ink/80 via-ink/20 to-transparent" />
-
-        {/* Name overlaid on gradient */}
-        <div className="absolute bottom-0 left-0 right-0 px-4 sm:px-8 pb-6 sm:pb-8 max-w-6xl mx-auto">
-          <h1 className="font-display font-bold text-bone text-[clamp(2rem,5vw,3.5rem)] leading-tight">
-            {artist.stage_name}
-          </h1>
-          <p className="mt-1 text-bone/60 text-sm uppercase tracking-[0.12em]">
-            {[artist.hometown, ...(artist.genres ?? [])].filter(Boolean).join(" · ")}
-          </p>
-        </div>
-      </div>
-
-      {/* ── Content ── */}
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 py-12 space-y-16">
-
-        {/* Bio + links */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-          <div className="lg:col-span-2">
-            {artist.bio && <BioParagraphs bio={artist.bio} />}
-          </div>
-
-          <div className="space-y-6">
-            {/* Spotify compact embed */}
-            {spotifyArtistEmbedUrl && (
-              <iframe
-                src={spotifyArtistEmbedUrl}
-                width="100%"
-                height="152"
-                frameBorder="0"
-                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                loading="lazy"
-                className="rounded-lg"
+          {artist.photo_url && (
+            <div className="relative aspect-[4/3] w-full bg-red">
+              <PrintedPhoto
+                tone="red"
+                src={artist.photo_url}
+                alt={artist.stage_name}
+                fill
+                priority
+                className="object-cover object-top"
+                sizes="(max-width: 768px) 100vw, 45vw"
               />
-            )}
-
-            {/* Streaming */}
-            {activeStreaming.length > 0 && (
-              <div>
-                <h3 className="text-[10px] font-semibold uppercase tracking-[0.15em] text-ink/40 mb-3">
-                  Stream
-                </h3>
-                <div className="flex flex-col gap-2">
-                  {activeStreaming.map(({ key, label, buildUrl }) => (
-                    <a
-                      key={key}
-                      href={buildUrl(streaming[key]!)}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 text-sm text-oxblood hover:text-ochre transition-colors font-medium"
-                    >
-                      {label} →
-                    </a>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Socials */}
-            {activeSocials.length > 0 && (
-              <div>
-                <h3 className="text-[10px] font-semibold uppercase tracking-[0.15em] text-ink/40 mb-3">
-                  Follow
-                </h3>
-                <div className="flex flex-col gap-2">
-                  {activeSocials.map(({ key, label, buildUrl }) => (
-                    <a
-                      key={key}
-                      href={buildUrl(socials[key]!)}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 text-sm text-oxblood hover:text-ochre transition-colors font-medium"
-                    >
-                      {label} →
-                    </a>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
+            </div>
+          )}
         </div>
 
-        {/* Releases */}
+        <div className="bg-paper text-black p-[22px] sm:p-8 md:min-h-[300px] grid gap-5 content-start min-w-0">
+          <div className="flex flex-wrap gap-2">
+            <span className={PILL}>Signed to One Flame</span>
+            {artist.hometown && <span className={PILL}>{artist.hometown}</span>}
+            {(artist.genres ?? []).map((g) => (
+              <span key={g} className={PILL}>{g}</span>
+            ))}
+          </div>
+
+          {artist.bio && (
+            <div className="text-black">
+              <BioParagraphs bio={artist.bio} />
+            </div>
+          )}
+
+          {spotifyArtistEmbedUrl && (
+            <iframe
+              src={spotifyArtistEmbedUrl}
+              title={`${artist.stage_name} on Spotify`}
+              width="100%"
+              height="152"
+              frameBorder="0"
+              allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+              loading="lazy"
+            />
+          )}
+
+          {activeStreaming.length > 0 && (
+            <div>
+              <h2 className="type-label text-black mb-3">Stream</h2>
+              <div className="flex flex-wrap gap-2">
+                {activeStreaming.map(({ key, label, buildUrl }) => (
+                  <a
+                    key={key}
+                    href={buildUrl(streaming[key]!)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={buttonClasses("dark", "paper")}
+                  >
+                    {label}
+                  </a>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {activeSocials.length > 0 && (
+            <div>
+              <h2 className="type-label text-black mb-3">Follow</h2>
+              <div className="flex flex-wrap gap-x-5 gap-y-2">
+                {activeSocials.map(({ key, label, buildUrl }) => (
+                  <a
+                    key={key}
+                    href={buildUrl(socials[key]!)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="type-label text-red underline underline-offset-4 inline-flex min-h-[44px] items-center focus-on-paper"
+                  >
+                    {label}
+                  </a>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* Releases, videos, photos, music on black */}
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 py-14 sm:py-[88px] space-y-14 sm:space-y-[88px]">
         {releases && releases.length > 0 && (
           <section>
             <SectionHeader title="Releases" />
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5 sm:gap-6">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2">
               {releases.map((r) => (
                 <ReleaseCard
                   key={r.id}
@@ -335,11 +344,10 @@ export default async function ArtistDetailPage({ params }: Props) {
           </section>
         )}
 
-        {/* Videos */}
         {videos && videos.length > 0 && (
           <section>
             <SectionHeader title="Videos" />
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
               {videos.map((v, i) => (
                 <VideoEmbed
                   key={v.id}
@@ -354,22 +362,21 @@ export default async function ArtistDetailPage({ params }: Props) {
           </section>
         )}
 
-        {/* Generated Videos */}
         {jobsWithUrls.length > 0 && (
           <section>
-            <SectionHeader title="Generated Videos" />
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <SectionHeader title="Saved videos" />
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
               {jobsWithUrls.map((job) =>
                 job.videoUrl ? (
-                  <div key={job.id} className="rounded-lg overflow-hidden border border-oxblood/10 bg-ink/5">
+                  <div key={job.id} className="bg-panel min-w-0">
                     <video
                       src={job.videoUrl}
                       controls
                       preload="metadata"
-                      className="w-full aspect-video bg-ink/20"
+                      className="w-full aspect-video bg-black"
                     />
                     {job.params && typeof job.params === "object" && "stylePreset" in job.params && (
-                      <p className="px-3 py-2 text-xs text-ink/50 truncate">
+                      <p className="px-3 py-2 type-caption text-muted [overflow-wrap:anywhere]">
                         {(job.params as Record<string, string>).stylePreset}
                       </p>
                     )}
@@ -380,25 +387,30 @@ export default async function ArtistDetailPage({ params }: Props) {
           </section>
         )}
 
-        {/* Photos */}
         {publicPhotos.length > 0 && (
           <section>
             <SectionHeader title="Photos" />
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-              {publicPhotos.map((photo) =>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
+              {publicPhotos.map((photo, i) =>
                 photo.signedUrl ? (
                   <a
                     key={photo.id}
                     href={photo.signedUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="block aspect-square rounded overflow-hidden bg-ink/10 hover:opacity-90 transition-opacity"
+                    aria-label={`${photo.title} (opens the full photo)`}
+                    className={`relative block aspect-square overflow-hidden focus-on-black ${
+                      i % 2 === 0 ? "bg-yellow" : "bg-red"
+                    }`}
                   >
-                    <img
+                    <PrintedPhoto
+                      tone={i % 2 === 0 ? "yellow" : "red"}
                       src={photo.signedUrl}
                       alt={photo.title}
-                      className="w-full h-full object-cover"
-                      loading="lazy"
+                      fill
+                      unoptimized
+                      className="object-cover"
+                      sizes="(max-width: 640px) 50vw, 25vw"
                     />
                   </a>
                 ) : null
@@ -407,36 +419,35 @@ export default async function ArtistDetailPage({ params }: Props) {
           </section>
         )}
 
-        {/* Music */}
         {publicMusic.length > 0 && (
           <section>
             <SectionHeader title="Music" />
-            <div className="flex flex-col divide-y divide-oxblood/10 border border-oxblood/10 rounded-lg overflow-hidden">
+            <div className="flex flex-col gap-2">
               {publicMusic.map((track) => (
-                <div key={track.id} className="flex items-center gap-4 px-4 py-3 hover:bg-oxblood/5 transition-colors">
-                  <div className="flex-1 min-w-0">
-                    <p className="text-ink font-medium text-sm truncate">{track.title}</p>
-                    <p className="text-ink/40 text-xs mt-0.5">
+                <div key={track.id} className="bg-paper text-black border-2 border-black grid gap-3 p-4 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center">
+                  <div className="min-w-0">
+                    <p className="type-title-sm text-black [overflow-wrap:anywhere]">{track.title}</p>
+                    <p className="type-caption text-black mt-0.5">
                       {track.kind === "demo" ? "Demo" : "Instrumental"}
-                      {track.duration_seconds != null && (
-                        <> · {Math.floor(track.duration_seconds / 60)}:{String(track.duration_seconds % 60).padStart(2, "0")}</>
-                      )}
+                      {track.duration_seconds != null && <> · {musicDuration(track.duration_seconds)}</>}
                     </p>
                   </div>
                   {track.signedUrl && (
-                    <div className="flex items-center gap-3 shrink-0">
-                      <audio
-                        src={track.signedUrl}
-                        controls
-                        preload="none"
-                        className="h-8 w-28 sm:w-44 md:w-56"
-                      />
+                    <div className="grid gap-2 min-w-0 sm:grid-flow-col sm:items-center sm:gap-4">
+                      <div className="bg-paper border-2 border-black p-1.5 min-w-0">
+                        <audio
+                          src={track.signedUrl}
+                          controls
+                          preload="none"
+                          className="block h-10 w-full sm:w-64 max-w-full rounded-none"
+                        />
+                      </div>
                       <a
                         href={track.signedUrl}
                         download
-                        className="text-xs text-oxblood hover:text-ochre transition-colors font-medium"
+                        className="type-label text-red underline underline-offset-4 inline-flex min-h-[44px] items-center focus-on-paper"
                       >
-                        ↓
+                        Download
                       </a>
                     </div>
                   )}
@@ -446,10 +457,12 @@ export default async function ArtistDetailPage({ params }: Props) {
           </section>
         )}
 
-        {/* Back link */}
-        <div className="pt-4 border-t border-oxblood/10">
-          <Link href="/artists" className="text-sm text-oxblood hover:text-ochre transition-colors">
-            ← All artists
+        <div>
+          <Link
+            href="/artists"
+            className="type-label text-yellow underline underline-offset-4 inline-flex min-h-[44px] items-center focus-on-black"
+          >
+            All artists
           </Link>
         </div>
       </div>

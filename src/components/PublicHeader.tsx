@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { useState } from "react";
+import LogoMark from "@/components/LogoMark";
 
 const NAV = [
   { href: "/artists",       label: "Artists" },
@@ -16,105 +16,75 @@ const NAV = [
 
 const NAV_CTA = { href: "/sign", label: "Sign with us" };
 
+// Navigation on black: small paper text, yellow focus ring.
+const LINK =
+  "type-small text-paper underline-offset-4 hover:text-yellow hover:underline focus-on-black";
+
 export default function PublicHeader() {
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-40 bg-cream/95 backdrop-blur-sm border-b border-oxblood/10">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 flex items-center justify-between h-24">
-        {/* Logo */}
+    <header className="sticky top-0 z-40 bg-black border-b-4 border-yellow">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 flex items-center justify-between gap-4 py-3">
+        {/* Logo: plain light horizontal lockup on black */}
         <Link
           href="/"
-          className="flex items-center"
+          className="flex items-center shrink-0 focus-on-black"
           onClick={() => setOpen(false)}
         >
-          <Image
-            src="/logo-2.png"
-            alt="One Flame Records"
-            width={160}
-            height={88}
-            className="h-20 w-auto"
-            priority
-          />
+          <LogoMark variant="horizontal" ground="black" height={40} className="h-10 w-auto lg:h-12" priority />
         </Link>
 
         {/* Desktop nav */}
-        <nav className="hidden md:flex items-center gap-7" aria-label="Main">
+        <nav className="hidden lg:flex items-center gap-x-5" aria-label="Main">
           {NAV.map(({ href, label }) => (
-            <Link
-              key={href}
-              href={href}
-              className="text-sm font-medium text-ink/80 hover:text-oxblood transition-colors"
-            >
+            <Link key={href} href={href} className={LINK}>
               {label}
             </Link>
           ))}
-          <Link
-            href="/search"
-            aria-label="Search"
-            className="text-ink/60 hover:text-oxblood transition-colors"
-          >
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+          <Link href="/search" aria-label="Search" className="text-paper hover:text-yellow focus-on-black p-1 -m-1">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="square" aria-hidden="true">
               <circle cx="11" cy="11" r="8" />
               <path d="M21 21l-4.35-4.35" />
             </svg>
           </Link>
-          <Link
-            href={NAV_CTA.href}
-            className="text-sm font-semibold text-oxblood border border-oxblood/40 rounded px-3.5 py-1.5 hover:bg-oxblood hover:text-bone transition-colors"
-          >
+          <Link href={NAV_CTA.href} className="type-small text-yellow underline underline-offset-4 hover:text-paper focus-on-black">
             {NAV_CTA.label}
           </Link>
         </nav>
 
-        {/* Hamburger */}
+        {/* Phone: outlined yellow Menu button */}
         <button
-          className="md:hidden p-3 -mr-3 text-ink"
+          type="button"
+          className="lg:hidden min-h-[40px] px-3 border-2 border-yellow text-yellow type-label hover:bg-yellow hover:text-black focus-on-black"
           onClick={() => setOpen((v) => !v)}
-          aria-label={open ? "Close menu" : "Open menu"}
           aria-expanded={open}
           aria-controls="mobile-menu"
         >
-          {open ? (
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-              <path d="M18 6L6 18M6 6l12 12" />
-            </svg>
-          ) : (
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-              <path d="M3 6h18M3 12h18M3 18h18" />
-            </svg>
-          )}
+          {open ? "Close" : "Menu"}
         </button>
       </div>
 
-      {/* Mobile overlay — z-[60] sits above grain overlay (z-50) and header (z-40) */}
+      {/* Phone menu: folds out under the header bar */}
       {open && (
         <nav
           id="mobile-menu"
-          className="md:hidden fixed inset-0 top-24 z-[60] flex flex-col px-6 pt-4 overflow-y-auto"
-          style={{ backgroundColor: "#1A1612" }}
+          className="lg:hidden bg-black border-t-2 border-line px-4 sm:px-6 pt-2 pb-6 max-h-[calc(100dvh-72px)] overflow-y-auto"
           aria-label="Mobile"
         >
-          {NAV.map(({ href, label }) => (
+          {[...NAV, { href: "/search", label: "Search" }].map(({ href, label }) => (
             <Link
               key={href}
               href={href}
-              className="font-display text-lg font-bold text-bone py-2.5 border-b border-bone/10 hover:text-ochre transition-colors"
+              className="block py-3 border-b-2 border-line type-title-sm text-paper hover:text-yellow focus-on-black"
               onClick={() => setOpen(false)}
             >
               {label}
             </Link>
           ))}
           <Link
-            href="/search"
-            className="font-display text-lg font-bold text-bone py-2.5 border-b border-bone/10 hover:text-ochre transition-colors"
-            onClick={() => setOpen(false)}
-          >
-            Search
-          </Link>
-          <Link
             href={NAV_CTA.href}
-            className="font-display text-lg font-bold text-ochre py-2.5 mt-1 hover:text-bone transition-colors"
+            className="block py-3 type-title-sm text-yellow underline underline-offset-4 hover:text-paper focus-on-black"
             onClick={() => setOpen(false)}
           >
             {NAV_CTA.label}

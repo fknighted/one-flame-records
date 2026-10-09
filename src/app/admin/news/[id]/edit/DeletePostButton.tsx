@@ -15,7 +15,7 @@ export default function DeletePostButton({ action }: { action: () => Promise<voi
       type="button"
       onClick={handleClick}
       disabled={pending}
-      className="text-sm text-red-400 hover:text-red-300 disabled:opacity-40 transition-colors"
+      className="studio-btn studio-btn-danger studio-btn-sm"
     >
       {pending ? "Deleting…" : "Delete"}
     </button>

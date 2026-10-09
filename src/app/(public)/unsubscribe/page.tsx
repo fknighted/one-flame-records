@@ -15,11 +15,11 @@ export default async function UnsubscribePage({ searchParams }: Props) {
 
   if (!email) {
     return (
-      <div className="min-h-screen bg-cream flex items-center justify-center px-4">
-        <div className="max-w-sm w-full text-center space-y-4">
-          <h1 className="font-display font-bold text-ink text-2xl">Invalid unsubscribe link</h1>
-          <p className="text-ink/50 text-sm">
-            This link doesn't look right. Please use the unsubscribe link from your email.
+      <div className="mx-auto max-w-xl px-4 sm:px-6 py-14 sm:py-[88px]">
+        <div className="bg-paper text-black p-5 sm:p-6 space-y-3">
+          <h1 className="type-title">Invalid unsubscribe link</h1>
+          <p className="type-body">
+            This link doesn&apos;t look right. Please use the unsubscribe link from your email.
           </p>
         </div>
       </div>
@@ -27,11 +27,11 @@ export default async function UnsubscribePage({ searchParams }: Props) {
   }
 
   return (
-    <div className="min-h-screen bg-cream flex items-center justify-center px-4">
-      <div className="max-w-sm w-full space-y-8">
-        <div className="text-center space-y-2">
-          <h1 className="font-display font-bold text-ink text-2xl">Unsubscribe</h1>
-          <p className="text-ink/50 text-sm">
+    <div className="mx-auto max-w-xl px-4 sm:px-6 py-14 sm:py-[88px]">
+      <div className="bg-paper text-black p-5 sm:p-6 space-y-6">
+        <div className="space-y-2">
+          <h1 className="type-title">Unsubscribe</h1>
+          <p className="type-body">
             Unsubscribe from the One Flame Records newsletter?
           </p>
         </div>

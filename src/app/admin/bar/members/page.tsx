@@ -11,49 +11,47 @@ export default async function AdminGamerMembersPage() {
   return (
     <div className="space-y-8 max-w-4xl">
       <div>
-        <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-sage mb-1">Bar</p>
-        <h1 className="font-display font-bold text-bone text-3xl">Gamer Members</h1>
-        <div className="mt-3 h-px w-16 bg-bone/20" />
+        <p className="studio-label mb-1">Bar</p>
+        <h1 className="studio-page-title">Gamer Members</h1>
       </div>
 
       {!members?.length ? (
-        <div className="border border-bone/10 rounded-lg p-12 text-center text-bone/50 text-sm">
-          No members yet. Bartenders can create them from the{" "}
-          <Link href="/bar/members" className="text-ochre hover:underline">bar POS</Link>.
+        <div className="studio-empty">
+          <p className="studio-empty-body">
+            No members yet. Bartenders can create them from the{" "}
+            <Link href="/bar/members" className="studio-link">bar POS</Link>.
+          </p>
         </div>
       ) : (
-        <div className="border border-bone/10 rounded-lg overflow-x-auto">
-          <table className="w-full min-w-[520px] text-sm">
-            <thead className="border-b border-bone/10 bg-bone/3">
+        <div className="studio-table-wrap">
+          <table className="studio-table min-w-[520px]">
+            <thead>
               <tr>
-                <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Member</th>
-                <th className="text-right px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Balance (min)</th>
-                <th className="text-center px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Status</th>
-                <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Joined</th>
-                <th className="px-4 py-3" />
+                <th>Member</th>
+                <th className="is-num">Balance (min)</th>
+                <th>Status</th>
+                <th>Joined</th>
+                <th><span className="sr-only">Actions</span></th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-bone/10">
+            <tbody>
               {members.map((m) => (
-                <tr key={m.id} className="hover:bg-bone/3 transition-colors">
-                  <td className="px-4 py-3">
-                    <p className="text-bone font-medium">{m.display_name}</p>
-                    <p className="text-xs text-bone/60">{m.email}</p>
+                <tr key={m.id} className="is-link">
+                  <td className="[overflow-wrap:anywhere]">
+                    <p className="font-semibold">{m.display_name}</p>
+                    <p className="text-[13px] text-muted">{m.email}</p>
                   </td>
-                  <td className="px-4 py-3 text-right font-mono text-bone">{m.minutes_balance}</td>
-                  <td className="px-4 py-3 text-center">
-                    <span className={[
-                      "inline-block px-2 py-0.5 rounded-full text-xs font-medium",
-                      m.status === "active" ? "bg-forest/20 text-sage" : "bg-oxblood/20 text-rose",
-                    ].join(" ")}>
+                  <td className="is-num"><span className="studio-count">{m.minutes_balance}</span></td>
+                  <td>
+                    <span className={m.status === "active" ? "studio-chip studio-chip-ok" : "studio-chip studio-chip-bad"}>
                       {m.status}
                     </span>
                   </td>
-                  <td className="px-4 py-3 text-xs text-bone/50">
+                  <td className="studio-figures text-muted">
                     {new Date(m.created_at).toLocaleDateString()}
                   </td>
-                  <td className="px-4 py-3 text-right">
-                    <Link href={`/admin/bar/members/${m.id}`} className="text-xs text-bone/60 hover:text-bone transition-colors">
+                  <td className="is-num">
+                    <Link href={`/admin/bar/members/${m.id}`} className="studio-btn studio-btn-secondary studio-btn-sm">
                       View
                     </Link>
                   </td>

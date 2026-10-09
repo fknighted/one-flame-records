@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { tooLong } from "@/lib/sound-system";
 
 type StreamingLinks = {
   spotify?: string;
@@ -21,11 +22,11 @@ type Props = {
   dark?: boolean;
 };
 
-const TYPE_STYLES: Record<string, string> = {
-  single:  "bg-ochre text-ink",
-  ep:      "bg-forest text-bone",
-  album:   "bg-oxblood text-bone",
-  mixtape: "bg-ink text-bone",
+const TYPE_LABELS: Record<string, string> = {
+  single:  "Single",
+  ep:      "EP",
+  album:   "Album",
+  mixtape: "Mixtape",
 };
 
 function formatDate(dateStr: string) {
@@ -89,6 +90,13 @@ const STREAMING_ICONS: { key: keyof StreamingLinks; label: string; icon: React.R
   },
 ];
 
+/**
+ * A release as a small poster: red type band on top, the title on paper (with
+ * square, uncropped cover art above it when there is one), then a 3px black
+ * rule and a bottom row with the artist and "Listen". Cover art is artwork,
+ * so it is not printed in three tones. Same props as before; `dark` is kept so
+ * existing pages compile, but the card is paper on any ground.
+ */
 export default function ReleaseCard({
   slug,
   title,
@@ -98,71 +106,53 @@ export default function ReleaseCard({
   artist_name,
   artist_slug,
   streaming_links,
-  dark = false,
 }: Props) {
-  const pillStyle = TYPE_STYLES[type] ?? "bg-ink/10 text-ink";
+  const typeLabel = TYPE_LABELS[type] ?? type;
   const activeLinks = STREAMING_ICONS.filter(({ key }) => streaming_links[key]);
+  const long = tooLong(title);
 
   return (
-    <div className="group flex flex-col">
-      {/* Cover */}
-      <Link href={`/releases/${slug}`} className="block relative aspect-square overflow-hidden ring-1 ring-white/5">
-        {cover_url ? (
-          <Image
-            src={cover_url}
-            alt={`${title} cover`}
-            fill
-            className="object-cover transition-transform duration-500 group-hover:scale-105"
-            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
-          />
-        ) : (
-          <div className="absolute inset-0 bg-ink flex items-center justify-center">
-            <svg viewBox="0 0 20 28" className="w-10 h-auto opacity-15" aria-hidden="true">
-              <path d="M10 1C10 1 4 9 4 16C4 19.8 6.3 23.1 10 25C13.7 23.1 16 19.8 16 16C16 9 10 1 10 1Z" fill="#8B2A1F" />
-            </svg>
-          </div>
-        )}
-      </Link>
+    <article className="@container grid grid-rows-[auto_1fr_auto] aspect-[4/5] bg-paper text-black">
+      <p className="flex items-center justify-between gap-2 bg-red text-paper px-3 py-2 type-label">
+        <span>{typeLabel}</span>
+        <span className="type-caption normal-case tracking-normal">{release_date.slice(0, 4)}</span>
+      </p>
 
-      {/* Info */}
-      <div className="mt-2.5 flex flex-col flex-1 px-0.5">
-        <div className="flex items-start justify-between gap-2">
+      <div className="px-3 py-3.5 grid content-end gap-2 min-w-0">
+        {cover_url && (
+          <Link href={`/releases/${slug}`} tabIndex={-1} aria-hidden="true" className="relative block aspect-square w-full bg-black">
+            <Image
+              src={cover_url}
+              alt=""
+              fill
+              className="object-contain"
+              sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
+            />
+          </Link>
+        )}
+        <h3 className="min-w-0">
           <Link
             href={`/releases/${slug}`}
-            className={`font-display font-bold text-base leading-tight transition-colors ${
-              dark ? "text-bone hover:text-ochre" : "text-oxblood hover:text-ochre"
+            className={`block font-poster font-black uppercase [overflow-wrap:anywhere] hover:text-red focus-on-paper ${
+              long
+                ? "leading-[0.95] text-[clamp(20px,11cqi,32px)]"
+                : "leading-[0.85] text-[clamp(26px,18cqi,46px)]"
             }`}
           >
             {title}
           </Link>
-          <span className={`shrink-0 text-[10px] font-semibold uppercase tracking-wide px-1.5 py-0.5 rounded-sm ${pillStyle}`}>
-            {type}
-          </span>
-        </div>
-        <Link
-          href={`/artists/${artist_slug}`}
-          className={`mt-0.5 text-sm transition-colors ${
-            dark ? "text-bone/50 hover:text-ochre" : "text-ink/60 hover:text-oxblood"
-          }`}
-        >
-          {artist_name}
-        </Link>
-        <p className={`mt-0.5 text-xs ${dark ? "text-bone/30" : "text-ink/40"}`}>
-          {formatDate(release_date)}
-        </p>
-
+        </h3>
+        <p className="type-caption text-black/75">{formatDate(release_date)}</p>
         {activeLinks.length > 0 && (
-          <div className="mt-2.5 flex items-center gap-1.5">
+          <div className="flex flex-wrap items-center gap-1">
             {activeLinks.map(({ key, label, icon }) => (
               <a
                 key={key}
                 href={streaming_links[key]!}
                 target="_blank"
                 rel="noopener noreferrer"
-                aria-label={label}
-                className={`p-1.5 -m-1.5 transition-colors ${
-                  dark ? "text-bone/40 hover:text-ochre" : "text-ink/40 hover:text-oxblood"
-                }`}
+                aria-label={`${label} (opens in a new tab)`}
+                className="grid place-items-center w-8 h-8 text-black hover:text-red focus-on-paper"
               >
                 {icon}
               </a>
@@ -170,6 +160,22 @@ export default function ReleaseCard({
           </div>
         )}
       </div>
-    </div>
+
+      <div className="flex justify-between items-center gap-2 px-3 py-2.5 border-t-[3px] border-black type-small min-w-0">
+        <Link
+          href={`/artists/${artist_slug}`}
+          className="min-w-0 truncate underline underline-offset-2 hover:text-red focus-on-paper"
+        >
+          {artist_name}
+        </Link>
+        <Link
+          href={`/releases/${slug}`}
+          aria-label={`Listen to ${title}`}
+          className="shrink-0 underline underline-offset-2 hover:text-red focus-on-paper"
+        >
+          Listen
+        </Link>
+      </div>
+    </article>
   );
 }

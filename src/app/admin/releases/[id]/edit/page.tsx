@@ -36,7 +36,7 @@ export default async function EditReleasePage({
 
   return (
     <div className="space-y-6">
-      <h1 className="font-display text-2xl text-bone">{release.title}</h1>
+      <h1 className="studio-page-title">{release.title}</h1>
       <ReleaseForm
         action={updateRelease}
         initialValues={initialValues}

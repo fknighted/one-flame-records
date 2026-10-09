@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
 import { createClient } from "@/lib/supabase/client";
+import LogoMark from "@/components/LogoMark";
+import "@/app/studio.css";
 
 export default function LoginPage() {
   const [error, setError] = useState<string | null>(null);
@@ -61,18 +62,17 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="min-h-screen bg-cream flex items-center justify-center px-4">
+    <main className="studio-shell min-h-screen bg-black text-paper font-text flex items-center justify-center px-4 py-12">
       <div className="w-full max-w-sm">
         <div className="mb-8 text-center">
-          <Image
-            src="/logo-1.png"
-            alt="One Flame Records"
-            width={320}
-            height={175}
-            className="h-40 w-auto mx-auto mb-4"
+          <LogoMark
+            variant="stacked"
+            ground="black"
+            height={128}
+            className="h-32 w-auto mx-auto mb-5"
             priority
           />
-          <p className="text-sm text-ink/60">
+          <p className="text-[15px] text-muted">
             {view === "login" ? "Sign in to continue" : "Reset password"}
           </p>
         </div>
@@ -82,7 +82,7 @@ export default function LoginPage() {
             <div>
               <label
                 htmlFor="email"
-                className="block text-sm font-medium text-ink mb-1"
+                className="studio-field-label"
               >
                 Email
               </label>
@@ -92,7 +92,7 @@ export default function LoginPage() {
                 type="email"
                 required
                 autoComplete="email"
-                className="w-full rounded border border-ink/60 bg-bone px-3 py-2 text-sm text-ink placeholder-ink/40 focus:border-oxblood focus:outline-2 focus:outline-oxblood focus:ring-1 focus:ring-oxblood"
+                className="studio-field"
                 placeholder="you@example.com"
               />
             </div>
@@ -100,7 +100,7 @@ export default function LoginPage() {
             <div>
               <label
                 htmlFor="password"
-                className="block text-sm font-medium text-ink mb-1"
+                className="studio-field-label"
               >
                 Password
               </label>
@@ -110,16 +110,16 @@ export default function LoginPage() {
                 type="password"
                 required
                 autoComplete="current-password"
-                className="w-full rounded border border-ink/60 bg-bone px-3 py-2 text-sm text-ink placeholder-ink/40 focus:border-oxblood focus:outline-2 focus:outline-oxblood focus:ring-1 focus:ring-oxblood"
+                className="studio-field"
               />
             </div>
 
-            {error && <p className="text-sm text-oxblood">{error}</p>}
+            {error && <p className="studio-error">{error}</p>}
 
             <button
               type="submit"
               disabled={pending}
-              className="w-full rounded bg-ochre px-4 py-2 text-sm font-semibold text-ink hover:bg-ochre/90 disabled:opacity-50 transition-colors"
+              className="studio-btn studio-btn-primary w-full"
             >
               {pending ? "Signing in…" : "Sign in"}
             </button>
@@ -127,7 +127,7 @@ export default function LoginPage() {
             <button
               type="button"
               onClick={() => { setView("reset"); setError(null); }}
-              className="w-full text-center text-xs text-ink/40 hover:text-ink/70 transition-colors mt-1"
+              className="studio-btn studio-btn-quiet studio-btn-sm w-full mt-1"
             >
               Forgot password?
             </button>
@@ -136,27 +136,27 @@ export default function LoginPage() {
           <div className="space-y-4">
             {resetSuccess ? (
               <div className="space-y-4">
-                <p className="text-sm text-ink/70 text-center">
+                <p className="text-[15px] text-paper text-center">
                   Check your email — a reset link is on its way.
                 </p>
                 <button
                   type="button"
                   onClick={() => { setView("login"); setResetSuccess(false); setError(null); }}
-                  className="w-full text-center text-xs text-ink/40 hover:text-ink/70 transition-colors"
+                  className="studio-btn studio-btn-quiet studio-btn-sm w-full"
                 >
                   Back to sign in
                 </button>
               </div>
             ) : (
               <form onSubmit={handleReset} className="space-y-4">
-                <p className="text-sm text-ink/60 text-center">
+                <p className="text-[15px] text-muted text-center">
                   Enter your email and we&apos;ll send you a reset link.
                 </p>
 
                 <div>
                   <label
                     htmlFor="reset-email"
-                    className="block text-sm font-medium text-ink mb-1"
+                    className="studio-field-label"
                   >
                     Email
                   </label>
@@ -166,17 +166,17 @@ export default function LoginPage() {
                     type="email"
                     required
                     autoComplete="email"
-                    className="w-full rounded border border-ink/60 bg-bone px-3 py-2 text-sm text-ink placeholder-ink/40 focus:border-oxblood focus:outline-2 focus:outline-oxblood focus:ring-1 focus:ring-oxblood"
+                    className="studio-field"
                     placeholder="you@example.com"
                   />
                 </div>
 
-                {error && <p className="text-sm text-oxblood">{error}</p>}
+                {error && <p className="studio-error">{error}</p>}
 
                 <button
                   type="submit"
                   disabled={pending}
-                  className="w-full rounded bg-ochre px-4 py-2 text-sm font-semibold text-ink hover:bg-ochre/90 disabled:opacity-50 transition-colors"
+                  className="studio-btn studio-btn-primary w-full"
                 >
                   {pending ? "Sending…" : "Send reset link"}
                 </button>
@@ -184,7 +184,7 @@ export default function LoginPage() {
                 <button
                   type="button"
                   onClick={() => { setView("login"); setError(null); }}
-                  className="w-full text-center text-xs text-ink/40 hover:text-ink/70 transition-colors"
+                  className="studio-btn studio-btn-quiet studio-btn-sm w-full"
                 >
                   Back to sign in
                 </button>

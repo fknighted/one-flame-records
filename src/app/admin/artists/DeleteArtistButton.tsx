@@ -32,7 +32,8 @@ export default function DeleteArtistButton({
           router.push("/admin/artists");
         });
       }}
-      className={className}
+      aria-label={`Delete ${name}`}
+      className={className ?? "studio-btn studio-btn-danger studio-btn-sm"}
     >
       {pending ? pendingLabel : label}
     </button>

@@ -1,8 +1,12 @@
 import Link from "next/link";
-import Image from "next/image";
 import type { Metadata } from "next";
 import { unstable_cache } from "next/cache";
 import { createServiceClient } from "@/lib/supabase/server";
+import SectionHeader from "@/components/SectionHeader";
+import EmptyState from "@/components/EmptyState";
+import LinkButton from "@/components/LinkButton";
+import LogoMark from "@/components/LogoMark";
+import PrintedPhoto from "@/components/PrintedPhoto";
 
 export const metadata: Metadata = {
   title: "News — One Flame Records",
@@ -16,12 +20,6 @@ function formatDate(dateStr: string) {
     day: "numeric",
   });
 }
-
-const CATEGORY_PILL: Record<string, string> = {
-  label:   "bg-oxblood/10 text-oxblood",
-  release: "bg-forest/10 text-forest",
-  event:   "bg-ochre text-ink",
-};
 
 const PAGE_SIZE = 9;
 
@@ -62,109 +60,92 @@ export default async function NewsPage({
 
   return (
     <>
-      {/* ── Ink banner ── */}
-      <section className="bg-ink">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 pt-16 pb-12">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-forest mb-4">
-            From the Label
-          </p>
-          <h1 className="font-display font-bold text-bone text-[clamp(2.5rem,5vw,4rem)] leading-[1.02] tracking-tight">
-            News
-          </h1>
-          <div className="mt-4 h-px w-20 bg-oxblood" />
+      {/* ── Page banner ── */}
+      <section className="bg-black">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 pt-14 sm:pt-[88px] pb-2">
+          <SectionHeader as="h1" title="News" />
         </div>
       </section>
 
       {/* ── Posts grid ── */}
-      <section className="bg-cream">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 py-12">
+      <section className="bg-black">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 py-14 sm:py-[88px]">
           {posts && posts.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-              {posts.map((post) => (
-                <Link
-                  key={post.id}
-                  href={`/news/${post.slug}`}
-                  className="group flex flex-col rounded-lg overflow-hidden border border-oxblood/10 hover:border-oxblood/30 transition-colors bg-white/50"
-                >
-                  {/* Cover */}
-                  <div className="relative aspect-video bg-ink/5 overflow-hidden">
-                    {post.cover_url ? (
-                      <Image
-                        src={post.cover_url}
-                        alt={post.title}
-                        fill
-                        className="object-cover group-hover:scale-105 transition-transform duration-300"
-                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                      />
-                    ) : (
-                      <div className="absolute inset-0 flex items-center justify-center opacity-10">
-                        <svg viewBox="0 0 20 28" className="w-10 h-auto" aria-hidden="true">
-                          <path d="M10 1C10 1 4 9 4 16C4 19.8 6.3 23.1 10 25C13.7 23.1 16 19.8 16 16C16 9 10 1 10 1Z" fill="#8B2A1F" />
-                        </svg>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Body */}
-                  <div className="flex flex-col flex-1 p-4 gap-2">
-                    <div className="flex items-center gap-2">
-                      <span
-                        className={`inline-block rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider capitalize ${CATEGORY_PILL[post.category] ?? "bg-ink/10 text-ink"}`}
-                      >
-                        {post.category}
-                      </span>
-                      {post.published_at && (
-                        <span className="text-[11px] text-ink/40">
-                          {formatDate(post.published_at)}
-                        </span>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+              {posts.map((post, i) => {
+                const tone = i % 2 === 0 ? "yellow" : "red";
+                return (
+                  <Link
+                    key={post.id}
+                    href={`/news/${post.slug}`}
+                    className="group flex flex-col min-w-0 bg-paper text-black focus-on-paper"
+                  >
+                    <div className="relative aspect-video bg-black overflow-hidden">
+                      {post.cover_url ? (
+                        <PrintedPhoto
+                          tone={tone}
+                          src={post.cover_url}
+                          alt=""
+                          fill
+                          className="object-cover"
+                          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                        />
+                      ) : (
+                        <div className={`absolute inset-0 grid place-items-center ${tone === "yellow" ? "bg-yellow" : "bg-red"}`}>
+                          <LogoMark variant="flame" ground={tone} height={48} alt="" />
+                        </div>
                       )}
                     </div>
 
-                    <h2 className="font-display font-semibold text-ink text-lg leading-snug group-hover:text-oxblood transition-colors line-clamp-2">
-                      {post.title}
-                    </h2>
+                    <p className="flex items-center justify-between gap-2 bg-red text-paper px-3 py-2 type-label">
+                      <span>{post.category}</span>
+                      {post.published_at && (
+                        <span className="type-caption normal-case tracking-normal">
+                          {formatDate(post.published_at)}
+                        </span>
+                      )}
+                    </p>
 
-                    {post.excerpt && (
-                      <p className="text-ink/60 text-sm leading-relaxed line-clamp-2 flex-1">
-                        {post.excerpt}
-                      </p>
-                    )}
-
-                    <span className="mt-2 text-xs font-medium text-oxblood group-hover:text-ochre transition-colors">
-                      Read more →
-                    </span>
-                  </div>
-                </Link>
-              ))}
+                    <div className="flex flex-col flex-1 min-w-0 px-3 py-3.5 gap-2">
+                      <h2 className="type-title line-clamp-3 group-hover:text-red [overflow-wrap:anywhere]">
+                        {post.title}
+                      </h2>
+                      {post.excerpt && (
+                        <p className="type-body-sm line-clamp-2 flex-1">{post.excerpt}</p>
+                      )}
+                      <span className="type-small underline underline-offset-2">Read the post</span>
+                    </div>
+                  </Link>
+                );
+              })}
             </div>
           ) : (
-            <p className="py-20 text-center text-ink/40 text-sm">
-              No posts yet — check back soon.
-            </p>
+            <EmptyState
+              title="No news yet."
+              body="The first posts are on the way. Get label news in your inbox."
+              action={{ href: "#subscribe", label: "Get label news" }}
+            />
           )}
 
           {totalPages > 1 && (
-            <div className="mt-12 flex items-center justify-center gap-2">
+            <nav aria-label="News pages" className="mt-12 flex flex-wrap items-center justify-center gap-3">
               {page > 1 && (
-                <Link
+                <LinkButton
+                  variant="outline"
                   href={page - 1 === 1 ? "/news" : `/news?page=${page - 1}`}
-                  className="px-4 py-2 rounded border border-oxblood/20 text-sm text-oxblood hover:bg-oxblood/5 transition-colors"
                 >
-                  ← Prev
-                </Link>
+                  Previous page
+                </LinkButton>
               )}
-              <span className="text-sm text-ink/40">
+              <span className="type-small text-muted">
                 Page {page} of {totalPages}
               </span>
               {page < totalPages && (
-                <Link
-                  href={`/news?page=${page + 1}`}
-                  className="px-4 py-2 rounded border border-oxblood/20 text-sm text-oxblood hover:bg-oxblood/5 transition-colors"
-                >
-                  Next →
-                </Link>
+                <LinkButton variant="outline" href={`/news?page=${page + 1}`}>
+                  Next page
+                </LinkButton>
               )}
-            </div>
+            </nav>
           )}
         </div>
       </section>

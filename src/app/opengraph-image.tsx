@@ -7,16 +7,17 @@ export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
 export default async function Image() {
+  // Light logo on black, from the brand files (satori renders SVG data URIs).
   const logoData = await readFile(
-    path.join(process.cwd(), "public", "logo.png")
+    path.join(process.cwd(), "public", "brand", "stacked-light.svg")
   );
-  const logoSrc = `data:image/png;base64,${logoData.toString("base64")}`;
+  const logoSrc = `data:image/svg+xml;base64,${logoData.toString("base64")}`;
 
   return new ImageResponse(
     (
       <div
         style={{
-          background: "#1A1612",
+          background: "#0F0D0B",
           width: "100%",
           height: "100%",
           display: "flex",
@@ -24,8 +25,7 @@ export default async function Image() {
           justifyContent: "center",
         }}
       >
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={logoSrc} width={400} height={400} alt="" />
+        <img src={logoSrc} width={380} height={500} alt="" />
       </div>
     ),
     { ...size }

@@ -19,18 +19,18 @@ export default async function PortalVideosPage() {
   const videos = data ?? [];
   return (
     <div className="px-4 py-6 sm:px-8 sm:py-8 max-w-3xl">
-      <h1 className="font-display font-bold text-bone text-3xl mb-3">Saved videos</h1>
-      <p className="text-sm text-bone/60 mb-8">Watch and manage your finished videos.</p>
-      {videos.length === 0 ? <p className="rounded-lg border border-bone/10 p-8 text-bone/60">No saved videos yet.</p> : (
+      <h1 className="studio-page-title mb-3">Saved videos</h1>
+      <p className="text-[15px] text-muted mb-8">Watch and manage your finished videos.</p>
+      {videos.length === 0 ? <div className="studio-empty"><p className="studio-empty-title">No saved videos yet.</p></div> : (
         <ul className="space-y-3">
           {videos.map(video => (
-            <li key={video.id} className="rounded-lg border border-bone/10 p-4">
-              <Link href={`/portal/videos/${video.id}`} className="font-display text-lg text-bone hover:text-ochre">
+            <li key={video.id} className="studio-card">
+              <Link href={`/portal/videos/${video.id}`} className="studio-section-title studio-link studio-focus [overflow-wrap:anywhere]">
                 {video.assets?.title ?? "Untitled video"}
               </Link>
-              <div className="mt-3 flex items-center gap-4">
+              <div className="mt-3 flex flex-wrap items-center gap-4">
                 <TogglePublicButton action={toggleVideoPublic.bind(null, video.id)} isPublic={!!video.is_public} />
-                {video.output_url && <a href={video.output_url} target="_blank" rel="noopener noreferrer" className="text-sm text-ochre hover:text-bone">Watch video</a>}
+                {video.output_url && <a href={video.output_url} target="_blank" rel="noopener noreferrer" className="studio-link studio-focus text-[15px]">Watch video</a>}
               </div>
             </li>
           ))}

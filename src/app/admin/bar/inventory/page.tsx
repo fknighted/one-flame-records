@@ -66,32 +66,28 @@ export default async function InventoryPage() {
 
   return (
     <div className="space-y-8 max-w-4xl">
-      <div className="flex items-start justify-between">
-        <div>
-          <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-sage mb-1">Bar</p>
-          <h1 className="font-display font-bold text-bone text-3xl">Inventory</h1>
-          <div className="mt-3 h-px w-16 bg-bone/20" />
-          <p className="mt-3 text-sm text-bone/60">Add costed stock below, or correct counts directly in the table. Margin = (price − cost) ÷ price.</p>
+      <div className="flex flex-wrap items-start justify-between gap-4">
+        <div className="min-w-0">
+          <p className="studio-label mb-1">Bar</p>
+          <h1 className="studio-page-title">Inventory</h1>
+          <p className="mt-2 text-[15px] text-muted">Add costed stock below, or correct counts directly in the table. Margin = (price − cost) ÷ price.</p>
         </div>
-        <Link
-          href="/admin/bar/items/new"
-          className="shrink-0 bg-ochre text-ink text-sm font-semibold px-4 py-2 rounded-lg hover:bg-ochre/90 transition-colors"
-        >
+        <Link href="/admin/bar/items/new" className="studio-btn studio-btn-primary shrink-0">
           + Add Item
         </Link>
       </div>
 
       {/* Add stock — click a line to expand its form (same as the bar POS list) */}
       <section className="space-y-3">
-        <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-bone/60">Add stock</h2>
-        <p className="text-[11px] text-bone/40 -mt-1">Tap an item to open its add form.</p>
+        <h2 className="studio-label">Add stock</h2>
+        <p className="studio-hint -mt-1">Tap an item to open its add form.</p>
         {SECTION_ORDER.filter((sec) => grouped[sec]?.some((i) => !i.bottle_parent_id)).map((sec) => {
           // Whole-bottle SKUs draw from their shot parent's pool, so no add row.
           const catItems = grouped[sec]!.filter((i) => !i.bottle_parent_id);
           const rendered = new Set<string>();
           return (
             <div key={sec} className="space-y-2">
-              <p className="text-[11px] uppercase tracking-wider text-bone/40">{SECTION_LABELS[sec] ?? sec}</p>
+              <p className="studio-label">{SECTION_LABELS[sec] ?? sec}</p>
               <div className="space-y-2">
                 {catItems.map((item) => {
                   if (rendered.has(item.id)) return null;
@@ -113,24 +109,24 @@ export default async function InventoryPage() {
       {/* Manage — cost, margin, set/remove, edit */}
       {SECTION_ORDER.filter((sec) => grouped[sec]?.length).map((sec) => (
         <section key={sec} className="space-y-3">
-          <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-bone/60">
+          <h2 className="studio-label">
             {SECTION_LABELS[sec] ?? sec}
           </h2>
-          <div className="border border-bone/10 rounded-lg overflow-x-auto">
-            <table className="w-full min-w-[560px] text-sm">
-              <thead className="border-b border-bone/10 bg-bone/3">
+          <div className="studio-table-wrap">
+            <table className="studio-table min-w-[560px]">
+              <thead>
                 <tr>
-                  <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Item</th>
-                  <th className="hidden sm:table-cell text-right px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Price</th>
-                  <th className="text-right px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Cost</th>
-                  <th className="hidden sm:table-cell text-right px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Margin</th>
-                  <th className="hidden md:table-cell text-right px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Sold Today</th>
-                  <th className="text-right px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Stock</th>
-                  <th className="text-right px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Set</th>
-                  <th scope="col" className="sr-only px-4 py-3">Actions</th>
+                  <th>Item</th>
+                  <th className="hidden sm:table-cell is-num">Price</th>
+                  <th className="is-num">Cost</th>
+                  <th className="hidden sm:table-cell is-num">Margin</th>
+                  <th className="hidden md:table-cell is-num">Sold Today</th>
+                  <th className="is-num">Stock</th>
+                  <th className="is-num">Set</th>
+                  <th scope="col"><span className="sr-only">Actions</span></th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-bone/10">
+              <tbody>
                 {grouped[sec]!.map((item) => {
                   const settledToday = soldMap[item.id] ?? 0;
                   const stock = item.stock_quantity;
@@ -139,47 +135,50 @@ export default async function InventoryPage() {
                   const isBottle = !!item.bottle_parent_id; // whole-bottle SKU: stock/cost derive from its shot parent
                   const margin = marginPct(item.price_jmd, item.cost_jmd);
                   return (
-                    <tr key={item.id} className={`hover:bg-bone/3 transition-colors ${!item.is_active ? "opacity-40" : ""}`}>
-                      <td className="px-4 py-3 text-bone font-medium">
+                    <tr key={item.id} className="is-link">
+                      <td className={`font-semibold [overflow-wrap:anywhere] ${!item.is_active ? "text-muted" : ""}`}>
                         {item.name}
                         {!item.is_active && (
-                          <span className="ml-2 text-[10px] font-semibold uppercase tracking-wider text-bone/60 border border-bone/20 rounded px-1">off</span>
+                          <span className="studio-chip studio-chip-neutral ml-2">off</span>
                         )}
                       </td>
-                      <td className="hidden sm:table-cell px-4 py-3 text-right font-mono text-bone/60">{formatJmd(item.price_jmd)}</td>
-                      <td className="px-4 py-3 text-right font-mono">
+                      <td className="hidden sm:table-cell is-num"><span className="studio-money text-[18px]">{formatJmd(item.price_jmd)}</span></td>
+                      <td className="is-num">
                         {isBottle ? (
-                          <span className="text-bone/40 text-xs">from shots</span>
+                          <span className="text-muted text-[13px]">from shots</span>
                         ) : item.cost_jmd == null ? (
-                          <Link href={`/admin/bar/items/${item.id}/edit`} className="text-ochre/80 hover:text-ochre text-xs">set cost</Link>
+                          <Link href={`/admin/bar/items/${item.id}/edit`} className="studio-link inline-flex min-h-[44px] items-center text-[14px]">set cost</Link>
                         ) : (
-                          <span className="text-bone/60">{formatJmd(item.cost_jmd)}</span>
+                          <span className="studio-money text-[18px]">{formatJmd(item.cost_jmd)}</span>
                         )}
                       </td>
-                      <td className="hidden sm:table-cell px-4 py-3 text-right font-mono">
+                      <td className="hidden sm:table-cell is-num studio-figures">
                         {margin == null ? (
-                          <span className="text-bone/40">—</span>
+                          <span className="text-muted">—</span>
                         ) : (
-                          <span className={margin < 0 ? "text-red-400" : "text-bone/60"}>{margin}%</span>
+                          <span>{margin}%</span>
                         )}
                       </td>
-                      <td className="hidden md:table-cell px-4 py-3 text-right font-mono text-bone/60">
-                        {settledToday > 0 ? settledToday : <span className="text-bone/60">—</span>}
+                      <td className="hidden md:table-cell is-num studio-figures text-muted">
+                        {settledToday > 0 ? settledToday : "—"}
                       </td>
-                      <td className="px-4 py-3 text-right">
+                      <td className="is-num">
                         {isBottle ? (
-                          <span className="text-bone/40 text-xs">pooled</span>
+                          <span className="text-muted text-[13px]">pooled</span>
                         ) : stock === null ? (
-                          <span className="text-bone/60 font-mono">—</span>
+                          <span className="text-muted">—</span>
                         ) : (
-                          <span className={`font-mono font-bold ${low ? "text-red-400" : "text-bone"}`}>{stock}</span>
+                          <span className="inline-flex items-center gap-2">
+                            {low && <span className="studio-chip studio-chip-bad">Low</span>}
+                            <span className="studio-count">{stock}</span>
+                          </span>
                         )}
                       </td>
-                      <td className="px-3 py-2">
+                      <td>
                         {isBottle ? (
-                          <div className="text-right text-bone/30 text-xs pr-2">—</div>
+                          <div className="text-right text-muted text-[13px] pr-2">—</div>
                         ) : (
-                        <form action={updateStock} className="flex gap-1.5 justify-end items-center">
+                        <form action={updateStock} className="flex gap-2 justify-end items-center">
                           <input type="hidden" name="id" value={item.id} />
                           <input
                             type="number"
@@ -187,22 +186,23 @@ export default async function InventoryPage() {
                             min="0"
                             defaultValue={stock ?? ""}
                             placeholder="—"
-                            className="w-16 rounded border border-bone/45 bg-transparent text-bone text-xs text-right px-2 py-1 focus:outline-2 focus:outline-ochre focus:border-ochre/60"
+                            aria-label={`Stock count for ${item.name}`}
+                            className="studio-field w-20 text-right"
                           />
                           <button
                             type="submit"
-                            className="text-xs text-ochre hover:text-ochre/80 transition-colors px-2 py-1 border border-ochre/30 rounded hover:border-ochre/60"
+                            className="studio-btn studio-btn-secondary studio-btn-sm"
                           >
                             Set
                           </button>
                         </form>
                         )}
                       </td>
-                      <td className="px-4 py-3 text-right">
-                        <span className="inline-flex items-center gap-3">
+                      <td className="is-num">
+                        <span className="inline-flex items-center gap-2">
                           <Link
                             href={`/admin/bar/items/${item.id}/edit`}
-                            className="text-xs text-bone/60 hover:text-bone transition-colors"
+                            className="studio-btn studio-btn-secondary studio-btn-sm"
                           >
                             Edit
                           </Link>

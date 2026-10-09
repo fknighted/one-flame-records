@@ -12,7 +12,7 @@ export default function LogoutButton() {
   return (
     <button
       onClick={handleLogout}
-      className="text-sm text-bone/50 hover:text-bone transition-colors"
+      className="studio-btn studio-btn-secondary studio-btn-sm shrink-0"
     >
       Sign out
     </button>

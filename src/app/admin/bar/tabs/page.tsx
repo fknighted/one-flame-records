@@ -39,9 +39,8 @@ export default async function OrderHistoryPage({
   return (
     <div className="space-y-8 max-w-4xl">
       <div>
-        <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-sage mb-1">Bar</p>
-        <h1 className="font-display font-bold text-bone text-3xl">Order History</h1>
-        <div className="mt-3 h-px w-16 bg-bone/20" />
+        <p className="studio-label mb-1">Bar</p>
+        <h1 className="studio-page-title">Order History</h1>
       </div>
 
       {/* Filter */}
@@ -56,10 +55,10 @@ export default async function OrderHistoryPage({
             key={s.value}
             href={s.value === "all" ? "/admin/bar/tabs" : `/admin/bar/tabs?status=${s.value}`}
             className={[
-              "px-3 py-1 rounded-full text-xs font-medium transition-colors",
+              "studio-focus inline-flex min-h-[44px] items-center px-4 text-[14px] font-semibold",
               (status ?? "all") === s.value
-                ? "bg-ochre text-ink"
-                : "bg-bone/10 text-bone/60 hover:bg-bone/20",
+                ? "bg-raised text-paper border border-muted"
+                : "text-muted border border-line hover:text-paper",
             ].join(" ")}
           >
             {s.label}
@@ -67,51 +66,46 @@ export default async function OrderHistoryPage({
         ))}
 
         {totalRevenue > 0 && (
-          <span className="ml-auto text-xs text-bone/50 self-center">
-            Total shown: <span className="text-bone font-mono">{formatJmd(totalRevenue)}</span>
+          <span className="ml-auto text-[14px] text-muted self-center">
+            Total shown: <span className="studio-money">{formatJmd(totalRevenue)}</span>
           </span>
         )}
       </div>
 
       {!tabs?.length ? (
-        <p className="text-sm text-bone/50">No tabs found.</p>
+        <p className="text-[15px] text-muted">No tabs found.</p>
       ) : (
-        <div className="border border-bone/10 rounded-lg overflow-x-auto">
-          <table className="w-full min-w-[560px] text-sm">
-            <thead className="border-b border-bone/10 bg-bone/3">
+        <div className="studio-table-wrap">
+          <table className="studio-table min-w-[560px]">
+            <thead>
               <tr>
-                <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Customer</th>
-                <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Opened</th>
-                <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Status</th>
-                <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Payment</th>
-                <th className="text-right px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Total</th>
+                <th>Customer</th>
+                <th>Opened</th>
+                <th>Status</th>
+                <th>Payment</th>
+                <th className="is-num">Total</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-bone/10">
+            <tbody>
               {tabs.map((tab) => (
-                <tr key={tab.id} className="hover:bg-bone/3 transition-colors">
-                  <td className="px-4 py-3 text-bone font-medium">
+                <tr key={tab.id} className="is-link">
+                  <td className="font-semibold [overflow-wrap:anywhere]">
                     {tab.name}
-                    {tab.notes && <p className="text-xs text-bone/60">{tab.notes}</p>}
+                    {tab.notes && <p className="text-[13px] font-normal text-muted">{tab.notes}</p>}
                   </td>
-                  <td className="px-4 py-3 text-bone/60 text-xs">
+                  <td className="studio-figures text-muted">
                     {jamaicaDateTime(tab.created_at)}
                   </td>
-                  <td className="px-4 py-3">
-                    <span className={[
-                      "inline-block px-2 py-0.5 rounded-full text-xs font-medium",
-                      tab.status === "closed" ? "bg-forest/20 text-sage" :
-                      tab.status === "open"   ? "bg-ochre/20 text-ochre" :
-                      "bg-bone/10 text-bone/60",
-                    ].join(" ")}>
+                  <td>
+                    <span className={tab.status === "open" ? "studio-chip studio-chip-ok" : "studio-chip studio-chip-neutral"}>
                       {STATUS_LABELS[tab.status] ?? tab.status}
                     </span>
                   </td>
-                  <td className="px-4 py-3 text-bone/60">
+                  <td className="text-muted">
                     {tab.payment_method ? PAYMENT_LABELS[tab.payment_method] : "—"}
                   </td>
-                  <td className="px-4 py-3 text-right font-mono text-bone">
-                    {formatJmd(tab.total_jmd ?? 0)}
+                  <td className="is-num">
+                    <span className="studio-money">{formatJmd(tab.total_jmd ?? 0)}</span>
                   </td>
                 </tr>
               ))}

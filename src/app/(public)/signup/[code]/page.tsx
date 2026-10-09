@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { createServiceClient } from "@/lib/supabase/server";
 import SignupForm from "@/components/SignupForm";
+import PosterHeadline from "@/components/PosterHeadline";
 
 export const metadata: Metadata = {
   title: "Apply to One Flame Records",
@@ -25,17 +26,11 @@ export default async function SignupPage({
   const invalid = !signupCode || !signupCode.is_active;
 
   return (
-    <div className="mx-auto max-w-2xl px-4 sm:px-6 py-16">
-      {/* Header */}
-      <div className="mb-10">
-        <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-forest mb-2">
-          One Flame Records
-        </p>
-        <h1 className="font-display font-bold text-oxblood text-[2.5rem] leading-[1.05] tracking-tight">
-          {invalid ? "Link expired" : "Apply to the roster"}
-        </h1>
-        <div className="mt-3 h-px w-16 bg-oxblood" />
-        <p className="mt-5 text-ink/70 leading-relaxed">
+    <div className="mx-auto max-w-2xl px-4 sm:px-6 py-14 sm:py-[88px]">
+      <div className="mb-8 min-w-0">
+        <p className="type-label text-yellow mb-3">One Flame Records</p>
+        <PosterHeadline as="h1">{invalid ? "Link expired" : "Apply to the roster"}</PosterHeadline>
+        <p className="type-body text-paper mt-5 max-w-[66ch]">
           {invalid
             ? "This signup link is no longer active. Ask One Flame Records for the latest QR code."
             : "Fill in the form below. We review every application and will reach out by email."}

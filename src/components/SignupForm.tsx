@@ -3,9 +3,12 @@
 import { useActionState } from "react";
 import { submitApplication, type SignupState } from "@/app/(public)/signup/[code]/actions";
 
-const inputClass =
-  "w-full border border-ink/60 rounded px-3 py-2 text-sm text-ink bg-cream placeholder:text-ink/40 focus:outline-2 focus:outline-oxblood focus:border-oxblood";
-const labelClass = "block text-xs font-semibold text-ink/60 uppercase tracking-wider mb-1";
+import { FIELD_CLASS, FIELD_LABEL_CLASS, buttonClasses } from "@/lib/sound-system";
+
+// Every field sits on paper: 2px black edge, red focus ring.
+const inputClass = FIELD_CLASS;
+const labelClass = FIELD_LABEL_CLASS;
+const headingClass = "type-title-sm mb-4";
 
 export default function SignupForm({ codeId }: { codeId: string }) {
   const [state, action, pending] = useActionState<SignupState, FormData>(
@@ -15,14 +18,13 @@ export default function SignupForm({ codeId }: { codeId: string }) {
 
   if (state?.status === "success") {
     return (
-      <div className="rounded-lg border border-forest/30 bg-forest/5 px-6 py-8 text-center">
-        <p className="text-2xl mb-2">🔥</p>
-        <h2 className="font-display font-bold text-oxblood text-xl mb-2">
+      <div className="bg-paper text-black p-5 sm:p-6" role="status">
+        <h2 className="type-title mb-3">
           Application received
         </h2>
-        <p className="text-ink/70 text-sm leading-relaxed">
+        <p className="type-body">
           We&apos;ll review your application and reach out to{" "}
-          <span className="font-medium text-ink">you by email</span>.
+          <span className="font-semibold">you by email</span>.
           Keep making music — we&apos;ll be in touch.
         </p>
       </div>
@@ -30,22 +32,23 @@ export default function SignupForm({ codeId }: { codeId: string }) {
   }
 
   return (
-    <form action={action} className="space-y-6">
+    <form action={action} className="bg-paper text-black p-5 sm:p-6 space-y-8">
       {/* Honeypot */}
       <input name="website" type="text" className="sr-only" tabIndex={-1} autoComplete="off" />
       <input name="code_id" type="hidden" value={codeId} />
 
       {/* Personal info */}
       <div>
-        <h2 className="font-display font-bold text-oxblood text-lg mb-4">
+        <h2 className={headingClass}>
           About you
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label className={labelClass}>
-              Stage name <span className="text-oxblood">*</span>
+            <label htmlFor="signup-stage_name" className={labelClass}>
+              Stage name <span className="text-red" aria-hidden="true">*</span>
             </label>
             <input
+              id="signup-stage_name"
               name="stage_name"
               type="text"
               required
@@ -54,10 +57,11 @@ export default function SignupForm({ codeId }: { codeId: string }) {
             />
           </div>
           <div>
-            <label className={labelClass}>
-              Legal name <span className="text-oxblood">*</span>
+            <label htmlFor="signup-legal_name" className={labelClass}>
+              Legal name <span className="text-red" aria-hidden="true">*</span>
             </label>
             <input
+              id="signup-legal_name"
               name="legal_name"
               type="text"
               required
@@ -66,10 +70,11 @@ export default function SignupForm({ codeId }: { codeId: string }) {
             />
           </div>
           <div>
-            <label className={labelClass}>
-              Email <span className="text-oxblood">*</span>
+            <label htmlFor="signup-email" className={labelClass}>
+              Email <span className="text-red" aria-hidden="true">*</span>
             </label>
             <input
+              id="signup-email"
               name="email"
               type="email"
               required
@@ -78,8 +83,9 @@ export default function SignupForm({ codeId }: { codeId: string }) {
             />
           </div>
           <div>
-            <label className={labelClass}>Phone</label>
+            <label htmlFor="signup-phone" className={labelClass}>Phone</label>
             <input
+              id="signup-phone"
               name="phone"
               type="tel"
               placeholder="+1 876 000 0000"
@@ -91,24 +97,26 @@ export default function SignupForm({ codeId }: { codeId: string }) {
 
       {/* Sound */}
       <div>
-        <h2 className="font-display font-bold text-oxblood text-lg mb-4">
+        <h2 className={headingClass}>
           Your sound
         </h2>
         <div>
-          <label className={labelClass}>Genres</label>
+          <label htmlFor="signup-genres" className={labelClass}>Genres</label>
           <input
+            id="signup-genres"
             name="genres"
+            aria-describedby="genres-hint"
             type="text"
             placeholder="e.g. reggae, dancehall, roots"
             className={inputClass}
           />
-          <p className="mt-1 text-xs text-ink/40">Separate multiple genres with commas.</p>
+          <p id="genres-hint" className="mt-1 type-small text-black/75">Separate multiple genres with commas.</p>
         </div>
       </div>
 
       {/* Socials */}
       <div>
-        <h2 className="font-display font-bold text-oxblood text-lg mb-4">
+        <h2 className={headingClass}>
           Socials
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -119,8 +127,9 @@ export default function SignupForm({ codeId }: { codeId: string }) {
             { name: "socials_youtube",   label: "YouTube",   placeholder: "Channel URL or handle" },
           ].map(({ name, label, placeholder }) => (
             <div key={name}>
-              <label className={labelClass}>{label}</label>
+              <label htmlFor={`signup-${name}`} className={labelClass}>{label}</label>
               <input
+                id={`signup-${name}`}
                 name={name}
                 type="text"
                 placeholder={placeholder}
@@ -133,23 +142,24 @@ export default function SignupForm({ codeId }: { codeId: string }) {
 
       {/* Message */}
       <div>
-        <label className={labelClass}>Tell us about yourself</label>
+        <label htmlFor="signup-message" className={labelClass}>Tell us about yourself</label>
         <textarea
+          id="signup-message"
           name="message"
           rows={4}
           placeholder="Where you're from, what you've been working on, why you want to sign with One Flame…"
-          className={`${inputClass} resize-none`}
+          className={`${inputClass} py-2.5 resize-none`}
         />
       </div>
 
       {state?.status === "error" && (
-        <p className="text-sm text-red-600">{state.message}</p>
+        <p className="type-small text-red" role="alert">{state.message}</p>
       )}
 
       <button
         type="submit"
         disabled={pending}
-        className="w-full py-3 bg-oxblood text-cream font-semibold text-sm rounded hover:bg-oxblood/90 disabled:opacity-50 transition-colors"
+        className={buttonClasses("dark", "paper", "w-full")}
       >
         {pending ? "Submitting…" : "Submit application"}
       </button>

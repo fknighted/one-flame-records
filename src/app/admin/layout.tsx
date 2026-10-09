@@ -1,6 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { createServiceClient } from "@/lib/supabase/server";
 import InkShell from "@/components/InkShell";
+import "@/app/studio.css";
 import { ToastProvider } from "@/components/ToastProvider";
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {

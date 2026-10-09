@@ -43,11 +43,8 @@ export default async function AdminOverviewPage() {
     <div className="space-y-8 max-w-5xl">
       {/* Header */}
       <div>
-        <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-sage mb-2">
-          Label Admin
-        </p>
-        <h1 className="font-display font-bold text-bone text-3xl">Overview</h1>
-        <div className="mt-3 h-px w-16 bg-bone/20" />
+        <p className="studio-label mb-2">Label Admin</p>
+        <h1 className="studio-page-title">Overview</h1>
       </div>
 
       {/* Stats row */}
@@ -56,23 +53,23 @@ export default async function AdminOverviewPage() {
           <Link
             key={label}
             href={href}
-            className="rounded-lg border border-bone/10 p-4 hover:border-bone/20 hover:bg-bone/[0.03] transition-colors group"
+            className="studio-stat hover:bg-raised focus-visible:outline focus-visible:outline-[3px] focus-visible:outline-offset-2 focus-visible:outline-yellow"
           >
-            <p className="text-xs text-bone/60 uppercase tracking-wider mb-1">{label}</p>
-            <p className="font-display text-2xl text-bone group-hover:text-ochre transition-colors">{value}</p>
+            <p className="studio-stat-label">{label}</p>
+            <p className="studio-stat-value">{value}</p>
           </Link>
         ))}
       </div>
 
       {/* Quick actions */}
       <div>
-        <p className="text-xs text-bone/60 uppercase tracking-wider mb-3">Quick actions</p>
+        <p className="studio-label mb-3">Quick actions</p>
         <div className="flex flex-wrap gap-2">
           {quickActions.map(({ label, href }) => (
             <Link
               key={label}
               href={href}
-              className="inline-block rounded border border-bone/15 px-3.5 py-1.5 text-sm text-bone/70 hover:border-ochre/50 hover:text-ochre hover:bg-ochre/5 transition-colors"
+              className="studio-btn studio-btn-secondary studio-btn-sm"
             >
               {label}
             </Link>
@@ -84,23 +81,23 @@ export default async function AdminOverviewPage() {
       <div className="grid grid-cols-1 gap-6">
 
         {/* Pending applications */}
-        <div className="rounded-lg border border-bone/10 overflow-hidden">
-          <div className="flex items-center justify-between px-4 py-3 border-b border-bone/10 bg-bone/[0.02]">
-            <p className="text-xs font-semibold uppercase tracking-wider text-bone/50">Pending Applications</p>
-            <Link href="/admin/applications" className="text-xs text-bone/50 hover:text-ochre transition-colors">Review →</Link>
+        <div className="studio-card p-0">
+          <div className="flex items-center justify-between gap-3 px-4 py-3 border-b border-line">
+            <h2 className="studio-section-title">Pending Applications</h2>
+            <Link href="/admin/applications" className="studio-link text-[15px]">Review</Link>
           </div>
           {(pendingApplications?.length ?? 0) === 0 ? (
-            <p className="px-4 py-6 text-sm text-bone/50 text-center">All clear — no pending applications.</p>
+            <p className="px-4 py-6 text-[15px] text-muted text-center">All clear — no pending applications.</p>
           ) : (
-            <ul className="divide-y divide-bone/5">
+            <ul className="divide-y divide-line">
               {(pendingApplications ?? []).map((app) => (
                 <li key={app.id} className="flex items-center justify-between px-4 py-3 gap-3">
                   <div className="min-w-0">
-                    <p className="text-sm text-bone truncate">{app.stage_name}</p>
-                    <p className="text-xs text-bone/60 truncate">{app.email}</p>
+                    <p className="text-paper truncate">{app.stage_name}</p>
+                    <p className="text-[15px] text-muted truncate">{app.email}</p>
                   </div>
-                  <Link href={`/admin/applications/${app.id}`} className="shrink-0 text-xs text-ochre hover:text-ochre/70 transition-colors">
-                    Review →
+                  <Link href={`/admin/applications/${app.id}`} className="studio-btn studio-btn-secondary studio-btn-sm shrink-0">
+                    Review
                   </Link>
                 </li>
               ))}

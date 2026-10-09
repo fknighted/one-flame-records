@@ -1,10 +1,13 @@
 import Link from "next/link";
-import Image from "next/image";
 import { createServiceClient } from "@/lib/supabase/server";
 import ArtistCard from "@/components/ArtistCard";
 import ReleaseCard from "@/components/ReleaseCard";
 import VideoEmbed from "@/components/VideoEmbed";
 import SectionHeader from "@/components/SectionHeader";
+import LinkButton from "@/components/LinkButton";
+import PrintedPhoto from "@/components/PrintedPhoto";
+import GrilleBand from "@/components/GrilleBand";
+import SpeakerRings from "@/components/SpeakerRings";
 import type { Tables } from "@/types/supabase";
 
 type ReleaseRow = Tables<"releases"> & {
@@ -25,10 +28,10 @@ type NewsPost = {
   published_at: string | null;
 };
 
-const NEWS_CATEGORY_PILL: Record<string, string> = {
-  label:   "bg-oxblood/10 text-oxblood",
-  release: "bg-forest/10 text-forest",
-  event:   "bg-ochre text-ink",
+const NEWS_CATEGORY_LABEL: Record<string, string> = {
+  label:   "Label",
+  release: "Release",
+  event:   "Event",
 };
 
 function formatDate(dateStr: string) {
@@ -87,76 +90,51 @@ export default async function HomePage() {
 
   return (
     <>
-      {/* ── Hero — full-bleed photo ── */}
-      <section className="relative overflow-hidden bg-ink">
-        {/* Full-bleed hero photo */}
-        <Image
-          src="/hero-bg.jpg"
-          alt=""
-          fill
-          priority
-          className="object-cover object-center"
-          sizes="100vw"
-        />
-        {/* Dark overlay — ink at 72% opacity for legibility */}
-        <div aria-hidden="true" className="absolute inset-0" style={{ backgroundColor: "rgba(26,22,18,0.72)" }} />
-        {/* Radial oxblood glow on top of overlay */}
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0"
-          style={{
-            background:
-              "radial-gradient(ellipse 70% 60% at 30% 60%, rgba(139,42,31,0.28) 0%, transparent 70%)",
-          }}
-        />
-
-        <div className="relative mx-auto max-w-6xl px-4 sm:px-6 pt-24 pb-28 md:pt-32 md:pb-36 min-h-[75vh] flex flex-col justify-center">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-forest mb-5">
-            Montego Bay · Jamaica
-          </p>
-          <h1 className="font-display font-bold text-bone text-[clamp(3rem,7vw,5.5rem)] leading-[1.02] tracking-tight max-w-3xl">
-            Pressed in<br />Montego Bay.
+      {/* ── Hero: yellow poster block, grille band, printed live-room photo ── */}
+      <section className="grid md:grid-cols-[1.15fr_1fr]">
+        <div className="relative min-w-0 bg-yellow text-black px-4 sm:px-7 pt-10 pb-[82px] sm:pt-14 md:pr-[92px] md:pb-14">
+          <h1 className="type-poster">
+            Pressed in <span className="text-red">Montego</span> Bay.
           </h1>
-          <div className="mt-6 h-px w-24 bg-oxblood" />
-          <p className="mt-6 text-lg text-bone/60 max-w-lg leading-relaxed">
-            One Flame Records is an independent reggae and dancehall label rooted in
-            the tradition of Jamaican music — artists, releases, and the culture they carry.
+          <p className="type-lead mt-5 max-w-[30ch]">
+            Independent reggae and dancehall. We sign artists, not sounds.
           </p>
-          <div className="mt-10 flex flex-wrap items-center gap-4">
-            <Link
-              href="/artists"
-              className="inline-block rounded bg-ochre px-7 py-3 text-sm font-semibold text-ink hover:bg-bone transition-colors"
-            >
-              Our Artists
-            </Link>
-            <Link
-              href="/releases"
-              className="inline-block rounded border border-bone/30 px-7 py-3 text-sm font-semibold text-bone hover:border-bone hover:bg-bone/5 transition-colors"
-            >
-              New Releases
-            </Link>
-          </div>
+          <LinkButton href="/artists" variant="outline" ground="yellow" className="mt-8">
+            Hear the roster
+          </LinkButton>
+          <GrilleBand className="absolute left-0 right-0 bottom-0 h-[42px] md:left-auto md:top-0 md:w-[60px] md:h-auto" />
+        </div>
+        <div className="relative min-h-[220px] sm:min-h-[260px] overflow-hidden">
+          <PrintedPhoto
+            tone="yellow"
+            src="/hero-bg.jpg"
+            alt="Live performance at an outdoor venue in Montego Bay"
+            fill
+            priority
+            className="object-cover object-center"
+            sizes="(max-width: 768px) 100vw, 50vw"
+          />
+          <SpeakerRings ground="photo" size={120} className="absolute right-2 top-2" />
         </div>
       </section>
 
-      {/* ── Featured Artists — ink ── */}
+      {/* ── The roster: colour tiles ── */}
       {featuredArtists && featuredArtists.length > 0 && (
-        <section className="bg-ink">
-          <div className="mx-auto max-w-6xl px-4 sm:px-6 py-20">
+        <section className="bg-black">
+          <div className="mx-auto max-w-6xl px-4 sm:px-6 py-14 sm:py-[88px]">
             <SectionHeader
-              dark
-              eyebrow="The Roster"
-              title="Featured Artists"
+              title="The roster"
               action={
-                <Link href="/artists" className="text-sm text-bone/40 hover:text-ochre transition-colors">
-                  Full roster →
+                <Link href="/artists" className="type-label text-yellow underline underline-offset-4 focus-on-black">
+                  All artists
                 </Link>
               }
             />
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-1 sm:gap-1.5">
-              {featuredArtists.map((artist) => (
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-2">
+              {featuredArtists.map((artist, i) => (
                 <ArtistCard
                   key={artist.id}
+                  index={i}
                   slug={artist.slug}
                   stage_name={artist.stage_name}
                   photo_url={artist.photo_url}
@@ -168,23 +146,22 @@ export default async function HomePage() {
         </section>
       )}
 
-      {/* ── Latest Releases — cream ── */}
+      {/* ── Latest releases: small paper posters ── */}
       {releases && releases.length > 0 && (
-        <section className="bg-cream">
-          <div className="mx-auto max-w-6xl px-4 sm:px-6 py-20">
+        <section className="bg-black">
+          <div className="mx-auto max-w-6xl px-4 sm:px-6 py-14 sm:py-[88px]">
             <SectionHeader
-              eyebrow="Discography"
-              title="Latest Releases"
+              title="Latest releases"
               action={
-                <Link href="/releases" className="text-sm text-oxblood/60 hover:text-ochre transition-colors">
-                  All releases →
+                <Link href="/releases" className="type-label text-yellow underline underline-offset-4 focus-on-black">
+                  All releases
                 </Link>
               }
             />
             <div className="-mx-4 sm:mx-0 px-4 sm:px-0 overflow-x-auto pb-4 sm:pb-0 snap-x snap-mandatory">
-              <div className="grid grid-flow-col sm:grid-flow-row sm:grid-cols-3 lg:grid-cols-6 gap-5 w-max sm:w-auto">
+              <div className="grid grid-flow-col sm:grid-flow-row sm:grid-cols-3 lg:grid-cols-6 gap-2 w-max sm:w-auto">
                 {releases.map((release) => (
-                  <div key={release.id} className="w-44 sm:w-auto snap-start">
+                  <div key={release.id} className="w-44 sm:w-auto min-w-0 snap-start">
                     <ReleaseCard
                       slug={release.slug}
                       title={release.title}
@@ -203,21 +180,27 @@ export default async function HomePage() {
         </section>
       )}
 
-      {/* ── Videos — ink ── */}
+      {/* ── Videos: thumbnails stay unprinted ── */}
       {videos && videos.length > 0 && (
-        <section className="bg-ink">
-          <div className="mx-auto max-w-6xl px-4 sm:px-6 py-20">
+        <section className="bg-black">
+          <div className="mx-auto max-w-6xl px-4 sm:px-6 py-14 sm:py-[88px]">
             <SectionHeader
-              dark
-              eyebrow="Watch"
-              title="Latest Videos"
+              title="Latest videos"
               action={
-                <Link href="/videos" className="text-sm text-bone/40 hover:text-ochre transition-colors">
-                  All videos →
+                <Link href="/videos" className="type-label text-yellow underline underline-offset-4 focus-on-black">
+                  All videos
                 </Link>
               }
             />
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div
+              className={`grid grid-cols-1 gap-2 md:gap-4 ${
+                videos.length === 1
+                  ? "max-w-3xl"
+                  : videos.length === 2
+                    ? "md:grid-cols-2"
+                    : "md:grid-cols-3"
+              }`}
+            >
               {videos.map((video, i) => (
                 <VideoEmbed
                   key={video.id}
@@ -233,61 +216,49 @@ export default async function HomePage() {
         </section>
       )}
 
-      {/* ── Latest News — cream ── */}
+      {/* ── Latest news: paper cards with a red tag band ── */}
       {newsPosts && newsPosts.length > 0 && (
-        <section className="bg-cream">
-          <div className="mx-auto max-w-6xl px-4 sm:px-6 py-20">
+        <section className="bg-black">
+          <div className="mx-auto max-w-6xl px-4 sm:px-6 py-14 sm:py-[88px]">
             <SectionHeader
-              eyebrow="From the Label"
-              title="Latest News"
+              title="Latest news"
               action={
-                <Link href="/news" className="text-sm text-oxblood/60 hover:text-ochre transition-colors">
-                  All posts →
+                <Link href="/news" className="type-label text-yellow underline underline-offset-4 focus-on-black">
+                  All posts
                 </Link>
               }
             />
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
               {newsPosts.map((post) => (
                 <Link
                   key={post.id}
                   href={`/news/${post.slug}`}
-                  className="group flex flex-col rounded-lg overflow-hidden border border-oxblood/10 hover:border-oxblood/30 transition-colors bg-white/50"
+                  className="group flex flex-col min-w-0 bg-paper text-black focus-on-black"
                 >
-                  <div className="relative aspect-video bg-ink/5 overflow-hidden">
-                    {post.cover_url ? (
-                      <Image
+                  <p className="bg-red text-paper px-3 py-2 type-label">
+                    {NEWS_CATEGORY_LABEL[post.category] ?? post.category}
+                  </p>
+                  {post.cover_url && (
+                    <div className="relative aspect-video overflow-hidden">
+                      <PrintedPhoto
+                        tone="red"
                         src={post.cover_url}
                         alt={post.title}
                         fill
-                        className="object-cover group-hover:scale-105 transition-transform duration-300"
+                        className="object-cover"
                         sizes="(max-width: 640px) 100vw, 33vw"
                       />
-                    ) : (
-                      <div className="absolute inset-0 flex items-center justify-center opacity-10">
-                        <svg viewBox="0 0 20 28" className="w-8 h-auto" aria-hidden="true">
-                          <path d="M10 1C10 1 4 9 4 16C4 19.8 6.3 23.1 10 25C13.7 23.1 16 19.8 16 16C16 9 10 1 10 1Z" fill="#8B2A1F" />
-                        </svg>
-                      </div>
+                    </div>
+                  )}
+                  <div className="flex flex-col flex-1 p-3 gap-2 min-w-0">
+                    <h3 className="type-title-sm line-clamp-3 [overflow-wrap:anywhere]">{post.title}</h3>
+                    {post.excerpt && (
+                      <p className="type-body-sm line-clamp-2 flex-1">{post.excerpt}</p>
                     )}
                   </div>
-                  <div className="flex flex-col flex-1 p-4 gap-2">
-                    <div className="flex items-center gap-2">
-                      <span className={`inline-block rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider capitalize ${NEWS_CATEGORY_PILL[post.category] ?? "bg-ink/10 text-ink"}`}>
-                        {post.category}
-                      </span>
-                      {post.published_at && (
-                        <span className="text-[11px] text-ink/40">{formatDate(post.published_at)}</span>
-                      )}
-                    </div>
-                    <h3 className="font-display font-semibold text-ink text-base leading-snug group-hover:text-oxblood transition-colors line-clamp-2">
-                      {post.title}
-                    </h3>
-                    {post.excerpt && (
-                      <p className="text-ink/60 text-sm leading-relaxed line-clamp-2 flex-1">{post.excerpt}</p>
-                    )}
-                    <span className="mt-1 text-xs font-medium text-oxblood group-hover:text-ochre transition-colors">
-                      Read more →
-                    </span>
+                  <div className="flex justify-between items-center gap-3 px-3 py-2.5 border-t-[3px] border-black type-small">
+                    <span>{post.published_at ? formatDate(post.published_at) : ""}</span>
+                    <span className="text-red underline underline-offset-4 group-hover:text-black">Read more</span>
                   </div>
                 </Link>
               ))}
@@ -296,27 +267,41 @@ export default async function HomePage() {
         </section>
       )}
 
-      {/* ── Sign with One Flame CTA ── */}
-      <section className="bg-oxblood">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 py-20 flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
-          <div>
-            <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-bone/50 mb-3">
-              Montego Bay · Jamaica
+      {/* ── Flames Lounge: red block. No real Lounge photos yet, so type and rings only ── */}
+      <GrilleBand orientation="horizontal" holes="yellow" />
+      <section className="bg-red text-paper">
+        <div className="mx-auto max-w-6xl grid md:grid-cols-2">
+          <div className="min-w-0 px-4 sm:px-6 py-14 sm:py-[88px] grid gap-4 content-start">
+            <h2 className="type-headline [overflow-wrap:anywhere]">Flames Lounge</h2>
+            <p className="type-body font-medium max-w-[46ch]">
+              Outdoor studio, gaming, Jamaican food and a bar. Walk-in welcome, no reservation needed.
             </p>
-            <h2 className="font-display font-bold text-bone text-[clamp(2rem,4vw,3rem)] leading-tight">
-              Sign with One Flame.
-            </h2>
-            <p className="mt-3 text-bone/70 max-w-md leading-relaxed">
-              We work with artists who have something real to say. If that&apos;s you,
-              we want to hear it.
+            <div>
+              <LinkButton href="/flames-lounge" variant="primary" ground="red" className="mt-2">
+                Visit the Lounge
+              </LinkButton>
+            </div>
+          </div>
+          <div className="hidden md:grid place-items-center px-6 py-10">
+            <SpeakerRings ground="red" size={190} />
+          </div>
+        </div>
+      </section>
+
+      {/* ── Sign with One Flame: the form block on paper ── */}
+      <section className="bg-paper text-black border-b-4 border-black">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 py-14 sm:py-[88px] grid gap-6 md:grid-cols-2 md:items-end">
+          <div className="min-w-0">
+            <h2 className="type-headline [overflow-wrap:anywhere]">Sign with One Flame.</h2>
+            <span aria-hidden="true" className="section-bar mt-2" />
+            <p className="type-body mt-4 max-w-[46ch]">
+              You keep your publishing. We handle the platform.
             </p>
           </div>
-          <Link
-            href="/contact"
-            className="shrink-0 inline-block rounded bg-bone px-8 py-3.5 text-sm font-semibold text-ink hover:bg-ochre transition-colors"
-          >
-            Get in touch
-          </Link>
+          <div className="min-w-0 md:justify-self-end">
+            {/* The footer directly below carries the newsletter form, so this block holds only the sign-up action. */}
+            <LinkButton href="/sign" variant="dark" ground="paper">Sign with us</LinkButton>
+          </div>
         </div>
       </section>
     </>

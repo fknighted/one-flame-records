@@ -10,25 +10,25 @@ export default function InviteGamerPage() {
   return (
     <div className="max-w-sm mx-auto space-y-6">
       <div>
-        <p className="text-xs text-bone/60 mb-1">
-          <Link href="/bar/members" className="hover:text-bone transition-colors">← Members</Link>
+        <p className="text-[14px] mb-2">
+          <Link href="/bar/members" className="studio-link inline-flex min-h-[44px] items-center">← Members</Link>
         </p>
-        <h1 className="font-display font-bold text-bone text-2xl">Invite Gamer</h1>
-        <p className="text-sm text-bone/50 mt-1">
+        <h1 className="studio-page-title">Invite Gamer</h1>
+        <p className="text-[15px] text-muted mt-2">
           They&apos;ll receive an email to set their password and access the gamer portal.
         </p>
       </div>
 
       <form action={formAction} className="space-y-5">
         {state?.error && (
-          <p className="text-sm text-red-400 bg-red-400/10 border border-red-400/20 rounded-lg px-4 py-3">
+          <p role="alert" className="studio-error">
             {state.error}
           </p>
         )}
 
         <div>
-          <label htmlFor="display_name" className="block text-sm font-medium text-bone/70 mb-1.5">
-            Display Name <span className="text-rose">*</span>
+          <label htmlFor="display_name" className="studio-field-label">
+            Display Name <span>*</span>
           </label>
           <input
             id="display_name"
@@ -36,27 +36,27 @@ export default function InviteGamerPage() {
             type="text"
             autoFocus
             placeholder="e.g. Jay King"
-            className="w-full bg-bone/5 border border-bone/45 rounded-lg px-4 py-3 text-bone placeholder:text-bone/60 text-base focus:outline-2 focus:outline-ochre focus:border-ochre/50 transition-colors"
+            className="studio-field"
           />
         </div>
 
         <div>
-          <label htmlFor="email" className="block text-sm font-medium text-bone/70 mb-1.5">
-            Email <span className="text-rose">*</span>
+          <label htmlFor="email" className="studio-field-label">
+            Email <span>*</span>
           </label>
           <input
             id="email"
             name="email"
             type="email"
             placeholder="gamer@email.com"
-            className="w-full bg-bone/5 border border-bone/45 rounded-lg px-4 py-3 text-bone placeholder:text-bone/60 text-base focus:outline-2 focus:outline-ochre focus:border-ochre/50 transition-colors"
+            className="studio-field"
           />
         </div>
 
         <button
           type="submit"
           disabled={pending}
-          className="w-full bg-ochre text-ink font-semibold text-base py-3.5 rounded-lg hover:bg-ochre/90 active:scale-[0.98] transition-all disabled:opacity-50"
+          className="studio-btn studio-btn-primary w-full"
         >
           {pending ? "Sending invite…" : "Send Invite"}
         </button>

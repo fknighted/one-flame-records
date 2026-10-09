@@ -1,10 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import LogoutButton from "@/components/LogoutButton";
+import LogoMark from "@/components/LogoMark";
 
 interface Props {
   displayName: string;
@@ -122,7 +122,7 @@ function NavLinks({
       {groups.map((group, gi) => (
         <div key={gi}>
           {group.label && (
-            <p className="px-3 mb-1 text-[9px] font-semibold uppercase tracking-[0.2em] text-bone/60">
+            <p className="studio-label px-3 mb-1.5">
               {group.label}
             </p>
           )}
@@ -132,16 +132,17 @@ function NavLinks({
                 <Link
                   href={href}
                   onClick={onClose}
+                  aria-current={isActive(href) ? "page" : undefined}
                   className={[
-                    "flex items-center justify-between rounded px-3 py-2 text-sm transition-colors",
+                    "studio-focus flex min-h-[44px] items-center justify-between border-l-[3px] px-3 py-2 text-[15px] transition-colors",
                     isActive(href)
-                      ? "bg-bone/10 text-bone"
-                      : "text-bone/60 hover:bg-bone/5 hover:text-bone",
+                      ? "border-paper bg-raised font-semibold text-paper"
+                      : "border-transparent text-muted hover:bg-raised hover:text-paper",
                   ].join(" ")}
                 >
                   <span>{label}</span>
                   {badge != null && badge > 0 && (
-                    <span className="ml-2 inline-flex items-center justify-center rounded-full bg-oxblood text-bone text-[10px] font-semibold w-4 h-4 shrink-0">
+                    <span className="studio-chip studio-chip-count ml-2 shrink-0">
                       {badge > 9 ? "9+" : badge}
                     </span>
                   )}
@@ -187,25 +188,25 @@ export default function InkShell({ displayName, pendingApps, isBartender, childr
   }));
 
   return (
-    <div className="min-h-screen bg-ink text-bone flex flex-col">
+    <div className="studio-shell min-h-screen bg-black text-paper font-text flex flex-col">
       {/* Top bar */}
-      <header className="h-16 sm:h-20 border-b border-bone/10 flex items-center justify-between px-4 sm:px-6 shrink-0">
+      <header className="h-16 border-b border-line bg-black flex items-center justify-between gap-3 px-4 sm:px-6 shrink-0">
         <button
-          className="sm:hidden p-2 -ml-2 text-bone/60 hover:text-bone transition-colors"
+          className="studio-focus sm:hidden inline-flex items-center justify-center w-11 h-11 -ml-2 text-paper transition-colors hover:bg-raised"
           onClick={() => setOpen(true)}
           aria-label="Open navigation"
         >
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" aria-hidden="true">
+          <svg width="22" height="22" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="square" aria-hidden="true">
             <path d="M3 5h14M3 10h14M3 15h14" />
           </svg>
         </button>
 
-        <Link href={homeHref}>
-          <Image src="/logo-4.png" alt="One Flame Records" width={200} height={110} className="h-14 sm:h-20 w-auto" />
+        <Link href={homeHref} className="studio-focus shrink-0">
+          <LogoMark variant="horizontal" ground="black" height={40} priority />
         </Link>
 
-        <div className="flex items-center gap-3 sm:gap-4">
-          <span className="hidden sm:block text-sm text-bone/50">{displayName}</span>
+        <div className="flex items-center gap-3 sm:gap-4 min-w-0">
+          <span className="hidden sm:block text-sm text-muted truncate max-w-[24ch]">{displayName}</span>
           <LogoutButton />
         </div>
       </header>
@@ -213,7 +214,7 @@ export default function InkShell({ displayName, pendingApps, isBartender, childr
       <div className="flex flex-1 overflow-hidden">
         {/* Mobile backdrop */}
         {open && (
-          <div className="sm:hidden fixed inset-0 z-40 bg-ink/80 backdrop-blur-sm" onClick={() => setOpen(false)} />
+          <div className="sm:hidden fixed inset-0 z-40 bg-black/80" onClick={() => setOpen(false)} />
         )}
 
         {/* Sidebar */}
@@ -221,7 +222,7 @@ export default function InkShell({ displayName, pendingApps, isBartender, childr
           className={[
             "fixed sm:static inset-y-0 left-0 z-50",
             "w-64 sm:w-56 shrink-0",
-            "bg-ink border-r border-bone/10",
+            "bg-panel border-r border-line",
             "flex flex-col py-6 px-3 overflow-y-auto",
             "transform transition-transform duration-200 ease-in-out",
             open ? "translate-x-0" : "-translate-x-full sm:translate-x-0",
@@ -229,26 +230,26 @@ export default function InkShell({ displayName, pendingApps, isBartender, childr
         >
           {/* Desktop logo */}
           <div className="hidden sm:flex justify-center px-4 mb-8">
-            <Link href={homeHref}>
-              <Image src="/logo.png" alt="One Flame Records" width={140} height={140} className="w-28 h-auto" />
+            <Link href={homeHref} className="studio-focus">
+              <LogoMark variant="flame" ground="black" height={56} />
             </Link>
           </div>
 
           {/* Mobile header inside sidebar */}
           <div className="sm:hidden flex items-center justify-between px-3 mb-6">
-            <Link href={homeHref} onClick={() => setOpen(false)}>
-              <Image src="/logo-4.png" alt="One Flame Records" width={160} height={88} className="h-12 w-auto" />
+            <Link href={homeHref} onClick={() => setOpen(false)} className="studio-focus">
+              <LogoMark variant="horizontal" ground="black" height={36} />
             </Link>
-            <button onClick={() => setOpen(false)} className="p-1 text-bone/50 hover:text-bone transition-colors" aria-label="Close navigation">
-              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" aria-hidden="true">
+            <button onClick={() => setOpen(false)} className="studio-focus inline-flex items-center justify-center w-11 h-11 -mr-2 text-paper transition-colors hover:bg-raised" aria-label="Close navigation">
+              <svg width="22" height="22" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="square" aria-hidden="true">
                 <path d="M15 5L5 15M5 5l10 10" />
               </svg>
             </button>
           </div>
 
           {/* Display name — mobile */}
-          <div className="sm:hidden px-3 mb-4 pb-4 border-b border-bone/10">
-            <p className="text-xs text-bone/60 truncate">{displayName}</p>
+          <div className="sm:hidden px-3 mb-4 pb-4 border-b border-line">
+            <p className="text-sm text-muted truncate">{displayName}</p>
           </div>
 
           <NavLinks groups={resolvedGroups} pathname={pathname} onClose={() => setOpen(false)} />

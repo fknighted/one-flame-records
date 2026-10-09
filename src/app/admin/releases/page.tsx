@@ -21,93 +21,93 @@ export default async function AdminReleasesPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="font-display text-2xl text-bone">Releases</h1>
+      <div className="flex flex-wrap items-center justify-between gap-4">
+        <h1 className="studio-page-title">Releases</h1>
         <Link
           href="/admin/releases/new"
-          className="bg-ochre text-ink text-sm font-medium px-4 py-2 rounded hover:bg-ochre/90 transition-colors"
+          className="studio-btn studio-btn-primary"
         >
           Add Release
         </Link>
       </div>
 
       {releases.length === 0 ? (
-        <div className="border border-bone/10 rounded-lg p-12 text-center text-bone/50 text-sm">
+        <div className="studio-empty">
           No releases yet.{" "}
-          <Link href="/admin/releases/new" className="underline hover:text-bone/60">
+          <Link href="/admin/releases/new" className="studio-link">
             Add the first one.
           </Link>
         </div>
       ) : (
-        <div className="border border-bone/10 rounded-lg overflow-x-auto">
-          <table className="w-full min-w-[640px] text-sm">
+        <div className="studio-table-wrap">
+          <table className="studio-table min-w-[640px]">
             <thead>
-              <tr className="border-b border-bone/10 bg-bone/5">
-                <th className="text-left px-4 py-3 text-xs font-medium text-bone/60 uppercase tracking-wider w-12" />
-                <th className="text-left px-4 py-3 text-xs font-medium text-bone/60 uppercase tracking-wider">
+              <tr>
+                <th><span className="sr-only">Cover</span></th>
+                <th>
                   Title
                 </th>
-                <th className="text-left px-4 py-3 text-xs font-medium text-bone/60 uppercase tracking-wider">
+                <th>
                   Artist
                 </th>
-                <th className="text-left px-4 py-3 text-xs font-medium text-bone/60 uppercase tracking-wider">
+                <th>
                   Type
                 </th>
-                <th className="text-left px-4 py-3 text-xs font-medium text-bone/60 uppercase tracking-wider">
+                <th>
                   Date
                 </th>
-                <th className="text-left px-4 py-3 text-xs font-medium text-bone/60 uppercase tracking-wider">
+                <th>
                   Featured
                 </th>
-                <th className="px-4 py-3 w-16" />
+                <th><span className="sr-only">Actions</span></th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-bone/5">
+            <tbody>
               {releases.map((release) => {
                 const artist = Array.isArray(release.artists)
                   ? release.artists[0]
                   : release.artists;
                 const deleteWithId = deleteRelease.bind(null, release.id);
                 return (
-                  <tr key={release.id} className="hover:bg-bone/5 transition-colors">
-                    <td className="px-4 py-3">
+                  <tr key={release.id}>
+                    <td>
                       {release.cover_url ? (
                         <img
                           src={release.cover_url}
                           alt=""
-                          className="w-9 h-9 rounded object-cover"
+                          className="w-9 h-9 object-cover"
                         />
                       ) : (
-                        <div className="w-9 h-9 rounded bg-bone/10" />
+                        <div className="w-9 h-9 bg-raised" />
                       )}
                     </td>
-                    <td className="px-4 py-3">
-                      <span className="text-bone font-medium">{release.title}</span>
-                      <span className="block text-bone/52 text-xs mt-0.5">
+                    <td>
+                      <span className="font-semibold">{release.title}</span>
+                      <span className="block text-muted text-sm mt-0.5">
                         /{release.slug}
                       </span>
                     </td>
-                    <td className="px-4 py-3 text-bone/60">
+                    <td className="text-muted">
                       {artist?.stage_name ?? "—"}
                     </td>
-                    <td className="px-4 py-3 text-bone/60">
+                    <td className="text-muted">
                       {TYPE_LABELS[release.type] ?? release.type}
                     </td>
-                    <td className="px-4 py-3 text-bone/60">
+                    <td className="text-muted">
                       {release.release_date}
                     </td>
-                    <td className="px-4 py-3">
+                    <td>
                       {release.featured && (
-                        <span className="inline-flex items-center px-2 py-0.5 rounded text-xs bg-ochre/20 text-ochre border border-ochre/30">
+                        <span className="studio-chip studio-chip-neutral">
                           Featured
                         </span>
                       )}
                     </td>
-                    <td className="px-4 py-3 text-right">
+                    <td className="is-num">
                       <div className="flex items-center gap-3 justify-end">
                         <Link
                           href={`/admin/releases/${release.id}/edit`}
-                          className="text-xs text-bone/60 hover:text-ochre transition-colors"
+                          className="studio-btn studio-btn-secondary studio-btn-sm"
                         >
                           Edit
                         </Link>

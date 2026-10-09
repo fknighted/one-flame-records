@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { createBrowserClient } from "@supabase/ssr";
+import "@/app/studio.css";
 
 export default function SetPasswordPage() {
   const [password, setPassword] = useState("");
@@ -51,24 +52,24 @@ export default function SetPasswordPage() {
   }
 
   return (
-    <div className="min-h-screen bg-cream flex items-center justify-center px-4">
+    <div className="studio-shell min-h-screen bg-black text-paper font-text flex items-center justify-center px-4 py-12">
       <div className="w-full max-w-sm">
         <div className="mb-8 text-center">
-          <h1 className="font-display text-3xl text-oxblood mb-2">
+          <h1 className="studio-page-title mb-3">
             One Flame Records
           </h1>
-          <p className="text-ink/60 text-sm">Set a password to access your portal</p>
+          <p className="text-[15px] text-muted">Set a password to access your portal</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           {error && (
-            <div className="rounded border border-red-300 bg-red-50 px-4 py-3 text-sm text-red-700">
+            <div className="studio-error">
               {error}
             </div>
           )}
 
           <div>
-            <label className="mb-1.5 block text-xs font-semibold uppercase tracking-[0.15em] text-ink/50">
+            <label className="studio-field-label">
               New Password
             </label>
             <input
@@ -77,13 +78,13 @@ export default function SetPasswordPage() {
               minLength={8}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full rounded border border-ink/60 bg-cream px-3 py-2.5 text-sm text-ink placeholder:text-ink/30 focus:border-oxblood focus:outline-2 focus:outline-oxblood"
+              className="studio-field"
               placeholder="At least 8 characters"
             />
           </div>
 
           <div>
-            <label className="mb-1.5 block text-xs font-semibold uppercase tracking-[0.15em] text-ink/50">
+            <label className="studio-field-label">
               Confirm Password
             </label>
             <input
@@ -91,7 +92,7 @@ export default function SetPasswordPage() {
               required
               value={confirm}
               onChange={(e) => setConfirm(e.target.value)}
-              className="w-full rounded border border-ink/60 bg-cream px-3 py-2.5 text-sm text-ink placeholder:text-ink/30 focus:border-oxblood focus:outline-2 focus:outline-oxblood"
+              className="studio-field"
               placeholder="Repeat password"
             />
           </div>
@@ -99,7 +100,7 @@ export default function SetPasswordPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full rounded bg-ochre py-2.5 text-sm font-semibold text-ink transition-colors hover:bg-ochre/90 disabled:opacity-50"
+            className="studio-btn studio-btn-primary w-full"
           >
             {loading ? "Saving…" : "Set Password & Enter Portal"}
           </button>

@@ -15,14 +15,14 @@ export default function GamerError({
   }, [error]);
 
   return (
-    <div className="px-6 py-12 max-w-xl mx-auto space-y-4">
-      <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-rose">Error</p>
-      <h2 className="font-display font-bold text-bone text-2xl">Something went wrong</h2>
-      <p className="text-sm text-bone/60">Please try again. If this keeps happening, refresh the page.</p>
-      {error.digest && <p className="text-xs text-bone/40 font-mono">ref: {error.digest}</p>}
+    <div className="px-4 sm:px-6 py-12 max-w-xl mx-auto space-y-4">
+      <p className="studio-label">Error</p>
+      <h2 className="studio-section-title">Something went wrong</h2>
+      <p className="text-[15px] text-muted">Please try again. If this keeps happening, refresh the page.</p>
+      {error.digest && <p className="studio-hint studio-figures">ref: {error.digest}</p>}
       <button
         onClick={reset}
-        className="rounded bg-ochre px-5 py-2 text-sm font-medium text-ink hover:bg-ochre/90 transition-colors"
+        className="studio-btn studio-btn-primary"
       >
         Try again
       </button>

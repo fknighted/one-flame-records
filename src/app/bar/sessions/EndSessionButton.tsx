@@ -9,11 +9,11 @@ export default function EndSessionButton({ sessionId }: { sessionId: string }) {
   return (
     <form action={formAction}>
       <input type="hidden" name="session_id" value={sessionId} />
-      {state?.error && <p className="text-xs text-red-400 mb-1">{state.error}</p>}
+      {state?.error && <p role="alert" className="studio-error text-[13px] mb-1">{state.error}</p>}
       <button
         type="submit"
         disabled={pending}
-        className="border border-bone/20 text-bone/60 hover:text-bone hover:border-bone/40 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors disabled:opacity-50"
+        className="studio-btn studio-btn-secondary studio-btn-sm"
       >
         {pending ? "Ending…" : "End"}
       </button>

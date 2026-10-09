@@ -2,6 +2,7 @@
 
 import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
+import "@/app/studio.css";
 
 function PortalInviteInner() {
   const params = useSearchParams();
@@ -9,7 +10,7 @@ function PortalInviteInner() {
 
   if (!destination) {
     return (
-      <p className="text-ink/50 text-sm text-center">
+      <p className="text-[15px] text-muted text-center">
         This link is invalid. Contact the label for a new one.
       </p>
     );
@@ -18,22 +19,22 @@ function PortalInviteInner() {
   return (
     <div className="text-center space-y-6">
       <div>
-        <h1 className="font-display text-3xl text-oxblood mb-2">
+        <h1 className="studio-page-title mb-3">
           One Flame Records
         </h1>
-        <p className="text-ink/60 text-sm">
+        <p className="text-[15px] text-muted">
           You&apos;ve been approved as an artist on the label.
         </p>
       </div>
 
       <a
         href={destination}
-        className="inline-block rounded bg-ochre px-8 py-3 text-sm font-semibold text-ink hover:bg-ochre/90 transition-colors"
+        className="studio-btn studio-btn-primary px-8"
       >
         Set Password &amp; Enter Portal
       </a>
 
-      <p className="text-xs text-ink/30">
+      <p className="studio-hint">
         This link is single-use and expires in 24 hours.
       </p>
     </div>
@@ -42,9 +43,9 @@ function PortalInviteInner() {
 
 export default function PortalInvitePage() {
   return (
-    <div className="min-h-screen bg-cream flex items-center justify-center px-4">
+    <div className="studio-shell min-h-screen bg-black text-paper font-text flex items-center justify-center px-4 py-12">
       <div className="w-full max-w-sm">
-        <Suspense fallback={<p className="text-ink/40 text-sm text-center">Loading…</p>}>
+        <Suspense fallback={<p className="text-[15px] text-muted text-center">Loading…</p>}>
           <PortalInviteInner />
         </Suspense>
       </div>

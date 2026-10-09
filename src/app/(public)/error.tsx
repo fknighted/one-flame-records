@@ -2,6 +2,8 @@
 
 import { useEffect } from "react";
 import * as Sentry from "@sentry/nextjs";
+import PosterHeadline from "@/components/PosterHeadline";
+import Button from "@/components/Button";
 
 export default function PublicError({
   error,
@@ -15,16 +17,21 @@ export default function PublicError({
   }, [error]);
 
   return (
-    <div className="px-6 py-20 max-w-xl mx-auto text-center space-y-4">
-      <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-oxblood">Error</p>
-      <h2 className="font-display font-bold text-ink text-2xl">Something went wrong</h2>
-      <p className="text-sm text-ink/60">We hit a snag loading this page. Please try again.</p>
-      <button
-        onClick={reset}
-        className="rounded bg-oxblood px-5 py-2 text-sm font-medium text-cream hover:bg-oxblood/90 transition-colors"
-      >
-        Try again
-      </button>
-    </div>
+    <section className="bg-black">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 py-14 sm:py-[88px]">
+        <div className="bg-black border-[3px] border-dashed border-yellow p-5 sm:p-8 grid gap-4 justify-items-start max-w-2xl">
+          <PosterHeadline size="headline" className="text-paper">
+            Something went wrong
+          </PosterHeadline>
+          <span aria-hidden="true" className="section-bar -mt-2" />
+          <p className="type-body text-paper max-w-[66ch]">
+            We hit a snag loading this page. Please try again.
+          </p>
+          <Button onClick={reset} variant="primary" ground="black">
+            Try again
+          </Button>
+        </div>
+      </div>
+    </section>
   );
 }

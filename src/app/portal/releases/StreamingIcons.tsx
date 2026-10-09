@@ -41,9 +41,9 @@ const STREAMING: {
 
 export default function StreamingIcons({ links }: { links: StreamingLinks }) {
   const active = STREAMING.filter(({ key }) => links[key]);
-  if (!active.length) return <span className="text-bone/52 text-xs">—</span>;
+  if (!active.length) return <span className="text-muted text-[14px]">—</span>;
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex items-center gap-1">
       {active.map(({ key, label, buildUrl, path }) => (
         <a
           key={key}
@@ -51,10 +51,10 @@ export default function StreamingIcons({ links }: { links: StreamingLinks }) {
           target="_blank"
           rel="noopener noreferrer"
           aria-label={label}
-          className="text-bone/60 hover:text-ochre transition-colors"
+          className="studio-focus inline-flex h-11 w-11 items-center justify-center text-muted hover:text-paper transition-colors"
           onClick={(e) => e.stopPropagation()}
         >
-          <svg width="13" height="13" viewBox="0 0 13 13" fill="currentColor" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 13 13" fill="currentColor" aria-hidden="true">
             <path d={path} />
           </svg>
         </a>

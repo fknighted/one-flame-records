@@ -59,37 +59,33 @@ function SessionRow({ session }: { session: ActiveSession }) {
   const isOvertime = secondsLeft !== null && secondsLeft < 0;
 
   return (
-    <div className={`flex items-center gap-3 border rounded-xl px-4 py-3 transition-colors ${
-      expired
-        ? "border-red-500/40 bg-red-900/10 animate-pulse"
-        : isOvertime
-        ? "border-red-500/20 bg-red-900/5"
-        : "border-bone/15"
+    <div className={`studio-card flex items-center gap-3 !py-3 ${
+      expired || isOvertime ? "!border-red" : ""
     }`}>
       <div className="flex-1 min-w-0">
-        <p className="text-bone font-medium text-sm">
+        <p className="text-paper font-semibold text-[15px] [overflow-wrap:anywhere]">
           {session.member_name ?? "Drop-in"}
-          {session.station && <span className="text-bone/60 ml-2 font-normal">· {session.station}</span>}
+          {session.station && <span className="text-muted ml-2 font-normal">· {session.station}</span>}
           {session.price_jmd && (
-            <span className="ml-2 text-xs font-mono text-ochre">
+            <span className="ml-2 studio-money text-[18px]">
               ${session.price_jmd}
             </span>
           )}
         </p>
         {durationMins !== null && secondsLeft !== null ? (
-          <p className={`text-xs font-mono font-semibold ${
-            expired ? "text-red-400" : isOvertime ? "text-red-400/70" : "text-bone/60"
+          <p className={`text-[14px] studio-figures ${
+            expired || isOvertime ? "text-paper font-bold" : "text-muted font-semibold"
           }`}>
-            {expired || isOvertime ? "⏰ OVERTIME " : ""}
+            {expired || isOvertime ? "OVERTIME " : ""}
             {formatCountdown(secondsLeft)} {!expired && !isOvertime ? "remaining" : ""}
           </p>
         ) : (
-          <p className="text-bone/60 text-xs">No duration set</p>
+          <p className="text-muted text-[13px]">No duration set</p>
         )}
       </div>
 
       {expired && (
-        <span className="text-xs font-semibold text-red-400 bg-red-900/20 border border-red-500/30 rounded-full px-2 py-0.5 shrink-0">
+        <span className="studio-chip studio-chip-bad shrink-0">
           Time Up
         </span>
       )}

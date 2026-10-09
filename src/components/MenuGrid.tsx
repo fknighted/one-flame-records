@@ -24,19 +24,19 @@ function AddButton({ item, tabId, disabled, badge }: { item: PosItem; tabId: str
         type="submit"
         disabled={pending || disabled}
         className={[
-          "w-full text-left border rounded-xl p-3 min-h-[72px] flex flex-col justify-between transition-all",
+          "studio-focus w-full text-left border bg-panel p-3 min-h-[72px] flex flex-col justify-between",
           disabled
-            ? "border-bone/8 opacity-40 cursor-not-allowed"
-            : "border-bone/15 hover:border-ochre/40 hover:bg-ochre/5 active:scale-[0.97] disabled:opacity-40",
+            ? "border-line opacity-60 cursor-not-allowed"
+            : "border-muted hover:bg-raised disabled:opacity-60",
         ].join(" ")}
       >
-        <span className="text-bone text-sm font-medium leading-tight line-clamp-2">{item.name}</span>
+        <span className="text-paper text-[15px] font-semibold leading-tight line-clamp-2">{item.name}</span>
         <div className="flex items-center justify-between mt-1">
-          <span className="text-ochre text-sm font-mono font-semibold">{formatJmd(item.price_jmd)}</span>
-          {badge && <span className="text-bone/50 text-[10px] uppercase tracking-wider">{badge}</span>}
+          <span className="studio-money text-[22px]">{formatJmd(item.price_jmd)}</span>
+          {badge && <span className={`studio-chip ${badge === "N/A" ? "studio-chip-neutral" : "studio-chip-bad"}`}>{badge}</span>}
         </div>
         {state?.error && (
-          <span className="text-red-400 text-xs mt-1 block">{state.error}</span>
+          <span role="alert" className="studio-error text-[13px] mt-1 block">{state.error}</span>
         )}
       </button>
     </form>
@@ -85,10 +85,11 @@ export default function MenuGrid({ items, tabId }: Props) {
           <button
             key={c.key}
             onClick={() => setActive(c.key)}
-            className={`whitespace-nowrap px-3.5 py-1.5 rounded-full text-sm font-medium transition-colors ${
+            aria-pressed={active === c.key}
+            className={`studio-focus whitespace-nowrap min-h-[44px] px-4 text-[14px] font-semibold ${
               active === c.key
-                ? "bg-ochre text-ink"
-                : "bg-bone/10 text-bone/60 hover:text-bone"
+                ? "bg-raised text-paper border border-muted"
+                : "text-muted border border-line hover:text-paper"
             }`}
           >
             {c.label}
@@ -99,12 +100,12 @@ export default function MenuGrid({ items, tabId }: Props) {
       {/* Grid, clustered by section within the tab */}
       <div className="flex-1 min-h-0 mt-3 overflow-y-auto space-y-4">
         {visible.length === 0 ? (
-          <p className="text-center text-bone/30 text-sm py-8">No items in this category</p>
+          <p className="text-center text-muted text-[15px] py-8">No items in this category</p>
         ) : (
           sections.map(sec => (
             <div key={sec} className="space-y-2">
               {showLabels && (
-                <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-bone/40">
+                <p className="studio-label">
                   {SECTION_LABELS[sec] ?? sec}
                 </p>
               )}

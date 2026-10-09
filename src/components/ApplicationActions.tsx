@@ -22,12 +22,12 @@ export default function ApplicationActions({ id }: { id: string }) {
       <form action={approveAction} className="flex flex-col gap-2">
         <input type="hidden" name="id" value={id} />
         {approveState && "error" in approveState && (
-          <p className="text-sm text-red-400">{approveState.error}</p>
+          <p role="alert" className="studio-error">{approveState.error}</p>
         )}
         <button
           type="submit"
           disabled={approvePending || rejectPending}
-          className="px-6 py-2 rounded bg-forest text-bone text-sm font-medium hover:bg-forest/80 disabled:opacity-50 transition-colors"
+          className="studio-btn studio-btn-primary"
         >
           {approvePending ? "Approving…" : "Approve"}
         </button>
@@ -36,12 +36,12 @@ export default function ApplicationActions({ id }: { id: string }) {
       <form action={rejectAction} className="flex flex-col gap-2">
         <input type="hidden" name="id" value={id} />
         {rejectState && "error" in rejectState && (
-          <p className="text-sm text-red-400">{rejectState.error}</p>
+          <p role="alert" className="studio-error">{rejectState.error}</p>
         )}
         <button
           type="submit"
           disabled={approvePending || rejectPending}
-          className="px-6 py-2 rounded border border-bone/20 text-bone/70 text-sm font-medium hover:border-bone/40 hover:text-bone disabled:opacity-50 transition-colors"
+          className="studio-btn studio-btn-danger"
         >
           {rejectPending ? "Rejecting…" : "Reject"}
         </button>

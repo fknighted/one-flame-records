@@ -8,7 +8,7 @@ type Props = {
 export default function ArtistLink({ stageName, slug }: Props) {
   return (
     <span
-      className="text-[13px] text-bone/70 hover:text-ochre transition-colors truncate"
+      className="text-[14px] text-muted hover:text-paper transition-colors truncate"
       onClick={(e) => {
         e.preventDefault();
         if (slug) window.location.href = `/artists/${slug}`;

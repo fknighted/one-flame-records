@@ -18,29 +18,29 @@ export default function ResendInviteButton({
   return (
     <form action={action} className="mt-6 space-y-3">
       <input type="hidden" name="id" value={id} />
-      <div className="flex items-center gap-4">
+      <div className="flex flex-wrap items-center gap-4">
         <button
           type="submit"
           disabled={pending}
-          className="rounded border border-bone/20 px-4 py-2 text-sm text-bone/70 hover:border-bone/40 hover:text-bone transition-colors disabled:opacity-50"
+          className="studio-btn studio-btn-secondary"
         >
           {pending ? "Sending…" : "Send Invite Email"}
         </button>
         {state && "success" in state && (
-          <p className="text-sm text-forest">Invite sent to {email}.</p>
+          <p className="studio-success">Invite sent to {email}.</p>
         )}
         {state && "error" in state && (
-          <p className="text-sm text-red-400">{state.error}</p>
+          <p role="alert" className="studio-error">{state.error}</p>
         )}
       </div>
 
       {/* Fallback: shown when Resend isn't available yet */}
       {state && "link" in state && (
-        <div className="rounded border border-bone/10 bg-bone/5 p-4 space-y-3">
-          <p className="text-xs text-bone/40 uppercase tracking-wider">
+        <div className="studio-card space-y-3">
+          <p className="studio-label">
             Email unavailable — copy and send this link manually
           </p>
-          <p className="text-xs text-bone/70 break-all font-mono leading-relaxed">
+          <p className="text-[15px] text-paper break-all studio-figures leading-relaxed">
             {state.link}
           </p>
           <button
@@ -48,7 +48,7 @@ export default function ResendInviteButton({
             onClick={() =>
               navigator.clipboard.writeText((state as { link: string }).link)
             }
-            className="text-xs text-ochre hover:text-ochre/80 transition-colors"
+            className="studio-btn studio-btn-secondary studio-btn-sm"
           >
             Copy to clipboard
           </button>

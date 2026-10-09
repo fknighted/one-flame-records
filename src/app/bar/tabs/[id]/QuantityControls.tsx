@@ -19,7 +19,7 @@ export default function QuantityControls({
   return (
     <div className="flex items-center gap-1 shrink-0">
       {(incState?.error || decState?.error) && (
-        <span className="text-red-400 text-xs">{incState?.error ?? decState?.error}</span>
+        <span role="alert" className="studio-error text-[13px]">{incState?.error ?? decState?.error}</span>
       )}
       <form action={decAction}>
         <input type="hidden" name="tab_item_id" value={tabItemId} />
@@ -27,20 +27,22 @@ export default function QuantityControls({
         <button
           type="submit"
           disabled={anyPending}
-          className="w-6 h-6 rounded border border-bone/20 text-bone/50 hover:text-bone hover:border-bone/40 flex items-center justify-center text-sm font-medium transition-colors disabled:opacity-30"
+          className="studio-btn studio-btn-secondary !min-h-[44px] !w-11 !p-0 text-[18px]"
+          aria-label={quantity <= 1 ? "Remove item" : "Decrease quantity"}
           title={quantity <= 1 ? "Remove item" : "Decrease quantity"}
         >
           −
         </button>
       </form>
-      <span className="text-bone/50 text-xs w-4 text-center tabular-nums">{quantity}</span>
+      <span className="studio-count text-[20px] min-w-[24px] text-center">{quantity}</span>
       <form action={incAction}>
         <input type="hidden" name="tab_item_id" value={tabItemId} />
         <input type="hidden" name="tab_id" value={tabId} />
         <button
           type="submit"
           disabled={anyPending}
-          className="w-6 h-6 rounded border border-bone/20 text-bone/50 hover:text-bone hover:border-bone/40 flex items-center justify-center text-sm font-medium transition-colors disabled:opacity-30"
+          className="studio-btn studio-btn-secondary !min-h-[44px] !w-11 !p-0 text-[18px]"
+          aria-label="Increase quantity"
           title="Increase quantity"
         >
           +

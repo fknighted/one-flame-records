@@ -33,17 +33,18 @@ export default function ReleasesManagerFilter({ basePath }: Props) {
 
   return (
     <div className="flex flex-wrap items-center gap-2">
-      <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-bone/50 mr-1">
+      <span className="studio-label mr-1">
         Format
       </span>
       {TYPES.map(({ value, label }) => (
         <button
           key={value}
           onClick={() => push("type", value)}
-          className={`px-3 py-1 text-[11px] font-semibold rounded transition-colors ${
+          aria-pressed={currentType === value}
+          className={`studio-focus inline-flex min-h-[44px] items-center px-4 text-[14px] font-bold border transition-colors ${
             currentType === value
-              ? "bg-ochre text-ink"
-              : "bg-transparent text-bone/70 border border-bone/10 hover:border-bone/30 hover:text-bone"
+              ? "bg-raised text-paper border-muted"
+              : "text-muted border-line hover:text-paper"
           }`}
         >
           {label}

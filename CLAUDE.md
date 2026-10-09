@@ -49,7 +49,7 @@ Source:
 ```
 src/
 ├── app/
-│   ├── (public)/      ← cream-theme public site (home, artists, releases, videos, news, about, contact, signup, flames-lounge, gamer-signup)
+│   ├── (public)/      ← Sound System public site (home, artists, releases, videos, news, about, contact, signup, flames-lounge, gamer-signup)
 │   ├── admin/         ← ink-theme label admin (artists, releases, videos, news, applications, bar/*)
 │   ├── portal/        ← ink-theme artist portal (profile, assets, releases, videos)
 │   ├── bar/           ← ink-theme bartender POS (tabs, inventory, sessions, members)
@@ -151,13 +151,13 @@ Current work and verification: `/Users/frankknight/Claude OS/Delegations/remove-
 
 **Commits.** Conventional commits: `feat:`, `fix:`, `chore:`, `docs:`, `refactor:`. One logical change per commit.
 
-**Themes.** Two visual worlds: `cream` (public site, `#ECE2C8` bg) and `ink` (portal + admin, `#1A1612` bg). Theme is a wrapper class on the route group layout, not a context or runtime toggle.
+**Themes.** One palette, two moods (Sound System, since 2026-10-09). The public site is the loud poster look on `black` with yellow/red/paper blocks (see `docs/sound-system-foundation.md`); the portal, admin, bar till and gamer portal are the calm studio look on `black`/`panel` using the `studio-*` classes in `src/app/studio.css` (see `docs/studio-sound-system.md`). Both are set by the route group layout, not a runtime toggle.
 
 **After server actions.** Use `router.refresh()` to re-fetch server data after a mutation — not `window.location.reload()`.
 
 **Client Components in Server pages.** When an interactive element (button with `onClick`, form with state) is needed inside a page that is otherwise a Server Component, extract it into its own `PascalCaseButton.tsx` or `PascalCaseClient.tsx` and import it. Never put `onClick` directly on a JSX element in a Server Component file.
 
-**Scrollable tables.** Use a single `overflow-x-auto` on the outer container div — do NOT nest `overflow-hidden` outer + `overflow-x-auto` inner. The nested pattern blocks touch-scroll on iOS Safari. Always add `min-w-[Npx]` to the `<table>` itself so columns don't collapse before the scroll kicks in. Pattern: `<div className="border border-bone/10 rounded-lg overflow-x-auto"><table className="w-full min-w-[Npx]">`.
+**Scrollable tables.** Use a single `overflow-x-auto` on the outer container div — do NOT nest `overflow-hidden` outer + `overflow-x-auto` inner. The nested pattern blocks touch-scroll on iOS Safari. Always add `min-w-[Npx]` to the `<table>` itself so columns don't collapse before the scroll kicks in. Pattern: the `studio-table-wrap` container from `docs/studio-sound-system.md` around `<table className="w-full min-w-[Npx]">`.
 
 ## Things to never do
 
@@ -173,14 +173,14 @@ Current work and verification: `/Users/frankknight/Claude OS/Delegations/remove-
 
 For brand, colours, type, copy rules and social posts, read `design-system/README.md` (current; `docs/brand.md` is out of date). The essentials:
 
-- **Oxblood** `#8B2A1F` — headlines, the flame
-- **Forest** `#3F5A3A` — accents, inner flame
-- **Cream** `#ECE2C8` — public site background
-- **Ink** `#1A1612` — portal/admin background
-- **Bone** `#F5EDD8` — body text on ink
-- **Ochre** `#B8893B` — CTA buttons, badges, hover states (use sparingly)
+- **Sound black** `#0F0D0B` — the ground for every screen
+- **Poster yellow** `#F2C230` — headline blocks, the one main button, money
+- **Flame red** `#C8321F` — artist pages, release tags, the Lounge
+- **Paper** `#FFF7E6` — long reading and forms
+- **Inner green** `#2F6B3A` — small doses only: open, live, paid, done
+- The logo keeps its own oxblood and olive; use the light version (`public/brand/*-light.svg`) on black or red.
 
-Fonts loaded via `next/font`: **Fraunces** (display/headlines), **Inter** (body).
+Fonts loaded via `next/font`: **Big Shoulders** at its Display cut (`font-poster`: headlines, names, numbers, uppercase) and **Archivo** (`font-text`: everything read). No gradients, glows, soft shadows, rounded cards or emoji.
 
 ## Environment variables
 

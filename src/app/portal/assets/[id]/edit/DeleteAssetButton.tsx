@@ -25,11 +25,11 @@ export default function DeleteAssetButton({ assetId, title }: { assetId: string;
 
   return (
     <div>
-      {errorMsg && <p className="text-sm text-red-400 mb-2">{errorMsg}</p>}
+      {errorMsg && <p role="alert" className="studio-error mb-2">{errorMsg}</p>}
       <button
         onClick={handleDelete}
         disabled={pending}
-        className="text-sm text-rose/60 hover:text-rose transition-colors disabled:opacity-40"
+        className="studio-btn studio-btn-danger studio-btn-sm"
       >
         {pending ? "Deleting…" : "Delete asset"}
       </button>

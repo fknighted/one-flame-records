@@ -29,24 +29,24 @@ export default function TabControls({ tabId, total, tabName, status }: Props) {
     return (
       <form action={voidAction} className="space-y-3">
         <input type="hidden" name="tab_id" value={tabId} />
-        <p className="text-sm text-bone/60 text-center">
+        <p className="text-[15px] text-muted text-center">
           Void this tab? All items will be removed and no payment recorded.
         </p>
         {voidState?.error && (
-          <p className="text-sm text-red-400 text-center">{voidState.error}</p>
+          <p role="alert" className="studio-error text-center">{voidState.error}</p>
         )}
         <div className="flex gap-2">
           <button
             type="button"
             onClick={() => setShowVoid(false)}
-            className="flex-1 border border-bone/20 text-bone/60 py-2.5 rounded-lg text-sm hover:text-bone transition-colors"
+            className="studio-btn studio-btn-secondary flex-1"
           >
             Cancel
           </button>
           <button
             type="submit"
             disabled={voidPending}
-            className="flex-1 bg-red-900/60 border border-red-700/40 text-red-200 py-2.5 rounded-lg text-sm font-medium hover:bg-red-900/80 transition-colors disabled:opacity-50"
+            className="studio-btn studio-btn-danger flex-1"
           >
             {voidPending ? "Voiding…" : "Confirm Void"}
           </button>
@@ -59,22 +59,22 @@ export default function TabControls({ tabId, total, tabName, status }: Props) {
     return (
       <div className="space-y-4">
         <div className="text-center space-y-1">
-          <p className="text-bone font-semibold">Close tab for {tabName}?</p>
-          <p className="text-2xl font-mono text-ochre">{formatJmd(total)}</p>
-          <p className="text-xs text-bone/60">This cannot be undone once payment is recorded.</p>
+          <p className="text-paper font-semibold text-[16px]">Close tab for {tabName}?</p>
+          <p className="studio-money text-[32px]">{formatJmd(total)}</p>
+          <p className="text-[13px] text-muted">This cannot be undone once payment is recorded.</p>
         </div>
         <div className="flex gap-2">
           <button
             type="button"
             onClick={() => setShowConfirm(false)}
-            className="flex-1 border border-bone/20 text-bone/60 py-2.5 rounded-lg text-sm hover:text-bone transition-colors"
+            className="studio-btn studio-btn-secondary flex-1"
           >
             Not yet
           </button>
           <button
             type="button"
             onClick={() => { setShowConfirm(false); setShowClose(true); }}
-            className="flex-1 bg-ochre text-ink font-semibold py-2.5 rounded-lg text-sm hover:bg-ochre/90 transition-colors"
+            className="studio-btn studio-btn-primary flex-1"
           >
             Yes, close it
           </button>
@@ -88,29 +88,30 @@ export default function TabControls({ tabId, total, tabName, status }: Props) {
       <form action={closeAction} className="space-y-3">
         <input type="hidden" name="tab_id" value={tabId} />
         <input type="hidden" name="tip_jmd" value={tipJmd} />
-        <p className="text-sm font-semibold text-bone text-center">
-          Total: <span className="text-ochre">{formatJmd(total)}</span>
+        <p className="text-[15px] font-semibold text-paper text-center">
+          Total: <span className="studio-money">{formatJmd(total)}</span>
         </p>
         <div className="flex items-center gap-2">
-          <label className="text-xs text-bone/50 shrink-0">Tip (JMD$)</label>
+          <label htmlFor="tip_input" className="text-[14px] text-paper shrink-0">Tip (JMD$)</label>
           <input
+            id="tip_input"
             type="number"
             min="0"
             step="100"
             placeholder="0"
             value={tipInput}
             onChange={e => setTipInput(e.target.value)}
-            className="flex-1 bg-bone/5 border border-bone/45 rounded px-2 py-1 text-bone text-sm text-right font-mono focus:outline-2 focus:outline-ochre focus:border-ochre/50"
+            className="studio-field flex-1 min-w-0 text-right studio-figures"
           />
         </div>
         {tipJmd > 0 && (
-          <p className="text-xs text-bone/50 text-center">
-            With tip: <span className="text-ochre font-semibold">{formatJmd(grandTotal)}</span>
+          <p className="text-[14px] text-muted text-center">
+            With tip: <span className="studio-money text-[20px]">{formatJmd(grandTotal)}</span>
           </p>
         )}
-        <p className="text-xs text-bone/50 text-center">How was this paid?</p>
+        <p className="text-[14px] text-muted text-center">How was this paid?</p>
         {closeState?.error && (
-          <p className="text-sm text-red-400 text-center">{closeState.error}</p>
+          <p role="alert" className="studio-error text-center">{closeState.error}</p>
         )}
         <div className="grid grid-cols-2 gap-2">
           {(["cash", "comp"] as const).map(method => (
@@ -120,7 +121,7 @@ export default function TabControls({ tabId, total, tabName, status }: Props) {
               name="payment_method"
               value={method}
               disabled={closePending}
-              className="py-3 rounded-lg border border-ochre/30 text-bone text-sm font-medium hover:bg-ochre/10 hover:border-ochre/60 active:scale-[0.97] transition-all disabled:opacity-50 capitalize"
+              className={`studio-btn !min-h-[52px] capitalize ${method === "cash" ? "studio-btn-primary" : "studio-btn-secondary"}`}
             >
               {method}
             </button>
@@ -129,7 +130,7 @@ export default function TabControls({ tabId, total, tabName, status }: Props) {
         <button
           type="button"
           onClick={() => setShowClose(false)}
-          className="w-full text-sm text-bone/60 hover:text-bone/60 transition-colors py-1"
+          className="studio-btn studio-btn-quiet w-full"
         >
           Cancel
         </button>
@@ -141,16 +142,16 @@ export default function TabControls({ tabId, total, tabName, status }: Props) {
   if (status === "away") {
     return (
       <div className="space-y-3">
-        <div className="rounded-lg bg-ochre/10 border border-ochre/20 px-4 py-3 text-center">
-          <p className="text-xs text-ochre font-semibold uppercase tracking-wider">Customer Left</p>
-          <p className="text-xs text-bone/60 mt-0.5">Tab locked — no new items can be added</p>
+        <div className="studio-card text-center !py-3">
+          <p className="studio-label">Customer Left</p>
+          <p className="text-[13px] text-muted mt-0.5">Tab locked — no new items can be added</p>
         </div>
-        {awayState?.error  && <p className="text-sm text-red-400 text-center">{awayState.error}</p>}
-        {reopenState?.error && <p className="text-sm text-red-400 text-center">{reopenState.error}</p>}
+        {awayState?.error  && <p role="alert" className="studio-error text-center">{awayState.error}</p>}
+        {reopenState?.error && <p role="alert" className="studio-error text-center">{reopenState.error}</p>}
         <button
           type="button"
           onClick={() => setShowConfirm(true)}
-          className="w-full bg-ochre text-ink font-semibold py-2.5 rounded-lg text-sm hover:bg-ochre/90 active:scale-[0.98] transition-all"
+          className="studio-btn studio-btn-primary w-full !min-h-[52px]"
         >
           Collect Payment — {formatJmd(total)}
         </button>
@@ -160,7 +161,7 @@ export default function TabControls({ tabId, total, tabName, status }: Props) {
             <button
               type="submit"
               disabled={reopenPending}
-              className="w-full border border-bone/15 text-bone/60 hover:text-bone hover:border-bone/30 py-2 rounded-lg text-sm transition-colors disabled:opacity-50"
+              className="studio-btn studio-btn-secondary w-full"
             >
               {reopenPending ? "Reopening…" : "Customer Returned — Reopen"}
             </button>
@@ -168,7 +169,7 @@ export default function TabControls({ tabId, total, tabName, status }: Props) {
           <button
             type="button"
             onClick={() => setShowVoid(true)}
-            className="border border-bone/15 text-bone/60 hover:text-red-400 hover:border-red-400/30 px-3 py-2 rounded-lg text-sm transition-colors"
+            className="studio-btn studio-btn-danger"
           >
             Void
           </button>
@@ -180,13 +181,13 @@ export default function TabControls({ tabId, total, tabName, status }: Props) {
   // ── Open state: normal controls ────────────────────────────────────────────
   return (
     <div className="space-y-2">
-      {awayState?.error && <p className="text-sm text-red-400 text-center">{awayState.error}</p>}
+      {awayState?.error && <p role="alert" className="studio-error text-center">{awayState.error}</p>}
       <form action={awayAction}>
         <input type="hidden" name="tab_id" value={tabId} />
         <button
           type="submit"
           disabled={awayPending}
-          className="w-full border border-bone/15 text-bone/60 hover:text-ochre hover:border-ochre/30 py-2 rounded-lg text-sm transition-colors disabled:opacity-50"
+          className="studio-btn studio-btn-secondary w-full"
         >
           {awayPending ? "Saving…" : "Customer Left — Lock Tab"}
         </button>
@@ -195,14 +196,14 @@ export default function TabControls({ tabId, total, tabName, status }: Props) {
         <button
           type="button"
           onClick={() => setShowVoid(true)}
-          className="border border-bone/15 text-bone/60 hover:text-red-400 hover:border-red-400/30 px-3 py-2.5 rounded-lg text-sm transition-colors"
+          className="studio-btn studio-btn-danger"
         >
           Void
         </button>
         <button
           type="button"
           onClick={() => setShowConfirm(true)}
-          className="flex-1 bg-ochre text-ink font-semibold py-2.5 rounded-lg text-sm hover:bg-ochre/90 active:scale-[0.98] transition-all"
+          className="studio-btn studio-btn-primary flex-1 !min-h-[52px]"
         >
           Close Tab — {formatJmd(total)}
         </button>

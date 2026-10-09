@@ -14,14 +14,14 @@ const KIND_LABELS: Record<string, string> = {
   reference_image: "Ref. image",
 };
 
-const JOB_STATUS_STYLES: Record<string, string> = {
-  pending:    "bg-bone/10 text-bone/50",
-  analyzing:  "bg-ochre/15 text-ochre",
-  prompting:  "bg-ochre/15 text-ochre",
-  generating: "bg-ochre/15 text-ochre",
-  assembling: "bg-ochre/15 text-ochre",
-  complete:   "bg-forest/20 text-sage",
-  failed:     "bg-oxblood/20 text-bone/70",
+const JOB_STATUS_CHIPS: Record<string, string> = {
+  pending:    "studio-chip-neutral",
+  analyzing:  "studio-chip-neutral",
+  prompting:  "studio-chip-neutral",
+  generating: "studio-chip-neutral",
+  assembling: "studio-chip-neutral",
+  complete:   "studio-chip-ok",
+  failed:     "studio-chip-bad",
 };
 
 function formatDate(iso: string): string {
@@ -126,46 +126,43 @@ export default async function PortalDashboardPage() {
   return (
     <div className="max-w-3xl">
       {/* Welcome */}
-      <div className="mb-10">
-        <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-sage mb-3">
-          Artist Portal
-        </p>
-        <h1 className="font-display font-bold text-bone text-[clamp(2rem,4vw,2.75rem)] leading-tight">
+      <div className="mb-8">
+        <p className="studio-label mb-2">Artist Portal</p>
+        <h1 className="studio-page-title">
           Welcome back, {stageName}.
         </h1>
-        <div className="mt-4 h-px w-16 bg-bone/20" />
       </div>
 
       {/* Stats row */}
-      <div className="grid grid-cols-2 gap-3 mb-10">
+      <div className="grid grid-cols-2 gap-3 mb-8">
         {STATS.map(({ label, value, href }) => (
           <Link
             key={href}
             href={href}
-            className="rounded-lg border border-bone/10 bg-bone/5 px-5 py-4 hover:border-bone/20 transition-colors"
+            className="studio-stat studio-focus hover:bg-raised transition-colors"
           >
-            <p className="font-display font-bold text-bone text-3xl">{value}</p>
-            <p className="text-xs text-bone/60 mt-1 uppercase tracking-widest">{label}</p>
+            <p className="studio-stat-label">{label}</p>
+            <p className="studio-stat-value">{value}</p>
           </Link>
         ))}
       </div>
 
       {/* Action tiles */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-10">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-8">
         {TILES.map(({ href, label, description, icon }) => (
           <Link
             key={href}
             href={href}
-            className="rounded-lg border border-bone/10 bg-bone/5 p-5 hover:bg-bone/10 hover:border-ochre/30 transition-colors group flex flex-col gap-3"
+            className="studio-card studio-focus hover:bg-raised transition-colors flex flex-col gap-3"
           >
-            <span className="text-bone/60 group-hover:text-ochre transition-colors">
+            <span className="text-muted">
               {icon}
             </span>
             <div>
-              <p className="text-bone text-sm font-semibold group-hover:text-ochre transition-colors">
+              <p className="text-paper text-[16px] font-bold">
                 {label}
               </p>
-              <p className="text-bone/60 text-xs mt-0.5 leading-relaxed">{description}</p>
+              <p className="text-muted text-[14px] mt-0.5 leading-relaxed">{description}</p>
             </div>
           </Link>
         ))}
@@ -173,38 +170,38 @@ export default async function PortalDashboardPage() {
 
       {/* Recent assets */}
       <div className="mb-8">
-        <div className="flex items-center justify-between mb-3">
-          <h2 className="text-[10px] font-semibold uppercase tracking-widest text-bone/50">
+        <div className="flex items-center justify-between gap-4 mb-3">
+          <h2 className="studio-label">
             Recent uploads
           </h2>
-          <Link href="/portal/assets" className="text-xs text-ochre hover:text-ochre/70 transition-colors">
-            View all →
+          <Link href="/portal/assets" className="studio-link text-[15px]">
+            View all
           </Link>
         </div>
         {!recentAssets || recentAssets.length === 0 ? (
-          <div className="rounded-lg border border-bone/10 p-6 text-center">
-            <p className="text-bone/60 text-sm">No uploads yet.</p>
+          <div className="studio-empty">
+            <p className="studio-empty-title">No uploads yet.</p>
             <Link
               href="/portal/assets/new"
-              className="mt-2 inline-block text-xs text-ochre hover:text-ochre/80 transition-colors"
+              className="studio-link text-[15px]"
             >
-              Upload your first asset →
+              Upload your first asset
             </Link>
           </div>
         ) : (
-          <div className="rounded-lg border border-bone/10 overflow-hidden">
+          <div className="studio-card p-0 divide-y divide-line">
             {recentAssets.map((asset) => (
               <div
                 key={asset.id}
-                className="flex items-center justify-between px-4 py-3 border-b border-bone/5 last:border-0"
+                className="flex items-center justify-between gap-4 px-4 py-3"
               >
                 <div className="flex items-center gap-3 min-w-0">
-                  <span className="shrink-0 px-2 py-0.5 rounded bg-bone/10 text-bone/60 text-[10px] uppercase tracking-wide">
+                  <span className="studio-chip studio-chip-neutral shrink-0">
                     {KIND_LABELS[asset.kind] ?? asset.kind}
                   </span>
-                  <p className="text-sm text-bone/70 truncate">{asset.title}</p>
+                  <p className="text-[16px] text-paper truncate">{asset.title}</p>
                 </div>
-                <p className="text-xs text-bone/60 shrink-0 ml-4">{formatDate(asset.created_at)}</p>
+                <p className="text-[14px] text-muted shrink-0">{formatDate(asset.created_at)}</p>
               </div>
             ))}
           </div>
@@ -213,39 +210,39 @@ export default async function PortalDashboardPage() {
 
       {/* Recent saved videos */}
       <div>
-        <div className="flex items-center justify-between mb-3">
-          <h2 className="text-[10px] font-semibold uppercase tracking-widest text-bone/50">
+        <div className="flex items-center justify-between gap-4 mb-3">
+          <h2 className="studio-label">
             Saved videos
           </h2>
-          <Link href="/portal/videos" className="text-xs text-ochre hover:text-ochre/70 transition-colors">
-            View all →
+          <Link href="/portal/videos" className="studio-link text-[15px]">
+            View all
           </Link>
         </div>
         {!recentJobs || recentJobs.length === 0 ? (
-          <div className="rounded-lg border border-bone/10 p-6 text-center">
-            <p className="text-bone/60 text-sm">No saved videos yet.</p>
+          <div className="studio-empty">
+            <p className="studio-empty-title">No saved videos yet.</p>
           </div>
         ) : (
-          <div className="rounded-lg border border-bone/10 overflow-hidden">
+          <div className="studio-card p-0 divide-y divide-line">
             {recentJobs.map((job) => (
               <Link
                 key={job.id}
                 href={`/portal/videos/${job.id}`}
-                className="flex items-center justify-between px-4 py-3 border-b border-bone/5 last:border-0 hover:bg-bone/5 transition-colors"
+                className="studio-focus flex items-center justify-between gap-4 px-4 py-3 min-h-[44px] hover:bg-raised transition-colors"
               >
                 <div className="flex items-center gap-3 min-w-0">
                   <span
-                    className={`shrink-0 px-2 py-0.5 rounded text-[10px] font-semibold uppercase tracking-wide ${
-                      JOB_STATUS_STYLES[job.status] ?? "bg-bone/10 text-bone/50"
+                    className={`studio-chip shrink-0 ${
+                      JOB_STATUS_CHIPS[job.status] ?? "studio-chip-neutral"
                     }`}
                   >
                     {job.status}
                   </span>
-                  <p className="text-sm text-bone/70 truncate">
+                  <p className="text-[16px] text-paper truncate">
                     {job.assets?.title ?? "—"}
                   </p>
                 </div>
-                <p className="text-xs text-bone/60 shrink-0 ml-4">{formatDate(job.created_at)}</p>
+                <p className="text-[14px] text-muted shrink-0">{formatDate(job.created_at)}</p>
               </Link>
             ))}
           </div>

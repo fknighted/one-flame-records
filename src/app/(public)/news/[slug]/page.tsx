@@ -1,9 +1,10 @@
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { marked } from "marked";
 import { createServiceClient } from "@/lib/supabase/server";
+import PosterHeadline from "@/components/PosterHeadline";
+import PrintedPhoto from "@/components/PrintedPhoto";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -31,12 +32,6 @@ function formatDate(dateStr: string) {
     day: "numeric",
   });
 }
-
-const CATEGORY_PILL: Record<string, string> = {
-  label:   "bg-oxblood/10 text-oxblood",
-  release: "bg-forest/10 text-forest",
-  event:   "bg-ochre text-ink",
-};
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
@@ -125,36 +120,30 @@ export default async function NewsPostPage({ params }: Props) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\u003c") }}
       />
-      {/* ── Ink header ── */}
-      <section className="bg-ink">
-        <div className="mx-auto max-w-3xl px-4 sm:px-6 pt-12 pb-10">
+      {/* ── Header ── */}
+      <section className="bg-black">
+        <div className="mx-auto max-w-3xl px-4 sm:px-6 pt-10 sm:pt-14 pb-10">
           <Link
             href="/news"
-            className="inline-flex items-center gap-1.5 text-xs text-bone/30 hover:text-bone/60 transition-colors mb-6"
+            className="type-label text-yellow underline underline-offset-4 focus-on-black"
           >
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
-              <path d="M19 12H5M5 12l7-7M5 12l7 7" />
-            </svg>
             All news
           </Link>
 
-          <div className="flex items-center gap-3 mb-4">
-            <span
-              className={`inline-block rounded-full px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider capitalize ${CATEGORY_PILL[post.category] ?? "bg-bone/10 text-bone"}`}
-            >
-              {post.category}
-            </span>
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-2 mt-8 mb-4">
+            <span className="bg-red text-paper px-3 py-1.5 type-label">{post.category}</span>
             {post.published_at && (
-              <span className="text-xs text-bone/40">{formatDate(post.published_at)}</span>
+              <span className="type-small text-muted">{formatDate(post.published_at)}</span>
             )}
           </div>
 
-          <h1 className="font-display font-bold text-bone text-[clamp(1.75rem,4vw,2.75rem)] leading-tight tracking-tight">
+          <PosterHeadline as="h1" size="headline" className="text-paper">
             {post.title}
-          </h1>
+          </PosterHeadline>
+          <span aria-hidden="true" className="section-bar mt-2" />
 
           {post.excerpt && (
-            <p className="mt-3 text-bone/60 text-base leading-relaxed max-w-prose">
+            <p className="mt-6 type-lead text-paper max-w-[66ch] [overflow-wrap:anywhere]">
               {post.excerpt}
             </p>
           )}
@@ -163,8 +152,9 @@ export default async function NewsPostPage({ params }: Props) {
 
       {/* ── Cover image ── */}
       {post.cover_url && (
-        <div className="relative w-full aspect-[16/6] bg-ink overflow-hidden">
-          <Image
+        <div className="relative w-full aspect-[16/9] sm:aspect-[16/6] bg-black">
+          <PrintedPhoto
+            tone="yellow"
             src={post.cover_url}
             alt={post.title}
             fill
@@ -175,33 +165,33 @@ export default async function NewsPostPage({ params }: Props) {
         </div>
       )}
 
-      {/* ── Body ── */}
-      <section className="bg-cream">
-        <div className="mx-auto max-w-3xl px-4 sm:px-6 py-12">
+      {/* ── Body: long reading sits on paper ── */}
+      <section className="bg-paper text-black">
+        <div className="mx-auto max-w-3xl px-4 sm:px-6 py-14 sm:py-[88px]">
           <div
-            className="prose prose-ink max-w-none text-ink/80 leading-relaxed [&_h2]:font-display [&_h2]:text-oxblood [&_h2]:text-2xl [&_h2]:mt-8 [&_h2]:mb-3 [&_h3]:font-display [&_h3]:text-ink [&_h3]:text-xl [&_h3]:mt-6 [&_h3]:mb-2 [&_a]:text-oxblood [&_a]:underline hover:[&_a]:text-ochre [&_strong]:text-ink [&_ul]:list-disc [&_ul]:pl-5 [&_ol]:list-decimal [&_ol]:pl-5 [&_li]:mb-1 [&_blockquote]:border-l-4 [&_blockquote]:border-oxblood/30 [&_blockquote]:pl-4 [&_blockquote]:text-ink/60 [&_blockquote]:italic [&_code]:bg-ink/5 [&_code]:px-1 [&_code]:rounded [&_code]:text-sm [&_pre]:bg-ink/5 [&_pre]:p-4 [&_pre]:rounded-lg [&_pre]:overflow-x-auto [&_hr]:border-oxblood/20 [&_hr]:my-8"
+            className="type-body max-w-[66ch] [overflow-wrap:anywhere] [&_p]:mb-4 [&_h2]:font-poster [&_h2]:font-black [&_h2]:uppercase [&_h2]:leading-[0.95] [&_h2]:text-[32px] [&_h2]:mt-10 [&_h2]:mb-3 [&_h3]:font-poster [&_h3]:font-extrabold [&_h3]:uppercase [&_h3]:leading-none [&_h3]:text-2xl [&_h3]:mt-8 [&_h3]:mb-2 [&_a]:text-red [&_a]:underline [&_a]:underline-offset-2 [&_a]:focus-visible:outline-3 [&_a]:focus-visible:outline-offset-2 [&_a]:focus-visible:outline-red [&_strong]:font-bold [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:mb-4 [&_ol]:list-decimal [&_ol]:pl-5 [&_ol]:mb-4 [&_li]:mb-1 [&_blockquote]:border-l-4 [&_blockquote]:border-red [&_blockquote]:pl-4 [&_blockquote]:my-6 [&_blockquote]:font-semibold [&_code]:bg-black/10 [&_code]:px-1 [&_code]:text-sm [&_pre]:bg-black [&_pre]:text-paper [&_pre]:p-4 [&_pre]:overflow-x-auto [&_pre]:mb-4 [&_pre_code]:bg-transparent [&_hr]:border-black [&_hr]:border-t-[3px] [&_hr]:my-8 [&_img]:max-w-full [&_img]:h-auto"
             dangerouslySetInnerHTML={{ __html: htmlBody }}
           />
 
-          <div className="mt-12 pt-8 border-t border-oxblood/10 grid grid-cols-3 gap-4 items-center text-sm">
-            <div className="text-left">
+          <div className="mt-12 pt-8 border-t-[3px] border-black grid grid-cols-1 sm:grid-cols-3 gap-6 items-start">
+            <div className="min-w-0 text-left">
               {prevPost && (
-                <Link href={`/news/${prevPost.slug}`} className="text-oxblood hover:text-ochre transition-colors">
-                  <span className="block text-xs text-ink/40 mb-1">← Previous</span>
-                  <span className="font-medium line-clamp-1">{prevPost.title}</span>
+                <Link href={`/news/${prevPost.slug}`} className="block underline underline-offset-2 hover:text-red focus-on-paper">
+                  <span className="block type-label mb-1">Previous post</span>
+                  <span className="block type-small line-clamp-2 [overflow-wrap:anywhere]">{prevPost.title}</span>
                 </Link>
               )}
             </div>
-            <div className="text-center">
-              <Link href="/news" className="text-xs text-ink/40 hover:text-oxblood transition-colors">
+            <div className="sm:text-center">
+              <Link href="/news" className="type-label underline underline-offset-4 hover:text-red focus-on-paper">
                 All news
               </Link>
             </div>
-            <div className="text-right">
+            <div className="min-w-0 sm:text-right">
               {nextPost && (
-                <Link href={`/news/${nextPost.slug}`} className="text-oxblood hover:text-ochre transition-colors">
-                  <span className="block text-xs text-ink/40 mb-1">Next →</span>
-                  <span className="font-medium line-clamp-1">{nextPost.title}</span>
+                <Link href={`/news/${nextPost.slug}`} className="block underline underline-offset-2 hover:text-red focus-on-paper">
+                  <span className="block type-label mb-1">Next post</span>
+                  <span className="block type-small line-clamp-2 [overflow-wrap:anywhere]">{nextPost.title}</span>
                 </Link>
               )}
             </div>

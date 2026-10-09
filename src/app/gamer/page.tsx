@@ -47,59 +47,53 @@ export default async function GamerDashboardPage() {
 
   return (
     <div className="space-y-6">
-      <h1 className="font-display font-bold text-bone text-2xl">
+      <h1 className="studio-page-title">
         Welcome, {member?.display_name ?? "Gamer"}
       </h1>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         {/* Balance */}
-        <div className="border border-bone/15 rounded-2xl p-6">
-          <p className="text-xs font-semibold text-bone/60 uppercase tracking-wider mb-2">
-            Game Time Balance
-          </p>
-          <p className="text-4xl font-mono text-ochre font-semibold">
+        <div className="studio-stat">
+          <p className="studio-label">Game Time Balance</p>
+          <p className="studio-stat-value text-[56px]">
             {member ? fmt(member.minutes_balance) : "—"}
           </p>
-          <p className="text-xs text-bone/50 mt-2">
+          <p className="text-[15px] text-muted">
             Ask a bartender to top up your balance
           </p>
         </div>
 
         {/* Active session */}
-        <div className="border border-bone/15 rounded-2xl p-6">
-          <p className="text-xs font-semibold text-bone/60 uppercase tracking-wider mb-2">
-            Current Session
-          </p>
+        <div className="studio-stat">
+          <p className="studio-label">Current Session</p>
           {activeSession ? (
             <>
-              <p className="text-lg text-bone font-medium">Playing now</p>
+              <p className="studio-section-title">Playing now</p>
               {activeSession.station && (
-                <p className="text-sm text-bone/50 mt-1">{activeSession.station}</p>
+                <p className="text-[15px] text-muted">{activeSession.station}</p>
               )}
             </>
           ) : (
-            <p className="text-bone/50 text-sm">No active session</p>
+            <p className="text-[16px] text-muted">No active session</p>
           )}
         </div>
       </div>
 
-      <Link href="/gamer/sessions" className="inline-block text-sm text-ochre hover:underline">
-        View session history →
+      <Link href="/gamer/sessions" className="studio-btn studio-btn-secondary w-full sm:w-auto">
+        View session history
       </Link>
 
       {recentTx && recentTx.length > 0 && (
-        <div className="border border-bone/15 rounded-2xl p-6">
-          <p className="text-xs font-semibold text-bone/60 uppercase tracking-wider mb-4">
-            Recent Transactions
-          </p>
-          <div className="space-y-2">
+        <div className="studio-card">
+          <h2 className="studio-label mb-4">Recent Transactions</h2>
+          <div className="divide-y divide-line">
             {recentTx.map((t, i) => (
-              <div key={i} className="flex items-center justify-between text-sm">
-                <div>
-                  <p className="text-bone capitalize">{t.type}</p>
-                  {t.reason && <p className="text-xs text-bone/60">{t.reason}</p>}
+              <div key={i} className="flex items-center justify-between gap-4 py-3 first:pt-0 last:pb-0">
+                <div className="min-w-0">
+                  <p className="text-[16px] text-paper capitalize">{t.type}</p>
+                  {t.reason && <p className="text-[14px] text-muted [overflow-wrap:anywhere]">{t.reason}</p>}
                 </div>
-                <p className={`font-mono font-semibold ${t.amount_minutes > 0 ? "text-sage" : "text-rose"}`}>
+                <p className="studio-count shrink-0">
                   {t.amount_minutes > 0 ? "+" : ""}{t.amount_minutes}m
                 </p>
               </div>

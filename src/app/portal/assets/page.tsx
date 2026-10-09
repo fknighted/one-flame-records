@@ -45,8 +45,8 @@ export default async function PortalAssetsPage() {
   if (!profile?.artist_id) {
     return (
       <div className="max-w-3xl">
-        <h1 className="font-display text-2xl text-bone mb-4">Assets</h1>
-        <p className="text-bone/50 text-sm">
+        <h1 className="studio-page-title mb-4">Assets</h1>
+        <p className="text-[16px] text-muted">
           No artist profile linked. Contact the label.
         </p>
       </div>
@@ -72,122 +72,99 @@ export default async function PortalAssetsPage() {
 
   return (
     <div className="max-w-3xl">
-      <div className="mb-8 flex items-start justify-between">
-        <div>
-          <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-sage mb-2">
-            Artist Portal
-          </p>
-          <h1 className="font-display font-bold text-bone text-3xl">Assets</h1>
-          <div className="mt-3 h-px w-16 bg-bone/20" />
+      <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
+        <div className="min-w-0">
+          <p className="studio-label mb-2">Artist Portal</p>
+          <h1 className="studio-page-title">Assets</h1>
         </div>
         <Link
           href="/portal/assets/new"
-          className="mt-1 rounded bg-ochre px-4 py-2 text-sm font-semibold text-ink hover:bg-ochre/90 transition-colors"
+          className="studio-btn studio-btn-primary"
         >
           Upload
         </Link>
       </div>
 
       {assetsWithUrls.length === 0 ? (
-        <div className="rounded-lg border border-bone/10 p-10 text-center">
-          <p className="text-bone/60 text-sm">No assets uploaded yet.</p>
+        <div className="studio-empty">
+          <p className="studio-empty-title">No assets uploaded yet.</p>
           <Link
             href="/portal/assets/new"
-            className="mt-4 inline-block rounded bg-ochre px-4 py-2 text-sm font-semibold text-ink hover:bg-ochre/90 transition-colors"
+            className="studio-btn studio-btn-secondary mt-2"
           >
             Upload your first asset
           </Link>
         </div>
       ) : (
-        <div className="rounded-lg border border-bone/10 overflow-x-auto">
-          <table className="w-full min-w-[600px] text-sm">
+        <div className="studio-table-wrap">
+          <table className="studio-table min-w-[640px]">
             <thead>
-              <tr className="border-b border-bone/10 bg-bone/5">
-                <th className="text-left px-4 py-3 text-bone/60 font-medium text-xs uppercase tracking-wider">
-                  Kind
-                </th>
-                <th className="text-left px-4 py-3 text-bone/60 font-medium text-xs uppercase tracking-wider">
-                  Title
-                </th>
-                <th className="text-left px-4 py-3 text-bone/60 font-medium text-xs uppercase tracking-wider">
-                  Duration
-                </th>
-                <th className="text-left px-4 py-3 text-bone/60 font-medium text-xs uppercase tracking-wider">
-                  Uploaded
-                </th>
-                <th className="text-left px-4 py-3 text-bone/60 font-medium text-xs uppercase tracking-wider">
-                  Visibility
-                </th>
-                <th className="px-4 py-3" />
+              <tr>
+                <th>Kind</th>
+                <th>Title</th>
+                <th>Duration</th>
+                <th>Uploaded</th>
+                <th>Visibility</th>
+                <th><span className="sr-only">Actions</span></th>
               </tr>
             </thead>
             <tbody>
-              {assetsWithUrls.map((asset, i) => (
+              {assetsWithUrls.map((asset) => (
                 <React.Fragment key={asset.id}>
-                  <tr
-                    className={`border-b border-bone/10 ${
-                      i % 2 !== 0 ? "bg-bone/[0.02]" : ""
-                    }`}
-                  >
-                    <td className="px-4 py-3">
-                      <span className="rounded-full bg-forest/20 text-sage text-xs px-2 py-0.5 font-medium">
+                  <tr>
+                    <td>
+                      <span className="studio-chip studio-chip-neutral">
                         {KIND_LABELS[asset.kind] ?? asset.kind}
                       </span>
                     </td>
-                    <td className="px-4 py-3 text-bone">{asset.title}</td>
-                    <td className="px-4 py-3 text-bone/50 font-mono text-xs">
+                    <td className="[overflow-wrap:anywhere]">{asset.title}</td>
+                    <td className="studio-figures text-muted">
                       {formatDuration(asset.duration_seconds)}
                     </td>
-                    <td className="px-4 py-3 text-bone/50">
+                    <td className="text-muted whitespace-nowrap">
                       {formatDate(asset.created_at)}
                     </td>
-                    <td className="px-4 py-3">
+                    <td>
                       <form action={toggleAssetPublic.bind(null, asset.id)}>
                         <button
                           type="submit"
                           title={asset.is_public ? "Visible on your public page — click to hide" : "Click to show on your public page"}
-                          className={`text-xs font-medium px-2 py-0.5 rounded transition-colors ${
-                            asset.is_public
-                              ? "bg-forest/20 text-sage hover:bg-forest/30"
-                              : "bg-bone/10 text-bone/50 hover:bg-bone/20 hover:text-bone/60"
-                          }`}
+                          className="studio-btn studio-btn-secondary studio-btn-sm"
                         >
                           {asset.is_public ? "Public" : "Private"}
                         </button>
                       </form>
                     </td>
-                    <td className="px-4 py-3 text-right space-x-3 whitespace-nowrap">
-                      <Link
-                        href={`/portal/assets/${asset.id}/edit`}
-                        className="text-xs text-bone/60 hover:text-bone transition-colors"
-                      >
-                        Edit
-                      </Link>
-                      {asset.signedUrl ? (
-                        <a
-                          href={asset.signedUrl}
-                          className="text-ochre hover:text-ochre/80 text-xs font-medium transition-colors"
-                          download
+                    <td className="text-right whitespace-nowrap">
+                      <div className="flex items-center justify-end gap-2">
+                        <Link
+                          href={`/portal/assets/${asset.id}/edit`}
+                          className="studio-btn studio-btn-secondary studio-btn-sm"
                         >
-                          Download
-                        </a>
-                      ) : (
-                        <span className="text-bone/52 text-xs">—</span>
-                      )}
+                          Edit
+                        </Link>
+                        {asset.signedUrl ? (
+                          <a
+                            href={asset.signedUrl}
+                            className="studio-btn studio-btn-secondary studio-btn-sm"
+                            download
+                          >
+                            Download
+                          </a>
+                        ) : (
+                          <span className="text-muted text-[14px]">—</span>
+                        )}
+                      </div>
                     </td>
                   </tr>
                   {asset.mime_type?.startsWith("audio/") && asset.signedUrl && (
-                    <tr
-                      className={`border-b border-bone/10 last:border-0 ${
-                        i % 2 !== 0 ? "bg-bone/[0.02]" : ""
-                      }`}
-                    >
-                      <td colSpan={6} className="px-4 pb-3 pt-0">
+                    <tr>
+                      <td colSpan={6} className="pt-0">
                         <audio
                           src={asset.signedUrl}
                           controls
                           preload="none"
-                          className="w-full h-8 opacity-70 hover:opacity-100 transition-opacity"
+                          className="w-full h-10"
                         />
                       </td>
                     </tr>

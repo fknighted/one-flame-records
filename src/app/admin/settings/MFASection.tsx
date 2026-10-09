@@ -77,30 +77,30 @@ export default function MFASection() {
   return (
     <section className="space-y-4">
       <div>
-        <h2 className="text-sm font-semibold text-bone">Two-Factor Authentication</h2>
-        <p className="text-xs text-bone/60 mt-1">
+        <h2 className="studio-section-title">Two-Factor Authentication</h2>
+        <p className="text-[15px] text-muted mt-1">
           Protect your admin account with an authenticator app (Google Authenticator, Authy, 1Password).
         </p>
       </div>
 
       {success && (
-        <p className="text-sm text-sage">{success}</p>
+        <p role="status" className="studio-success">{success}</p>
       )}
       {error && (
-        <p className="text-sm text-rose">{error}</p>
+        <p role="alert" className="studio-error">{error}</p>
       )}
 
       {verified.length > 0 ? (
         <div className="space-y-2">
           {verified.map(f => (
-            <div key={f.id} className="flex items-center justify-between border border-bone/10 rounded-lg px-4 py-3">
+            <div key={f.id} className="flex flex-wrap items-center justify-between gap-3 studio-card">
               <div>
-                <p className="text-sm text-bone font-medium">Authenticator app</p>
-                <p className="text-xs text-bone/60">TOTP · Active</p>
+                <p className="font-semibold">Authenticator app</p>
+                <p className="text-[15px] text-muted">TOTP · Active</p>
               </div>
               <button
                 onClick={() => unenroll(f.id)}
-                className="text-xs text-rose/60 hover:text-rose transition-colors"
+                className="studio-btn studio-btn-danger studio-btn-sm"
               >
                 Remove
               </button>
@@ -110,36 +110,37 @@ export default function MFASection() {
       ) : !enrolling ? (
         <button
           onClick={startEnroll}
-          className="bg-ochre text-ink text-sm font-medium px-4 py-2 rounded hover:bg-ochre/90 transition-colors"
+          className="studio-btn studio-btn-primary"
         >
           Set up authenticator app
         </button>
       ) : null}
 
       {enrolling && qrCode && (
-        <div className="space-y-4 border border-bone/10 rounded-lg p-4">
-          <p className="text-sm text-bone">
+        <div className="space-y-4 studio-card">
+          <p className="text-paper">
             Scan this QR code with your authenticator app, then enter the 6-digit code to confirm.
           </p>
           <div
-            className="bg-white rounded p-3 inline-block"
+            className="bg-white p-3 inline-block"
             dangerouslySetInnerHTML={{ __html: qrCode }}
           />
-          <div className="flex gap-2 items-center">
+          <div className="flex flex-wrap gap-2 items-center">
             <input
               type="text"
               inputMode="numeric"
               pattern="[0-9]*"
               maxLength={6}
+              aria-label="6-digit code"
               placeholder="000000"
               value={code}
               onChange={e => setCode(e.target.value.replace(/\D/g, ""))}
-              className="w-28 bg-bone/5 border border-bone/45 rounded px-3 py-2 text-bone text-sm font-mono text-center focus:outline-2 focus:outline-ochre focus:border-ochre/50"
+              className="studio-field studio-figures w-32 text-center"
             />
             <button
               onClick={verifyCode}
               disabled={code.length !== 6}
-              className="bg-ochre text-ink text-sm font-medium px-4 py-2 rounded hover:bg-ochre/90 transition-colors disabled:opacity-50"
+              className="studio-btn studio-btn-primary"
             >
               Verify
             </button>
@@ -151,7 +152,7 @@ export default function MFASection() {
                 setCode("");
                 setError(null);
               }}
-              className="text-sm text-bone/60 hover:text-bone transition-colors"
+              className="studio-btn studio-btn-quiet studio-btn-sm"
             >
               Cancel
             </button>

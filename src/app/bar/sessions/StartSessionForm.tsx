@@ -14,16 +14,16 @@ export default function StartSessionForm({ members }: { members: Member[] }) {
   const [state, formAction, pending] = useActionState(startSession, null);
 
   return (
-    <form action={formAction} className="border border-bone/15 rounded-xl p-4 space-y-4 max-w-sm">
+    <form action={formAction} className="studio-card space-y-4 max-w-sm">
       {state?.error && (
-        <p className="text-sm text-red-400">{state.error}</p>
+        <p role="alert" className="studio-error">{state.error}</p>
       )}
 
       {/* Duration selector */}
-      <div>
-        <label className="block text-sm font-medium text-bone/70 mb-2">
+      <fieldset>
+        <legend className="studio-field-label">
           Session Duration
-        </label>
+        </legend>
         <div className="grid grid-cols-2 gap-2">
           {DURATIONS.map((d, i) => (
             <label key={d.value} className="cursor-pointer">
@@ -34,24 +34,24 @@ export default function StartSessionForm({ members }: { members: Member[] }) {
                 defaultChecked={i === 0}
                 className="sr-only peer"
               />
-              <div className="border border-bone/15 rounded-lg px-3 py-3 text-center transition-colors peer-checked:border-ochre peer-checked:bg-ochre/10 hover:border-bone/30">
-                <p className="text-bone font-semibold text-sm">{d.label}</p>
-                <p className="text-ochre text-xs font-mono">{d.sublabel}</p>
-                <p className="text-bone/50 text-xs">{d.minutes} min</p>
+              <div className="border-2 border-line min-h-[64px] px-3 py-3 text-center peer-checked:border-paper peer-checked:bg-raised peer-focus-visible:outline peer-focus-visible:outline-[3px] peer-focus-visible:outline-offset-2 peer-focus-visible:outline-yellow hover:border-muted">
+                <p className="text-paper font-semibold text-[15px]">{d.label}</p>
+                <p className="studio-money text-[18px]">{d.sublabel}</p>
+                <p className="text-muted text-[13px]">{d.minutes} min</p>
               </div>
             </label>
           ))}
         </div>
-      </div>
+      </fieldset>
 
       <div>
-        <label htmlFor="member_id" className="block text-sm font-medium text-bone/70 mb-1.5">
-          Member <span className="text-bone/50 font-normal">(optional)</span>
+        <label htmlFor="member_id" className="studio-field-label">
+          Member <span className="text-muted font-normal">(optional)</span>
         </label>
         <select
           id="member_id"
           name="member_id"
-          className="w-full bg-bone/5 border border-bone/45 rounded-lg px-3 py-2.5 text-bone text-sm focus:outline-2 focus:outline-ochre focus:border-ochre/50"
+          className="studio-field"
         >
           <option value="">Drop-in (no account)</option>
           {members.map(m => (
@@ -61,14 +61,14 @@ export default function StartSessionForm({ members }: { members: Member[] }) {
       </div>
 
       <div>
-        <label htmlFor="station" className="block text-sm font-medium text-bone/70 mb-1.5">
-          Station <span className="text-bone/50 font-normal">(optional)</span>
+        <label htmlFor="station" className="studio-field-label">
+          Station <span className="text-muted font-normal">(optional)</span>
         </label>
         <select
           id="station"
           name="station"
           defaultValue=""
-          className="w-full bg-bone/5 border border-bone/45 rounded-lg px-3 py-2.5 text-bone text-sm focus:outline-2 focus:outline-ochre focus:border-ochre/50"
+          className="studio-field"
         >
           <option value="">— Select station —</option>
           <option value="Xbox 1">Xbox 1</option>
@@ -81,7 +81,7 @@ export default function StartSessionForm({ members }: { members: Member[] }) {
       <button
         type="submit"
         disabled={pending}
-        className="w-full bg-ochre text-ink font-semibold py-2.5 rounded-lg text-sm hover:bg-ochre/90 transition-colors disabled:opacity-50"
+        className="studio-btn studio-btn-primary w-full"
       >
         {pending ? "Starting…" : "Start Session"}
       </button>

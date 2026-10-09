@@ -14,6 +14,20 @@ const SORTS = [
 
 type Props = { artists: Artist[] };
 
+// Square chips on black with a 2px edge; the selected chip is yellow with black text.
+function chip(selected: boolean) {
+  return `min-h-[44px] px-3 border-2 type-label transition-colors focus-on-black ${
+    selected
+      ? "bg-yellow border-yellow text-black"
+      : "bg-black border-muted text-paper hover:border-yellow hover:text-yellow"
+  }`;
+}
+
+// Fields always sit on paper; this one sits on the black page, so the ring is yellow.
+const SELECT =
+  "min-h-[44px] max-w-full border-2 border-paper bg-paper text-black type-body-sm px-3 focus:outline-3 focus:outline-offset-2 focus:outline-yellow";
+
+
 export default function ReleasesFilter({ artists }: Props) {
   const router = useRouter();
   const params = useSearchParams();
@@ -36,28 +50,24 @@ export default function ReleasesFilter({ artists }: Props) {
   );
 
   return (
-    <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
+    <div className="flex items-center gap-x-5 gap-y-2 overflow-x-auto p-1 -m-1 sm:flex-wrap sm:overflow-visible">
       {/* Type pills */}
-      <div className="flex flex-wrap gap-1.5" role="group" aria-label="Filter by type">
+      <div className="flex shrink-0 gap-2 sm:flex-wrap" role="group" aria-label="Filter by type">
         <button
+          type="button"
           onClick={() => push("type", "")}
-          className={`rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-wide transition-colors ${
-            !currentType
-              ? "bg-oxblood text-bone"
-              : "bg-oxblood/10 text-ink hover:bg-oxblood/20"
-          }`}
+          aria-pressed={!currentType}
+          className={chip(!currentType)}
         >
           All
         </button>
         {TYPES.map((t) => (
           <button
+            type="button"
             key={t}
             onClick={() => push("type", currentType === t ? "" : t)}
-            className={`rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-wide transition-colors ${
-              currentType === t
-                ? "bg-oxblood text-bone"
-                : "bg-oxblood/10 text-ink hover:bg-oxblood/20"
-            }`}
+            aria-pressed={currentType === t}
+            className={chip(currentType === t)}
           >
             {t}
           </button>
@@ -65,14 +75,14 @@ export default function ReleasesFilter({ artists }: Props) {
       </div>
 
       {/* Divider */}
-      <span className="hidden sm:block w-px h-4 bg-oxblood/15" aria-hidden="true" />
+      <span className="hidden sm:block w-px h-6 bg-line" aria-hidden="true" />
 
       {/* Artist dropdown */}
       {artists.length > 0 && (
         <select
           value={currentArtist}
           onChange={(e) => push("artist", e.target.value)}
-          className="rounded border border-oxblood/65 bg-cream text-sm text-ink px-3 py-1.5 focus:border-oxblood focus:outline-2 focus:outline-oxblood focus:ring-1 focus:ring-oxblood"
+          className={`${SELECT} shrink-0`}
           aria-label="Filter by artist"
         >
           <option value="">All artists</option>
@@ -85,16 +95,14 @@ export default function ReleasesFilter({ artists }: Props) {
       )}
 
       {/* Sort chips */}
-      <div className="sm:ml-auto flex gap-1.5" role="group" aria-label="Sort releases">
+      <div className="sm:ml-auto flex shrink-0 gap-2" role="group" aria-label="Sort releases">
         {SORTS.map(({ value, label }) => (
           <button
+            type="button"
             key={value}
             onClick={() => push("sort", value)}
-            className={`rounded-full px-3 py-1 text-xs font-medium transition-colors ${
-              currentSort === value
-                ? "bg-ink text-bone"
-                : "bg-transparent text-ink/50 hover:text-ink"
-            }`}
+            aria-pressed={currentSort === value}
+            className={chip(currentSort === value)}
           >
             {label}
           </button>

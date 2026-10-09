@@ -1,9 +1,10 @@
 import { Suspense } from "react";
 import { unstable_cache } from "next/cache";
-import Link from "next/link";
 import { createServiceClient } from "@/lib/supabase/server";
 import ReleaseCard from "@/components/ReleaseCard";
 import ReleasesFilter from "@/components/ReleasesFilter";
+import SectionHeader from "@/components/SectionHeader";
+import EmptyState from "@/components/EmptyState";
 import type { Tables } from "@/types/supabase";
 
 export const metadata = {
@@ -73,27 +74,24 @@ export default async function ReleasesPage({ searchParams }: { searchParams: Sea
   return (
     <>
       {/* ── Page banner ── */}
-      <section className="bg-ink">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 pt-16 pb-12">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-forest mb-4">
-            Discography
-          </p>
-          <div className="flex flex-wrap items-end justify-between gap-4">
-            <h1 className="font-display font-bold text-bone text-[clamp(2.5rem,5vw,4rem)] leading-[1.02] tracking-tight">
-              Releases
-            </h1>
-            <p className="text-bone/30 text-sm font-medium mb-1">
-              {isFiltered
-                ? `${filteredCount} of ${totalCount}`
-                : `${totalCount} release${totalCount !== 1 ? "s" : ""}`}
-            </p>
-          </div>
-          <div className="mt-4 h-px w-20 bg-oxblood" />
+      <section className="bg-black">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 pt-14 sm:pt-[88px] pb-2">
+          <SectionHeader
+            as="h1"
+            title="Releases"
+            action={
+              <p className="type-small text-muted">
+                {isFiltered
+                  ? `${filteredCount} of ${totalCount}`
+                  : `${totalCount} release${totalCount !== 1 ? "s" : ""}`}
+              </p>
+            }
+          />
         </div>
       </section>
 
       {/* ── Filter bar ── */}
-      <section className="bg-cream border-b border-oxblood/10 sticky top-24 z-20">
+      <section className="bg-black border-y border-line md:sticky md:top-[76px] z-20">
         <div className="mx-auto max-w-6xl px-4 sm:px-6 py-3">
           <Suspense fallback={null}>
             <ReleasesFilter artists={artists ?? []} />
@@ -102,10 +100,10 @@ export default async function ReleasesPage({ searchParams }: { searchParams: Sea
       </section>
 
       {/* ── Grid ── */}
-      <section className="bg-cream">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 py-12">
+      <section className="bg-black">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 py-14 sm:py-[88px]">
           {releases.length > 0 ? (
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5 sm:gap-6">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2">
               {releases.map((r) => (
                 <ReleaseCard
                   key={r.id}
@@ -120,22 +118,18 @@ export default async function ReleasesPage({ searchParams }: { searchParams: Sea
                 />
               ))}
             </div>
+          ) : isFiltered ? (
+            <EmptyState
+              title="No releases match."
+              body="Try a different artist or type."
+              action={{ href: "/releases", label: "Clear filters" }}
+            />
           ) : (
-            <div className="py-20 text-center">
-              <p className="text-ink/40 text-sm">
-                {isFiltered
-                  ? "No releases match those filters."
-                  : "Releases coming soon."}
-              </p>
-              {isFiltered && (
-                <Link
-                  href="/releases"
-                  className="mt-4 inline-block text-sm text-oxblood hover:underline"
-                >
-                  Clear filters
-                </Link>
-              )}
-            </div>
+            <EmptyState
+              title="No releases yet."
+              body="The first ones are in the studio. Get the drop in your inbox."
+              action={{ href: "#subscribe", label: "Get release news" }}
+            />
           )}
         </div>
       </section>

@@ -11,7 +11,7 @@ export default async function NewVideoPage() {
 
   return (
     <div className="space-y-6">
-      <h1 className="font-display text-2xl text-bone">Add Video</h1>
+      <h1 className="studio-page-title">Add Video</h1>
       <VideoForm
         action={createVideo}
         mode="create"

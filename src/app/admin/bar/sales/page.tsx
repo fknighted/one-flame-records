@@ -110,13 +110,12 @@ export default async function SalesPage({
     <div className="space-y-8 max-w-4xl">
       {/* Header */}
       <div>
-        <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-sage mb-1">Bar</p>
-        <h1 className="font-display font-bold text-bone text-3xl">Sales</h1>
-        <div className="mt-3 h-px w-16 bg-bone/20" />
+        <p className="studio-label mb-1">Bar</p>
+        <h1 className="studio-page-title">Sales</h1>
       </div>
 
       {loadError && (
-        <div className="rounded-lg border border-rose/30 bg-rose/10 px-4 py-3 text-sm text-rose">
+        <div role="alert" className="studio-error">
           Some sales data couldn&apos;t be loaded, so the totals below may be incomplete. Refresh to try again.
         </div>
       )}
@@ -128,10 +127,10 @@ export default async function SalesPage({
             key={p.value}
             href={p.value === "today" ? "/admin/bar/sales" : `/admin/bar/sales?period=${p.value}`}
             className={[
-              "px-3 py-1 rounded-full text-xs font-medium transition-colors",
+              "studio-focus inline-flex min-h-[44px] items-center px-4 text-[14px] font-semibold",
               period === p.value
-                ? "bg-ochre text-ink"
-                : "bg-bone/10 text-bone/60 hover:bg-bone/20",
+                ? "bg-raised text-paper border border-muted"
+                : "text-muted border border-line hover:text-paper",
             ].join(" ")}
           >
             {p.label}
@@ -141,48 +140,45 @@ export default async function SalesPage({
 
       {/* Open tabs — outstanding now, independent of the period filter */}
       <section className="space-y-3">
-        <div className="flex items-baseline justify-between">
-          <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-bone/60">Open Tabs ({openTabs.length})</h2>
-          <span className="text-sm text-bone/60">
-            Outstanding <span className="font-mono font-bold text-ochre">{formatJmd(openTotal)}</span>
+        <div className="flex flex-wrap items-baseline justify-between gap-2">
+          <h2 className="studio-label">Open Tabs ({openTabs.length})</h2>
+          <span className="text-[15px] text-muted">
+            Outstanding <span className="studio-money">{formatJmd(openTotal)}</span>
           </span>
         </div>
         {openTabs.length === 0 ? (
-          <p className="text-sm text-bone/50">No open tabs.</p>
+          <p className="text-[15px] text-muted">No open tabs.</p>
         ) : (
-          <div className="border border-ochre/20 rounded-lg overflow-x-auto">
-            <table className="w-full min-w-[400px] text-sm">
-              <thead className="border-b border-bone/10 bg-bone/3">
+          <div className="studio-table-wrap">
+            <table className="studio-table min-w-[400px]">
+              <thead>
                 <tr>
-                  <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Customer</th>
-                  <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Opened</th>
-                  <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Status</th>
-                  <th className="text-right px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Total</th>
+                  <th>Customer</th>
+                  <th>Opened</th>
+                  <th>Status</th>
+                  <th className="is-num">Total</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-bone/10">
+              <tbody>
                 {openTabs.map((tab) => (
-                  <tr key={tab.id} className="hover:bg-bone/3 transition-colors">
-                    <td className="px-4 py-3 text-bone font-medium">
-                      <Link href={`/bar/tabs/${tab.id}`} className="hover:text-ochre transition-colors">{tab.name}</Link>
+                  <tr key={tab.id} className="is-link">
+                    <td className="font-semibold [overflow-wrap:anywhere]">
+                      <Link href={`/bar/tabs/${tab.id}`} className="studio-link inline-flex min-h-[44px] items-center">{tab.name}</Link>
                     </td>
-                    <td className="px-4 py-3 text-bone/50 text-xs">{jamaicaDateTime(tab.created_at)}</td>
-                    <td className="px-4 py-3">
-                      <span className={[
-                        "inline-block px-2 py-0.5 rounded-full text-xs font-medium",
-                        tab.status === "away" ? "bg-red-400/15 text-red-400" : "bg-ochre/20 text-ochre",
-                      ].join(" ")}>
+                    <td className="studio-figures text-muted">{jamaicaDateTime(tab.created_at)}</td>
+                    <td>
+                      <span className={tab.status === "away" ? "studio-chip studio-chip-neutral" : "studio-chip studio-chip-ok"}>
                         {tab.status === "away" ? "Away" : "Open"}
                       </span>
                     </td>
-                    <td className="px-4 py-3 text-right font-mono text-bone">{formatJmd(tab.total_jmd ?? 0)}</td>
+                    <td className="is-num"><span className="studio-money">{formatJmd(tab.total_jmd ?? 0)}</span></td>
                   </tr>
                 ))}
               </tbody>
-              <tfoot className="border-t border-bone/10 bg-bone/3">
+              <tfoot>
                 <tr>
-                  <td colSpan={3} className="px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Outstanding</td>
-                  <td className="px-4 py-3 text-right font-mono font-bold text-ochre">{formatJmd(openTotal)}</td>
+                  <td colSpan={3} className="px-4 py-3 text-[13px] font-semibold text-muted border-t border-line">Outstanding</td>
+                  <td className="is-num px-4 py-3 border-t border-line"><span className="studio-money">{formatJmd(openTotal)}</span></td>
                 </tr>
               </tfoot>
             </table>
@@ -192,34 +188,34 @@ export default async function SalesPage({
 
       {/* Canceled sales (voids) — un-sold items, stock restored, logged here */}
       <section className="space-y-3">
-        <div className="flex items-baseline justify-between">
-          <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-bone/60">Canceled ({voidCount})</h2>
-          <span className="text-sm text-bone/60">
-            Value <span className="font-mono font-bold text-bone/70">{formatJmd(voidValue)}</span>
+        <div className="flex flex-wrap items-baseline justify-between gap-2">
+          <h2 className="studio-label">Canceled ({voidCount})</h2>
+          <span className="text-[15px] text-muted">
+            Value <span className="studio-money">{formatJmd(voidValue)}</span>
           </span>
         </div>
         {voids.length === 0 ? (
-          <p className="text-sm text-bone/50">No canceled items for this period.</p>
+          <p className="text-[15px] text-muted">No canceled items for this period.</p>
         ) : (
-          <div className="border border-bone/10 rounded-lg overflow-x-auto">
-            <table className="w-full min-w-[480px] text-sm">
-              <thead className="border-b border-bone/10 bg-bone/3">
+          <div className="studio-table-wrap">
+            <table className="studio-table min-w-[480px]">
+              <thead>
                 <tr>
-                  <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Item</th>
-                  <th className="text-right px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Qty</th>
-                  <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Reason</th>
-                  <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">When</th>
-                  <th className="text-right px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Value</th>
+                  <th>Item</th>
+                  <th className="is-num">Qty</th>
+                  <th>Reason</th>
+                  <th>When</th>
+                  <th className="is-num">Value</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-bone/10">
+              <tbody>
                 {voids.map((v, i) => (
-                  <tr key={i} className="hover:bg-bone/3 transition-colors">
-                    <td className="px-4 py-3 text-bone font-medium">{v.name}</td>
-                    <td className="px-4 py-3 text-right font-mono text-bone/70">{v.quantity ?? 1}</td>
-                    <td className="px-4 py-3 text-bone/50">{v.reason || <span className="text-bone/30">—</span>}</td>
-                    <td className="px-4 py-3 text-bone/50 text-xs">{jamaicaDateTime(v.created_at)}</td>
-                    <td className="px-4 py-3 text-right font-mono text-bone/60">{formatJmd((v.price_jmd ?? 0) * (v.quantity ?? 1))}</td>
+                  <tr key={i} className="is-link">
+                    <td className="font-semibold [overflow-wrap:anywhere]">{v.name}</td>
+                    <td className="is-num"><span className="studio-count">{v.quantity ?? 1}</span></td>
+                    <td className="text-muted">{v.reason || "—"}</td>
+                    <td className="studio-figures text-muted">{jamaicaDateTime(v.created_at)}</td>
+                    <td className="is-num"><span className="studio-money">{formatJmd((v.price_jmd ?? 0) * (v.quantity ?? 1))}</span></td>
                   </tr>
                 ))}
               </tbody>
@@ -229,54 +225,54 @@ export default async function SalesPage({
       </section>
 
       {tabsClosed === 0 ? (
-        <p className="text-sm text-bone/50">No closed tabs for this period.</p>
+        <p className="text-[15px] text-muted">No closed tabs for this period.</p>
       ) : (
         <>
           {/* Summary row */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
             {[
-              { label: "Total Revenue",  value: formatJmd(totalRevenue), tone: "text-bone" },
-              { label: "Cost of Goods",  value: formatJmd(totalCost),    tone: "text-bone/60" },
-              { label: "Profit",         value: formatJmd(totalProfit),  tone: totalProfit < 0 ? "text-red-400" : "text-sage", sub: totalMargin != null ? `${totalMargin}% margin` : undefined },
-              { label: "Items Sold",     value: totalItemsSold.toString(), tone: "text-bone" },
-              { label: "Tabs Closed",    value: tabsClosed.toString(), tone: "text-bone" },
+              { label: "Total Revenue",  value: formatJmd(totalRevenue), money: true },
+              { label: "Cost of Goods",  value: formatJmd(totalCost),    money: true },
+              { label: "Profit",         value: formatJmd(totalProfit),  money: true, sub: totalMargin != null ? `${totalMargin}% margin` : undefined },
+              { label: "Items Sold",     value: totalItemsSold.toString(), money: false },
+              { label: "Tabs Closed",    value: tabsClosed.toString(), money: false },
             ].map((card) => (
-              <div key={card.label} className="rounded-lg border border-bone/10 bg-bone/3 px-5 py-4">
-                <p className="text-xs font-semibold uppercase tracking-wider text-bone/60 mb-1">{card.label}</p>
-                <p className={`font-mono text-2xl font-bold ${card.tone}`}>{card.value}</p>
-                {card.sub && <p className="text-[11px] text-bone/40 mt-0.5">{card.sub}</p>}
+              <div key={card.label} className="studio-stat">
+                <p className="studio-stat-label">{card.label}</p>
+                <p className={`studio-stat-value text-[32px] ${card.money ? "is-money" : ""}`}>{card.value}</p>
+                {card.sub && <p className="text-[13px] text-muted">{card.sub}</p>}
               </div>
             ))}
           </div>
-          <p className="-mt-4 text-[11px] text-bone/35">
+          <p className="-mt-4 studio-hint">
             Profit uses cost captured at time of sale. Items sold before a cost was set (or with no cost) count as pure profit.
           </p>
 
           {/* Revenue by category */}
           {categoryRows.length > 0 && (
             <section className="space-y-3">
-              <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-bone/60">By Category</h2>
-              <div className="border border-bone/10 rounded-lg overflow-x-auto">
-                <table className="w-full min-w-[520px] text-sm">
-                  <thead className="border-b border-bone/10 bg-bone/3">
+              <h2 className="studio-label">By Category</h2>
+              <div className="studio-table-wrap">
+                <table className="studio-table min-w-[520px]">
+                  <thead>
                     <tr>
-                      <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Category</th>
-                      <th className="text-right px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Qty Sold</th>
-                      <th className="text-right px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Revenue</th>
-                      <th className="hidden sm:table-cell text-right px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Cost</th>
-                      <th className="text-right px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Profit</th>
+                      <th>Category</th>
+                      <th className="is-num">Qty Sold</th>
+                      <th className="is-num">Revenue</th>
+                      <th className="hidden sm:table-cell is-num">Cost</th>
+                      <th className="is-num">Profit</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-bone/10">
+                  <tbody>
                     {categoryRows.map(([cat, data]) => {
                       const profit = data.jmd - data.cost;
                       return (
-                        <tr key={cat} className="hover:bg-bone/3 transition-colors">
-                          <td className="px-4 py-3 text-bone font-medium">{CATEGORY_LABELS[cat] ?? cat}</td>
-                          <td className="px-4 py-3 text-right font-mono text-bone/70">{data.qty}</td>
-                          <td className="px-4 py-3 text-right font-mono text-bone">{formatJmd(data.jmd)}</td>
-                          <td className="hidden sm:table-cell px-4 py-3 text-right font-mono text-bone/50">{formatJmd(data.cost)}</td>
-                          <td className={`px-4 py-3 text-right font-mono ${profit < 0 ? "text-red-400" : "text-sage"}`}>{formatJmd(profit)}</td>
+                        <tr key={cat} className="is-link">
+                          <td className="font-semibold">{CATEGORY_LABELS[cat] ?? cat}</td>
+                          <td className="is-num"><span className="studio-count">{data.qty}</span></td>
+                          <td className="is-num"><span className="studio-money">{formatJmd(data.jmd)}</span></td>
+                          <td className="hidden sm:table-cell is-num studio-figures text-muted">{formatJmd(data.cost)}</td>
+                          <td className="is-num"><span className="studio-money">{formatJmd(profit)}</span></td>
                         </tr>
                       );
                     })}
@@ -289,28 +285,28 @@ export default async function SalesPage({
           {/* Top items */}
           {topItems.length > 0 && (
             <section className="space-y-3">
-              <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-bone/60">Top Items</h2>
-              <div className="border border-bone/10 rounded-lg overflow-x-auto">
-                <table className="w-full min-w-[520px] text-sm">
-                  <thead className="border-b border-bone/10 bg-bone/3">
+              <h2 className="studio-label">Top Items</h2>
+              <div className="studio-table-wrap">
+                <table className="studio-table min-w-[520px]">
+                  <thead>
                     <tr>
-                      <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Item</th>
-                      <th className="hidden sm:table-cell text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Category</th>
-                      <th className="text-right px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Qty</th>
-                      <th className="text-right px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Revenue</th>
-                      <th className="text-right px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Profit</th>
+                      <th>Item</th>
+                      <th className="hidden sm:table-cell">Category</th>
+                      <th className="is-num">Qty</th>
+                      <th className="is-num">Revenue</th>
+                      <th className="is-num">Profit</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-bone/10">
+                  <tbody>
                     {topItems.map(([name, data]) => {
                       const profit = data.jmd - data.cost;
                       return (
-                        <tr key={name} className="hover:bg-bone/3 transition-colors">
-                          <td className="px-4 py-3 text-bone font-medium">{name}</td>
-                          <td className="hidden sm:table-cell px-4 py-3 text-bone/50">{CATEGORY_LABELS[data.category] ?? data.category}</td>
-                          <td className="px-4 py-3 text-right font-mono text-bone/70">{data.qty}</td>
-                          <td className="px-4 py-3 text-right font-mono text-bone">{formatJmd(data.jmd)}</td>
-                          <td className={`px-4 py-3 text-right font-mono ${profit < 0 ? "text-red-400" : "text-sage"}`}>{formatJmd(profit)}</td>
+                        <tr key={name} className="is-link">
+                          <td className="font-semibold [overflow-wrap:anywhere]">{name}</td>
+                          <td className="hidden sm:table-cell text-muted">{CATEGORY_LABELS[data.category] ?? data.category}</td>
+                          <td className="is-num"><span className="studio-count">{data.qty}</span></td>
+                          <td className="is-num"><span className="studio-money">{formatJmd(data.jmd)}</span></td>
+                          <td className="is-num"><span className="studio-money">{formatJmd(profit)}</span></td>
                         </tr>
                       );
                     })}
@@ -323,13 +319,13 @@ export default async function SalesPage({
           {/* Payment method split */}
           {Object.keys(byPayment).length > 0 && (
             <section className="space-y-3">
-              <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-bone/60">Payment Methods</h2>
-              <div className="flex flex-wrap gap-3">
+              <h2 className="studio-label">Payment Methods</h2>
+              <div className="flex flex-wrap gap-2">
                 {Object.entries(byPayment).map(([method, data]) => (
-                  <div key={method} className="rounded-lg border border-bone/10 bg-bone/3 px-5 py-4 min-w-[140px]">
-                    <p className="text-xs font-semibold uppercase tracking-wider text-bone/60 mb-1 capitalize">{method}</p>
-                    <p className="font-mono text-bone text-xl font-bold">{formatJmd(data.jmd)}</p>
-                    <p className="text-xs text-bone/60 mt-0.5">{data.count} tab{data.count !== 1 ? "s" : ""}</p>
+                  <div key={method} className="studio-stat min-w-[140px]">
+                    <p className="studio-stat-label capitalize">{method}</p>
+                    <p className="studio-money">{formatJmd(data.jmd)}</p>
+                    <p className="text-[13px] text-muted">{data.count} tab{data.count !== 1 ? "s" : ""}</p>
                   </div>
                 ))}
               </div>

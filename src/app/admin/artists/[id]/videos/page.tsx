@@ -18,10 +18,10 @@ function formatDate(iso: string) {
 }
 
 const STATUS_PILL: Record<string, string> = {
-  pending:    "bg-bone/10 text-bone/60",
-  processing: "bg-ochre/15 text-ochre",
-  complete:   "bg-forest/20 text-sage",
-  failed:     "bg-red-900/30 text-red-400",
+  pending:    "studio-chip studio-chip-neutral",
+  processing: "studio-chip studio-chip-neutral",
+  complete:   "studio-chip studio-chip-ok",
+  failed:     "studio-chip studio-chip-bad",
 };
 
 export default async function AdminArtistVideosPage({ params }: Props) {
@@ -47,96 +47,89 @@ export default async function AdminArtistVideosPage({ params }: Props) {
   const rows = jobs ?? [];
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-start justify-between">
-        <div>
-          <Link
-            href={`/admin/artists/${id}/edit`}
-            className="text-xs text-bone/60 hover:text-ochre transition-colors"
-          >
-            ← {artist.stage_name}
-          </Link>
-          <h1 className="font-display text-2xl text-bone mt-1">
-            Saved Videos — {artist.stage_name}
-          </h1>
-        </div>
+      <div>
+        <Link href={`/admin/artists/${id}/edit`} className="studio-btn studio-btn-quiet studio-btn-sm">
+          {artist.stage_name}
+        </Link>
+        <h1 className="studio-page-title mt-1">
+          Saved Videos — {artist.stage_name}
+        </h1>
       </div>
 
       {rows.length === 0 ? (
-        <div className="border border-bone/10 rounded-lg p-10 text-center text-bone/50 text-sm">
-          No saved videos for this artist.
+        <div className="studio-empty">
+          <p className="studio-empty-body">No saved videos for this artist.</p>
         </div>
       ) : (
-        <div className="border border-bone/10 rounded-lg overflow-x-auto">
-          <table className="w-full min-w-[640px] text-sm">
+        <div className="studio-table-wrap">
+          <table className="studio-table min-w-[640px]">
             <thead>
-              <tr className="border-b border-bone/10 bg-bone/5">
-                <th className="text-left px-4 py-3 text-xs font-medium text-bone/60 uppercase tracking-wider">Style</th>
-                <th className="text-left px-4 py-3 text-xs font-medium text-bone/60 uppercase tracking-wider">Status</th>
-                <th className="text-left px-4 py-3 text-xs font-medium text-bone/60 uppercase tracking-wider">Created</th>
-                <th className="text-left px-4 py-3 text-xs font-medium text-bone/60 uppercase tracking-wider">Completed</th>
-                <th className="text-left px-4 py-3 text-xs font-medium text-bone/60 uppercase tracking-wider">Public</th>
-                <th className="text-left px-4 py-3 text-xs font-medium text-bone/60 uppercase tracking-wider">YouTube</th>
-                <th className="px-4 py-3 w-20" />
+              <tr>
+                <th>Style</th>
+                <th>Status</th>
+                <th>Created</th>
+                <th>Completed</th>
+                <th>Public</th>
+                <th>YouTube</th>
+                <th><span className="sr-only">Actions</span></th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-bone/5">
+            <tbody>
               {rows.map((job) => {
                 const params = (job.params && typeof job.params === "object") ? job.params as Record<string, string> : {};
                 const toggleAction = toggleJobPublic.bind(null, job.id, artist.id);
 
                 return (
-                  <tr key={job.id} className="hover:bg-bone/5 transition-colors">
-                    <td className="px-4 py-3">
-                      <span className="text-bone font-medium">
+                  <tr key={job.id}>
+                    <td>
+                      <span className="font-semibold">
                         {params.stylePreset ?? "—"}
                       </span>
                       {params.aspectRatio && (
-                        <span className="block text-bone/52 text-xs mt-0.5">
+                        <span className="block text-muted text-sm mt-0.5">
                           {params.aspectRatio}
                         </span>
                       )}
                     </td>
-                    <td className="px-4 py-3">
-                      <span className={`inline-block rounded-full px-2.5 py-0.5 text-xs font-medium capitalize ${STATUS_PILL[job.status] ?? "bg-bone/10 text-bone/60"}`}>
+                    <td>
+                      <span className={`${STATUS_PILL[job.status] ?? "studio-chip studio-chip-neutral"} capitalize`}>
                         {job.status}
                       </span>
                       {job.error && (
                         <span
-                          className="block text-red-400/70 text-xs mt-0.5 truncate max-w-[200px]"
+                          className="block text-muted text-sm mt-0.5 truncate max-w-[200px]"
                           title={job.error}
                         >
                           {job.error}
                         </span>
                       )}
                     </td>
-                    <td className="px-4 py-3 text-xs text-bone/50">
+                    <td className="text-sm text-muted">
                       {formatDate(job.created_at)}
                     </td>
-                    <td className="px-4 py-3 text-xs text-bone/50">
+                    <td className="text-sm text-muted">
                       {job.completed_at ? formatDate(job.completed_at) : "—"}
                     </td>
-                    <td className="px-4 py-3">
+                    <td>
                       {job.status === "complete" ? (
                         <form action={toggleAction}>
                           <button
                             type="submit"
                             title={job.is_public ? "Click to make private" : "Click to make public"}
-                            className={`text-xs font-medium px-2 py-0.5 rounded transition-colors ${
-                              job.is_public
-                                ? "bg-forest/20 text-sage hover:bg-forest/30"
-                                : "bg-bone/10 text-bone/50 hover:bg-bone/20 hover:text-bone/60"
+                            className={`studio-btn studio-btn-sm ${
+                              job.is_public ? "studio-btn-secondary" : "studio-btn-quiet"
                             }`}
                           >
                             {job.is_public ? "Public" : "Private"}
                           </button>
                         </form>
                       ) : (
-                        <span className="text-bone/52 text-xs">—</span>
+                        <span className="text-muted text-sm">—</span>
                       )}
                     </td>
-                    <td className="px-4 py-3">
+                    <td>
                       {job.status === "complete" && (
                         <YoutubeUploadButton
                           source="video_job"
@@ -146,9 +139,9 @@ export default async function AdminArtistVideosPage({ params }: Props) {
                         />
                       )}
                     </td>
-                    <td className="px-4 py-3 text-right">
+                    <td className="is-num">
                       {job.status === "complete" && (
-                        <a href={job.output_url ?? undefined} target="_blank" rel="noopener noreferrer" className="text-xs text-ochre hover:text-bone">Watch</a>
+                        <a href={job.output_url ?? undefined} target="_blank" rel="noopener noreferrer" className="studio-link inline-flex items-center min-h-[44px]">Watch</a>
                       )}
                     </td>
                   </tr>

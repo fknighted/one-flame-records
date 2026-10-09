@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { createServiceClient } from "@/lib/supabase/server";
 import { createClient } from "@/lib/supabase/server";
 import InkShell from "@/components/InkShell";
+import "@/app/studio.css";
 
 export default async function GamerLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createClient();

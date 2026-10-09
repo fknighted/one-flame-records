@@ -28,11 +28,9 @@ const KIND_OPTIONS = [
   { value: "generated", label: "Generated Video" },
 ];
 
-const INPUT =
-  "w-full bg-bone/5 border border-bone/45 rounded px-3 py-2 text-sm text-bone placeholder:text-bone/50 focus:outline-2 focus:outline-ochre focus:border-ochre/60";
-const LABEL = "block text-xs text-bone/50 mb-1";
-const SECTION_HEADING =
-  "text-xs font-sans uppercase tracking-widest text-bone/52 pb-2 border-b border-bone/10";
+const INPUT = "studio-field";
+const LABEL = "studio-field-label";
+const SECTION_HEADING = "studio-section-title pb-2 border-b border-line";
 
 function extractYouTubeId(input: string): string | null {
   const trimmed = input.trim();
@@ -112,7 +110,7 @@ export default function VideoForm({
       )}
 
       {state?.error && (
-        <div className="bg-oxblood/20 border border-oxblood/50 rounded px-4 py-3 text-sm text-bone">
+        <div role="alert" className="studio-error">
           {state.error}
         </div>
       )}
@@ -122,9 +120,9 @@ export default function VideoForm({
         <h2 className={SECTION_HEADING}>Video</h2>
 
         <div>
-          <label className={LABEL}>Title *</label>
+          <label htmlFor="title" className={LABEL}>Title *</label>
           <input
-            name="title"
+            id="title" name="title"
             type="text"
             required
             defaultValue={initialValues.title ?? ""}
@@ -134,15 +132,15 @@ export default function VideoForm({
 
         {/* Source toggle */}
         <div>
-          <label className={LABEL}>Video source *</label>
-          <div className="flex rounded overflow-hidden border border-bone/15 w-fit mb-4">
+          <p className={LABEL}>Video source *</p>
+          <div className="flex flex-wrap gap-2 mb-4">
             <button
               type="button"
               onClick={() => setSource("youtube")}
-              className={`px-4 py-1.5 text-sm transition-colors ${
+              className={`studio-focus inline-flex items-center justify-center min-h-[44px] px-4 text-sm font-semibold ${
                 source === "youtube"
-                  ? "bg-ochre text-ink font-medium"
-                  : "text-bone/50 hover:text-bone"
+                  ? "bg-raised text-paper border border-muted"
+                  : "text-muted border border-line hover:text-paper"
               }`}
             >
               YouTube link
@@ -150,10 +148,10 @@ export default function VideoForm({
             <button
               type="button"
               onClick={() => setSource("upload")}
-              className={`px-4 py-1.5 text-sm transition-colors ${
+              className={`studio-focus inline-flex items-center justify-center min-h-[44px] px-4 text-sm font-semibold ${
                 source === "upload"
-                  ? "bg-ochre text-ink font-medium"
-                  : "text-bone/50 hover:text-bone"
+                  ? "bg-raised text-paper border border-muted"
+                  : "text-muted border border-line hover:text-paper"
               }`}
             >
               Upload file
@@ -171,7 +169,7 @@ export default function VideoForm({
                 className={INPUT}
               />
               {previewId && (
-                <div className="rounded overflow-hidden border border-bone/15 w-64">
+                <div className="overflow-hidden border border-line w-64 max-w-full">
                   <img
                     src={`https://img.youtube.com/vi/${previewId}/mqdefault.jpg`}
                     alt="YouTube thumbnail preview"
@@ -189,28 +187,28 @@ export default function VideoForm({
                 accept="video/*"
                 onChange={handleFileChange}
                 disabled={uploading}
-                className="block w-full text-sm text-bone/60 file:mr-3 file:py-1.5 file:px-3 file:rounded file:border-0 file:bg-bone/10 file:text-bone file:text-sm hover:file:bg-bone/20 file:cursor-pointer disabled:opacity-50"
+                className="studio-field cursor-pointer"
               />
 
               {/* Progress bar */}
               {uploading && (
                 <div className="space-y-1">
-                  <div className="h-1.5 w-full rounded-full bg-bone/10 overflow-hidden">
+                  <div className="h-2 w-full bg-line overflow-hidden">
                     <div
-                      className="h-full bg-ochre transition-all duration-200"
+                      className="h-full bg-paper transition-all duration-200"
                       style={{ width: `${uploadProgress}%` }}
                     />
                   </div>
-                  <p className="text-xs text-bone/60">Uploading… {uploadProgress}%</p>
+                  <p className="studio-hint">Uploading… {uploadProgress}%</p>
                 </div>
               )}
 
               {uploadError && (
-                <p className="text-xs text-rose">{uploadError}</p>
+                <p role="alert" className="studio-error">{uploadError}</p>
               )}
 
               {uploadedUrl && !uploading && (
-                <p className="text-xs text-sage">✓ Video uploaded successfully</p>
+                <p className="studio-success">Video uploaded successfully</p>
               )}
 
               {initialValues.storage_url && !uploadedUrl && (
@@ -219,9 +217,9 @@ export default function VideoForm({
                     src={initialValues.storage_url}
                     controls
                     preload="metadata"
-                    className="w-full rounded border border-bone/10 bg-ink aspect-video"
+                    className="w-full border border-line bg-black aspect-video"
                   />
-                  <p className="text-xs text-bone/60">
+                  <p className="studio-hint">
                     Upload a new file to replace this video.
                   </p>
                 </div>
@@ -238,14 +236,14 @@ export default function VideoForm({
       <section className="space-y-4">
         <h2 className={SECTION_HEADING}>Metadata</h2>
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label className={LABEL}>Artist *</label>
+            <label htmlFor="artist_id" className={LABEL}>Artist *</label>
             <select
-              name="artist_id"
+              id="artist_id" name="artist_id"
               required
               defaultValue={initialValues.artist_id ?? ""}
-              className={INPUT + " bg-ink"}
+              className={INPUT}
             >
               <option value="" disabled>Select artist…</option>
               {artists.map((a) => (
@@ -254,11 +252,11 @@ export default function VideoForm({
             </select>
           </div>
           <div>
-            <label className={LABEL}>Kind</label>
+            <label htmlFor="kind" className={LABEL}>Kind</label>
             <select
-              name="kind"
+              id="kind" name="kind"
               defaultValue={initialValues.kind ?? "official"}
-              className={INPUT + " bg-ink"}
+              className={INPUT}
             >
               {KIND_OPTIONS.map(({ value, label }) => (
                 <option key={value} value={value}>{label}</option>
@@ -267,13 +265,13 @@ export default function VideoForm({
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label className={LABEL}>Related Release (optional)</label>
+            <label htmlFor="release_id" className={LABEL}>Related Release (optional)</label>
             <select
-              name="release_id"
+              id="release_id" name="release_id"
               defaultValue={initialValues.release_id ?? ""}
-              className={INPUT + " bg-ink"}
+              className={INPUT}
             >
               <option value="">None</option>
               {releases.map((r) => (
@@ -282,44 +280,44 @@ export default function VideoForm({
             </select>
           </div>
           <div>
-            <label className={LABEL}>Published Date</label>
+            <label htmlFor="published_at" className={LABEL}>Published Date</label>
             <input
-              name="published_at"
+              id="published_at" name="published_at"
               type="date"
               defaultValue={
                 initialValues.published_at?.slice(0, 10) ??
                 new Date().toISOString().slice(0, 10)
               }
-              className={INPUT + " bg-ink"}
+              className={INPUT}
             />
           </div>
         </div>
 
         <div>
-          <label className="flex items-center gap-2 cursor-pointer">
+          <label className="flex items-center gap-3 min-h-[44px] cursor-pointer">
             <input type="hidden" name="featured" value="false" />
             <input
               name="featured"
               type="checkbox"
               value="true"
               defaultChecked={initialValues.featured ?? false}
-              className="w-4 h-4 rounded border-bone/30 bg-bone/5 accent-ochre"
+              className="studio-check"
             />
-            <span className="text-sm text-bone/70">Featured on homepage</span>
+            <span className="text-[15px]">Featured on homepage</span>
           </label>
         </div>
       </section>
 
       {/* Form actions */}
-      <div className="flex items-center gap-4 pt-2">
+      <div className="flex flex-wrap items-center gap-4 pt-2">
         <button
           type="submit"
           disabled={pending || uploading}
-          className="bg-ochre text-ink text-sm font-medium px-5 py-2 rounded hover:bg-ochre/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          className="studio-btn studio-btn-primary"
         >
           {pending ? "Saving…" : uploading ? "Uploading…" : mode === "create" ? "Add Video" : "Save Changes"}
         </button>
-        <Link href="/admin/videos" className="text-sm text-bone/60 hover:text-bone transition-colors">
+        <Link href="/admin/videos" className="studio-btn studio-btn-quiet studio-btn-sm">
           Cancel
         </Link>
       </div>

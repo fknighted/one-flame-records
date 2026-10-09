@@ -2,6 +2,7 @@
 
 import { useActionState } from "react";
 import { submitContact, type ContactState } from "@/app/(public)/contact/actions";
+import { FIELD_CLASS, FIELD_LABEL_CLASS, buttonClasses } from "@/lib/sound-system";
 
 export default function ContactForm() {
   const [state, action, pending] = useActionState<ContactState, FormData>(
@@ -11,11 +12,11 @@ export default function ContactForm() {
 
   if (state?.status === "success") {
     return (
-      <div className="py-12 text-center">
-        <h2 className="font-display font-bold text-oxblood text-3xl mb-4">
+      <div className="bg-paper text-black p-5 sm:p-6" role="status">
+        <h2 className="type-title mb-3">
           Message received.
         </h2>
-        <p className="text-ink/70 leading-relaxed">
+        <p className="type-body">
           Thanks for reaching out. We read every message and get back to the
           ones that are a good fit — usually within a few days.
         </p>
@@ -24,7 +25,7 @@ export default function ContactForm() {
   }
 
   return (
-    <form action={action} className="space-y-5">
+    <form action={action} className="bg-paper text-black p-5 sm:p-6 space-y-5">
       {/* Honeypot — hidden from real users, bots fill it */}
       <input
         type="text"
@@ -36,8 +37,8 @@ export default function ContactForm() {
       />
 
       <div>
-        <label htmlFor="name" className="block text-sm font-medium text-ink mb-1.5">
-          Name <span className="text-oxblood">*</span>
+        <label htmlFor="name" className={FIELD_LABEL_CLASS}>
+          Name <span className="text-red" aria-hidden="true">*</span>
         </label>
         <input
           id="name"
@@ -45,14 +46,14 @@ export default function ContactForm() {
           type="text"
           required
           autoComplete="name"
-          className="w-full rounded border border-ink/60 bg-bone px-3 py-2.5 text-sm text-ink placeholder-ink/40 focus:border-oxblood focus:outline-2 focus:outline-oxblood focus:ring-1 focus:ring-oxblood"
+          className={FIELD_CLASS}
           placeholder="Your name"
         />
       </div>
 
       <div>
-        <label htmlFor="email" className="block text-sm font-medium text-ink mb-1.5">
-          Email <span className="text-oxblood">*</span>
+        <label htmlFor="email" className={FIELD_LABEL_CLASS}>
+          Email <span className="text-red" aria-hidden="true">*</span>
         </label>
         <input
           id="email"
@@ -60,20 +61,20 @@ export default function ContactForm() {
           type="email"
           required
           autoComplete="email"
-          className="w-full rounded border border-ink/60 bg-bone px-3 py-2.5 text-sm text-ink placeholder-ink/40 focus:border-oxblood focus:outline-2 focus:outline-oxblood focus:ring-1 focus:ring-oxblood"
+          className={FIELD_CLASS}
           placeholder="you@example.com"
         />
       </div>
 
       <div>
-        <label htmlFor="reason" className="block text-sm font-medium text-ink mb-1.5">
+        <label htmlFor="reason" className={FIELD_LABEL_CLASS}>
           Reason
         </label>
         <select
           id="reason"
           name="reason"
           defaultValue="general"
-          className="w-full rounded border border-ink/60 bg-bone px-3 py-2.5 text-sm text-ink focus:border-oxblood focus:outline-2 focus:outline-oxblood focus:ring-1 focus:ring-oxblood"
+          className={FIELD_CLASS}
         >
           <option value="general">General enquiry</option>
           <option value="press">Press &amp; media</option>
@@ -83,27 +84,27 @@ export default function ContactForm() {
       </div>
 
       <div>
-        <label htmlFor="message" className="block text-sm font-medium text-ink mb-1.5">
-          Message <span className="text-oxblood">*</span>
+        <label htmlFor="message" className={FIELD_LABEL_CLASS}>
+          Message <span className="text-red" aria-hidden="true">*</span>
         </label>
         <textarea
           id="message"
           name="message"
           required
           rows={6}
-          className="w-full rounded border border-ink/60 bg-bone px-3 py-2.5 text-sm text-ink placeholder-ink/40 focus:border-oxblood focus:outline-2 focus:outline-oxblood focus:ring-1 focus:ring-oxblood resize-none"
+          className={`${FIELD_CLASS} py-2.5 resize-none`}
           placeholder="Tell us what's on your mind."
         />
       </div>
 
       {state?.status === "error" && (
-        <p className="text-sm text-oxblood">{state.message}</p>
+        <p className="type-small text-red" role="alert">{state.message}</p>
       )}
 
       <button
         type="submit"
         disabled={pending}
-        className="w-full rounded bg-oxblood px-6 py-3 text-sm font-semibold text-bone hover:bg-ochre hover:text-ink disabled:opacity-50 transition-colors"
+        className={buttonClasses("dark", "paper", "w-full")}
       >
         {pending ? "Sending…" : "Send message"}
       </button>

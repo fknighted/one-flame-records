@@ -28,11 +28,9 @@ function slugify(name: string): string {
     .replace(/-+/g, "-");
 }
 
-const INPUT =
-  "w-full bg-bone/5 border border-bone/45 rounded px-3 py-2 text-sm text-bone placeholder:text-bone/30 focus:outline-2 focus:outline-ochre focus:border-ochre/60";
-const LABEL = "block text-xs text-bone/50 mb-1";
-const SECTION_HEADING =
-  "text-xs font-sans uppercase tracking-widest text-bone/35 pb-2 border-b border-bone/10";
+const INPUT = "studio-field";
+const LABEL = "studio-field-label";
+const SECTION_HEADING = "studio-section-title pb-2 border-b border-line";
 
 export default function ArtistForm({
   action,
@@ -78,7 +76,7 @@ export default function ArtistForm({
       )}
 
       {state?.error && (
-        <div className="bg-oxblood/20 border border-oxblood/50 rounded px-4 py-3 text-sm text-bone">
+        <div role="alert" className="studio-error">
           {state.error}
         </div>
       )}
@@ -87,11 +85,11 @@ export default function ArtistForm({
       <section className="space-y-4">
         <h2 className={SECTION_HEADING}>Basic Info</h2>
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label className={LABEL}>Stage Name *</label>
+            <label htmlFor="stage_name" className={LABEL}>Stage Name *</label>
             <input
-              name="stage_name"
+              id="stage_name" name="stage_name"
               type="text"
               required
               value={stageName}
@@ -100,9 +98,9 @@ export default function ArtistForm({
             />
           </div>
           <div>
-            <label className={LABEL}>URL Slug *</label>
+            <label htmlFor="slug" className={LABEL}>URL Slug *</label>
             <input
-              name="slug"
+              id="slug" name="slug"
               type="text"
               required
               value={slug}
@@ -112,22 +110,22 @@ export default function ArtistForm({
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label className={LABEL}>Legal Name</label>
+            <label htmlFor="legal_name" className={LABEL}>Legal Name</label>
             <input
-              name="legal_name"
+              id="legal_name" name="legal_name"
               type="text"
               defaultValue={initialValues.legal_name ?? ""}
               className={INPUT}
             />
           </div>
           <div>
-            <label className={LABEL}>Status</label>
+            <label htmlFor="status" className={LABEL}>Status</label>
             <select
-              name="status"
+              id="status" name="status"
               defaultValue={initialValues.status ?? "active"}
-              className={INPUT + " bg-ink"}
+              className={INPUT}
             >
               <option value="active">Active</option>
               <option value="inactive">Inactive</option>
@@ -136,20 +134,20 @@ export default function ArtistForm({
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label className={LABEL}>Hometown</label>
+            <label htmlFor="hometown" className={LABEL}>Hometown</label>
             <input
-              name="hometown"
+              id="hometown" name="hometown"
               type="text"
               defaultValue={initialValues.hometown ?? ""}
               className={INPUT}
             />
           </div>
           <div>
-            <label className={LABEL}>Featured Order</label>
+            <label htmlFor="featured_order" className={LABEL}>Featured Order</label>
             <input
-              name="featured_order"
+              id="featured_order" name="featured_order"
               type="number"
               min="1"
               defaultValue={initialValues.featured_order ?? ""}
@@ -165,11 +163,9 @@ export default function ArtistForm({
         <h2 className={SECTION_HEADING}>Profile</h2>
 
         <div>
-          <div className="flex items-center justify-between mb-1">
-            <label className={LABEL} style={{ marginBottom: 0 }}>Bio</label>
-          </div>
+          <label htmlFor="bio" className={LABEL}>Bio</label>
           <textarea
-            name="bio"
+            id="bio" name="bio"
             rows={4}
             defaultValue={initialValues.bio ?? ""}
             className={INPUT}
@@ -177,9 +173,9 @@ export default function ArtistForm({
         </div>
 
         <div>
-          <label className={LABEL}>Genres (comma-separated)</label>
+          <label htmlFor="genres" className={LABEL}>Genres (comma-separated)</label>
           <input
-            name="genres"
+            id="genres" name="genres"
             type="text"
             defaultValue={genresStr}
             placeholder="Reggae, Dancehall, Roots"
@@ -188,24 +184,24 @@ export default function ArtistForm({
         </div>
 
         <div>
-          <label className={LABEL}>Photo</label>
+          <label htmlFor="photo" className={LABEL}>Photo</label>
           <div className="flex items-center gap-4">
             {photoPreview ? (
               <img
                 src={photoPreview}
                 alt=""
-                className="w-16 h-16 rounded-full object-cover border border-bone/15 shrink-0"
+                className="w-16 h-16 object-cover border border-line shrink-0"
               />
             ) : (
-              <div className="w-16 h-16 rounded-full bg-bone/5 border border-bone/15 shrink-0" />
+              <div className="w-16 h-16 bg-raised border border-line shrink-0" />
             )}
-            <div className="space-y-1.5">
+            <div className="space-y-1.5 min-w-0 flex-1">
               <input
-                name="photo"
+                id="photo" name="photo"
                 type="file"
                 accept="image/jpeg,image/png,image/webp"
                 onChange={handlePhotoChange}
-                className="text-sm text-bone/50 file:mr-3 file:py-1.5 file:px-3 file:rounded file:border-0 file:bg-bone/10 file:text-bone/70 file:text-xs hover:file:bg-bone/15 cursor-pointer"
+                className="studio-field cursor-pointer"
               />
             </div>
           </div>
@@ -215,7 +211,7 @@ export default function ArtistForm({
       {/* Social links */}
       <section className="space-y-4">
         <h2 className={SECTION_HEADING}>Social Links</h2>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {(
             [
               ["socials_instagram", "Instagram"],
@@ -225,9 +221,9 @@ export default function ArtistForm({
             ] as const
           ).map(([name, label]) => (
             <div key={name}>
-              <label className={LABEL}>{label}</label>
+              <label htmlFor={name} className={LABEL}>{label}</label>
               <input
-                name={name}
+                id={name} name={name}
                 type="url"
                 defaultValue={socials[name.replace("socials_", "")] ?? ""}
                 placeholder="https://..."
@@ -241,7 +237,7 @@ export default function ArtistForm({
       {/* Streaming links */}
       <section className="space-y-4">
         <h2 className={SECTION_HEADING}>Streaming Links</h2>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {(
             [
               ["streaming_spotify", "Spotify"],
@@ -250,9 +246,9 @@ export default function ArtistForm({
             ] as const
           ).map(([name, label]) => (
             <div key={name}>
-              <label className={LABEL}>{label}</label>
+              <label htmlFor={name} className={LABEL}>{label}</label>
               <input
-                name={name}
+                id={name} name={name}
                 type="url"
                 defaultValue={streaming[name.replace("streaming_", "")] ?? ""}
                 placeholder="https://..."
@@ -264,11 +260,11 @@ export default function ArtistForm({
       </section>
 
       {/* Form actions */}
-      <div className="flex items-center gap-4 pt-2">
+      <div className="flex flex-wrap items-center gap-4 pt-2">
         <button
           type="submit"
           disabled={pending}
-          className="bg-ochre text-ink text-sm font-medium px-5 py-2 rounded hover:bg-ochre/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          className="studio-btn studio-btn-primary"
         >
           {pending
             ? "Saving…"
@@ -278,7 +274,7 @@ export default function ArtistForm({
         </button>
         <Link
           href="/admin/artists"
-          className="text-sm text-bone/40 hover:text-bone transition-colors"
+          className="studio-btn studio-btn-quiet studio-btn-sm"
         >
           Cancel
         </Link>

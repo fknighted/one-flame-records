@@ -61,98 +61,91 @@ export default async function AdminArtistAssetsPage({
   const rows = assets ?? [];
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       {/* Header */}
       <div>
-        <div className="flex items-center justify-between">
-          <Link
-            href={`/admin/artists/${id}/edit`}
-            className="text-xs text-bone/60 hover:text-ochre transition-colors"
-          >
-            ← {artist.stage_name}
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <Link href={`/admin/artists/${id}/edit`} className="studio-btn studio-btn-quiet studio-btn-sm">
+            {artist.stage_name}
           </Link>
-          <Link
-            href={`/admin/artists/${id}/videos`}
-            className="text-xs text-bone/60 hover:text-ochre transition-colors"
-          >
-            Generated Videos →
+          <Link href={`/admin/artists/${id}/videos`} className="studio-btn studio-btn-quiet studio-btn-sm">
+            Generated Videos
           </Link>
         </div>
-        <h1 className="font-display text-2xl text-bone mt-1">
+        <h1 className="studio-page-title mt-1">
           Assets — {artist.stage_name}
         </h1>
       </div>
 
       {/* Asset list */}
       <div>
-        <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-bone/60 mb-3">
+        <h2 className="studio-section-title mb-3">
           Library ({rows.length})
         </h2>
         {rows.length === 0 ? (
-          <div className="border border-bone/10 rounded-lg p-8 text-center text-bone/50 text-sm">
-            No assets yet. Upload the first one below.
+          <div className="studio-empty">
+            <p className="studio-empty-body">No assets yet. Upload the first one below.</p>
           </div>
         ) : (
-          <div className="border border-bone/10 rounded-lg overflow-x-auto">
-            <table className="w-full min-w-[560px] text-sm">
+          <div className="studio-table-wrap">
+            <table className="studio-table min-w-[560px]">
               <thead>
-                <tr className="border-b border-bone/10 bg-bone/5">
-                  <th className="text-left px-4 py-3 text-xs font-medium text-bone/60 uppercase tracking-wider">Title</th>
-                  <th className="text-left px-4 py-3 text-xs font-medium text-bone/60 uppercase tracking-wider">Kind</th>
-                  <th className="text-left px-4 py-3 text-xs font-medium text-bone/60 uppercase tracking-wider">Size</th>
-                  <th className="text-left px-4 py-3 text-xs font-medium text-bone/60 uppercase tracking-wider">Duration</th>
-                  <th className="text-left px-4 py-3 text-xs font-medium text-bone/60 uppercase tracking-wider">Uploaded</th>
-                  <th className="text-left px-4 py-3 text-xs font-medium text-bone/60 uppercase tracking-wider">Public</th>
-                  <th className="px-4 py-3 w-10" />
+                <tr>
+                  <th>Title</th>
+                  <th>Kind</th>
+                  <th>Size</th>
+                  <th>Duration</th>
+                  <th>Uploaded</th>
+                  <th>Public</th>
+                  <th><span className="sr-only">Actions</span></th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-bone/5">
+              <tbody>
                 {rows.map((asset) => {
                   const deleteWithId = deleteAsset.bind(null, asset.id);
                   return (
-                    <tr key={asset.id} className="hover:bg-bone/5 transition-colors">
-                      <td className="px-4 py-3">
-                        <span className="text-bone font-medium">{asset.title}</span>
+                    <tr key={asset.id}>
+                      <td>
+                        <span className="font-semibold">{asset.title}</span>
                         {asset.notes && (
-                          <span className="block text-bone/52 text-xs mt-0.5 truncate max-w-[240px]">
+                          <span className="block text-muted text-sm mt-0.5 truncate max-w-[240px]">
                             {asset.notes}
                           </span>
                         )}
                       </td>
-                      <td className="px-4 py-3 text-bone/60">
+                      <td className="text-muted">
                         {KIND_LABELS[asset.kind] ?? asset.kind}
                       </td>
-                      <td className="px-4 py-3 font-mono text-xs text-bone/60">
+                      <td className="studio-figures text-muted">
                         {formatBytes(asset.size_bytes)}
                       </td>
-                      <td className="px-4 py-3 font-mono text-xs text-bone/60">
+                      <td className="studio-figures text-muted">
                         {formatDuration(asset.duration_seconds)}
                       </td>
-                      <td className="px-4 py-3 text-xs text-bone/50">
+                      <td className="text-sm text-muted">
                         {formatDate(asset.created_at)}
                       </td>
-                      <td className="px-4 py-3">
+                      <td>
                         <form action={toggleAssetPublic.bind(null, asset.id)}>
                           <button
                             type="submit"
                             title={asset.is_public ? "Click to make private" : "Click to make public"}
-                            className={`text-xs font-medium px-2 py-0.5 rounded transition-colors ${
-                              asset.is_public
-                                ? "bg-forest/20 text-sage hover:bg-forest/30"
-                                : "bg-bone/10 text-bone/50 hover:bg-bone/20 hover:text-bone/60"
+                            className={`studio-btn studio-btn-sm ${
+                              asset.is_public ? "studio-btn-secondary" : "studio-btn-quiet"
                             }`}
                           >
                             {asset.is_public ? "Public" : "Private"}
                           </button>
                         </form>
                       </td>
-                      <td className="px-4 py-3 text-right">
+                      <td className="is-num">
                         <div className="flex items-center justify-end gap-3">
                           <form action={deleteWithId}>
                             <button
                               type="submit"
-                              className="text-xs text-bone/50 hover:text-red-400 transition-colors"
+                              className="studio-btn studio-btn-danger studio-btn-sm"
                               title="Delete asset"
+                              aria-label="Delete asset"
                             >
                               ×
                             </button>
@@ -170,10 +163,10 @@ export default async function AdminArtistAssetsPage({
 
       {/* Upload form */}
       <div>
-        <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-bone/60 mb-4">
+        <h2 className="studio-section-title mb-3">
           Upload new asset
         </h2>
-        <div className="border border-bone/10 rounded-lg p-6 max-w-lg">
+        <div className="studio-card max-w-lg">
           <AdminAssetUploadForm artistId={id} />
         </div>
       </div>

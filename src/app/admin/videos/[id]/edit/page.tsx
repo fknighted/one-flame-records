@@ -34,11 +34,11 @@ export default async function EditVideoPage({
 
   return (
     <div className="space-y-6">
-      <h1 className="font-display text-2xl text-bone">{video.title}</h1>
+      <h1 className="studio-page-title">{video.title}</h1>
 
       {/* Video preview */}
       {video.youtube_id && (
-        <div className="max-w-2xl rounded overflow-hidden border border-bone/10">
+        <div className="max-w-2xl overflow-hidden border border-line">
           <iframe
             src={`https://www.youtube.com/embed/${video.youtube_id}?rel=0`}
             title={video.title}
@@ -49,7 +49,7 @@ export default async function EditVideoPage({
         </div>
       )}
       {!video.youtube_id && video.storage_url && (
-        <div className="max-w-2xl rounded overflow-hidden border border-bone/10 bg-ink">
+        <div className="max-w-2xl overflow-hidden border border-line bg-black">
           <video
             src={video.storage_url}
             controls

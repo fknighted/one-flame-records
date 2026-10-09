@@ -32,26 +32,26 @@ export default async function EventsPage() {
   type EventRow = { id: string; title: string; type: string; event_date: string; location: string; is_public: boolean };
   function EventRow({ event, i }: { event: EventRow; i: number }) {
     return (
-      <div className={`flex items-start justify-between gap-4 px-5 py-4 ${i > 0 ? "border-t border-bone/8" : ""}`}>
+      <div className={`flex items-start justify-between gap-4 px-4 sm:px-5 py-4 ${i > 0 ? "border-t border-line" : ""}`}>
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-2 flex-wrap mb-1">
-            <span className="text-sm font-medium text-bone">{event.title}</span>
-            <span className="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full bg-bone/10 text-bone/50">
+            <span className="font-semibold text-paper [overflow-wrap:anywhere]">{event.title}</span>
+            <span className="studio-chip studio-chip-neutral">
               {TYPE_LABELS[event.type] ?? event.type}
             </span>
             {!event.is_public && (
-              <span className="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full bg-oxblood/15 text-rose">
+              <span className="studio-chip studio-chip-neutral">
                 Private
               </span>
             )}
           </div>
-          <p className="text-xs text-bone/60">{formatDate(event.event_date)}</p>
+          <p className="text-[15px] text-muted studio-figures">{formatDate(event.event_date)}</p>
           {event.location !== "Flames Lounge, Montego Bay" && (
-            <p className="text-xs text-bone/50 mt-0.5">{event.location}</p>
+            <p className="text-[15px] text-muted mt-0.5">{event.location}</p>
           )}
         </div>
-        <Link href={`/admin/events/${event.id}/edit`} className="shrink-0 text-xs text-bone/60 hover:text-ochre transition-colors">
-          Edit →
+        <Link href={`/admin/events/${event.id}/edit`} className="studio-btn studio-btn-secondary studio-btn-sm shrink-0">
+          Edit
         </Link>
       </div>
     );
@@ -61,34 +61,33 @@ export default async function EventsPage() {
     <div className="space-y-10 max-w-3xl">
       <div className="flex items-start justify-between gap-4">
         <div>
-          <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-sage mb-2">Community</p>
-          <h1 className="font-display font-bold text-bone text-3xl">Events</h1>
-          <div className="mt-3 h-px w-16 bg-bone/20" />
+          <p className="studio-label mb-2">Community</p>
+          <h1 className="studio-page-title">Events</h1>
         </div>
         <Link
           href="/admin/events/new"
-          className="shrink-0 rounded bg-ochre px-4 py-2.5 text-sm font-medium text-ink hover:bg-ochre/90 transition-colors"
+          className="studio-btn studio-btn-primary shrink-0"
         >
           + New event
         </Link>
       </div>
 
       {(events ?? []).length === 0 ? (
-        <p className="text-bone/60 text-sm">No events yet.</p>
+        <p className="text-muted">No events yet.</p>
       ) : (
         <div className="space-y-8">
           {upcoming.length > 0 && (
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-bone/52 mb-3">Upcoming</p>
-              <div className="rounded-lg border border-bone/10 overflow-hidden">
+              <h2 className="studio-label mb-3">Upcoming</h2>
+              <div className="studio-card p-0">
                 {upcoming.map((event, i) => <EventRow key={event.id} event={event} i={i} />)}
               </div>
             </div>
           )}
           {past.length > 0 && (
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-bone/52 mb-3">Past</p>
-              <div className="rounded-lg border border-bone/10 overflow-hidden opacity-60">
+              <h2 className="studio-label mb-3">Past</h2>
+              <div className="studio-card p-0">
                 {past.map((event, i) => <EventRow key={event.id} event={event} i={i} />)}
               </div>
             </div>

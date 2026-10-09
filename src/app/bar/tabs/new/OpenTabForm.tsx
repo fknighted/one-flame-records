@@ -29,14 +29,14 @@ export default function OpenTabForm({ regulars }: { regulars: Regular[] }) {
   return (
     <form action={formAction} className="space-y-5">
       {state?.error && (
-        <p className="text-sm text-red-400 bg-red-400/10 border border-red-400/20 rounded-lg px-4 py-3">
+        <p role="alert" className="studio-error">
           {state.error}
         </p>
       )}
 
       <div>
-        <label htmlFor="name" className="block text-sm font-medium text-bone/70 mb-1.5">
-          Customer Name <span className="text-rose">*</span>
+        <label htmlFor="name" className="studio-field-label">
+          Customer Name <span>*</span>
         </label>
         <input
           id="name"
@@ -47,7 +47,7 @@ export default function OpenTabForm({ regulars }: { regulars: Regular[] }) {
           value={nameInput}
           onChange={e => handleNameChange(e.target.value)}
           placeholder={hasRegulars ? "Type a name or pick a regular…" : "e.g. Table 3, Jay, Walk-in"}
-          className="w-full bg-bone/5 border border-bone/45 rounded-lg px-4 py-3 text-bone placeholder:text-bone/60 text-base focus:outline-2 focus:outline-ochre focus:border-ochre/50 transition-colors"
+          className="studio-field"
         />
         {hasRegulars && (
           <datalist id="regulars-list">
@@ -57,38 +57,38 @@ export default function OpenTabForm({ regulars }: { regulars: Regular[] }) {
           </datalist>
         )}
         {hint && (
-          <p className="text-xs text-ochre/70 mt-1.5 px-1">{hint}</p>
+          <p className="studio-hint mt-1.5">{hint}</p>
         )}
         {regularId && (
-          <p className="text-xs text-sage/70 mt-1 px-1">Regular customer ✓</p>
+          <p className="mt-1.5"><span className="studio-chip studio-chip-ok">Regular customer</span></p>
         )}
         <input type="hidden" name="regular_id" value={regularId ?? ""} />
       </div>
 
       <div>
-        <label htmlFor="notes" className="block text-sm font-medium text-bone/70 mb-1.5">
-          Notes <span className="text-bone/50 font-normal">(optional)</span>
+        <label htmlFor="notes" className="studio-field-label">
+          Notes <span className="text-muted font-normal">(optional)</span>
         </label>
         <input
           id="notes"
           name="notes"
           type="text"
           placeholder="e.g. VIP, allergies, seat number"
-          className="w-full bg-bone/5 border border-bone/45 rounded-lg px-4 py-3 text-bone placeholder:text-bone/60 text-base focus:outline-2 focus:outline-ochre focus:border-ochre/50 transition-colors"
+          className="studio-field"
         />
       </div>
 
       <button
         type="submit"
         disabled={pending || !nameInput.trim()}
-        className="w-full bg-ochre text-ink font-semibold text-base py-3.5 rounded-lg hover:bg-ochre/90 active:scale-[0.98] transition-all disabled:opacity-50"
+        className="studio-btn studio-btn-primary w-full"
       >
         {pending ? "Opening…" : "Open Tab"}
       </button>
 
       {hasRegulars && (
-        <p className="text-center text-xs text-bone/50">
-          <Link href="/bar/regulars" className="hover:text-bone/60 transition-colors">Manage regulars →</Link>
+        <p className="text-center text-[14px]">
+          <Link href="/bar/regulars" className="studio-link inline-flex min-h-[44px] items-center">Manage regulars</Link>
         </p>
       )}
     </form>

@@ -12,8 +12,8 @@ const CATEGORIES = [
   { value: "game_time", label: "Game Time" },
 ];
 
-const INPUT = "w-full bg-bone/5 border border-bone/45 rounded px-3 py-2 text-sm text-bone placeholder:text-bone/30 focus:outline-2 focus:outline-ochre focus:border-ochre/60";
-const LABEL = "block text-xs text-bone/50 mb-1";
+const INPUT = "studio-field";
+const LABEL = "studio-field-label";
 
 type InitialValues = {
   id?: string;
@@ -58,14 +58,15 @@ export default function MenuItemForm({
       {initialValues.id && <input type="hidden" name="id" value={initialValues.id} />}
 
       {state?.error && (
-        <div className="bg-oxblood/20 border border-oxblood/50 rounded px-4 py-3 text-sm text-bone">
+        <div role="alert" className="studio-error">
           {state.error}
         </div>
       )}
 
       <div>
-        <label className={LABEL}>Name *</label>
+        <label htmlFor="name" className={LABEL}>Name *</label>
         <input
+          id="name"
           name="name"
           type="text"
           required
@@ -75,14 +76,15 @@ export default function MenuItemForm({
         />
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
-          <label className={LABEL}>Category *</label>
+          <label htmlFor="category" className={LABEL}>Category *</label>
           <select
-            name="category"
+            id="category"
+          name="category"
             required
             defaultValue={initialValues.category ?? "drink"}
-            className={INPUT + " bg-ink"}
+            className={INPUT}
           >
             {CATEGORIES.map(({ value, label }) => (
               <option key={value} value={value}>{label}</option>
@@ -90,9 +92,10 @@ export default function MenuItemForm({
           </select>
         </div>
         <div>
-          <label className={LABEL}>Sale price *</label>
+          <label htmlFor="price" className={LABEL}>Sale price *</label>
           <input
-            name="price"
+            id="price"
+          name="price"
             type="number"
             step="1"
             min="0"
@@ -105,8 +108,9 @@ export default function MenuItemForm({
       </div>
 
       <div>
-        <label className={LABEL}>Cost — what you pay, per sellable unit (optional; drives profit)</label>
+        <label htmlFor="cost" className={LABEL}>Cost — what you pay, per sellable unit (optional; drives profit)</label>
         <input
+          id="cost"
           name="cost"
           type="number"
           step="1"
@@ -117,16 +121,17 @@ export default function MenuItemForm({
         />
       </div>
 
-      <fieldset className="border border-bone/10 rounded-lg p-4 space-y-4">
-        <legend className="px-2 text-xs text-bone/50">Sold by the bottle (optional — spirits only)</legend>
-        <p className="text-xs text-bone/40 -mt-1">
+      <fieldset className="studio-card space-y-4">
+        <legend className="px-2 text-[14px] font-semibold text-paper">Sold by the bottle (optional — spirits only)</legend>
+        <p className="studio-hint -mt-1">
           Group the shot / flask / bottle versions of one spirit together and set how many of this item come from one bottle. Leave blank for normal items.
         </p>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label className={LABEL}>Bottle group (e.g. rum)</label>
+            <label htmlFor="bottle_group" className={LABEL}>Bottle group (e.g. rum)</label>
             <input
-              name="bottle_group"
+              id="bottle_group"
+          name="bottle_group"
               type="text"
               defaultValue={initialValues.bottle_group ?? ""}
               placeholder="rum"
@@ -134,9 +139,10 @@ export default function MenuItemForm({
             />
           </div>
           <div>
-            <label className={LABEL}>Units per bottle (shot 16, flask 4, bottle 1)</label>
+            <label htmlFor="bottle_yield" className={LABEL}>Units per bottle (shot 16, flask 4, bottle 1)</label>
             <input
-              name="bottle_yield"
+              id="bottle_yield"
+          name="bottle_yield"
               type="number"
               min="1"
               defaultValue={initialValues.bottle_yield ?? ""}
@@ -148,11 +154,12 @@ export default function MenuItemForm({
       </fieldset>
 
       <div>
-        <label className={LABEL}>Inventory section (how it groups on the inventory page)</label>
+        <label htmlFor="menu_section" className={LABEL}>Inventory section (how it groups on the inventory page)</label>
         <select
+          id="menu_section"
           name="menu_section"
           defaultValue={initialValues.menu_section ?? ""}
-          className={INPUT + " bg-ink"}
+          className={INPUT}
         >
           {SECTIONS.map(({ value, label }) => (
             <option key={value} value={value}>{label}</option>
@@ -161,8 +168,9 @@ export default function MenuItemForm({
       </div>
 
       <div>
-        <label className={LABEL}>Description (optional)</label>
+        <label htmlFor="description" className={LABEL}>Description (optional)</label>
         <input
+          id="description"
           name="description"
           type="text"
           defaultValue={initialValues.description ?? ""}
@@ -172,8 +180,9 @@ export default function MenuItemForm({
       </div>
 
       <div>
-        <label className={LABEL}>Sort order (optional — lower numbers appear first)</label>
+        <label htmlFor="sort_order" className={LABEL}>Sort order (optional — lower numbers appear first)</label>
         <input
+          id="sort_order"
           name="sort_order"
           type="number"
           min="0"
@@ -184,8 +193,9 @@ export default function MenuItemForm({
       </div>
 
       <div>
-        <label className={LABEL}>Reorder level (optional — highlights red on inventory when stock hits this)</label>
+        <label htmlFor="reorder_level" className={LABEL}>Reorder level (optional — flagged Low on inventory when stock hits this)</label>
         <input
+          id="reorder_level"
           name="reorder_level"
           type="number"
           min="0"
@@ -197,16 +207,16 @@ export default function MenuItemForm({
 
       {mode === "edit" && (
         <div>
-          <label className="flex items-center gap-2 cursor-pointer">
+          <label className="flex items-center gap-3 min-h-[44px] cursor-pointer">
             <input type="hidden" name="is_active" value="false" />
             <input
               name="is_active"
               type="checkbox"
               value="true"
               defaultChecked={initialValues.is_active ?? true}
-              className="w-4 h-4 rounded border-bone/30 bg-bone/5 accent-ochre"
+              className="studio-check"
             />
-            <span className="text-sm text-bone/70">Active (visible on POS)</span>
+            <span className="text-[15px] text-paper">Active (visible on POS)</span>
           </label>
         </div>
       )}
@@ -215,11 +225,11 @@ export default function MenuItemForm({
         <button
           type="submit"
           disabled={pending}
-          className="bg-ochre text-ink text-sm font-medium px-5 py-2 rounded hover:bg-ochre/90 disabled:opacity-50 transition-colors"
+          className="studio-btn studio-btn-primary"
         >
           {pending ? "Saving…" : mode === "create" ? "Add Item" : "Save Changes"}
         </button>
-        <Link href="/admin/bar/items" className="text-sm text-bone/40 hover:text-bone transition-colors">
+        <Link href="/admin/bar/items" className="studio-btn studio-btn-quiet">
           Cancel
         </Link>
       </div>

@@ -1,13 +1,11 @@
 export default function Loading() {
   return (
-    <div className="mx-auto max-w-6xl px-6 py-16">
-      <div className="h-8 w-40 rounded bg-ink/10 animate-pulse" />
-      <div className="mt-10 grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-4">
+    <div className="mx-auto max-w-6xl px-4 sm:px-6 py-14 sm:py-[88px]" role="status" aria-label="Loading the roster">
+      <div className="h-12 w-48 bg-raised animate-pulse" />
+      <div className="mt-2 h-2 w-[72px] bg-red" />
+      <div className="mt-8 grid grid-cols-2 gap-2 lg:grid-cols-4">
         {Array.from({ length: 8 }).map((_, i) => (
-          <div key={i} className="space-y-3">
-            <div className="aspect-square rounded-lg bg-ink/10 animate-pulse" />
-            <div className="h-4 w-2/3 rounded bg-ink/10 animate-pulse" />
-          </div>
+          <div key={i} className="aspect-square bg-raised animate-pulse" />
         ))}
       </div>
     </div>

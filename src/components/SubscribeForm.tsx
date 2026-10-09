@@ -1,13 +1,16 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useId, useState, useTransition } from "react";
 import { subscribeEmail } from "@/app/(public)/subscribe/actions";
+import { FIELD_CLASS, FIELD_LABEL_CLASS, buttonClasses } from "@/lib/sound-system";
 
+// Sits on a paper block: 2px black field, red focus ring, black button.
 export default function SubscribeForm() {
   const [email, setEmail]     = useState("");
   const [done, setDone]       = useState(false);
   const [error, setError]     = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
+  const id = useId();
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -25,32 +28,42 @@ export default function SubscribeForm() {
 
   if (done) {
     return (
-      <p className="text-sm text-forest font-medium">
-        ✓ You&apos;re subscribed.
+      <p className="type-body font-semibold text-green" role="status">
+        You&apos;re subscribed.
       </p>
     );
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-2">
-      <div className="flex gap-2">
+    <form onSubmit={handleSubmit} className="grid gap-2">
+      <label htmlFor={`${id}-email`} className={FIELD_LABEL_CLASS}>
+        Your email
+      </label>
+      <div className="flex flex-wrap gap-2">
         <input
+          id={`${id}-email`}
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder="your@email.com"
+          autoComplete="email"
           required
-          className="flex-1 min-w-0 rounded bg-bone/5 border border-bone/45 px-3 py-2 text-sm text-bone placeholder:text-bone/30 focus:outline-2 focus:outline-ochre focus:border-ochre/50"
+          aria-describedby={error ? `${id}-error` : undefined}
+          className={`${FIELD_CLASS} flex-[1_1_180px] min-w-0`}
         />
         <button
           type="submit"
           disabled={pending}
-          className="shrink-0 rounded bg-ochre px-4 py-2 text-sm font-semibold text-ink hover:bg-ochre/90 disabled:opacity-50 transition-colors"
+          className={buttonClasses("dark", "paper", "shrink-0")}
         >
-          {pending ? "…" : "Subscribe"}
+          {pending ? "Sending" : "Subscribe"}
         </button>
       </div>
-      {error && <p className="text-xs text-oxblood">{error}</p>}
+      {error && (
+        <p id={`${id}-error`} className="type-small text-red" role="alert">
+          {error}
+        </p>
+      )}
     </form>
   );
 }

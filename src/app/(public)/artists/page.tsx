@@ -1,5 +1,7 @@
 import { createServiceClient } from "@/lib/supabase/server";
 import ArtistCard from "@/components/ArtistCard";
+import SectionHeader from "@/components/SectionHeader";
+import EmptyState from "@/components/EmptyState";
 
 export const metadata = {
   title: "Artists",
@@ -23,47 +25,40 @@ export default async function ArtistsPage() {
   const count = artists?.length ?? 0;
 
   return (
-    <>
-      {/* ── Ink banner ── */}
-      <section className="bg-ink">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 pt-16 pb-12">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-forest mb-4">
-            The Roster
-          </p>
-          <div className="flex flex-wrap items-end justify-between gap-4">
-            <h1 className="font-display font-bold text-bone text-[clamp(2.5rem,5vw,4rem)] leading-[1.02] tracking-tight">
-              Artists
-            </h1>
-            {count > 0 && (
-              <p className="text-bone/30 text-sm font-medium mb-1">
+    <section className="bg-black">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 py-14 sm:py-[88px]">
+        <SectionHeader
+          as="h1"
+          title="The roster"
+          action={
+            count > 0 ? (
+              <p className="type-label text-muted">
                 {count} artist{count !== 1 ? "s" : ""}
               </p>
-            )}
+            ) : undefined
+          }
+        />
+        {artists && artists.length > 0 ? (
+          <div className="grid grid-cols-2 gap-2 md:grid-cols-3 lg:grid-cols-4">
+            {artists.map((artist, i) => (
+              <ArtistCard
+                key={artist.id}
+                index={i}
+                slug={artist.slug}
+                stage_name={artist.stage_name}
+                photo_url={artist.photo_url}
+                hometown={artist.hometown}
+              />
+            ))}
           </div>
-          <div className="mt-4 h-px w-20 bg-oxblood" />
-        </div>
-      </section>
-
-      {/* ── Grid ── */}
-      <section className="bg-cream">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 py-12">
-          {artists && artists.length > 0 ? (
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-1 sm:gap-1.5">
-              {artists.map((artist) => (
-                <ArtistCard
-                  key={artist.id}
-                  slug={artist.slug}
-                  stage_name={artist.stage_name}
-                  photo_url={artist.photo_url}
-                  hometown={artist.hometown}
-                />
-              ))}
-            </div>
-          ) : (
-            <p className="text-ink/50 py-12 text-center text-sm">Artists coming soon.</p>
-          )}
-        </div>
-      </section>
-    </>
+        ) : (
+          <EmptyState
+            title="No artists yet."
+            body="We sign artists, not sounds. If the music is rooted, honest and built to last, we want to hear it."
+            action={{ href: "/sign", label: "Sign with us" }}
+          />
+        )}
+      </div>
+    </section>
   );
 }

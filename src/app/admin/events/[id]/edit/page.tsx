@@ -17,13 +17,12 @@ export default async function EditEventPage({ params }: { params: Promise<{ id: 
 
   return (
     <div className="space-y-8 max-w-2xl">
-      <div className="flex items-start justify-between gap-4">
+      <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
-          <Link href="/admin/events" className="text-xs text-bone/60 hover:text-ochre transition-colors mb-3 block">
-            ← Events
+          <Link href="/admin/events" className="studio-btn studio-btn-quiet studio-btn-sm mb-3 -ml-3.5">
+            Events
           </Link>
-          <h1 className="font-display font-bold text-bone text-3xl">{event.title}</h1>
-          <div className="mt-3 h-px w-16 bg-bone/20" />
+          <h1 className="studio-page-title">{event.title}</h1>
         </div>
         <DeleteEventButton id={event.id} />
       </div>

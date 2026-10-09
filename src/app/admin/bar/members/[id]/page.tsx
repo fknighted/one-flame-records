@@ -20,26 +20,26 @@ export default async function AdminMemberDetailPage({ params }: { params: Promis
   return (
     <div className="space-y-8 max-w-2xl">
       <div>
-        <p className="text-xs text-bone/60 mb-1">
-          <Link href="/admin/bar/members" className="hover:text-bone transition-colors">← Gamer Members</Link>
+        <p className="text-[14px] mb-2">
+          <Link href="/admin/bar/members" className="studio-link inline-flex min-h-[44px] items-center">← Gamer Members</Link>
         </p>
-        <h1 className="font-display font-bold text-bone text-2xl">{member.display_name}</h1>
-        <p className="text-sm text-bone/50 mt-1">{member.email}</p>
+        <h1 className="studio-page-title">{member.display_name}</h1>
+        <p className="text-[15px] text-muted mt-2 [overflow-wrap:anywhere]">{member.email}</p>
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="border border-bone/10 rounded-lg p-4">
-          <p className="text-xs text-bone/60 mb-1">Balance</p>
-          <p className="text-2xl font-display font-bold text-bone">{member.minutes_balance}<span className="text-sm text-bone/60 ml-1">min</span></p>
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+        <div className="studio-stat">
+          <p className="studio-stat-label">Balance</p>
+          <p className="studio-stat-value">{member.minutes_balance}<span className="text-[14px] font-normal text-muted ml-1 font-text">min</span></p>
         </div>
-        <div className="border border-bone/10 rounded-lg p-4">
-          <p className="text-xs text-bone/60 mb-1">Sessions</p>
-          <p className="text-2xl font-display font-bold text-bone">{sessions?.length ?? 0}</p>
+        <div className="studio-stat">
+          <p className="studio-stat-label">Sessions</p>
+          <p className="studio-stat-value">{sessions?.length ?? 0}</p>
         </div>
-        <div className="border border-bone/10 rounded-lg p-4">
-          <p className="text-xs text-bone/60 mb-1">Total Time</p>
-          <p className="text-2xl font-display font-bold text-bone">{totalMinutes}<span className="text-sm text-bone/60 ml-1">min</span></p>
+        <div className="studio-stat">
+          <p className="studio-stat-label">Total Time</p>
+          <p className="studio-stat-value">{totalMinutes}<span className="text-[14px] font-normal text-muted ml-1 font-text">min</span></p>
         </div>
       </div>
 
@@ -47,18 +47,18 @@ export default async function AdminMemberDetailPage({ params }: { params: Promis
 
       {/* Session history */}
       <section className="space-y-3">
-        <h2 className="text-xs font-semibold uppercase tracking-widest text-bone/52">Session History</h2>
+        <h2 className="studio-label">Session History</h2>
         {!sessions?.length ? (
-          <p className="text-sm text-bone/50">No sessions yet.</p>
+          <p className="text-[15px] text-muted">No sessions yet.</p>
         ) : (
-          <div className="border border-bone/10 rounded-lg divide-y divide-bone/10">
+          <div className="studio-card p-0 divide-y divide-line">
             {sessions.map((s) => (
-              <div key={s.id} className="flex items-center justify-between px-4 py-3 text-sm">
+              <div key={s.id} className="flex items-center justify-between gap-3 px-4 py-3 text-[15px]">
                 <div>
-                  <p className="text-bone">{new Date(s.started_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}</p>
-                  {s.station && <p className="text-xs text-bone/60">{s.station}</p>}
+                  <p className="text-paper">{new Date(s.started_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}</p>
+                  {s.station && <p className="text-[13px] text-muted">{s.station}</p>}
                 </div>
-                <p className="text-bone/60 font-mono">
+                <p className="text-muted studio-figures">
                   {s.duration_minutes != null ? `${s.duration_minutes} min` : "In progress"}
                 </p>
               </div>
@@ -69,19 +69,19 @@ export default async function AdminMemberDetailPage({ params }: { params: Promis
 
       {/* Balance history */}
       <section className="space-y-3">
-        <h2 className="text-xs font-semibold uppercase tracking-widest text-bone/52">Balance History</h2>
+        <h2 className="studio-label">Balance History</h2>
         {!transactions?.length ? (
-          <p className="text-sm text-bone/50">No transactions yet.</p>
+          <p className="text-[15px] text-muted">No transactions yet.</p>
         ) : (
-          <div className="border border-bone/10 rounded-lg divide-y divide-bone/10">
+          <div className="studio-card p-0 divide-y divide-line">
             {transactions.map((t) => (
-              <div key={t.id} className="flex items-center justify-between px-4 py-3 text-sm">
+              <div key={t.id} className="flex items-center justify-between gap-3 px-4 py-3 text-[15px]">
                 <div>
-                  <p className="text-bone capitalize">{t.type}</p>
-                  {t.reason && <p className="text-xs text-bone/60">{t.reason}</p>}
-                  <p className="text-xs text-bone/50">{new Date(t.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}</p>
+                  <p className="text-paper capitalize">{t.type}</p>
+                  {t.reason && <p className="text-[13px] text-muted">{t.reason}</p>}
+                  <p className="text-[13px] text-muted">{new Date(t.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}</p>
                 </div>
-                <p className={`font-mono font-semibold text-sm ${t.amount_minutes > 0 ? "text-sage" : "text-rose"}`}>
+                <p className="studio-count">
                   {t.amount_minutes > 0 ? "+" : ""}{t.amount_minutes}m
                 </p>
               </div>

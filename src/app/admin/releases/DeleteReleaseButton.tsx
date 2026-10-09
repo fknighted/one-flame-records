@@ -10,8 +10,9 @@ export default function DeleteReleaseButton({ action, title }: Props) {
     <form action={action}>
       <button
         type="submit"
-        className="text-xs text-bone/50 hover:text-red-400 transition-colors"
+        className="studio-btn studio-btn-danger studio-btn-sm"
         title="Delete release"
+        aria-label="Delete release"
         onClick={(e) => { if (!confirm(`Delete release "${title}"?`)) e.preventDefault(); }}
       >
         ×

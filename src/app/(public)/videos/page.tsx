@@ -4,6 +4,7 @@ import { createServiceClient } from "@/lib/supabase/server";
 import VideoEmbed from "@/components/VideoEmbed";
 import VideosFilter from "@/components/VideosFilter";
 import SectionHeader from "@/components/SectionHeader";
+import EmptyState from "@/components/EmptyState";
 import type { Tables } from "@/types/supabase";
 
 export const metadata = {
@@ -91,21 +92,15 @@ export default async function VideosPage({
 
   return (
     <>
-      {/* ── Ink banner ── */}
-      <section className="bg-ink">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 pt-16 pb-12">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-forest mb-4">
-            Watch
-          </p>
-          <h1 className="font-display font-bold text-bone text-[clamp(2.5rem,5vw,4rem)] leading-[1.02] tracking-tight">
-            Videos
-          </h1>
-          <div className="mt-4 h-px w-20 bg-oxblood" />
+      {/* ── Page banner ── */}
+      <section className="bg-black">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 pt-14 sm:pt-[88px] pb-2">
+          <SectionHeader as="h1" title="Videos" />
         </div>
       </section>
 
-      {/* ── Sticky filter bar ── */}
-      <section className="bg-cream border-b border-oxblood/10 sticky top-24 z-20">
+      {/* ── Filter bar ── */}
+      <section className="bg-black border-y border-line md:sticky md:top-[76px] z-20">
         <div className="mx-auto max-w-6xl px-4 sm:px-6 py-3">
           <Suspense fallback={null}>
             <VideosFilter artists={artists ?? []} />
@@ -114,13 +109,13 @@ export default async function VideosPage({
       </section>
 
       {/* ── Grid ── */}
-      <section className="bg-cream">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 py-12 space-y-16">
+      <section className="bg-black">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 py-14 sm:py-[88px] space-y-14 sm:space-y-[88px]">
           {/* Music Videos */}
           <div>
             {jobsWithUrls.length > 0 && <SectionHeader title="Music Videos" />}
             {videos && videos.length > 0 ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-2 gap-y-8">
                 {videos.map((video, i) => (
                   <VideoEmbed
                     key={video.id}
@@ -132,22 +127,18 @@ export default async function VideosPage({
                   />
                 ))}
               </div>
+            ) : isFiltered ? (
+              <EmptyState
+                title="No videos match."
+                body="Try a different artist or kind."
+                action={{ href: "/videos", label: "Clear filters" }}
+              />
             ) : (
-              <div className="py-20 text-center">
-                <p className="text-ink/40 text-sm">
-                  {isFiltered
-                    ? "No videos match those filters."
-                    : "Videos coming soon."}
-                </p>
-                {isFiltered && (
-                  <a
-                    href="/videos"
-                    className="mt-4 inline-block text-sm text-oxblood hover:underline"
-                  >
-                    Clear filters
-                  </a>
-                )}
-              </div>
+              <EmptyState
+                title="No videos yet."
+                body="The first ones are in the edit. Hear the roster while you wait."
+                action={{ href: "/artists", label: "Hear the roster" }}
+              />
             )}
           </div>
 
@@ -155,22 +146,22 @@ export default async function VideosPage({
           {jobsWithUrls.length > 0 && (
             <div>
               <SectionHeader title="Generated Videos" />
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-2 gap-y-8">
                 {jobsWithUrls.map((job) =>
                   job.videoUrl ? (
-                    <div key={job.id} className="rounded-lg overflow-hidden border border-oxblood/10 bg-ink/5">
+                    <div key={job.id} className="flex flex-col min-w-0">
                       <video
                         src={job.videoUrl}
                         controls
                         preload="metadata"
-                        className="w-full aspect-video bg-ink/20"
+                        className="w-full aspect-video bg-panel focus-on-black"
                       />
-                      <div className="px-3 py-2">
-                        <p className="text-ink font-medium text-sm truncate">
+                      <div className="mt-2.5 min-w-0">
+                        <p className="type-title-sm text-paper line-clamp-2 [overflow-wrap:anywhere]">
                           {job.artists?.stage_name ?? ""}
                         </p>
                         {job.params && typeof job.params === "object" && "stylePreset" in job.params && (
-                          <p className="text-ink/40 text-xs mt-0.5 truncate">
+                          <p className="mt-1 type-small text-muted [overflow-wrap:anywhere]">
                             {(job.params as Record<string, string>).stylePreset}
                           </p>
                         )}

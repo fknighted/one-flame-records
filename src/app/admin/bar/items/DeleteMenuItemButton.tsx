@@ -14,7 +14,7 @@ export default function DeleteMenuItemButton({ id, name }: { id: string; name: s
         if (!confirm(`Delete "${name}"?`)) return;
         startTransition(() => deleteMenuItem(id));
       }}
-      className="text-xs text-rose/50 hover:text-rose transition-colors disabled:opacity-50"
+      className="studio-btn studio-btn-danger studio-btn-sm"
     >
       {pending ? "…" : "Delete"}
     </button>

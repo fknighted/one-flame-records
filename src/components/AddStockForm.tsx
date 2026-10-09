@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useMemo, useState } from "react";
+import { useActionState, useId, useMemo, useState } from "react";
 import { formatJmd } from "@/lib/bar/pos";
 
 type ActionState = { error: string } | { ok: string } | null;
@@ -12,9 +12,8 @@ export type StockTarget = {
   priceJmd: number;
 };
 
-const INPUT =
-  "w-full bg-bone/5 border border-bone/45 rounded px-2.5 py-1.5 text-sm text-bone placeholder:text-bone/30 focus:outline-2 focus:outline-ochre focus:border-ochre/60";
-const LABEL = "block text-[11px] text-bone/50 mb-1";
+const INPUT = "studio-field";
+const LABEL = "studio-field-label";
 
 /**
  * Add-only stock entry. Bartenders can only add — there is no remove path here.
@@ -32,6 +31,7 @@ export default function AddStockForm({
   targets: StockTarget[];
 }) {
   const [state, formAction, pending] = useActionState(action, null);
+  const uid = useId();
 
   const [targetId, setTargetId] = useState(targets[0]?.id ?? "");
   const [containers, setContainers] = useState("1");
@@ -110,12 +110,12 @@ export default function AddStockForm({
       )}
 
       {(localError || (state && "error" in state)) && (
-        <div className="bg-oxblood/20 border border-oxblood/50 rounded px-3 py-2 text-xs text-bone">
+        <div role="alert" className="studio-error">
           {localError ?? (state && "error" in state ? state.error : "")}
         </div>
       )}
       {state && "ok" in state && (
-        <div className="bg-forest/25 border border-forest/50 rounded px-3 py-2 text-xs text-bone">
+        <div className="studio-success">
           {state.ok}
         </div>
       )}
@@ -124,15 +124,16 @@ export default function AddStockForm({
         <>
           {targets.length > 1 && (
             <div>
-              <label className={LABEL}>Turn this bottle into</label>
+              <label htmlFor={`${uid}-f1`} className={LABEL}>Turn this bottle into</label>
               <select
+id={`${uid}-f1`}
                 value={targetId}
                 onChange={(e) => {
                   setTargetId(e.target.value);
                   const t = targets.find((x) => x.id === e.target.value);
                   setBottleYield(String(t?.bottleYield ?? ""));
                 }}
-                className={INPUT + " bg-ink"}
+                className={INPUT}
               >
                 {targets.map((t) => (
                   <option key={t.id} value={t.id}>
@@ -148,8 +149,9 @@ export default function AddStockForm({
             {isBottle ? (
               <>
                 <div>
-                  <label className={LABEL}>Bottles</label>
+                  <label htmlFor={`${uid}-f2`} className={LABEL}>Bottles</label>
                   <input
+id={`${uid}-f2`}
                     type="number"
                     min="1"
                     step="1"
@@ -159,8 +161,9 @@ export default function AddStockForm({
                   />
                 </div>
                 <div>
-                  <label className={LABEL}>Cost per bottle</label>
+                  <label htmlFor={`${uid}-f3`} className={LABEL}>Cost per bottle</label>
                   <input
+id={`${uid}-f3`}
                     type="number"
                     min="0"
                     step="1"
@@ -171,8 +174,9 @@ export default function AddStockForm({
                   />
                 </div>
                 <div className="col-span-2">
-                  <label className={LABEL}>Units per bottle (e.g. 750ml ≈ 16 shots, 1L ≈ 22)</label>
+                  <label htmlFor={`${uid}-f4`} className={LABEL}>Units per bottle (e.g. 750ml ≈ 16 shots, 1L ≈ 22)</label>
                   <input
+id={`${uid}-f4`}
                     type="number"
                     min="1"
                     step="1"
@@ -186,8 +190,9 @@ export default function AddStockForm({
             ) : (
               <>
                 <div>
-                  <label className={LABEL}>Units</label>
+                  <label htmlFor={`${uid}-f5`} className={LABEL}>Units</label>
                   <input
+id={`${uid}-f5`}
                     type="number"
                     min="1"
                     step="1"
@@ -197,8 +202,9 @@ export default function AddStockForm({
                   />
                 </div>
                 <div>
-                  <label className={LABEL}>Cost each</label>
+                  <label htmlFor={`${uid}-f6`} className={LABEL}>Cost each</label>
                   <input
+id={`${uid}-f6`}
                     type="number"
                     min="0"
                     step="1"
@@ -213,34 +219,34 @@ export default function AddStockForm({
           </div>
 
           {preview && isBottle && (
-            <p className="text-[11px] text-bone/50">
-              Adds <span className="text-bone">{preview.units}</span> × {target?.name} at{" "}
-              <span className="text-bone">{formatJmd(preview.perUnitJmd)}</span> each.
+            <p className="studio-hint">
+              Adds <span className="text-paper">{preview.units}</span> × {target?.name} at{" "}
+              <span className="studio-money text-[16px]">{formatJmd(preview.perUnitJmd)}</span> each.
             </p>
           )}
 
           <button
             type="button"
             onClick={handleReview}
-            className="text-xs text-ochre px-3 py-1.5 border border-ochre/30 rounded hover:border-ochre/60 transition-colors"
+            className="studio-btn studio-btn-secondary"
           >
             Add stock…
           </button>
         </>
       ) : (
         preview && (
-          <div className="space-y-3 rounded-lg border border-ochre/30 bg-ochre/5 p-3">
-            <p className="text-sm text-bone">
+          <div className="space-y-3 border border-muted bg-raised p-3">
+            <p className="text-[15px] text-paper">
               Add <span className="font-semibold">{preview.units} {target?.name}</span> at{" "}
-              <span className="font-semibold">{formatJmd(preview.perUnitJmd)}</span> each
-              {" — "}total cost <span className="font-semibold">{formatJmd(preview.totalJmd)}</span>.
+              <span className="studio-money text-[18px]">{formatJmd(preview.perUnitJmd)}</span> each
+              {" — "}total cost <span className="studio-money text-[18px]">{formatJmd(preview.totalJmd)}</span>.
             </p>
-            <p className="text-[11px] text-bone/50">This can’t be removed once added. Confirm it’s right.</p>
-            <div className="flex items-center gap-2">
+            <p className="studio-hint">This can’t be removed once added. Confirm it’s right.</p>
+            <div className="flex flex-wrap items-center gap-2">
               <button
                 type="submit"
                 disabled={pending}
-                className="bg-ochre text-ink text-xs font-semibold px-4 py-1.5 rounded hover:bg-ochre/90 disabled:opacity-50 transition-colors"
+                className="studio-btn studio-btn-primary"
               >
                 {pending ? "Adding…" : "Confirm & add"}
               </button>
@@ -248,7 +254,7 @@ export default function AddStockForm({
                 type="button"
                 onClick={() => setPhase("edit")}
                 disabled={pending}
-                className="text-xs text-bone/50 hover:text-bone px-3 py-1.5 transition-colors"
+                className="studio-btn studio-btn-quiet"
               >
                 Cancel
               </button>

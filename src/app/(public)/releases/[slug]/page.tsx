@@ -4,6 +4,9 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { createServiceClient } from "@/lib/supabase/server";
 import VideoEmbed from "@/components/VideoEmbed";
+import PosterHeadline from "@/components/PosterHeadline";
+import SectionHeader from "@/components/SectionHeader";
+import LogoMark from "@/components/LogoMark";
 import type { Tables } from "@/types/supabase";
 import { buildSpotifyEmbedUrl } from "@/lib/spotify";
 
@@ -25,13 +28,6 @@ const TYPE_LABEL: Record<string, string> = {
   ep:      "EP",
   album:   "Album",
   mixtape: "Mixtape",
-};
-
-const TYPE_PILL: Record<string, string> = {
-  single:  "bg-ochre text-ink",
-  ep:      "bg-forest text-bone",
-  album:   "bg-oxblood text-bone",
-  mixtape: "bg-ink text-bone",
 };
 
 function formatDate(dateStr: string) {
@@ -159,7 +155,6 @@ export default async function ReleaseDetailPage({ params }: Props) {
   const streaming = (release.streaming_links as StreamingLinks) ?? {};
   const activeStreaming = STREAMING_SERVICES.filter(({ key }) => streaming[key]);
   const spotifyEmbedUrl = streaming.spotify ? buildSpotifyEmbedUrl(streaming.spotify, "album") : null;
-  const pillStyle = TYPE_PILL[release.type] ?? "bg-ink/10 text-ink";
 
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://oneflamerecords.com";
   const jsonLd = {
@@ -186,23 +181,20 @@ export default async function ReleaseDetailPage({ params }: Props) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\u003c") }}
       />
 
-      {/* ── Ink header band ── */}
-      <section className="bg-ink">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 pt-12 pb-10">
+      {/* ── Header ── */}
+      <section className="bg-black">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 pt-10 sm:pt-14 pb-14">
           <Link
             href="/releases"
-            className="inline-flex items-center gap-1.5 text-xs text-bone/30 hover:text-bone/60 transition-colors mb-6"
+            className="type-label text-yellow underline underline-offset-4 focus-on-black"
           >
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
-              <path d="M19 12H5M5 12l7-7M5 12l7 7" />
-            </svg>
             All releases
           </Link>
 
           {/* Cover + headline */}
-          <div className="flex flex-col sm:flex-row gap-7 sm:gap-10 items-start">
-            {/* Cover */}
-            <div className="relative w-40 sm:w-52 aspect-square shrink-0 overflow-hidden shadow-lg">
+          <div className="mt-8 flex flex-col sm:flex-row gap-7 sm:gap-10 items-start">
+            {/* Cover: artwork, so it is shown as supplied (not printed) */}
+            <div className="relative w-40 sm:w-52 aspect-square shrink-0 bg-panel">
               {release.cover_url ? (
                 <Image
                   src={release.cover_url}
@@ -213,48 +205,46 @@ export default async function ReleaseDetailPage({ params }: Props) {
                   sizes="(max-width: 640px) 160px, 208px"
                 />
               ) : (
-                <div className="absolute inset-0 bg-oxblood/20 flex items-center justify-center">
-                  <svg viewBox="0 0 20 28" className="w-10 h-auto opacity-30" aria-hidden="true">
-                    <path d="M10 1C10 1 4 9 4 16C4 19.8 6.3 23.1 10 25C13.7 23.1 16 19.8 16 16C16 9 10 1 10 1Z" fill="#8B2A1F" />
-                  </svg>
+                <div className="absolute inset-0 bg-red grid place-items-center">
+                  <LogoMark variant="flame" ground="red" height={56} alt="" />
                 </div>
               )}
             </div>
 
             {/* Title block */}
-            <div className="flex flex-col justify-end py-1">
-              <span className={`inline-block self-start text-[10px] font-semibold uppercase tracking-widest px-2 py-0.5 rounded-sm mb-3 ${pillStyle}`}>
+            <div className="flex flex-col justify-end min-w-0">
+              <span className="self-start bg-red text-paper px-3 py-1.5 type-label mb-4">
                 {TYPE_LABEL[release.type] ?? release.type}
               </span>
-              <h1 className="font-display font-bold text-bone text-[clamp(1.75rem,4vw,3rem)] leading-tight tracking-tight">
+              <PosterHeadline as="h1" size="headline" className="text-paper">
                 {release.title}
-              </h1>
-              <div className="mt-2 flex flex-wrap items-center gap-x-2.5 gap-y-1 text-sm">
+              </PosterHeadline>
+              <span aria-hidden="true" className="section-bar mt-2" />
+              <div className="mt-4 flex flex-wrap items-center gap-x-3 gap-y-1 type-small">
                 {artist && (
                   <Link
                     href={`/artists/${artist.slug}`}
-                    className="font-medium text-bone/80 hover:text-ochre transition-colors"
+                    className="text-yellow underline underline-offset-2 focus-on-black [overflow-wrap:anywhere]"
                   >
                     {artist.stage_name}
                   </Link>
                 )}
-                <span className="text-bone/25">·</span>
-                <span className="text-bone/40">{formatDate(release.release_date)}</span>
+                <span className="text-muted">{formatDate(release.release_date)}</span>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ── Cream body ── */}
-      <section className="bg-cream">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 py-12">
+      {/* ── Body ── */}
+      <section className="bg-black border-t border-line">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 py-14 sm:py-[88px]">
           <div className="grid grid-cols-1 md:grid-cols-[1fr_auto] gap-10">
 
             {/* Left: description + video */}
-            <div>
+            <div className="min-w-0">
               {release.description && (
-                <p className="text-ink/70 leading-relaxed max-w-prose mb-10">
+                <p className="type-body text-paper max-w-[66ch] mb-10 [overflow-wrap:anywhere]">
                   {release.description}
                 </p>
               )}
@@ -263,20 +253,20 @@ export default async function ReleaseDetailPage({ params }: Props) {
                 <div className="mb-10 max-w-2xl">
                   <iframe
                     src={spotifyEmbedUrl}
+                    title={`${release.title} on Spotify`}
                     width="100%"
                     height="352"
                     frameBorder="0"
                     allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
                     loading="lazy"
-                    className="rounded-lg"
+                    className="block w-full"
                   />
                 </div>
               )}
 
               {video && (
                 <>
-                  <h2 className="font-display font-bold text-oxblood text-xl mb-1">Video</h2>
-                  <div className="mt-2 h-px w-10 bg-oxblood mb-6" />
+                  <SectionHeader title="Video" />
                   <div className="max-w-2xl">
                     <VideoEmbed
                       youtube_id={video.youtube_id}
@@ -292,10 +282,8 @@ export default async function ReleaseDetailPage({ params }: Props) {
 
             {/* Right: streaming links */}
             {activeStreaming.length > 0 && (
-              <div className="md:w-52 shrink-0">
-                <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-ink/40 mb-3">
-                  Listen on
-                </p>
+              <div className="md:w-56 shrink-0">
+                <p className="type-label text-muted mb-3">Listen on</p>
                 <div className="flex flex-col gap-2">
                   {activeStreaming.map(({ key, label, buildUrl, Icon }) => (
                     <a
@@ -303,7 +291,8 @@ export default async function ReleaseDetailPage({ params }: Props) {
                       href={buildUrl(streaming[key]!)}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-3 rounded border border-oxblood/20 px-3.5 py-2.5 text-sm font-medium text-ink hover:border-oxblood hover:bg-oxblood hover:text-bone transition-colors"
+                      aria-label={`${label} (opens in a new tab)`}
+                      className="inline-flex min-h-[46px] items-center gap-3 px-4 bg-black text-yellow shadow-[inset_0_0_0_2px_var(--color-yellow)] type-button hover:bg-yellow hover:text-black focus-on-black"
                     >
                       <Icon />
                       {label}

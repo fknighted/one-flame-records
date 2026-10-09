@@ -23,7 +23,7 @@ export default function RemoveItemButton({ tabItemId, tabId }: { tabItemId: stri
       <input type="hidden" name="tab_id" value={tabId} />
       <input type="hidden" name="reason" ref={reasonRef} defaultValue="" />
       {state?.error && (
-        <span className="text-xs text-red-400 absolute bottom-full left-0 whitespace-nowrap mb-1">
+        <span role="alert" className="studio-error text-[13px] absolute bottom-full left-0 whitespace-nowrap mb-1">
           {state.error}
         </span>
       )}
@@ -31,7 +31,7 @@ export default function RemoveItemButton({ tabItemId, tabId }: { tabItemId: stri
         type="button"
         onClick={handleClick}
         disabled={pending}
-        className="text-bone/52 hover:text-red-400 transition-colors text-lg leading-none shrink-0 w-6 h-6 flex items-center justify-center disabled:opacity-40"
+        className="studio-btn studio-btn-danger !min-h-[44px] !w-11 !p-0 text-[18px] shrink-0"
         aria-label="Remove item"
       >
         ×

@@ -32,28 +32,29 @@ export default function AdminAssetUploadForm({ artistId }: { artistId: string })
   return (
     <form ref={formRef} action={action} className="space-y-5">
       {state && "error" in state && (
-        <div className="rounded border border-oxblood/30 bg-oxblood/20 px-4 py-3 text-sm text-red-300">
+        <div role="alert" className="studio-error">
           {state.error}
         </div>
       )}
       {uploaded && !pending && !(state && "error" in state) && (
-        <div className="rounded border border-forest/40 bg-forest/20 px-4 py-3 text-sm text-green-300 flex items-center justify-between">
+        <div className="studio-success flex items-center justify-between">
           <span>Asset uploaded successfully.</span>
-          <button type="button" onClick={() => setUploaded(false)} className="text-green-300/60 hover:text-green-300 ml-4">
+          <button type="button" onClick={() => setUploaded(false)} aria-label="Dismiss" className="studio-btn studio-btn-quiet studio-btn-sm ml-4">
             ×
           </button>
         </div>
       )}
 
       <div>
-        <label className="mb-2 block text-xs font-semibold uppercase tracking-[0.15em] text-bone/50">
+        <label htmlFor="asset-kind" className="studio-field-label">
           Kind
         </label>
         <select
+          id="asset-kind"
           name="kind"
           value={selectedKind}
           onChange={(e) => { setSelectedKind(e.target.value); setUploaded(false); }}
-          className="w-full rounded border border-bone/45 bg-ink px-3 py-2 text-sm text-bone focus:border-ochre focus:outline-2 focus:outline-ochre"
+          className="studio-field"
         >
           {KINDS.map((k) => (
             <option key={k.value} value={k.value}>
@@ -64,49 +65,52 @@ export default function AdminAssetUploadForm({ artistId }: { artistId: string })
       </div>
 
       <div>
-        <label className="mb-2 block text-xs font-semibold uppercase tracking-[0.15em] text-bone/50">
+        <label htmlFor="asset-title" className="studio-field-label">
           Title
         </label>
         <input
+          id="asset-title"
           name="title"
           type="text"
           required
           placeholder="Track or file name"
-          className="w-full rounded border border-bone/45 bg-ink px-3 py-2 text-sm text-bone placeholder:text-bone/50 focus:border-ochre focus:outline-2 focus:outline-ochre"
+          className="studio-field"
         />
       </div>
 
       <div>
-        <label className="mb-2 block text-xs font-semibold uppercase tracking-[0.15em] text-bone/50">
-          Notes <span className="normal-case text-bone/50">(optional)</span>
+        <label htmlFor="asset-notes" className="studio-field-label">
+          Notes <span className="text-muted">(optional)</span>
         </label>
         <textarea
+          id="asset-notes"
           name="notes"
           rows={3}
           placeholder="BPM, key, or any notes for the pipeline…"
-          className="w-full resize-none rounded border border-bone/45 bg-ink px-3 py-2 text-sm text-bone placeholder:text-bone/50 focus:border-ochre focus:outline-2 focus:outline-ochre"
+          className="studio-field resize-none"
         />
       </div>
 
       <div>
-        <label className="mb-2 block text-xs font-semibold uppercase tracking-[0.15em] text-bone/50">
+        <label htmlFor="asset-file" className="studio-field-label">
           File
         </label>
         <input
+          id="asset-file"
           name="file"
           type="file"
           required
           accept={currentKind.accept}
-          className="w-full cursor-pointer text-sm text-bone/70 file:mr-3 file:cursor-pointer file:rounded file:border-0 file:bg-bone/10 file:px-3 file:py-1.5 file:text-xs file:font-semibold file:text-bone hover:file:bg-bone/20"
+          className="studio-field cursor-pointer"
         />
-        <p className="mt-1.5 text-xs text-bone/50">Max 10 MB</p>
+        <p className="studio-hint mt-1.5">Max 10 MB</p>
       </div>
 
       <div className="flex items-center gap-4 pt-2">
         <button
           type="submit"
           disabled={pending}
-          className="rounded bg-ochre px-5 py-2 text-sm font-semibold text-ink transition-colors hover:bg-ochre/90 disabled:opacity-50"
+          className="studio-btn studio-btn-primary"
         >
           {pending ? "Uploading…" : "Upload Asset"}
         </button>

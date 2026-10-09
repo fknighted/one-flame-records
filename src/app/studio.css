@@ -1,0 +1,396 @@
+/* Studio screens (admin, portal, bar till, gamer portal, login, auth) in the
+   Sound System look. Calm: black ground, panel for lifted panels, paper text,
+   muted supporting text, line dividers, square corners, borders not shadows.
+   Yellow only for the one main action and for money. Green only for small
+   open / live / paid / done chips. Guide: docs/studio-sound-system.md.
+
+   Plain CSS on the variables from globals.css (fallbacks repeat the values).
+   Everything sits in the `components` layer so Tailwind utilities on the same
+   element (w-auto, mt-4, text-right ...) still win. */
+
+@layer theme, base, components, utilities;
+
+@layer components {
+  /* ── Ground ───────────────────────────────────────────────────────────── */
+  .studio-shell {
+    background-color: var(--color-black, #0F0D0B);
+    color: var(--color-paper, #FFF7E6);
+    font-family: var(--font-text, system-ui, sans-serif);
+    color-scheme: dark;
+  }
+
+  /* ── Type ─────────────────────────────────────────────────────────────── */
+  /* The only Big Shoulders text besides money and counts. */
+  .studio-page-title {
+    font-family: var(--font-poster, Impact, sans-serif);
+    font-variation-settings: "opsz" 72;
+    font-weight: 800;
+    text-transform: uppercase;
+    font-size: 32px;
+    line-height: 0.95;
+    color: var(--color-paper, #FFF7E6);
+    overflow-wrap: anywhere;
+  }
+  .studio-section-title {
+    font-family: var(--font-text, system-ui, sans-serif);
+    font-weight: 800;
+    font-size: 18px;
+    line-height: 1.3;
+    color: var(--color-paper, #FFF7E6);
+  }
+  /* Small heading above a group (was the 10px tracked bone/60 eyebrow). */
+  .studio-label {
+    font-family: var(--font-text, system-ui, sans-serif);
+    font-weight: 800;
+    font-size: 12px;
+    line-height: 1.3;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-muted, #D8CCB4);
+  }
+  .studio-muted {
+    color: var(--color-muted, #D8CCB4);
+  }
+  .studio-hint {
+    font-size: 13px;
+    line-height: 1.4;
+    font-weight: 600;
+    color: var(--color-muted, #D8CCB4);
+  }
+  /* Times, codes, ids: Archivo with even-width figures (replaces font-mono). */
+  .studio-figures {
+    font-family: var(--font-text, system-ui, sans-serif);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Money: yellow, Big Shoulders, even-width figures. */
+  .studio-money {
+    font-family: var(--font-poster, Impact, sans-serif);
+    font-variation-settings: "opsz" 72;
+    font-weight: 800;
+    font-size: 24px;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+    color: var(--color-yellow, #F2C230);
+    white-space: nowrap;
+  }
+  /* A count in a table or list: Big Shoulders, paper. */
+  .studio-count {
+    font-family: var(--font-poster, Impact, sans-serif);
+    font-variation-settings: "opsz" 72;
+    font-weight: 800;
+    font-size: 24px;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+    color: var(--color-paper, #FFF7E6);
+  }
+
+  /* ── Links ────────────────────────────────────────────────────────────── */
+  .studio-link {
+    color: var(--color-paper, #FFF7E6);
+    text-decoration-line: underline;
+    text-underline-offset: 4px;
+    text-decoration-thickness: 1px;
+  }
+  .studio-link:hover {
+    text-decoration-thickness: 2px;
+  }
+  .studio-link:focus-visible,
+  .studio-focus:focus-visible {
+    outline: 3px solid var(--color-yellow, #F2C230);
+    outline-offset: 2px;
+  }
+
+  /* ── Panels ───────────────────────────────────────────────────────────── */
+  .studio-card {
+    background-color: var(--color-panel, #16130F);
+    border: 1px solid var(--color-line, #3A332B);
+    padding: 16px;
+  }
+  @media (min-width: 640px) {
+    .studio-card {
+      padding: 20px;
+    }
+  }
+  .studio-divider {
+    border-top: 1px solid var(--color-line, #3A332B);
+  }
+
+  /* Stat tile: label, then a big count or money figure. */
+  .studio-stat {
+    background-color: var(--color-panel, #16130F);
+    border: 1px solid var(--color-line, #3A332B);
+    padding: 16px;
+    display: grid;
+    gap: 8px;
+    align-content: start;
+    min-width: 0;
+  }
+  .studio-stat-label {
+    font-size: 13px;
+    line-height: 1.4;
+    font-weight: 600;
+    color: var(--color-muted, #D8CCB4);
+  }
+  .studio-stat-value {
+    font-family: var(--font-poster, Impact, sans-serif);
+    font-variation-settings: "opsz" 72;
+    font-weight: 900;
+    font-size: 44px;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+    color: var(--color-paper, #FFF7E6);
+    overflow-wrap: anywhere;
+  }
+  .studio-stat-value.is-money {
+    color: var(--color-yellow, #F2C230);
+  }
+
+  /* ── Tables ───────────────────────────────────────────────────────────── */
+  /* One scrolling box. Never nest overflow-hidden around it (iOS Safari). */
+  .studio-table-wrap {
+    background-color: var(--color-panel, #16130F);
+    border: 1px solid var(--color-line, #3A332B);
+    overflow-x: auto;
+  }
+  .studio-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 16px;
+    line-height: 1.45;
+  }
+  .studio-table th {
+    padding: 12px 16px;
+    text-align: left;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--color-muted, #D8CCB4);
+    border-bottom: 1px solid var(--color-line, #3A332B);
+    white-space: nowrap;
+  }
+  .studio-table td {
+    padding: 12px 16px;
+    color: var(--color-paper, #FFF7E6);
+    border-bottom: 1px solid var(--color-line, #3A332B);
+    vertical-align: middle;
+  }
+  .studio-table tbody tr:last-child td {
+    border-bottom: 0;
+  }
+  .studio-table .is-num {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+  .studio-table tbody tr.is-link:hover td {
+    background-color: var(--color-raised, #2A241E);
+  }
+
+  /* ── Fields ───────────────────────────────────────────────────────────── */
+  /* Fields always sit on paper (brand book). The fill is the edge against the
+     black ground (18.2:1); the focus ring is drawn on the ground, so yellow. */
+  .studio-field {
+    display: block;
+    width: 100%;
+    min-height: 46px;
+    padding: 0 12px;
+    background-color: var(--color-paper, #FFF7E6);
+    color: var(--color-black, #0F0D0B);
+    border: 2px solid var(--color-black, #0F0D0B);
+    border-radius: 0;
+    font-family: var(--font-text, system-ui, sans-serif);
+    font-size: 16px; /* 16px stops iPhone zooming in on focus */
+    line-height: 1.4;
+    color-scheme: light; /* dark date-picker and select icons on paper */
+  }
+  textarea.studio-field {
+    padding: 10px 12px;
+    min-height: 96px;
+  }
+  .studio-field::placeholder {
+    color: rgb(15 13 11 / 0.7);
+    opacity: 1;
+  }
+  .studio-field:focus,
+  .studio-field:focus-visible {
+    outline: 3px solid var(--color-yellow, #F2C230);
+    outline-offset: 2px;
+  }
+  .studio-field:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+  .studio-field[type="file"] {
+    padding: 8px 12px;
+  }
+  .studio-field-label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 14px;
+    line-height: 1.4;
+    font-weight: 600;
+    color: var(--color-paper, #FFF7E6);
+  }
+  /* Checkbox / radio: native control in yellow. */
+  .studio-check {
+    width: 20px;
+    height: 20px;
+    accent-color: var(--color-yellow, #F2C230);
+  }
+  .studio-check:focus-visible {
+    outline: 3px solid var(--color-yellow, #F2C230);
+    outline-offset: 2px;
+  }
+
+  /* ── Buttons ──────────────────────────────────────────────────────────── */
+  .studio-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 46px;
+    padding: 0 20px;
+    border: 2px solid transparent;
+    border-radius: 0;
+    font-family: var(--font-text, system-ui, sans-serif);
+    font-weight: 800;
+    font-size: 15px;
+    line-height: 1;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 120ms, color 120ms, border-color 120ms;
+  }
+  .studio-btn:focus-visible {
+    outline: 3px solid var(--color-yellow, #F2C230);
+    outline-offset: 2px;
+  }
+  .studio-btn:disabled,
+  .studio-btn[aria-disabled="true"] {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+  /* Phone-friendly smaller button for table rows: still a 44px tap target. */
+  .studio-btn-sm {
+    min-height: 44px;
+    padding: 0 14px;
+    font-size: 13px;
+  }
+  /* The one main action on the screen. Black on yellow 11.6:1. */
+  .studio-btn-primary {
+    background-color: var(--color-yellow, #F2C230);
+    border-color: var(--color-yellow, #F2C230);
+    color: var(--color-black, #0F0D0B);
+  }
+  .studio-btn-primary:hover:not(:disabled) {
+    background-color: var(--color-paper, #FFF7E6);
+    border-color: var(--color-paper, #FFF7E6);
+  }
+  /* Every other action. Paper text, 2px muted edge (12.2:1). */
+  .studio-btn-secondary {
+    background-color: transparent;
+    border-color: var(--color-muted, #D8CCB4);
+    color: var(--color-paper, #FFF7E6);
+  }
+  .studio-btn-secondary:hover:not(:disabled) {
+    background-color: var(--color-muted, #D8CCB4);
+    color: var(--color-black, #0F0D0B);
+  }
+  /* Delete, revoke, void. Red edge (3.6:1 as an edge), paper text; fills red on hover (5.0:1). */
+  .studio-btn-danger {
+    background-color: transparent;
+    border-color: var(--color-red, #C8321F);
+    color: var(--color-paper, #FFF7E6);
+  }
+  .studio-btn-danger:hover:not(:disabled) {
+    background-color: var(--color-red, #C8321F);
+  }
+  /* Quiet text-only action (Cancel, Back). */
+  .studio-btn-quiet {
+    background-color: transparent;
+    color: var(--color-paper, #FFF7E6);
+    text-decoration-line: underline;
+    text-underline-offset: 4px;
+    text-transform: none;
+    letter-spacing: 0;
+    font-weight: 600;
+  }
+
+  /* ── Status chips ─────────────────────────────────────────────────────── */
+  /* Always the word, never colour alone. */
+  .studio-chip {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px 8px;
+    border: 1px solid transparent;
+    font-family: var(--font-text, system-ui, sans-serif);
+    font-weight: 700;
+    font-size: 12px;
+    line-height: 1.4;
+    white-space: nowrap;
+  }
+  /* open, live, paid, done, active. Paper on green 6.0:1. */
+  .studio-chip-ok {
+    background-color: var(--color-green, #2F6B3A);
+    color: var(--color-paper, #FFF7E6);
+  }
+  /* failed, overdue, rejected, banned. Paper on red 5.0:1. */
+  .studio-chip-bad {
+    background-color: var(--color-red, #C8321F);
+    color: var(--color-paper, #FFF7E6);
+  }
+  /* everything else: pending, draft, idea, mixing, closed, hidden. Muted 12.2:1. */
+  .studio-chip-neutral {
+    background-color: transparent;
+    border-color: var(--color-muted, #D8CCB4);
+    color: var(--color-muted, #D8CCB4);
+  }
+  /* a count needing attention (nav badge). Black on paper 18.2:1. */
+  .studio-chip-count {
+    background-color: var(--color-paper, #FFF7E6);
+    color: var(--color-black, #0F0D0B);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ── Messages ─────────────────────────────────────────────────────────── */
+  /* Red text on black is only 3.6:1, so errors are a red strip with paper text. */
+  .studio-error {
+    background-color: var(--color-red, #C8321F);
+    color: var(--color-paper, #FFF7E6);
+    padding: 10px 14px;
+    font-size: 15px;
+    line-height: 1.45;
+    font-weight: 600;
+  }
+  .studio-success {
+    background-color: var(--color-green, #2F6B3A);
+    color: var(--color-paper, #FFF7E6);
+    padding: 10px 14px;
+    font-size: 15px;
+    line-height: 1.45;
+    font-weight: 600;
+  }
+
+  /* ── Empty state ──────────────────────────────────────────────────────── */
+  .studio-empty {
+    background-color: var(--color-panel, #16130F);
+    border: 1px dashed var(--color-muted, #D8CCB4);
+    padding: 24px 20px;
+    display: grid;
+    gap: 8px;
+    justify-items: start;
+  }
+  .studio-empty-title {
+    font-weight: 800;
+    font-size: 18px;
+    line-height: 1.3;
+    color: var(--color-paper, #FFF7E6);
+  }
+  .studio-empty-body {
+    font-size: 16px;
+    line-height: 1.5;
+    color: var(--color-muted, #D8CCB4);
+    max-width: 60ch;
+  }
+}

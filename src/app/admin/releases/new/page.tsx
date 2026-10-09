@@ -12,7 +12,7 @@ export default async function NewReleasePage() {
 
   return (
     <div className="space-y-6">
-      <h1 className="font-display text-2xl text-bone">New Release</h1>
+      <h1 className="studio-page-title">New Release</h1>
       <ReleaseForm action={createRelease} mode="create" artists={artists ?? []} />
     </div>
   );

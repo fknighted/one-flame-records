@@ -7,9 +7,8 @@ import type { Tables } from "@/types/supabase";
 type Post = Tables<"news_posts">;
 type ActionState = { error: string } | null;
 
-const INPUT =
-  "w-full bg-bone/5 border border-bone/45 rounded px-3 py-2 text-sm text-bone placeholder:text-bone/30 focus:outline-2 focus:outline-ochre focus:border-ochre/60";
-const LABEL = "block text-xs text-bone/50 mb-1";
+const INPUT = "studio-field";
+const LABEL = "studio-field-label";
 
 function slugify(text: string): string {
   return text
@@ -62,15 +61,16 @@ export default function NewsForm({
       <input type="hidden" name="is_published" value={isPublished ? "true" : "false"} />
 
       {state?.error && (
-        <p className="rounded bg-red-900/40 px-4 py-2 text-sm text-red-300">
+        <p role="alert" className="studio-error">
           {state.error}
         </p>
       )}
 
       {/* Title */}
       <div>
-        <label className={LABEL}>Title *</label>
+        <label htmlFor="news-title" className={LABEL}>Title *</label>
         <input
+          id="news-title"
           className={INPUT}
           name="title"
           value={title}
@@ -82,8 +82,9 @@ export default function NewsForm({
 
       {/* Slug */}
       <div>
-        <label className={LABEL}>Slug *</label>
+        <label htmlFor="news-slug" className={LABEL}>Slug *</label>
         <input
+          id="news-slug"
           className={INPUT}
           name="slug"
           value={slug}
@@ -95,8 +96,8 @@ export default function NewsForm({
 
       {/* Category */}
       <div>
-        <label className={LABEL}>Category</label>
-        <select className={INPUT} name="category" defaultValue={post?.category ?? "label"}>
+        <label htmlFor="news-category" className={LABEL}>Category</label>
+        <select id="news-category" className={INPUT} name="category" defaultValue={post?.category ?? "label"}>
           <option value="label">Label</option>
           <option value="release">Release</option>
           <option value="event">Event</option>
@@ -105,8 +106,9 @@ export default function NewsForm({
 
       {/* Excerpt */}
       <div>
-        <label className={LABEL}>Excerpt</label>
+        <label htmlFor="news-excerpt" className={LABEL}>Excerpt</label>
         <textarea
+          id="news-excerpt"
           className={INPUT}
           name="excerpt"
           rows={2}
@@ -117,11 +119,10 @@ export default function NewsForm({
 
       {/* Body */}
       <div>
-        <div className="flex items-center justify-between mb-1">
-          <label className={LABEL} style={{ marginBottom: 0 }}>Body (Markdown)</label>
-        </div>
+        <label htmlFor="news-body" className={LABEL}>Body (Markdown)</label>
         <textarea
-          className={`${INPUT} font-mono text-xs leading-relaxed`}
+          id="news-body"
+          className={`${INPUT} leading-relaxed`}
           name="body"
           rows={16}
           placeholder="Write the post body in Markdown…"
@@ -131,29 +132,29 @@ export default function NewsForm({
 
       {/* Cover image */}
       <div>
-        <div className="flex items-center justify-between mb-1">
-          <label className={LABEL} style={{ marginBottom: 0 }}>Cover image</label>
-        </div>
+        <label htmlFor="news-cover" className={LABEL}>Cover image</label>
         {coverPreview && (
           <img
             src={coverPreview}
             alt="Cover preview"
-            className="mb-3 h-32 w-auto rounded object-cover"
+            className="mb-3 h-32 w-auto object-cover border border-line"
           />
         )}
         <input
+          id="news-cover"
           type="file"
           name="cover"
           accept="image/*"
           onChange={handleCoverChange}
-          className="text-sm text-bone/60 file:mr-3 file:rounded file:border-0 file:bg-oxblood file:px-3 file:py-1 file:text-xs file:text-bone file:cursor-pointer"
+          className="studio-field"
         />
       </div>
 
       {/* Published at */}
       <div>
-        <label className={LABEL}>Publish date &amp; time</label>
+        <label htmlFor="news-published-at" className={LABEL}>Publish date &amp; time</label>
         <input
+          id="news-published-at"
           type="datetime-local"
           className={INPUT}
           name="published_at"
@@ -168,31 +169,31 @@ export default function NewsForm({
           role="switch"
           aria-checked={isPublished}
           onClick={() => setIsPublished((v) => !v)}
-          className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors ${
-            isPublished ? "bg-forest" : "bg-bone/20"
+          className={`relative inline-flex h-7 w-12 shrink-0 cursor-pointer border-2 border-muted transition-colors focus-visible:outline focus-visible:outline-[3px] focus-visible:outline-offset-2 focus-visible:outline-yellow ${
+            isPublished ? "bg-green" : "bg-raised"
           }`}
         >
           <span
-            className={`pointer-events-none inline-block h-5 w-5 rounded-full bg-bone shadow transition-transform ${
+            className={`pointer-events-none inline-block h-5 w-5 bg-paper transition-transform ${
               isPublished ? "translate-x-5" : "translate-x-0"
             }`}
           />
         </button>
-        <span className="text-sm text-bone/70">
+        <span className="text-paper">
           {isPublished ? "Published" : "Draft"}
         </span>
       </div>
 
       {/* Actions */}
-      <div className="flex items-center gap-4 pt-2">
+      <div className="flex flex-wrap items-center gap-4 pt-2">
         <button
           type="submit"
           disabled={pending}
-          className="rounded bg-oxblood px-5 py-2 text-sm font-medium text-bone hover:bg-oxblood/80 disabled:opacity-50 transition-colors"
+          className="studio-btn studio-btn-primary"
         >
           {pending ? "Saving…" : mode === "create" ? "Create Post" : "Save Changes"}
         </button>
-        <Link href="/admin/news" className="text-sm text-bone/40 hover:text-bone/70 transition-colors">
+        <Link href="/admin/news" className="studio-btn studio-btn-quiet studio-btn-sm">
           Cancel
         </Link>
       </div>

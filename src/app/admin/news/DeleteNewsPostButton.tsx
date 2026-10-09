@@ -20,8 +20,9 @@ export default function DeleteNewsPostButton({ id, title }: { id: string; title:
           }
         });
       }}
-      className="text-xs text-bone/60 hover:text-red-400 transition-colors disabled:opacity-50"
+      className="studio-btn studio-btn-danger studio-btn-sm"
       title="Delete post"
+      aria-label="Delete post"
     >
       {pending ? "…" : "×"}
     </button>

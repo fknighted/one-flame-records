@@ -28,11 +28,9 @@ function slugify(name: string): string {
     .replace(/-+/g, "-");
 }
 
-const INPUT =
-  "w-full bg-bone/5 border border-bone/45 rounded px-3 py-2 text-sm text-bone placeholder:text-bone/30 focus:outline-2 focus:outline-ochre focus:border-ochre/60";
-const LABEL = "block text-xs text-bone/50 mb-1";
-const SECTION_HEADING =
-  "text-xs font-sans uppercase tracking-widest text-bone/35 pb-2 border-b border-bone/10";
+const INPUT = "studio-field";
+const LABEL = "studio-field-label";
+const SECTION_HEADING = "studio-section-title pb-2 border-b border-line";
 
 export default function ReleaseForm({
   action,
@@ -78,7 +76,7 @@ export default function ReleaseForm({
       )}
 
       {state?.error && (
-        <div className="bg-oxblood/20 border border-oxblood/50 rounded px-4 py-3 text-sm text-bone">
+        <div role="alert" className="studio-error">
           {state.error}
         </div>
       )}
@@ -87,11 +85,11 @@ export default function ReleaseForm({
       <section className="space-y-4">
         <h2 className={SECTION_HEADING}>Basic Info</h2>
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label className={LABEL}>Title *</label>
+            <label htmlFor="title" className={LABEL}>Title *</label>
             <input
-              name="title"
+              id="title" name="title"
               type="text"
               required
               value={title}
@@ -100,9 +98,9 @@ export default function ReleaseForm({
             />
           </div>
           <div>
-            <label className={LABEL}>URL Slug *</label>
+            <label htmlFor="slug" className={LABEL}>URL Slug *</label>
             <input
-              name="slug"
+              id="slug" name="slug"
               type="text"
               required
               value={slug}
@@ -112,14 +110,14 @@ export default function ReleaseForm({
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label className={LABEL}>Artist *</label>
+            <label htmlFor="artist_id" className={LABEL}>Artist *</label>
             <select
-              name="artist_id"
+              id="artist_id" name="artist_id"
               required
               defaultValue={initialValues.artist_id ?? ""}
-              className={INPUT + " bg-ink"}
+              className={INPUT}
             >
               <option value="" disabled>
                 Select artist…
@@ -132,11 +130,11 @@ export default function ReleaseForm({
             </select>
           </div>
           <div>
-            <label className={LABEL}>Type *</label>
+            <label htmlFor="type" className={LABEL}>Type *</label>
             <select
-              name="type"
+              id="type" name="type"
               defaultValue={initialValues.type ?? "single"}
-              className={INPUT + " bg-ink"}
+              className={INPUT}
             >
               <option value="single">Single</option>
               <option value="ep">EP</option>
@@ -146,19 +144,19 @@ export default function ReleaseForm({
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label className={LABEL}>Release Date *</label>
+            <label htmlFor="release_date" className={LABEL}>Release Date *</label>
             <input
-              name="release_date"
+              id="release_date" name="release_date"
               type="date"
               required
               defaultValue={initialValues.release_date ?? ""}
-              className={INPUT + " bg-ink"}
+              className={INPUT}
             />
           </div>
-          <div className="flex items-end pb-2">
-            <label className="flex items-center gap-2 cursor-pointer">
+          <div className="flex items-end">
+            <label className="flex items-center gap-3 min-h-[44px] cursor-pointer">
               <input
                 type="hidden"
                 name="featured"
@@ -169,9 +167,9 @@ export default function ReleaseForm({
                 type="checkbox"
                 value="true"
                 defaultChecked={initialValues.featured ?? false}
-                className="w-4 h-4 rounded border-bone/30 bg-bone/5 accent-ochre"
+                className="studio-check"
               />
-              <span className="text-sm text-bone/70">Featured on homepage</span>
+              <span className="text-[15px]">Featured on homepage</span>
             </label>
           </div>
         </div>
@@ -186,18 +184,19 @@ export default function ReleaseForm({
             <img
               src={coverPreview}
               alt=""
-              className="w-20 h-20 rounded object-cover border border-bone/15 shrink-0"
+              className="w-20 h-20 object-cover border border-line shrink-0"
             />
           ) : (
-            <div className="w-20 h-20 rounded bg-bone/5 border border-bone/15 shrink-0" />
+            <div className="w-20 h-20 bg-raised border border-line shrink-0" />
           )}
-          <div className="space-y-1.5">
+          <div className="space-y-1.5 min-w-0 flex-1">
             <input
+              id="cover"
               name="cover"
               type="file"
               accept="image/jpeg,image/png,image/webp"
               onChange={handleCoverChange}
-              className="text-sm text-bone/50 file:mr-3 file:py-1.5 file:px-3 file:rounded file:border-0 file:bg-bone/10 file:text-bone/70 file:text-xs hover:file:bg-bone/15 cursor-pointer"
+              className="studio-field cursor-pointer"
             />
           </div>
         </div>
@@ -206,7 +205,9 @@ export default function ReleaseForm({
       {/* Description */}
       <section className="space-y-4">
         <h2 className={SECTION_HEADING}>Description</h2>
+        <label htmlFor="description" className="sr-only">Description</label>
         <textarea
+          id="description"
           name="description"
           rows={3}
           defaultValue={initialValues.description ?? ""}
@@ -217,7 +218,7 @@ export default function ReleaseForm({
       {/* Streaming links */}
       <section className="space-y-4">
         <h2 className={SECTION_HEADING}>Streaming Links</h2>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {(
             [
               ["streaming_spotify", "Spotify"],
@@ -227,9 +228,9 @@ export default function ReleaseForm({
             ] as const
           ).map(([name, label]) => (
             <div key={name}>
-              <label className={LABEL}>{label}</label>
+              <label htmlFor={name} className={LABEL}>{label}</label>
               <input
-                name={name}
+                id={name} name={name}
                 type="url"
                 defaultValue={streaming[name.replace("streaming_", "")] ?? ""}
                 placeholder="https://..."
@@ -241,11 +242,11 @@ export default function ReleaseForm({
       </section>
 
       {/* Form actions */}
-      <div className="flex items-center gap-4 pt-2">
+      <div className="flex flex-wrap items-center gap-4 pt-2">
         <button
           type="submit"
           disabled={pending}
-          className="bg-ochre text-ink text-sm font-medium px-5 py-2 rounded hover:bg-ochre/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          className="studio-btn studio-btn-primary"
         >
           {pending
             ? "Saving…"
@@ -255,7 +256,7 @@ export default function ReleaseForm({
         </button>
         <Link
           href="/admin/releases"
-          className="text-sm text-bone/40 hover:text-bone transition-colors"
+          className="studio-btn studio-btn-quiet studio-btn-sm"
         >
           Cancel
         </Link>

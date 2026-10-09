@@ -28,16 +28,12 @@ export default async function MenuItemsPage({
 
   return (
     <div className="space-y-8 max-w-4xl">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-sage mb-1">Bar</p>
-          <h1 className="font-display font-bold text-bone text-3xl">Menu Items</h1>
-          <div className="mt-3 h-px w-16 bg-bone/20" />
+          <p className="studio-label mb-1">Bar</p>
+          <h1 className="studio-page-title">Menu Items</h1>
         </div>
-        <Link
-          href="/admin/bar/items/new"
-          className="bg-ochre text-ink text-sm font-medium px-4 py-2 rounded hover:bg-ochre/90 transition-colors"
-        >
+        <Link href="/admin/bar/items/new" className="studio-btn studio-btn-primary">
           + Add Item
         </Link>
       </div>
@@ -49,10 +45,10 @@ export default async function MenuItemsPage({
             key={c.value}
             href={c.value === "all" ? "/admin/bar/items" : `/admin/bar/items?cat=${c.value}`}
             className={[
-              "px-3 py-1 rounded-full text-xs font-medium transition-colors",
+              "studio-focus inline-flex min-h-[44px] items-center px-4 text-[14px] font-semibold",
               (cat ?? "all") === c.value
-                ? "bg-ochre text-ink"
-                : "bg-bone/10 text-bone/60 hover:bg-bone/20",
+                ? "bg-raised text-paper border border-muted"
+                : "text-muted border border-line hover:text-paper",
             ].join(" ")}
           >
             {c.label}
@@ -61,49 +57,48 @@ export default async function MenuItemsPage({
       </div>
 
       {!items?.length ? (
-        <div className="border border-bone/10 rounded-lg p-12 text-center text-bone/50 text-sm">
-          No items yet.{" "}
-          <Link href="/admin/bar/items/new" className="text-ochre hover:underline">
-            Add your first menu item.
-          </Link>
+        <div className="studio-empty">
+          <p className="studio-empty-body">
+            No items yet.{" "}
+            <Link href="/admin/bar/items/new" className="studio-link">
+              Add your first menu item.
+            </Link>
+          </p>
         </div>
       ) : (
-        <div className="border border-bone/10 rounded-lg overflow-x-auto">
-          <table className="w-full min-w-[460px] text-sm">
-            <thead className="border-b border-bone/10 bg-bone/3">
+        <div className="studio-table-wrap">
+          <table className="studio-table min-w-[460px]">
+            <thead>
               <tr>
-                <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Name</th>
-                <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Category</th>
-                <th className="text-right px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Price</th>
-                <th className="text-center px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Status</th>
-                <th className="px-4 py-3" />
+                <th>Name</th>
+                <th>Category</th>
+                <th className="is-num">Price</th>
+                <th>Status</th>
+                <th><span className="sr-only">Actions</span></th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-bone/10">
+            <tbody>
               {items.map((item: Tables<"pos_items">) => (
-                <tr key={item.id} className="hover:bg-bone/3 transition-colors">
-                  <td className="px-4 py-3 text-bone font-medium">
+                <tr key={item.id} className="is-link">
+                  <td className="font-semibold [overflow-wrap:anywhere]">
                     {item.name}
                     {item.description && (
-                      <p className="text-xs text-bone/60 mt-0.5">{item.description}</p>
+                      <p className="text-[13px] font-normal text-muted mt-0.5">{item.description}</p>
                     )}
                   </td>
-                  <td className="px-4 py-3 text-bone/60">{CATEGORY_LABELS[item.category] ?? item.category}</td>
-                  <td className="px-4 py-3 text-right text-bone font-mono">
-                    {formatJmd(item.price_jmd)}
+                  <td className="text-muted">{CATEGORY_LABELS[item.category] ?? item.category}</td>
+                  <td className="is-num">
+                    <span className="studio-money">{formatJmd(item.price_jmd)}</span>
                   </td>
-                  <td className="px-4 py-3 text-center">
-                    <span className={[
-                      "inline-block px-2 py-0.5 rounded-full text-xs font-medium",
-                      item.is_active ? "bg-forest/20 text-sage" : "bg-bone/10 text-bone/60",
-                    ].join(" ")}>
+                  <td>
+                    <span className={item.is_active ? "studio-chip studio-chip-ok" : "studio-chip studio-chip-neutral"}>
                       {item.is_active ? "Active" : "Inactive"}
                     </span>
                   </td>
-                  <td className="px-4 py-3 text-right">
+                  <td className="is-num whitespace-nowrap">
                     <Link
                       href={`/admin/bar/items/${item.id}/edit`}
-                      className="text-xs text-bone/60 hover:text-bone transition-colors mr-4"
+                      className="studio-btn studio-btn-secondary studio-btn-sm mr-2"
                     >
                       Edit
                     </Link>

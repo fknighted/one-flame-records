@@ -1,50 +1,193 @@
 @import "tailwindcss";
 
 @theme inline {
-  /* Brand color tokens */
-  --color-oxblood: #8B2A1F;
-  --color-forest:  #3F5A3A;
-  --color-cream:   #ECE2C8;
-  --color-ink:     #1A1612;
-  --color-bone:    #F5EDD8;
-  --color-ochre:   #B8893B;
+  /* ── Sound System (design-system/building.md) ─────────────────────────────
+     The only palette. The old record-sleeve tokens were removed on 2026-10-09
+     once every public and studio screen had moved to these. */
+  --color-black:  #0F0D0B;  /* overrides Tailwind's pure black on purpose */
+  --color-yellow: #F2C230;
+  --color-red:    #C8321F;  /* bg-red, text-red. Tailwind's red-400 etc. are separate and unchanged */
+  --color-paper:  #FFF7E6;
+  --color-green:  #2F6B3A;
+  --color-muted:  #D8CCB4;
+  --color-line:   #3A332B;
+  --color-panel:  #16130F;
+  --color-raised: #2A241E;
 
-  /* Ink-background readable variants — same hue, lifted for dark-bg contrast */
-  --color-rose:    #E0907F;  /* oxblood brightened for ink bg */
-  --color-sage:    #82A57A;  /* forest brightened for ink bg */
+  --font-poster: var(--font-big-shoulders), Oswald, Impact, "Arial Narrow", sans-serif;
+  /* Big Shoulders' optical-size axis: 72 is the condensed Display cut at every size */
+  --font-poster--font-variation-settings: "opsz" 72;
+  --font-text:   var(--font-archivo), system-ui, -apple-system, "Segoe UI", sans-serif;
 
-  /* Font stack */
-  --font-display: var(--font-fraunces);
-  --font-sans:    var(--font-inter);
-  --font-mono:    var(--font-jetbrains-mono);
-
-  /* Production status tokens — portal releases manager */
-  --color-status-idea-bg:      rgba(245,237,216,0.10);
-  --color-status-idea-fg:      rgba(245,237,216,0.70);
-  --color-status-preprod-bg:   rgba(63,90,58,0.25);
-  --color-status-preprod-fg:   #9BB694;
-  --color-status-tracking-bg:  rgba(184,137,59,0.20);
-  --color-status-tracking-fg:  #B8893B;
-  --color-status-mixing-bg:    rgba(184,137,59,0.35);
-  --color-status-mixing-fg:    #E0B66B;
-  --color-status-mastering-bg: rgba(199,114,74,0.30);
-  --color-status-mastering-fg: #E5946F;
-  --color-status-scheduled-bg: rgba(139,42,31,0.30);
-  --color-status-scheduled-fg: #E0907F;
-  --color-status-live-bg:      rgba(63,90,58,0.30);
-  --color-status-live-fg:      #82A57A;
-
-  /* Video job status tokens */
-  --color-status-done-bg:      rgba(63,90,58,0.30);
-  --color-status-done-fg:      #82A57A;
-  --color-status-rendering-bg: rgba(184,137,59,0.35);
-  --color-status-rendering-fg: #E0B66B;
-  --color-status-failed-bg:    rgba(139,42,31,0.40);
-  --color-status-failed-fg:    #E0907F;
+  /* Tailwind's default sans (used by preflight) points at Archivo. */
+  --font-sans: var(--font-text);
 }
 
 body {
-  background-color: #ECE2C8;
-  color: #1A1612;
-  font-family: var(--font-inter), system-ui, sans-serif;
+  background-color: #0F0D0B;
+  color: #FFF7E6;
+  font-family: var(--font-archivo), system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+/* ── Sound System type styles ──────────────────────────────────────────────
+   One class per type style in design-system/brand-book.md. Poster and
+   headline must hold five words or fewer: use <PosterHeadline> (or tooLong()
+   from src/lib/sound-system.ts) so longer text drops to type-title. */
+@utility type-poster {
+  font-family: var(--font-poster);
+  font-variation-settings: "opsz" 72;
+  font-weight: 900;
+  text-transform: uppercase;
+  line-height: 0.82;
+  letter-spacing: -0.01em;
+  font-size: clamp(56px, 9vw, 112px);
+}
+@utility type-headline {
+  font-family: var(--font-poster);
+  font-variation-settings: "opsz" 72;
+  font-weight: 900;
+  text-transform: uppercase;
+  line-height: 0.85;
+  font-size: clamp(36px, 7vw, 64px);
+}
+@utility type-title {
+  font-family: var(--font-poster);
+  font-variation-settings: "opsz" 72;
+  font-weight: 800;
+  text-transform: uppercase;
+  line-height: 0.95;
+  font-size: 32px;
+}
+@utility type-title-sm {
+  font-family: var(--font-poster);
+  font-variation-settings: "opsz" 72;
+  font-weight: 800;
+  text-transform: uppercase;
+  line-height: 1;
+  letter-spacing: 0.01em;
+  font-size: 24px;
+}
+@utility type-number {
+  font-family: var(--font-poster);
+  font-variation-settings: "opsz" 72;
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  font-size: 44px;
+}
+@utility type-money {
+  font-family: var(--font-poster);
+  font-variation-settings: "opsz" 72;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  font-size: 24px;
+  color: var(--color-yellow);
+}
+@utility type-lead {
+  font-family: var(--font-text);
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 1.5;
+}
+@utility type-body {
+  font-family: var(--font-text);
+  font-weight: 400;
+  font-size: 17px;
+  line-height: 1.6;
+}
+@utility type-body-sm {
+  font-family: var(--font-text);
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.6;
+}
+@utility type-button {
+  font-family: var(--font-text);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-size: 15px;
+  line-height: 1;
+}
+@utility type-label {
+  font-family: var(--font-text);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 13px;
+  line-height: 1.2;
+}
+@utility type-small {
+  font-family: var(--font-text);
+  font-weight: 600;
+  font-size: 13px;
+  line-height: 1.4;
+}
+@utility type-caption {
+  font-family: var(--font-text);
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+/* ── Sound System building blocks ── */
+
+/* Thick red bar under a section title (72 x 8; 64 x 7 inside the home page) */
+@utility section-bar {
+  display: block;
+  width: 72px;
+  height: 8px;
+  background-color: var(--color-red);
+}
+
+/* Speaker grille: hard-edged 9px holes at an 18px pitch. Only beside a photo
+   or along a block edge, never over a photo or behind text. The radial
+   gradient draws round holes; it is not a colour fade. */
+@utility grille {
+  background-color: var(--color-black);
+  background-image: radial-gradient(circle, var(--color-yellow) 0 4.4px, transparent 4.9px);
+  background-size: 18px 18px;
+  background-position: 4px 4px;
+}
+@utility grille-red {
+  background-color: var(--color-black);
+  background-image: radial-gradient(circle, var(--color-red) 0 4.4px, transparent 4.9px);
+  background-size: 18px 18px;
+  background-position: 4px 4px;
+}
+
+/* Three-tone photo print. Needs <PrintFilters /> mounted once on the page
+   (the public layout does this). The original file is untouched. */
+@utility print-yellow {
+  filter: url(#print-yellow);
+}
+@utility print-red {
+  filter: url(#print-red);
+}
+
+/* Solid 3px focus outline, coloured for the ground the element sits on */
+@utility focus-on-black {
+  &:focus-visible {
+    outline: 3px solid var(--color-yellow);
+    outline-offset: 2px;
+  }
+}
+@utility focus-on-paper {
+  &:focus-visible {
+    outline: 3px solid var(--color-red);
+    outline-offset: 2px;
+  }
+}
+@utility focus-on-yellow {
+  &:focus-visible {
+    outline: 3px solid var(--color-black);
+    outline-offset: 2px;
+  }
+}
+@utility focus-on-red {
+  &:focus-visible {
+    outline: 3px solid var(--color-paper);
+    outline-offset: 2px;
+  }
 }

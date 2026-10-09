@@ -13,7 +13,7 @@ export default function DeactivateButton({
     <form action={deactivateBartender.bind(null, userId)}>
       <button
         type="submit"
-        className="text-xs text-rose/50 hover:text-rose transition-colors"
+        className="studio-btn studio-btn-danger studio-btn-sm"
         onClick={(e) => {
           if (!confirm(`Deactivate ${email}?`)) e.preventDefault();
         }}

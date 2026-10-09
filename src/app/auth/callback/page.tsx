@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { createBrowserClient } from "@supabase/ssr";
 import { Suspense } from "react";
+import "@/app/studio.css";
 
 function CallbackInner() {
   const searchParams = useSearchParams();
@@ -56,8 +57,8 @@ function CallbackInner() {
   }, [searchParams]);
 
   return (
-    <div className="min-h-screen bg-cream flex items-center justify-center">
-      <p className="text-ink/40 text-sm">Signing you in…</p>
+    <div className="studio-shell min-h-screen bg-black text-paper font-text flex items-center justify-center">
+      <p className="text-[15px] text-muted">Signing you in…</p>
     </div>
   );
 }
@@ -66,8 +67,8 @@ export default function AuthCallbackPage() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen bg-cream flex items-center justify-center">
-          <p className="text-ink/40 text-sm">Signing you in…</p>
+        <div className="studio-shell min-h-screen bg-black text-paper font-text flex items-center justify-center">
+          <p className="text-[15px] text-muted">Signing you in…</p>
         </div>
       }
     >

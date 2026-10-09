@@ -23,11 +23,11 @@ export default function DeleteEventButton({ id }: { id: string }) {
             router.push("/admin/events");
           });
         }}
-        className="text-sm text-rose/60 hover:text-rose transition-colors disabled:opacity-50"
+        className="studio-btn studio-btn-danger studio-btn-sm"
       >
         {pending ? "Deleting…" : "Delete event"}
       </button>
-      {error && <p className="text-xs text-rose">{error}</p>}
+      {error && <p role="alert" className="studio-error">{error}</p>}
     </div>
   );
 }

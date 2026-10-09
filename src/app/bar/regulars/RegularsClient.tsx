@@ -8,32 +8,35 @@ type Regular = { id: string; name: string; phone: string | null; notes: string |
 function AddForm() {
   const [state, action, pending] = useActionState(createRegular, null);
   return (
-    <form action={action} className="border border-bone/10 rounded-lg p-4 space-y-3">
-      <p className="text-xs font-semibold text-bone/60 uppercase tracking-wider">Add Regular</p>
-      {state?.error && <p className="text-sm text-rose">{state.error}</p>}
+    <form action={action} className="studio-card space-y-3">
+      <h2 className="studio-label">Add Regular</h2>
+      {state?.error && <p role="alert" className="studio-error">{state.error}</p>}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <input
           name="name"
           required
+          aria-label="Name"
           placeholder="Name *"
-          className="bg-bone/5 border border-bone/45 rounded-lg px-3 py-2 text-bone placeholder:text-bone/60 text-sm focus:outline-2 focus:outline-ochre focus:border-ochre/50"
+          className="studio-field"
         />
         <input
           name="phone"
           type="tel"
+          aria-label="Phone"
           placeholder="Phone (optional)"
-          className="bg-bone/5 border border-bone/45 rounded-lg px-3 py-2 text-bone placeholder:text-bone/60 text-sm focus:outline-2 focus:outline-ochre focus:border-ochre/50"
+          className="studio-field"
         />
       </div>
       <input
         name="notes"
+        aria-label="Notes"
         placeholder="Notes (optional — e.g. usual order, seat preference)"
-        className="w-full bg-bone/5 border border-bone/45 rounded-lg px-3 py-2 text-bone placeholder:text-bone/60 text-sm focus:outline-2 focus:outline-ochre focus:border-ochre/50"
+        className="studio-field"
       />
       <button
         type="submit"
         disabled={pending}
-        className="bg-ochre text-ink text-sm font-semibold px-4 py-2 rounded-lg hover:bg-ochre/90 transition-colors disabled:opacity-50"
+        className="studio-btn studio-btn-primary"
       >
         {pending ? "Saving…" : "Add Regular"}
       </button>
@@ -58,40 +61,43 @@ function RegularRow({ regular }: { regular: Regular }) {
       <tr>
         <td colSpan={4} className="px-4 py-3">
           <form action={formAction} className="space-y-2">
-            {state?.error && <p className="text-sm text-rose">{state.error}</p>}
+            {state?.error && <p role="alert" className="studio-error">{state.error}</p>}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
               <input
                 name="name"
                 defaultValue={regular.name}
                 required
-                className="bg-bone/5 border border-bone/45 rounded px-3 py-1.5 text-bone text-sm focus:outline-2 focus:outline-ochre focus:border-ochre/50"
+                aria-label="Name"
+                className="studio-field"
               />
               <input
                 name="phone"
                 type="tel"
+                aria-label="Phone"
                 defaultValue={regular.phone ?? ""}
                 placeholder="Phone"
-                className="bg-bone/5 border border-bone/45 rounded px-3 py-1.5 text-bone text-sm focus:outline-2 focus:outline-ochre focus:border-ochre/50"
+                className="studio-field"
               />
             </div>
             <input
               name="notes"
+              aria-label="Notes"
               defaultValue={regular.notes ?? ""}
               placeholder="Notes"
-              className="w-full bg-bone/5 border border-bone/45 rounded px-3 py-1.5 text-bone text-sm focus:outline-2 focus:outline-ochre focus:border-ochre/50"
+              className="studio-field"
             />
             <div className="flex gap-2">
               <button
                 type="submit"
                 disabled={pending}
-                className="bg-ochre text-ink text-xs font-semibold px-3 py-1.5 rounded hover:bg-ochre/90 transition-colors disabled:opacity-50"
+                className="studio-btn studio-btn-secondary studio-btn-sm"
               >
                 {pending ? "Saving…" : "Save"}
               </button>
               <button
                 type="button"
                 onClick={() => setEditing(false)}
-                className="text-xs text-bone/60 hover:text-bone transition-colors px-2"
+                className="studio-btn studio-btn-quiet studio-btn-sm"
               >
                 Cancel
               </button>
@@ -103,16 +109,16 @@ function RegularRow({ regular }: { regular: Regular }) {
   }
 
   return (
-    <tr className="hover:bg-bone/3 transition-colors">
-      <td className="px-4 py-3 text-bone font-medium">{regular.name}</td>
-      <td className="px-4 py-3 text-bone/50 text-sm">{regular.phone ?? "—"}</td>
-      <td className="px-4 py-3 text-bone/60 text-sm">{regular.notes ?? "—"}</td>
-      <td className="px-4 py-3 text-right">
-        <span className="inline-flex items-center gap-3">
+    <tr>
+      <td className="font-semibold [overflow-wrap:anywhere]">{regular.name}</td>
+      <td className="studio-figures text-muted">{regular.phone ?? "—"}</td>
+      <td className="text-muted [overflow-wrap:anywhere]">{regular.notes ?? "—"}</td>
+      <td className="is-num">
+        <span className="inline-flex items-center gap-2">
           <button
             type="button"
             onClick={() => setEditing(true)}
-            className="text-xs text-ochre/60 hover:text-ochre transition-colors"
+            className="studio-btn studio-btn-secondary studio-btn-sm"
           >
             Edit
           </button>
@@ -127,11 +133,11 @@ function RegularRow({ regular }: { regular: Regular }) {
               });
             }}
             disabled={deletePending}
-            className="text-xs text-rose/40 hover:text-rose transition-colors disabled:opacity-50"
+            className="studio-btn studio-btn-danger studio-btn-sm"
           >
             {deletePending ? "…" : "Remove"}
           </button>
-          {deleteError && <span className="text-xs text-rose">{deleteError}</span>}
+          {deleteError && <span role="alert" className="studio-error text-[13px]">{deleteError}</span>}
         </span>
       </td>
     </tr>
@@ -144,19 +150,19 @@ export default function RegularsClient({ regulars }: { regulars: Regular[] }) {
       <AddForm />
 
       {regulars.length === 0 ? (
-        <p className="text-bone/50 text-sm text-center py-8">No regulars yet — add the first one above.</p>
+        <div className="studio-empty"><p className="studio-empty-body">No regulars yet — add the first one above.</p></div>
       ) : (
-        <div className="border border-bone/10 rounded-lg overflow-x-auto">
-          <table className="w-full min-w-[500px] text-sm">
-            <thead className="border-b border-bone/10 bg-bone/3">
+        <div className="studio-table-wrap">
+          <table className="studio-table min-w-[500px]">
+            <thead>
               <tr>
-                <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Name</th>
-                <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Phone</th>
-                <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Notes</th>
-                <th className="px-4 py-3" />
+                <th>Name</th>
+                <th>Phone</th>
+                <th>Notes</th>
+                <th><span className="sr-only">Actions</span></th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-bone/10">
+            <tbody>
               {regulars.map(r => <RegularRow key={r.id} regular={r} />)}
             </tbody>
           </table>

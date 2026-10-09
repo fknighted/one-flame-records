@@ -7,9 +7,9 @@ import { createServiceClient } from "@/lib/supabase/server";
 import DeleteArtistButton from "@/app/admin/artists/DeleteArtistButton";
 
 const STATUS_STYLES: Record<string, string> = {
-  active:   "bg-forest/20 text-sage border border-forest/25",
-  inactive: "bg-bone/10 text-bone/60 border border-bone/15",
-  pending:  "bg-ochre/15 text-ochre border border-ochre/25",
+  active:   "studio-chip studio-chip-ok",
+  inactive: "studio-chip studio-chip-neutral",
+  pending:  "studio-chip studio-chip-neutral",
 };
 
 export default async function EditArtistPage({
@@ -48,20 +48,14 @@ export default async function EditArtistPage({
   return (
     <div className="space-y-6 max-w-2xl">
       {/* Breadcrumb */}
-      <Link
-        href="/admin/artists"
-        className="inline-flex items-center gap-1.5 text-xs text-bone/52 hover:text-bone/70 transition-colors"
-      >
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
-          <path d="M19 12H5M5 12l7-7M5 12l7 7" />
-        </svg>
+      <Link href="/admin/artists" className="studio-btn studio-btn-quiet studio-btn-sm">
         Artists
       </Link>
 
       {/* Artist identity header */}
-      <div className="flex items-center gap-5">
-        <div className="relative w-16 h-16 rounded-full overflow-hidden shrink-0 border border-bone/15 bg-ink">
-          {artist.photo_url ? (
+      <div className="flex items-center gap-4">
+        <div className="relative w-16 h-16 overflow-hidden shrink-0 border border-line bg-raised">
+          {artist.photo_url && (
             <Image
               src={artist.photo_url}
               alt={artist.stage_name}
@@ -69,52 +63,46 @@ export default async function EditArtistPage({
               className="object-cover object-top"
               sizes="64px"
             />
-          ) : (
-            <div className="absolute inset-0 flex items-center justify-center opacity-20">
-              <svg viewBox="0 0 20 28" className="w-6 h-auto" aria-hidden="true">
-                <path d="M10 1C10 1 4 9 4 16C4 19.8 6.3 23.1 10 25C13.7 23.1 16 19.8 16 16C16 9 10 1 10 1Z" fill="#8B2A1F" />
-              </svg>
-            </div>
           )}
         </div>
 
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2.5 flex-wrap">
-            <h1 className="font-display font-bold text-bone text-2xl leading-tight">{artist.stage_name}</h1>
-            <span className={`text-[10px] font-semibold capitalize px-2 py-0.5 rounded-full border ${STATUS_STYLES[artist.status] ?? STATUS_STYLES.inactive}`}>
+            <h1 className="studio-page-title">{artist.stage_name}</h1>
+            <span className={`${STATUS_STYLES[artist.status] ?? STATUS_STYLES.inactive} capitalize`}>
               {artist.status}
             </span>
           </div>
           {genres.length > 0 && (
-            <p className="mt-0.5 text-xs text-bone/60">{genres.join(", ")}</p>
+            <p className="mt-1 text-sm text-muted">{genres.join(", ")}</p>
           )}
-          <div className="mt-2 flex items-center gap-4 text-xs text-bone/52">
-            <Link href={`/admin/artists/${id}/assets`} className="hover:text-ochre transition-colors">
-              {assetCount ?? 0} assets →
+          <div className="mt-1 flex flex-wrap items-center gap-x-4 text-sm">
+            <Link href={`/admin/artists/${id}/assets`} className="studio-link inline-flex items-center min-h-[44px]">
+              {assetCount ?? 0} assets
             </Link>
-            <Link href={`/admin/artists/${id}/videos`} className="hover:text-ochre transition-colors">
-              {videoCount ?? 0} saved videos →
+            <Link href={`/admin/artists/${id}/videos`} className="studio-link inline-flex items-center min-h-[44px]">
+              {videoCount ?? 0} saved videos
             </Link>
             <a
               href={`/artists/${artist.slug}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="hover:text-ochre transition-colors"
+              className="studio-link inline-flex items-center min-h-[44px]"
             >
-              Public profile ↗
+              Public profile
             </a>
           </div>
         </div>
       </div>
 
-      <div className="h-px bg-bone/10" />
+      <div className="studio-divider" />
 
       <ArtistForm action={updateArtist} initialValues={initialValues} mode="edit" />
 
-      <div className="h-px bg-bone/10" />
-      <div className="flex items-center justify-between">
-        <p className="text-xs text-bone/50">Danger zone</p>
-        <DeleteArtistButton id={artist.id} name={artist.stage_name} />
+      <div className="studio-divider" />
+      <div className="flex items-center justify-between gap-4">
+        <p className="text-sm text-muted">Danger zone</p>
+        <DeleteArtistButton id={artist.id} name={artist.stage_name} className="studio-btn studio-btn-danger studio-btn-sm" />
       </div>
     </div>
   );

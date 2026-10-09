@@ -15,12 +15,12 @@ export default function ResendInviteButton({ email }: { email: string }) {
       <button
         type="submit"
         disabled={pending}
-        className="text-xs text-ochre/70 hover:text-ochre transition-colors disabled:opacity-50"
+        className="studio-btn studio-btn-secondary studio-btn-sm"
       >
         {pending ? "Sending…" : "Resend invite"}
       </button>
       {state?.error && (
-        <p className="text-[10px] text-rose">{state.error}</p>
+        <p role="alert" className="studio-error text-[13px]">{state.error}</p>
       )}
     </form>
   );

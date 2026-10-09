@@ -13,7 +13,7 @@ export default async function RegularsPage() {
 
   return (
     <div className="max-w-2xl space-y-6">
-      <h1 className="font-display font-bold text-bone text-2xl">Regulars</h1>
+      <h1 className="studio-page-title">Regulars</h1>
       <RegularsClient regulars={regulars ?? []} />
     </div>
   );

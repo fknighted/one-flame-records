@@ -30,11 +30,11 @@ export default async function BarMembersPage({
 
   return (
     <div className="space-y-5">
-      <div className="flex items-center justify-between">
-        <h1 className="font-display font-bold text-bone text-2xl">Members</h1>
+      <div className="flex flex-wrap items-center justify-between gap-4">
+        <h1 className="studio-page-title">Members</h1>
         <Link
           href="/bar/members/new"
-          className="bg-ochre text-ink text-sm font-semibold px-4 py-2 rounded-lg hover:bg-ochre/90 transition-colors"
+          className="studio-btn studio-btn-primary"
         >
           + Invite Member
         </Link>
@@ -47,11 +47,12 @@ export default async function BarMembersPage({
           defaultValue={q}
           type="search"
           placeholder="Search by name or email…"
-          className="flex-1 bg-bone/5 border border-bone/45 rounded-lg px-4 py-2.5 text-bone placeholder:text-bone/50 text-sm focus:outline-2 focus:outline-ochre focus:border-ochre/50"
+          aria-label="Search members"
+          className="studio-field flex-1 min-w-0"
         />
         <button
           type="submit"
-          className="border border-bone/20 text-bone/60 hover:text-bone px-4 py-2.5 rounded-lg text-sm transition-colors"
+          className="studio-btn studio-btn-secondary"
         >
           Search
         </button>
@@ -59,7 +60,7 @@ export default async function BarMembersPage({
 
       {/* List */}
       {!members?.length ? (
-        <p className="text-bone/50 text-sm text-center py-12">
+        <p className="text-muted text-[15px] text-center py-12">
           {q ? "No members found" : "No members yet"}
         </p>
       ) : (
@@ -68,18 +69,18 @@ export default async function BarMembersPage({
             <Link
               key={m.id}
               href={`/bar/members/${m.id}`}
-              className="flex items-center gap-3 border border-bone/15 rounded-xl px-4 py-3 hover:border-ochre/30 transition-colors"
+              className="studio-card studio-focus flex items-center gap-3 !py-3 min-h-[56px] hover:bg-raised"
             >
               <div className="flex-1 min-w-0">
-                <p className="text-bone font-medium text-sm">{m.display_name}</p>
-                <p className="text-bone/60 text-xs">{m.email}</p>
+                <p className="text-paper font-semibold text-[15px] [overflow-wrap:anywhere]">{m.display_name}</p>
+                <p className="text-muted text-[13px] [overflow-wrap:anywhere]">{m.email}</p>
               </div>
-              <span className={`text-xs px-2 py-0.5 rounded-full ${
-                m.status === "active" ? "bg-forest/20 text-sage" : "bg-red-900/30 text-red-400"
+              <span className={`studio-chip ${
+                m.status === "active" ? "studio-chip-ok" : "studio-chip-bad"
               }`}>
                 {m.status}
               </span>
-              <span className="text-bone/50 text-xs font-mono shrink-0">{m.minutes_balance}m</span>
+              <span className="studio-count text-[20px] shrink-0">{m.minutes_balance}m</span>
             </Link>
           ))}
         </div>

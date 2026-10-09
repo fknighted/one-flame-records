@@ -31,10 +31,8 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
           <div
             key={toast.id}
             className={[
-              "px-4 py-3 rounded-lg text-sm font-medium shadow-lg pointer-events-auto",
-              toast.type === "success"
-                ? "bg-forest text-bone border border-forest/60"
-                : "bg-oxblood/90 text-bone border border-oxblood/60",
+              "max-w-[min(360px,calc(100vw-2rem))] px-4 py-3 border-2 border-black font-text text-[15px] font-semibold leading-snug text-paper pointer-events-auto",
+              toast.type === "success" ? "bg-green" : "bg-red",
             ].join(" ")}
           >
             {toast.message}

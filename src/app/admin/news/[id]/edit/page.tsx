@@ -23,8 +23,8 @@ export default async function EditNewsPostPage({ params }: Props) {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="font-display text-2xl text-bone">Edit Post</h1>
+      <div className="flex flex-wrap items-center justify-between gap-4">
+        <h1 className="studio-page-title">Edit Post</h1>
         <DeletePostButton action={deleteAction} />
       </div>
       <NewsForm action={updateNewsPost} mode="edit" post={post} />

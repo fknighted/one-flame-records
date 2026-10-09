@@ -25,8 +25,8 @@ type Event = {
   is_public: boolean;
 };
 
-const INPUT = "w-full bg-bone/5 border border-bone/45 rounded px-3 py-2 text-sm text-bone placeholder:text-bone/50 focus:outline-2 focus:outline-ochre focus:border-ochre/60";
-const LABEL = "block text-xs text-bone/50 mb-1.5";
+const INPUT = "studio-field";
+const LABEL = "studio-field-label";
 
 function toDatetimeLocal(iso: string | null): string {
   if (!iso) return "";
@@ -41,15 +41,16 @@ export default function EventForm({ event }: { event?: Event }) {
   return (
     <form action={formAction} className="space-y-5 max-w-2xl">
       {state?.error && (
-        <p className="rounded bg-oxblood/20 border border-oxblood/40 px-4 py-2 text-sm text-rose">
+        <p role="alert" className="studio-error">
           {state.error}
         </p>
       )}
       {isEdit && <input type="hidden" name="id" value={event.id} />}
 
       <div>
-        <label className={LABEL}>Title *</label>
+        <label htmlFor="event-title" className={LABEL}>Title *</label>
         <input
+          id="event-title"
           name="title"
           type="text"
           required
@@ -61,9 +62,10 @@ export default function EventForm({ event }: { event?: Event }) {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
         <div>
-          <label className={LABEL}>Event date & time *</label>
+          <label htmlFor="event-event_date" className={LABEL}>Event date & time *</label>
           <input
-            name="event_date"
+            id="event-event_date"
+          name="event_date"
             type="datetime-local"
             required
             defaultValue={toDatetimeLocal(event?.event_date ?? null)}
@@ -71,9 +73,10 @@ export default function EventForm({ event }: { event?: Event }) {
           />
         </div>
         <div>
-          <label className={LABEL}>End time (optional)</label>
+          <label htmlFor="event-end_date" className={LABEL}>End time (optional)</label>
           <input
-            name="end_date"
+            id="event-end_date"
+          name="end_date"
             type="datetime-local"
             defaultValue={toDatetimeLocal(event?.end_date ?? null)}
             className={INPUT}
@@ -83,17 +86,19 @@ export default function EventForm({ event }: { event?: Event }) {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
         <div>
-          <label className={LABEL}>Type</label>
-          <select name="type" defaultValue={event?.type ?? "other"} className={INPUT}>
+          <label htmlFor="event-type" className={LABEL}>Type</label>
+          <select id="event-type"
+          name="type" defaultValue={event?.type ?? "other"} className={INPUT}>
             {EVENT_TYPES.map(({ value, label }) => (
               <option key={value} value={value}>{label}</option>
             ))}
           </select>
         </div>
         <div>
-          <label className={LABEL}>Location</label>
+          <label htmlFor="event-location" className={LABEL}>Location</label>
           <input
-            name="location"
+            id="event-location"
+          name="location"
             type="text"
             defaultValue={event?.location ?? "Flames Lounge, Montego Bay"}
             className={INPUT}
@@ -102,8 +107,9 @@ export default function EventForm({ event }: { event?: Event }) {
       </div>
 
       <div>
-        <label className={LABEL}>Description</label>
+        <label htmlFor="event-description" className={LABEL}>Description</label>
         <textarea
+          id="event-description"
           name="description"
           rows={4}
           defaultValue={event?.description ?? ""}
@@ -113,8 +119,9 @@ export default function EventForm({ event }: { event?: Event }) {
       </div>
 
       <div>
-        <label className={LABEL}>Tickets URL (optional)</label>
+        <label htmlFor="event-tickets_url" className={LABEL}>Tickets URL (optional)</label>
         <input
+          id="event-tickets_url"
           name="tickets_url"
           type="url"
           defaultValue={event?.tickets_url ?? ""}
@@ -123,27 +130,28 @@ export default function EventForm({ event }: { event?: Event }) {
         />
       </div>
 
-      <div className="flex items-center gap-3">
+      <div className="flex flex-wrap items-center gap-3">
         <select
+          id="event-is_public"
           name="is_public"
           defaultValue={String(event?.is_public ?? true)}
-          className="bg-bone/5 border border-bone/45 rounded px-3 py-2 text-sm text-bone focus:outline-2 focus:outline-ochre focus:border-ochre/60"
+          className="studio-field w-auto"
         >
           <option value="true">Public</option>
           <option value="false">Private</option>
         </select>
-        <span className="text-xs text-bone/60">Public events appear on the Flames Lounge page.</span>
+        <label htmlFor="event-is_public" className="studio-hint">Public events appear on the Flames Lounge page.</label>
       </div>
 
-      <div className="flex items-center gap-4 pt-2">
+      <div className="flex flex-wrap items-center gap-4 pt-2">
         <button
           type="submit"
           disabled={pending}
-          className="rounded bg-ochre px-5 py-2.5 text-sm font-medium text-ink hover:bg-ochre/90 disabled:opacity-50 transition-colors"
+          className="studio-btn studio-btn-primary"
         >
           {pending ? "Saving…" : isEdit ? "Save changes" : "Create event"}
         </button>
-        <a href="/admin/events" className="text-sm text-bone/60 hover:text-bone transition-colors">
+        <a href="/admin/events" className="studio-btn studio-btn-quiet studio-btn-sm">
           Cancel
         </a>
       </div>

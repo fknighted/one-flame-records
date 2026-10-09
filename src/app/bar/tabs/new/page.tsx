@@ -13,10 +13,10 @@ export default async function NewTabPage() {
   return (
     <div className="max-w-sm mx-auto space-y-6">
       <div>
-        <p className="text-xs text-bone/60 mb-1">
-          <a href="/bar" className="hover:text-bone transition-colors">← Tabs</a>
+        <p className="text-[14px] mb-2">
+          <a href="/bar" className="studio-link inline-flex min-h-[44px] items-center">← Tabs</a>
         </p>
-        <h1 className="font-display font-bold text-bone text-2xl">Open Tab</h1>
+        <h1 className="studio-page-title">Open Tab</h1>
       </div>
       <OpenTabForm regulars={regulars ?? []} />
     </div>

@@ -22,9 +22,9 @@ export default function YoutubeUploadButton({ source, id, youtubeId, uploadStatu
         href={`https://www.youtube.com/watch?v=${youtubeId}`}
         target="_blank"
         rel="noopener noreferrer"
-        className="text-xs text-ochre hover:text-ochre/70 transition-colors whitespace-nowrap"
+        className="studio-btn studio-btn-secondary studio-btn-sm whitespace-nowrap"
       >
-        YouTube ↗
+        YouTube
       </a>
     );
   }
@@ -32,7 +32,7 @@ export default function YoutubeUploadButton({ source, id, youtubeId, uploadStatu
   // In-flight (optimistic or confirmed from DB)
   if (uploadStatus === "uploading" || isPending) {
     return (
-      <span className="text-xs text-ochre/50 whitespace-nowrap">Uploading…</span>
+      <span className="text-sm text-muted whitespace-nowrap">Uploading…</span>
     );
   }
 
@@ -47,13 +47,11 @@ export default function YoutubeUploadButton({ source, id, youtubeId, uploadStatu
           router.refresh();
         });
       }}
-      className={`text-xs whitespace-nowrap transition-colors ${
-        isFailed
-          ? "text-red-400 hover:text-red-300"
-          : "text-bone/40 hover:text-ochre"
+      className={`studio-btn studio-btn-sm whitespace-nowrap ${
+        isFailed ? "studio-btn-danger" : "studio-btn-secondary"
       }`}
     >
-      {isFailed ? "Retry YouTube ↑" : "Upload to YouTube"}
+      {isFailed ? "Retry YouTube" : "Upload to YouTube"}
     </button>
   );
 }

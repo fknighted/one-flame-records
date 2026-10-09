@@ -5,7 +5,7 @@ import { adjustBalance, toggleMemberStatus } from "./actions";
 import type { Tables } from "@/types/supabase";
 import { useToast } from "@/components/ToastProvider";
 
-const INPUT = "bg-bone/5 border border-bone/45 rounded px-3 py-2 text-sm text-bone placeholder:text-bone/50 focus:outline-2 focus:outline-ochre focus:border-ochre/60";
+const INPUT = "studio-field";
 
 export default function MemberAdminActions({ member }: { member: Tables<"gamer_members"> }) {
   const [adjustState, adjustAction, adjustPending] = useActionState(adjustBalance, null);
@@ -31,25 +31,26 @@ export default function MemberAdminActions({ member }: { member: Tables<"gamer_m
   return (
     <div className="space-y-4">
       {(adjustState?.error || statusState?.error) && (
-        <div className="bg-oxblood/20 border border-oxblood/50 rounded px-4 py-3 text-sm text-bone">
+        <div role="alert" className="studio-error">
           {adjustState?.error ?? statusState?.error}
         </div>
       )}
 
       <div className="flex flex-wrap gap-3">
         {/* Balance adjustment */}
-        <form action={adjustAction} className="flex items-center gap-2">
+        <form action={adjustAction} className="flex flex-wrap items-center gap-2">
           <input type="hidden" name="id" value={member.id} />
           <input
             name="minutes"
             type="number"
             placeholder="±minutes"
-            className={INPUT + " w-28"}
+            aria-label="Minutes to add or remove"
+            className={INPUT + " w-32"}
           />
           <button
             type="submit"
             disabled={adjustPending}
-            className="text-sm bg-bone/10 text-bone px-3 py-2 rounded hover:bg-bone/20 disabled:opacity-50 transition-colors"
+            className="studio-btn studio-btn-secondary"
           >
             Adjust Balance
           </button>
@@ -62,12 +63,11 @@ export default function MemberAdminActions({ member }: { member: Tables<"gamer_m
           <button
             type="submit"
             disabled={statusPending}
-            className={[
-              "text-sm px-3 py-2 rounded transition-colors disabled:opacity-50",
+            className={
               member.status === "active"
-                ? "bg-oxblood/20 text-rose hover:bg-oxblood/30"
-                : "bg-forest/20 text-sage hover:bg-forest/30",
-            ].join(" ")}
+                ? "studio-btn studio-btn-danger"
+                : "studio-btn studio-btn-secondary"
+            }
           >
             {statusPending ? "Saving…" : member.status === "active" ? "Suspend Member" : "Reactivate Member"}
           </button>

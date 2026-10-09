@@ -31,35 +31,34 @@ export default async function BarStaffPage() {
   return (
     <div className="space-y-10 max-w-2xl">
       <div>
-        <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-sage mb-1">Bar</p>
-        <h1 className="font-display font-bold text-bone text-3xl">Bar Staff</h1>
-        <div className="mt-3 h-px w-16 bg-bone/20" />
+        <p className="studio-label mb-1">Bar</p>
+        <h1 className="studio-page-title">Bar Staff</h1>
       </div>
 
       {/* Staff list */}
       <section className="space-y-3">
-        <h2 className="text-xs font-semibold uppercase tracking-widest text-bone/52">Current Bar Staff</h2>
+        <h2 className="studio-label">Current Bar Staff</h2>
         {!staff.length ? (
-          <p className="text-sm text-bone/50">No bar staff yet. Invite or promote someone below.</p>
+          <p className="text-[15px] text-muted">No bar staff yet. Invite or promote someone below.</p>
         ) : (
-          <div className="border border-bone/10 rounded-lg divide-y divide-bone/10">
+          <div className="studio-card p-0 divide-y divide-line">
             {staff.map((b) => (
-              <div key={b.id} className="flex items-center justify-between px-4 py-3">
-                <div>
-                  <div className="flex items-center gap-2">
-                    <p className="text-sm text-bone">{b.email}</p>
+              <div key={b.id} className="flex flex-wrap items-center justify-between gap-3 px-4 py-3">
+                <div className="min-w-0">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <p className="text-[15px] text-paper [overflow-wrap:anywhere]">{b.email}</p>
                     {b.isDualAccess && (
-                      <span className="text-[10px] bg-forest/20 text-sage px-1.5 py-0.5 rounded-full font-medium">
+                      <span className="studio-chip studio-chip-ok">
                         Artist + Bar
                       </span>
                     )}
                     {b.banned && (
-                      <span className="text-[10px] bg-oxblood/20 text-rose px-1.5 py-0.5 rounded-full font-medium">
+                      <span className="studio-chip studio-chip-bad">
                         Deactivated
                       </span>
                     )}
                   </div>
-                  <p className="text-xs text-bone/60 mt-0.5">
+                  <p className="text-[13px] text-muted mt-0.5">
                     Added {new Date(b.created_at).toLocaleDateString()}
                   </p>
                 </div>
@@ -82,10 +81,10 @@ export default async function BarStaffPage() {
 
       {/* Promote an existing artist to bar access */}
       <section className="space-y-4">
-        <h2 className="text-xs font-semibold uppercase tracking-widest text-bone/52 pb-2 border-b border-bone/10">
+        <h2 className="studio-section-title pb-2 border-b border-line">
           Promote Existing Artist
         </h2>
-        <p className="text-sm text-bone/60">
+        <p className="text-[15px] text-muted">
           Enter the email of an artist already in the system to grant them bar access.
           They keep their artist portal and gain access to the bar POS.
         </p>
@@ -94,7 +93,7 @@ export default async function BarStaffPage() {
 
       {/* Invite a brand-new bartender */}
       <section className="space-y-4">
-        <h2 className="text-xs font-semibold uppercase tracking-widest text-bone/52 pb-2 border-b border-bone/10">
+        <h2 className="studio-section-title pb-2 border-b border-line">
           Invite New Bartender
         </h2>
         <InviteBartenderForm />

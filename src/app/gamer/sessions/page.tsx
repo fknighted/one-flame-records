@@ -31,30 +31,37 @@ export default async function GamerSessionsPage() {
 
   return (
     <div className="space-y-6">
-      <h1 className="font-display font-bold text-bone text-2xl">Session History</h1>
+      <h1 className="studio-page-title">Session History</h1>
 
       {!sessions?.length ? (
-        <p className="text-bone/50 text-sm">No sessions yet — visit the Flames Lounge to play!</p>
+        <p className="text-[16px] text-muted">No sessions yet — visit the Flames Lounge to play!</p>
       ) : (
         <div className="space-y-2">
           {sessions.map(s => (
-            <div key={s.id} className="flex items-center gap-3 border border-bone/10 rounded-xl px-4 py-3">
-              <div className="flex-1">
-                <p className="text-bone text-sm">
+            <div key={s.id} className="studio-card flex items-center gap-3 py-3">
+              <div className="flex-1 min-w-0">
+                <p className="text-[16px] text-paper">
                   {new Date(s.started_at).toLocaleDateString("en-JM", {
                     year: "numeric",
                     month: "short",
                     day: "numeric",
                   })}
                 </p>
-                <p className="text-bone/60 text-xs mt-0.5">
+                <p className="text-[14px] text-muted mt-0.5 studio-figures">
                   {new Date(s.started_at).toLocaleTimeString("en-JM", { hour: "2-digit", minute: "2-digit" })}
                   {s.station ? ` · ${s.station}` : ""}
                 </p>
               </div>
-              <span className={`text-sm font-mono ${s.ended_at ? "text-bone/60" : "text-ochre"}`}>
-                {s.duration_minutes ? fmt(s.duration_minutes) : "active"}
-              </span>
+              {s.ended_at ? (
+                <span className="studio-count shrink-0">
+                  {s.duration_minutes ? fmt(s.duration_minutes) : "active"}
+                </span>
+              ) : (
+                <span className="flex items-center gap-2 shrink-0">
+                  <span className="studio-chip studio-chip-ok">Active</span>
+                  {s.duration_minutes ? <span className="studio-count">{fmt(s.duration_minutes)}</span> : null}
+                </span>
+              )}
             </div>
           ))}
         </div>

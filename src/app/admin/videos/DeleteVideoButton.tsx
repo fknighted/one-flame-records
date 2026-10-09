@@ -20,8 +20,9 @@ export default function DeleteVideoButton({ id, title }: { id: string; title: st
           }
         });
       }}
-      className="text-xs text-bone/60 hover:text-red-400 transition-colors disabled:opacity-50"
+      className="studio-btn studio-btn-danger studio-btn-sm"
       title="Delete video"
+      aria-label="Delete video"
     >
       {pending ? "…" : "×"}
     </button>

@@ -4,10 +4,10 @@ export default function WatchLink({ href }: { href: string }) {
   return (
     <span
       onClick={(e) => e.stopPropagation()}
-      className="text-xs font-medium text-ochre hover:text-ochre/80 transition-colors"
+      className="text-[15px]"
     >
-      <a href={href} target="_blank" rel="noopener noreferrer">
-        Watch →
+      <a href={href} target="_blank" rel="noopener noreferrer" className="studio-link studio-focus">
+        Watch
       </a>
     </span>
   );

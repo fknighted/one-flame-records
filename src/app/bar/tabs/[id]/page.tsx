@@ -28,23 +28,25 @@ export default async function TabPage({ params }: { params: Promise<{ id: string
   return (
     <div className="flex flex-col gap-4 max-w-2xl mx-auto lg:max-w-none pb-16">
       {/* Header */}
-      <div className="flex items-center justify-between shrink-0">
-        <div>
-          <p className="text-xs text-bone/60 mb-0.5">
-            <a href="/bar" className="hover:text-bone transition-colors">← Tabs</a>
+      <div className="flex items-center justify-between gap-3 shrink-0">
+        <div className="min-w-0">
+          <p className="text-[14px] mb-0.5">
+            <a href="/bar" className="studio-link inline-flex min-h-[44px] items-center">← Tabs</a>
           </p>
-          <h1 className="font-display font-bold text-bone text-xl leading-tight">{tab.name}</h1>
-          {tab.notes && <p className="text-xs text-bone/60 mt-0.5">{tab.notes}</p>}
+          <h1 className="studio-page-title">{tab.name}</h1>
+          {tab.notes && <p className="text-[13px] text-muted mt-1">{tab.notes}</p>}
           {!tab.regular_id && isOpen && <SaveAsRegularButton tabId={id} />}
         </div>
-        <div className="text-right">
-          <p className="text-2xl font-mono text-ochre font-semibold">{formatJmd(tab.total_jmd)}</p>
+        <div className="text-right shrink-0">
+          <p className="studio-money text-[32px]">{formatJmd(tab.total_jmd)}</p>
           {isAway ? (
-            <span className="inline-block text-xs font-semibold text-ochre bg-ochre/10 border border-ochre/20 rounded-full px-2 py-0.5">
+            <span className="studio-chip studio-chip-neutral mt-1">
               Customer Left
             </span>
           ) : (
-            <p className="text-xs text-bone/60 capitalize">{tab.status}</p>
+            <p className="mt-1">
+              <span className={`studio-chip capitalize ${isOpen ? "studio-chip-ok" : "studio-chip-neutral"}`}>{tab.status}</span>
+            </p>
           )}
         </div>
       </div>
@@ -54,13 +56,13 @@ export default async function TabPage({ params }: { params: Promise<{ id: string
 
         {/* Left: current tab items */}
         <div className="lg:w-2/5 flex flex-col">
-          <h2 className="text-xs font-semibold text-bone/60 uppercase tracking-wider mb-2">
+          <h2 className="studio-label mb-2">
             Order ({tabItems?.length ?? 0} items)
           </h2>
 
           <div className="space-y-1.5">
             {!tabItems?.length ? (
-              <p className="text-bone/60 text-sm text-center py-8">No items yet — tap menu to add</p>
+              <p className="text-muted text-[15px] text-center py-8">No items yet — tap menu to add</p>
             ) : (
               tabItems.map(ti => (
                 <TabItem key={ti.id} item={ti} tabId={id} isOpen={isOpen} />
@@ -70,7 +72,7 @@ export default async function TabPage({ params }: { params: Promise<{ id: string
 
           {/* Tab controls */}
           {isActive && (
-            <div className="pt-3 border-t border-bone/10 mt-3">
+            <div className="pt-3 border-t border-line mt-3">
               <TabControls
                 tabId={id}
                 total={tab.total_jmd}
@@ -80,8 +82,8 @@ export default async function TabPage({ params }: { params: Promise<{ id: string
             </div>
           )}
           {!isActive && (
-            <div className="pt-3 border-t border-bone/10 mt-3">
-              <p className="text-center text-sm text-bone/60 capitalize">
+            <div className="pt-3 border-t border-line mt-3">
+              <p className="text-center text-[15px] text-muted capitalize">
                 Tab {tab.status} · {tab.payment_method ?? "—"}
               </p>
             </div>
@@ -92,7 +94,7 @@ export default async function TabPage({ params }: { params: Promise<{ id: string
         {isOpen && items && (
           <div className="lg:flex-1 flex flex-col gap-3">
             <div>
-              <h2 className="text-xs font-semibold text-bone/60 uppercase tracking-wider mb-2">
+              <h2 className="studio-label mb-2">
                 Menu
               </h2>
               <div className="flex-1 min-h-0">
@@ -100,7 +102,7 @@ export default async function TabPage({ params }: { params: Promise<{ id: string
               </div>
             </div>
             <div className="shrink-0">
-              <h2 className="text-xs font-semibold text-bone/60 uppercase tracking-wider mb-2">
+              <h2 className="studio-label mb-2">
                 Other / Custom
               </h2>
               <CustomItemForm tabId={id} />
@@ -122,12 +124,12 @@ function TabItem({
   isOpen: boolean;
 }) {
   return (
-    <div className="flex items-center gap-2 border border-bone/10 rounded-lg px-3 py-2">
-      <div className="flex-1 min-w-0">
-        <p className="text-bone text-sm font-medium truncate">{item.name}</p>
-        {item.note && <p className="text-bone/60 text-xs">{item.note}</p>}
+    <div className="studio-card flex flex-wrap items-center gap-x-2 gap-y-1 !p-3">
+      <div className="flex-1 min-w-[7rem]">
+        <p className="text-paper text-[15px] font-semibold [overflow-wrap:anywhere]">{item.name}</p>
+        {item.note && <p className="text-muted text-[13px]">{item.note}</p>}
       </div>
-      <span className="text-ochre font-mono text-sm shrink-0">{formatJmd(item.price_jmd * item.quantity)}</span>
+      <span className="studio-money text-[20px] shrink-0">{formatJmd(item.price_jmd * item.quantity)}</span>
       {isOpen && <QuantityControls tabItemId={item.id} tabId={tabId} quantity={item.quantity} />}
     </div>
   );

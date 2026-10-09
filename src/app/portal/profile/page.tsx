@@ -22,8 +22,8 @@ export default async function PortalProfilePage() {
   if (!profile?.artist_id) {
     return (
       <div className="max-w-2xl">
-        <h1 className="font-display text-2xl text-bone mb-4">Profile</h1>
-        <p className="text-bone/50 text-sm">
+        <h1 className="studio-page-title mb-4">Profile</h1>
+        <p className="text-[16px] text-muted">
           Your artist profile hasn&apos;t been linked yet. Contact the label.
         </p>
       </div>
@@ -39,8 +39,8 @@ export default async function PortalProfilePage() {
   if (error || !artist) {
     return (
       <div className="max-w-2xl">
-        <h1 className="font-display text-2xl text-bone mb-4">Profile</h1>
-        <p className="text-red-400 text-sm">Failed to load profile.</p>
+        <h1 className="studio-page-title mb-4">Profile</h1>
+        <p role="alert" className="studio-error">Failed to load profile.</p>
       </div>
     );
   }
@@ -48,11 +48,8 @@ export default async function PortalProfilePage() {
   return (
     <div className="max-w-2xl">
       <div className="mb-8">
-        <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-sage mb-2">
-          Artist Portal
-        </p>
-        <h1 className="font-display font-bold text-bone text-3xl">Profile</h1>
-        <div className="mt-3 h-px w-16 bg-bone/20" />
+        <p className="studio-label mb-2">Artist Portal</p>
+        <h1 className="studio-page-title">Profile</h1>
       </div>
 
       <PortalProfileForm

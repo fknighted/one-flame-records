@@ -24,12 +24,12 @@ export default function GenerateCodeForm({
             type="text"
             placeholder="Label (e.g. Business card v1)"
             defaultValue={defaultLabel}
-            className="flex-1 bg-bone/10 border border-bone/50 rounded px-3 py-2 text-sm text-bone placeholder:text-bone/40 focus:outline-2 focus:outline-ochre focus:border-ochre"
+            className="studio-field flex-1"
           />
           <button
             type="submit"
             disabled={pending}
-            className="px-4 py-2 bg-ochre text-ink font-semibold text-sm rounded hover:bg-ochre/90 disabled:opacity-50 transition-colors whitespace-nowrap"
+            className="studio-btn studio-btn-primary whitespace-nowrap"
           >
             {pending ? "Generating…" : "Generate code"}
           </button>
@@ -41,20 +41,20 @@ export default function GenerateCodeForm({
             type="hidden"
             value={defaultLabel ?? "Rotation"}
           />
-          <p className="text-xs text-bone/50">
+          <p className="studio-hint">
             Artists with the old QR will not be able to apply.
           </p>
           <button
             type="submit"
             disabled={pending}
-            className="self-start px-4 py-2 border border-bone/30 text-bone/70 text-sm rounded hover:border-ochre hover:text-ochre disabled:opacity-50 transition-colors"
+            className="studio-btn studio-btn-secondary self-start"
           >
             {pending ? "Rotating…" : "Rotate code"}
           </button>
         </div>
       )}
       {state?.error && (
-        <p className="mt-2 text-sm text-red-400">{state.error}</p>
+        <p role="alert" className="studio-error mt-2">{state.error}</p>
       )}
     </form>
   );

@@ -15,10 +15,15 @@ export type InvRow = {
 };
 
 function StockPill({ stock, threshold }: { stock: number | null; threshold: number }) {
-  if (stock === null) return <span className="text-bone/40 text-xs">not tracked</span>;
-  if (stock === 0) return <span className="text-red-400 font-bold text-sm">OUT</span>;
+  if (stock === null) return <span className="text-muted text-[13px]">not tracked</span>;
+  if (stock === 0) return <span className="studio-chip studio-chip-bad">OUT</span>;
   const low = stock < threshold;
-  return <span className={`font-mono font-bold text-sm ${low ? "text-red-400" : "text-bone"}`}>{stock}</span>;
+  return (
+    <span className="inline-flex items-center gap-2">
+      {low && <span className="studio-chip studio-chip-bad">Low</span>}
+      <span className="studio-count">{stock}</span>
+    </span>
+  );
 }
 
 /**
@@ -48,19 +53,19 @@ export default function InventoryAddRow({
   const anyLow = rows.some((r) => r.stock !== null && r.stock < r.threshold);
 
   return (
-    <div className={`rounded-lg border ${open ? "border-ochre/40" : anyLow ? "border-red-400/25" : "border-bone/10"} transition-colors`}>
+    <div className={`border bg-panel ${open ? "border-muted" : "border-line"}`}>
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
-        className="w-full flex items-center justify-between gap-3 px-4 py-3 text-left"
+        className="studio-focus w-full min-h-[52px] flex items-center justify-between gap-3 px-4 py-3 text-left"
       >
-        <span className="text-bone font-medium">{title}</span>
+        <span className="text-paper font-semibold [overflow-wrap:anywhere]">{title}</span>
         <span className="flex items-center gap-3">
           {!isGroup && <StockPill stock={rows[0].stock} threshold={rows[0].threshold} />}
-          {isGroup && anyLow && <span className="text-red-400 text-xs font-semibold">low</span>}
+          {isGroup && anyLow && <span className="studio-chip studio-chip-bad">low</span>}
           <svg
-            className={`w-4 h-4 text-bone/40 transition-transform ${open ? "rotate-180" : ""}`}
+            className={`w-4 h-4 text-muted transition-transform ${open ? "rotate-180" : ""}`}
             viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.6"
           >
             <path d="M6 8l4 4 4-4" strokeLinecap="round" strokeLinejoin="round" />
@@ -69,12 +74,12 @@ export default function InventoryAddRow({
       </button>
 
       {open && (
-        <div className="px-4 pb-4 pt-1 space-y-3 border-t border-bone/10">
+        <div className="px-4 pb-4 pt-1 space-y-3 border-t border-line">
           {isGroup && (
             <div className="space-y-1 pt-2">
               {rows.map((r) => (
-                <div key={r.id} className="flex items-center justify-between text-sm">
-                  <span className="text-bone/70">{r.name}</span>
+                <div key={r.id} className="flex items-center justify-between gap-3 text-[15px]">
+                  <span className="text-muted">{r.name}</span>
                   <StockPill stock={r.stock} threshold={r.threshold} />
                 </div>
               ))}

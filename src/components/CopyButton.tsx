@@ -20,7 +20,7 @@ export default function CopyButton({
   return (
     <button
       onClick={handleClick}
-      className="text-sm font-medium text-ochre hover:text-ochre/80 transition-colors"
+      className="studio-btn studio-btn-secondary studio-btn-sm"
     >
       {copied ? "Copied!" : label}
     </button>

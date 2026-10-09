@@ -22,13 +22,13 @@ export default function EditAssetForm({
   return (
     <form action={action} className="space-y-5">
       <div>
-        <label className="block text-xs font-semibold uppercase tracking-wider text-bone/60 mb-1.5">
+        <label className="studio-field-label">
           Kind
         </label>
         <select
           name="kind"
           defaultValue={asset.kind}
-          className="w-full bg-bone/5 border border-bone/45 rounded px-3 py-2 text-bone text-sm focus:outline-2 focus:outline-ochre focus:border-ochre/50"
+          className="studio-field"
         >
           {KIND_OPTIONS.map(opt => (
             <option key={opt.value} value={opt.value}>{opt.label}</option>
@@ -37,45 +37,45 @@ export default function EditAssetForm({
       </div>
 
       <div>
-        <label className="block text-xs font-semibold uppercase tracking-wider text-bone/60 mb-1.5">
+        <label className="studio-field-label">
           Title
         </label>
         <input
           name="title"
           defaultValue={asset.title}
           required
-          className="w-full bg-bone/5 border border-bone/45 rounded px-3 py-2 text-bone text-sm focus:outline-2 focus:outline-ochre focus:border-ochre/50"
+          className="studio-field"
         />
       </div>
 
       <div>
-        <label className="block text-xs font-semibold uppercase tracking-wider text-bone/60 mb-1.5">
+        <label className="studio-field-label">
           Notes{" "}
-          <span className="text-bone/60 font-normal normal-case tracking-normal">(optional)</span>
+          <span className="text-muted font-normal">(optional)</span>
         </label>
         <textarea
           name="notes"
           defaultValue={asset.notes ?? ""}
           rows={3}
-          className="w-full bg-bone/5 border border-bone/45 rounded px-3 py-2 text-bone text-sm focus:outline-2 focus:outline-ochre focus:border-ochre/50 resize-none"
+          className="studio-field resize-none"
         />
       </div>
 
       {state?.error && (
-        <p className="text-sm text-red-400">{state.error}</p>
+        <p role="alert" className="studio-error">{state.error}</p>
       )}
 
       <div className="flex gap-3 pt-2">
         <Link
           href="/portal/assets"
-          className="flex-1 text-center border border-bone/20 text-bone/60 py-2.5 rounded text-sm hover:text-bone transition-colors"
+          className="studio-btn studio-btn-secondary flex-1"
         >
           Cancel
         </Link>
         <button
           type="submit"
           disabled={pending}
-          className="flex-1 bg-ochre text-ink font-semibold py-2.5 rounded text-sm hover:bg-ochre/90 transition-colors disabled:opacity-50"
+          className="studio-btn studio-btn-primary flex-1"
         >
           {pending ? "Saving…" : "Save Changes"}
         </button>

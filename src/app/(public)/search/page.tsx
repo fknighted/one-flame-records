@@ -2,6 +2,10 @@ import Image from "next/image";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
+import PosterHeadline from "@/components/PosterHeadline";
+import PrintedPhoto from "@/components/PrintedPhoto";
+import EmptyState from "@/components/EmptyState";
+import { FIELD_CLASS, FIELD_LABEL_CLASS, buttonClasses } from "@/lib/sound-system";
 
 export const metadata: Metadata = {
   title: "Search — One Flame Records",
@@ -62,28 +66,34 @@ export default async function SearchPage({
 
   const totalResults = artists.length + releases.length + posts.length;
 
+  // Result rows: paper on black, so the black focus ring sits outside them.
+  const ROW = "flex items-center gap-3 p-3 min-w-0 bg-paper text-black hover:bg-yellow transition-colors focus-on-black";
+
   return (
     <>
-      {/* Ink banner */}
-      <section className="bg-ink">
-        <div className="mx-auto max-w-3xl px-4 sm:px-6 pt-14 pb-10">
-          <h1 className="font-display font-bold text-bone text-[clamp(2rem,5vw,3rem)] leading-tight mb-6">
+      {/* Header and search form */}
+      <section className="bg-black">
+        <div className="mx-auto max-w-3xl px-4 sm:px-6 pt-14 pb-10 sm:pt-[88px]">
+          <PosterHeadline as="h1" size="headline" className="text-paper">
             Search
-          </h1>
-          <form method="GET" action="/search">
-            <div className="flex gap-2">
+          </PosterHeadline>
+          <span aria-hidden="true" className="section-bar mt-2 mb-8" />
+          {/* Forms sit on paper */}
+          <form method="GET" action="/search" className="bg-paper text-black p-4 sm:p-5">
+            <label htmlFor="search-q" className={FIELD_LABEL_CLASS}>
+              Search artists, releases and news
+            </label>
+            <div className="flex flex-wrap gap-2">
               <input
+                id="search-q"
                 name="q"
                 type="search"
                 defaultValue={query}
                 placeholder="Artists, releases, news…"
                 autoFocus
-                className="flex-1 bg-bone/10 border border-bone/50 rounded-lg px-4 py-3 text-bone placeholder:text-bone/30 focus:outline-2 focus:outline-ochre focus:border-ochre/60 text-base"
+                className={`${FIELD_CLASS} flex-[1_1_180px] min-w-0 appearance-none [&::-webkit-search-cancel-button]:hidden [&::-webkit-search-cancel-button]:appearance-none`}
               />
-              <button
-                type="submit"
-                className="px-5 py-3 bg-ochre text-ink font-semibold rounded-lg hover:bg-ochre/90 transition-colors text-sm"
-              >
+              <button type="submit" className={buttonClasses("dark", "paper", "shrink-0")}>
                 Search
               </button>
             </div>
@@ -92,40 +102,41 @@ export default async function SearchPage({
       </section>
 
       {/* Results */}
-      <section className="bg-cream">
-        <div className="mx-auto max-w-3xl px-4 sm:px-6 py-12 space-y-10">
+      <section className="bg-black">
+        <div className="mx-auto max-w-3xl px-4 sm:px-6 pb-14 sm:pb-[88px] space-y-10">
 
-          {!query && (
-            <p className="text-ink/40 text-sm text-center py-12">
-              Type at least 2 characters to search.
-            </p>
+          {query.length < 2 && (
+            <EmptyState
+              title={query ? "Type at least 2 letters." : "What are you looking for?"}
+              body="Search by artist name, release title or news headline."
+            />
           )}
 
           {query.length >= 2 && totalResults === 0 && (
-            <p className="text-ink/40 text-sm text-center py-12">
-              No results for <strong className="text-ink">&ldquo;{query}&rdquo;</strong>.
-            </p>
+            <EmptyState
+              title="No results."
+              body={`Nothing matched \u201c${query}\u201d. Try a different spelling or fewer letters.`}
+            />
           )}
 
           {/* Artists */}
           {artists.length > 0 && (
             <div>
-              <h2 className="font-display text-lg font-semibold text-ink mb-4">Artists</h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <h2 className="type-title text-paper">Artists</h2>
+              <span aria-hidden="true" className="section-bar mt-2 mb-5" />
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                 {artists.map((a) => (
-                  <Link
-                    key={a.slug}
-                    href={`/artists/${a.slug}`}
-                    className="flex items-center gap-3 p-3 rounded-lg border border-oxblood/10 hover:border-oxblood/30 hover:bg-white/40 transition-colors"
-                  >
+                  <Link key={a.slug} href={`/artists/${a.slug}`} className={ROW}>
                     {a.photo_url ? (
-                      <Image src={a.photo_url} alt={a.stage_name} width={40} height={40} className="rounded-full object-cover w-10 h-10 shrink-0" />
+                      <PrintedPhoto tone="yellow" src={a.photo_url} alt={a.stage_name} width={48} height={48} className="object-cover w-12 h-12 shrink-0" />
                     ) : (
-                      <div className="w-10 h-10 rounded-full bg-oxblood/10 shrink-0" />
+                      <span aria-hidden="true" className="grid place-items-center w-12 h-12 shrink-0 bg-red text-paper type-title-sm">
+                        {a.stage_name.charAt(0)}
+                      </span>
                     )}
                     <div className="min-w-0">
-                      <p className="font-semibold text-ink text-sm truncate">{a.stage_name}</p>
-                      {a.hometown && <p className="text-ink/50 text-xs">{a.hometown}</p>}
+                      <p className="type-title-sm truncate">{a.stage_name}</p>
+                      {a.hometown && <p className="type-small mt-1">{a.hometown}</p>}
                     </div>
                   </Link>
                 ))}
@@ -133,27 +144,24 @@ export default async function SearchPage({
             </div>
           )}
 
-          {/* Releases */}
+          {/* Releases: cover art is artwork, so it is not printed */}
           {releases.length > 0 && (
             <div>
-              <h2 className="font-display text-lg font-semibold text-ink mb-4">Releases</h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <h2 className="type-title text-paper">Releases</h2>
+              <span aria-hidden="true" className="section-bar mt-2 mb-5" />
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                 {releases.map((r) => {
                   const artist = Array.isArray(r.artists) ? r.artists[0] : r.artists;
                   return (
-                    <Link
-                      key={r.slug}
-                      href={`/releases/${r.slug}`}
-                      className="flex items-center gap-3 p-3 rounded-lg border border-oxblood/10 hover:border-oxblood/30 hover:bg-white/40 transition-colors"
-                    >
+                    <Link key={r.slug} href={`/releases/${r.slug}`} className={ROW}>
                       {r.cover_url ? (
-                        <Image src={r.cover_url} alt={r.title} width={40} height={40} className="rounded object-cover w-10 h-10 shrink-0" />
+                        <Image src={r.cover_url} alt={r.title} width={48} height={48} className="object-cover w-12 h-12 shrink-0" />
                       ) : (
-                        <div className="w-10 h-10 rounded bg-oxblood/10 shrink-0" />
+                        <span aria-hidden="true" className="w-12 h-12 shrink-0 bg-red" />
                       )}
                       <div className="min-w-0">
-                        <p className="font-semibold text-ink text-sm truncate">{r.title}</p>
-                        <p className="text-ink/50 text-xs capitalize">{r.type}{artist?.stage_name ? ` · ${artist.stage_name}` : ""}</p>
+                        <p className="type-title-sm truncate">{r.title}</p>
+                        <p className="type-small mt-1 capitalize [overflow-wrap:anywhere]">{r.type}{artist?.stage_name ? ` · ${artist.stage_name}` : ""}</p>
                       </div>
                     </Link>
                   );
@@ -165,21 +173,18 @@ export default async function SearchPage({
           {/* News */}
           {posts.length > 0 && (
             <div>
-              <h2 className="font-display text-lg font-semibold text-ink mb-4">News</h2>
-              <div className="space-y-3">
+              <h2 className="type-title text-paper">News</h2>
+              <span aria-hidden="true" className="section-bar mt-2 mb-5" />
+              <div className="grid gap-2">
                 {posts.map((p) => (
-                  <Link
-                    key={p.slug}
-                    href={`/news/${p.slug}`}
-                    className="flex items-start gap-3 p-3 rounded-lg border border-oxblood/10 hover:border-oxblood/30 hover:bg-white/40 transition-colors"
-                  >
+                  <Link key={p.slug} href={`/news/${p.slug}`} className={`${ROW} items-start`}>
                     {p.cover_url && (
-                      <Image src={p.cover_url} alt={p.title} width={64} height={40} className="rounded object-cover w-16 h-10 shrink-0 mt-0.5" />
+                      <PrintedPhoto tone="red" src={p.cover_url} alt={p.title} width={80} height={48} className="object-cover w-20 h-12 shrink-0" />
                     )}
                     <div className="min-w-0">
-                      <p className="font-semibold text-ink text-sm leading-snug">{p.title}</p>
-                      {p.excerpt && <p className="text-ink/50 text-xs mt-0.5 line-clamp-1">{p.excerpt}</p>}
-                      {p.published_at && <p className="text-ink/30 text-xs mt-0.5">{formatDate(p.published_at)}</p>}
+                      <p className="type-title-sm [overflow-wrap:anywhere]">{p.title}</p>
+                      {p.excerpt && <p className="type-body-sm mt-1 line-clamp-1">{p.excerpt}</p>}
+                      {p.published_at && <p className="type-caption mt-1">{formatDate(p.published_at)}</p>}
                     </div>
                   </Link>
                 ))}

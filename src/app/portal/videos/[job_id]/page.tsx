@@ -17,14 +17,14 @@ export default async function SavedVideoPage({ params }: { params: Promise<{ job
   const title = asset?.title ?? "Saved video";
   return (
     <div className="px-4 py-6 sm:px-8 sm:py-8 max-w-4xl space-y-6">
-      <Link href="/portal/videos" className="text-sm text-bone/60 hover:text-ochre">← Saved videos</Link>
-      <h1 className="font-display text-3xl text-bone">{title}</h1>
+      <Link href="/portal/videos" className="studio-link studio-focus text-[15px]">Saved videos</Link>
+      <h1 className="studio-page-title">{title}</h1>
       {video.output_url ? (
         <div className="space-y-4">
-          <video src={video.output_url} controls preload="metadata" aria-label={title} className="w-full rounded-lg bg-black" />
-          <a href={video.output_url} download={`${title}.mp4`} className="inline-block text-sm text-ochre hover:text-bone">Download video</a>
+          <video src={video.output_url} controls preload="metadata" aria-label={title} className="w-full bg-black border border-line" />
+          <a href={video.output_url} download={`${title}.mp4`} className="studio-btn studio-btn-secondary">Download video</a>
         </div>
-      ) : <p className="text-bone/60">No video file is available for this saved record.</p>}
+      ) : <p className="text-[16px] text-muted">No video file is available for this saved record.</p>}
       <ShareToggle jobId={video.id} isPublic={video.is_public ?? false} />
     </div>
   );

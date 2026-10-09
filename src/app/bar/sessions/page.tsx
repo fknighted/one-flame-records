@@ -78,34 +78,34 @@ export default async function SessionsPage() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="font-display font-bold text-bone text-2xl">Game Sessions</h1>
+        <h1 className="studio-page-title">Game Sessions</h1>
       </div>
 
       {/* Revenue summary */}
-      <div className="grid grid-cols-3 gap-3">
-        <div className="border border-bone/10 rounded-lg p-3">
-          <p className="text-[10px] text-bone/60 uppercase tracking-wider mb-1">Today</p>
-          <p className="text-xl font-display font-bold text-ochre">{formatJmd(todayRevenue)}</p>
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+        <div className="studio-stat">
+          <p className="studio-stat-label">Today</p>
+          <p className="studio-stat-value is-money text-[32px]">{formatJmd(todayRevenue)}</p>
         </div>
-        <div className="border border-bone/10 rounded-lg p-3">
-          <p className="text-[10px] text-bone/60 uppercase tracking-wider mb-1">This Week</p>
-          <p className="text-xl font-display font-bold text-bone">{formatJmd(weekRevenue)}</p>
+        <div className="studio-stat">
+          <p className="studio-stat-label">This Week</p>
+          <p className="studio-stat-value is-money text-[32px]">{formatJmd(weekRevenue)}</p>
         </div>
-        <div className="border border-bone/10 rounded-lg p-3">
-          <p className="text-[10px] text-bone/60 uppercase tracking-wider mb-1">This Month</p>
-          <p className="text-xl font-display font-bold text-bone">{formatJmd(monthRevenue)}</p>
+        <div className="studio-stat">
+          <p className="studio-stat-label">This Month</p>
+          <p className="studio-stat-value is-money text-[32px]">{formatJmd(monthRevenue)}</p>
         </div>
       </div>
 
       {/* Active sessions — live countdown timer */}
       <section>
-        <h2 className="text-xs font-semibold text-bone/60 uppercase tracking-wider mb-3">
+        <h2 className="studio-label mb-3">
           Active ({activeSessions?.length ?? 0})
         </h2>
 
         {!activeSessions?.length ? (
-          <div className="border border-bone/10 rounded-xl p-10 text-center text-bone/50 text-sm">
-            No active sessions
+          <div className="studio-empty">
+            <p className="studio-empty-body">No active sessions</p>
           </div>
         ) : (
           <div className="space-y-3">
@@ -113,9 +113,9 @@ export default async function SessionsPage() {
             {/* End session buttons — separate from timer so they can be server-rendered */}
             <div className="space-y-2">
               {activeSessions.map(s => (
-                <div key={s.id} className="flex items-center gap-3 border border-bone/10 rounded-xl px-4 py-2.5">
+                <div key={s.id} className="studio-card flex items-center gap-3 !py-2.5">
                   <div className="flex-1 min-w-0">
-                    <p className="text-bone/70 text-xs">
+                    <p className="text-paper text-[14px] [overflow-wrap:anywhere]">
                       {getName(s.gamer_members) ?? "Drop-in"}
                       {s.station && <span className="ml-1">· {s.station}</span>}
                     </p>
@@ -130,50 +130,50 @@ export default async function SessionsPage() {
 
       {/* Today's completed sessions */}
       <section>
-        <div className="flex items-center justify-between mb-3">
-          <h2 className="text-xs font-semibold text-bone/60 uppercase tracking-wider">
+        <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
+          <h2 className="studio-label">
             Completed Today ({todaySessions?.length ?? 0})
           </h2>
           {todayRevenue > 0 && (
-            <span className="text-xs font-mono text-ochre font-semibold">
+            <span className="studio-money">
               {formatJmd(todayRevenue)}
             </span>
           )}
         </div>
 
         {!todaySessions?.length ? (
-          <div className="border border-bone/10 rounded-xl p-6 text-center text-bone/50 text-sm">
-            No sessions completed today
+          <div className="studio-empty">
+            <p className="studio-empty-body">No sessions completed today</p>
           </div>
         ) : (
-          <div className="border border-bone/10 rounded-lg overflow-x-auto">
-            <table className="w-full min-w-[420px] text-sm">
-              <thead className="border-b border-bone/10 bg-bone/3">
+          <div className="studio-table-wrap">
+            <table className="studio-table min-w-[420px]">
+              <thead>
                 <tr>
-                  <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Member</th>
-                  <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Station</th>
-                  <th className="text-right px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Start</th>
-                  <th className="text-right px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">End</th>
-                  <th className="text-right px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Price</th>
+                  <th>Member</th>
+                  <th>Station</th>
+                  <th className="is-num">Start</th>
+                  <th className="is-num">End</th>
+                  <th className="is-num">Price</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-bone/10">
+              <tbody>
                 {todaySessions.map(s => (
-                  <tr key={s.id} className="hover:bg-bone/3 transition-colors">
-                    <td className="px-4 py-3 text-bone font-medium">{getName(s.gamer_members) ?? <span className="text-bone/50">Drop-in</span>}</td>
-                    <td className="px-4 py-3 text-bone/50">{s.station ?? "—"}</td>
-                    <td className="px-4 py-3 text-right text-bone/50 text-xs font-mono">{jamaicaTime(s.started_at)}</td>
-                    <td className="px-4 py-3 text-right text-bone/50 text-xs font-mono">{s.ended_at ? jamaicaTime(s.ended_at) : "—"}</td>
-                    <td className="px-4 py-3 text-right font-mono text-ochre">
-                      {s.price_jmd ? formatJmd(s.price_jmd) : <span className="text-bone/50">—</span>}
+                  <tr key={s.id}>
+                    <td className="font-semibold [overflow-wrap:anywhere]">{getName(s.gamer_members) ?? <span className="text-muted font-normal">Drop-in</span>}</td>
+                    <td className="text-muted">{s.station ?? "—"}</td>
+                    <td className="is-num studio-figures text-muted">{jamaicaTime(s.started_at)}</td>
+                    <td className="is-num studio-figures text-muted">{s.ended_at ? jamaicaTime(s.ended_at) : "—"}</td>
+                    <td className="is-num">
+                      {s.price_jmd ? <span className="studio-money">{formatJmd(s.price_jmd)}</span> : <span className="text-muted">—</span>}
                     </td>
                   </tr>
                 ))}
               </tbody>
-              <tfoot className="border-t border-bone/10 bg-bone/3">
+              <tfoot>
                 <tr>
-                  <td colSpan={4} className="px-4 py-3 text-xs font-semibold text-bone/50">Day Total</td>
-                  <td className="px-4 py-3 text-right font-mono font-bold text-bone">{formatJmd(todayRevenue)}</td>
+                  <td colSpan={4} className="px-4 py-3 text-[13px] font-semibold text-muted border-t border-line">Day Total</td>
+                  <td className="is-num px-4 py-3 border-t border-line"><span className="studio-money">{formatJmd(todayRevenue)}</span></td>
                 </tr>
               </tfoot>
             </table>
@@ -183,7 +183,7 @@ export default async function SessionsPage() {
 
       {/* Start session form */}
       <section>
-        <h2 className="text-xs font-semibold text-bone/60 uppercase tracking-wider mb-3">
+        <h2 className="studio-label mb-3">
           Start Session
         </h2>
         <StartSessionForm members={members ?? []} />

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { unsubscribeEmail } from "./actions";
+import { buttonClasses } from "@/lib/sound-system";
 
 interface UnsubscribeFormProps {
   email: string;
@@ -13,11 +14,11 @@ export default function UnsubscribeForm({ email }: UnsubscribeFormProps) {
 
   if (state?.done) {
     return (
-      <div className="text-center space-y-4">
-        <p className="text-ink/70 text-sm">
-          You've been unsubscribed from the One Flame Records newsletter.
+      <div className="space-y-3" role="status">
+        <p className="type-body">
+          You&apos;ve been unsubscribed from the One Flame Records newsletter.
         </p>
-        <p className="text-ink/40 text-xs">You won't receive any further emails from us.</p>
+        <p className="type-body-sm">You won&apos;t receive any further emails from us.</p>
       </div>
     );
   }
@@ -37,15 +38,15 @@ export default function UnsubscribeForm({ email }: UnsubscribeFormProps) {
   return (
     <form onSubmit={handleSubmit} className="space-y-5">
       {state?.error && (
-        <p className="text-sm text-oxblood bg-oxblood/10 border border-oxblood/20 rounded-lg px-4 py-3">
+        <p role="alert" className="bg-red text-paper type-body-sm px-4 py-3">
           {state.error}
         </p>
       )}
-      <p className="text-ink/60 text-sm text-center break-all">{email}</p>
+      <p className="type-body-sm font-semibold break-all">{email}</p>
       <button
         type="submit"
         disabled={pending}
-        className="w-full border border-ochre text-ink font-semibold text-base py-3 rounded-xl hover:bg-ochre/10 active:scale-[0.98] transition-all disabled:opacity-50"
+        className={buttonClasses("dark", "paper", "w-full")}
       >
         {pending ? "Unsubscribing…" : "Unsubscribe"}
       </button>

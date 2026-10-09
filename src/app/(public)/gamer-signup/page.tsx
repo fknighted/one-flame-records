@@ -2,26 +2,26 @@
 
 import { useActionState } from "react";
 import Link from "next/link";
+import Button from "@/components/Button";
+import { FIELD_CLASS, FIELD_LABEL_CLASS } from "@/lib/sound-system";
 import { gamerSignup } from "./actions";
+
+const TEXT_LINK = "text-red underline underline-offset-4 focus-on-paper";
 
 export default function GamerSignupPage() {
   const [state, formAction, pending] = useActionState(gamerSignup, null);
 
   if (state && "success" in state) {
     return (
-      <div className="min-h-screen bg-cream flex items-center justify-center px-4">
-        <div className="max-w-sm w-full text-center space-y-6">
-          <div className="w-16 h-16 bg-forest/10 rounded-full flex items-center justify-center mx-auto">
-            <span className="text-3xl">🎮</span>
-          </div>
-          <div>
-            <h1 className="font-display font-bold text-ink text-2xl mb-2">Check your email</h1>
-            <p className="text-ink/60 text-sm">
-              We sent you a link to set your password and activate your Flames Lounge gamer account.
-            </p>
-          </div>
-          <Link href="/flames-lounge" className="text-sm text-oxblood hover:underline">
-            ← Back to Flames Lounge
+      <div className="bg-black px-4 sm:px-6 py-14 sm:py-[88px]">
+        <div className="mx-auto max-w-md bg-paper text-black border-2 border-black p-6 sm:p-8 grid gap-4">
+          <h1 className="type-headline [overflow-wrap:anywhere]">Check your email</h1>
+          <span aria-hidden="true" className="section-bar" />
+          <p className="type-body">
+            We sent you a link to set your password and activate your Flames Lounge gamer account.
+          </p>
+          <Link href="/flames-lounge" className={`${TEXT_LINK} type-label min-h-[44px] inline-flex items-center`}>
+            Back to Flames Lounge
           </Link>
         </div>
       </div>
@@ -29,19 +29,20 @@ export default function GamerSignupPage() {
   }
 
   return (
-    <div className="min-h-screen bg-cream flex items-center justify-center px-4">
-      <div className="max-w-sm w-full space-y-8">
-        <div>
-          <Link href="/flames-lounge" className="text-sm text-ink/40 hover:text-ink/70 transition-colors">
-            ← Flames Lounge
+    <div className="bg-black px-4 sm:px-6 py-14 sm:py-[88px]">
+      <div className="mx-auto max-w-md bg-paper text-black p-6 sm:p-8 grid gap-6">
+        <div className="min-w-0">
+          <Link href="/flames-lounge" className={`${TEXT_LINK} type-label min-h-[44px] inline-flex items-center`}>
+            Flames Lounge
           </Link>
-          <h1 className="font-display font-bold text-ink text-3xl mt-4 mb-1">Join as a Gamer</h1>
-          <p className="text-ink/50 text-sm">
+          <h1 className="type-headline mt-2 [overflow-wrap:anywhere]">Join as a Gamer</h1>
+          <span aria-hidden="true" className="section-bar mt-2" />
+          <p className="type-body-sm mt-4">
             Get a loyalty account, track your sessions, and manage your game time balance.
           </p>
         </div>
 
-        <form action={formAction} className="space-y-5">
+        <form action={formAction} className="grid gap-5">
           {/* Honeypot — hidden from humans; bots that fill it are silently dropped. */}
           <input
             type="text"
@@ -52,27 +53,26 @@ export default function GamerSignupPage() {
             className="absolute left-[-9999px] w-px h-px opacity-0"
           />
           {state && "error" in state && (
-            <p className="text-sm text-oxblood bg-oxblood/10 border border-oxblood/20 rounded-lg px-4 py-3">
+            <p role="alert" className="bg-red text-paper type-body-sm px-4 py-3 border-2 border-black">
               {state.error}
             </p>
           )}
 
           <div>
-            <label htmlFor="display_name" className="block text-sm font-medium text-ink/70 mb-1.5">
+            <label htmlFor="display_name" className={FIELD_LABEL_CLASS}>
               Your Name
             </label>
             <input
               id="display_name"
               name="display_name"
               type="text"
-              autoFocus
               placeholder="e.g. Jay King"
-              className="w-full bg-white border border-ink/60 rounded-xl px-4 py-3 text-ink placeholder:text-ink/25 text-base focus:outline-2 focus:outline-oxblood focus:border-oxblood/50 transition-colors"
+              className={FIELD_CLASS}
             />
           </div>
 
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-ink/70 mb-1.5">
+            <label htmlFor="email" className={FIELD_LABEL_CLASS}>
               Email Address
             </label>
             <input
@@ -80,22 +80,18 @@ export default function GamerSignupPage() {
               name="email"
               type="email"
               placeholder="you@email.com"
-              className="w-full bg-white border border-ink/60 rounded-xl px-4 py-3 text-ink placeholder:text-ink/25 text-base focus:outline-2 focus:outline-oxblood focus:border-oxblood/50 transition-colors"
+              className={FIELD_CLASS}
             />
           </div>
 
-          <button
-            type="submit"
-            disabled={pending}
-            className="w-full bg-oxblood text-cream font-semibold text-base py-3.5 rounded-xl hover:bg-oxblood/90 active:scale-[0.98] transition-all disabled:opacity-50"
-          >
+          <Button type="submit" variant="dark" ground="paper" disabled={pending} className="w-full">
             {pending ? "Creating account…" : "Create Gamer Account"}
-          </button>
+          </Button>
         </form>
 
-        <p className="text-center text-xs text-ink/30">
+        <p className="type-small">
           Already have an account?{" "}
-          <Link href="/login" className="text-oxblood hover:underline">Sign in</Link>
+          <Link href="/login" className={TEXT_LINK}>Sign in</Link>
         </p>
       </div>
     </div>

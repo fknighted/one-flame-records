@@ -1,5 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import LinkButton from "@/components/LinkButton";
+import PosterHeadline from "@/components/PosterHeadline";
+import SectionHeader from "@/components/SectionHeader";
+import GrilleBand from "@/components/GrilleBand";
 
 export const metadata: Metadata = {
   title: "Sign with One Flame Records",
@@ -37,81 +41,65 @@ const GENRES = [
 export default function SignPage() {
   return (
     <>
-      {/* ── Hero ── */}
-      <section className="bg-ink">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 pt-24 pb-24 md:pt-32 md:pb-28">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-forest mb-5">
-            For Artists
+      {/* Hero: yellow poster block */}
+      <section className="relative bg-yellow text-black">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 pt-12 pb-20 sm:pt-16 md:pb-14 md:pr-[84px] min-w-0">
+          <PosterHeadline as="h1" size="poster">Sign with One Flame.</PosterHeadline>
+          <p className="type-lead mt-4 max-w-[30ch]">
+            You keep your publishing. We handle the platform.
           </p>
-          <h1 className="font-display font-bold text-bone text-[clamp(2.75rem,6vw,5rem)] leading-[1.02] tracking-tight max-w-3xl">
-            We&apos;re looking for artists who have something real to say.
-          </h1>
-          <div className="mt-6 h-px w-24 bg-oxblood" />
-          <p className="mt-6 text-lg text-bone/60 max-w-xl leading-relaxed">
+          <p className="type-body mt-6 max-w-[66ch]">
             One Flame Records is an independent reggae and dancehall label
-            based in Montego Bay, Jamaica. We sign artists, not sounds — if
-            the music is rooted, honest, and built to last, we want to hear it.
+            based in Montego Bay, Jamaica. We&apos;re looking for artists who
+            have something real to say. We sign artists, not sounds. If the
+            music is rooted, honest, and built to last, we want to hear it.
           </p>
-          <div className="mt-10 flex flex-wrap items-center gap-4">
-            <Link
-              href="/contact"
-              className="inline-block rounded bg-ochre px-7 py-3 text-sm font-semibold text-ink hover:bg-bone transition-colors"
-            >
+          <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-4">
+            <LinkButton href="/contact" variant="outline" ground="yellow">
               Start the conversation
-            </Link>
+            </LinkButton>
             <Link
               href="/artists"
-              className="inline-block rounded border border-bone/30 px-7 py-3 text-sm font-semibold text-bone hover:border-bone hover:bg-bone/5 transition-colors"
+              className="type-label text-black underline underline-offset-4 focus-on-yellow"
             >
               Our roster
             </Link>
           </div>
         </div>
+        <GrilleBand className="absolute left-0 right-0 bottom-0 h-[42px] md:left-auto md:inset-y-0 md:w-[60px] md:h-auto" />
       </section>
 
-      {/* ── What we look for ── */}
-      <section className="bg-cream">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 py-20">
-          <div className="grid md:grid-cols-2 gap-12 items-start">
-            <div>
-              <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-forest mb-3">
-                What we look for
-              </p>
-              <h2 className="font-display font-bold text-oxblood text-[clamp(2rem,3.5vw,2.75rem)] leading-tight">
-                Rooted music.<br />Real stories.
-              </h2>
-              <div className="mt-4 h-px w-16 bg-oxblood" />
-              <p className="mt-6 text-ink/70 leading-relaxed">
-                One Flame started in the tradition of Jamaican music — not to
+      {/* What we look for: reading on paper */}
+      <section className="bg-paper text-black">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 py-14 sm:py-[88px]">
+          <div className="grid md:grid-cols-2 gap-10 md:gap-12 items-start">
+            <div className="min-w-0">
+              <SectionHeader as="h2" variant="paper" title="Rooted music. Real stories." />
+              <p className="type-body mt-6 max-w-[66ch]">
+                One Flame started in the tradition of Jamaican music, not to
                 chase what&apos;s trending, but to amplify voices that carry
                 weight. We sign artists at every stage, from emerging
                 bedroom producers to established performers ready for the
                 next chapter.
               </p>
-              <p className="mt-4 text-ink/70 leading-relaxed">
+              <p className="type-body mt-4 max-w-[66ch]">
                 We work closely with our artists on production, releases,
                 visual identity, and distribution. You keep your publishing.
                 We handle the platform.
               </p>
             </div>
-            <div>
-              <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-ink/40 mb-4">
-                Genres we work with
-              </p>
-              <ul className="space-y-2">
+            <div className="min-w-0">
+              <h3 className="type-label mb-4">Genres we work with</h3>
+              <ul className="border-t-2 border-black">
                 {GENRES.map((g) => (
-                  <li key={g} className="flex items-center gap-3">
-                    <span
-                      className="inline-block w-1.5 h-1.5 rounded-full bg-oxblood shrink-0"
-                      aria-hidden="true"
-                    />
-                    <span className="text-ink/80 text-[15px]">{g}</span>
+                  <li key={g} className="type-title-sm border-b-2 border-black py-3 [overflow-wrap:anywhere]">
+                    {g}
                   </li>
                 ))}
               </ul>
-              <p className="mt-8 text-sm text-ink/50 leading-relaxed">
+              <p className="type-body-sm mt-6 max-w-[66ch]">
                 If your sound doesn&apos;t fit a neat category but feels
-                connected to Caribbean music culture, reach out anyway — we
+                connected to Caribbean music culture, reach out anyway. We
                 listen before we label.
               </p>
             </div>
@@ -119,52 +107,36 @@ export default function SignPage() {
         </div>
       </section>
 
-      {/* ── Process ── */}
-      <section className="bg-ink">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 py-20">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-forest mb-3">
-            How it works
-          </p>
-          <h2 className="font-display font-bold text-bone text-[clamp(2rem,3.5vw,2.75rem)] leading-tight mb-12">
-            Simple. Three steps.
-          </h2>
-          <div className="grid md:grid-cols-3 gap-8">
+      {/* Process: black ground, raised tiles */}
+      <section className="bg-black text-paper">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 py-14 sm:py-[88px]">
+          <SectionHeader as="h2" title="Simple. Three steps." />
+          <ol className="grid md:grid-cols-3 gap-2 mt-8">
             {PROCESS.map(({ step, title, body }) => (
-              <div key={step} className="border-t border-bone/10 pt-6">
-                <span className="font-mono text-[11px] text-bone/25 tracking-widest block mb-4">
-                  {step}
-                </span>
-                <h3 className="font-display font-semibold text-bone text-xl mb-3">
-                  {title}
-                </h3>
-                <p className="text-bone/50 text-sm leading-relaxed">{body}</p>
-              </div>
+              <li key={step} className="bg-raised text-paper p-5 sm:p-6 min-w-0">
+                <span className="type-number text-yellow block mb-3">{step}</span>
+                <h3 className="type-title mb-3 [overflow-wrap:anywhere]">{title}</h3>
+                <p className="type-body-sm">{body}</p>
+              </li>
             ))}
-          </div>
+          </ol>
         </div>
       </section>
 
-      {/* ── Final CTA ── */}
-      <section className="bg-oxblood">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 py-20 flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
-          <div>
-            <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-bone/50 mb-3">
-              Montego Bay · Jamaica
-            </p>
-            <h2 className="font-display font-bold text-bone text-[clamp(2rem,4vw,3rem)] leading-tight">
-              Ready to talk?
-            </h2>
-            <p className="mt-3 text-bone/70 max-w-md leading-relaxed">
+      {/* Final call: red block */}
+      <section className="bg-red text-paper">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 py-14 sm:py-[88px] flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
+          <div className="min-w-0">
+            <p className="type-label mb-3">Montego Bay, Jamaica</p>
+            <PosterHeadline as="h2">Ready to talk?</PosterHeadline>
+            <p className="type-body mt-3 max-w-[40ch]">
               Send us a message and include links to your music. We read
               every submission.
             </p>
           </div>
-          <Link
-            href="/contact"
-            className="shrink-0 inline-block rounded bg-bone px-8 py-3.5 text-sm font-semibold text-ink hover:bg-ochre transition-colors"
-          >
+          <LinkButton href="/contact" variant="primary" ground="red" className="shrink-0">
             Get in touch
-          </Link>
+          </LinkButton>
         </div>
       </section>
     </>

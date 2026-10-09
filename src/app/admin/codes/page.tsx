@@ -45,7 +45,7 @@ export default async function AdminCodesPage() {
     qrDataUri = await QRCode.toDataURL(signupUrl, {
       width: 240,
       margin: 2,
-      color: { dark: "#1A1612", light: "#F5EDD8" },
+      color: { dark: "#0F0D0B", light: "#FFF7E6" },
     });
   }
 
@@ -56,18 +56,13 @@ export default async function AdminCodesPage() {
     <div className="max-w-3xl">
       {/* Header */}
       <div className="mb-8">
-        <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-sage mb-2">
-          QR Onboarding
-        </p>
-        <h1 className="font-display font-bold text-bone text-3xl">
-          Signup Codes
-        </h1>
-        <div className="mt-3 h-px w-16 bg-bone/20" />
+        <p className="studio-label mb-2">QR Onboarding</p>
+        <h1 className="studio-page-title">Signup Codes</h1>
       </div>
 
       {/* Active code */}
       {active && qrDataUri && signupUrl ? (
-        <div className="bg-bone/5 border border-bone/10 rounded-lg p-6 mb-8">
+        <div className="studio-card mb-8">
           <div className="flex flex-col sm:flex-row gap-6">
             {/* QR */}
             <div className="shrink-0">
@@ -76,25 +71,25 @@ export default async function AdminCodesPage() {
                 alt="Signup QR code"
                 width={160}
                 height={160}
-                className="rounded"
+                className="border border-line"
                 unoptimized
               />
             </div>
 
             {/* Details */}
             <div className="flex-1 min-w-0">
-              <p className="text-xs text-bone/50 uppercase tracking-widest mb-1">
+              <p className="studio-label mb-1">
                 Active code
               </p>
-              <p className="text-bone font-semibold text-lg mb-1">
+              <p className="studio-section-title mb-1">
                 {active.label}
               </p>
-              <p className="font-mono text-sm text-ochre mb-3">
+              <p className="studio-figures text-paper mb-3 [overflow-wrap:anywhere]">
                 {active.code}
               </p>
 
-              <p className="text-xs text-bone/50 mb-1">Signup URL</p>
-              <p className="text-sm text-bone/70 break-all mb-3">
+              <p className="studio-hint mb-1">Signup URL</p>
+              <p className="text-[15px] text-paper break-all mb-3">
                 {signupUrl}
               </p>
 
@@ -103,14 +98,14 @@ export default async function AdminCodesPage() {
                 <a
                   href={qrDataUri}
                   download="one-flame-signup-qr.png"
-                  className="text-sm font-medium text-ochre hover:text-ochre/80 transition-colors"
+                  className="studio-btn studio-btn-secondary studio-btn-sm"
                 >
                   Download QR
                 </a>
               </div>
 
-              <div className="border-t border-bone/10 pt-4">
-                <p className="text-xs text-bone/60 uppercase tracking-widest mb-3">
+              <div className="studio-divider pt-4">
+                <p className="studio-label mb-3">
                   Rotate code
                 </p>
                 <GenerateCodeForm mode="rotate" defaultLabel={rotateLabel} />
@@ -119,8 +114,8 @@ export default async function AdminCodesPage() {
           </div>
         </div>
       ) : (
-        <div className="bg-bone/5 border border-bone/10 rounded-lg p-6 mb-8">
-          <p className="text-bone/60 text-sm mb-4">
+        <div className="studio-card mb-8">
+          <p className="text-muted mb-4">
             No active code. Generate one to start onboarding artists.
           </p>
           <GenerateCodeForm mode="generate" />
@@ -130,38 +125,30 @@ export default async function AdminCodesPage() {
       {/* History */}
       {history && history.length > 0 && (
         <div>
-          <h2 className="text-bone/50 text-xs uppercase tracking-widest mb-3">
+          <h2 className="studio-section-title mb-3">
             Rotated codes
           </h2>
-          <div className="border border-bone/10 rounded-lg overflow-x-auto">
-            <table className="w-full min-w-[480px] text-sm">
+          <div className="studio-table-wrap">
+            <table className="studio-table min-w-[480px]">
               <thead>
-                <tr className="border-b border-bone/10">
-                  <th className="text-left px-4 py-2 text-bone/60 font-normal text-xs">
-                    Label
-                  </th>
-                  <th className="text-left px-4 py-2 text-bone/60 font-normal text-xs">
-                    Code
-                  </th>
-                  <th className="text-left px-4 py-2 text-bone/60 font-normal text-xs">
-                    Created
-                  </th>
-                  <th className="text-left px-4 py-2 text-bone/60 font-normal text-xs">
-                    Rotated
-                  </th>
+                <tr>
+                  <th>Label</th>
+                  <th>Code</th>
+                  <th>Created</th>
+                  <th>Rotated</th>
                 </tr>
               </thead>
               <tbody>
                 {history.map((row) => (
-                  <tr key={row.id} className="border-b border-bone/5 last:border-0">
-                    <td className="px-4 py-3 text-bone/70">{row.label}</td>
-                    <td className="px-4 py-3 font-mono text-bone/50 text-xs">
+                  <tr key={row.id}>
+                    <td>{row.label}</td>
+                    <td className="studio-figures text-muted">
                       {row.code}
                     </td>
-                    <td className="px-4 py-3 text-bone/50">
+                    <td className="text-muted whitespace-nowrap">
                       {formatDate(row.created_at)}
                     </td>
-                    <td className="px-4 py-3 text-bone/50">
+                    <td className="text-muted whitespace-nowrap">
                       {formatDate(row.rotated_at)}
                     </td>
                   </tr>

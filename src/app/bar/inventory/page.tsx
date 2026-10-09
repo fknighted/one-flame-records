@@ -47,8 +47,8 @@ export default async function BarInventoryPage() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="font-display font-bold text-bone text-2xl">Inventory</h1>
-        <p className="mt-1 text-sm text-bone/60">Tap an item to add stock as you buy it. You can add but not remove — an admin adjusts counts. Low or out items show in red.</p>
+        <h1 className="studio-page-title">Inventory</h1>
+        <p className="mt-2 text-[15px] text-muted">Tap an item to add stock as you buy it. You can add but not remove — an admin adjusts counts. Low or out items show in red.</p>
       </div>
 
       {SECTION_ORDER.filter((sec) => grouped[sec]?.length).map((sec) => {
@@ -57,7 +57,7 @@ export default async function BarInventoryPage() {
 
         return (
           <section key={sec} className="space-y-2">
-            <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-bone/60">
+            <h2 className="studio-label">
               {SECTION_LABELS[sec] ?? sec}
             </h2>
             <div className="space-y-2">

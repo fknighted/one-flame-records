@@ -23,27 +23,20 @@ const STATUS_ORDER = [
 
 type StatusKey = (typeof STATUS_ORDER)[number];
 
-const STATUS_CONFIG: Record<StatusKey, { label: string; bgVar: string; fgVar: string }> = {
-  "idea":       { label: "Idea",       bgVar: "--color-status-idea-bg",      fgVar: "--color-status-idea-fg" },
-  "pre-prod":   { label: "Pre-prod",   bgVar: "--color-status-preprod-bg",   fgVar: "--color-status-preprod-fg" },
-  "tracking":   { label: "Tracking",   bgVar: "--color-status-tracking-bg",  fgVar: "--color-status-tracking-fg" },
-  "mixing":     { label: "Mixing",     bgVar: "--color-status-mixing-bg",    fgVar: "--color-status-mixing-fg" },
-  "mastering":  { label: "Mastering",  bgVar: "--color-status-mastering-bg", fgVar: "--color-status-mastering-fg" },
-  "scheduled":  { label: "Scheduled",  bgVar: "--color-status-scheduled-bg", fgVar: "--color-status-scheduled-fg" },
-  "live":       { label: "Live",       bgVar: "--color-status-live-bg",      fgVar: "--color-status-live-fg" },
+const STATUS_CONFIG: Record<StatusKey, { label: string; chip: string }> = {
+  "idea":       { label: "Idea",       chip: "studio-chip-neutral" },
+  "pre-prod":   { label: "Pre-prod",   chip: "studio-chip-neutral" },
+  "tracking":   { label: "Tracking",   chip: "studio-chip-neutral" },
+  "mixing":     { label: "Mixing",     chip: "studio-chip-neutral" },
+  "mastering":  { label: "Mastering",  chip: "studio-chip-neutral" },
+  "scheduled":  { label: "Scheduled",  chip: "studio-chip-neutral" },
+  "live":       { label: "Live",       chip: "studio-chip-ok" },
 };
 
 function StatusPill({ status }: { status: string }) {
   const cfg = STATUS_CONFIG[status as StatusKey] ?? STATUS_CONFIG["live"];
   return (
-    <span
-      className="inline-flex items-center gap-1.5 px-[10px] py-1 rounded-sm text-[10px] font-bold uppercase tracking-[0.12em] whitespace-nowrap shrink-0"
-      style={{ backgroundColor: `var(${cfg.bgVar})`, color: `var(${cfg.fgVar})` }}
-    >
-      <span
-        className="w-1.5 h-1.5 rounded-full shrink-0"
-        style={{ backgroundColor: `var(${cfg.fgVar})` }}
-      />
+    <span className={`studio-chip ${cfg.chip} shrink-0`}>
       {cfg.label}
     </span>
   );
@@ -51,20 +44,9 @@ function StatusPill({ status }: { status: string }) {
 
 // ── Type pill ────────────────────────────────────────────────────────────────
 
-const TYPE_STYLES: Record<string, string> = {
-  single:  "bg-ochre text-ink",
-  ep:      "bg-forest text-bone",
-  album:   "bg-oxblood text-bone",
-  mixtape: "bg-ink text-bone border border-bone/30",
-};
-
 function TypePill({ type }: { type: string }) {
   return (
-    <span
-      className={`inline-block px-[7px] py-[3px] rounded-sm text-[10px] font-bold uppercase tracking-[0.08em] ${
-        TYPE_STYLES[type] ?? "bg-bone/10 text-bone"
-      }`}
-    >
+    <span className="studio-chip studio-chip-neutral capitalize">
       {type}
     </span>
   );
@@ -127,31 +109,30 @@ export default async function PortalReleasesPage({
   return (
     <div className="px-4 py-4 sm:px-8 sm:py-8">
       {/* ── Header ── */}
-      <div className="flex items-end justify-between mb-6 pb-5 border-b border-bone/10">
-        <div>
-          <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-sage mb-1">
+      <div className="flex flex-wrap items-end justify-between gap-4 mb-6 pb-5 border-b border-line">
+        <div className="min-w-0">
+          <p className="studio-label mb-1">
             {isAdmin ? "Label catalog" : "Your releases"}
           </p>
-          <h1 className="font-display font-bold text-bone text-[2rem] sm:text-[2.5rem] leading-none tracking-[-0.018em]">
-            Releases.
+          <h1 className="studio-page-title">
+            Releases
           </h1>
-          <div className="mt-3 h-px w-16 bg-bone/30" />
         </div>
         <div className="flex items-center gap-3">
           {isAdmin && (
             <Link
               href="/admin/releases/new"
-              className="rounded px-3 py-1.5 sm:px-4 sm:py-2 bg-ochre text-ink text-xs sm:text-sm font-semibold hover:bg-bone transition-colors"
+              className="studio-btn studio-btn-primary"
             >
-              + New
+              New
             </Link>
           )}
         </div>
       </div>
 
       {/* ── Status tile strip — scrolls on mobile ── */}
-      <div className="overflow-x-auto mb-6 -mx-4 sm:mx-0 px-4 sm:px-0">
-        <div className="flex border border-bone/10 rounded-sm overflow-hidden min-w-[480px] sm:min-w-0">
+      <div className="studio-table-wrap mb-6">
+        <div className="flex min-w-[560px] sm:min-w-0">
           {STATUS_ORDER.map((s, i) => {
             const cfg = STATUS_CONFIG[s];
             const isActive = status === s;
@@ -162,23 +143,12 @@ export default async function PortalReleasesPage({
               <Link
                 key={s}
                 href={href}
-                className={`flex-1 px-3 sm:px-4 py-3 text-center transition-colors ${
-                  i > 0 ? "border-l border-bone/10" : ""
-                } ${isActive ? "bg-bone/10" : "hover:bg-bone/5"}`}
+                className={`studio-focus flex-1 px-3 sm:px-4 py-3 min-h-[44px] text-center transition-colors ${
+                  i > 0 ? "border-l border-line" : ""
+                } ${isActive ? "bg-raised" : "hover:bg-raised"}`}
               >
-                <div className="flex items-center justify-center gap-1 sm:gap-1.5 mb-1">
-                  <span
-                    className="w-[6px] sm:w-[7px] h-[6px] sm:h-[7px] rounded-full shrink-0"
-                    style={{ backgroundColor: `var(${cfg.fgVar})` }}
-                  />
-                  <span
-                    className="text-[9px] sm:text-[10px] font-semibold uppercase tracking-[0.14em]"
-                    style={{ color: `var(${cfg.fgVar})` }}
-                  >
-                    {cfg.label}
-                  </span>
-                </div>
-                <p className="font-display font-bold text-bone text-lg sm:text-2xl leading-none tracking-[-0.01em]">
+                <p className="studio-label mb-1">{cfg.label}</p>
+                <p className="studio-count">
                   {tileCounts[s] ?? 0}
                 </p>
               </Link>
@@ -188,28 +158,28 @@ export default async function PortalReleasesPage({
       </div>
 
       {/* ── Filter row ── */}
-      <div className="flex items-center justify-between py-3 border-t border-b border-bone/10 mb-0">
+      <div className="flex flex-wrap items-center justify-between gap-3 py-3 border-t border-b border-line mb-0">
         <Suspense fallback={null}>
           <ReleasesManagerFilter basePath="/portal/releases" />
         </Suspense>
-        <span className="font-mono text-[11px] text-bone/60 tracking-[0.04em] shrink-0 ml-3">
+        <span className="studio-count shrink-0">
           {filtered.length} of {releases.length}
         </span>
       </div>
 
       {/* ── Column headers — desktop only ── */}
       <div
-        className={`hidden sm:grid gap-4 px-0 py-3 border-b border-bone/10 ${
+        className={`hidden sm:grid gap-4 px-0 py-3 border-b border-line ${
           isAdmin
             ? "grid-cols-[80px_44px_1fr_160px_100px_130px_110px_110px]"
             : "grid-cols-[80px_44px_1fr_100px_130px_110px_110px]"
         }`}
       >
         {["Cat #", "", "Title", ...(isAdmin ? ["Artist"] : []), "Format", "Status", "Released", "Listen"].map(
-          (col) => (
+          (col, idx) => (
             <span
-              key={col}
-              className="font-mono text-[10px] text-bone/50 uppercase tracking-[0.16em]"
+              key={`${col}-${idx}`}
+              className="studio-label"
             >
               {col}
             </span>
@@ -219,20 +189,18 @@ export default async function PortalReleasesPage({
 
       {/* ── Release rows ── */}
       {filtered.length === 0 ? (
-        <div className="py-16 text-center">
+        <div className="py-10">
           {releases.length === 0 ? (
-            <>
-              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-bone/50 mb-2">
-                Empty roster
-              </p>
-              <p className="font-display font-bold text-bone text-2xl">
+            <div className="studio-empty">
+              <p className="studio-label">Empty roster</p>
+              <p className="studio-empty-title">
                 No records here yet.
               </p>
-            </>
+            </div>
           ) : (
-            <p className="text-bone/50 text-sm">
+            <p className="text-[16px] text-muted">
               No releases match this filter.{" "}
-              <Link href="/portal/releases" className="text-ochre hover:text-ochre/80 transition-colors">
+              <Link href="/portal/releases" className="studio-link">
                 Reset
               </Link>
             </p>
@@ -248,11 +216,11 @@ export default async function PortalReleasesPage({
               <Link
                 key={release.id}
                 href={`/releases/${release.slug}`}
-                className="block group border-b border-bone/10 hover:bg-bone/5 transition-colors"
+                className="studio-focus block group border-b border-line hover:bg-raised transition-colors"
               >
                 {/* ── Mobile card ── */}
                 <div className="sm:hidden flex items-start gap-3 py-3">
-                  <div className="relative w-10 h-10 shrink-0 bg-oxblood/10 border border-white/5">
+                  <div className="relative w-10 h-10 shrink-0 bg-panel border border-line">
                     {release.cover_url && (
                       <Image
                         src={release.cover_url}
@@ -265,19 +233,19 @@ export default async function PortalReleasesPage({
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-start justify-between gap-2 mb-1">
-                      <p className="font-display font-bold text-bone text-sm leading-snug tracking-[-0.005em] group-hover:text-ochre transition-colors truncate">
+                      <p className="text-paper font-bold text-[16px] leading-snug truncate">
                         {release.title}
                       </p>
                       <StatusPill status={release.production_status} />
                     </div>
-                    <p className="text-[11px] text-bone/60 mb-1.5">
+                    <p className="text-[14px] text-muted mb-1.5">
                       {release.catalog_no && (
-                        <span className="font-mono">{release.catalog_no} · </span>
+                        <span className="studio-figures">{release.catalog_no} · </span>
                       )}
                       <span className="uppercase">{release.type}</span>
                       {" · "}{shortDate(release.release_date)}
                       {isAdmin && artist && (
-                        <span className="text-bone/50"> · {artist.stage_name}</span>
+                        <span> · {artist.stage_name}</span>
                       )}
                     </p>
                     <StreamingIcons links={streaming} />
@@ -292,11 +260,11 @@ export default async function PortalReleasesPage({
                       : "grid-cols-[80px_44px_1fr_100px_130px_110px_110px]"
                   }`}
                 >
-                  <span className="font-mono text-xs text-sage tracking-[0.06em] font-medium">
+                  <span className="studio-figures text-[14px] text-muted">
                     {release.catalog_no ?? "—"}
                   </span>
 
-                  <div className="relative w-[40px] h-[40px] shrink-0 bg-oxblood/10 border border-white/5">
+                  <div className="relative w-[40px] h-[40px] shrink-0 bg-panel border border-line">
                     {release.cover_url && (
                       <Image
                         src={release.cover_url}
@@ -309,10 +277,10 @@ export default async function PortalReleasesPage({
                   </div>
 
                   <div className="min-w-0">
-                    <p className="font-display font-bold text-bone text-base leading-snug tracking-[-0.005em] group-hover:text-ochre transition-colors truncate">
+                    <p className="text-paper font-bold text-[16px] leading-snug truncate">
                       {release.title}
                     </p>
-                    <p className="text-[11px] text-bone/50 mt-0.5">—</p>
+                    <p className="text-[13px] text-muted mt-0.5">—</p>
                   </div>
 
                   {isAdmin && (
@@ -327,7 +295,7 @@ export default async function PortalReleasesPage({
                     <StatusPill status={release.production_status} />
                   </div>
 
-                  <span className="font-mono text-xs text-bone/70">
+                  <span className="studio-figures text-[14px] text-muted">
                     {shortDate(release.release_date)}
                   </span>
 
@@ -342,7 +310,7 @@ export default async function PortalReleasesPage({
       )}
 
       {/* ── Footer ── */}
-      <p className="pt-5 text-[12px] text-bone/50">
+      <p className="pt-5 text-[14px] text-muted">
         Showing {filtered.length} of {releases.length} releases
       </p>
     </div>

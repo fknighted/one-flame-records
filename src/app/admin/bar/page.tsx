@@ -87,36 +87,36 @@ export default async function BarOverviewPage() {
   return (
     <div className="space-y-8 max-w-4xl">
       <div>
-        <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-sage mb-1">Bar</p>
-        <h1 className="font-display font-bold text-bone text-3xl">Overview</h1>
-        <div className="mt-3 h-px w-16 bg-bone/20" />
+        <p className="studio-label mb-1">Bar</p>
+        <h1 className="studio-page-title">Overview</h1>
       </div>
 
       {loadError && (
-        <div className="rounded-lg border border-rose/30 bg-rose/10 px-4 py-3 text-sm text-rose">
+        <div role="alert" className="studio-error">
           Some figures below couldn&apos;t be loaded, so revenue, profit, and open-tab totals may be incomplete. Refresh to try again.
         </div>
       )}
 
       {/* Revenue + profit totals (admin only) */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
         {windows.map((w) => {
           const profit = w.revenue - w.cost;
           const margin = w.revenue > 0 ? Math.round((profit / w.revenue) * 100) : null;
           return (
-            <div key={w.label} className="border border-bone/10 rounded-lg p-4">
-              <p className="text-xs text-bone/60 mb-1">{w.label}</p>
-              <p className="text-2xl font-display font-bold text-bone">{formatJmd(w.revenue)}</p>
-              <p className="text-[11px] text-bone/40 mt-0.5">revenue</p>
-              <div className="mt-3 pt-3 border-t border-bone/10 space-y-1">
-                <div className="flex justify-between text-xs">
-                  <span className="text-bone/50">Cost</span>
-                  <span className="font-mono text-bone/60">{formatJmd(w.cost)}</span>
+            <div key={w.label} className="studio-stat">
+              <p className="studio-stat-label">{w.label}</p>
+              <p className="studio-stat-value is-money text-[36px]">{formatJmd(w.revenue)}</p>
+              <p className="text-[13px] text-muted">revenue</p>
+              <div className="pt-3 border-t border-line space-y-1">
+                <div className="flex justify-between items-baseline gap-3 text-[14px]">
+                  <span className="text-muted">Cost</span>
+                  <span className="studio-figures text-muted">{formatJmd(w.cost)}</span>
                 </div>
-                <div className="flex justify-between text-sm">
-                  <span className="text-bone/70">Profit</span>
-                  <span className={`font-mono font-bold ${profit < 0 ? "text-red-400" : "text-sage"}`}>
-                    {formatJmd(profit)}{margin != null && <span className="text-bone/40 font-normal"> · {margin}%</span>}
+                <div className="flex justify-between items-baseline gap-3 text-[15px]">
+                  <span className="text-paper">Profit</span>
+                  <span className="text-right">
+                    <span className="studio-money text-[20px]">{formatJmd(profit)}</span>
+                    {margin != null && <span className="text-muted font-normal studio-figures"> · {margin}%</span>}
                   </span>
                 </div>
               </div>
@@ -124,12 +124,12 @@ export default async function BarOverviewPage() {
           );
         })}
       </div>
-      <p className="-mt-4 text-[11px] text-bone/35">
+      <p className="-mt-4 studio-hint">
         Profit = tab revenue − cost of goods sold (cost locked at time of sale). Items without a cost set count as pure profit until you add their cost. Gaming session revenue is tracked separately.
       </p>
 
       {/* Secondary stats */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
         {[
           { label: "Active Sessions", value: activeSessions ?? 0,  href: "/bar/sessions",        sub: undefined as string | undefined },
           { label: "Menu Items",      value: totalItems ?? 0,       href: "/admin/bar/inventory", sub: undefined },
@@ -139,60 +139,57 @@ export default async function BarOverviewPage() {
           <Link
             key={s.label}
             href={s.href}
-            className="border border-bone/10 rounded-lg p-4 hover:border-bone/25 transition-colors"
+            className="studio-stat studio-focus hover:bg-raised"
           >
-            <p className="text-xs text-bone/60 mb-1">{s.label}</p>
-            <p className="text-2xl font-display font-bold text-bone">{s.value}</p>
-            {s.sub && <p className="text-[11px] text-bone/40 mt-0.5">{s.sub}</p>}
+            <p className="studio-stat-label">{s.label}</p>
+            <p className="studio-stat-value">{s.value}</p>
+            {s.sub && <p className="studio-money text-[18px]">{s.sub}</p>}
           </Link>
         ))}
       </div>
 
       {/* Open tabs — outstanding money right now */}
       <section className="space-y-3">
-        <div className="flex items-baseline justify-between">
-          <h2 className="text-xs font-semibold uppercase tracking-widest text-bone/52">Open Tabs ({openList.length})</h2>
-          <span className="text-sm text-bone/60">
-            Outstanding <span className="font-mono font-bold text-ochre">{formatJmd(openTotal)}</span>
+        <div className="flex flex-wrap items-baseline justify-between gap-2">
+          <h2 className="studio-label">Open Tabs ({openList.length})</h2>
+          <span className="text-[15px] text-muted">
+            Outstanding <span className="studio-money">{formatJmd(openTotal)}</span>
           </span>
         </div>
 
         {openList.length === 0 ? (
-          <p className="text-sm text-bone/50">No open tabs.</p>
+          <p className="text-[15px] text-muted">No open tabs.</p>
         ) : (
-          <div className="border border-ochre/20 rounded-lg overflow-x-auto">
-            <table className="w-full min-w-[400px] text-sm">
-              <thead className="border-b border-bone/10 bg-bone/3">
+          <div className="studio-table-wrap">
+            <table className="studio-table min-w-[400px]">
+              <thead>
                 <tr>
-                  <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Customer</th>
-                  <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Opened</th>
-                  <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Status</th>
-                  <th className="text-right px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Total</th>
+                  <th>Customer</th>
+                  <th>Opened</th>
+                  <th>Status</th>
+                  <th className="is-num">Total</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-bone/10">
+              <tbody>
                 {openList.map((tab) => (
-                  <tr key={tab.id} className="hover:bg-bone/3 transition-colors">
-                    <td className="px-4 py-3 text-bone font-medium">
-                      <Link href={`/bar/tabs/${tab.id}`} className="hover:text-ochre transition-colors">{tab.name}</Link>
+                  <tr key={tab.id} className="is-link">
+                    <td className="font-semibold [overflow-wrap:anywhere]">
+                      <Link href={`/bar/tabs/${tab.id}`} className="studio-link inline-flex min-h-[44px] items-center">{tab.name}</Link>
                     </td>
-                    <td className="px-4 py-3 text-bone/50 text-xs">{jamaicaDateTime(tab.created_at)}</td>
-                    <td className="px-4 py-3">
-                      <span className={[
-                        "inline-block px-2 py-0.5 rounded-full text-xs font-medium",
-                        tab.status === "away" ? "bg-red-400/15 text-red-400" : "bg-ochre/20 text-ochre",
-                      ].join(" ")}>
+                    <td className="studio-figures text-muted">{jamaicaDateTime(tab.created_at)}</td>
+                    <td>
+                      <span className={tab.status === "away" ? "studio-chip studio-chip-neutral" : "studio-chip studio-chip-ok"}>
                         {STATUS_LABELS[tab.status] ?? tab.status}
                       </span>
                     </td>
-                    <td className="px-4 py-3 text-right font-mono text-bone">{formatJmd(tab.total_jmd ?? 0)}</td>
+                    <td className="is-num"><span className="studio-money">{formatJmd(tab.total_jmd ?? 0)}</span></td>
                   </tr>
                 ))}
               </tbody>
-              <tfoot className="border-t border-bone/10 bg-bone/3">
+              <tfoot>
                 <tr>
-                  <td colSpan={3} className="px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Outstanding</td>
-                  <td className="px-4 py-3 text-right font-mono font-bold text-ochre">{formatJmd(openTotal)}</td>
+                  <td colSpan={3} className="px-4 py-3 text-[13px] font-semibold text-muted border-t border-line">Outstanding</td>
+                  <td className="is-num px-4 py-3 border-t border-line"><span className="studio-money">{formatJmd(openTotal)}</span></td>
                 </tr>
               </tfoot>
             </table>
@@ -202,47 +199,46 @@ export default async function BarOverviewPage() {
 
       {/* Today's tabs */}
       <section className="space-y-3">
-        <div className="flex items-center justify-between">
-          <h2 className="text-xs font-semibold uppercase tracking-widest text-bone/52">Today&apos;s Tabs</h2>
-          <Link href="/bar/tabs/new" className="text-xs text-ochre hover:underline">+ New Tab</Link>
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <h2 className="studio-label">Today&apos;s Tabs</h2>
+          <Link href="/bar/tabs/new" className="studio-btn studio-btn-secondary studio-btn-sm">+ New Tab</Link>
         </div>
 
         {!todayAllTabs?.length ? (
-          <p className="text-sm text-bone/50">No tabs opened today.</p>
+          <p className="text-[15px] text-muted">No tabs opened today.</p>
         ) : (
-          <div className="border border-bone/10 rounded-lg overflow-x-auto">
-            <table className="w-full min-w-[400px] text-sm">
-              <thead className="border-b border-bone/10 bg-bone/3">
+          <div className="studio-table-wrap">
+            <table className="studio-table min-w-[400px]">
+              <thead>
                 <tr>
-                  <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Customer</th>
-                  <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Time</th>
-                  <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Status</th>
-                  <th className="text-right px-4 py-3 text-xs font-semibold uppercase tracking-wider text-bone/60">Total</th>
+                  <th>Customer</th>
+                  <th>Time</th>
+                  <th>Status</th>
+                  <th className="is-num">Total</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-bone/10">
+              <tbody>
                 {todayAllTabs.map((tab) => (
-                  <tr key={tab.id} className="hover:bg-bone/3 transition-colors">
-                    <td className="px-4 py-3 text-bone font-medium">
+                  <tr key={tab.id} className="is-link">
+                    <td className="font-semibold [overflow-wrap:anywhere]">
                       {tab.status === "open" ? (
-                        <Link href={`/bar/tabs/${tab.id}`} className="hover:text-ochre transition-colors">{tab.name}</Link>
+                        <Link href={`/bar/tabs/${tab.id}`} className="studio-link inline-flex min-h-[44px] items-center">{tab.name}</Link>
                       ) : tab.name}
                     </td>
-                    <td className="px-4 py-3 text-bone/50 text-xs">
+                    <td className="studio-figures text-muted">
                       {jamaicaTime(tab.created_at)}
                     </td>
-                    <td className="px-4 py-3">
-                      <span className={[
-                        "inline-block px-2 py-0.5 rounded-full text-xs font-medium",
-                        tab.status === "closed" ? "bg-forest/20 text-sage" :
-                        tab.status === "open"   ? "bg-ochre/20 text-ochre" :
-                        "bg-bone/10 text-bone/60",
-                      ].join(" ")}>
+                    <td>
+                      <span className={
+                        tab.status === "open"
+                          ? "studio-chip studio-chip-ok"
+                          : "studio-chip studio-chip-neutral"
+                      }>
                         {STATUS_LABELS[tab.status] ?? tab.status}
                       </span>
                     </td>
-                    <td className="px-4 py-3 text-right font-mono text-bone">
-                      {formatJmd(tab.total_jmd ?? 0)}
+                    <td className="is-num">
+                      <span className="studio-money">{formatJmd(tab.total_jmd ?? 0)}</span>
                     </td>
                   </tr>
                 ))}
@@ -253,11 +249,11 @@ export default async function BarOverviewPage() {
       </section>
 
       {/* Quick links */}
-      <section className="flex flex-wrap gap-3">
-        <Link href="/admin/bar/sales"     className="text-sm text-bone/50 hover:text-bone transition-colors border border-bone/15 rounded px-3 py-1.5">Sales Report</Link>
-        <Link href="/admin/bar/inventory" className="text-sm text-bone/50 hover:text-bone transition-colors border border-bone/15 rounded px-3 py-1.5">Inventory</Link>
-        <Link href="/admin/bar/items"     className="text-sm text-bone/50 hover:text-bone transition-colors border border-bone/15 rounded px-3 py-1.5">Manage Menu</Link>
-        <Link href="/admin/bar/tabs"      className="text-sm text-bone/50 hover:text-bone transition-colors border border-bone/15 rounded px-3 py-1.5">Order History</Link>
+      <section className="flex flex-wrap gap-2">
+        <Link href="/admin/bar/sales"     className="studio-btn studio-btn-secondary studio-btn-sm">Sales Report</Link>
+        <Link href="/admin/bar/inventory" className="studio-btn studio-btn-secondary studio-btn-sm">Inventory</Link>
+        <Link href="/admin/bar/items"     className="studio-btn studio-btn-secondary studio-btn-sm">Manage Menu</Link>
+        <Link href="/admin/bar/tabs"      className="studio-btn studio-btn-secondary studio-btn-sm">Order History</Link>
       </section>
     </div>
   );
