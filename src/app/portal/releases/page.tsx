@@ -200,7 +200,7 @@ export default async function PortalReleasesPage({
           ) : (
             <p className="text-[16px] text-muted">
               No releases match this filter.{" "}
-              <Link href="/portal/releases" className="studio-link">
+              <Link href="/portal/releases" className="studio-link inline-flex min-h-[44px] items-center">
                 Reset
               </Link>
             </p>

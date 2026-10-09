@@ -22,7 +22,7 @@ export default function SaveAsRegularButton({ tabId }: { tabId: string }) {
             router.refresh();
           });
         }}
-        className="studio-btn studio-btn-quiet studio-btn-sm"
+        className="studio-btn studio-btn-quiet studio-btn-sm -ml-4"
       >
         {pending ? "Saving…" : "+ Add to regulars"}
       </button>

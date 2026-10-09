@@ -152,6 +152,7 @@
     background-color: var(--color-panel, #16130F);
     border: 1px solid var(--color-line, #3A332B);
     overflow-x: auto;
+    position: relative; /* contains .sr-only spans so they cannot widen the page */
   }
   .studio-table {
     width: 100%;
@@ -221,6 +222,19 @@
   }
   .studio-field[type="file"] {
     padding: 8px 12px;
+  }
+  .studio-field[type="file"]::file-selector-button {
+    margin-right: 12px;
+    padding: 8px 14px;
+    background-color: transparent;
+    color: var(--color-black, #0F0D0B);
+    border: 2px solid var(--color-black, #0F0D0B);
+    border-radius: 0;
+    font-family: var(--font-text, system-ui, sans-serif);
+    font-size: 14px;
+    font-weight: 800;
+    text-transform: uppercase;
+    cursor: pointer;
   }
   .studio-field-label {
     display: block;

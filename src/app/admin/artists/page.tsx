@@ -93,9 +93,9 @@ export default async function AdminArtistsPage({
       {(artists ?? []).length === 0 ? (
         <div className="studio-empty">
           {filterStatus === "all" ? (
-            <>No artists yet. <Link href="/admin/artists/new" className="studio-link">Add the first one.</Link></>
+            <>No artists yet. <Link href="/admin/artists/new" className="studio-link inline-flex min-h-[44px] items-center">Add the first one.</Link></>
           ) : (
-            <>No {filterStatus} artists. <Link href="/admin/artists" className="studio-link">Clear filter.</Link></>
+            <>No {filterStatus} artists. <Link href="/admin/artists" className="studio-link inline-flex min-h-[44px] items-center">Clear filter.</Link></>
           )}
         </div>
       ) : (

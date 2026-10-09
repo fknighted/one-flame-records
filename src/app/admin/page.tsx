@@ -84,7 +84,7 @@ export default async function AdminOverviewPage() {
         <div className="studio-card p-0">
           <div className="flex items-center justify-between gap-3 px-4 py-3 border-b border-line">
             <h2 className="studio-section-title">Pending Applications</h2>
-            <Link href="/admin/applications" className="studio-link text-[15px]">Review</Link>
+            <Link href="/admin/applications" className="studio-link inline-flex min-h-[44px] items-center text-[15px]">Review</Link>
           </div>
           {(pendingApplications?.length ?? 0) === 0 ? (
             <p className="px-4 py-6 text-[15px] text-muted text-center">All clear — no pending applications.</p>

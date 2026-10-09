@@ -37,7 +37,7 @@ export default async function AdminVideosPage() {
       {videos.length === 0 ? (
         <div className="studio-empty">
           No videos yet.{" "}
-          <Link href="/admin/videos/new" className="studio-link">
+          <Link href="/admin/videos/new" className="studio-link inline-flex min-h-[44px] items-center">
             Add the first one.
           </Link>
         </div>

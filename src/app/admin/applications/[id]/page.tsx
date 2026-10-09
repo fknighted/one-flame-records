@@ -128,7 +128,7 @@ export default async function ApplicationDetailPage({
                     href={url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="studio-link [overflow-wrap:anywhere]"
+                    className="studio-link inline-flex min-h-[44px] items-center [overflow-wrap:anywhere]"
                   >
                     {handle}
                   </a>

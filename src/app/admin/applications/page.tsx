@@ -56,7 +56,7 @@ export default async function AdminApplicationsPage() {
           <p className="text-muted">No applications yet.</p>
           <p className="text-muted text-[15px] mt-1">
             Share a signup link from{" "}
-            <Link href="/admin/codes" className="studio-link">
+            <Link href="/admin/codes" className="studio-link inline-flex min-h-[44px] items-center">
               Codes
             </Link>{" "}
             to start receiving applications.

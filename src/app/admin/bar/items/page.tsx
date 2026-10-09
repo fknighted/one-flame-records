@@ -60,7 +60,7 @@ export default async function MenuItemsPage({
         <div className="studio-empty">
           <p className="studio-empty-body">
             No items yet.{" "}
-            <Link href="/admin/bar/items/new" className="studio-link">
+            <Link href="/admin/bar/items/new" className="studio-link inline-flex min-h-[44px] items-center">
               Add your first menu item.
             </Link>
           </p>

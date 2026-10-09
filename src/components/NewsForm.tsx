@@ -169,15 +169,19 @@ export default function NewsForm({
           role="switch"
           aria-checked={isPublished}
           onClick={() => setIsPublished((v) => !v)}
-          className={`relative inline-flex h-7 w-12 shrink-0 cursor-pointer border-2 border-muted transition-colors focus-visible:outline focus-visible:outline-[3px] focus-visible:outline-offset-2 focus-visible:outline-yellow ${
-            isPublished ? "bg-green" : "bg-raised"
-          }`}
+          className="inline-flex h-11 w-12 shrink-0 cursor-pointer items-center focus-visible:outline focus-visible:outline-[3px] focus-visible:outline-offset-2 focus-visible:outline-yellow"
         >
           <span
-            className={`pointer-events-none inline-block h-5 w-5 bg-paper transition-transform ${
-              isPublished ? "translate-x-5" : "translate-x-0"
+            className={`relative inline-flex h-7 w-12 shrink-0 border-2 border-muted transition-colors ${
+              isPublished ? "bg-green" : "bg-raised"
             }`}
-          />
+          >
+            <span
+              className={`pointer-events-none inline-block h-5 w-5 bg-paper transition-transform ${
+                isPublished ? "translate-x-5" : "translate-x-0"
+              }`}
+            />
+          </span>
         </button>
         <span className="text-paper">
           {isPublished ? "Published" : "Draft"}

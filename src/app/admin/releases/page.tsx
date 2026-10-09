@@ -34,7 +34,7 @@ export default async function AdminReleasesPage() {
       {releases.length === 0 ? (
         <div className="studio-empty">
           No releases yet.{" "}
-          <Link href="/admin/releases/new" className="studio-link">
+          <Link href="/admin/releases/new" className="studio-link inline-flex min-h-[44px] items-center">
             Add the first one.
           </Link>
         </div>

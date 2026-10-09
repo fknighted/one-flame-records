@@ -188,7 +188,7 @@ export default function InkShell({ displayName, pendingApps, isBartender, childr
           </svg>
         </button>
 
-        <Link href={homeHref} className="studio-focus shrink-0">
+        <Link href={homeHref} className="studio-focus inline-flex min-h-[44px] shrink-0 items-center">
           <LogoMark variant="horizontal" ground="black" height={40} priority />
         </Link>
 
@@ -224,7 +224,7 @@ export default function InkShell({ displayName, pendingApps, isBartender, childr
 
           {/* Mobile header inside sidebar */}
           <div className="sm:hidden flex items-center justify-between px-3 mb-6">
-            <Link href={homeHref} onClick={() => setOpen(false)} className="studio-focus">
+            <Link href={homeHref} onClick={() => setOpen(false)} className="studio-focus inline-flex min-h-[44px] items-center">
               <LogoMark variant="horizontal" ground="black" height={36} />
             </Link>
             <button onClick={() => setOpen(false)} className="studio-focus inline-flex items-center justify-center w-11 h-11 -mr-2 text-paper transition-colors hover:bg-raised" aria-label="Close navigation">
