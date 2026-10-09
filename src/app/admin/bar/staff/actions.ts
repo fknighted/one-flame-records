@@ -3,6 +3,12 @@
 import { revalidatePath } from "next/cache";
 import { createServiceClient } from "@/lib/supabase/server";
 import { requireAdmin } from "@/lib/auth";
+import {
+  emailButton,
+  emailLayout,
+  emailParagraph,
+  emailSmallPrint,
+} from "@/lib/email/layout";
 
 export type ActionState = { error: string } | null;
 
@@ -75,7 +81,14 @@ export async function resendBartenderInvite(
       to: email,
       subject: "Set up your One Flame bar account",
       text: `You've been invited to the One Flame bar system. Click the link below to set your password:\n\n${link}\n\nThis link expires in 24 hours.`,
-      html: `<p>You've been invited to the One Flame bar system.</p><p><a href="${link}">Set your password</a></p><p>This link expires in 24 hours.</p>`,
+      html: emailLayout({
+        title: "Set up your One Flame bar account",
+        body: [
+          emailParagraph("You've been invited to the One Flame bar system.", { last: true }),
+          emailButton(link, "Set your password"),
+          emailSmallPrint("This link expires in 24 hours."),
+        ].join("\n"),
+      }),
     });
 
     if (emailError) return { error: `Link generated but email failed: ${emailError}` };

@@ -1,6 +1,7 @@
 "use server";
 
 import { Resend } from "resend";
+import { EMAIL_COLORS, EMAIL_FONT_TEXT, emailLayout } from "@/lib/email/layout";
 
 export type ContactState =
   | { status: "success" }
@@ -48,12 +49,12 @@ export async function submitContact(
       "",
       message,
     ].join("\n"),
-    html: `
-      <p><strong>From:</strong> ${name} &lt;${email}&gt;</p>
-      <p><strong>Reason:</strong> ${REASONS[reason] ?? reason}</p>
-      <hr />
-      <p style="white-space:pre-wrap">${message.replace(/</g, "&lt;")}</p>
-    `,
+    html: emailLayout({
+      body: `<p style="margin:0 0 12px;font-family:${EMAIL_FONT_TEXT};font-size:17px;line-height:1.6;color:${EMAIL_COLORS.black};"><strong>From:</strong> ${name} &lt;${email}&gt;</p>
+      <p style="margin:0 0 20px;font-family:${EMAIL_FONT_TEXT};font-size:17px;line-height:1.6;color:${EMAIL_COLORS.black};"><strong>Reason:</strong> ${REASONS[reason] ?? reason}</p>
+      <hr style="border:0;border-top:2px solid ${EMAIL_COLORS.black};margin:0 0 20px;" />
+      <p style="margin:0;font-family:${EMAIL_FONT_TEXT};font-size:17px;line-height:1.6;color:${EMAIL_COLORS.black};white-space:pre-wrap">${message.replace(/</g, "&lt;")}</p>`,
+    }),
   });
 
   if (error) {

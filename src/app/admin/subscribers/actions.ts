@@ -4,6 +4,7 @@ import { Resend } from "resend";
 import { marked } from "marked";
 import { createServiceClient } from "@/lib/supabase/server";
 import { requireAdmin } from "@/lib/auth";
+import { EMAIL_COLORS, emailLayout, styleMarkdownHtml } from "@/lib/email/layout";
 
 export type NewsletterState = { error?: string; sent?: number } | null;
 
@@ -28,7 +29,7 @@ export async function sendNewsletter(
 
   if (!subscribers?.length) return { sent: 0 };
 
-  const html = await marked(body);
+  const html = styleMarkdownHtml(await marked(body));
   const resend = new Resend(process.env.RESEND_API_KEY);
   const from = process.env.RESEND_FROM_EMAIL ?? "noreply@oneflamerecords.com";
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://oneflamerecords.com";
@@ -42,7 +43,11 @@ export async function sendNewsletter(
         from,
         to: s.email,
         subject,
-        html: `${html}<p style="font-size:12px;color:#888;margin-top:32px;">You're receiving this because you subscribed at oneflamerecords.com. <a href="${siteUrl}/unsubscribe?email=${encodeURIComponent(s.email)}" style="color:#B8893B;">Unsubscribe</a></p>`,
+        html: emailLayout({
+          title: subject,
+          body: html,
+          footerHtml: `You're receiving this because you subscribed at oneflamerecords.com. <a href="${siteUrl}/unsubscribe?email=${encodeURIComponent(s.email)}" style="color:${EMAIL_COLORS.yellow};text-decoration:underline;">Unsubscribe</a>`,
+        }),
       }))
     );
     if (batchErr) return { error: `Send failed after ${sent} emails: ${batchErr.message}`, sent };
