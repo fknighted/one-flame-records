@@ -1,21 +1,32 @@
 # One Flame Records brand book
 
-One Flame Records is an independent reggae and dancehall label in Montego Bay, Jamaica. It also runs Flames Lounge, a venue with an outdoor recording studio, a gaming lounge, a kitchen and a bar. One app serves all of it: the public site, a portal for signed artists, the label's admin, the bar till (the point-of-sale screen bar staff use to run customer tabs) and a portal for gaming members. The look is a vintage Jamaican record sleeve made for the web: warm cream paper, oxblood red headlines in a heavy serif, a forest green accent, and ochre saved for the one thing you want pressed.
+One Flame Records is an independent reggae and dancehall label in Montego Bay, Jamaica. It also runs Flames Lounge, a creative space with an outdoor recording studio, a gaming lounge, a kitchen and a bar. One app serves all of it: the public site, a portal for signed artists, the label's admin, the bar till (the screen bar staff use to run customer tabs) and a portal for gaming members.
+
+The look is called **Sound System**: a Montego Bay dance poster made for the web. Every page should feel like a flyer pasted on a wall: one loud headline, a flat block of colour, the name or the date, and the flame stamped in the corner. It is built from lettering and colour first, so it looks finished even while the site has few photos and no releases. Photos are printed in three tones (black, the block colour and white), the way flyers are printed, so ordinary phone photos look deliberate and bright.
+
+Four principles carry everything below:
+
+- **Stack it big.** One headline per screen, set huge and tight, one word per line where it fits. If two things shout, neither is heard.
+- **Flat blocks, no blur.** Colour comes in solid blocks with hard edges. No gradients, glows, soft shadows or rounded cards. The one pattern is the speaker grille, and it runs beside a photo, never over it.
+- **The flame always shows.** Original logo on yellow or paper, light logo on black or red. Never the original straight on black or red.
+- **Green lives in the flame.** Green is for small, good news only. It never fills a page, so the brand never reads as a tourist flag.
 
 ## Voice and content
 
-- Sound like the back of a record sleeve, not a tourism advert. Confident, grounded, specific. Short sentences, active verbs, real details.
-- Write as the label: "we". Talk to the artist or visitor as "you". "We work with artists who have something real to say. If that's you, we want to hear it."
-- Headlines are short, sentence case, and usually end with a full stop: "Pressed in Montego Bay." "One flame is enough." "Sign with One Flame." Page names inside the app stay plain nouns with no full stop ("Bar Tabs", "Latest Releases").
-- Eyebrows (the small uppercase label above a heading) use a middle dot as a separator: "MONTEGO BAY · JAMAICA".
-- Arrows end text links: "Full roster →", "Read more →", "Visit the label →". ↗ marks a link to another site. ✓ confirms an action in the admin ("✓ Copied").
-- Never write "Welcome to our family!", "Vibes only", "irie" used ironically, or "soulful" used straight. No tropical-paradise clichés. No Jamaican Patois for flavour unless the person wrote in it first.
+- Sound like a flyer and the back of a record sleeve, not a tourism advert. Confident, grounded, specific. Short sentences, active verbs, real details.
+- Write as the label: "we". Talk to the artist or visitor as "you". "We sign artists, not sounds. If the music is rooted, honest and built to last, we want to hear it."
+- Headlines are set in `poster` or `headline` and are always uppercase on screen (the type style does it; write them in sentence case in the source). They often end with a full stop: "Pressed in Montego Bay." "Sign with One Flame." Five words or fewer (see "The five-word rule").
+- Body text is sentence case and never set in capitals. Only short button words and `label` tags are capitals.
+- **"Mo'Bay"** is allowed in headlines and social posts, because it is how people say the city's name ("Pressed in Mo'Bay."). Body text always says **Montego Bay**. No other Jamaican Patois for flavour unless the artist wrote it.
+- Text links are plain words ("All artists", "Follow @flamesmobay"). The concept uses no arrows or ticks, so prefer saying what happens in words ("Copied", "Opens Instagram") over the old →, ↗ and ✓ characters.
+- Never write "Welcome to our family!", "Vibes only", "irie" used ironically, or "soulful" used straight. No tropical-paradise clichés.
 - Do not invent slogans, values, awards, chart positions, stream counts, sales figures, prices, opening hours, an address or a phone number. None are published.
-- **Never repeat the old About page timeline.** Frank confirmed on 2026-10-05 that its founding story and "ten million combined streams" are not true; the rest of that timeline (first release, distribution deal, radio play) is untraced and went with it. It was removed from the site on 2026-10-05, along with the line "Distribution is worldwide." Never claim a founding date, a deal, a stream count, chart play or an award.
-- **The studio line is true.** "Production, mixing, and video work happen in-house at our Montego Bay studio" (About page) was confirmed by Frank on 2026-10-05 and may be repeated.
-- Never announce a release date, title or featured artist that is not confirmed. Name artists and releases exactly as credited, and never speak for an artist in the first person.
+- **No invented events or dates.** A flyer layout makes it tempting to write a date and a line-up. Only publish ones that are confirmed.
+- **No false history.** Never repeat the old About page timeline. Frank confirmed on 2026-10-05 that its founding story and "ten million combined streams" are not true; the rest of that timeline (first release, distribution deal, radio play) is untraced and went with it. It was removed from the site on 2026-10-05, along with "Distribution is worldwide." Never claim a founding date, a distribution deal, a stream count, chart play or an award.
+- **The studio line is true.** "Production, mixing, and video work happen in-house at our Montego Bay studio" was confirmed by Frank on 2026-10-05 and may be repeated. This means the physical recording studio, not software.
+- Never announce a release date, title or featured artist that is not confirmed. Name artists and releases exactly as credited. Never speak for an artist in the first person: an artist's biography is in their own words, written or approved by them.
 - Money in the bar and gaming screens is whole Jamaican dollars, shown as "$600" with no cents. Never quote a food or drink price outside the till.
-- No emoji on public pages or in brand copy. The public site uses none.
+- No emoji anywhere: not on the site, in headlines or on posters.
 
 Real copy to model on:
 
@@ -23,103 +34,229 @@ Real copy to model on:
 
 > You keep your publishing. We handle the platform.
 
-> What the roster has in common is not a genre; it's a standard. The music has to mean something.
+> We sign artists, not sounds. If the music is rooted, honest and built to last, we want to hear it.
 
-> We sign artists, not sounds — if the music is rooted, honest, and built to last, we want to hear it.
+> Walk-in welcome, no reservation needed.
 
-> Walk-in welcome — no reservation needed.
+> No releases yet. The first ones are in the studio. Get the drop in your inbox.
 
 A Lounge line that broke these rules ("just here for the vibes") was rewritten on 2026-10-05 as "just here to hang out". Do not bring the old wording back.
 
-## Two worlds, one palette
-
-The app has two environments. They are surfaces, not a light and dark theme: every colour keeps its value everywhere.
-
-- **Cream** is the public label: `cream` ground with a faint paper-grain texture (a fixed noise layer at 5.5% opacity, multiplied over the page). Headlines `oxblood`, text `ink`.
-- **Ink** is studio mode: the artist portal, the admin, the bar till and the gamer portal all sit on `ink` with `bone` text, so photos, video and numbers stand out. No paper grain here.
-- The public site borrows ink for weight. The home hero, the inner-page banners and the footer are `ink` bands, and the closing call to action is an `oxblood` band. The home page alternates ink, cream, ink, cream, oxblood. Keep that rhythm; do not invent a third ground.
-- **Flames Lounge** has its own night: `lounge-night`, `lounge-deep` and `lounge-warm` are near-blacks darker than `ink`, used only on the Lounge page so the venue reads as evening.
-
 ## Colour
 
-- On `cream`: headings `oxblood`, body `ink`, supporting text `ink-70` (5.9:1) or `ink-80`. Eyebrows are `forest`. `ink-60` is just under the 4.5:1 floor on cream (4.3:1), and `ink-50`/`ink-40` fail outright; use `ink-70` for anything a visitor must read.
-- On `ink`: headings `bone`, supporting text `bone-60` (the most used colour in the app, 6.2:1), tertiary `bone-50` (4.7:1, the lightest that passes). `bone-40` and `bone-30` fail for small text; keep them for decoration or text 24px and up.
-- `oxblood` is the flame: headlines on cream, the 1px rule under every section title, primary buttons, the closing band. On `ink` it is only a fill or a border. As text or an icon on ink it is 2.1:1 and fails; use `rose` there.
-- `forest` is the inner flame: eyebrows on cream, EP pills. On `ink` it fails (2.3:1). `SectionHeader` paints its eyebrow `sage` on dark grounds (6.5:1, since 2026-10-05), but the home hero, the ink banners that open inner public pages and the Lounge sections still set their eyebrows in `forest`. In new work, set dark-ground eyebrows in `sage` or `ochre`.
-- `ochre` is the trap: a strong colour for the one thing that needs attention. Solid ochre buttons with `ink` text (5.7:1), the "new" badge, money on the bar till, link hover, the focus outline on ink. Never a surface or a large field. Never text on cream (2.4:1). Text on ochre is always `ink`, including when a button hovers to ochre.
-- `rose` and `sage` are oxblood and forest lifted for dark grounds. Use them for error and success text on ink. `rose` also carries the Lounge pillar icons and menu labels (7.7–7.9:1); `sage` the dark `SectionHeader` eyebrow.
-- Status pills in the portal pair a `status-*-bg` fill with its `status-*-fg` text, always with the word ("Mixing", "Live", "Failed"), never colour alone. `status-tracking-fg` is 4.3:1, just under the floor.
-- Errors: `danger-on-ink` in the studio world. On cream, use `oxblood` for error text; the one place the site uses red on cream (`danger-on-cream`) fails at 3.7:1.
-- Instagram pink and Facebook blue appear only as platform tags inside the admin's campaign screen. They are not brand colours.
+Five colours, one theme (`sound`). Every colour keeps its value everywhere; there is no light and dark mode.
+
+| Token | Hex | Job |
+| --- | --- | --- |
+| `black` (Sound black) | #0F0D0B | The wall. The main ground for the public site and every studio screen. |
+| `yellow` (Poster yellow) | #F2C230 | The lead colour. Headline blocks, the main button, money on the till. |
+| `red` (Flame red) | #C8321F | The second block. Artist pages, release tags, the Lounge. |
+| `paper` | #FFF7E6 | The reading ground for long text and forms, and the main text colour on black. |
+| `green` (Inner green) | #2F6B3A | Small doses only: open, live, paid, done. |
+
+Supporting tokens, never used as blocks of their own:
+
+- `muted` (#D8CCB4) — supporting text on `black` (12.2:1), such as intros under a heading, table headings and footers.
+- `line` (#3A332B) — hairline dividers on `black`: table rows, card edges in studio screens. It is decoration (1.6:1 against black), never the only edge of a control.
+- `panel` (#16130F) — the slightly lifted ground of a studio panel such as the till's tab list. Same text rules as `black`.
+- `raised` (#2A241E) — the fourth colour in a row of roster tiles, after yellow, red and paper, so the row does not vanish into the wall.
+- `lens` — `black` at 50%, the dark see-through circle behind the light logo on a photo.
+
+The logo keeps its own colours: oxblood `logo-red` (#902721) and olive `logo-green` (#3A482F). `red` is deliberately brighter, so poster blocks feel loud while the logo stays the logo. Never recolour the logo file to match the palette, and never use the logo colours for anything else.
+
+Rules:
+
+- Lead with `black` and `yellow`. `red` is the second block. `paper` is for reading. `green` is a small mark.
+- Text on `yellow` is always `black`. Text on `red` is `paper` (or `black` only at 24px and up). Text on `green` is `paper`.
+- `yellow` is never text on `paper` (1.6:1) and `paper` is never text on `yellow`.
+- `green` text or icons on `black` fail for small sizes (3.0:1). Put status on a `green` chip with `paper` text instead.
+- Red, yellow and green together across a whole page reads as tourist Rasta merchandise. Keep green small and never let the three run side by side as equal stripes.
+- Errors: on `paper`, error text is `red` (5.0:1). On `black`, show an error as a `red` strip with `paper` text (5.0:1); `red` text on black is only 3.6:1. Always say the problem in words, never colour alone.
+
+### Contrast
+
+Measured with the standard web formula for contrast (WCAG 2, the Web Content Accessibility Guidelines) by a script, not by eye. Readable text needs 4.5:1. Lettering 24px and up, control edges and focus rings need 3:1.
+
+| Text or mark | On | Contrast | Use |
+| --- | --- | --- | --- |
+| `black` | `yellow` | 11.6:1 | Anything |
+| `yellow` | `black` | 11.6:1 | Anything |
+| `paper` | `black` | 18.2:1 | Anything |
+| `muted` | `black` | 12.2:1 | Anything |
+| `paper` / `yellow` / `muted` | `panel` | 17.4 / 11.1 / 11.7:1 | Anything |
+| `paper` | `raised` | 14.4:1 | Anything |
+| `paper` | `red` | 5.0:1 | Anything |
+| `red` | `paper` | 5.0:1 | Anything |
+| `black` | `paper` | 18.2:1 | Anything |
+| `paper` | `green` | 6.0:1 | Anything (status chips) |
+| `green` | `paper` | 6.0:1 | Anything ("Paid" on a form) |
+| `red` | `yellow` | 3.2:1 | Lettering 24px and up only |
+| `yellow` | `red` | 3.2:1 | Lettering 24px and up only |
+| `black` | `red` | 3.6:1 | Lettering 24px and up only |
+| `red` | `black` | 3.6:1 | Lettering 24px and up, or a control edge |
+| `muted` | `red` | 3.4:1 | Lettering 24px and up only |
+| `yellow` | `green` | 3.8:1 | Lettering 24px and up only; avoid |
+| `black` | `green` | 3.0:1 | Avoid for text; just clears 3:1 as an edge |
+| `green` | `black` | 3.0:1 | Avoid for text |
+| `yellow` | `paper` | 1.6:1 | Never |
+| `line` | `black` | 1.6:1 | Decoration only |
+| `logo-red` (original logo) | `yellow` / `paper` | 5.0 / 7.9:1 | Logo reads well |
+| `logo-red` (original logo) | `black` / `red` | 2.3 / 1.6:1 | Never; use the light logo |
+
+Every value in the concept's own table was checked and matches to one decimal place. The `muted`, `panel`, `raised` and `yellow`-on-`green` rows are added here.
 
 ## Type
 
-- Three families, all Google fonts loaded with `next/font`: **display** (Fraunces) for headlines and big figures, **sans** (Inter) for everything read, **mono** (JetBrains Mono) for money, times and codes in the till and portal.
-- Fraunces is always bold (700) in headlines. Semibold (600) only at `title-sm`. Never use it for body text.
-- Size by role: `hero` only on the home and Lounge heroes; `page-title` for the ink banner that opens an inner public page; `band-title` for full-width bands; `section-title` for SectionHeader; `card-title` for page and card titles in the studio world; `title-sm` for release, news, menu and event titles.
-- Every public section opens the same way: an `eyebrow` (11px, semibold, uppercase, tracked 0.22em), the `section-title`, then a short 1px `oxblood` rule (`rule-section`, 64px wide) under it. On ink the rule is `bone` at 30%. This trio is the signature of the layout.
-- Body is `body` (16px, loose 1.625 line height) or `body-sm` (14px). `caption` (12px) for dates and meta, `micro` (10px uppercase) for pills and stat labels.
-- Money and times on the bar till are `money` and `mono-sm`, in `ochre` for a running total and `bone` for a settled one.
+Two families, both Google fonts:
+
+- **`poster`: Big Shoulders Display**, weights 700, 800 and 900. Every headline, name and number. Tall, heavy and condensed like the stacked type on sound-system flyers, and close in spirit to the lettering in the logo. Always uppercase in headlines.
+- **`text`: Archivo**, weights 400, 500, 600 and 800. Everything people read: intros, forms, lists, the till. Sentence case. Capitals only for short button words and `label` tags (800, tracked).
+
+There is no third, fixed-width font. Money and counts on the till are set in `poster` with even-width figures requested (`tabular-nums`), as the concept shows; times and codes are `text` with even-width figures.
+
+Size by role:
+
+| Style | Family, weight | Size and leading | Use |
+| --- | --- | --- | --- |
+| `poster` | poster 900 | 112px, 0.82 | Home hero, Lounge hero, social posts. Scales down to 56px on phones. |
+| `headline` | poster 900 | 56px, 0.85 | Page and section openers. 36px on phones. |
+| `title` | poster 800 | 32px, 0.95 | Names, card titles, and any long headline that drops a size. |
+| `title-sm` | poster 800 | 24px, 1 | Small titles: list rows on the Lounge page, studio panel heads, tab names. |
+| `number` | poster 900 | 44px, 1 | Big counts and money totals ("$600"). |
+| `money` | poster 800 | 24px, 1 | Amounts in till rows, in `yellow`. |
+| `lead` | text 600 | 18px, 1.5 | The line under a hero or headline. |
+| `body` | text 400 | 17px, 1.6 | Anything read at length. Keep lines under 66 characters. |
+| `body-sm` | text 400 | 16px, 1.6 | Form inputs, table cells, card bodies. |
+| `button` | text 800 | 15px, 1, uppercase, +0.04em | Button labels only. |
+| `label` | text 800 | 13px, uppercase, +0.06em | Tags ("Single", "Walk-in welcome"), the phone menu button. |
+| `small` | text 600 | 13px, 1.4 | Navigation, table headings, meta lines, field labels at 14px. |
+| `caption` | text 600 | 12px, 1.4 | Tiny supporting lines under a tile name ("Signed to One Flame"). |
+
+### The five-word rule
+
+`poster` and `headline` are for five words or fewer. Anything longer (a long song title, an artist with a long name, a sentence) drops to `title` automatically, so it never breaks a layout or runs off a phone screen. Count words, not letters, and also drop a size if one word is longer than 12 letters at `poster`. This is a rule for the code, not for the writer: a component that renders a headline checks the word count.
 
 ## Layout and spacing
 
-- Content is centred at `content-max` (1152px) with a `space-4` side gutter on phones and `space-6` from 640px up.
-- Public sections pad `space-20` top and bottom; Lounge sections `space-16`, then `space-24` from 640px up.
-- Long reading (About, legal pages) sits in `prose-max` (768px).
-- Grids: artist photos are 2 columns on phones, 3 on tablets, 4 on desktop, with a hairline 4–6px gap so they read as a contact sheet. Release covers scroll sideways on phones and sit 3 or 6 across above that.
-- Tables in the studio world scroll sideways inside one bordered box, with a minimum width on the table so columns never collapse on a phone.
+- Content is centred at `content-max` (1152px), with a `gutter` of 16px on phones and `gutter-wide` 24px from 640px up.
+- Long reading (About, legal, an artist's biography) sits on `paper` in `read-max` (66 characters wide).
+- Public sections are full-width blocks of one colour: black, yellow, red or paper. A page stacks them like flyers. Pad sections `space-22` (88px) top and bottom on desktop and `space-14` (56px) on phones.
+- Spacing comes from the `space-*` steps (4px to 96px). Inside blocks use `space-4` to `space-7`; between blocks use the block edge itself, not a gap.
+- One layout rearranges itself for phones: the menu folds into a `Menu` button, the photo moves under the headline, roster tiles go from four columns to two, and the Lounge block stacks. Check every page at 375px wide.
+- Grids of tiles and cards use an 8px gap (`space-2`), tight like a pasted wall.
+- Tables in studio screens scroll sideways inside one box with a minimum width, so columns never squash on a phone.
 
 ## Edges, corners and depth
 
-- Corners are small and quiet. `radius` (4px) for every public button, input and pill; `radius-lg` (8px) for studio-world cards, tables and stat tiles; `radius-xl` for bar tab cards and the Lounge grid; `radius-full` for pills and badges. Photos (artist cards, release covers, the hero) are square-cornered.
-- Borders do the work, not shadows. `line-cream` (oxblood at 10%) on cream, `line-ink` (bone at 10%) on ink. Hover strengthens the border (oxblood at 30%, or ochre at 40% on the bar till).
-- The public footer carries a 2px solid `oxblood` top border.
-- There is almost no shadow. `shadow-lg` appears only on a few dropdowns. Do not add lift to cards.
+- **Square corners everywhere** (`radius-none`). Buttons, fields, cards, tiles, photos and tags are square. `radius-round` exists only for the dark see-through circle behind the logo on a photo, the speaker rings and the grille's holes.
+- No gradients, no glow, no soft shadows, no lift on hover. The old darkened photo overlay and the paper grain go.
+- Edges are solid and visible: `border-field` (2px) for fields, outlined buttons and tags; `border-rule` (3px) to divide a release card; `border-band` (4px) yellow under the site header; `border-hair` (1px) `line` for table rows on black.
 
 ## Controls and states
 
-- **Primary button on cream:** `oxblood` fill, `bone` text, `button` style, `radius`, `space-6` side padding, `space-3` vertical. Hover turns the fill `ochre` and the text `ink` (5.7:1). Never leave `bone` text on the ochre hover (2.7:1).
-- **Primary button on ink:** `ochre` fill, `ink` text. Hover goes to `bone` (public) or ochre at 90% (studio world).
-- **Ghost button:** transparent with a 1px border — `oxblood` at 40% on cream ("Sign with us" in the header), `bone` at 30% on ink. Hover fills it.
-- **Light button on oxblood:** `bone` fill, `ink` text ("Get in touch" on the closing band).
-- **Text link:** `oxblood` on cream, `ochre` on ink, ending in →. Hover goes to `ochre` on cream (hover only — it fails as resting text).
-- **Section header action:** a quiet link at right ("All releases →") in oxblood at 60% on cream or `bone-40` on ink. Both fail contrast; in new work use `oxblood` and `bone-60`.
-- **Input on cream:** `bone`, `cream` or white field, `input-edge` border (ink at 60%), `body-sm` text, label above in `ink` medium. The border clears 3:1 against both the cream page and the field's own fill (3.6:1 at worst, on white). Focus: a 2px `oxblood` outline (6.7:1 on cream, 7.3:1 on bone, 8.6:1 on white), plus the oxblood border and 1px ring where the field already had them. The catalogue filter selects use oxblood at 65% for their border (3.3:1).
-- **Input on ink:** bone at 5% fill, `input-edge-ink` border (bone at 45%; bone at 50% on the bone-10 fields of search and invite codes). The border is 4.4:1 against ink and 3.9:1 against its fill. Focus: a 2px `ochre` outline (5.7:1 on ink, 5.1:1 on a bone-5 card).
-- **Pills:** release type pills are `micro` text on a solid fill — single `ochre`/`ink`, EP `forest`/`bone`, album `oxblood`/`bone`, mixtape `ink`/`bone`.
+Buttons are `control-height` (46px) tall, square, `button` type, `space-5` (18 to 20px) side padding.
 
-**Focus is always visible.** Since 2026-10-05 every form field in the app shows a solid 2px focus outline: `oxblood` on cream and `ochre` on ink or the lounge grounds (6.1 to 6.4:1). Give every new field and interactive element the same, and never remove the browser outline without a visible replacement. One element still does: the `VideoEmbed` play button replaces it with a 2px oxblood ring over the video thumbnail, so its contrast depends on the image.
+- **Main button: `yellow` fill, `black` text.** One per screen. Hover turns the fill `paper` (black text stays, 18.2:1).
+- **Second button: outlined.** `black` fill, `yellow` text, a 2px `yellow` edge inside the button. On a yellow block it reads as a solid black button. Hover fills it `yellow` with `black` text.
+- **Lounge button: `red` fill, `paper` text** (5.0:1). Only for Lounge actions ("Visit the Lounge").
+- **Text link:** `yellow` on black, `red` on paper, `black` on yellow, always underlined.
+- **Tags:** `label` type. Release tags are a `red` band with `paper` text. Plain tags are a 2px `black` edge on paper or yellow.
+- **Status chips (studio screens):** a `green` chip with `paper` text for open, live, paid or done; a `red` chip with `paper` text for failed or overdue; a 1px `muted` edge with `muted` text for neutral states. Always the word, never colour alone.
 
-## Imagery
+**Fields always sit on `paper`.** Long typing on yellow or black is hard on the eyes. A field is `control-height` tall with a `paper` (or white) fill, a 2px `black` edge (18.2:1 on paper), `body-sm` text in `black`, and a `small` label above it in `black`. Placeholder text is not a label.
 
-- Real photographs only: the label's artists, its shows and its own spaces. Warm white balance, natural or available light, real places, grain over gloss. Black-and-white works well on ink.
-- The one real brand photo in the code is the home hero, a night performance at an outdoor Montego Bay venue (Imagery group). It always sits under an `ink` layer at 72% with a soft oxblood glow, so bone text reads on it.
-- Artist photos and release covers come from the label's own uploads (not in this system). Show artist photos square, with an ink gradient from the bottom and the stage name in `display` bold `bone`.
-- There are no real photos of Flames Lounge yet. The stock photo of another bar was removed from the Lounge page on 2026-10-05; the hero is now drawn from the palette only — the `lounge-night` ground, a soft oxblood glow and a large faint flame mark (14% opacity, hidden on phones). When the owner supplies a real photo, it goes in that spot. Never use a stock or AI image as if it were the Lounge. The old file `public/flames-lounge-hero.jpg` was deleted from the repository on 2026-10-05; do not bring it back.
-- The app can generate images and music videos with AI. Never present a generated image as a real photo of an artist, a show or the Lounge. Generated people must be Jamaican, described by visible detail and setting, per the label's video rules.
+**Focus is always visible and always solid.** Use a 3px outline (`focus-width`) with a 2px gap (`focus-offset`), coloured for the ground the element sits on:
+
+| Ground | Focus ring | Contrast |
+| --- | --- | --- |
+| `paper` (all forms) | `red` | 5.0:1 |
+| `black`, `panel` | `yellow` | 11.6:1 or more |
+| `yellow` | `black` | 11.6:1 |
+| `red` | `paper` | 5.0:1 |
+
+Never remove the browser outline without this replacement. A yellow ring on a yellow block disappears; that is why the ring changes with the ground.
+
+## Logo
+
+The flame and the name lettering stay exactly as drawn. The vector files in the Logos group come from the real logo files: same shapes, only the colours change.
+
+- **Original** (`*-original.svg`, oxblood flame and lettering, olive inner flame): on `yellow` or `paper` only.
+- **Light** (`*-light.svg`, paper flame and lettering, yellow inner flame): on `black` or `red`.
+- **One colour**: `*-paper.svg` on dark grounds and `*-black.svg` on light grounds, for print, stamps, merch and very small sizes.
+- **Never put the original on black or red** (2.3:1 and 1.6:1; it all but vanishes).
+- **On a photo:** the light logo inside the dark see-through circle (`lens`). Never a solid circle behind the logo, on any ground.
+- Plain flame on flat colour for small sizes, the site header and footers. Use the speaker rings for hero moments and posts, and the corner block for photos in grids and cards.
+- Never redraw, stretch, add effects to, or separate the flame from its inner flame. Minimum size 32px tall; clear space of half the flame's width on every side.
+- The name lettering beside the flame stays as it is for now.
+
+### Speaker rings, corner block and the grille
+
+- **Speaker rings** come from the speaker cones of a sound system. Three thin rings (2.5px) around the flame at 44%, 66% and 88% of the radius, fading out: full, 55% and 28% strength. Dark rings (`black`) with the original logo on yellow; light rings (`paper`) with the light logo on red. On a photo, dark rings around the light logo in its `lens` circle. Sizes: `rings-hero` (190px) on a hero, `rings-post` (118 to 132px) on posts and the home photo. Recommended for hero moments and posts.
+- **Corner block** borrows the price tag on a flyer: a square of colour, `corner-block` (72 to 78px), flush in the top-right corner of a photo or card, with the flame centred in it. `black` block with the light logo on photos and yellow cards; `yellow` block with the original logo on red. Recommended for photos in grids and cards.
+- **The speaker grille** is the one pattern: rows of round holes, like the front of a speaker box. `yellow` holes on `black` (or `red` holes on `black`), each `grille-hole` (9px) across at a `grille-pitch` of 18px. Big holes only. It runs only as a band beside a photo or along the edge of a headline block: `grille-band` (60px) on the home hero, `grille-band-wide` (92px) on covers, and a 40 to 46px strip across the top or bottom on phones and stories. Never over a photo, never as a full background, never behind text.
+- An off-register print effect was tried and dropped because the flame looked doubled. Do not bring it back.
+
+## Photos
+
+- Real photographs only: the label's artists, its shows, its studio and its own spaces. Never a stock or AI image presented as an artist, a show or the Lounge.
+- **Every photo is printed in three tones:** `black` for the shadows, the block colour it sits on (`yellow` or `red`) for the middle, and white (`paper`) for the highlights. The white is what makes lights glow and faces read. Use the middle strength on every colour: enough white to lift the lights and faces while it still reads as a print. Black and one colour only is too dark; more white stops looking printed.
+- **Green is never used for photos.** Photos are never printed in `paper` or `black` alone either.
+- This happens automatically when a photo is shown, so nobody edits photos by hand. The original upload is kept untouched.
+- Photos have square corners and fill their block edge to edge. Text never sits on a photo; it sits in a black or colour box beside or over the edge of it.
+- Alt text says who or what is in the photo and where ("Live performance at an outdoor venue in Montego Bay").
 - Avoid tourism imagery: palm-tree postcards, beach paradise, theme-park Jamaica.
 
-## Logo and iconography
+## Building blocks
 
-- The mark is a flame in `oxblood` with a `forest` inner flame, printed with a speckled texture, above or beside "ONE FLAME" in a condensed slab. Use the files in the Logos group as they are: never redraw, recolour, stretch or separate the flame from its inner flame.
-- The formal lockup carries "MONTEGO BAY · JAMAICA" (`logo.png`, `logo-1.png`). Use the shorter lockups where space is tight, and the flame alone (`icon.png`) for favicons and avatars.
-- Every logo file has oxblood lettering. It reads on `cream` and `bone`; on `ink` the lettering is about 2.1:1, so the app's sidebars and social card place it there anyway. Prefer cream grounds for the logo, and treat a bone-lettered version for dark grounds as missing.
-- Icons are hand-written inline line icons (24px grid, 1.5–2px stroke, round caps) that take the text colour. There is no icon library. Placeholders for missing photos use a small two-path flame glyph at 10–15% opacity.
-- Text characters do the rest: → for actions, ← for back, ↗ for other sites, ↓ for downloads, ✓ for done, · as a separator.
+- **Section opener:** a `headline` title with a short, thick `red` bar under it (`section-bar-width` 72px by `section-bar-height` 8px; 64 by 7 inside the home page). It replaces the old eyebrow, title and thin rule. No eyebrow above it.
+- **Artist tile, no photo:** until there is a photo, the tile is the artist's initial at `poster` size on a colour block, with the stage name in `title` and one `caption` line ("Signed to One Flame"). Square. Roster tiles cycle `yellow`, `red`, `paper`, `raised`. It looks intentional instead of empty.
+- **Artist tile, with photo:** the photo printed in the tile's block colour, the corner block top right, the name in a `black` box along the bottom edge.
+- **Release card:** a small poster, 4:5. A `red` band on top with the type tag ("Single", `label`, `paper`), the title in `headline` (or `title` when longer than five words) on `paper`, then a 3px `black` rule and a bottom row with the artist and "Listen". Cover art fills the middle when there is one, square and uncropped.
+- **Empty page:** an invitation with one action instead of "Coming soon". A `black` panel with a 3px dashed `yellow` edge, a `title`, one line of `body` and one main button. "No releases yet. The first ones are in the studio. Get the drop in your inbox." then "Get release news".
+- **Form block:** a `paper` block with a `headline`, one line of `body` and the field and button in a row ("Sign with One Flame." / "You keep your publishing. We handle the platform." / Subscribe).
+- **Site header:** `black`, the plain light horizontal logo at left, navigation in `small` `paper`, a 4px `yellow` line along the bottom. On phones the links fold into an outlined `yellow` `Menu` button.
+- **Footer:** `black`, `muted` text, the light stacked logo, "Montego Bay, Jamaica".
+- **Home page:** the yellow poster block with the headline and the main photo printed over yellow beside it, a grille band between, then the roster as colour tiles, the Lounge as a red block, the form block on paper and the footer.
 
 ## Flames Lounge and the bar
 
-- The Lounge page is part of the public site but lives at night: `lounge-*` grounds, `bone` headlines, eyebrows in `ochre` or `forest` (use `ochre` — forest fails here, at about 2.5:1), icons and menu category labels in `rose`, menu and event rows divided by bone at 6%.
-- Menu items name the food plainly ("Fish Fritters — Crispy Jamaican-style, made fresh to order") and never show a price.
-- The bar till (`/bar`) is the ink studio world tuned for speed on a phone behind a bar: big `ochre` "open tab" buttons, tab cards with the customer name in `display` and the running total in `money`, a settled-today table in `mono-sm`.
-- The gamer portal uses the same ink world. Gaming time is sold in 30- and 60-minute sessions; show durations and balances in `mono`.
+- Flames Lounge is Montego Bay's creative space, part of One Flame Records: an outdoor studio (record where the label works), a gaming lounge (members and walk-ins), a kitchen (Jamaican food) and a bar (drinks and a tab). "Walk-in welcome, no reservation needed."
+- The Lounge's block colour is `red`. Its hero is `black` with a `poster` headline in `paper` and `yellow`, and a list of the four spaces in `title-sm` divided by 2px `line` rules. Its buttons are the red Lounge button.
+- Menu items name the food plainly and never show a price. Name events only once they are confirmed.
+- There are no real photos of the Lounge yet. Until the owner supplies them, the Lounge uses colour blocks and type only. Never use a stock or AI image as the Lounge. The old stock file `public/flames-lounge-hero.jpg` was deleted on 2026-10-05; do not bring it back.
+- The Lounge posts as @flamesmobay.
+
+## Studio screens
+
+The artist portal, the label admin, the bar till and the gamer portal stay calm. Staff use them for hours, often at night, so readability beats attitude.
+
+- `black` ground (`panel` for lifted panels), `paper` text, `muted` supporting text, `line` dividers, the new type.
+- No stripes, no grille, no speaker rings, no colour blocks behind content.
+- No huge type, except money and counts (`number`, `money`).
+- `yellow` only for the one main action on the screen and for amounts. Everything else is outlined or plain.
+- Status uses the chips above: green for open, live, paid, done.
+- The bar till is tuned for speed on a phone behind a bar: one big `yellow` "New tab" button, the open tabs in a table with the amount right-aligned in `money` `yellow`.
+- Money is whole Jamaican dollars ("$600", "$2,400"), as the till already shows it. Gaming time is sold in 30- and 60-minute sessions.
+- Change how these screens look, never how they work.
+
+## Guardrails
+
+- **No flag look.** Red, yellow and green together across a page reads as tourist Rasta merchandise. Green stays small.
+- **No original logo on black or red.** Use the light version there; on photos add the dark see-through circle.
+- **No invented events or dates.** Only publish confirmed ones.
+- **No false history.** Never bring back the removed founding story, distribution deal or stream count.
+- **No gradients, glow or soft shadows.** Flat blocks only.
+- **No rounded cards** and no solid circle behind the logo.
+- **No grille over photos** or behind text.
+- **No emoji.**
+- **No more than five words** at `poster` or `headline` size.
 
 ## Not synced
 
-From `fknighted/one-flame-records` at `main@f7d9bac`.
+From the approved concept, "One Flame Sound System" (https://claude.ai/artifact/DRRtVLep9ki5pNCDPV3Mo5, version 8, direction B chosen by Frank on 2026-10-08), and from `fknighted/one-flame-records` at `main@807859f` for the logo files and app structure.
 
-- **Colours** are the `@theme inline` tokens in `src/app/globals.css` (core six, rose, sage and the release and video status pairs) plus the opacity steps the components use most, written out as rgba. The three Lounge near-blacks are hex values written directly in `src/app/(public)/flames-lounge/page.tsx`; their gradient end `#1A0C07` was left out (one use). Admin-only platform colours were left out.
-- **Fonts:** none fetched. Fraunces, Inter and JetBrains Mono are Google fonts loaded through `next/font`; the repository ships no font files.
-- **Images:** `hero-bg.jpg` was resized to 1600px wide; the original is 1920px. The old Flames Lounge hero (`public/flames-lounge-hero.jpg`) was left out because it is a stock photo; the site no longer shows it. The Next.js starter icons were left out.
-- **Components:** no live previews. The real components stay in the repository; "Building in the app" lists each one and its file.
-- `docs/brand.md` in the repository is partly out of date (it names Cooper Std or Recoleta, a `tailwind.config.ts` and SVG logos in `public/brand/` that do not exist). This system follows the code.
+- **The live site is still on the old record-sleeve look** (cream, oxblood, Fraunces). Nothing on the site changes until Frank approves the rebuild. "Building in the app" describes the target, not the current code.
+- **Fonts:** none fetched. Big Shoulders Display and Archivo are Google fonts, to be loaded with `next/font`.
+- **Logos:** the twelve vector files are from the repository's `brand/vector/` folder, which is not yet committed. The six old PNG logos stay as legacy files.
+- **Photo printing:** the three-tone settings in "Building in the app" are a written-down version of the concept's sample images; check them against the concept by eye before the rebuild.
+- **Components:** no live previews. The real components stay in the repository.

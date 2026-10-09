@@ -3,7 +3,7 @@
 The One Flame Records brand, written down so people and coding agents build and post consistently. The code is the final authority: if this folder and the code disagree, the code wins and this folder should be updated.
 
 - Live, browsable version: https://claude.ai/artifact/WJFpQH32qQV2qbiZEyS7WU
-- Synced from: `main@f7d9bac` on 2026-10-06
+- Synced from: `concept DRRtVLep9ki5pNCDPV3Mo5 v8 (Sound System), repo main@807859f`
 
 | File | Use it for |
 | --- | --- |

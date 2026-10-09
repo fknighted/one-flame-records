@@ -1,137 +1,278 @@
 # Building in the app
 
-For Claude Code, Codex or any agent changing the `one-flame-records` repository (`Projects/one flame app`). The repository's code is the truth; this page tells you which of its pieces to reach for and how this system's tokens are written there. Read the repository's own `CLAUDE.md` and `AGENTS.md` first. Its `docs/brand.md` is partly out of date (it names Cooper Std or Recoleta, a `tailwind.config.ts`, and SVG logos in `public/brand/` that do not exist); where it disagrees with the code or with this page, the code wins.
+For Claude Code, Codex or any agent changing the `one-flame-records` repository (`Projects/one flame app`). Read the repository's own `CLAUDE.md` and `AGENTS.md` first.
+
+**The repository is still on the old record-sleeve look** (cream, oxblood, Fraunces, Inter, JetBrains Mono) until the Sound System rebuild lands. Everything below is the target. Do not start the rebuild, or mix the two looks on one page, until Frank approves it. The rebuild goes page by page in this order, checked on a phone at every step: home, artists, releases, videos, news, Lounge, About, Contact, Sign with us. Studio screens (portal, admin, bar till, gamer portal) come last and change how they look, never how they work.
+
+The repository's `design-system/` folder holds the old system. It is replaced by this one when the rebuild starts; `docs/brand.md` is out of date and should not be followed.
 
 ## The stack
 
-- Next.js 16 (App Router), React 19, Tailwind CSS v4. There is no `tailwind.config` file: brand colours and font variables live in the `@theme inline` block in `src/app/globals.css`.
-- Fonts load in `src/app/layout.tsx` through `next/font/google`: Fraunces (`--font-display`), Inter (`--font-sans`), JetBrains Mono (`--font-mono`). Use the classes `font-display`, `font-sans`, `font-mono`.
-- Styling is Tailwind utility classes written directly on elements. No CSS per component, no component library.
-- Each world is a wrapper class on its route group's layout, not a runtime toggle: `src/app/(public)/layout.tsx` sets `bg-cream` and the paper grain; `src/components/InkShell.tsx` sets `bg-ink text-bone` for the portal, admin, bar till and gamer portal.
+- Next.js 16 (App Router), React 19, Tailwind CSS v4. There is no `tailwind.config` file: colours and font variables live in the `@theme inline` block in `src/app/globals.css`.
+- Fonts load in `src/app/layout.tsx` through `next/font/google`. Today that is Fraunces, Inter and JetBrains Mono; the rebuild replaces them with Big Shoulders Display and Archivo.
+- Styling is Tailwind utility classes on elements. No CSS file per component, no component library.
+- Each area is a wrapper on its route group's layout: `src/app/(public)/layout.tsx` (today `bg-cream` plus the paper-grain overlay) and `src/components/InkShell.tsx` (today `bg-ink text-bone`) for the portal, admin, bar till and gamer portal. In the rebuild both become `bg-black text-paper`, and the grain overlay is removed.
 
-## Rules
+## Proposed theme
 
-1. Do not add new colours, fonts or shadows. Use the tokens below. If a design truly needs one, add it to `@theme inline` in `src/app/globals.css` with a comment, and add it to this system. Do not keep writing raw hex in `className` (the Lounge page does; do not copy that habit).
-2. Never mix the two worlds in one component. Public pages may stack cream, ink and oxblood bands; the studio world is ink only.
-3. Every public section opens with `SectionHeader` (eyebrow, display title, short rule). Do not hand-roll a new heading pattern.
-4. On dark grounds, eyebrows are `text-sage` or `text-ochre`, not `text-forest` (2.3:1 on ink). Icons and small text on dark grounds are `text-rose`, not `text-oxblood` (2.1:1).
-5. Text a visitor must read on cream is at least `text-ink/70`. On ink, at least `text-bone/50`.
-6. Every form field carries a 2px focus outline: `focus:outline-2 focus:outline-oxblood` on cream, `focus:outline-2 focus:outline-ochre` on ink. Copy that on new fields; for buttons and links use the `focus-visible:` form of the same classes. Never add `focus:outline-none` without a visible replacement.
-7. Field borders must clear 3:1 against both the page and the field's own fill: `border-ink/60` on cream, `border-bone/45` on ink (`border-bone/50` on a `bg-bone/10` field). Lighter borders fail.
-8. Bar money is whole Jamaican dollars. Format with `formatJmd()` and read "today" with `jamaicaMidnight()`, both in `src/lib/bar/pos.ts`. Never write a new `_cents` value.
-9. Tables scroll inside one container: `<div className="border border-bone/10 rounded-lg overflow-x-auto"><table className="w-full min-w-[Npx]">`. Never nest `overflow-hidden` around it (it blocks scrolling on iPhone).
-10. Interactive bits inside a Server Component page go in their own `*Client.tsx` or `*Button.tsx` file.
-11. Check every change at phone width (390px). The bar till and the gamer portal are used on phones.
+Add these to `src/app/globals.css` when the rebuild starts. During the changeover the old tokens stay beside them, so pages not yet rebuilt keep working; remove the old ones when the last page moves.
+
+```css
+@theme inline {
+  /* Sound System */
+  --color-black:  #0F0D0B;  /* overrides Tailwind's pure black on purpose; the repo does not use bg-black today */
+  --color-yellow: #F2C230;
+  --color-red:    #C8321F;  /* bg-red, text-red. Tailwind's red-400 etc. are separate and stay until replaced */
+  --color-paper:  #FFF7E6;
+  --color-green:  #2F6B3A;
+  --color-muted:  #D8CCB4;
+  --color-line:   #3A332B;
+  --color-panel:  #16130F;
+  --color-raised: #2A241E;
+
+  --font-poster: var(--font-big-shoulders);
+  --font-text:   var(--font-archivo);
+}
+```
+
+```tsx
+// src/app/layout.tsx
+import { Big_Shoulders, Archivo } from "next/font/google";
+
+// Big Shoulders Display is now one family, "Big Shoulders", with an optical-size axis.
+const poster = Big_Shoulders({ variable: "--font-big-shoulders", subsets: ["latin"], axes: ["opsz"], display: "swap" });
+const text = Archivo({ variable: "--font-archivo", subsets: ["latin"], weight: ["400", "500", "600", "800"], display: "swap" });
+```
+
+The installed `next/font/google` (Next.js 16.3.8) has no `Big_Shoulders_Display` export, only `Big_Shoulders`, whose optical-size axis (`opsz`, 10 to 72) contains the Display design at its top end. To match the concept at every size, add `[font-variation-settings:'opsz'_72]` to poster text (or set it once on `.font-poster`); without it, small poster text such as `title-sm` picks a less condensed cut. Google Fonts still serves the old "Big Shoulders Display" name for pages outside the app, such as this system's cover. Read `node_modules/next/dist/docs/` before changing the layout, as `AGENTS.md` asks.
 
 ## Tokens as Tailwind classes
 
 | Token | Tailwind class |
 | --- | --- |
-| `cream`, `ink`, `bone`, `oxblood`, `forest`, `ochre`, `rose`, `sage` | `bg-*`, `text-*`, `border-*` with the same name |
-| `lounge-night` / `lounge-deep` / `lounge-warm` | `bg-[#0A0806]` / `bg-[#0D0B09]` / `bg-[#111009]` (Lounge page only, not yet theme tokens) |
-| `ink-80` / `ink-70` / `ink-60` / `ink-50` / `ink-40` | `text-ink/80` … `text-ink/40` (40 and 50 fail on cream) |
-| `bone-70` / `bone-60` / `bone-50` / `bone-40` / `bone-30` | `text-bone/70` … `text-bone/30` (40 and 30 fail on ink) |
-| `line-cream` / `line-ink` | `border-oxblood/10` / `border-bone/10` |
-| `input-edge` | `border-ink/60` (cream-world fields on a bone, cream or white fill); filter selects on cream use `border-oxblood/65` |
-| `input-edge-ink` | `border-bone/45` on a `bg-bone/5` field; `border-bone/50` on a `bg-bone/10` field |
-| Field focus | `focus:outline-2 focus:outline-oxblood` (cream) / `focus:outline-2 focus:outline-ochre` (ink) |
-| `danger-on-ink` / `danger-on-cream` | `text-red-400` / `text-red-600` |
-| `status-<name>-bg` / `status-<name>-fg` | `bg-status-<name>-bg` / `text-status-<name>-fg` (idea, preprod, tracking, mixing, mastering, scheduled, live, done, rendering, failed) |
-| `radius` / `radius-lg` / `radius-xl` / `radius-2xl` / `radius-full` | `rounded` / `rounded-lg` / `rounded-xl` / `rounded-2xl` / `rounded-full` |
-| `shadow-lg` | `shadow-lg` (rare; prefer a border) |
-| `content-max` / `prose-max` | `max-w-6xl` / `max-w-3xl` |
-| Page gutter | `px-4 sm:px-6` |
-| Section padding | `py-20` (home), `py-16 sm:py-24` (Lounge) |
+| `black`, `yellow`, `red`, `paper`, `green`, `muted`, `line`, `panel`, `raised` | `bg-*`, `text-*`, `border-*`, `outline-*` with the same name |
+| `lens` | `bg-black/50` |
+| `logo-red`, `logo-green` | none. They live only inside the logo files. |
+| `radius-none` | no class (the default); never add `rounded-*` |
+| `radius-round` | `rounded-full`, only for the logo lens, the speaker rings and grille holes |
+| `border-hair` / `border-field` / `border-rule` / `border-band` | `border` / `border-2` / `border-[3px]` / `border-4` |
+| `focus-width` + `focus-offset` | `focus-visible:outline-3 focus-visible:outline-offset-2` plus the colour for the ground |
+| `content-max` / `read-max` | `max-w-6xl` / `max-w-[66ch]` |
+| `gutter` / `gutter-wide` | `px-4 sm:px-6` |
+| `control-height` | `min-h-[46px]` |
+| Section padding | `py-14 sm:py-[88px]` |
 
 | Type style | Tailwind classes |
 | --- | --- |
-| `hero` | `font-display font-bold text-[clamp(3rem,7vw,5.5rem)] leading-[1.02] tracking-tight` |
-| `page-title` | `font-display font-bold text-[clamp(2.5rem,5vw,4rem)] leading-[1.02] tracking-tight` |
-| `band-title` | `font-display font-bold text-[clamp(2rem,4vw,3rem)] leading-tight` |
-| `section-title` | `font-display font-bold text-3xl sm:text-[2.25rem] leading-[1.05] tracking-tight` (via `SectionHeader`) |
-| `card-title` | `font-display font-bold text-2xl` |
-| `title-sm` | `font-display font-semibold text-base leading-snug` |
-| `figure` | `font-display font-bold text-xl` |
-| `lead` | `text-lg leading-relaxed` |
-| `body` | `leading-relaxed` |
-| `body-sm` | `text-sm` |
-| `button` | `text-sm font-semibold` |
-| `eyebrow` | `text-[11px] font-semibold uppercase tracking-[0.22em]` (heroes `tracking-[0.28em]`) |
-| `caption` | `text-xs` |
-| `micro` | `text-[10px] font-semibold uppercase tracking-wider` |
-| `money` | `font-mono text-2xl text-ochre` |
-| `mono-sm` | `font-mono text-xs` |
+| `poster` | `font-poster font-black uppercase leading-[0.82] tracking-[-0.01em] text-[clamp(56px,9vw,112px)]` |
+| `headline` | `font-poster font-black uppercase leading-[0.85] text-[clamp(36px,7vw,64px)]` |
+| `title` | `font-poster font-extrabold uppercase leading-[0.95] text-[32px]` |
+| `title-sm` | `font-poster font-extrabold uppercase leading-none tracking-[0.01em] text-2xl` |
+| `number` | `font-poster font-black tabular-nums text-[44px] leading-none` |
+| `money` | `font-poster font-extrabold tabular-nums text-2xl leading-none text-yellow` |
+| `lead` | `font-text font-semibold text-lg leading-normal` |
+| `body` | `font-text text-[17px] leading-[1.6]` |
+| `body-sm` | `font-text text-base leading-[1.6]` |
+| `button` | `font-text font-extrabold uppercase tracking-[0.04em] text-[15px] leading-none` |
+| `label` | `font-text font-extrabold uppercase tracking-[0.06em] text-[13px]` |
+| `small` | `font-text font-semibold text-[13px]` |
+| `caption` | `font-text font-semibold text-xs` |
+
+Focus colour by ground: `focus-visible:outline-red` on paper, `focus-visible:outline-yellow` on black and panel, `focus-visible:outline-black` on yellow, `focus-visible:outline-paper` on red. Fields use `focus:` rather than `focus-visible:`.
 
 ## Ready-made patterns
 
-Primary button on cream:
+Main button (one per screen):
 
 ```tsx
-<Link href="/contact" className="inline-block rounded bg-oxblood px-6 py-3 text-sm font-semibold text-bone hover:bg-ochre hover:text-ink transition-colors">Get in touch</Link>
+<Link href="/artists" className="inline-flex min-h-[46px] items-center px-5 bg-yellow text-black font-text font-extrabold uppercase tracking-[0.04em] text-[15px] leading-none hover:bg-paper focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-yellow">Hear the roster</Link>
 ```
 
-Keep `hover:text-ink`: bone text on the ochre hover is only 2.7:1. Every oxblood button that hovers to ochre has it since 2026-10-05.
+On a yellow block, give it `focus-visible:outline-black`, or use the outlined button there instead.
 
-Primary button on ink:
+Outlined button (second action):
 
 ```tsx
-<Link href="/artists" className="inline-block rounded bg-ochre px-7 py-3 text-sm font-semibold text-ink hover:bg-bone transition-colors">Our Artists</Link>
+<Link href="/sign" className="inline-flex min-h-[46px] items-center px-5 bg-black text-yellow shadow-[inset_0_0_0_2px_var(--color-yellow)] font-text font-extrabold uppercase tracking-[0.04em] text-[15px] leading-none hover:bg-yellow hover:text-black focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-yellow">Sign with us</Link>
 ```
 
-Ghost button on cream (header):
+The inset shadow here is a hard 2px edge, not a soft shadow; `border-2 border-yellow` works the same.
+
+Lounge button:
 
 ```tsx
-<Link href="/sign" className="text-sm font-semibold text-oxblood border border-oxblood/40 rounded px-3.5 py-1.5 hover:bg-oxblood hover:text-bone transition-colors">Sign with us</Link>
+<Link href="/flames-lounge" className="inline-flex min-h-[46px] items-center px-5 bg-red text-paper font-text font-extrabold uppercase tracking-[0.04em] text-[15px] leading-none focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-paper">Visit the Lounge</Link>
 ```
 
-Section opening:
+Section opener (replaces the eyebrow, title and thin rule of today's `SectionHeader`):
 
 ```tsx
-<SectionHeader eyebrow="Discography" title="Latest Releases" action={<Link href="/releases" className="text-sm text-oxblood hover:text-ochre transition-colors">All releases →</Link>} />
-```
-
-Pass `dark` on ink: `SectionHeader` then paints the eyebrow `text-sage` (it is `text-forest` on cream). Hand-written eyebrows in the ink page banners and on the Lounge page still use `text-forest` / `text-[#3F5A3A]`, which fail there; do not copy them.
-
-Field on cream (from `ContactForm`):
-
-```tsx
-<input className="w-full rounded border border-ink/60 bg-bone px-3 py-2.5 text-sm text-ink placeholder-ink/40 focus:border-oxblood focus:outline-2 focus:outline-oxblood focus:ring-1 focus:ring-oxblood" />
-```
-
-Field on ink (from `SubscribeForm`):
-
-```tsx
-<input className="flex-1 min-w-0 rounded bg-bone/5 border border-bone/45 px-3 py-2 text-sm text-bone placeholder:text-bone/30 focus:outline-2 focus:outline-ochre focus:border-ochre/50" />
-```
-
-Studio-world card:
-
-```tsx
-<div className="border border-bone/10 rounded-lg p-4">
-  <p className="text-[10px] text-bone/60 uppercase tracking-wider mb-1">Today's Sales</p>
-  <p className="text-xl font-display font-bold text-bone">{formatJmd(todayRevenue)}</p>
+<div className="mb-8">
+  <h2 className="font-poster font-black uppercase leading-[0.85] text-[clamp(36px,7vw,64px)]">{title}</h2>
+  <div className="mt-2 h-2 w-[72px] bg-red" />
 </div>
 ```
 
-## Components to reuse
+The five-word rule, in code:
 
-Reach for these before writing new markup. All are in `src/components/` unless noted.
+```ts
+const tooLong = (s: string) => s.trim().split(/\s+/).length > 5 || s.split(/\s+/).some((w) => w.length > 12);
+// poster or headline when !tooLong(text), otherwise the title classes
+```
 
-| Component | File | Use it for |
-| --- | --- | --- |
-| `PublicHeader`, `PublicFooter` | `PublicHeader.tsx`, `PublicFooter.tsx` | Public site chrome, already in `src/app/(public)/layout.tsx`. Do not add another. |
-| `InkShell` | `InkShell.tsx` | The frame (header, side nav, logo) for every portal, admin, bar and gamer page. Already in those layouts. |
-| `SectionHeader` | `SectionHeader.tsx` | Eyebrow, display title and rule at the top of a public section; `dark` on ink. |
-| `ArtistCard` | `ArtistCard.tsx` | Square artist photo with gradient and stage name, in roster grids. |
-| `ReleaseCard` | `ReleaseCard.tsx` | Square cover, title, type pill, artist, date and streaming icons; `dark` on ink. |
-| `VideoEmbed` | `VideoEmbed.tsx` | A 16:9 YouTube or stored video with title and artist. |
-| `ReleasesFilter`, `VideosFilter` | same names | Filter and sort chips on the public catalogue pages. |
-| `ContactForm`, `SubscribeForm`, `SignupForm` | same names | The public contact form, footer newsletter box, and artist QR sign-up. |
-| `MenuGrid` | `MenuGrid.tsx` | The tap-to-add item grid on a bar tab (`src/app/bar/tabs/[id]/page.tsx`). |
-| `AddStockForm`, `InventoryAddRow`, `MenuItemForm` | same names | Bar stock and menu editing. Bartenders may only add stock. |
-| `VideoRequestForm` / `AdminVideoRequestForm` | same names | AI music video requests. Their `STYLE_PRESETS` lists must stay identical. |
-| `ReleasesManagerFilter`, `VideoLibraryFilter` | same names | Status and format chips in the portal. |
-| `ToastProvider` | `ToastProvider.tsx` | Confirmation toasts in the admin. |
-| `CopyButton`, `RetryButton`, `LogoutButton` | same names | Small client-side buttons. |
+Field on paper:
+
+```tsx
+<label className="grid gap-1.5">
+  <span className="font-text font-semibold text-sm text-black">Your email</span>
+  <input type="email" className="min-h-[46px] px-3 border-2 border-black bg-paper text-black font-text text-base focus:outline-3 focus:outline-offset-2 focus:outline-red" />
+</label>
+```
+
+Artist tile without a photo:
+
+```tsx
+const TILE = ["bg-yellow text-black", "bg-red text-paper", "bg-paper text-black", "bg-raised text-paper"];
+<Link href={`/artists/${slug}`} className={`${TILE[i % 4]} aspect-square flex flex-col justify-between p-3 font-poster font-black uppercase leading-[0.88] overflow-hidden`}>
+  <span className="text-[clamp(54px,9vw,96px)] leading-[0.75]">{stage_name[0]}</span>
+  <span className="text-[28px]">{stage_name}<small className="block font-text font-semibold normal-case text-xs tracking-normal">Signed to One Flame</small></span>
+</Link>
+```
+
+Release card (a small poster):
+
+```tsx
+<article className="grid grid-rows-[auto_1fr_auto] aspect-[4/5] bg-paper text-black">
+  <p className="bg-red text-paper px-3 py-2 font-text font-extrabold uppercase tracking-[0.06em] text-[13px]">{type}</p>
+  <div className="px-3 py-3.5 grid content-end">{/* square cover art here when there is one */}<h3 className="font-poster font-black uppercase leading-[0.85] text-[46px]">{title}</h3></div>
+  <div className="flex justify-between items-center px-3 py-2.5 border-t-[3px] border-black font-text font-semibold text-[13px]"><span>{artist}</span><span>Listen</span></div>
+</article>
+```
+
+Empty state (an invitation with one action):
+
+```tsx
+<div className="bg-black border-[3px] border-dashed border-yellow p-5 grid gap-2.5">
+  <p className="font-poster font-extrabold uppercase text-[32px] leading-[0.95] text-paper">No releases yet.</p>
+  <p className="font-text text-paper">The first ones are in the studio. Get the drop in your inbox.</p>
+  {/* one main button: "Get release news" */}
+</div>
+```
+
+Studio panel and table (calm: no stripes, no grille, no huge type except money):
+
+```tsx
+<div className="bg-panel border border-line overflow-x-auto">
+  <table className="w-full min-w-[520px]">
+    <thead><tr className="border-b border-line text-left"><th className="px-4 py-3 font-text font-semibold text-[13px] text-muted">Tab</th>…<th className="px-4 py-3 text-right font-text font-semibold text-[13px] text-muted">Total</th></tr></thead>
+    <tbody><tr className="border-b border-line"><td className="px-4 py-3 text-paper">{name}</td><td className="px-4 py-3"><span className="bg-green text-paper font-text font-bold text-xs px-2 py-0.5">Open</span></td>…<td className="px-4 py-3 text-right font-poster font-extrabold tabular-nums text-2xl text-yellow">{formatJmd(total)}</td></tr></tbody>
+  </table>
+</div>
+```
+
+Never nest `overflow-hidden` around a scrolling table (it blocks scrolling on iPhone).
+
+Speaker-grille band (beside a photo or along a block edge, never over a photo):
+
+```tsx
+<span aria-hidden="true" className="absolute right-0 inset-y-0 w-[60px] bg-black bg-[radial-gradient(circle,var(--color-yellow)_0_4.4px,transparent_4.9px)] bg-[length:18px_18px] bg-[position:4px_4px]" />
+```
+
+The radial gradient here only draws hard-edged round holes; it is not a colour fade. The concept faded the bottom of one band with a mask; keep bands solid instead, which matches "flat blocks, no blur".
+
+Speaker rings (draw them as SVG so the rings stay crisp):
+
+```tsx
+<svg viewBox="0 0 100 100" className="w-[120px] h-[120px]" aria-hidden="true">
+  <circle cx="50" cy="50" r="22" fill="none" stroke="var(--color-black)" strokeWidth="1.3" />
+  <circle cx="50" cy="50" r="33" fill="none" stroke="var(--color-black)" strokeOpacity="0.55" strokeWidth="1.3" />
+  <circle cx="50" cy="50" r="44" fill="none" stroke="var(--color-black)" strokeOpacity="0.28" strokeWidth="1.3" />
+</svg>
+```
+
+Put the flame in the centre at about 40% of the ring size. Use `--color-paper` rings with the light logo on red. On a photo, use dark rings and the light logo on a `bg-black/50 rounded-full` lens inside them.
+
+Corner block:
+
+```tsx
+<span className="absolute right-0 top-0 grid place-items-center w-[72px] h-[72px] bg-black">
+  <Image src="/brand/flame-light.svg" alt="" width={40} height={46} />
+</span>
+```
+
+`bg-yellow` with `flame-original.svg` on red cards.
+
+### Three-tone photos
+
+Recommendation: **print photos when they are shown, with an SVG colour filter**, rather than making printed copies when they are uploaded.
+
+- It needs no new software and no change to storage or uploads. The original upload stays untouched.
+- One upload works on any block: the same photo prints in yellow on the home hero and in red on the Lounge block.
+- It applies to photos already uploaded and to `hero-bg.jpg` at once, so "automatic on upload" holds without anyone editing photos by hand.
+- Server-side printing (for example with the Sharp image library) is the better choice only for files that leave the site, such as social posts or link previews. Sharp is present only as a dependency of Next.js today; it is not listed in `package.json`.
+
+Put one hidden SVG with both filters in the public layout, then add `[filter:url(#print-yellow)]` or `[filter:url(#print-red)]` to the photo:
+
+```tsx
+<svg width="0" height="0" className="absolute" aria-hidden="true">
+  <filter id="print-yellow" colorInterpolationFilters="sRGB">
+    <feColorMatrix type="matrix" values="0.2126 0.7152 0.0722 0 0  0.2126 0.7152 0.0722 0 0  0.2126 0.7152 0.0722 0 0  0 0 0 1 0" />
+    <feComponentTransfer>
+      <feFuncR type="table" tableValues="0.059 0.949 0.949 1" />
+      <feFuncG type="table" tableValues="0.051 0.761 0.761 0.969" />
+      <feFuncB type="table" tableValues="0.043 0.188 0.188 0.902" />
+    </feComponentTransfer>
+  </filter>
+  <filter id="print-red" colorInterpolationFilters="sRGB">
+    <feColorMatrix type="matrix" values="0.2126 0.7152 0.0722 0 0  0.2126 0.7152 0.0722 0 0  0.2126 0.7152 0.0722 0 0  0 0 0 1 0" />
+    <feComponentTransfer>
+      <feFuncR type="table" tableValues="0.059 0.784 0.784 1" />
+      <feFuncG type="table" tableValues="0.051 0.196 0.196 0.969" />
+      <feFuncB type="table" tableValues="0.043 0.122 0.122 0.902" />
+    </feComponentTransfer>
+  </filter>
+</svg>
+```
+
+Each table maps dark to `black`, the middle to the block colour and the brightest part to `paper`. Four values (`black`, colour, colour, `paper`) is the middle strength: white appears only in the top third of the tones. Three values (`black`, colour, `paper`) is the brighter version that was not chosen; two values (`black`, colour) is the dim "before". Compare against the concept's sample images by eye, and check on an iPhone in Safari before relying on it. Never add a green filter.
+
+## Components to reuse or replace
+
+All are in `src/components/`.
+
+| Component | What happens in the rebuild |
+| --- | --- |
+| `PublicHeader`, `PublicFooter` | Restyle: black header with the light horizontal logo and a 4px yellow line; phone `Menu` button. Black footer with the light stacked logo. |
+| `SectionHeader` | Replace its eyebrow, title and thin rule with the section opener (headline plus red bar). Drop the `eyebrow` and `dark` props once no page uses them. |
+| `ArtistCard` | Replace the ink gradient and hover zoom with the artist tile: initial on a colour block without a photo; three-tone photo, corner block and a black name box with one. |
+| `ReleaseCard` | Rebuild as the small-poster release card. |
+| `VideoEmbed` | Keep; square corners, and a solid focus ring that does not depend on the thumbnail. |
+| `ReleasesFilter`, `VideosFilter` | Keep; square chips with a 2px edge, selected chip in yellow with black text. |
+| `ContactForm`, `SubscribeForm`, `SignupForm` | Move every form onto a paper block with 2px black fields and the red focus ring. |
+| `InkShell` | Keep the structure; black ground, paper text, line dividers, light logo, new type. Calm rules apply. |
+| `MenuGrid`, `AddStockForm`, `InventoryAddRow`, `MenuItemForm` | Restyle only (bar). Bartenders may still only add stock. |
+| `ArtistForm`, `ReleaseForm`, `VideoForm`, `NewsForm`, `PortalProfileForm`, `AssetUploadForm`, `AdminAssetUploadForm`, `GenerateCodeForm` | Restyle only (studio screens). |
+| `ReleasesManagerFilter`, `ApplicationActions`, `ToastProvider`, `CopyButton`, `LogoutButton`, `ResendInviteButton`, `YoutubeUploadButton` | Restyle only. Status colours move to the chips: green for live and done, red for failed, outlined muted for the rest. The old `status-*` tokens retire with the studio screens. |
+
+## Logo files in the app
+
+The vector files are in `brand/vector/` and `brand/vector/trimmed/`, outside `public/`, so the site cannot serve them yet. Copy the ones the rebuild uses into `public/brand/` unchanged: `flame-original.svg`, `flame-light.svg` and the trimmed `horizontal-*` and `stacked-*` files. Keep `public/logo*.png` until nothing links to them.
+
+## Rules
+
+1. Use the tokens above. Do not add colours, fonts or shadows. If a design truly needs one, add it to `@theme inline` with a comment and to this system. No raw hex in `className`.
+2. Square corners: never `rounded-*`, except `rounded-full` for the logo lens, rings and grille holes.
+3. No gradients, glows, soft shadows, blur, or `drop-shadow`. The paper grain and the darkened photo overlay go.
+4. One `yellow` main button per screen.
+5. Headlines at `poster` or `headline` size hold five words or fewer; check it in code and drop to `title`.
+6. Forms and long reading sit on `paper`.
+7. Every interactive element has a solid 3px focus outline in the colour for its ground. Never `outline-none` without that replacement.
+8. Logo: original on yellow or paper; light on black or red; on photos, light in the black 50% lens. Never the original on black or red, never a solid circle.
+9. Grille only beside photos or along block edges, never over a photo or behind text.
+10. Photos get the three-tone filter for the block they sit on. Never green.
+11. Studio screens: black ground, no stripes or grille, yellow only for the one action and money, no huge type except money and counts.
+12. Bar money is whole Jamaican dollars. Format with `formatJmd()` and read "today" with `jamaicaMidnight()`, both in `src/lib/bar/pos.ts`.
+13. Interactive bits inside a Server Component page go in their own `*Client.tsx` or `*Button.tsx` file.
+14. Check every change at phone width (375px). The bar till and the gamer portal are used on phones.
 
 Copy and tone rules are in the brand book's "Voice and content" section and in `knowledge-base/brand-and-voice.md`.

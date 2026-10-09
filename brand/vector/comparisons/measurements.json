@@ -1,0 +1,58 @@
+{
+  "flame": {
+    "source": "public/logo.png",
+    "source_sha256": "43a99576ac3feeaf1a64998e0d8629d5658773553753ad1130dbbf0911ce18a4",
+    "viewBox": [
+      0,
+      0,
+      379,
+      648
+    ],
+    "source_crop": [
+      344,
+      92,
+      723,
+      740
+    ],
+    "comparison_width_px": 2560,
+    "comparison_height_px": 4377,
+    "max_boundary_distance_px": 1.0,
+    "mask_agreement_percent": 99.993173,
+    "trace_simplification_tolerance_at_2560_px": 0.12,
+    "svg_bytes": 55261
+  },
+  "horizontal": {
+    "source": "public/logo-2.png",
+    "source_sha256": "d6e6ccd7ec2208382bd4ae07a3b195538c134f9ae15be6219ff55a905a355e21",
+    "viewBox": [
+      0,
+      0,
+      2560,
+      1400
+    ],
+    "source_crop": null,
+    "comparison_width_px": 2560,
+    "comparison_height_px": 1400,
+    "max_boundary_distance_px": 1.0,
+    "mask_agreement_percent": 99.981641,
+    "trace_simplification_tolerance_at_2560_px": 0.12,
+    "svg_bytes": 52243
+  },
+  "stacked": {
+    "source": "public/logo.png",
+    "source_sha256": "43a99576ac3feeaf1a64998e0d8629d5658773553753ad1130dbbf0911ce18a4",
+    "viewBox": [
+      0,
+      0,
+      1080,
+      1080
+    ],
+    "source_crop": null,
+    "comparison_width_px": 2560,
+    "comparison_height_px": 2560,
+    "max_boundary_distance_px": 1.0,
+    "mask_agreement_percent": 99.986435,
+    "trace_simplification_tolerance_at_2560_px": 0.12,
+    "svg_bytes": 85787
+  }
+}

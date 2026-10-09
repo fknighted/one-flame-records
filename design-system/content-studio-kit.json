@@ -1,52 +1,69 @@
 {
   "palette": {
-    "primary": "#8B2A1F",
-    "secondary": "#3F5A3A",
-    "accent": "#B8893B",
-    "background": "#ECE2C8",
-    "text": "#1A1612"
+    "primary": "#F2C230",
+    "secondary": "#C8321F",
+    "accent": "#2F6B3A",
+    "background": "#0F0D0B",
+    "text": "#FFF7E6"
   },
   "extraColors": [
     {
-      "name": "Bone",
-      "hex": "#F5EDD8"
+      "name": "Paper (reading ground, white of photos)",
+      "hex": "#FFF7E6"
     },
     {
-      "name": "Rose",
-      "hex": "#E0907F"
+      "name": "Muted text on black",
+      "hex": "#D8CCB4"
     },
     {
-      "name": "Sage",
-      "hex": "#82A57A"
+      "name": "Logo oxblood (logo only, never recolour)",
+      "hex": "#902721"
+    },
+    {
+      "name": "Logo olive inner flame (logo only)",
+      "hex": "#3A482F"
     }
   ],
   "typography": {
-    "headingFont": "Fraunces",
-    "bodyFont": "Inter",
-    "notes": "Fraunces carries the headline voice; Inter is for everything read at length. Warm, printed feel — never a tech-startup sans stack."
+    "headingFont": "Big Shoulders Display",
+    "bodyFont": "Archivo",
+    "notes": "Headlines in Big Shoulders Display 900, uppercase, stacked tight, five words or fewer; longer text drops a size. Archivo for everything read, sentence case. Text on yellow is black; on black or red it is paper. Green is a small status mark only."
   },
   "logos": [],
   "imagery": {
-    "direction": "Warm, filmic and analogue — the palette of aged print rather than a screen. Jamaican light, real rooms, real studios. Grain over gloss.",
+    "direction": "A Montego Bay sound-system dance flyer: flat solid blocks of poster yellow, flame red and black with hard square edges. Real photos printed in three tones: black shadows, the block colour in the middle tones, bright white highlights, medium strength. The one pattern is a speaker grille of big round holes, as a band beside a photo, never over it. Lettering and colour first.",
     "subjects": [
       "artists in the studio and on stage",
-      "physical media and artwork",
-      "Jamaican settings"
+      "live sound-system nights and crowds",
+      "the label's own studio and spaces",
+      "Jamaican settings in Montego Bay"
     ],
     "avoid": [
-      "cold blue-grey tech aesthetics",
-      "generic gradient backgrounds",
+      "gradients, glows, soft shadows or blur",
+      "rounded cards or panels",
+      "a solid circle behind the logo",
+      "red, yellow and green flag stripes",
+      "photos tinted green",
+      "pattern over a photo or behind text",
+      "tourism postcards: palms, beaches, umbrella cocktails",
       "AI-obvious plastic skin and hands"
     ]
   },
   "dos": [
+    "One headline per post, five words or fewer",
     "Name the artist and the release exactly as credited",
-    "Use the release date only once it is confirmed",
+    "Use a release date, event or line-up only once it is confirmed",
+    "Put the original logo on yellow or paper, the light logo on black or red",
+    "Say Montego Bay in body text; Mo'Bay only in a headline",
     "Credit producers and features where they are known"
   ],
   "donts": [
-    "Never announce a date, title or feature that is not confirmed",
-    "Never invent chart positions, streams or sales figures",
-    "Never speak for an artist in the first person"
+    "Never announce a date, title, feature or event that is not confirmed",
+    "Never invent chart positions, streams, sales figures or awards",
+    "Never repeat the removed founding story, distribution deal or stream count",
+    "Never speak for an artist in the first person",
+    "Never quote food, drink or gaming prices",
+    "Never use emoji",
+    "Never present a stock or generated image as a real artist, show or the Lounge"
   ]
 }
