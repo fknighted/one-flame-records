@@ -1,3 +1,5 @@
+> Release completed later on October 18. [Live receipt](../audits/2026-10-18-release/report.md) supersedes the local-only status below.
+
 # October 18 audit repair receipt
 
 Frank asked to fix all audit recommendations. Local software repairs and five unapplied migrations are ready for review/release; production is unchanged. Independent read-only review found no remaining high/medium blocker in reviewed paths after corrections. Build, type checking, isolated regression tests and lint pass (lint warnings remain).

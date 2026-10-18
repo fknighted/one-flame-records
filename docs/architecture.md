@@ -1,8 +1,10 @@
 # Current architecture notes — October 18, 2026
 
-## October 18 repair candidate — NOT applied live
+All five migrations are applied. [Release receipt](audits/2026-10-18-release/report.md).
 
-The five `20261018*` migrations are additive local release work, tested against the migration history in an isolated engine:
+## October 18 repair release — applied live
+
+The five `20261018*` migrations are applied release work, tested against the migration history in an isolated engine:
 
 - Access hardening: safe registration role, MFA-aware administrator/bar helpers, service-only internal functions and sensitive writes, public artist column allowlist, bucket limits.
 - Atomic bar operations: request receipts, stock snapshots and locked tab/stock/purchase/regular operations. Stable request IDs reject changed payload reuse and prevent repeated successful operations.

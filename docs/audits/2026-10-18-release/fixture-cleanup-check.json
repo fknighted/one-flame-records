@@ -1,0 +1,7 @@
+{
+  "allOriginalPublicTablesMatchBaseline": true,
+  "relations": 26,
+  "temporaryAuthUserRemoved": true,
+  "temporaryMediaRemoved": true,
+  "securityAuditLogsRetained": true
+}

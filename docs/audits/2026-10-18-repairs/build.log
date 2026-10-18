@@ -17,9 +17,9 @@
   Finished TypeScript in 8.5s ...
   Collecting page data using 11 workers ...
   Generating static pages using 11 workers (0/70) ...
-  Generating static pages using 11 workers (17/70) 
-  Generating static pages using 11 workers (34/70) 
-  Generating static pages using 11 workers (52/70) 
+  Generating static pages using 11 workers (17/70)
+  Generating static pages using 11 workers (34/70)
+  Generating static pages using 11 workers (52/70)
 ✓ Generating static pages using 11 workers (70/70) in 2.0s
   Finalizing page optimization ...
 
@@ -112,4 +112,3 @@ Route (app)                         Revalidate  Expire
 ○  (Static)   prerendered as static content
 ●  (SSG)      prerendered as static HTML (uses generateStaticParams)
 ƒ  (Dynamic)  server-rendered on demand
-

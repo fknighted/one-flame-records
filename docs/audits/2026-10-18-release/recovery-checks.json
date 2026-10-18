@@ -1,0 +1,19 @@
+{
+  "time": "2026-10-18T19:14:50.496536+00:00",
+  "databaseRestore": "pg_restore complete with owners preserved into network-isolated Supabase PostgreSQL 17.6 container",
+  "databaseCountsAndFingerprintsMatch": 62,
+  "trialMigrations": 5,
+  "trialPreservesAllExistingPublicAndAuthRows": true,
+  "mediaObjects": 23,
+  "mediaBytes": 696528377,
+  "restoredMediaChecksumsMatch": true,
+  "externalProviderServicesExercised": false,
+  "liveStateChanged": false,
+  "backupDirectory": "/Users/frankknight/one-flame-backups/2026-10-18-pre-audit-repairs",
+  "databaseDumpSha256": "d0aad626ff92bd49a5188ae1508115947ca43cefc9e4144729071d6eb865f9b2",
+  "dailyHostedBackupLatest": "2026-10-18T04:28:57Z",
+  "dailyBackupsObserved": "October 11\u201318",
+  "pointInTimeRecoveryEnabled": false,
+  "managementCliTokenValid": false,
+  "directConnectionCertificateVerified": true
+}

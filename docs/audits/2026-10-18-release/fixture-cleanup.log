@@ -1,0 +1,15 @@
+BEGIN
+set_config
+service_role
+set_config
+"{""role"":""service_role""}"
+DO
+DELETE 0
+DELETE 1
+DELETE 6
+DELETE 1
+DELETE 1
+DELETE 1
+UPDATE 1
+DELETE 1
+COMMIT

@@ -1,0 +1,14 @@
+
+> oneflame-records@0.1.0 test
+> node scripts/test-audit-repairs.mjs && node scripts/test-security-boundaries.mjs && node scripts/test-studio-retirement.mjs
+
+PASS: full migration history and all audit migrations execute in PostgreSQL
+PASS: sale retries, receipt misuse, quantity/remove, duplicate removal, rollback, add-after-close
+PASS: legal-name column privacy, public mutation denial, untrusted signup role, enrolled-admin assurance
+PASS: QR rotation, duplicate application, approval claim exclusion and recovered-account finalization
+PASS: upload finalization retry, atomic record/cleanup, deleted-upload replay denial
+PASS: recipient confirmation/reactivation, replay denial, snapshot without duplication, claim exclusion, expired retry quarantine
+PASS: email/Markdown injection, token tampering/scope, admin second-step and non-admin action denial
+PASS: changing upload kind after validation failure prepares a new reservation
+PASS: ambiguous bar response keeps its identity; a successful response starts a fresh operation
+PASS: studio pages/actions/providers/events/navigation absent; retired request routes redirect; only shared YouTube, hello and storage-cleanup workers registered.

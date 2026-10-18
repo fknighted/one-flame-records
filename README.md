@@ -16,4 +16,4 @@ Tests use an isolated in-memory PostgreSQL-compatible engine and mocked provider
 
 Read `CLAUDE.md` and `node_modules/next/dist/docs/` before implementation. Money is whole Jamaican dollars. Retired AI Studio/gamer screens must stay retired; saved media remains.
 
-October 18 repairs are local, not released. See [repair report](docs/audits/2026-10-18-repairs/report.md), [operations](docs/operations.md) and [current brief](docs/next-session-prompt.md). Commit, push, hosted migrations and deployment require Frank’s explicit approval.
+October 18 repairs and all five migrations are released. See [release receipt](docs/audits/2026-10-18-release/report.md) for evidence and remaining limits. See [repair report](docs/audits/2026-10-18-repairs/report.md), [operations](docs/operations.md) and [current brief](docs/next-session-prompt.md). Commit, push, hosted migrations and deployment require Frank’s explicit approval.

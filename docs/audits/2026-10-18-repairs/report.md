@@ -1,3 +1,5 @@
+> Released later on October 18 with Frank’s approval. See [live release receipt](../2026-10-18-release/report.md). The report below records the pre-release implementation checkpoint.
+
 # One Flame audit repairs — October 18, 2026
 
 The recommended software repairs are implemented locally and independently reviewed. Production is unchanged. No commit, push, hosted migration, deployment, real email, media upload, YouTube upload, account provisioning or business-data correction was performed.

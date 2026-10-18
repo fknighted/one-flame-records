@@ -1,6 +1,6 @@
 # Operations runbook
 
-October 18 repair candidate: new recovery features below become available only after the five migrations and matching code are released. Production is unchanged. See [repair report](audits/2026-10-18-repairs/report.md).
+October 18 recovery repairs and five migrations are live. See [release receipt](audits/2026-10-18-release/report.md) for proof and remaining limits.
 
 ## Sign-in and staff access
 
@@ -42,7 +42,7 @@ Commit, push, migrations, hosted configuration and deployment require Frank’s 
 
 ## Private backup and demonstrated restore
 
-Current hosted backup coverage, retention and storage recovery are unverified. The known August 15 backup is historical evidence, not current protection. Supabase management authorization was rejected and strict database TLS verification failed in the audit; refresh authorization and fix trusted connectivity before proceeding. Never disable certificate checks as a workaround.
+October 18 dashboard evidence confirms daily physical backups for October 11–18. A fresh private database/media backup and isolated restore passed. Ongoing media backup frequency and complete external-service recovery remain to establish. The management CLI token remains invalid, but dashboard sign-in and direct database connectivity now work with the official certificate. Never disable certificate checks as a workaround.
 
 Before release:
 
@@ -53,7 +53,7 @@ Before release:
 5. Compare table counts, representative whole-JMD totals, foreign keys, access grants, account links and media checksums. Confirm a test account’s role isolation and file access; verify restored private files remain private.
 6. Record the result, failures, elapsed recovery time and backup location without credentials. A completed dump is not a successful restore test. Retain the existing backup until the new recovery proof is accepted.
 
-No backup export or restoration was performed during these repairs.
+October 18: fresh private database and media export completed; isolated database/file restore checks passed. Daily hosted backups were confirmed; point-in-time recovery is not enabled. See the release receipt.
 
 ## Monitoring and routine checks
 

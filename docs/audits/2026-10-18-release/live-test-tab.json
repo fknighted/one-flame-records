@@ -1,0 +1,28 @@
+{
+  "tab": {
+    "id": "36d81cd2-0760-448b-bc7c-021640bb09de",
+    "status": "closed",
+    "total_jmd": 34,
+    "payment_method": "comp"
+  },
+  "operations": [
+    {
+      "operation": "open"
+    },
+    {
+      "operation": "custom"
+    },
+    {
+      "operation": "increment"
+    },
+    {
+      "operation": "away"
+    },
+    {
+      "operation": "reopen"
+    },
+    {
+      "operation": "close"
+    }
+  ]
+}

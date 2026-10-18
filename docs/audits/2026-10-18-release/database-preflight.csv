@@ -1,0 +1,116 @@
+BEGIN
+version,name
+20260513140946,initial_schema
+20260513154209,add_rls_policies
+20260513200000,portal_artist_select
+20260514000000,cost_limiter
+20260519000000,releases_catalog_status
+20260527000000,assets_public_flag
+20260527000001,news_posts
+20260604000000,videos_storage_url
+20260604000001,campaigns_and_image_library
+20260604000002,campaign_ideas
+20260606000001,content_pieces_news_type
+20260606000002,fan_subscribers
+20260606000003,events
+20260617000001,pos_and_gaming
+20260618000001,seed_menu_items
+20260621000001,update_menu_prices
+20260621000002,fix_rum_drinks
+20260621000003,add_campari_kingston62
+20260621000004,add_magnum_red_label
+20260621000005,add_boom
+20260621000006,inventory_and_craven
+20260621000007,add_snack_items
+20260621000008,is_bartender_flag
+20260622000001,atomic_stock_and_tab_total
+20260622175257,update_stock_quantities
+20260623000001,tab_item_quantity_rpcs
+20260623000002,pos_tabs_tip_cents
+20260623000003,gamer_balance_transactions
+20260623000004,pos_items_reorder_level
+20260625000001,bar_regulars
+20260625000002,bar_regulars_rls
+20260630000001,youtube_upload_status
+20260630000002,video_jobs_youtube
+20260702000001,pos_tabs_away_status
+20260702000002,game_sessions_pricing
+20260716000001,pos_item_costs
+20260716000002,wire_real_rum_items
+20260716000003,fever_kingston62_bottle_yield
+20260716000004,campari_fever_flask_yields
+20260716000005,menu_sections
+20260716000006,whole_bottle_items
+20260716000007,lock_privileged_columns
+20260716000008,pos_voids_and_stock_restore
+20260716000009,performance_indexes
+20260716000010,gamer_balance_and_signup_throttle
+20260717000001,admin_count_rpcs
+20260717000002,bar_sales_aggregation_rpcs
+20260809000001,money_cents_to_dollars
+nspname,proname,prosecdef,proconfig,pg_get_functiondef
+public,handle_new_user,t,{search_path=public},"CREATE OR REPLACE FUNCTION public.handle_new_user()
+ RETURNS trigger
+ LANGUAGE plpgsql
+ SECURITY DEFINER
+ SET search_path TO 'public'
+AS $function$
+declare
+  v_role text;
+begin
+  v_role := coalesce(new.raw_user_meta_data->>'role', 'artist');
+  if v_role not in ('admin', 'artist', 'bartender', 'gamer') then
+    v_role := 'artist';
+  end if;
+  insert into public.profiles (id, role)
+  values (new.id, v_role);
+  return new;
+end;
+$function$
+"
+public,is_admin,t,{search_path=public},"CREATE OR REPLACE FUNCTION public.is_admin()
+ RETURNS boolean
+ LANGUAGE sql
+ STABLE SECURITY DEFINER
+ SET search_path TO 'public'
+AS $function$
+  select exists (
+    select 1 from public.profiles
+    where id = auth.uid() and role = 'admin'
+  );
+$function$
+"
+public,is_bar_staff,t,{search_path=public},"CREATE OR REPLACE FUNCTION public.is_bar_staff()
+ RETURNS boolean
+ LANGUAGE sql
+ STABLE SECURITY DEFINER
+ SET search_path TO 'public'
+AS $function$
+  select exists (
+    select 1 from public.profiles
+    where id = auth.uid() and role in ('admin', 'bartender')
+  );
+$function$
+"
+event_object_schema,event_object_table,trigger_name,action_statement
+auth,users,on_auth_user_created,EXECUTE FUNCTION handle_new_user()
+duplicate_asset_paths
+0
+role,count
+admin,1
+bartender,3
+artist,9
+factor_type,status,count
+bucket_id,count,bytes
+public-media,8,504767560
+generated-videos,11,180975537
+private-assets,4,10785280
+id,public,file_size_limit,allowed_mime_types
+public-media,t,,
+private-assets,f,,
+generated-videos,f,,
+total,open,away
+267,17,3
+recent_business_writes
+0
+COMMIT

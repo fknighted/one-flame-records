@@ -1,0 +1,22 @@
+[
+  {
+    "file": "20261018000001_access_hardening.sql",
+    "sha256": "42327bfa923462df9e39d991945a18b989fd7cbfeb5d480ab8560787561cd77a"
+  },
+  {
+    "file": "20261018000002_atomic_bar_operations.sql",
+    "sha256": "f9237135f061dba004b62aaf67988f7a7ddf812e84feb118e62930f5d387950d"
+  },
+  {
+    "file": "20261018000003_workflow_recovery.sql",
+    "sha256": "5b392676eb2c21964e553fbe17d0802f38367feb31fddbcf1522865ff46a4449"
+  },
+  {
+    "file": "20261018000004_newsletter_delivery.sql",
+    "sha256": "b93a03ef11ea33e66ca5578a23783b8ed29142a51b6af60ce1057be385c60296"
+  },
+  {
+    "file": "20261018000005_youtube_recovery.sql",
+    "sha256": "6a7b7f98a347098695c5628f56b8c428370d6427ef2b2c4ac9c8983ee4312b81"
+  }
+]

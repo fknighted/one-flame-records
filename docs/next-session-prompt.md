@@ -1,9 +1,7 @@
 # Current brief — October 18, 2026
 
-All code-addressable recommendations from the full-site audit have local repairs. Five October 18 migrations are not applied to production. No commit, push, deployment, provider send or business-data correction occurred.
+Audit software repairs and all five migrations are live. Frank approved the release; the prepared production build was promoted, background workers resynced, live access checks passed and synthetic records were removed. Fresh database and media backups passed isolated restore checks. See [October 18 release receipt](audits/2026-10-18-release/report.md).
 
-[Repair report](audits/2026-10-18-repairs/report.md) contains the coverage map, evidence and release sequence. [Operations](operations.md) explains recovery. Current work and completion status belong only in [the delegation](</Users/frankknight/Claude OS/Delegations/fix-all-recommendations-from-the-october-18-one-flame-full-s.md>).
+The current work state belongs only in [the delegation](</Users/frankknight/Claude OS/Delegations/fix-all-recommendations-from-the-october-18-one-flame-full-s.md>). Provider delivery/source-map setup, ongoing media recovery and owner content/cost decisions are not called complete. The receipt records the Supabase organization quota warning for November 8.
 
-Keep the whole-JMD model, existing providers and Sound System design. The old Studio and gamer screens remain retired. Use Node 24. Do not follow old cents conversion or generation-job instructions in historical records.
-
-Release needs Frank’s approval, refreshed Supabase management authorization and trusted database connectivity, a current private backup and isolated restore proof, then a short maintenance window for migrations plus matching code. Owner facts and controlled provider/signed-in checks remain listed in the report. Preserve unrelated dirty continuity records and mix exports.
+Keep whole-JMD money, current providers, Sound System branding and retired Studio/gamer screens. Use Node 24. The old management CLI token is invalid; approved direct database access now verifies the official certificate. Preserve unrelated dirty continuity records and mix exports.

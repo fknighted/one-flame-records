@@ -1,0 +1,183 @@
+{
+  "checkedAt": "2026-10-18T19:16:48.584Z",
+  "pages": [
+    {
+      "route": "/",
+      "status": 200,
+      "location": null,
+      "frame": "DENY",
+      "types": "nosniff",
+      "csp": "object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'",
+      "title": "One Flame Records",
+      "errorPage": false
+    },
+    {
+      "route": "/artists",
+      "status": 200,
+      "location": null,
+      "frame": "DENY",
+      "types": "nosniff",
+      "csp": "object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'",
+      "title": "Artists — One Flame Records",
+      "errorPage": false
+    },
+    {
+      "route": "/artists/kahlic",
+      "status": 200,
+      "location": null,
+      "frame": "DENY",
+      "types": "nosniff",
+      "csp": "object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'",
+      "title": "Kahlic — One Flame Records",
+      "errorPage": false
+    },
+    {
+      "route": "/releases",
+      "status": 200,
+      "location": null,
+      "frame": "DENY",
+      "types": "nosniff",
+      "csp": "object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'",
+      "title": "Releases — One Flame Records",
+      "errorPage": false
+    },
+    {
+      "route": "/videos",
+      "status": 200,
+      "location": null,
+      "frame": "DENY",
+      "types": "nosniff",
+      "csp": "object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'",
+      "title": "Videos — One Flame Records",
+      "errorPage": false
+    },
+    {
+      "route": "/news",
+      "status": 200,
+      "location": null,
+      "frame": "DENY",
+      "types": "nosniff",
+      "csp": "object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'",
+      "title": "News — One Flame Records",
+      "errorPage": false
+    },
+    {
+      "route": "/contact",
+      "status": 200,
+      "location": null,
+      "frame": "DENY",
+      "types": "nosniff",
+      "csp": "object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'",
+      "title": "Contact — One Flame Records",
+      "errorPage": false
+    },
+    {
+      "route": "/flames-lounge",
+      "status": 200,
+      "location": null,
+      "frame": "DENY",
+      "types": "nosniff",
+      "csp": "object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'",
+      "title": "Flames Lounge — Montego Bay&#x27;s Creative Space — One Flame Records",
+      "errorPage": false
+    },
+    {
+      "route": "/privacy",
+      "status": 200,
+      "location": null,
+      "frame": "DENY",
+      "types": "nosniff",
+      "csp": "object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'",
+      "title": "Privacy Policy — One Flame Records",
+      "errorPage": false
+    },
+    {
+      "route": "/login",
+      "status": 200,
+      "location": null,
+      "frame": "DENY",
+      "types": "nosniff",
+      "csp": "object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'",
+      "title": "Sign in — One Flame Records",
+      "errorPage": false
+    },
+    {
+      "route": "/admin",
+      "status": 307,
+      "location": "/login?next=%2Fadmin",
+      "frame": "DENY",
+      "types": "nosniff",
+      "csp": "object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'",
+      "errorPage": false
+    },
+    {
+      "route": "/bar",
+      "status": 307,
+      "location": "/login?next=%2Fbar",
+      "frame": "DENY",
+      "types": "nosniff",
+      "csp": "object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'",
+      "errorPage": false
+    },
+    {
+      "route": "/portal",
+      "status": 307,
+      "location": "/login?next=%2Fportal",
+      "frame": "DENY",
+      "types": "nosniff",
+      "csp": "object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'",
+      "errorPage": false
+    },
+    {
+      "route": "/auth/portal-invite?to=https%3A%2F%2Fexample.com",
+      "status": 200,
+      "location": null,
+      "frame": "DENY",
+      "types": "nosniff",
+      "csp": "object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'",
+      "title": "One Flame Records",
+      "externalInviteLink": false,
+      "errorPage": false
+    },
+    {
+      "route": "/subscribe/confirm?token=invalid",
+      "status": 200,
+      "location": null,
+      "frame": "DENY",
+      "types": "nosniff",
+      "csp": "object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'",
+      "title": "Confirm subscription — One Flame Records",
+      "errorPage": false
+    },
+    {
+      "route": "/api/inngest",
+      "status": 401,
+      "location": null,
+      "frame": "DENY",
+      "types": "nosniff",
+      "csp": "object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'",
+      "errorPage": false
+    }
+  ],
+  "anonymousDatabase": [
+    {
+      "column": "stage_name",
+      "status": 200,
+      "rowCount": 1
+    },
+    {
+      "column": "legal_name",
+      "status": 401
+    },
+    {
+      "function": "increment_tab_total",
+      "status": 401,
+      "code": "42501"
+    },
+    {
+      "function": "decrement_pos_item_stock",
+      "status": 401,
+      "code": "42501"
+    }
+  ]
+}

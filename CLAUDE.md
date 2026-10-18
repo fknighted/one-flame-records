@@ -206,7 +206,7 @@ Full list in `.env.example`.
 
 ## Current phase
 
-October 18 audit repairs are local and reviewed; five new migrations are NOT applied to production. See `docs/next-session-prompt.md` and the delegation ledger for current release status. Use Node 24. Admin guards require a second sign-in step when a verified authenticator is enrolled. Ordinary registration always creates an artist role. Staff roles are assigned only by authorized service actions.
+October 18 audit repairs and all five migrations are released and independently checked. See `docs/audits/2026-10-18-release/report.md` for live evidence and remaining provider/content/monitoring limits. See `docs/next-session-prompt.md` and the delegation ledger for current release status. Use Node 24. Admin guards require a second sign-in step when a verified authenticator is enrolled. Ordinary registration always creates an artist role. Staff roles are assigned only by authorized service actions.
 
 ## End of session checklist
 

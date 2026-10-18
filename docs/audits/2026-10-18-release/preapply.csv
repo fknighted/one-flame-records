@@ -1,0 +1,16 @@
+BEGIN
+current_user,database_owner
+postgres,postgres
+column_name,data_type
+version,text
+statements,ARRAY
+name,text
+recent_writes
+0
+queued_worker_jobs
+0
+uploads_in_progress
+0
+uploads_in_progress
+0
+COMMIT
