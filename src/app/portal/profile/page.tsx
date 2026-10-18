@@ -32,7 +32,7 @@ export default async function PortalProfilePage() {
 
   const { data: artist, error } = await supabase
     .from("artists")
-    .select("*")
+    .select("id, stage_name, bio, photo_url, hometown, genres, socials, streaming")
     .eq("id", profile.artist_id)
     .single<ArtistRow>();
 

@@ -1,4 +1,5 @@
 "use server";
+import { invalidatePublicCatalog } from "@/lib/public-cache";
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
@@ -84,6 +85,7 @@ export async function updateNewsPost(
     return { error: `Failed to update post: ${error.message}` };
   }
 
+  invalidatePublicCatalog("news");
   revalidatePath("/admin/news");
   redirect("/admin/news");
 }

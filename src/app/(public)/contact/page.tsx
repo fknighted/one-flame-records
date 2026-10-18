@@ -3,6 +3,7 @@ import ContactForm from "@/components/ContactForm";
 import PosterHeadline from "@/components/PosterHeadline";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/contact" },
   title: "Contact",
   description:
     "Get in touch with One Flame Records — press, sync licensing, artist submissions, and general enquiries.",

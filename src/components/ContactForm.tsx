@@ -43,6 +43,7 @@ export default function ContactForm() {
         <input
           id="name"
           name="name"
+          maxLength={100}
           type="text"
           required
           autoComplete="name"
@@ -58,6 +59,7 @@ export default function ContactForm() {
         <input
           id="email"
           name="email"
+          maxLength={254}
           type="email"
           required
           autoComplete="email"
@@ -90,6 +92,7 @@ export default function ContactForm() {
         <textarea
           id="message"
           name="message"
+          maxLength={5000}
           required
           rows={6}
           className={`${FIELD_CLASS} py-2.5 resize-none`}

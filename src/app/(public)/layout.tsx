@@ -14,8 +14,9 @@ export default function PublicLayout({
       {/* Three-tone photo print filters, used by print-yellow / print-red */}
       <PrintFilters />
 
+      <a href="#main-content" className="sr-only focus:not-sr-only focus:block focus:bg-paper focus:text-black focus:p-4">Skip to main content</a>
       <PublicHeader />
-      <main className="flex-1">{children}</main>
+      <main id="main-content" tabIndex={-1} className="flex-1">{children}</main>
       <PublicFooter />
     </div>
   );

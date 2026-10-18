@@ -1,4 +1,5 @@
 "use server";
+import { invalidatePublicCatalog } from "@/lib/public-cache";
 
 import { revalidatePath } from "next/cache";
 import { createServiceClient } from "@/lib/supabase/server";
@@ -6,66 +7,19 @@ import { requireAdmin } from "@/lib/auth";
 
 export type AssetActionState = { error: string } | null;
 
-const AUDIO_KINDS = ["instrumental", "demo"];
-const VALID_KINDS = ["instrumental", "demo", "reference_video", "reference_image"];
-
-export async function uploadAssetForArtist(
-  artistId: string,
-  _prev: AssetActionState,
-  formData: FormData
-): Promise<AssetActionState> {
-  await requireAdmin();
-  const kind = (formData.get("kind") as string) ?? "";
-  const title = ((formData.get("title") as string) ?? "").trim();
-  const notes = ((formData.get("notes") as string) ?? "").trim() || null;
-  const file = formData.get("file") as File | null;
-
-  if (!VALID_KINDS.includes(kind)) return { error: "Invalid asset kind." };
-  if (!title) return { error: "Title is required." };
-  if (!file || file.size === 0) return { error: "Please select a file." };
-  if (file.size > 10 * 1024 * 1024) return { error: "File must be under 10 MB." };
-
-  const ext = file.name.split(".").pop()?.toLowerCase() ?? "bin";
-  const storagePath = `${artistId}/${crypto.randomUUID()}.${ext}`;
-  const buffer = await file.arrayBuffer();
-
-  const supabase = createServiceClient();
-
-  const { error: storageError } = await supabase.storage
-    .from("private-assets")
-    .upload(storagePath, buffer, { contentType: file.type, upsert: false });
-
-  if (storageError) return { error: `Upload failed: ${storageError.message}` };
-
-  let durationSeconds: number | null = null;
-  if (AUDIO_KINDS.includes(kind)) {
-    try {
-      const { parseBuffer } = await import("music-metadata");
-      const meta = await parseBuffer(new Uint8Array(buffer), { mimeType: file.type });
-      durationSeconds = meta.format.duration != null ? Math.round(meta.format.duration) : null;
-    } catch {
-      // Non-fatal — leave duration null
-    }
-  }
-
-  const { error: dbError } = await supabase.from("assets").insert({
-    artist_id: artistId,
-    kind,
-    title,
-    notes,
-    storage_path: storagePath,
-    mime_type: file.type,
-    size_bytes: file.size,
-    duration_seconds: durationSeconds,
-  });
-
-  if (dbError) {
-    await supabase.storage.from("private-assets").remove([storagePath]);
-    return { error: `Failed to save asset: ${dbError.message}` };
-  }
-
-  revalidatePath(`/admin/artists/${artistId}/assets`);
-  return null;
+import { verifyUpload } from "@/lib/uploads/verify";
+import { deleteStoredAsset } from "@/lib/uploads/delete";
+import { currentUserId } from "@/lib/auth";
+export async function uploadAssetForArtist(artistId: string, _prev: AssetActionState, data: FormData): Promise<AssetActionState> {
+ await requireAdmin(); const owner=await currentUserId(); if(!owner) return {error:"Not authenticated."};
+ const title=String(data.get("title")??"").trim(); const notes=String(data.get("notes")??"").trim();
+ if(!title || title.length>200 || notes.length>5000) return {error:"Enter a title up to 200 characters and notes up to 5,000 characters."};
+ try {
+  const {upload}=await verifyUpload(String(data.get("upload_id")??""),owner,artistId,"asset");
+  const {error}=await createServiceClient().rpc("finalize_asset_upload",{p_upload:upload.id,p_owner:owner,p_title:title,p_notes:notes||null,p_duration:null});
+  if(error) return {error:error.message};
+ }catch(error){return {error:error instanceof Error?error.message:"Upload could not be saved."};}
+ revalidatePath(`/admin/artists/${artistId}/assets`);return null;
 }
 
 export async function toggleAssetPublic(assetId: string, _formData: FormData): Promise<void> {
@@ -84,6 +38,7 @@ export async function toggleAssetPublic(assetId: string, _formData: FormData): P
     .update({ is_public: !asset.is_public })
     .eq("id", assetId);
 
+  invalidatePublicCatalog("artist");
   revalidatePath(`/admin/artists/${asset.artist_id}/assets`);
 }
 
@@ -97,8 +52,9 @@ export async function deleteAsset(assetId: string, _formData: FormData): Promise
     .single();
 
   if (asset) {
-    await supabase.storage.from("private-assets").remove([asset.storage_path]);
-    await supabase.from("assets").delete().eq("id", assetId);
-    revalidatePath(`/admin/artists/${asset.artist_id}/assets`);
+    const result = await deleteStoredAsset(assetId,asset.artist_id);
+    if(result) throw new Error(result.error);
+    invalidatePublicCatalog("artist");
+  revalidatePath(`/admin/artists/${asset.artist_id}/assets`);
   }
 }

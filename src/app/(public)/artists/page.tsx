@@ -4,6 +4,7 @@ import SectionHeader from "@/components/SectionHeader";
 import EmptyState from "@/components/EmptyState";
 
 export const metadata = {
+  alternates: { canonical: "/artists" },
   title: "Artists",
   description:
     "The full One Flame Records roster — reggae and dancehall artists from Montego Bay, Jamaica.",

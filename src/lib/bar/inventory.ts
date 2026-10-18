@@ -17,6 +17,7 @@ import { createServiceClient } from "@/lib/supabase/server";
  */
 export type StockPurchaseInput = {
   itemId: string;
+  requestId: string;
   addedBy: string | null;
   note?: string | null;
 } & (
@@ -38,7 +39,7 @@ export async function applyStockPurchase(input: StockPurchaseInput): Promise<Sto
   if (input.mode === "bottle") {
     const { containers: c, containerCostJmd: cc, bottleYield } = input;
     if (!Number.isInteger(c) || c <= 0) return { ok: false, error: "Enter how many bottles (at least 1)." };
-    if (!Number.isFinite(cc) || cc < 0) return { ok: false, error: "Enter the bottle cost." };
+    if (!Number.isSafeInteger(cc) || cc < 0) return { ok: false, error: "Enter the bottle cost." };
     if (!Number.isInteger(bottleYield) || bottleYield <= 0) return { ok: false, error: "This item has no bottle yield set." };
     quantityAdded = c * bottleYield;
     unitCostJmd = Math.round(cc / bottleYield);
@@ -48,34 +49,22 @@ export async function applyStockPurchase(input: StockPurchaseInput): Promise<Sto
   } else {
     const { quantity, unitCostJmd: uc } = input;
     if (!Number.isInteger(quantity) || quantity <= 0) return { ok: false, error: "Enter how many units (at least 1)." };
-    if (!Number.isFinite(uc) || uc < 0) return { ok: false, error: "Enter the unit cost." };
+    if (!Number.isSafeInteger(uc) || uc < 0) return { ok: false, error: "Enter the unit cost." };
     quantityAdded = quantity;
     unitCostJmd = uc;
     totalCostJmd = quantity * uc;
   }
 
+  if (!Number.isSafeInteger(quantityAdded) || quantityAdded>2147483647 || !Number.isSafeInteger(totalCostJmd) || totalCostJmd>2147483647 || unitCostJmd>2147483647 || (input.note?.length??0)>500) return {ok:false,error:"Purchase values are too large."};
   const supabase = createServiceClient();
 
-  const { data: newStock, error: rpcError } = await supabase.rpc("add_pos_item_stock", {
-    p_item_id: input.itemId,
-    p_qty: quantityAdded,
-    p_unit_cost_jmd: unitCostJmd,
+  if (!input.addedBy) return { ok: false, error: "Not authenticated." };
+  const { data: newStock, error: rpcError } = await supabase.rpc("bar_record_purchase", {
+    p_request_id: input.requestId, p_actor: input.addedBy, p_item_id: input.itemId,
+    p_qty: quantityAdded, p_unit_cost: unitCostJmd, p_total_cost: totalCostJmd,
+    p_containers: containers, p_container_cost: containerCostJmd, p_note: input.note ?? null,
   });
-
   if (rpcError) return { ok: false, error: rpcError.message };
-
-  // Ledger row is best-effort — the stock is already added; a failed insert
-  // should not roll back the addition, but we surface nothing extra to the user.
-  await supabase.from("pos_stock_purchases").insert({
-    pos_item_id: input.itemId,
-    quantity_added: quantityAdded,
-    unit_cost_jmd: unitCostJmd,
-    total_cost_jmd: totalCostJmd,
-    containers,
-    container_cost_jmd: containerCostJmd,
-    added_by: input.addedBy,
-    note: input.note ?? null,
-  });
 
   return { ok: true, quantityAdded, unitCostJmd, newStock: newStock ?? 0 };
 }

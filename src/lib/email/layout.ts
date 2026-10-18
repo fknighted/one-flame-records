@@ -1,3 +1,4 @@
+import { escapeHtml } from "./escape";
 /**
  * Sound System email layout, shared by every email the app sends.
  *
@@ -79,7 +80,7 @@ export function emailLayout(opts: EmailLayoutOptions): string {
   const { title, heading, body, footerHtml } = opts;
 
   const headingBlock = heading
-    ? `<h1 style="margin:0;font-family:${EMAIL_FONT_HEADLINE};font-size:38px;line-height:40px;font-weight:900;text-transform:uppercase;letter-spacing:0.01em;color:${C.black};">${heading}</h1>
+    ? `<h1 style="margin:0;font-family:${EMAIL_FONT_HEADLINE};font-size:38px;line-height:40px;font-weight:900;text-transform:uppercase;letter-spacing:0.01em;color:${C.black};">${escapeHtml(heading)}</h1>
           <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="72" style="margin:14px 0 24px;">
             <tr><td height="6" bgcolor="${C.red}" style="height:6px;line-height:6px;font-size:0;background-color:${C.red};">&nbsp;</td></tr>
           </table>`

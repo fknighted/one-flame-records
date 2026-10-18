@@ -54,13 +54,14 @@ async function main() {
     assert(!/\/admin\/(?:ai-studio|campaigns|jobs)|Draft with Claude|Generate with AI|from ["'](?:openai|@anthropic-ai\/sdk)/.test(text),`${file}: studio tool remains`);
   }
   const route=load('src/app/api/inngest/route.ts',{
-    'inngest/next':{serve:({functions})=>{assert.deepEqual(functions,['hello','youtube']);return {GET:true,POST:true,PUT:true};}},
+    'inngest/next':{serve:({functions})=>{assert.deepEqual(functions,['hello','youtube','cleanup']);return {GET:true,POST:true,PUT:true};}},
     '@/lib/inngest/client':{inngest:{}},
+    '@/lib/inngest/functions/storage-cleanup':{storageCleanup:'cleanup'},
     '@/lib/inngest/functions/hello':{helloWorld:'hello'},
     '@/lib/inngest/functions/upload-to-youtube':{uploadToYoutubeJob:'youtube'},
   });
   assert(route.GET);
-  console.log('PASS: studio pages/actions/providers/events/navigation absent; retired request routes redirect; only shared YouTube and hello workers registered.');
+  console.log('PASS: studio pages/actions/providers/events/navigation absent; retired request routes redirect; only shared YouTube, hello and storage-cleanup workers registered.');
 
 }
 main().catch(error=>{console.error(error);process.exitCode=1;});

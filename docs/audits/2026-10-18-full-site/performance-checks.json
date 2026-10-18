@@ -1,0 +1,296 @@
+{
+  "lcp_ms": {
+    "query": {
+      "metric": "vercel.speed_insights.lcp_ms",
+      "aggregation": "p75",
+      "groupBy": [
+        "device_type"
+      ],
+      "startTime": "2026-10-11T18:17:46.186Z",
+      "endTime": "2026-10-18T18:17:46.186Z",
+      "granularity": {
+        "hours": 4
+      },
+      "orderBy": "count",
+      "orderDirection": "desc"
+    },
+    "summary": [
+      {
+        "vercel_speed_insights_lcp_ms_p75": 564,
+        "device_type": "desktop"
+      },
+      {
+        "vercel_speed_insights_lcp_ms_p75": 1647,
+        "device_type": "mobile"
+      }
+    ]
+  },
+  "inp_ms": {
+    "query": {
+      "metric": "vercel.speed_insights.inp_ms",
+      "aggregation": "p75",
+      "groupBy": [
+        "device_type"
+      ],
+      "startTime": "2026-10-11T18:17:46.231Z",
+      "endTime": "2026-10-18T18:17:46.231Z",
+      "granularity": {
+        "hours": 4
+      },
+      "orderBy": "count",
+      "orderDirection": "desc"
+    },
+    "summary": [
+      {
+        "vercel_speed_insights_inp_ms_p75": 40,
+        "device_type": "desktop"
+      },
+      {
+        "vercel_speed_insights_inp_ms_p75": 24,
+        "device_type": "mobile"
+      }
+    ]
+  },
+  "cls": {
+    "query": {
+      "metric": "vercel.speed_insights.cls",
+      "aggregation": "p75",
+      "groupBy": [
+        "device_type"
+      ],
+      "startTime": "2026-10-11T18:17:46.317Z",
+      "endTime": "2026-10-18T18:17:46.317Z",
+      "granularity": {
+        "hours": 4
+      },
+      "orderBy": "count",
+      "orderDirection": "desc"
+    },
+    "summary": [
+      {
+        "vercel_speed_insights_cls_p75": 0,
+        "device_type": "desktop"
+      },
+      {
+        "vercel_speed_insights_cls_p75": 0,
+        "device_type": "mobile"
+      }
+    ]
+  },
+  "lcp_count": {
+    "query": {
+      "metric": "vercel.speed_insights.lcp_count",
+      "aggregation": "sum",
+      "groupBy": [
+        "device_type"
+      ],
+      "startTime": "2026-10-11T18:17:46.215Z",
+      "endTime": "2026-10-18T18:17:46.215Z",
+      "granularity": {
+        "hours": 4
+      },
+      "orderBy": "count",
+      "orderDirection": "desc"
+    },
+    "summary": [
+      {
+        "vercel_speed_insights_lcp_count_sum": 10,
+        "device_type": "desktop"
+      },
+      {
+        "vercel_speed_insights_lcp_count_sum": 6,
+        "device_type": "mobile"
+      }
+    ]
+  },
+  "inp_count": {
+    "query": {
+      "metric": "vercel.speed_insights.inp_count",
+      "aggregation": "sum",
+      "groupBy": [
+        "device_type"
+      ],
+      "startTime": "2026-10-11T18:19:23.710Z",
+      "endTime": "2026-10-18T18:19:23.710Z",
+      "granularity": {
+        "hours": 4
+      },
+      "orderBy": "count",
+      "orderDirection": "desc"
+    },
+    "summary": [
+      {
+        "vercel_speed_insights_inp_count_sum": 2,
+        "device_type": "desktop"
+      },
+      {
+        "vercel_speed_insights_inp_count_sum": 4,
+        "device_type": "mobile"
+      }
+    ]
+  },
+  "cls_count": {
+    "query": {
+      "metric": "vercel.speed_insights.cls_count",
+      "aggregation": "sum",
+      "groupBy": [
+        "device_type"
+      ],
+      "startTime": "2026-10-11T18:19:25.605Z",
+      "endTime": "2026-10-18T18:19:25.605Z",
+      "granularity": {
+        "hours": 4
+      },
+      "orderBy": "count",
+      "orderDirection": "desc"
+    },
+    "summary": [
+      {
+        "vercel_speed_insights_cls_count_sum": 11,
+        "device_type": "desktop"
+      },
+      {
+        "vercel_speed_insights_cls_count_sum": 5,
+        "device_type": "mobile"
+      }
+    ]
+  },
+  "ttfb": {
+    "query": {
+      "metric": "vercel.function_invocation.ttfb_ms",
+      "aggregation": "p75",
+      "groupBy": [
+        "route"
+      ],
+      "startTime": "2026-10-11T18:17:23.661Z",
+      "endTime": "2026-10-18T18:17:23.661Z",
+      "granularity": {
+        "hours": 4
+      },
+      "orderBy": "count",
+      "orderDirection": "desc"
+    },
+    "summary": [
+      {
+        "route": "/",
+        "vercel_function_invocation_ttfb_ms_p75": 846
+      },
+      {
+        "route": "/releases",
+        "vercel_function_invocation_ttfb_ms_p75": 114
+      },
+      {
+        "route": "/videos",
+        "vercel_function_invocation_ttfb_ms_p75": 297
+      },
+      {
+        "route": "/news",
+        "vercel_function_invocation_ttfb_ms_p75": 263
+      },
+      {
+        "route": "/search",
+        "vercel_function_invocation_ttfb_ms_p75": 110
+      },
+      {
+        "route": "/flames-lounge",
+        "vercel_function_invocation_ttfb_ms_p75": 686
+      },
+      {
+        "route": "/artists",
+        "vercel_function_invocation_ttfb_ms_p75": 697
+      },
+      {
+        "route": "/artists/twiggy",
+        "vercel_function_invocation_ttfb_ms_p75": 842
+      },
+      {
+        "route": "/artists/fola-boss",
+        "vercel_function_invocation_ttfb_ms_p75": 368
+      },
+      {
+        "route": "/artists/layshaunex",
+        "vercel_function_invocation_ttfb_ms_p75": 615
+      }
+    ]
+  },
+  "request-status": {
+    "query": {
+      "metric": "vercel.request.count",
+      "aggregation": "sum",
+      "groupBy": [
+        "http_status"
+      ],
+      "startTime": "2026-10-11T18:17:49.402Z",
+      "endTime": "2026-10-18T18:17:49.402Z",
+      "granularity": {
+        "hours": 4
+      },
+      "orderBy": "count",
+      "orderDirection": "desc"
+    },
+    "summary": [
+      {
+        "vercel_request_count_sum": 1234,
+        "http_status": "200"
+      },
+      {
+        "vercel_request_count_sum": 455,
+        "http_status": "307"
+      },
+      {
+        "vercel_request_count_sum": 92,
+        "http_status": "404"
+      },
+      {
+        "vercel_request_count_sum": 32,
+        "http_status": "403"
+      },
+      {
+        "vercel_request_count_sum": 17,
+        "http_status": "304"
+      },
+      {
+        "vercel_request_count_sum": 8,
+        "http_status": "206"
+      },
+      {
+        "vercel_request_count_sum": 8,
+        "http_status": "308"
+      },
+      {
+        "vercel_request_count_sum": 3,
+        "http_status": "405"
+      },
+      {
+        "vercel_request_count_sum": 2,
+        "http_status": "202"
+      },
+      {
+        "vercel_request_count_sum": 1,
+        "http_status": "421"
+      }
+    ]
+  },
+  "speed-environment": {
+    "query": {
+      "metric": "vercel.speed_insights.lcp_ms",
+      "aggregation": "p75",
+      "groupBy": [
+        "environment"
+      ],
+      "startTime": "2026-10-11T18:18:16.629Z",
+      "endTime": "2026-10-18T18:18:16.629Z",
+      "granularity": {
+        "hours": 4
+      },
+      "orderBy": "count",
+      "orderDirection": "desc"
+    },
+    "summary": [
+      {
+        "environment": "production",
+        "vercel_speed_insights_lcp_ms_p75": 952
+      }
+    ]
+  }
+}

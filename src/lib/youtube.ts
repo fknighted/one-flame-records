@@ -23,9 +23,12 @@ export async function uploadToYouTube({
 }): Promise<string> {
   const youtube = getYouTubeClient();
 
-  const response = await fetch(videoUrl);
+  const source=new URL(videoUrl);
+  const storage=new URL(process.env.NEXT_PUBLIC_SUPABASE_URL!);
+  if(source.protocol!=="https:" || source.origin!==storage.origin || !/^\/storage\/v1\/object\/(?:public\/public-media|sign\/generated-videos)\/videos\//.test(source.pathname)) throw new Error("Video must come from this label’s media storage.");
+  const response = await fetch(source,{redirect:"error"});
   if (!response.ok || !response.body) {
-    throw new Error(`Failed to fetch video for YouTube upload (${response.status}): ${videoUrl}`);
+    throw new Error(`Failed to fetch video for YouTube upload (${response.status})`);
   }
 
   // Stream the video bytes directly to YouTube's resumable upload API.

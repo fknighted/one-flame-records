@@ -3,7 +3,8 @@ import type { Metadata } from "next";
 import PosterHeadline from "@/components/PosterHeadline";
 
 export const metadata: Metadata = {
-  title: "Terms of Service — One Flame Records",
+  alternates: { canonical: "/terms" },
+  title: "Terms of Service",
   robots: { index: false, follow: false },
 };
 

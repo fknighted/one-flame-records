@@ -1,0 +1,121 @@
+{
+  "checkedAt": "2026-10-18T18:14:22.757Z",
+  "probes": "Anonymous function calls use NULL row identifiers; no existing row can match.",
+  "authSettings": {
+    "disable_signup": false,
+    "mailer_autoconfirm": false,
+    "external_email": true
+  },
+  "rpc": {
+    "increment_tab_total": {
+      "status": 204,
+      "error": null,
+      "result": null
+    },
+    "decrement_tab_total": {
+      "status": 204,
+      "error": null,
+      "result": null
+    },
+    "increment_tab_item_quantity": {
+      "status": 204,
+      "error": null,
+      "result": null
+    },
+    "decrement_tab_item_quantity": {
+      "status": 204,
+      "error": null,
+      "result": null
+    },
+    "decrement_pos_item_stock": {
+      "status": 200,
+      "error": null,
+      "result": false
+    },
+    "decrement_pos_item_stock_by": {
+      "status": 200,
+      "error": null,
+      "result": false
+    },
+    "increment_pos_item_stock_by": {
+      "status": 200,
+      "error": null,
+      "result": false
+    },
+    "adjust_member_minutes": {
+      "status": 200,
+      "error": null,
+      "result": null
+    },
+    "add_pos_item_stock": {
+      "status": 400,
+      "error": "add_pos_item_stock: item <NULL> not found",
+      "result": null
+    }
+  },
+  "anonymous_profiles": {
+    "status": 200,
+    "count": 0,
+    "error": null
+  },
+  "anonymous_signup_applications": {
+    "status": 200,
+    "count": 0,
+    "error": null
+  },
+  "anonymous_pos_tabs": {
+    "status": 200,
+    "count": 0,
+    "error": null
+  },
+  "anonymous_bar_regulars": {
+    "status": 200,
+    "count": 0,
+    "error": null
+  },
+  "anonymous_fan_subscribers": {
+    "status": 200,
+    "count": 0,
+    "error": null
+  },
+  "publicArtistLegalNames": {
+    "status": 200,
+    "rows": 9,
+    "nonemptyLegalNames": 8,
+    "error": null
+  },
+  "menuCosts": {
+    "status": 200,
+    "active": 55,
+    "activeMissingCost": 36
+  },
+  "tabIntegrity": {
+    "tabCount": 267,
+    "rowsRead": 267,
+    "lineCount": 469,
+    "lineRowsRead": 469,
+    "mismatchCount": 0,
+    "openOrAway": 20,
+    "oldestOpenDate": "2026-06-22T22:02:07.436203+00:00"
+  },
+  "storage": [
+    {
+      "name": "public-media",
+      "public": true,
+      "file_size_limit": null,
+      "allowed_mime_types": null
+    },
+    {
+      "name": "private-assets",
+      "public": false,
+      "file_size_limit": null,
+      "allowed_mime_types": null
+    },
+    {
+      "name": "generated-videos",
+      "public": false,
+      "file_size_limit": null,
+      "allowed_mime_types": null
+    }
+  ]
+}

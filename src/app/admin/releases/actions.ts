@@ -1,4 +1,5 @@
 "use server";
+import { invalidatePublicCatalog } from "@/lib/public-cache";
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
@@ -88,6 +89,7 @@ export async function createRelease(
     return { error: `Failed to create release: ${error.message}` };
   }
 
+  invalidatePublicCatalog("release");
   revalidatePath("/admin/releases");
   redirect("/admin/releases");
 }
@@ -96,6 +98,7 @@ export async function deleteRelease(releaseId: string): Promise<void> {
   await requireAdmin();
   const supabase = createServiceClient();
   await supabase.from("releases").delete().eq("id", releaseId);
+  invalidatePublicCatalog("release");
   revalidatePath("/admin/releases");
 }
 
@@ -136,6 +139,7 @@ export async function updateRelease(
     return { error: `Failed to update release: ${error.message}` };
   }
 
+  invalidatePublicCatalog("release");
   revalidatePath("/admin/releases");
   redirect("/admin/releases");
 }

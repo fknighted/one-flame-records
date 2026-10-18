@@ -72,9 +72,9 @@ export default function LoginPage() {
             className="h-32 w-auto mx-auto mb-5"
             priority
           />
-          <p className="text-[15px] text-muted">
+          <h1 className="text-[15px] text-muted">
             {view === "login" ? "Sign in to continue" : "Reset password"}
-          </p>
+          </h1>
         </div>
 
         {view === "login" ? (

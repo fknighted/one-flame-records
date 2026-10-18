@@ -1,0 +1,91 @@
+[
+  {
+    "canonical": "https://www.oneflamerecords.com/",
+    "h1": [
+      "Pressed in Montego Bay."
+    ],
+    "mainCount": 1,
+    "path": "/",
+    "scrollWidth": 375,
+    "title": "One Flame Records",
+    "width": 390
+  },
+  {
+    "canonical": "https://www.oneflamerecords.com/artists/kahlic",
+    "h1": [
+      "Kahlic"
+    ],
+    "mainCount": 1,
+    "path": "/artists/kahlic",
+    "scrollWidth": 375,
+    "title": "Kahlic \u2014 One Flame Records",
+    "width": 390,
+    "note": "Verified after waiting for the artist heading; initial measurement caught the loading shell."
+  },
+  {
+    "canonical": "https://www.oneflamerecords.com/releases",
+    "h1": [
+      "Releases"
+    ],
+    "mainCount": 1,
+    "path": "/releases",
+    "scrollWidth": 375,
+    "title": "Releases \u2014 One Flame Records",
+    "width": 390
+  },
+  {
+    "canonical": "https://www.oneflamerecords.com/videos",
+    "h1": [
+      "Videos"
+    ],
+    "mainCount": 1,
+    "path": "/videos",
+    "scrollWidth": 375,
+    "title": "Videos \u2014 One Flame Records",
+    "width": 390
+  },
+  {
+    "canonical": "https://www.oneflamerecords.com/news",
+    "h1": [
+      "News"
+    ],
+    "mainCount": 1,
+    "path": "/news",
+    "scrollWidth": 375,
+    "title": "News \u2014 One Flame Records",
+    "width": 390
+  },
+  {
+    "canonical": "https://www.oneflamerecords.com/search",
+    "h1": [
+      "Search"
+    ],
+    "mainCount": 1,
+    "path": "/search",
+    "scrollWidth": 375,
+    "title": "Search \u2014 One Flame Records",
+    "width": 390
+  },
+  {
+    "canonical": "https://www.oneflamerecords.com/privacy",
+    "h1": [
+      "Privacy Policy"
+    ],
+    "mainCount": 1,
+    "path": "/privacy",
+    "scrollWidth": 375,
+    "title": "Privacy Policy \u2014 One Flame Records",
+    "width": 390
+  },
+  {
+    "canonical": null,
+    "h1": [
+      "Verify your sign-in"
+    ],
+    "mainCount": 1,
+    "path": "/auth/mfa",
+    "scrollWidth": 390,
+    "title": "One Flame Records",
+    "width": 390
+  }
+]

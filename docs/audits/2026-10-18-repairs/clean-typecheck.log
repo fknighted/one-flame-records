@@ -1,0 +1,4 @@
+Running: node_modules/.bin/next typegen
+Generating route types...
+✓ Types generated successfully
+Running: node_modules/.bin/tsc --noEmit

@@ -39,6 +39,19 @@ export type Database = {
   }
   public: {
     Tables: {
+      youtube_upload_requests: { Row: { source:string;record_id:string;request_id:string;status:string;youtube_id:string|null;created_at:string }; Insert: { source:string;record_id:string;request_id?:string;status?:string;youtube_id?:string|null;created_at?:string }; Update: { request_id?:string;status?:string;youtube_id?:string|null }; Relationships:[] }
+
+      newsletter_deliveries: { Row: { run_id: string; subscriber_id: string; email: string; status: string; first_attempt_at: string | null; claimed_at: string | null; provider_id: string | null }; Insert: { run_id?: string; subscriber_id?: string; email?: string; status?: string; first_attempt_at?: string | null; claimed_at?: string | null; provider_id?: string | null }; Update: { run_id?: string; subscriber_id?: string; email?: string; status?: string; first_attempt_at?: string | null; claimed_at?: string | null; provider_id?: string | null }; Relationships: [] }
+
+      newsletter_runs: { Row: { id: string; subject: string; body: string; created_by: string; created_at: string }; Insert: { id?: string; subject?: string; body?: string; created_by?: string; created_at?: string }; Update: { id?: string; subject?: string; body?: string; created_by?: string; created_at?: string }; Relationships: [] }
+
+      newsletter_confirmations: { Row: { email: string; token_hash: string; expires_at: string }; Insert: { email?: string; token_hash?: string; expires_at?: string }; Update: { email?: string; token_hash?: string; expires_at?: string }; Relationships: [] }
+
+      upload_reservations: { Row: { id: string; owner_id: string; artist_id: string; purpose: string; kind: string; bucket: string; path: string; mime_type: string; size_bytes: number; expires_at: string }; Insert: { id?: string; owner_id?: string; artist_id?: string; purpose?: string; kind?: string; bucket?: string; path?: string; mime_type?: string; size_bytes?: number; expires_at?: string }; Update: { id?: string; owner_id?: string; artist_id?: string; purpose?: string; kind?: string; bucket?: string; path?: string; mime_type?: string; size_bytes?: number; expires_at?: string }; Relationships: [] }
+
+      storage_cleanup_queue: { Row: { id: string; bucket: string; path: string; created_at: string }; Insert: { id?: string; bucket?: string; path?: string; created_at?: string }; Update: { id?: string; bucket?: string; path?: string; created_at?: string }; Relationships: [] }
+
+
       ai_generated_images: {
         Row: {
           created_at: string
@@ -958,6 +971,9 @@ export type Database = {
       }
       signup_applications: {
         Row: {
+          approval_lease_until: string | null
+          provisioned_user_id: string | null
+          provisioned_artist_id: string | null
           code_id: string
           created_at: string
           email: string
@@ -974,6 +990,9 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          approval_lease_until?: string | null
+          provisioned_user_id?: string | null
+          provisioned_artist_id?: string | null
           code_id: string
           created_at?: string
           email: string
@@ -990,6 +1009,9 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          approval_lease_until?: string | null
+          provisioned_user_id?: string | null
+          provisioned_artist_id?: string | null
           code_id?: string
           created_at?: string
           email?: string
@@ -1189,6 +1211,29 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      newsletter_progress: { Args:{p_actor:string;p_run?:string|null}; Returns:{run_id:string;subject:string;created_at:string;sent:number;remaining:number;uncertain:number}[] }
+
+      bar_open_tab: { Args:{p_request_id:string;p_actor:string;p_name:string;p_notes:string|null;p_regular:string|null}; Returns:string }
+      bar_save_regular: { Args:{p_tab:string}; Returns:string }
+
+      finalize_asset_upload: { Args: {p_upload:string;p_owner:string;p_title:string;p_notes:string|null;p_duration:number|null}; Returns:string }
+
+      claim_youtube_upload: { Args: {p_source:string;p_id:string}; Returns:string }
+
+      confirm_newsletter: { Args: {p_email:string;p_hash:string}; Returns:boolean }
+      prepare_newsletter: { Args: {p_id:string;p_subject:string;p_body:string;p_actor:string}; Returns:undefined }
+      claim_newsletter_batch: { Args: {p_id:string}; Returns: Database["public"]["Tables"]["newsletter_deliveries"]["Row"][] }
+
+      delete_asset_record: { Args: { p_id: string; p_artist: string }; Returns: undefined }
+      claim_application: { Args: { p_id: string }; Returns: Json }
+      finish_application: { Args: { p_id: string; p_user: string; p_admin: string }; Returns: undefined }
+      consume_form_limit: { Args: { p_key: string; p_limit: number; p_window_seconds: number }; Returns: boolean }
+      submit_artist_application: { Args: { p_data: Json }; Returns: string | null }
+
+      bar_apply_operation: { Args: { p_request_id: string; p_actor: string; p_tab_id: string; p_operation: string; p_payload: Json }; Returns: undefined }
+      bar_record_purchase: { Args: { p_request_id: string; p_actor: string; p_item_id: string; p_qty: number; p_unit_cost: number; p_total_cost: number; p_containers: number | null; p_container_cost: number | null; p_note: string | null }; Returns: number }
+
+
       add_pos_item_stock: {
         Args: { p_item_id: string; p_qty: number; p_unit_cost_jmd: number }
         Returns: number

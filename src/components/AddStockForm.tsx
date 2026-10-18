@@ -1,4 +1,5 @@
 "use client";
+import { useRetryableAction } from "@/lib/retryable-action";
 
 import { useActionState, useId, useMemo, useState } from "react";
 import { formatJmd } from "@/lib/bar/pos";
@@ -30,7 +31,7 @@ export default function AddStockForm({
   action: (state: ActionState, formData: FormData) => Promise<ActionState>;
   targets: StockTarget[];
 }) {
-  const [state, formAction, pending] = useActionState(action, null);
+  const [state, formAction, pending] = useActionState(useRetryableAction(action), null);
   const uid = useId();
 
   const [targetId, setTargetId] = useState(targets[0]?.id ?? "");

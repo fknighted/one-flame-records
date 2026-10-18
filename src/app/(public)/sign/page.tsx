@@ -6,6 +6,7 @@ import SectionHeader from "@/components/SectionHeader";
 import GrilleBand from "@/components/GrilleBand";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/sign" },
   title: "Sign with One Flame Records",
   description:
     "One Flame Records is looking for artists who have something real to say. Roots reggae, dancehall, and conscious music from Montego Bay.",

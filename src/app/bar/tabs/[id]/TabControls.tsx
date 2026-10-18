@@ -1,4 +1,5 @@
 "use client";
+import { useRetryableAction } from "@/lib/retryable-action";
 
 import { useActionState, useState } from "react";
 import { closeTab, voidTab, markTabAway, reopenTab } from "./actions";
@@ -16,10 +17,10 @@ export default function TabControls({ tabId, total, tabName, status }: Props) {
   const [showClose,   setShowClose]   = useState(false);
   const [showVoid,    setShowVoid]    = useState(false);
   const [tipInput,  setTipInput]  = useState("");
-  const [closeState, closeAction, closePending] = useActionState(closeTab, null);
-  const [voidState,  voidAction,  voidPending]  = useActionState(voidTab, null);
-  const [awayState,  awayAction,  awayPending]  = useActionState(markTabAway, null);
-  const [reopenState, reopenAction, reopenPending] = useActionState(reopenTab, null);
+  const [closeState, closeAction, closePending] = useActionState(useRetryableAction(closeTab), null);
+  const [voidState,  voidAction,  voidPending]  = useActionState(useRetryableAction(voidTab), null);
+  const [awayState,  awayAction,  awayPending]  = useActionState(useRetryableAction(markTabAway), null);
+  const [reopenState, reopenAction, reopenPending] = useActionState(useRetryableAction(reopenTab), null);
 
   // Tips are whole dollars, same as every other amount — no conversion.
   const tipJmd     = Math.max(0, Math.round(Number(tipInput || "0")));
@@ -30,7 +31,7 @@ export default function TabControls({ tabId, total, tabName, status }: Props) {
       <form action={voidAction} className="space-y-3">
         <input type="hidden" name="tab_id" value={tabId} />
         <p className="text-[15px] text-muted text-center">
-          Void this tab? All items will be removed and no payment recorded.
+          Void this tab? No payment will be recorded. Stock will be restored and the cancellation kept in the records.
         </p>
         {voidState?.error && (
           <p role="alert" className="studio-error text-center">{voidState.error}</p>

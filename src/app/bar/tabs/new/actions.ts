@@ -22,14 +22,10 @@ export async function openTab(
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
 
-  const serviceClient = createServiceClient();
-  const { data: tab, error } = await serviceClient
-    .from("pos_tabs")
-    .insert({ name, notes, opened_by: user?.id ?? null, regular_id: regularId })
-    .select("id")
-    .single();
-
-  if (error || !tab) return { error: `Failed to open tab: ${error?.message ?? "unknown"}` };
-
-  redirect(`/bar/tabs/${tab.id}`);
+  if(!user)return {error:"Not authenticated."};
+  const requestId=String(formData.get("request_id")??"");
+  if(!requestId)return {error:"Refresh this page before opening a tab."};
+  const {data:tabId,error}=await createServiceClient().rpc("bar_open_tab",{p_request_id:requestId,p_actor:user.id,p_name:name,p_notes:notes,p_regular:regularId});
+  if(error||!tabId)return {error:error?.message??"Could not open tab."};
+  redirect(`/bar/tabs/${tabId}`);
 }

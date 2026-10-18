@@ -1,4 +1,5 @@
 "use server";
+import { invalidatePublicCatalog } from "@/lib/public-cache";
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
@@ -102,6 +103,7 @@ export async function createArtist(
     return { error: `Failed to create artist: ${error.message}` };
   }
 
+  invalidatePublicCatalog("artist");
   revalidatePath("/admin/artists");
   redirect("/admin/artists");
 }
@@ -122,6 +124,7 @@ export async function deleteArtist(artistId: string): Promise<{ error: string } 
   const { error } = await supabase.from("artists").delete().eq("id", artistId);
   if (error) return { error: `Failed to delete artist: ${error.message}` };
 
+  invalidatePublicCatalog("artist");
   revalidatePath("/admin/artists");
   return null;
 }
@@ -130,6 +133,7 @@ export async function activateArtist(artistId: string): Promise<void> {
   await requireAdmin();
   const supabase = createServiceClient();
   await supabase.from("artists").update({ status: "active" }).eq("id", artistId);
+  invalidatePublicCatalog("artist");
   revalidatePath("/admin/artists");
 }
 
@@ -168,6 +172,7 @@ export async function updateArtist(
     return { error: `Failed to update artist: ${error.message}` };
   }
 
+  invalidatePublicCatalog("artist");
   revalidatePath("/admin/artists");
   redirect("/admin/artists");
 }

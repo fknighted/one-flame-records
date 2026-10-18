@@ -1,3 +1,4 @@
+import { escapeHtml } from "@/lib/email/escape";
 import {
   EMAIL_COLORS,
   EMAIL_FONT_TEXT,
@@ -29,7 +30,7 @@ export function renderApplicationReceived(data: ApplicationReceivedData): {
   const row = (label: string, value: string, last = false) =>
     `<tr>
               <td width="120" valign="top" style="padding:10px 12px 10px 0;${last ? "" : `border-bottom:1px solid ${EMAIL_COLORS.black};`}font-family:${EMAIL_FONT_TEXT};font-size:13px;line-height:1.4;font-weight:800;letter-spacing:0.06em;text-transform:uppercase;color:${EMAIL_COLORS.black};">${label}</td>
-              <td valign="top" style="padding:10px 0;${last ? "" : `border-bottom:1px solid ${EMAIL_COLORS.black};`}font-family:${EMAIL_FONT_TEXT};font-size:16px;line-height:1.5;color:${EMAIL_COLORS.black};">${value}</td>
+              <td valign="top" style="padding:10px 0;${last ? "" : `border-bottom:1px solid ${EMAIL_COLORS.black};`}font-family:${EMAIL_FONT_TEXT};font-size:16px;line-height:1.5;color:${EMAIL_COLORS.black};">${escapeHtml(value)}</td>
             </tr>`;
 
   const html = emailLayout({
@@ -42,7 +43,7 @@ export function renderApplicationReceived(data: ApplicationReceivedData): {
             ${row("Email", email)}
             ${row("Phone", `${phone ?? "—"}`)}
             ${row("Genres", genreList, !message)}
-            ${message ? row("Message", message.replace(/\n/g, "<br>"), true) : ""}
+            ${message ? row("Message", message, true) : ""}
           </table>`,
       emailButton(adminUrl, "Review Application"),
     ].join("\n"),

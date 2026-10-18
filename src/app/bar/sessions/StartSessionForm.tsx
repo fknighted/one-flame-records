@@ -17,6 +17,7 @@ export default function StartSessionForm() {
         <p role="alert" className="studio-error">{state.error}</p>
       )}
 
+      <p className="studio-hint">This starts a timer. Add game time to the customer’s tab separately to record the charge.</p>
       {/* Duration selector */}
       <fieldset>
         <legend className="studio-field-label">

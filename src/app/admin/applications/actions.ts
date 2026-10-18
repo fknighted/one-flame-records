@@ -10,111 +10,29 @@ import { renderApplicationRejected } from "@/lib/email/templates/applicationReje
 
 export type ActionState = { error: string } | { success: true } | { link: string } | null;
 
-function toSlug(name: string): string {
-  return name
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-|-$/g, "");
-}
-
-export async function approveApplication(
-  _prev: ActionState,
-  formData: FormData
-): Promise<ActionState> {
-  await requireAdmin();
-  const id = (formData.get("id") as string)?.trim();
-  if (!id) return { error: "Missing application ID." };
-
-  const supabase = createServiceClient();
-  const sessionClient = await createClient();
-  const {
-    data: { user: adminUser },
-  } = await sessionClient.auth.getUser();
-
-  const { data: app, error: fetchError } = await supabase
-    .from("signup_applications")
-    .select("*")
-    .eq("id", id)
-    .single();
-
-  if (fetchError || !app) return { error: "Application not found." };
-  if (app.status !== "pending")
-    return { error: `Application is already ${app.status}.` };
-
-  // 1. Invite via Supabase Admin — creates auth.users row, fires handle_new_user
-  //    trigger (creates profiles row), and sends invite email.
-  const siteUrl =
-    process.env.NEXT_PUBLIC_SITE_URL ?? "https://oneflamerecords.com";
-  const { data: inviteData, error: inviteError } =
-    await supabase.auth.admin.inviteUserByEmail(app.email, {
-      redirectTo: `${siteUrl}/auth/callback`,
-    });
-
-  if (inviteError || !inviteData?.user) {
-    return {
-      error: `Failed to create artist account: ${inviteError?.message ?? "unknown error"}`,
-    };
-  }
-
-  const userId = inviteData.user.id;
-
-  // 2. Create artists row
-  const baseSlug = toSlug(app.stage_name) || `artist-${Date.now()}`;
-  const { data: existingSlug } = await supabase
-    .from("artists")
-    .select("id")
-    .eq("slug", baseSlug)
-    .maybeSingle();
-  const slug = existingSlug ? `${baseSlug}-${Date.now()}` : baseSlug;
-
-  const { data: artist, error: artistError } = await supabase
-    .from("artists")
-    .insert({
-      stage_name: app.stage_name,
-      legal_name: app.legal_name,
-      slug,
-      genres: app.genres,
-      socials: app.socials ?? {},
-      bio: "",
-      status: "pending",
-    })
-    .select("id")
-    .single();
-
-  if (artistError || !artist) {
-    return {
-      error: `Failed to create artist record: ${artistError?.message ?? "unknown error"}`,
-    };
-  }
-
-  // 3. Link profiles.artist_id (profile row already exists via trigger)
-  const { error: profileError } = await supabase
-    .from("profiles")
-    .update({ artist_id: artist.id })
-    .eq("id", userId);
-
-  if (profileError) {
-    return { error: `Failed to link profile: ${profileError.message}` };
-  }
-
-  // 4. Mark application approved
-  const { error: updateError } = await supabase
-    .from("signup_applications")
-    .update({
-      status: "approved",
-      reviewed_by: adminUser?.id ?? null,
-      reviewed_at: new Date().toISOString(),
-    })
-    .eq("id", id);
-
-  if (updateError) {
-    return {
-      error: `Failed to update application status: ${updateError.message}`,
-    };
-  }
-
-  revalidatePath("/admin/applications");
-  redirect("/admin/applications");
+export async function approveApplication(_prev: ActionState, data: FormData): Promise<ActionState> {
+ await requireAdmin(); const id=String(data.get("id")??""); if(!id)return {error:"Missing application ID."};
+ const service=createServiceClient(); const {data:{user:admin}}=await (await createClient()).auth.getUser();
+ if(!admin)return {error:"Not authenticated."};
+ const claim=await service.rpc("claim_application",{p_id:id});
+ if(claim.error || !claim.data)return {error:claim.error?.message??"Could not claim application."};
+ const application=claim.data as {email:string;provisioned_user_id:string|null};
+ let userId=application.provisioned_user_id;
+ if(!userId){
+  // Create no email side effect before the database profile is linked. If the
+  // response is lost, the next claim locates this unlinked account by email.
+  const created=await service.auth.admin.createUser({email:application.email,email_confirm:true});
+  if(created.error || !created.data.user)return {error:"Could not create account. Wait five minutes, then retry; existing accounts are recovered safely."};
+  userId=created.data.user.id;
+  const saved=await service.from("signup_applications").update({provisioned_user_id:userId}).eq("id",id);
+  if(saved.error)return {error:"Account created but approval is incomplete. Wait five minutes and retry."};
+ }
+ const finished=await service.rpc("finish_application",{p_id:id,p_user:userId,p_admin:admin.id});
+ if(finished.error)return {error:finished.error.message};
+ revalidatePath("/admin/applications");
+ const result=await resendInvite(null,data);
+ if(result && "error" in result)return {error:`Approved; invitation needs retry. ${result.error}`};
+ return result;
 }
 
 export async function resendInvite(
@@ -190,17 +108,20 @@ export async function rejectApplication(
 
   if (fetchError || !app) return { error: "Application not found." };
 
-  const { error } = await supabase
+  const { data:reviewed, error } = await supabase
     .from("signup_applications")
     .update({
       status: "rejected",
       reviewed_by: adminUser?.id ?? null,
       reviewed_at: new Date().toISOString(),
     })
-    .eq("id", id);
+    .eq("id", id)
+    .eq("status","pending")
+    .or(`approval_lease_until.is.null,approval_lease_until.lt.${new Date().toISOString()}`)
+    .select("id").maybeSingle();
 
-  if (error) {
-    return { error: `Failed to reject application: ${error.message}` };
+  if (error || !reviewed) {
+    return { error: error ? `Failed to reject application: ${error.message}` : "This application changed or is being approved. Refresh first." };
   }
 
   // Send rejection email — fire and forget (don't fail the action if email fails)

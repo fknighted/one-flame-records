@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { marked } from "marked";
+import { renderSafeMarkdown } from "@/lib/email/markdown";
 import { createServiceClient } from "@/lib/supabase/server";
 import PosterHeadline from "@/components/PosterHeadline";
 import PrintedPhoto from "@/components/PrintedPhoto";
@@ -44,10 +44,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     .lte("published_at", new Date().toISOString())
     .maybeSingle();
 
-  if (!post) return { title: "Not found — One Flame Records" };
+  if (!post) return { title: "Not found" };
 
   return {
-    title: `${post.title} — One Flame Records`,
+    alternates: { canonical: `/news/${slug}` },
+    title: `${post.title}`,
     description: post.excerpt ?? undefined,
     openGraph: {
       title: post.title,
@@ -98,7 +99,7 @@ export default async function NewsPostPage({ params }: Props) {
       .maybeSingle(),
   ]);
 
-  const htmlBody = await marked(post.body ?? "");
+  const htmlBody = await renderSafeMarkdown(post.body ?? "");
 
   const jsonLd = {
     "@context": "https://schema.org",

@@ -1,10 +1,11 @@
 "use client";
+import { useRetryableAction } from "@/lib/retryable-action";
 
 import { useActionState, useRef } from "react";
 import { removeTabItem } from "./actions";
 
 export default function RemoveItemButton({ tabItemId, tabId }: { tabItemId: string; tabId: string }) {
-  const [state, formAction, pending] = useActionState(removeTabItem, null);
+  const [state, formAction, pending] = useActionState(useRetryableAction(removeTabItem), null);
   const formRef = useRef<HTMLFormElement>(null);
   const reasonRef = useRef<HTMLInputElement>(null);
 

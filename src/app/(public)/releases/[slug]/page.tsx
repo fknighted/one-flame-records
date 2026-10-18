@@ -116,7 +116,7 @@ async function getRelease(slug: string) {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const release = await getRelease(slug);
-  if (!release) return { title: "Release not found — One Flame Records" };
+  if (!release) return { title: "Release not found" };
 
   const artist = release.artists as { stage_name: string; slug: string } | null;
   const description =
@@ -124,7 +124,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     `${release.title} by ${artist?.stage_name ?? "One Flame Records"} — ${TYPE_LABEL[release.type] ?? release.type}.`;
 
   return {
-    title: `${release.title} — One Flame Records`,
+    alternates: { canonical: `/releases/${slug}` },
+    title: `${release.title}`,
     description,
     openGraph: {
       title: release.title,

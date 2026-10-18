@@ -29,7 +29,16 @@ export default function MFASection() {
     setLoading(false);
   }
 
-  useEffect(() => { loadFactors(); }, []);
+  useEffect(() => {
+    let active = true;
+    getSupabase().auth.mfa.listFactors().then(({ data, error }) => {
+      if (!active) return;
+      if (error) setError(error.message);
+      setFactors((data?.totp ?? []) as Factor[]);
+      setLoading(false);
+    });
+    return () => { active = false; };
+  }, []);
 
   async function startEnroll() {
     setError(null);
@@ -65,7 +74,8 @@ export default function MFASection() {
   async function unenroll(id: string) {
     if (!confirm("Disable two-factor authentication?")) return;
     const supabase = getSupabase();
-    await supabase.auth.mfa.unenroll({ factorId: id });
+    const { error } = await supabase.auth.mfa.unenroll({ factorId: id });
+    if (error) { setError(error.message); return; }
     setSuccess("Two-factor authentication disabled.");
     loadFactors();
   }

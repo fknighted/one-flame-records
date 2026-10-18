@@ -20,8 +20,7 @@ A web platform for One Flame Records, a Jamaican record label based in Montego B
 - **Supabase** — Postgres, Auth, Storage, Row-Level Security
 - **Resend** — transactional email
 - **Inngest** — durable YouTube uploads
-- **Make.com** — social posting webhook (Instagram, Facebook, TikTok) — not direct API calls
-- **Sentry** — error tracking (active in production)
+- **Sentry** — error tracking; release/source-map delivery still needs verification
 - **Vercel** — hosting; push to `main` triggers deploy
 
 > **Note:** This Next.js version has breaking changes from prior releases. Read `node_modules/next/dist/docs/` before writing new routing or middleware code.
@@ -60,10 +59,9 @@ src/
 ├── components/        ← shared UI components (PascalCase)
 ├── lib/
 │   ├── supabase/      ← client.ts, server.ts, middleware.ts
-│   ├── inngest/       ← client.ts + functions/ (hello, upload-to-youtube)
-│   ├── social/        ← meta.ts, tiktok.ts (fire Make.com webhook, do not call platform APIs directly)
+│   ├── inngest/       ← client.ts + functions/ (hello, upload-to-youtube, storage-cleanup)
 │   ├── email/         ← send.ts + templates/
-│   ├── bar/           ← pos.ts (shared bar utilities: formatCents, jamaicaMidnight, CATEGORY_LABELS, etc.)
+│   ├── bar/           ← pos.ts (shared bar utilities: formatJmd, jamaicaMidnight, CATEGORY_LABELS, etc.)
 │   ├── auth.ts        ← server-side role helpers (requireAdmin, requireBarStaff)
 │   └── spotify.ts
 ├── proxy.ts           ← Next.js middleware — route protection + role check
@@ -74,6 +72,8 @@ supabase/
 ```
 
 ## Common commands
+
+Use Node 24 (`.nvmrc`). Remote database commands below require explicit release approval; never run them as routine checks.
 
 ```bash
 # Development
@@ -90,6 +90,7 @@ npx supabase gen types typescript --linked > src/types/supabase.ts
 npm run build
 npm run lint
 npm run typecheck              # tsc --noEmit
+npm test                       # isolated database/security/retirement checks
 ```
 
 Type checking (`npm run typecheck`) is the primary correctness gate. Run `node scripts/test-studio-retirement.mjs` for offline video-retirement regression checks; all services are mocked.
@@ -100,7 +101,7 @@ Type checking (`npm run typecheck`) is the primary correctness gate. Run `node s
 
 The Next.js route-protection middleware lives at `src/proxy.ts` (exports `proxy` and `config`). The Supabase session helper is a separate file at `src/lib/supabase/middleware.ts`. **Never import from `src/lib/supabase/server.ts` inside the proxy** — it pulls in `next/headers`, which is incompatible with Edge Runtime.
 
-### Auth is client-side only
+### Sign-in uses the browser client
 
 Login uses `createBrowserClient` (from `@supabase/ssr`) and navigates via `window.location.href = "/admin"` after success. Do not use a Server Action for sign-in: in Next.js 16, cookies set inside a Server Action are not reliably forwarded when `redirect()` is called, causing a session loop. The proxy reads the session from cookies and checks the role using a service-role client.
 
@@ -117,18 +118,18 @@ Mutations use Server Actions in `actions.ts` files co-located with the route. Th
 export type ActionState = { error: string } | null;
 ```
 
-Forms use `useActionState` for inline error display. Server Actions have a 10 MB body size limit (set in `next.config.ts`) to support photo/cover uploads.
+Forms use `useActionState` for inline error display. The configured action limit does not override hosting request limits. Artist assets/photos and admin video files use authorized direct storage uploads with completion validation. Read `docs/operations.md` for recovery and release steps.
 
 ### Bar POS
 
 The Flames Lounge POS lives at `/bar` (bartenders) and `/admin/bar/*` (label admin). Key patterns:
 
 - **Money is whole JMD dollars** — owner decision 2026-08-09 (`docs/decisions.md`). No price, cost, or tip is ever a fraction of a dollar. `game_sessions.price_jmd` is the correct model; **do not migrate it to cents.**
-- **Cents are being removed** — `price_cents` / `cost_cents` / `total_cents` / `tip_cents` / `unit_cost_cents` are *legacy* (JMD × 100, e.g. $200 = `20000`) and are scheduled for conversion to dollar columns; see `docs/next-session-prompt.md` Priority 1. Until that migration ships they remain **authoritative** — keep treating them as cents. Do not add new `_cents` columns.
+- **Whole-dollar conversion shipped August 15.** Current money columns end in `_jmd`; never restore authoritative cents columns. Bar mutations use service-only transactional functions and stable request identifiers.
 - **Jamaica timezone** — all "today" queries must use `jamaicaMidnight()` from `src/lib/bar/pos.ts`. Jamaica is UTC-5 year-round (no DST); midnight Jamaica = 05:00 UTC. Never use `new Date().setHours(0,0,0,0)` for bar queries (that gives UTC midnight).
 - **Time display** — use `jamaicaTime()` / `jamaicaDateTime()` from `src/lib/bar/pos.ts` for all bar timestamps.
 - **is_bartender flag** — artists can hold both portal and bar access. The proxy and `requireBarStaff()` accept `is_bartender = true` alongside `role = 'bartender'`. Grant via Admin → Bar → Staff → "Promote Existing Artist". Revoke via the same page (sets flag to `false`, does not ban the artist).
-- **Shared bar utilities** (`src/lib/bar/pos.ts`) — `formatCents`, `jamaicaMidnight`, `jamaicaTime`, `jamaicaDateTime`, `CATEGORY_LABELS`, `CATEGORY_ORDER`. All bar pages import from here; never duplicate these.
+- **Shared bar utilities** (`src/lib/bar/pos.ts`) — `formatJmd`, `jamaicaMidnight`, `jamaicaTime`, `jamaicaDateTime`, `CATEGORY_LABELS`, `CATEGORY_ORDER`. All bar pages import from here; never duplicate these.
 - **Categories** — `drink`, `beverage`, `food`, `snack`, `game_time`. The `pos_items_category_check` constraint must be updated in a migration before adding new categories.
 
 ### Production retirement — October 8, 2026
@@ -151,7 +152,7 @@ Current work and verification: `/Users/frankknight/Claude OS/Delegations/remove-
 
 **Commits.** Conventional commits: `feat:`, `fix:`, `chore:`, `docs:`, `refactor:`. One logical change per commit.
 
-**Themes.** One palette, two moods (Sound System, since 2026-10-09). The public site is the loud poster look on `black` with yellow/red/paper blocks (see `docs/sound-system-foundation.md`); the portal, admin, bar till and gamer portal are the calm studio look on `black`/`panel` using the `studio-*` classes in `src/app/studio.css` (see `docs/studio-sound-system.md`). Both are set by the route group layout, not a runtime toggle.
+**Themes.** One palette, two moods (Sound System, since 2026-10-09). The public site is the loud poster look on `black` with yellow/red/paper blocks (see `docs/sound-system-foundation.md`); the portal, admin, bar till are the calm studio look on `black`/`panel` using the `studio-*` classes in `src/app/studio.css` (see `docs/studio-sound-system.md`). Both are set by the route group layout, not a runtime toggle.
 
 **After server actions.** Use `router.refresh()` to re-fetch server data after a mutation — not `window.location.reload()`.
 
@@ -167,7 +168,6 @@ Current work and verification: `/Users/frankknight/Claude OS/Delegations/remove-
 - Never deploy a destructive migration to production without backing up first.
 - Never use a real artist's email or PII in seed data or test fixtures.
 - Never modify `CLAUDE.md`, `docs/project-memory.md`, or `docs/decisions.md` silently — these are the project memory.
-- Never call platform social APIs directly — route through the Make.com webhook.
 
 ## Brand quick reference
 
@@ -190,8 +190,8 @@ Full list in `.env.example`.
 - `SUPABASE_SERVICE_ROLE_KEY` — server-only, never expose
 - `NEXT_PUBLIC_SITE_URL`
 - `RESEND_API_KEY`, `RESEND_FROM_EMAIL`, `ADMIN_EMAIL`
+- `NEWSLETTER_TOKEN_SECRET` — optional server-only dedicated signing key; falls back to the service key when absent. Rotation invalidates outstanding links; never rotate as a routine repair.
 - `INNGEST_EVENT_KEY`, `INNGEST_SIGNING_KEY`
-- `SOCIAL_WEBHOOK_URL` — Make.com webhook for all social posting
 - `NEXT_PUBLIC_SENTRY_DSN`, `SENTRY_ORG`, `SENTRY_PROJECT`, `SENTRY_AUTH_TOKEN`
 ## Roles
 
@@ -200,18 +200,17 @@ Full list in `.env.example`.
 | `admin` | `/admin` | Everything |
 | `artist` | `/portal` | Artist portal only |
 | `bartender` | `/bar` | Bar POS only |
-| `gamer` | `/gamer` | Gamer portal only |
 | `artist` + `is_bartender=true` | `/portal` | Artist portal + bar POS |
 
 `roleHome()` in `src/proxy.ts` maps roles to their home route. `requireBarStaff()` in `src/lib/auth.ts` accepts admin, bartender, or is_bartender flag.
 
 ## Current phase
 
-Phases 1–5 and the Bar POS are complete and operational. Next: first live bar session (open real tab, close as cash). Content entry (artists, releases, news) is ongoing via admin. See `docs/project-memory.md` for live status.
+October 18 audit repairs are local and reviewed; five new migrations are NOT applied to production. See `docs/next-session-prompt.md` and the delegation ledger for current release status. Use Node 24. Admin guards require a second sign-in step when a verified authenticator is enrolled. Ordinary registration always creates an artist role. Staff roles are assigned only by authorized service actions.
 
 ## End of session checklist
 
 1. Update `docs/project-memory.md` — what got done, blockers, next session goal.
 2. Refresh `docs/next-session-prompt.md` with the top priorities for next time.
 3. If a non-obvious architectural decision was made, append an entry to `docs/decisions.md`.
-4. Commit and push.
+4. Leave a reviewable diff. Commit, push, hosted migrations and deployment require Frank’s explicit release approval.

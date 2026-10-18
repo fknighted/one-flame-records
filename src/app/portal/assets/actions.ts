@@ -1,10 +1,14 @@
 "use server";
+import { invalidatePublicCatalog } from "@/lib/public-cache";
 
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { createClient, createServiceClient } from "@/lib/supabase/server";
 
 export type AssetActionState = { error: string } | null;
+
+import { verifyUpload } from "@/lib/uploads/verify";
+import { deleteStoredAsset } from "@/lib/uploads/delete";
 
 const AUDIO_KINDS = ["instrumental", "demo"];
 
@@ -30,25 +34,14 @@ export async function uploadAsset(
   const kind = (formData.get("kind") as string) ?? "";
   const title = ((formData.get("title") as string) ?? "").trim();
   const notes = ((formData.get("notes") as string) ?? "").trim() || null;
-  const file = formData.get("file") as File | null;
-
   const validKinds = ["instrumental", "demo", "reference_video", "reference_image"];
-  if (!validKinds.includes(kind)) return { error: "Invalid asset kind." };
-  if (!title) return { error: "Title is required." };
-  if (!file || file.size === 0) return { error: "Please select a file." };
-  if (file.size > 10 * 1024 * 1024) return { error: "File must be under 10 MB." };
-
-  const ext = file.name.split(".").pop()?.toLowerCase() ?? "bin";
-  const storagePath = `${artistId}/${crypto.randomUUID()}.${ext}`;
-  const buffer = await file.arrayBuffer();
-
-  const serviceClient = createServiceClient();
-  const { error: storageError } = await serviceClient.storage
-    .from("private-assets")
-    .upload(storagePath, buffer, { contentType: file.type, upsert: false });
-
-  if (storageError) return { error: `Upload failed: ${storageError.message}` };
-
+  if (!validKinds.includes(kind) || !title || title.length > 200 || (notes?.length ?? 0)>5000) return { error: "Enter a valid kind and title (up to 200 characters)." };
+  let verified;
+  try { verified = await verifyUpload(String(formData.get("upload_id") ?? ""), user.id, artistId, "asset"); }
+  catch(error) { return { error: error instanceof Error ? error.message : "Could not verify upload." }; }
+  const { upload, buffer } = verified;
+  if(upload.kind !== kind) return { error: "The uploaded file kind has changed. Select the file again." };
+  const file={ type:upload.mime_type, size:upload.size_bytes };
   let durationSeconds: number | null = null;
   if (AUDIO_KINDS.includes(kind)) {
     try {
@@ -61,22 +54,10 @@ export async function uploadAsset(
     }
   }
 
-  const { error: dbError } = await sessionClient.from("assets").insert({
-    artist_id: artistId,
-    kind,
-    title,
-    notes,
-    storage_path: storagePath,
-    mime_type: file.type,
-    size_bytes: file.size,
-    duration_seconds: durationSeconds,
-  });
+  const {error:dbError}=await createServiceClient().rpc("finalize_asset_upload",{p_upload:upload.id,p_owner:user.id,p_title:title,p_notes:notes,p_duration:durationSeconds});
+  if(dbError)return {error:dbError.message};
 
-  if (dbError) {
-    await serviceClient.storage.from("private-assets").remove([storagePath]);
-    return { error: `Failed to save asset: ${dbError.message}` };
-  }
-
+  invalidatePublicCatalog("artist");
   revalidatePath("/portal/assets");
   redirect("/portal/assets");
 }
@@ -114,6 +95,7 @@ export async function updateAsset(
 
   if (error) return { error: `Failed to update: ${error.message}` };
 
+  invalidatePublicCatalog("artist");
   revalidatePath("/portal/assets");
   redirect("/portal/assets");
 }
@@ -141,18 +123,10 @@ export async function deleteAsset(assetId: string): Promise<AssetActionState> {
 
   if (!asset) return { error: "Asset not found or access denied." };
 
-  await serviceClient.storage.from("private-assets").remove([asset.storage_path]);
-
-  const { error } = await serviceClient
-    .from("assets")
-    .delete()
-    .eq("id", assetId)
-    .eq("artist_id", profile.artist_id);
-
-  if (error) return { error: `Failed to delete: ${error.message}` };
-
+  const result = await deleteStoredAsset(assetId, profile.artist_id);
+  invalidatePublicCatalog("artist");
   revalidatePath("/portal/assets");
-  return null;
+  return result;
 }
 
 export async function toggleAssetPublic(assetId: string, _formData: FormData): Promise<void> {
@@ -183,5 +157,6 @@ export async function toggleAssetPublic(assetId: string, _formData: FormData): P
     .update({ is_public: !asset.is_public })
     .eq("id", assetId);
 
+  invalidatePublicCatalog("artist");
   revalidatePath("/portal/assets");
 }

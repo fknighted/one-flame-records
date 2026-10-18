@@ -15,7 +15,7 @@ export type ActionState = { error: string } | { ok: string } | null;
  */
 function parseJmd(value: string | null): number | null {
   if (!value) return null;
-  const dollars = parseFloat(value);
+  const dollars = Number(value);
   if (isNaN(dollars) || dollars < 0 || !Number.isInteger(dollars)) return null;
   return dollars;
 }
@@ -60,6 +60,7 @@ export async function addStock(
   const result = isBottle
     ? await applyStockPurchase({
         itemId,
+        requestId: String(formData.get("request_id") ?? ""),
         addedBy,
         mode: "bottle",
         containers: parseInt(formData.get("containers") as string, 10),
@@ -68,6 +69,7 @@ export async function addStock(
       })
     : await applyStockPurchase({
         itemId,
+        requestId: String(formData.get("request_id") ?? ""),
         addedBy,
         mode: "unit",
         quantity: parseInt(formData.get("quantity") as string, 10),

@@ -1,5 +1,6 @@
 "use server";
 
+import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 
 /**
@@ -19,6 +20,9 @@ export async function requireAdmin(): Promise<void> {
     .single();
 
   if (profile?.role !== "admin") throw new Error("Forbidden");
+  const { data: assurance, error } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel();
+  if (error || !assurance) throw new Error("Could not verify sign-in security.");
+  if (assurance.nextLevel === "aal2" && assurance.currentLevel !== "aal2") redirect("/auth/mfa");
 }
 
 /** Verify the caller is an authenticated admin, bartender, or artist with bar access. */
@@ -36,8 +40,9 @@ export async function requireBarStaff(): Promise<void> {
   if (
     profile?.role !== "admin" &&
     profile?.role !== "bartender" &&
-    !profile?.is_bartender
+    !(profile?.role === "artist" && profile.is_bartender)
   ) throw new Error("Forbidden");
+  if (profile?.role === "admin") await requireAdmin();
 }
 
 /** Current authenticated user's id, or null. For audit fields (e.g. added_by). */

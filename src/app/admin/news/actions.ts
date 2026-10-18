@@ -1,4 +1,5 @@
 "use server";
+import { invalidatePublicCatalog } from "@/lib/public-cache";
 
 import { revalidatePath } from "next/cache";
 import { createServiceClient } from "@/lib/supabase/server";
@@ -9,5 +10,6 @@ export async function deleteNewsPost(postId: string): Promise<void> {
   const supabase = createServiceClient();
   const { error } = await supabase.from("news_posts").delete().eq("id", postId);
   if (error) throw new Error(error.message);
+  invalidatePublicCatalog("news");
   revalidatePath("/admin/news");
 }

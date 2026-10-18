@@ -1,3 +1,4 @@
+import { NonRetriableError } from "inngest";
 import { inngest } from "@/lib/inngest/client";
 import { createServiceClient } from "@/lib/supabase/server";
 import { uploadToYouTube } from "@/lib/youtube";
@@ -10,19 +11,22 @@ export const uploadToYoutubeJob = inngest.createFunction(
     triggers: [{ event: "youtube/upload.requested" }],
     retries: 1,
     onFailure: async ({ error, event }) => {
-      const { source, id } = (event.data as unknown as { event: { data: { source: UploadSource; id: string } } }).event.data;
-      const supabase = createServiceClient();
-      const table = source === "video" ? "videos" : "video_jobs";
-      await supabase
-        .from(table)
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        .update({ youtube_upload_status: "failed" } as any)
-        .eq("id", id);
+      const { source,id,requestId } = (event.data as unknown as {event:{data:{source:UploadSource;id:string;requestId:string}}}).event.data;
+      const supabase=createServiceClient();
+      const {data:attempt}=await supabase.from("youtube_upload_requests").select("status,youtube_id").eq("request_id",requestId).single();
+      if(attempt?.youtube_id){
+        const result=await supabase.from(source==="video"?"videos":"video_jobs").update({youtube_id:attempt.youtube_id,youtube_upload_status:"done"}).eq("id",id);
+        if(!result.error)return;
+      }
+      const uncertain=attempt?.status==="started" || attempt?.status==="uncertain" || !!attempt?.youtube_id;
+      await supabase.from("youtube_upload_requests").update({status:uncertain?"uncertain":"failed"}).eq("request_id",requestId).neq("status","done");
+      await supabase.from(source==="video"?"videos":"video_jobs").update({youtube_upload_status:uncertain?"review":"failed"}).eq("id",id);
+
       console.error(`YouTube upload failed for ${source} ${id}:`, error.message);
     },
   },
   async ({ event, step }) => {
-    const { source, id } = event.data as { source: UploadSource; id: string };
+    const { source, id, requestId } = event.data as { source: UploadSource; id: string; requestId:string };
 
     const { title, description, videoUrl } = await step.run("load-record", async () => {
       const supabase = createServiceClient();
@@ -72,9 +76,18 @@ export const uploadToYoutubeJob = inngest.createFunction(
       return { title: videoTitle, description: desc, videoUrl: signed.signedUrl };
     });
 
-    const youtubeId = await step.run("upload-video", () =>
-      uploadToYouTube({ title, description, videoUrl, privacyStatus: "private" })
-    );
+    const youtubeId = await step.run("upload-video", async () => {
+      const service=createServiceClient();
+      const {data:attempt,error}=await service.from("youtube_upload_requests").select("status,youtube_id").eq("request_id",requestId).single();
+      if(error || !attempt) throw new NonRetriableError("Upload request is missing.");
+      if(attempt.youtube_id) return attempt.youtube_id;
+      const claim=await service.from("youtube_upload_requests").update({status:"started"}).eq("request_id",requestId).eq("status","queued").select("request_id").maybeSingle();
+      if(claim.error || !claim.data) throw new NonRetriableError("Previous upload result is uncertain. Check private YouTube uploads before retrying.");
+      const result=await uploadToYouTube({title,description,videoUrl,privacyStatus:"private"});
+      const saved=await service.from("youtube_upload_requests").update({youtube_id:result,status:"done"}).eq("request_id",requestId);
+      if(saved.error) throw new NonRetriableError("YouTube accepted the upload but the receipt was not saved. Manual reconciliation required.");
+      return result;
+    });
 
     await step.run("save-result", async () => {
       const supabase = createServiceClient();

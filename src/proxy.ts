@@ -20,7 +20,7 @@ function roleHome(role: string | undefined): string {
 }
 
 export async function proxy(request: NextRequest) {
-  const { supabaseResponse, user } = await updateSession(request);
+  const { supabaseResponse, user, supabase } = await updateSession(request);
   const { pathname } = request.nextUrl;
 
   const isAdminRoute  = pathname.startsWith("/admin");
@@ -44,13 +44,19 @@ export async function proxy(request: NextRequest) {
     .eq("id", user.id)
     .single();
   const role         = profile?.role as string | undefined;
-  const isBartender  = profile?.is_bartender === true;
+  const isBartender  = role === "artist" && profile?.is_bartender === true;
 
   function redirect(path: string) {
     const url = request.nextUrl.clone();
     url.pathname = path;
     url.search = "";
     return NextResponse.redirect(url);
+  }
+
+  if (role === "admin") {
+    const { data: assurance, error } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel();
+    if (error || !assurance) return redirect("/login");
+    if (assurance.nextLevel === "aal2" && assurance.currentLevel !== "aal2") return redirect("/auth/mfa");
   }
 
   if (isAdminRoute  && role !== "admin")                                           return redirect(roleHome(role));

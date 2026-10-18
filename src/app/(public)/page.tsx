@@ -1,3 +1,4 @@
+import { assertPublicReads } from "@/lib/public-data";
 import Link from "next/link";
 import { createServiceClient } from "@/lib/supabase/server";
 import ArtistCard from "@/components/ArtistCard";
@@ -48,10 +49,12 @@ function formatDate(dateStr: string) {
 // service client (which bypasses RLS) returns exactly what anon users may see.
 export const revalidate = 120;
 
+export const metadata = { alternates: { canonical: "/" } };
+
 export default async function HomePage() {
   const supabase = createServiceClient();
 
-  const [{ data: featuredArtists }, { data: releases }, { data: videos }, { data: newsPosts }] =
+  const results =
     await Promise.all([
       supabase
         .from("artists")
@@ -87,6 +90,9 @@ export default async function HomePage() {
         .limit(3)
         .returns<NewsPost[]>(),
     ]);
+
+  assertPublicReads(...results);
+  const [{data:featuredArtists},{data:releases},{data:videos},{data:newsPosts}]=results;
 
   return (
     <>

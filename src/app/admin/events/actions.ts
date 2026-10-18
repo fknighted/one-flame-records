@@ -1,4 +1,5 @@
 "use server";
+import { invalidatePublicCatalog } from "@/lib/public-cache";
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
@@ -33,6 +34,7 @@ export async function createEvent(_prev: ActionState, formData: FormData): Promi
   const { error } = await supabase.from("events").insert({ ...fields, event_date: fields.event_date! });
   if (error) return { error: `Failed to create event: ${error.message}` };
 
+  invalidatePublicCatalog("event");
   revalidatePath("/admin/events");
   redirect("/admin/events");
 }
@@ -50,6 +52,7 @@ export async function updateEvent(_prev: ActionState, formData: FormData): Promi
   const { error } = await supabase.from("events").update({ ...fields, event_date: fields.event_date! }).eq("id", id);
   if (error) return { error: `Failed to update event: ${error.message}` };
 
+  invalidatePublicCatalog("event");
   revalidatePath("/admin/events");
   redirect("/admin/events");
 }
@@ -59,6 +62,7 @@ export async function deleteEvent(id: string): Promise<ActionState> {
   const supabase = createServiceClient();
   const { error } = await supabase.from("events").delete().eq("id", id);
   if (error) return { error: `Failed to delete event: ${error.message}` };
+  invalidatePublicCatalog("event");
   revalidatePath("/admin/events");
   return null;
 }

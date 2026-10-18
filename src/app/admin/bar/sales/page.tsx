@@ -32,6 +32,7 @@ export default async function SalesPage({
   const supabase = createServiceClient();
 
   const start = periodStart(period);
+  const staleTabBefore=new Date().getTime()-30*86400000;
 
   // ── Aggregated sales figures for the period (grouped in Postgres) ──────────
   const [
@@ -69,6 +70,12 @@ export default async function SalesPage({
   if (loadError) {
     Sentry.captureException(loadError, { tags: { area: "bar-sales" }, extra: { period } });
   }
+
+  const {count:missingMenuCosts,error:menuCostError}=await supabase.from("pos_items").select("id",{head:true,count:"exact"}).eq("is_active",true).is("cost_jmd",null);
+  let missingQuery=supabase.from("pos_tab_items").select("id,pos_tabs!inner(status,closed_at)",{head:true,count:"exact"}).eq("pos_tabs.status","closed").is("cost_jmd",null);
+  if(start) missingQuery=missingQuery.gte("pos_tabs.closed_at",start);
+  const {count:missingSaleCosts,error:saleCostError}=await missingQuery;
+  const incompleteCosts=!!menuCostError||!!saleCostError||(missingMenuCosts??0)>0||(missingSaleCosts??0)>0;
 
   // ── Derive view models from the aggregated rows ───────────────────────────
   const payments = paymentRows ?? [];
@@ -120,6 +127,8 @@ export default async function SalesPage({
         </div>
       )}
 
+      {incompleteCosts && <div role="alert" className="studio-error">Profit is an estimate: {missingMenuCosts??"unknown"} active menu items and {missingSaleCosts??"unknown"} sale lines in this period lack costs. Enter menu costs for future sales; historical missing costs need separate review.</div>}
+      {openTabs.some(t=>Date.parse(t.created_at)<staleTabBefore) && <p role="status" className="studio-error">Some unpaid tabs are more than 30 days old. Review their settlement with the owner.</p>}
       {/* Period filter */}
       <div className="flex flex-wrap gap-2">
         {PERIOD_OPTIONS.map((p) => (
@@ -233,7 +242,7 @@ export default async function SalesPage({
             {[
               { label: "Total Revenue",  value: formatJmd(totalRevenue), money: true },
               { label: "Cost of Goods",  value: formatJmd(totalCost),    money: true },
-              { label: "Profit",         value: formatJmd(totalProfit),  money: true, sub: totalMargin != null ? `${totalMargin}% margin` : undefined },
+              { label: incompleteCosts ? "Estimated profit" : "Profit",         value: formatJmd(totalProfit),  money: true, sub: incompleteCosts ? "Costs incomplete" : totalMargin != null ? `${totalMargin}% margin` : undefined },
               { label: "Items Sold",     value: totalItemsSold.toString(), money: false },
               { label: "Tabs Closed",    value: tabsClosed.toString(), money: false },
             ].map((card) => (
@@ -245,7 +254,7 @@ export default async function SalesPage({
             ))}
           </div>
           <p className="-mt-4 studio-hint">
-            Profit uses cost captured at time of sale. Items sold before a cost was set (or with no cost) count as pure profit.
+            Profit uses cost captured at time of sale. Missing costs count as zero in this estimate. Actual profit is unknown until those costs are reviewed.
           </p>
 
           {/* Revenue by category */}
@@ -260,7 +269,7 @@ export default async function SalesPage({
                       <th className="is-num">Qty Sold</th>
                       <th className="is-num">Revenue</th>
                       <th className="hidden sm:table-cell is-num">Cost</th>
-                      <th className="is-num">Profit</th>
+                      <th className="is-num">Estimated profit</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -294,7 +303,7 @@ export default async function SalesPage({
                       <th className="hidden sm:table-cell">Category</th>
                       <th className="is-num">Qty</th>
                       <th className="is-num">Revenue</th>
-                      <th className="is-num">Profit</th>
+                      <th className="is-num">Estimated profit</th>
                     </tr>
                   </thead>
                   <tbody>

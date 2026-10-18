@@ -1,7 +1,17 @@
 import type { NextConfig } from "next";
-import { withSentryConfig } from "@sentry/nextjs";
+import { withSentryConfig } from "@sentry/nextjs/config";
 
 const nextConfig: NextConfig = {
+  async headers() {
+    return [{source:"/:path*",headers:[
+      {key:"X-Content-Type-Options",value:"nosniff"},
+      {key:"X-Frame-Options",value:"DENY"},
+      {key:"Referrer-Policy",value:"strict-origin-when-cross-origin"},
+      {key:"Permissions-Policy",value:"camera=(), microphone=(), geolocation=()"},
+      {key:"Content-Security-Policy",value:"object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'"},
+      {key:"Content-Security-Policy-Report-Only",value:"default-src 'self'; script-src 'self' 'unsafe-inline' https://va.vercel-scripts.com https://vercel.live; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; media-src 'self' blob: https://*.supabase.co; font-src 'self' data:; connect-src 'self' https://*.supabase.co wss://*.supabase.co https://*.ingest.sentry.io https://*.ingest.us.sentry.io https://*.vercel-insights.com https://vercel.live; frame-src https://www.youtube.com https://www.youtube-nocookie.com https://open.spotify.com; object-src 'none'; base-uri 'self'; frame-ancestors 'none'"},
+    ]}];
+  },
   serverExternalPackages: ["music-metadata"],
   experimental: {
     serverActions: {
@@ -40,6 +50,6 @@ export default withSentryConfig(nextConfig, {
   project: process.env.SENTRY_PROJECT,
   silent: !process.env.CI,
   widenClientFileUpload: true,
-  disableLogger: true,
-  automaticVercelMonitors: true,
+  authToken: process.env.SENTRY_AUTH_TOKEN,
+  telemetry: false,
 });

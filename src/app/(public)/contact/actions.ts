@@ -1,5 +1,7 @@
 "use server";
 
+import { escapeHtml } from "@/lib/email/escape";
+import { allowPublicForm } from "@/lib/form-limit";
 import { Resend } from "resend";
 import { EMAIL_COLORS, EMAIL_FONT_TEXT, emailLayout } from "@/lib/email/layout";
 
@@ -34,6 +36,8 @@ export async function submitContact(
     return { status: "error", message: "Please enter a valid email address." };
   }
 
+  if (name.length>100 || email.length>254 || message.length>5000 || !Object.hasOwn(REASONS,reason)) return {status:"error",message:"Use a valid reason, a name up to 100 characters and a message up to 5,000 characters."};
+  if (!await allowPublicForm("contact",email)) return {status:"error",message:"Please wait before sending another message."};
   const resend = new Resend(process.env.RESEND_API_KEY);
   const from   = process.env.RESEND_FROM_EMAIL ?? "noreply@oneflamerecords.com";
   const to     = process.env.ADMIN_EMAIL ?? "fknighted@gmail.com";
@@ -50,10 +54,10 @@ export async function submitContact(
       message,
     ].join("\n"),
     html: emailLayout({
-      body: `<p style="margin:0 0 12px;font-family:${EMAIL_FONT_TEXT};font-size:17px;line-height:1.6;color:${EMAIL_COLORS.black};"><strong>From:</strong> ${name} &lt;${email}&gt;</p>
-      <p style="margin:0 0 20px;font-family:${EMAIL_FONT_TEXT};font-size:17px;line-height:1.6;color:${EMAIL_COLORS.black};"><strong>Reason:</strong> ${REASONS[reason] ?? reason}</p>
+      body: `<p style="margin:0 0 12px;font-family:${EMAIL_FONT_TEXT};font-size:17px;line-height:1.6;color:${EMAIL_COLORS.black};"><strong>From:</strong> ${escapeHtml(name)} &lt;${escapeHtml(email)}&gt;</p>
+      <p style="margin:0 0 20px;font-family:${EMAIL_FONT_TEXT};font-size:17px;line-height:1.6;color:${EMAIL_COLORS.black};"><strong>Reason:</strong> ${escapeHtml(REASONS[reason])}</p>
       <hr style="border:0;border-top:2px solid ${EMAIL_COLORS.black};margin:0 0 20px;" />
-      <p style="margin:0;font-family:${EMAIL_FONT_TEXT};font-size:17px;line-height:1.6;color:${EMAIL_COLORS.black};white-space:pre-wrap">${message.replace(/</g, "&lt;")}</p>`,
+      <p style="margin:0;font-family:${EMAIL_FONT_TEXT};font-size:17px;line-height:1.6;color:${EMAIL_COLORS.black};white-space:pre-wrap">${escapeHtml(message)}</p>`,
     }),
   });
 

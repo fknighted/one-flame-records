@@ -8,7 +8,9 @@ import EmptyState from "@/components/EmptyState";
 import { FIELD_CLASS, FIELD_LABEL_CLASS, buttonClasses } from "@/lib/sound-system";
 
 export const metadata: Metadata = {
-  title: "Search — One Flame Records",
+  robots: { index:false, follow:true },
+  alternates: { canonical: "/search" },
+  title: "Search",
 };
 
 function formatDate(dateStr: string) {

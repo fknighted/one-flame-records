@@ -71,6 +71,7 @@ export default function VideoForm({
   async function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
+    if(file.size>100*1024*1024){setUploadError("Choose a video under 100 MB.");return;}
 
     setUploading(true);
     setUploadProgress(0);
@@ -78,7 +79,7 @@ export default function VideoForm({
     setUploadedUrl("");
 
     try {
-      const { signedUrl, publicUrl } = await getVideoUploadUrl(file.name, file.type);
+      const { signedUrl, publicUrl } = await getVideoUploadUrl(file.name, file.type, file.size);
 
       // Upload directly to Supabase Storage — no file passes through the server
       await new Promise<void>((resolve, reject) => {

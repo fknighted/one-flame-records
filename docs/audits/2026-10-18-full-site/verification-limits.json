@@ -1,0 +1,7 @@
+{
+  "databaseManagementApi": "401 Invalid access token; current function definitions, live policies and backup settings could not be inspected through management API. CLI returned the same rejection.",
+  "directDatabaseMetadata": "Strict TLS certificate verification failed; no SQL ran and certificate verification was not disabled.",
+  "runtimeLogs": "Bounded production error query, preceding 24 hours, returned no entries. This is not proof that no errors occurred.",
+  "accountActions": "No sign-in, registration, emails, bar transactions, uploads, publish, settings change or database migration. Null-identifier function probes cannot match existing rows.",
+  "reviewMethod": "Single-agent sequential research; no independent review or research fan-out."
+}

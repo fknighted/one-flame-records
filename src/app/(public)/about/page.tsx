@@ -3,6 +3,7 @@ import PosterHeadline from "@/components/PosterHeadline";
 import LinkButton from "@/components/LinkButton";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/about" },
   title: "About",
   description:
     "One Flame Records is an independent reggae and dancehall label pressed in Montego Bay, Jamaica. The story, the philosophy, and the people behind it.",

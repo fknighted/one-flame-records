@@ -67,12 +67,13 @@ async function getArtist(slug: string) {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const artist = await getArtist(slug);
-  if (!artist) return { title: "Artist not found — One Flame Records" };
+  if (!artist) return { title: "Artist not found" };
 
   const description = artist.bio ? artist.bio.slice(0, 160) : `${artist.stage_name} on One Flame Records.`;
 
   return {
-    title: `${artist.stage_name} — One Flame Records`,
+    alternates: { canonical: `/artists/${slug}` },
+    title: `${artist.stage_name}`,
     description,
     openGraph: {
       title: artist.stage_name,

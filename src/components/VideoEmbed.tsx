@@ -20,6 +20,7 @@ export default function VideoEmbed({ youtube_id, storage_url, title, artist_name
       <div className="group flex flex-col">
         <div className="aspect-video bg-panel">
           <video
+            aria-label={`${title} — ${artist_name}`}
             src={storage_url}
             controls
             preload="metadata"

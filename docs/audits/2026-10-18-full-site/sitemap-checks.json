@@ -1,0 +1,92 @@
+[
+  {
+    "url": "https://www.oneflamerecords.com",
+    "status": 200,
+    "seconds": 0.744
+  },
+  {
+    "url": "https://www.oneflamerecords.com/artists",
+    "status": 200,
+    "seconds": 0.642
+  },
+  {
+    "url": "https://www.oneflamerecords.com/releases",
+    "status": 200,
+    "seconds": 0.782
+  },
+  {
+    "url": "https://www.oneflamerecords.com/videos",
+    "status": 200,
+    "seconds": 0.682
+  },
+  {
+    "url": "https://www.oneflamerecords.com/news",
+    "status": 200,
+    "seconds": 0.908
+  },
+  {
+    "url": "https://www.oneflamerecords.com/flames-lounge",
+    "status": 200,
+    "seconds": 0.865
+  },
+  {
+    "url": "https://www.oneflamerecords.com/about",
+    "status": 200,
+    "seconds": 0.689
+  },
+  {
+    "url": "https://www.oneflamerecords.com/contact",
+    "status": 200,
+    "seconds": 0.876
+  },
+  {
+    "url": "https://www.oneflamerecords.com/sign",
+    "status": 200,
+    "seconds": 1.188
+  },
+  {
+    "url": "https://www.oneflamerecords.com/artists/fola-boss",
+    "status": 200,
+    "seconds": 0.837
+  },
+  {
+    "url": "https://www.oneflamerecords.com/artists/kahlic",
+    "status": 200,
+    "seconds": 0.726
+  },
+  {
+    "url": "https://www.oneflamerecords.com/artists/layd-d",
+    "status": 200,
+    "seconds": 0.77
+  },
+  {
+    "url": "https://www.oneflamerecords.com/artists/layshaunex",
+    "status": 200,
+    "seconds": 0.742
+  },
+  {
+    "url": "https://www.oneflamerecords.com/artists/mystique-fyre",
+    "status": 200,
+    "seconds": 0.434
+  },
+  {
+    "url": "https://www.oneflamerecords.com/artists/phayroh",
+    "status": 200,
+    "seconds": 0.68
+  },
+  {
+    "url": "https://www.oneflamerecords.com/artists/twiggy",
+    "status": 200,
+    "seconds": 0.6
+  },
+  {
+    "url": "https://www.oneflamerecords.com/artists/vyperxstudiobeat",
+    "status": 200,
+    "seconds": 0.715
+  },
+  {
+    "url": "https://www.oneflamerecords.com/artists/bawlinz-1781571125557",
+    "status": 200,
+    "seconds": 0.671
+  }
+]

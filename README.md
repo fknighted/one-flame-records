@@ -1,36 +1,19 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# One Flame Records
 
-## Getting Started
+Public label website, artist portal, label administration and Flames Lounge till. Next.js 16.3.8, React 19, Supabase, Resend, Inngest and Vercel. Brand guidance lives in `design-system/README.md`.
 
-First, run the development server:
+Use Node 24, install with `npm ci`, and configure local values from `.env.example` in an ignored environment file. Verify ignore rules before saving secrets.
 
-```bash
+```sh
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm run build
+npm run typecheck
+npm run lint
+npm test
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Tests use an isolated in-memory PostgreSQL-compatible engine and mocked providers; they do not write to the live business. The continuous-check workflow runs type checking, lint and tests. Production builds also need the existing environment configuration.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Read `CLAUDE.md` and `node_modules/next/dist/docs/` before implementation. Money is whole Jamaican dollars. Retired AI Studio/gamer screens must stay retired; saved media remains.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+October 18 repairs are local, not released. See [repair report](docs/audits/2026-10-18-repairs/report.md), [operations](docs/operations.md) and [current brief](docs/next-session-prompt.md). Commit, push, hosted migrations and deployment require Frank’s explicit approval.

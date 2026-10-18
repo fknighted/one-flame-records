@@ -1,4 +1,5 @@
 "use client";
+import { useUploadAction } from "@/lib/uploads/use-upload-action";
 
 import { useActionState, useState, useEffect } from "react";
 import { updateProfile, type ProfileActionState } from "@/app/portal/profile/actions";
@@ -24,7 +25,7 @@ export default function PortalProfileForm({
   initialValues: InitialValues;
 }) {
   const [state, formAction, pending] = useActionState<ProfileActionState, FormData>(
-    updateProfile,
+    useUploadAction(updateProfile, "profile_photo"),
     null
   );
   const [photoPreview, setPhotoPreview] = useState<string | null>(
@@ -40,6 +41,10 @@ export default function PortalProfileForm({
       return () => clearTimeout(t);
     }
   }, [state]);
+
+  useEffect(()=>{
+    if(photoPreview?.startsWith("blob:"))return ()=>URL.revokeObjectURL(photoPreview);
+  },[photoPreview]);
 
   function handlePhotoChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
@@ -65,30 +70,33 @@ export default function PortalProfileForm({
         </p>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label className={LABEL}>Stage Name</label>
+            <label htmlFor="profile-stage-name" className={LABEL}>Stage Name</label>
             <input
               type="text"
               readOnly
+              id="profile-stage-name"
               value={initialValues.stage_name}
               className={READONLY}
             />
           </div>
           <div>
-            <label className={LABEL}>Hometown</label>
+            <label htmlFor="profile-hometown" className={LABEL}>Hometown</label>
             <input
               type="text"
               readOnly
+              id="profile-hometown"
               value={initialValues.hometown ?? "—"}
               className={READONLY}
             />
           </div>
         </div>
         <div>
-          <label className={LABEL}>Genres</label>
+          <label htmlFor="profile-genres" className={LABEL}>Genres</label>
           <input
             type="text"
             readOnly
-            value={initialValues.genres.join(", ") || "—"}
+            id="profile-genres"
+              value={initialValues.genres.join(", ") || "—"}
             className={READONLY}
           />
         </div>
@@ -98,8 +106,9 @@ export default function PortalProfileForm({
       <section className="space-y-4">
         <h2 className={SECTION_HEADING}>Bio</h2>
         <div>
-          <label className={LABEL}>Bio</label>
+          <label htmlFor="profile-bio" className={LABEL}>Bio</label>
           <textarea
+            id="profile-bio"
             name="bio"
             rows={5}
             defaultValue={initialValues.bio}
@@ -123,6 +132,7 @@ export default function PortalProfileForm({
             <div className="w-16 h-16 bg-panel border border-line shrink-0" />
           )}
           <input
+            aria-label="Profile photo"
             name="photo"
             type="file"
             accept="image/jpeg,image/png,image/webp"

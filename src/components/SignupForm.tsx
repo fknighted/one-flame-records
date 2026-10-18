@@ -50,6 +50,7 @@ export default function SignupForm({ codeId }: { codeId: string }) {
             <input
               id="signup-stage_name"
               name="stage_name"
+          maxLength={100}
               type="text"
               required
               placeholder="Your artist name"
@@ -63,6 +64,7 @@ export default function SignupForm({ codeId }: { codeId: string }) {
             <input
               id="signup-legal_name"
               name="legal_name"
+          maxLength={200}
               type="text"
               required
               placeholder="First and last name"
@@ -76,6 +78,7 @@ export default function SignupForm({ codeId }: { codeId: string }) {
             <input
               id="signup-email"
               name="email"
+          maxLength={254}
               type="email"
               required
               placeholder="you@example.com"
@@ -87,6 +90,7 @@ export default function SignupForm({ codeId }: { codeId: string }) {
             <input
               id="signup-phone"
               name="phone"
+          maxLength={40}
               type="tel"
               placeholder="+1 876 000 0000"
               className={inputClass}
@@ -105,6 +109,7 @@ export default function SignupForm({ codeId }: { codeId: string }) {
           <input
             id="signup-genres"
             name="genres"
+          maxLength={500}
             aria-describedby="genres-hint"
             type="text"
             placeholder="e.g. reggae, dancehall, roots"
@@ -146,6 +151,7 @@ export default function SignupForm({ codeId }: { codeId: string }) {
         <textarea
           id="signup-message"
           name="message"
+          maxLength={5000}
           rows={4}
           placeholder="Where you're from, what you've been working on, why you want to sign with One Flame…"
           className={`${inputClass} py-2.5 resize-none`}

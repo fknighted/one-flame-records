@@ -21,7 +21,7 @@ export function renderApplicationApproved(data: ApplicationApprovedData): {
 
   const html = emailLayout({
     title: subject,
-    heading: `You&rsquo;re in, ${stageName}.`,
+    heading: `You’re in, ${stageName}.`,
     body: [
       emailParagraph(
         "Your application has been approved. Click below to set your password and access your artist portal."

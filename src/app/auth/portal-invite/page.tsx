@@ -6,7 +6,12 @@ import "@/app/studio.css";
 
 function PortalInviteInner() {
   const params = useSearchParams();
-  const destination = params.get("to");
+  let destination: string | null = null;
+  try {
+    const candidate=new URL(params.get("to")??"");
+    const trusted=new URL(process.env.NEXT_PUBLIC_SUPABASE_URL!);
+    if(candidate.protocol==="https:" && candidate.origin===trusted.origin && candidate.pathname==="/auth/v1/verify" && !candidate.username && !candidate.password) destination=candidate.href;
+  } catch { /* Invalid or untrusted destination. */ }
 
   if (!destination) {
     return (

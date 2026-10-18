@@ -1,4 +1,5 @@
 "use client";
+import { useRetryableAction } from "@/lib/retryable-action";
 
 import { useActionState, useState } from "react";
 import Link from "next/link";
@@ -7,7 +8,7 @@ import { openTab } from "./actions";
 type Regular = { id: string; name: string; phone: string | null; notes: string | null };
 
 export default function OpenTabForm({ regulars }: { regulars: Regular[] }) {
-  const [state, formAction, pending] = useActionState(openTab, null);
+  const [state, formAction, pending] = useActionState(useRetryableAction(openTab), null);
   const [nameInput, setNameInput]     = useState("");
   const [regularId, setRegularId]     = useState<string | null>(null);
   const [hint, setHint]               = useState<string | null>(null);

@@ -1,10 +1,11 @@
 "use client";
+import { useRetryableAction } from "@/lib/retryable-action";
 
 import { useActionState, useEffect, useRef } from "react";
 import { addCustomItem } from "./actions";
 
 export default function CustomItemForm({ tabId }: { tabId: string }) {
-  const [state, action, pending] = useActionState(addCustomItem, null);
+  const [state, action, pending] = useActionState(useRetryableAction(addCustomItem), null);
   const formRef = useRef<HTMLFormElement>(null);
 
   // Clear the form after a successful add

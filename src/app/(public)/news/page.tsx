@@ -1,3 +1,4 @@
+import { assertPublicReads } from "@/lib/public-data";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { unstable_cache } from "next/cache";
@@ -8,10 +9,11 @@ import LinkButton from "@/components/LinkButton";
 import LogoMark from "@/components/LogoMark";
 import PrintedPhoto from "@/components/PrintedPhoto";
 
-export const metadata: Metadata = {
-  title: "News — One Flame Records",
-  description: "Latest news, releases, and events from One Flame Records.",
-};
+
+export async function generateMetadata({searchParams}:{searchParams:Promise<{page?:string}>}):Promise<Metadata>{
+ const {page}=await searchParams;const number=Math.max(1,parseInt(page??"1",10)||1);
+ return {title:"News",description:"Latest news, releases, and events from One Flame Records.",alternates:{canonical:number>1?`/news?page=${number}`:"/news"}};
+}
 
 function formatDate(dateStr: string) {
   return new Date(dateStr).toLocaleDateString("en-US", {
@@ -31,13 +33,14 @@ const getNewsPage = unstable_cache(
   async (from: number, to: number) => {
     const supabase = createServiceClient();
     const now = new Date().toISOString();
-    const { data: posts, count } = await supabase
+    const { data: posts, count, error } = await supabase
       .from("news_posts")
       .select("id, slug, title, excerpt, cover_url, category, published_at", { count: "exact" })
       .eq("is_published", true)
       .lte("published_at", now)
       .order("published_at", { ascending: false })
       .range(from, to);
+    assertPublicReads({error});
     return { posts: posts ?? [], count: count ?? 0 };
   },
   ["public-news-list"],

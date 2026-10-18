@@ -1,6 +1,6 @@
 "use client";
 
-import { useTransition } from "react";
+import { useTransition, useState } from "react";
 import { requestYouTubeUpload } from "@/app/admin/videos/actions";
 import { useRouter } from "next/navigation";
 
@@ -13,6 +13,7 @@ interface Props {
 
 export default function YoutubeUploadButton({ source, id, youtubeId, uploadStatus }: Props) {
   const [isPending, startTransition] = useTransition();
+  const [error,setError]=useState<string|null>(null);
   const router = useRouter();
 
   // Already on YouTube
@@ -36,14 +37,18 @@ export default function YoutubeUploadButton({ source, id, youtubeId, uploadStatu
     );
   }
 
+  if(uploadStatus === "review") return <p role="alert" className="studio-error">Upload result needs review. Check the private uploads in YouTube Studio before retrying.</p>;
+
   // Failed — allow retry
   const isFailed = uploadStatus === "failed";
 
   return (
-    <button
+    <span>{error && <span role="alert" className="studio-error">{error}</span>}<button
       onClick={() => {
         startTransition(async () => {
-          await requestYouTubeUpload(source, id);
+          setError(null);
+          try { const result=await requestYouTubeUpload(source,id);if(result?.error)setError(result.error); }
+          catch {setError("Could not confirm this request. Please retry.");}
           router.refresh();
         });
       }}
@@ -52,6 +57,6 @@ export default function YoutubeUploadButton({ source, id, youtubeId, uploadStatu
       }`}
     >
       {isFailed ? "Retry YouTube" : "Upload to YouTube"}
-    </button>
+    </button></span>
   );
 }

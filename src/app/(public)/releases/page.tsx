@@ -1,3 +1,4 @@
+import { assertPublicReads, readAllRows } from "@/lib/public-data";
 import { Suspense } from "react";
 import { unstable_cache } from "next/cache";
 import { createServiceClient } from "@/lib/supabase/server";
@@ -8,6 +9,7 @@ import EmptyState from "@/components/EmptyState";
 import type { Tables } from "@/types/supabase";
 
 export const metadata = {
+  alternates: { canonical: "/releases" },
   title: "Releases",
   description: "Albums, EPs, and singles from the One Flame Records roster.",
 };
@@ -26,18 +28,12 @@ type SearchParams = Promise<{ artist?: string; type?: string; sort?: string }>;
 const getReleasesData = unstable_cache(
   async () => {
     const supabase = createServiceClient();
-    const [{ data: artists }, { data: allReleases }] = await Promise.all([
-      supabase
-        .from("artists")
-        .select("id, stage_name")
-        .eq("status", "active")
-        .order("stage_name", { ascending: true }),
-
-      supabase
-        .from("releases")
-        .select("*, artists(stage_name, slug)")
-        .returns<ReleaseRow[]>(),
+    const results = await Promise.all([
+      readAllRows((from,to)=>supabase.from("artists").select("id, stage_name").eq("status","active").order("stage_name").order("id").range(from,to)).then(data=>({data,error:null})),
+      readAllRows((from,to)=>supabase.from("releases").select("*, artists(stage_name, slug)").order("id").range(from,to).returns<ReleaseRow[]>()).then(data=>({data,error:null})),
     ]);
+    assertPublicReads(...results);
+    const [{data:artists},{data:allReleases}]=results;
     return { artists: artists ?? [], allReleases: allReleases ?? [] };
   },
   ["public-releases-page"],

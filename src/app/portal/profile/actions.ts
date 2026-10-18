@@ -1,4 +1,5 @@
 "use server";
+import { invalidatePublicCatalog } from "@/lib/public-cache";
 
 import { revalidatePath } from "next/cache";
 import { createClient, createServiceClient } from "@/lib/supabase/server";
@@ -8,35 +9,7 @@ export type ProfileActionState =
   | { success: true }
   | null;
 
-// Allowed image types → canonical extension. The photo lands in the PUBLIC
-// bucket, so we never trust the client-supplied filename/content-type for the
-// stored extension — an attacker could otherwise host arbitrary content (HTML/
-// SVG) on the Supabase public domain.
-const IMAGE_EXT_BY_TYPE: Record<string, string> = {
-  "image/jpeg": "jpg",
-  "image/png": "png",
-  "image/webp": "webp",
-};
-const MAX_PHOTO_BYTES = 5 * 1024 * 1024; // 5 MB
-
-async function uploadPhoto(file: File, artistId: string): Promise<string> {
-  const ext = IMAGE_EXT_BY_TYPE[file.type];
-  if (!ext) throw new Error("Photo must be a JPG, PNG, or WebP image.");
-  if (file.size > MAX_PHOTO_BYTES) throw new Error("Photo must be under 5 MB.");
-
-  const supabase = createServiceClient();
-  const path = `photos/${artistId}/${crypto.randomUUID()}.${ext}`;
-  const buffer = await file.arrayBuffer();
-
-  const { error } = await supabase.storage
-    .from("public-media")
-    .upload(path, buffer, { contentType: file.type, upsert: false });
-
-  if (error) throw new Error(`Photo upload failed: ${error.message}`);
-
-  const { data } = supabase.storage.from("public-media").getPublicUrl(path);
-  return data.publicUrl;
-}
+import { verifyUpload } from "@/lib/uploads/verify";
 
 export async function updateProfile(
   _prev: ProfileActionState,
@@ -73,13 +46,12 @@ export async function updateProfile(
 
   // Photo upload (service client for storage; row update uses session client for RLS)
   let newPhotoUrl: string | undefined;
-  const photoFile = formData.get("photo") as File | null;
-  if (photoFile && photoFile.size > 0) {
+  const uploadId = formData.get("upload_id");
+  if (typeof uploadId === "string" && uploadId) {
     try {
-      newPhotoUrl = await uploadPhoto(photoFile, artistId);
-    } catch (e) {
-      return { error: (e as Error).message };
-    }
+      const {upload}=await verifyUpload(uploadId,user.id,artistId,"profile_photo");
+      newPhotoUrl=createServiceClient().storage.from(upload.bucket).getPublicUrl(upload.path).data.publicUrl;
+    } catch(error) { return {error:error instanceof Error?error.message:"Could not verify photo."}; }
   }
 
   const update = newPhotoUrl !== undefined
@@ -94,6 +66,7 @@ export async function updateProfile(
 
   if (error) return { error: `Failed to save: ${error.message}` };
 
+  invalidatePublicCatalog("artist");
   revalidatePath("/portal/profile");
   revalidatePath(`/artists`); // public site reflects the update
   return { success: true };

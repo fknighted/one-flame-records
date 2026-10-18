@@ -1,17 +1,21 @@
 import type { Metadata } from "next";
+import { verifyNewsletterToken } from "@/lib/email/newsletter-token";
 import UnsubscribeForm from "./UnsubscribeForm";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/unsubscribe" },
   title: "Unsubscribe",
   robots: { index: false, follow: false },
 };
 
 interface Props {
-  searchParams: Promise<{ email?: string }>;
+  searchParams: Promise<{ email?: string; token?: string }>;
 }
 
 export default async function UnsubscribePage({ searchParams }: Props) {
-  const { email } = await searchParams;
+  const params = await searchParams;
+  const token=params.token;
+  const email=token ? verifyNewsletterToken(token,"unsubscribe") : params.email;
 
   if (!email) {
     return (
@@ -35,7 +39,7 @@ export default async function UnsubscribePage({ searchParams }: Props) {
             Unsubscribe from the One Flame Records newsletter?
           </p>
         </div>
-        <UnsubscribeForm email={email} />
+        <UnsubscribeForm email={email} token={token} />
       </div>
     </div>
   );

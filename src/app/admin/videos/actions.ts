@@ -1,4 +1,5 @@
 "use server";
+import { invalidatePublicCatalog } from "@/lib/public-cache";
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
@@ -21,11 +22,15 @@ function extractYouTubeId(input: string): string | null {
 // The browser uploads directly to Supabase — no file passes through the server.
 export async function getVideoUploadUrl(
   filename: string,
-  contentType: string
+  contentType: string,
+  size: number
 ): Promise<{ signedUrl: string; publicUrl: string }> {
   await requireAdmin();
   const supabase = createServiceClient();
-  const ext = filename.split(".").pop() ?? "mp4";
+  if (!Number.isSafeInteger(size) || size<=0 || size>100*1024*1024) throw new Error("Choose a video under 100 MB.");
+  if (!["video/mp4","video/quicktime"].includes(contentType)) throw new Error("Choose an MP4 or MOV video.");
+  const ext = contentType === "video/quicktime" ? "mov" : "mp4";
+  if (!filename || filename.length>255) throw new Error("Invalid filename.");
   const storagePath = `videos/${crypto.randomUUID()}.${ext}`;
 
   const { data, error } = await supabase.storage
@@ -71,6 +76,7 @@ export async function createVideo(
 
   if (error) return { error: `Failed to create video: ${error.message}` };
 
+  invalidatePublicCatalog("video");
   revalidatePath("/admin/videos");
   redirect("/admin/videos");
 }
@@ -80,6 +86,7 @@ export async function deleteVideo(videoId: string): Promise<void> {
   const supabase = createServiceClient();
   const { error } = await supabase.from("videos").delete().eq("id", videoId);
   if (error) throw new Error(error.message);
+  invalidatePublicCatalog("video");
   revalidatePath("/admin/videos");
 }
 
@@ -90,13 +97,12 @@ export async function requestYouTubeUpload(
   await requireAdmin();
   const supabase = createServiceClient();
 
-  // Optimistically mark as uploading so the UI updates before Inngest fires
-  const table = source === "video" ? "videos" : "video_jobs";
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  await supabase.from(table).update({ youtube_upload_status: "uploading" } as any).eq("id", id);
+  const claim=await supabase.rpc("claim_youtube_upload",{p_source:source,p_id:id});
+  if(claim.error || !claim.data)return {error:claim.error?.message??"Could not prepare upload."};
+  try { await inngest.send({ id:claim.data, name:"youtube/upload.requested",data:{source,id,requestId:claim.data} }); }
+  catch { return {error:"Could not confirm background delivery. Retry this request; it will reuse the same upload identity."}; }
 
-  await inngest.send({ name: "youtube/upload.requested", data: { source, id } });
-
+  invalidatePublicCatalog("video");
   revalidatePath(source === "video" ? "/admin/videos" : "/admin/artists");
   return null;
 }
@@ -132,6 +138,7 @@ export async function updateVideo(
 
   if (error) return { error: `Failed to update video: ${error.message}` };
 
+  invalidatePublicCatalog("video");
   revalidatePath("/admin/videos");
   redirect("/admin/videos");
 }

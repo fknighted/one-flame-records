@@ -29,7 +29,7 @@ export default function SubscribeForm() {
   if (done) {
     return (
       <p className="type-body font-semibold text-green" role="status">
-        You&apos;re subscribed.
+        Check your email to confirm your subscription.
       </p>
     );
   }

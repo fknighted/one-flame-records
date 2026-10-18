@@ -13,6 +13,7 @@ import { createServiceClient } from "@/lib/supabase/server";
 export const revalidate = 120;
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/flames-lounge" },
   title: "Flames Lounge — Montego Bay's Creative Space",
   description:
     "Outdoor recording studio, gaming lounge, Jamaican food, and live events — all under one roof in Montego Bay, Jamaica. Part of the One Flame Records family.",

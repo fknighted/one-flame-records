@@ -1,4 +1,5 @@
 "use client";
+import { useRetryableAction } from "@/lib/retryable-action";
 
 import { useActionState, useState } from "react";
 import type { Database } from "@/types/supabase";
@@ -14,7 +15,7 @@ type Props = {
 
 
 function AddButton({ item, tabId, disabled, badge }: { item: PosItem; tabId: string; disabled: boolean; badge?: string }) {
-  const [state, formAction, pending] = useActionState(addItemToTab, null);
+  const [state, formAction, pending] = useActionState(useRetryableAction(addItemToTab), null);
 
   return (
     <form action={formAction}>

@@ -1,0 +1,24 @@
+{
+  "gameSessions": {
+    "status": 200,
+    "count": 7,
+    "error": null,
+    "unlinked": 7
+  },
+  "publishedNews": {
+    "status": 200,
+    "count": 0,
+    "error": null
+  },
+  "releases": {
+    "status": 200,
+    "count": 0,
+    "error": null
+  },
+  "artistPhotos": {
+    "status": 200,
+    "count": null,
+    "error": null,
+    "missing": 9
+  }
+}

@@ -1,4 +1,5 @@
 "use client";
+import { useUploadAction } from "@/lib/uploads/use-upload-action";
 
 import { useActionState, useState, useEffect, useRef } from "react";
 import { uploadAssetForArtist, type AssetActionState } from "@/app/admin/artists/[id]/assets/actions";
@@ -12,7 +13,7 @@ const KINDS = [
 
 export default function AdminAssetUploadForm({ artistId }: { artistId: string }) {
   const boundAction = uploadAssetForArtist.bind(null, artistId);
-  const [state, action, pending] = useActionState<AssetActionState, FormData>(boundAction, null);
+  const [state, action, pending] = useActionState<AssetActionState, FormData>(useUploadAction(boundAction,"asset",artistId), null);
   const [selectedKind, setSelectedKind] = useState(KINDS[0].value);
   const [uploaded, setUploaded] = useState(false);
   const prevPending = useRef(false);

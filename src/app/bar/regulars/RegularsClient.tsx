@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useEffect, useState, useTransition } from "react";
+import { useActionState, useState, useTransition } from "react";
 import { createRegular, updateRegular, deleteRegular } from "./actions";
 
 type Regular = { id: string; name: string; phone: string | null; notes: string | null };
@@ -47,14 +47,13 @@ function AddForm() {
 function RegularRow({ regular }: { regular: Regular }) {
   const [editing, setEditing] = useState(false);
   const action = updateRegular.bind(null, regular.id);
-  const [state, formAction, pending] = useActionState(action, null);
+  const [state, formAction, pending] = useActionState(async(previous: {error:string}|null, data: FormData) => {
+    const result=await action(previous,data);
+    if(!result) setEditing(false);
+    return result;
+  }, null);
   const [deletePending, startDelete] = useTransition();
   const [deleteError, setDeleteError] = useState<string | null>(null);
-
-  // Close edit form automatically after a successful save
-  useEffect(() => {
-    if (state === null && !pending && editing) setEditing(false);
-  }, [state, pending, editing]);
 
   if (editing) {
     return (

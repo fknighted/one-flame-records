@@ -1,10 +1,22 @@
-> October 8 expanded removal: all legacy AI Studio/campaign/production-job tools and menus are retired. Only completed saved videos and shared YouTube uploads remain. The design below is historical. Current evidence: [release receipt](session-handoffs/2026-10-08-total-studio-removal.md).
+# Current architecture notes — October 18, 2026
 
-# Local production retirement — October 8, 2026
+## October 18 repair candidate — NOT applied live
 
-Video-production actions, provider adapters and workers are removed locally. Saved job/media tables, private-assets/generated-videos/public-media storage, public catalog and upload/YouTube flows remain. Old request and brand-settings pages redirect. Campaign workers retain copy, images and scripts but never queue video rendering. No schema migration, database deletion, credential change or deployment was performed. The sections below describe retained data and historical implementation; old generation routes/services are superseded.
+The five `20261018*` migrations are additive local release work, tested against the migration history in an isolated engine:
 
-[Current work and review state](/Users/frankknight/Claude OS/Delegations/remove-the-old-one-flame-video-production-code-while-preserv.md)
+- Access hardening: safe registration role, MFA-aware administrator/bar helpers, service-only internal functions and sensitive writes, public artist column allowlist, bucket limits.
+- Atomic bar operations: request receipts, stock snapshots and locked tab/stock/purchase/regular operations. Stable request IDs reject changed payload reuse and prevent repeated successful operations.
+- Workflow recovery: approval leases and saved provisioning IDs; signed upload reservations and completion; transactional asset deletion plus cleanup queue; bounded public forms and active QR checks.
+- Newsletter delivery: hashed confirmation tokens, persistent audience snapshot and per-recipient results, claim leases, provider idempotency window and aggregate progress recovery.
+- YouTube recovery: saved request identities and provider receipts; ambiguous external outcomes require review rather than blind repeat upload.
+
+New private tables and functions are service-only. Server actions must still authorize the current user before service access. Admin second-step checks apply when a verified factor is enrolled; enrollment itself remains an owner action. Client browser uploads use short-lived authorized storage paths; server completion checks size/type/owner/path before storing references. Deleted private files are removed by the registered hourly storage-cleanup worker only after the record deletion commits.
+
+Public catalog changes invalidate affected cached pages. Database errors throw rather than become cached empty catalogs; growing releases/videos are read in bounded pages. Security headers preserve static caching; broader resource policy starts in report-only mode. See the repair report for verification limits and release ordering.
+
+## Historical reference
+
+The retained schema reference below predates the whole-JMD conversion and full October 8 Studio retirement. Use current migration history/types and the notes above for implementation. Campaign/image/copy/generation workers and gamer screens are retired; saved data/media remain. [October 8 release receipt](session-handoffs/2026-10-08-total-studio-removal.md).
 
 # Architecture
 
@@ -271,7 +283,7 @@ src/app/
 
 Single Supabase Auth instance handles both admin and artist roles. After login, the user is redirected based on `profiles.role`: admins to `/admin`, artists to `/portal`.
 
-Middleware (`src/middleware.ts`) protects `/admin/*` and `/portal/*`. Unauthenticated → redirect to `/login` with the original destination as `?next=`. Wrong role → redirect to the appropriate dashboard.
+Route protection (`src/proxy.ts`) protects `/admin/*` and `/portal/*`. Unauthenticated → redirect to `/login` with the original destination as `?next=`. Wrong role → redirect to the appropriate dashboard.
 
 ## Environment variables
 
@@ -286,5 +298,5 @@ See `.env.example`. Phase notes:
 | `RESEND_FROM_EMAIL` | 3 | e.g. `noreply@oneflamerecords.com` |
 | `INNGEST_EVENT_KEY` | 4 | |
 | `INNGEST_SIGNING_KEY` | 4 | |
-| `KLING_API_KEY` | 4 | First video model integration |
+| Retired generation-provider variables | Historical | Not required by the current application |
 | `NEXT_PUBLIC_SITE_URL` | 1 | `https://oneflamerecords.com` in prod, `http://localhost:3000` local |

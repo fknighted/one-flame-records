@@ -3,7 +3,8 @@ import type { Metadata } from "next";
 import PosterHeadline from "@/components/PosterHeadline";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy — One Flame Records",
+  alternates: { canonical: "/privacy" },
+  title: "Privacy Policy",
   robots: { index: false, follow: false },
 };
 
@@ -22,7 +23,7 @@ export default function PrivacyPage() {
       {/* Reading on paper */}
       <section className="bg-paper text-black">
         <div className="mx-auto max-w-3xl px-4 sm:px-6 py-14 sm:py-[88px] space-y-10">
-          <p className="type-label">Effective date: June 2026</p>
+          <p className="type-label">Effective date: October 2026</p>
 
           <div>
             <h2 className="type-title mb-4">
@@ -47,8 +48,7 @@ export default function PrivacyPage() {
               What data we collect
             </h2>
             <p className="type-body max-w-[66ch] mb-3">
-              We collect personal information only when you voluntarily provide
-              it to us. This may include:
+              We collect information you provide and limited technical information needed to operate and improve this website. Information you provide may include:
             </p>
             <ul className="list-disc pl-5 space-y-2 type-body max-w-[66ch]">
               <li>
@@ -69,6 +69,11 @@ export default function PrivacyPage() {
               We do not collect payment information directly. We do not use
               tracking cookies or third-party advertising pixels.
             </p>
+          </div>
+
+          <div>
+            <h2 className="type-title mb-4">Website operation and diagnostics</h2>
+            <p className="type-body max-w-[66ch]">Sign-in uses essential session cookies. We use Vercel for hosting, aggregated usage analytics and page-speed measurements, and Sentry for error reports. Error diagnostics may include technical details about your browser and actions around an error. Sentry error replay is configured to mask text and form inputs and block media; it is not used for advertising. Music and video embeds can connect to services such as YouTube and Spotify, which process information under their own policies.</p>
           </div>
 
           <div>

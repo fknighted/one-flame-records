@@ -1,4 +1,5 @@
 "use client";
+import { useRetryableAction } from "@/lib/retryable-action";
 
 import { useActionState } from "react";
 import { incrementTabItem, decrementTabItem } from "./actions";
@@ -12,8 +13,8 @@ export default function QuantityControls({
   tabId: string;
   quantity: number;
 }) {
-  const [incState, incAction, incPending] = useActionState(incrementTabItem, null);
-  const [decState, decAction, decPending] = useActionState(decrementTabItem, null);
+  const [incState, incAction, incPending] = useActionState(useRetryableAction(incrementTabItem), null);
+  const [decState, decAction, decPending] = useActionState(useRetryableAction(decrementTabItem), null);
   const anyPending = incPending || decPending;
 
   return (

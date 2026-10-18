@@ -1,3 +1,4 @@
+import { assertPublicReads, readAllRows } from "@/lib/public-data";
 import { Suspense } from "react";
 import { unstable_cache } from "next/cache";
 import { createServiceClient } from "@/lib/supabase/server";
@@ -8,6 +9,7 @@ import EmptyState from "@/components/EmptyState";
 import type { Tables } from "@/types/supabase";
 
 export const metadata = {
+  alternates: { canonical: "/videos" },
   title: "Videos",
   description:
     "Music videos, live performances, and more from One Flame Records artists.",
@@ -31,28 +33,13 @@ type SearchParams = Promise<{ artist?: string; kind?: string }>;
 const getVideosData = unstable_cache(
   async () => {
     const supabase = createServiceClient();
-    const [{ data: artists }, { data: videos }, { data: publicJobs }] = await Promise.all([
-      supabase
-        .from("artists")
-        .select("id, stage_name")
-        .eq("status", "active")
-        .order("stage_name", { ascending: true }),
-
-      supabase
-        .from("videos")
-        .select("*, artists(stage_name)")
-        .order("featured", { ascending: false })
-        .order("published_at", { ascending: false })
-        .returns<VideoRow[]>(),
-
-      supabase
-        .from("video_jobs")
-        .select("*, artists(stage_name)")
-        .eq("is_public", true)
-        .eq("status", "complete")
-        .order("completed_at", { ascending: false })
-        .returns<VideoJobRow[]>(),
+    const results = await Promise.all([
+      readAllRows((from,to)=>supabase.from("artists").select("id, stage_name").eq("status","active").order("stage_name").order("id").range(from,to)).then(data=>({data,error:null})),
+      readAllRows((from,to)=>supabase.from("videos").select("*, artists(stage_name)").order("featured",{ascending:false}).order("published_at",{ascending:false}).order("id").range(from,to).returns<VideoRow[]>()).then(data=>({data,error:null})),
+      readAllRows((from,to)=>supabase.from("video_jobs").select("*, artists(stage_name)").eq("is_public",true).eq("status","complete").order("completed_at",{ascending:false}).order("id").range(from,to).returns<VideoJobRow[]>()).then(data=>({data,error:null})),
     ]);
+    assertPublicReads(...results);
+    const [{data:artists},{data:videos},{data:publicJobs}]=results;
     return {
       artists: artists ?? [],
       videos: videos ?? [],

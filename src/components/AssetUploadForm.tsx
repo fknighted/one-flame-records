@@ -1,4 +1,5 @@
 "use client";
+import { useUploadAction } from "@/lib/uploads/use-upload-action";
 
 import { useActionState, useState } from "react";
 import { uploadAsset, type AssetActionState } from "@/app/portal/assets/actions";
@@ -28,7 +29,7 @@ const KINDS = [
 
 export default function AssetUploadForm() {
   const [state, action, pending] = useActionState<AssetActionState, FormData>(
-    uploadAsset,
+    useUploadAction(uploadAsset, "asset"),
     null
   );
   const [selectedKind, setSelectedKind] = useState(KINDS[0].value);
@@ -44,10 +45,10 @@ export default function AssetUploadForm() {
       )}
 
       <div>
-        <label className="studio-field-label">
-          Kind
+        <label htmlFor="asset-kind" className="studio-field-label">Kind
         </label>
         <select
+          id="asset-kind"
           name="kind"
           value={selectedKind}
           onChange={(e) => setSelectedKind(e.target.value)}
@@ -62,10 +63,10 @@ export default function AssetUploadForm() {
       </div>
 
       <div>
-        <label className="studio-field-label">
-          Title
+        <label htmlFor="asset-title" className="studio-field-label">Title
         </label>
         <input
+          id="asset-title"
           name="title"
           type="text"
           required
@@ -75,11 +76,11 @@ export default function AssetUploadForm() {
       </div>
 
       <div>
-        <label className="studio-field-label">
-          Notes{" "}
+        <label htmlFor="asset-notes" className="studio-field-label">Notes{" "}
           <span className="text-muted font-normal">(optional)</span>
         </label>
         <textarea
+          id="asset-notes"
           name="notes"
           rows={3}
           placeholder="BPM, key, or any notes for the label…"
@@ -88,10 +89,10 @@ export default function AssetUploadForm() {
       </div>
 
       <div>
-        <label className="studio-field-label">
-          File
+        <label htmlFor="asset-file" className="studio-field-label">File
         </label>
         <input
+          id="asset-file"
           name="file"
           type="file"
           required

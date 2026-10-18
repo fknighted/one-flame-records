@@ -25,13 +25,16 @@ export async function inviteBartender(
   if (!name)  return { error: "Name is required." };
 
   const supabase = createServiceClient();
-  const { error } = await supabase.auth.admin.inviteUserByEmail(email, {
+  const { data: invitation, error } = await supabase.auth.admin.inviteUserByEmail(email, {
     data: { role: "bartender", display_name: name },
     redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth/set-password`,
   });
 
   if (error) return { error: `Failed to send invite: ${error.message}` };
 
+  if (!invitation?.user) return { error: "Invitation did not return an account." };
+  const { error: roleError } = await supabase.from("profiles").update({ role: "bartender" }).eq("id", invitation.user.id);
+  if (roleError) return { error: "Account invited, but bar access was not assigned. Retry by promoting the existing account." };
   revalidatePath("/admin/bar/staff");
   return null;
 }
