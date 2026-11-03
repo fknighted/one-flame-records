@@ -4,8 +4,19 @@ title: Gaming at Flames Lounge
 product: one-flame-records
 domain: oneflamerecords.com
 audience: customer
-intent: [gaming, game time, walk-in, session rates]
-keywords: [game time, gaming lounge, play games, gamer account, membership, balance, how much is a session, xbox, nintendo switch]
+intent: [ gaming, game time, walk-in, session rates ]
+keywords:
+  [
+    game time,
+    gaming lounge,
+    play games,
+    gamer account,
+    membership,
+    balance,
+    how much is a session,
+    xbox,
+    nintendo switch
+  ]
 answers:
   - "How do I play games at Flames Lounge?"
   - "How much does a gaming session cost?"
@@ -16,6 +27,8 @@ voice_safe: true
 sources:
   - Projects/one flame app/src/app/bar/sessions/actions.ts
   - Projects/one flame app/src/app/bar/sessions/StartSessionForm.tsx
+reviewed: 2026-11-03
+review_scope: November3 focused local source correction; original verified date retained; no fresh live transaction or hosted knowledge update
 ---
 
 ## Short answer
@@ -26,7 +39,7 @@ Gaming at Flames Lounge is walk-in only. Ask at the Lounge counter and staff wil
 
 **How to play.** Come to the Lounge and ask a staff member. They start your session on a station and ring it up at the counter. You pay in person.
 
-**Session rates.** Gaming sessions are sold in two lengths and are rung up by staff at the Lounge: thirty minutes at three hundred Jamaican dollars, and one hour at six hundred Jamaican dollars. These rates come from the venue's till system rather than from the website, so confirm at the counter — the site itself does not publish them.
+**Session rates.** Ask staff at the Lounge counter for the current session lengths and prices before starting. The website publishes no gaming prices; internal till constants are not a current public price list.
 
 **Stations.** Staff can assign an Xbox or a Nintendo Switch. Availability is decided at the Lounge on the day.
 

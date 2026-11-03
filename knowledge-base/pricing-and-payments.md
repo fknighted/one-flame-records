@@ -4,8 +4,17 @@ title: Pricing and payments
 product: one-flame-records
 domain: oneflamerecords.com
 audience: customer
-intent: [pricing, billing, payments]
-keywords: [how much, cost, price, do you take card, can I pay online, checkout, fees]
+intent: [ pricing, billing, payments ]
+keywords:
+  [
+    how much,
+    cost,
+    price,
+    do you take card,
+    can I pay online,
+    checkout,
+    fees
+  ]
 answers:
   - "How much does it cost?"
   - "Can I pay on the website?"
@@ -17,11 +26,13 @@ sources:
   - https://www.oneflamerecords.com/
   - Projects/one flame app/src/app/(public)
   - Projects/one flame app/package.json
+reviewed: 2026-11-03
+review_scope: November3 focused local source correction; original verified date retained; no fresh live transaction or hosted knowledge update
 ---
 
 ## Short answer
 
-Nothing on the One Flame Records website is paid for online. There is no shop, no checkout and no card payment on the site — browsing, subscribing to the newsletter, submitting music and creating a gaming account are all free. Anything you buy at Flames Lounge — food, drinks or gaming time — is paid for in person at the venue.
+Nothing on the One Flame Records website is paid for online. There is no shop, no checkout and no card payment on the site — browsing, subscribing to the newsletter and submitting music are free. Gaming needs no account. Anything you buy at Flames Lounge — food, drinks or gaming time — is paid for in person at the venue.
 
 ## Details
 
@@ -33,12 +44,12 @@ What is free:
 - Subscribing to the label newsletter.
 - Sending a message through the contact form.
 - Submitting music for consideration.
-- Creating a Flames Lounge gaming account — the site says "Free to join."
+- Gaming information is public; there are no gaming accounts or memberships.
 
 What is paid for at the venue, in person:
 
 - Food and drinks at Flames Lounge. Prices are held in the venue's own till system and are **not** published on the website.
-- Gaming sessions. The till system sells them in two lengths — thirty minutes at three hundred Jamaican dollars and one hour at six hundred Jamaican dollars — but these are venue rates, not website pricing, so confirm at the counter.
+- Gaming sessions. Ask at the counter for current lengths and rates; internal till constants are not a current public price list.
 
 All amounts at the venue are in Jamaican dollars and are whole dollars — no cents.
 

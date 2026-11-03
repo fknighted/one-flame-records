@@ -1,6 +1,45 @@
 # One Flame Records — Creative Systems Overview
 
-> **Purpose of this document:** A complete, self-contained reference for the entire One Flame Records web platform. Written for upload into an AI assistant (ChatGPT, Claude Web, etc.) for analysis, Q&A, or onboarding. Covers every layer: product design, data architecture, authentication, business logic, AI pipelines, POS system, security model, and deployment.
+> Current reference reconciled November 3, 2026 against local source and dated release evidence. The current summary below precedes a retained historical creative-system snapshot. It is suitable for AI context only with that distinction intact; the appendix is not a current route/worker inventory or authority to restore retired tools.
+
+## Current platform summary
+
+The application supports the public label/venue website, artist profiles and ordinary
+media uploads, saved completed songs/videos, label administration, and the Flames
+Lounge till. [Project memory](project-memory.md) owns later release evidence and
+[contributor instructions](../CLAUDE.md) own operating and security rules.
+
+The October 8 [total-retirement release](session-handoffs/2026-10-08-total-studio-removal.md)
+removed software AI Studio, copy/image/campaign/video generation, production-job
+screens/actions and generation workers. Old artist video-request URLs redirect to
+saved-video libraries. Normal catalog editing, media storage, visibility controls
+and shared YouTube uploads remain. Gamer accounts/screens were retired October 9;
+walk-in gaming and the physical recording-studio offering remain separate.
+
+The actual local registration in `src/app/api/inngest/route.ts` lists helloWorld,
+uploadToYoutubeJob and storageCleanup. The release receipt owns dated hosted
+registration proof; this review did not query current hosted workers or upload a
+video. The appendix's old model/provider lists and generation flow are historical.
+
+Current public and private screens use the Sound System palette, with the public
+poster look and calm studio styling for admin/portal/till. Follow
+[brand rules](../design-system/README.md), not the appendix's earlier styling.
+Money is whole Jamaican dollars; authoritative price/cost columns use `_jmd`.
+Keep current staff/artist permissions, second sign-in checks where enrolled,
+retained rows/media and the release evidence's provider/backup limits.
+
+Active campaign creation belongs to the separate Claude OS
+`Projects/campaign-workbench` workspace. Original Content Studio is parked; no
+complete feature parity or permission to resume it follows from this reference.
+The October 27 Fola Village and October 18–19 Email Studio releases are linked in
+current memory. A reviewed local security candidate does not establish deployment.
+
+## Historical appendix — earlier creative-system snapshot
+
+Everything below records the former architecture and interfaces. Statements such
+as “generation is active,” old campaign/job routes, model names and data flows
+belong to that snapshot. They are not current capabilities, pending tasks or new
+authorization. Source/decisions and newer relevant release receipts take precedence.
 
 ---
 

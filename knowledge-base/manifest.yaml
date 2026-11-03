@@ -3,142 +3,215 @@ title: One Flame Records
 domains:
   - oneflamerecords.com
   - www.oneflamerecords.com
-canonical_domain: www.oneflamerecords.com
 source_project: Projects/one flame app
 generated: 2026-08-11
-verified: 2026-08-11
-schema: Knowledge Bases/README.md
-notes: >-
-  Public site is a label showcase with no e-commerce. Catalogue is sparse as of
-  the generated date: 9 artists, 0 published releases, 1 video, 0 news posts.
-  No opening hours, phone number, street address or menu prices are published
-  anywhere. See _sources.md for unresolved questions.
-
+reviewed: 2026-11-03
+schema: Templates/knowledge-base-conventions.md
+review_scope: November3 local customer-corpus/source comparison with retained release evidence; original verification dates retained. No hosted ingestion, live catalog query, generated answer or customer transaction.
+notes: Label, artist saved-media portal, operating physical Lounge and the October27 Fola Village page. AI Studio/video requests and
+  gamer accounts are retired. Catalogue totals are dated observations; ask the venue about current
+  hours and availability.
 files:
   - slug: 00-overview
-    file: 00-overview.md
     title: One Flame Records overview
     audience: customer
     confidence: verified
-    intent: [overview, about, orientation]
-    summary: What the label is, where it is, and what a visitor can do on the website.
-
-  - slug: brand-and-voice
-    file: brand-and-voice.md
-    title: Brand and voice
-    audience: internal
-    confidence: verified
-    intent: [brand, voice, tone, style]
-    summary: How the assistant should sound, plus the label's stated positioning and tone rules.
-
-  - slug: artists-and-roster
-    file: artists-and-roster.md
-    title: Artists and roster
-    audience: customer
-    confidence: verified
-    intent: [catalog, artists, roster]
-    summary: The nine artists on the public roster and what an artist page contains.
-
-  - slug: releases-and-videos
-    file: releases-and-videos.md
-    title: Releases, videos and news
-    audience: customer
-    confidence: verified
-    intent: [catalog, releases, videos, music, news]
-    summary: The state of the discography, video and news sections, and the newsletter.
-
-  - slug: flames-lounge
-    file: flames-lounge.md
-    title: Flames Lounge
-    audience: customer
-    confidence: verified
-    intent: [venue, lounge, food, events, studio]
-    summary: The Montego Bay venue - outdoor studio, gaming, food menu, and live events.
-
-  - slug: gaming-at-flames-lounge
-    file: gaming-at-flames-lounge.md
-    title: Gaming at Flames Lounge
-    audience: customer
-    confidence: verified
-    intent: [gaming, game time, walk-in, session rates]
-    summary: Gaming is walk-in only at the Lounge counter (no accounts, memberships or balances), plus the venue session rates.
-
-  - slug: signing-and-submissions
-    file: signing-and-submissions.md
-    title: Signing and artist submissions
-    audience: customer
-    confidence: verified
-    intent: [signing, submissions, demo, artists]
-    summary: The three-step submission process, genres accepted, and the two-week reply aim.
-
+    intent:
+      - overview
+      - about
+      - orientation
+    summary: One Flame Records is an independent reggae and dancehall label based in Montego Bay,
+      Jamaica. The label records, releases and represents Jamaican artists, and it also runs Flames
+      Lounge, a creative space in Montego Bay with an outdoor recording studio, gaming, food and
+      live events. On the website you can browse the roster, watch videos, read label news, learn
+      about Flames Lounge, and get in touch about signing, press or licensing.
   - slug: accounts-and-access
-    file: accounts-and-access.md
     title: Accounts, login and access
     audience: customer
     confidence: verified
-    intent: [accounts, login, access, roles]
-    summary: Who gets an account, how login and password reset work, and what each role reaches.
-
+    intent:
+      - accounts
+      - login
+      - access
+      - roles
+    summary: Most of the One Flame Records website is open to everyone with no account at all. Artist
+      applications require label approval. Label and Lounge staff access is assigned by the label.
+      There are no gaming accounts. If you have an account you sign in from the login page with your
+      email address and password, and there is a "forgot password" link there if you need a reset
+      link sent to you.
   - slug: artist-portal
-    file: artist-portal.md
-    title: The artist portal
+    title: Artist portal and saved videos
     audience: customer
     confidence: verified
-    intent: [accounts, artists, portal, video]
-    summary: What signed artists can do in their private portal, including AI video requests.
-
-  - slug: pricing-and-payments
-    file: pricing-and-payments.md
-    title: Pricing and payments
+    intent:
+      - accounts
+      - artists
+      - portal
+      - video
+    summary: Artist accounts have a private dashboard, releases, assets, profile and saved-video
+      library. You can watch completed saved videos and manage their visibility. New automatic video
+      requests and the old AI Studio were retired in October 2026.
+  - slug: artists-and-roster
+    title: Artists and roster
     audience: customer
     confidence: verified
-    intent: [pricing, billing, payments]
-    summary: Nothing is sold online; what is free and what is paid for in person at the Lounge.
-
+    intent:
+      - catalog
+      - artists
+      - roster
+    summary: "As of the eleventh of August 2026, nine artists appear on the public roster: Bawlinz, Fola
+      Boss, Kahlic, Layd D, Layshaunex, Mystique Fyre, Phayroh, Twiggy, and Vyperxstudiobeat. Each
+      has a page on the site showing their hometown, genres, and any videos or music the label has
+      made public. The roster page is the definitive list, so check it rather than quoting this one
+      if the count matters."
+  - slug: brand-and-voice
+    title: Brand and voice
+    audience: internal
+    confidence: verified
+    intent:
+      - brand
+      - voice
+      - tone
+      - style
+    summary: "Speak the way the label writes: confident, grounded and specific. Short sentences, active
+      verbs, real details instead of vague enthusiasm. The label's own guidance is that copy should
+      read like a dance-poster flyer or the back of a record sleeve, not a tourism advert. Never
+      perform Jamaican-ness for effect."
   - slug: contact-and-support
-    file: contact-and-support.md
     title: Contact and support
     audience: customer
     confidence: verified
-    intent: [contact, support, newsletter]
-    summary: The contact form, its four reasons, the published email address, and newsletter opt-out.
-
-  - slug: policies
-    file: policies.md
-    title: Privacy, terms and data
-    audience: customer
-    confidence: verified
-    intent: [policy, legal, privacy, terms]
-    summary: What the published Privacy Policy and Terms of Service actually say.
-
-  - slug: troubleshooting
-    file: troubleshooting.md
-    title: Troubleshooting
-    audience: customer
-    confidence: verified
-    intent: [support, troubleshooting, errors]
-    summary: Real failure modes - missing pages, undelivered emails, blocked forms - and remedies.
-
-  - slug: faq
-    file: faq.md
-    title: Frequently asked questions
-    audience: customer
-    confidence: verified
-    intent: [faq, overview, support]
-    summary: Short answers to the questions the site's own copy implies people ask most.
-
+    intent:
+      - contact
+      - support
+      - newsletter
+    summary: The main way to reach One Flame Records is the contact form on the website's Contact page.
+      It asks for your name, your email address, a reason for writing, and your message. For
+      privacy, data and newsletter matters the label publishes the email address contact at
+      oneflamerecords dot com. No phone number is published.
   - slug: escalation-and-limits
-    file: escalation-and-limits.md
     title: Escalation and limits
     audience: internal
     confidence: verified
-    intent: [guardrails, escalation, limits]
-    summary: Master guardrail - what the bot must never claim and exactly when to hand to a human.
-
+    intent:
+      - guardrails
+      - escalation
+      - limits
+    summary: The assistant answers questions about the label, the roster, Flames Lounge and how to get
+      in touch. It hands over to a human the moment a question touches money, contracts, legal
+      matters, a named individual's account, or any fact the website does not publish. When in
+      doubt, say what is known, say plainly what is not, and point to the contact form.
+  - slug: faq
+    title: Frequently asked questions
+    audience: customer
+    confidence: verified
+    intent:
+      - faq
+      - overview
+      - support
+    summary: "The questions people most often ask One Flame Records are how to get signed, where to find
+      the music, what Flames Lounge is, and how to get in touch. Short answers: send links through
+      the contact form, browse the Artists and Videos pages, the Lounge is the label's creative
+      space in Montego Bay with a studio, gaming, food and events, and the contact form is the way
+      to reach the team."
+  - slug: flames-lounge
+    title: Flames Lounge
+    audience: customer
+    confidence: verified
+    intent:
+      - venue
+      - lounge
+      - food
+      - events
+      - studio
+    summary: Flames Lounge is One Flame Records' creative and social space in Montego Bay, Jamaica. It
+      has an outdoor recording studio, a gaming lounge, freshly made Jamaican food and drinks, and a
+      programme of live events. Walk-ins are welcome and no reservation is needed. Opening hours are
+      not published on the website yet, so please check with the Lounge directly before travelling.
+  - slug: gaming-at-flames-lounge
+    title: Gaming at Flames Lounge
+    audience: customer
+    confidence: verified
+    intent:
+      - gaming
+      - game time
+      - walk-in
+      - session rates
+    summary: Gaming at Flames Lounge is walk-in only. Ask at the Lounge counter and staff will start a
+      timed session for you. There are no gaming accounts, memberships, stored balances or online
+      booking, and none have been offered since 9 October 2026.
   - slug: glossary
-    file: glossary.md
     title: Glossary
     audience: internal
     confidence: verified
-    intent: [glossary, vocabulary, terminology]
-    summary: Product and Jamaican music vocabulary a voice agent must recognise when spoken.
+    intent:
+      - glossary
+      - vocabulary
+      - terminology
+    summary: These are the words visitors and staff use around One Flame Records. Recognise them when
+      someone says them aloud, especially the venue name, the artist names, and the music terms — a
+      voice agent will hear them spoken far more often than it will read them.
+  - slug: policies
+    title: Privacy, terms and data
+    audience: customer
+    confidence: verified
+    intent:
+      - policy
+      - legal
+      - privacy
+      - terms
+    summary: The October2026 Privacy Policy covers supplied information, essential sign-in cookies,
+      limited website diagnostics and external media embeds; Terms remain dated June2026.
+      Newsletter consent requires email confirmation. Contact contact at oneflamerecords dot com
+      for privacy requests; no new privacy or legal guarantees are inferred.
+  - slug: pricing-and-payments
+    title: Pricing and payments
+    audience: customer
+    confidence: verified
+    intent:
+      - pricing
+      - billing
+      - payments
+    summary: Nothing on the One Flame Records website is paid for online. There is no shop, no checkout
+      and no card payment on the site — browsing, subscribing to the newsletter and submitting music
+      are free. Gaming needs no account. Anything you buy at Flames Lounge — food, drinks or gaming
+      time — is paid for in person at the venue.
+  - slug: releases-and-videos
+    title: Finding releases, videos and news
+    audience: customer
+    confidence: verified
+    intent:
+      - catalog
+      - releases
+      - videos
+      - music
+      - news
+    summary: Use Releases for the current discography, Videos for published clips, and News for label
+      announcements. These pages change as the label publishes. Historical counts and old
+      screenshots do not establish today’s catalogue or next release date.
+  - slug: signing-and-submissions
+    title: Signing and artist submissions
+    audience: customer
+    confidence: verified
+    intent:
+      - signing
+      - submissions
+      - demo
+      - artists
+    summary: Send a message through the contact page on the website, choosing "Artist submission" as the
+      reason, and include a short bio, a description of your sound, and links to your best work. No
+      attachments are needed at that stage. The label says every submission is listened to by the
+      team and that they aim to get back to you within two weeks. If the music fits, the next step
+      is a call — not paperwork.
+  - slug: troubleshooting
+    title: Troubleshooting
+    audience: customer
+    confidence: verified
+    intent:
+      - support
+      - troubleshooting
+      - errors
+    summary: "Most problems on the One Flame Records site fall into three groups: a page that cannot be
+      found, an email that never arrived, or a form that refuses to send. Each has a simple first
+      step — reload from the main navigation, check your spam folder, or check the required fields.
+      If none of that works, use the contact form and a person will pick it up."

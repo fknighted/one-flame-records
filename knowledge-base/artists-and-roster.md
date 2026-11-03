@@ -4,8 +4,17 @@ title: Artists and roster
 product: one-flame-records
 domain: oneflamerecords.com
 audience: customer
-intent: [catalog, artists, roster]
-keywords: [who is signed, roster, artists list, kahlic, twiggy, phayroh, artist page]
+intent: [ catalog, artists, roster ]
+keywords:
+  [
+    who is signed,
+    roster,
+    artists list,
+    kahlic,
+    twiggy,
+    phayroh,
+    artist page
+  ]
 answers:
   - "Which artists are signed to One Flame Records?"
   - "How many artists are on the roster?"
@@ -17,6 +26,8 @@ sources:
   - https://www.oneflamerecords.com/artists
   - https://www.oneflamerecords.com/artists/kahlic
   - Projects/one flame app/supabase/migrations/20260513140946_initial_schema.sql
+reviewed: 2026-11-03
+review_scope: November3 focused local source correction; original verified date retained; no fresh live transaction or hosted knowledge update
 ---
 
 ## Short answer
@@ -25,17 +36,17 @@ As of the eleventh of August 2026, nine artists appear on the public roster: Baw
 
 ## Details
 
-Hometowns shown on the roster page: Fola Boss is listed as Kingston. Kahlic, Layshaunex, Phayroh and Twiggy are listed as Montego Bay. The remaining artists have no hometown displayed.
+The August 11 survey recorded these hometowns on the roster page: Fola Boss is listed as Kingston. Kahlic, Layshaunex, Phayroh and Twiggy are listed as Montego Bay. The remaining artists have no hometown displayed.
 
 An artist page can show:
 
 - Stage name, hometown and genre tags.
 - A biography, when the label has entered one.
 - Videos featuring that artist.
-- A **Music** section listing audio the artist has chosen to make public — for example Kahlic's page lists a demo titled "Speechless how long" with its running time and a download control.
+- A **Music** section listing audio the artist has chosen to make public — for example the August 11 survey recorded Kahlic’s demo titled "Speechless how long" with its running time and a download control.
 - Links to the artist's social and streaming profiles, when supplied.
 
-Artist pages are database driven. A page fills out as the label adds content through its admin tools, so an artist with a sparse page is simply awaiting content entry, not inactive.
+Artist pages are database driven. A sparse page alone does not establish an artist’s current status or why material is absent; use the current published roster or ask the label.
 
 Behind the scenes an artist record carries a status of pending, active or archived. Only artists the label has published appear publicly.
 

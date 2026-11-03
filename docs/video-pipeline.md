@@ -1,8 +1,8 @@
 > October 8 expanded removal: all legacy AI Studio/campaign/production-job tools and menus are retired. Only completed saved videos and shared YouTube uploads remain. The design below is historical. Current evidence: [release receipt](session-handoffs/2026-10-08-total-studio-removal.md).
 
-# Historical pipeline — retired locally October 8, 2026
+# Historical pipeline — retired and released October 8, 2026
 
-The generation design below is historical. Its implementation, forms, providers and workers have been removed from the local app. Do not rebuild it from this document. Saved videos and job history remain. The hosted release has not changed.
+The generation design below is historical. Its implementation, forms, providers and workers have been removed from the local app. Do not rebuild it from this document. Saved videos and job history remain. The earlier local-only checkpoint was superseded by the later October 8 [total-retirement release](session-handoffs/2026-10-08-total-studio-removal.md) supersedes it; no fresh hosted check ran during this documentation review.
 
 [Current work and review state](/Users/frankknight/Claude OS/Delegations/remove-the-old-one-flame-video-production-code-while-preserv.md)
 

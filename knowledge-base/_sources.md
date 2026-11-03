@@ -50,7 +50,7 @@ Update 2026-10-09: all gamer features were removed from the app. `gaming-members
 - `.../20260716000010_gamer_balance_and_signup_throttle.sql`  (historic; gamer features removed 2026-10-09, tables kept)
 - `.../20260809000001_money_cents_to_dollars.sql`
 
-## Facts confirmed against live site
+## Historical facts confirmed against the live site — August 11, 2026
 
 | Fact | Value |
 |---|---|
@@ -66,7 +66,7 @@ Update 2026-10-09: all gamer features were removed from the app. `gaming-members
 | Submission reply aim | "within two weeks" |
 | Policy effective date | June 2026 |
 
-## Repo vs live discrepancies
+## Historical repository/live discrepancies — August 11, 2026
 
 1. **Sitemap includes an unpublished news post.** `/sitemap.xml` lists
    `before-the-drop-inside-the-booth-...` which returns 404. The sitemap generator does
@@ -136,3 +136,20 @@ has to refuse.
     production, roster growth, ten million streams 2024) was removed from the page and
     from this knowledge base. No founding year, release history or stream figure is
     confirmed; the bot must not give one.
+
+## Repository reconciliation — October 18, 2026
+
+Read current portal video list/detail/actions, the retired request redirect, signup application action, proxy, contact action, gaming session action and StartSessionForm, CLAUDE.md, current project memory and the October 8 retirement receipt. Corrected the retired video request, free gamer account and obsolete troubleshooting claims. The session timer is separate from adding game time to a tab; starting it alone does not record a sale.
+
+Earlier live URL and catalog counts below/above are historical observations, not fresh October 18 checks. The old cents-migration ambiguity is superseded by the applied whole-dollar conversion recorded in CLAUDE.md. New review did not fetch public URLs, query artist/customer records, send email, play saved media or publish. Physical food/studio/events operation is confirmed by Frank below; specific event dates and kitchen hours still require venue confirmation.
+
+## Owner confirmation — October 18, 2026
+
+Frank directly confirmed on October 18, 2026 in the knowledge-reconciliation chat that food service, the outdoor recording studio and live events are all operating. That resolves the older uncertainty about restaurant reopening and studio construction; it does not approve new prices, hours or event dates. The physical venue remains distinct from retired AI Studio tools.
+
+
+## November 3 complete customer-corpus recheck
+
+Rechecked all local customer articles/manifest against current public route source, contact and newsletter actions, confirmation page/action, current privacy/terms, saved-media portal, Fola Village page and October27 release receipt. Corrected newsletter two-step double opt-in (open link, then Confirm subscription within24h), uncertain contact delivery, October privacy/technical diagnostics and the omitted published Fola page. Old roster hometown/media examples are explicitly August observations. Till-only gaming prices are not promoted as a current public price list; the unchanged historical source survey preserves its original facts.
+
+No in-app customer knowledge retrieval or Markdown ingestion consumer was identified in active source/scripts. These files are local support authoring, not proof of a deployed chatbot or message-sending tool. No hosted rows, live catalog, email send, privacy setting, customer account or venue price was changed or freshly queried. Original verification dates retain their scope. Physical venue operating confirmation remains October18; no new visitor hours, Fola bookings/event programme or candidate voice approval is inferred.

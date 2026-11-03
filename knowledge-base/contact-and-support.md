@@ -4,8 +4,17 @@ title: Contact and support
 product: one-flame-records
 domain: oneflamerecords.com
 audience: customer
-intent: [contact, support, newsletter]
-keywords: [how do I contact you, email address, phone number, get in touch, press enquiry, sync licensing, unsubscribe]
+intent: [ contact, support, newsletter ]
+keywords:
+  [
+    how do I contact you,
+    email address,
+    phone number,
+    get in touch,
+    press enquiry,
+    sync licensing,
+    unsubscribe
+  ]
 answers:
   - "How do I contact One Flame Records?"
   - "What is your email address?"
@@ -17,7 +26,10 @@ sources:
   - https://www.oneflamerecords.com/contact
   - https://www.oneflamerecords.com/privacy
   - Projects/one flame app/src/app/(public)/contact/actions.ts
-  - Owner confirmation (Frank), 2026-10-05 — label handles; About-page timeline not true
+  - Owner confirmation (Frank), 2026-10-05 — label handles; About-page timeline
+    not true
+reviewed: 2026-11-03
+review_scope: November3 focused local source correction; original verified date retained; no fresh live transaction or hosted knowledge update
 ---
 
 ## Short answer
@@ -33,13 +45,13 @@ The main way to reach One Flame Records is the contact form on the website's Con
 - Sync licensing
 - Artist submission
 
-The form's own note reads: "For press, sync licensing, or artist submissions — use the form below. No attachments needed to start a conversation." Submissions are emailed straight to the label team, and a reply comes back to the address you supplied.
+The form's own note reads: "For press, sync licensing, or artist submissions — use the form below. No attachments needed to start a conversation." The form attempts to email the label team with your address as Reply-To. A successful form response is not proof of inbox arrival or a reply; an error or interrupted response can leave delivery uncertain.
 
 **Email.** The Privacy Policy and Terms of Service both give contact at oneflamerecords dot com for questions about those policies, for unsubscribing, and for requests to access, correct or delete your personal data.
 
 **Social.** The label is on Instagram and YouTube as @oneflamerecords (confirmed by the owner on 2026-10-05; both are linked in the site footer). Flames Lounge has its own accounts on Instagram and TikTok as @flamesmobay.
 
-**Newsletter.** Every public page has a "Stay in the loop" subscription box that takes an email address and sends new releases, events and label news. To stop receiving it, use the unsubscribe link in any email the label sends, or email the address above. The site also has an unsubscribe page where you enter your email address directly.
+**Newsletter.** The public "Stay in the loop" box requests a confirmation email. Open its secure link and press Confirm subscription within 24 hours to activate or reactivate newsletter consent; opening the page alone does not subscribe you; submitting an address or a quiet response alone does not prove subscription or email delivery. Confirmed subscribers can receive releases, events and label news. To stop receiving it, use the unsubscribe link in any email the label sends, or email the address above. Use the secure unsubscribe link sent to your email and confirm there. An older email-only link can request a fresh secure link; entering an address alone does not complete the unsubscribe.
 
 **Response time.** The only response time the label publishes is for artist submissions: they aim to get back within two weeks. See [[signing-and-submissions]].
 

@@ -4,8 +4,8 @@ title: Frequently asked questions
 product: one-flame-records
 domain: oneflamerecords.com
 audience: customer
-intent: [faq, overview, support]
-keywords: [faq, common questions, quick answers, do you, can I, where is]
+intent: [ faq, overview, support ]
+keywords: [ faq, common questions, quick answers, do you, can I, where is ]
 answers:
   - "What are the most common questions about One Flame Records?"
   - "Quick answers about the label and the Lounge"
@@ -16,7 +16,10 @@ sources:
   - https://www.oneflamerecords.com/
   - https://www.oneflamerecords.com/sign
   - https://www.oneflamerecords.com/flames-lounge
-  - Owner confirmation (Frank), 2026-10-05 — label handles; About-page timeline not true
+  - Owner confirmation (Frank), 2026-10-05 — label handles; About-page timeline
+    not true
+reviewed: 2026-11-03
+review_scope: November3 focused local source correction; original verified date retained; no fresh live transaction or hosted knowledge update
 ---
 
 ## Short answer
@@ -31,7 +34,9 @@ Each answer below has a fuller version in its own document — follow the links 
 
 **How do I get signed?** Message the label through the contact page, choose "Artist submission", and include a short bio and links to your best work. They aim to reply within two weeks. See [[signing-and-submissions]].
 
-**Where can I listen to One Flame music?** The Videos page has the label's published videos, and some artist pages carry audio the artist has made public. The discography is not published yet — the Releases page says "Releases coming soon." See [[releases-and-videos]].
+**Where can I listen to One Flame music?** The Videos page has the label's published videos, and some artist pages carry audio the artist has made public. Use the current Releases page for the discography; the earlier empty listing was an August observation. See [[releases-and-videos]].
+
+**What is Fola Village?** The riverside-community page is at /fola-village. Ask One Flame about current visiting arrangements before travelling; future projects remain plans, not available services or a booking promise.
 
 **Who is on the roster?** Nine artists as of the eleventh of August 2026: Bawlinz, Fola Boss, Kahlic, Layd D, Layshaunex, Mystique Fyre, Phayroh, Twiggy and Vyperxstudiobeat. See [[artists-and-roster]].
 
@@ -59,3 +64,7 @@ Escalate anything that needs a real hours, address, price or booking answer, and
 
 - Do not fill a gap with a plausible-sounding hour, price, address or date.
 - Do not treat this summary as newer than the live site. If they disagree, the site wins.
+
+## Owner-confirmed operation — October 18, 2026
+
+Frank confirmed that food service, the physical outdoor recording studio and live events are all operating. This does not establish today’s opening hours, a particular menu item, a future event date, available capacity or a studio booking. Ask the Lounge for those details. The physical studio is separate from the retired AI production software.

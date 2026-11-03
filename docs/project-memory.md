@@ -1,6 +1,87 @@
+# Current project summary — November 3, 2026
+
+Status: Fola Village released October 27; Email Studio and October 18 audit repairs released; October 26 security candidate local.
+
+Phase: Operating label, bar and village site; Studio/gamer tools retired.
+
+[Fola release](fola-village/release-2026-10-27/report.md),
+[Email Studio closeout](session-handoffs/2026-10-19-email-studio-session-closeout.md)
+and [audit-repair release](audits/2026-10-18-release/report.md) own dated proof.
+The [October 26 candidate](session-handoffs/2026-10-26-runtime-security-candidate.md)
+was not deployed by that preparation. Preserve whole-Jamaican-dollar money,
+`pos_items.cost_jmd`, retained media and Sound System branding. July suggestions
+to convert game prices to cents are superseded. Owner cost/content decisions,
+provider delivery and monitoring limits in the receipts remain separate.
+
+Current customer knowledge and related memory were rechecked against local source. [Documentation renewal](session-handoffs/2026-11-03-documentation-renewal.md) records the corrections, source/serving boundaries and independent-review evidence; no live business outcome was newly tested.
+
+Newer relevant receipts supersede earlier local-only and pending-release notes below.
+This is a local documentation reconciliation, not a fresh service/provider check.
+Current work and independent acceptance stay in Claude OS Delegations.
+
+## Dated evidence and earlier summaries
+
+# Fola Village is live — October 27, 2026
+
+Frank authorized publication and added supporting community/drumming artwork with One Flame fonts. The village page is live at https://www.oneflamerecords.com/fola-village on the existing Vercel project. Approved logo and drum-only favicon are unchanged. The final scoped production build passed, source inventory matches exactly, and live phone/desktop/logo/icon/artwork checks passed. No commit, push, migration or email send occurred; unrelated local work remains preserved.
+
+[Release receipt](fola-village/release-2026-10-27/report.md) · [Canonical acceptance](</Users/frankknight/Claude OS/Delegations/publish-the-approved-fola-village-page-on-one-flame.md>). This live receipt supersedes the local-only Fola notes below. Current task state is held only in Delegations.
+
+# Security source candidate independently reviewed — October26,2026
+
+A narrow isolated repair now passes production dependency checks, relevant tests and build. It is **not deployed**; existing serving releases below remain unchanged. Parent application/dependency source and unrelated peer work were preserved. [Candidate receipt](</Users/frankknight/Claude OS/Projects/one flame app/docs/session-handoffs/2026-10-26-runtime-security-candidate.md>) and its linked root Delegations record own exact evidence and release state.
+
+# Fola Village official branding and local website — October 26, 2026
+
+Frank approved option 11 with a green rim as the official village logo. The complete branding pack and `/fola-village` landing page are built locally. Production build, affected-file lint, existing tests and independent desktop/mobile/asset review passed. Drum-only favicon excludes dots and lettering. Existing providers and One Flame design remain in use. No deployment, commit, push or email send occurred.
+
+[Delivery evidence](fola-village/implementation-2026-10-26.md) · [Official brand rules](../design-system/fola-village.md) · [Canonical work record](</Users/frankknight/Claude OS/Delegations/create-official-fola-village-brand-kit-and-build-the-village.md>). Real village photographs and detailed visitor arrangements are not invented. Historical release notes below describe earlier work.
+
+# Email studio session closed — October 19, 2026
+
+The deployed studio, final branding/provider checks, owner-sample receipts and recovery limits are consolidated in [the final project handoff](</Users/frankknight/Claude OS/Projects/one flame app/docs/session-handoffs/2026-10-19-email-studio-session-closeout.md>). Later receipts there supersede earlier preparation-only/no-send notes below. Live release: `dpl_8VTfnCFZX1LbH2nTczPMiJvWiXP4`. Inbox arrival remains unverified. Current commitments stay in root Delegations; no commit or push was made.
+
+# Hosted account-email branding released — October19,2026
+
+One Flame Records's hosted sign-in/account-email templates are branded with the approved company logo: 8 missing logo/HTML wrappers applied; 5 existing branded bodies preserved exactly. All 13 hosted body hashes match the reviewed after snapshot, and all subjects, message text, secure placeholders and original links remain unchanged. Only content fields and their expected provider-generated customization markers changed; mail-server, redirects, notification switches and other account settings stayed unchanged. No email was sent for this provider-template release, and no app deployment/schema/credential change was needed.
+
+Separate source/script and phone/desktop sample reviews passed. The guarded apply reconciled every result through a fresh provider read, preserving the other apps' settings and One Flame's five prior branded bodies. [Provider release receipt](</Users/frankknight/Claude OS/Audits/2026-10-19-provider-account-email-branding-release.md>). Existing Stripe, app-release and rollback notes below are preserved. Inbox delivery and every mail client's appearance are unclaimed; root Delegations owns independent completion state.
+
+# Email Studio — independently reviewed locally, October 18, 2026
+
+## Email Studio production release — October 18, 2026
+
+Email Studio is live at https://www.oneflamerecords.com/admin/email-studio. The required database update was applied. Live owner previews, edit/save/restoration and newsletter review checks passed; the original empty override state was restored. No email was sent. [Release receipt](audits/2026-10-18-email-studio/release.md). Earlier local-only notes below describe the pre-release state. Root has already communicated these changes to Frank, satisfying the project rule against silent changes. Independent release acceptance remains recorded only in the root Delegations ledger. No commit or push was made.
+
+The reviewed email editing, preview and sender changes are integrated into this main local checkout. Separate review and tested feature-file matching completed; earlier awaiting-review notes below describe preparation. No email-studio migration, production deployment, real email, commit or push occurred. See [docs/audits/2026-10-18-email-studio/independent-review.md](</Users/frankknight/Claude OS/Projects/one flame app/docs/audits/2026-10-18-email-studio/independent-review.md>) for evidence and release limits. The root Delegations record owns completion state. Existing unrelated work is preserved.
+
+# Customer Email Studio — October 18, 2026 (local candidate)
+
+Customer email wording controls, live draft previews and safe self-tests are implemented in the isolated email-studio candidate. Newsletters now require exact-draft review and preserve saved-send recovery. No hosted changes or real emails occurred. Evidence and release dependencies are in [the implementation report](audits/2026-10-18-email-studio/report.md). Current work status is recorded only in [the delegation](</Users/frankknight/Claude OS/Delegations/build-customer-email-studio-controls-in-one-flame-app.md>). Earlier release entries below describe prior work.
+
+# Security release — October 18, 2026
+
+Frank approved the reviewed dependency release. Next.js16.4.1 is live on the existing provider; separate review confirmed deployed source, website responses and protection against signed-out access. Vercel dpl_BKaHmTkvcRX19R6uyKChmZRpMaQZ supersedes dpl_Bjox227JxBSft4mrjN8SgL5QzU5U. The earlier October18 application/migration repairs remain included.
+
+Reviewed package/checking files are now copied into this parent checkout after baseline fingerprint checks; unrelated owner changes remain. No commit or push was made. Parent node_modules was not replaced: run npm ci before the next local build. The tested isolated candidate remains at work/portfolio-security-20261018. Production package scans report zero known findings; development-tool notices and real customer/payment/email/publishing proof remain separate.
+
+[Full release receipt](</Users/frankknight/Claude OS/Audits/2026-10-18-portfolio-repairs.md>) · [Canonical work](</Users/frankknight/Claude OS/Delegations/resolve-the-october-18-portfolio-audit-findings.md>). Earlier release statements below are historical.
+
+# Audit repairs released — October 18, 2026
+
+Frank approved deployment. Main is pushed at 8bddad3; serving Git release is dpl_Bjox227JxBSft4mrjN8SgL5QzU5U. All five migrations and the reviewed website are live; the separate live reviewer found no blocker. Fresh database/media exports passed isolated restore checks. Controlled sign-in, till, regular edit and upload/cleanup checks passed; synthetic records removed and original public business records preserved. Provider/source-map and owner-content limits remain in the [October 18 release receipt](audits/2026-10-18-release/report.md). The delegation owns remaining work. Earlier local-only entries below are historical.
+
+# Audit repairs — October 18, 2026 (local only)
+
+Frank authorized fixing the audit recommendations. Local access, transaction, recovery, upload, newsletter, form, metadata and maintenance repairs are implemented and independently reviewed. Five migrations remain unapplied; production is unchanged. Real costs, old-tab decisions, approved content/business hours, provider delivery and backup restoration are not invented or claimed complete. [Repair report](audits/2026-10-18-repairs/report.md). Current status belongs in [the delegation](</Users/frankknight/Claude OS/Delegations/fix-all-recommendations-from-the-october-18-one-flame-full-s.md>). Earlier audit-only and release entries below are historical.
+
+# Full-site audit — October 18, 2026
+
+Report-only audit completed against the October 9 production deployment, matching application HEAD d87e115. No application code, hosted settings, existing business data, emails or deployment changed. Live checks confirm anonymous access to internal bar-changing database functions and public access to artist legal names. Source also contains a potentially critical self-selected registration role; live public registration is enabled, but current trigger verification was blocked by rejected management credentials. Admin second-step enforcement, bar transaction safety, approval/upload recovery and newsletter defects need work. All current tab totals match line items; public speed samples look good but are sparse. Build/typecheck/retirement checks pass; lint fails. Full prioritized findings, evidence and verification limits: [October 18 audit](audits/2026-10-18-full-site/report.md). These are findings and suggestions, not an authorized repair or release.
+
 # Full legacy studio removal — October 8, 2026
 
-All legacy studio navigation, production pages/actions/workers and contextual AI buttons are removed. Saved media and normal catalog/upload/YouTube functions remain. Independent source review, offline checks, type checking and build passed. Frank authorized commit, push and deployment; release evidence: [receipt](session-handoffs/2026-10-08-total-studio-removal.md). Current state belongs in [Delegations](/Users/frankknight/Claude OS/Delegations/remove-all-remaining-one-flame-studio-navigation-and-tools-a.md).
+All legacy studio navigation, production pages/actions/workers and contextual AI buttons are removed. Saved media and normal catalog/upload/YouTube functions remain. Independent source review, offline checks, type checking and build passed. Removal commit807859f is pushed and live in production deployment dpl_CcwWUZi6Ezs3jSrC1SPuaKfT15Xr. Signed-in menu and retired URLs checked; One Flame background functions resynced and old generation workers absent. Release evidence: [receipt](session-handoffs/2026-10-08-total-studio-removal.md). Current state belongs in [Delegations](/Users/frankknight/Claude OS/Delegations/remove-all-remaining-one-flame-studio-navigation-and-tools-a.md).
 
 # Current security release — October 6, 2026
 
@@ -22,17 +103,17 @@ This is the living state of the build. Update at the end of every session.
 
 ---
 
-## Current state
+## Earlier product summary
 
 - **Phase:** Bar POS operational + ongoing content + post-launch hardening/perf
 - **Status:** Phases 1–5 complete. Bar POS live with cost/profit tracking. A full-site audit (2026-07-16/17) shipped all Critical+High security/design/perf fixes; public-page caching and admin count-aggregation RPCs landed 2026-07-17. **Recent detailed session history lives in `docs/session-handoffs/` (2026-07-16, 2026-07-17, 2026-07-17-2) and the auto-memory index** — the session log below jumps from session 41 to 2026-07-17.
 - **Last updated:** 2026-10-06 (security release); July product summary below is historical.
 
-## Active focus
+## Historical July focus
 
 Post-launch performance + correctness cleanup. Remaining backlog is small; see Next session.
 
-## Blockers
+## Historical July blockers
 
 - **TikTok auto-posting** — Make.com has no TikTok video upload module. Manual for now.
 - **Flames Lounge gallery / logos / hero** — gallery grid + logo assets still placeholder; needs owner-provided assets. Since 2026-10-05 the hero has no photo at all (the stock Unsplash bar photo was removed) — a real Lounge photo is needed.
@@ -490,3 +571,20 @@ Append a new entry at the top of this section after every session. Date, summary
 **Decided:** Stack locked — Next.js 15 + Supabase + Vercel + Inngest. Two visual themes (cream public, ink portal). QR signup is single reusable code + admin approval gate.
 **Blocked on:** Nothing.
 **Next:** Phase 1, Task 1.
+
+
+## Local knowledge reconciliation — October 18, 2026
+
+The local knowledge documents were reconciled with current source, retained release
+records and owner confirmations. This was a documentation review; no deployment,
+hosted knowledge sync or customer transaction was performed. Independent review
+and precise changed-file evidence are recorded in the shared report below. Historical
+release entries retain their dates and scope.
+
+Report: `/Users/frankknight/Claude OS/Audits/2026-10-18-knowledge-reconciliation.md`.
+Completion and any follow-up: `/Users/frankknight/Claude OS/Delegations/reconcile-active-project-knowledge-bases-and-shared-claude-o.md`.
+
+
+## ACE Studio research chat closed — October 19, 2026
+
+Research and the suggested private vocal experiment are preserved in [the closeout](session-handoffs/2026-10-19-ace-studio-research-closeout.md). No build or purchase was authorized; this does not revive the retired website Studio or change current priorities.

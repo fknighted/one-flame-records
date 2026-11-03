@@ -4,8 +4,16 @@ title: One Flame Records overview
 product: one-flame-records
 domain: oneflamerecords.com
 audience: customer
-intent: [overview, about, orientation]
-keywords: [what is one flame, who are you, record label, montego bay, reggae label, dancehall label]
+intent: [ overview, about, orientation ]
+keywords:
+  [
+    what is one flame,
+    who are you,
+    record label,
+    montego bay,
+    reggae label,
+    dancehall label
+  ]
 answers:
   - "What is One Flame Records?"
   - "Where are you based?"
@@ -17,6 +25,8 @@ sources:
   - https://www.oneflamerecords.com/
   - https://www.oneflamerecords.com/about
   - Projects/one flame app/CLAUDE.md
+reviewed: 2026-11-03
+review_scope: November3 focused local source correction; original verified date retained; no fresh live transaction or hosted knowledge update
 ---
 
 ## Short answer
@@ -34,6 +44,7 @@ The public website has these areas:
 - **Videos** — music videos and other clips from the roster.
 - **News** — posts from the label.
 - **Flames Lounge** — the Montego Bay venue and creative space. See [[flames-lounge]].
+- **Fola Village** — the published riverside-community page at /fola-village, released October 27. Contact One Flame and mention Fola Village for current visitor arrangements before travelling; the page is not a booking service or an event timetable. Future school, water/power and enterprise ideas remain plans.
 - **About** — the label's story and what it stands for.
 - **Contact** — a form for enquiries. See [[contact-and-support]].
 - **Sign with us** — how artists submit music. See [[signing-and-submissions]].
@@ -60,3 +71,7 @@ Hand to a human for anything involving contracts, money, legal terms, or a speci
 - Do not state a phone number, street address, or opening hours. None are published.
 - Do not say music, merchandise or tickets can be bought on the website.
 - Do not describe the label as a major label or as part of a larger music group.
+
+## Owner-confirmed operation — October 18, 2026
+
+Frank confirmed that food service, the physical outdoor recording studio and live events are all operating. This does not establish today’s opening hours, a particular menu item, a future event date, available capacity or a studio booking. Ask the Lounge for those details. The physical studio is separate from the retired AI production software.

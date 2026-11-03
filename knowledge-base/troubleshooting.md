@@ -4,8 +4,17 @@ title: Troubleshooting
 product: one-flame-records
 domain: oneflamerecords.com
 audience: customer
-intent: [support, troubleshooting, errors]
-keywords: [not working, page not found, 404, no email, form won't send, can't log in, broken link]
+intent: [ support, troubleshooting, errors ]
+keywords:
+  [
+    not working,
+    page not found,
+    404,
+    no email,
+    form won't send,
+    can't log in,
+    broken link
+  ]
 answers:
   - "The page I clicked says not found — why?"
   - "I did not receive my signup email."
@@ -17,6 +26,8 @@ sources:
   - Projects/one flame app/src/app/(public)/contact/actions.ts
   - Projects/one flame app/src/app/(public)/signup/[code]/page.tsx
   - https://www.oneflamerecords.com/sitemap.xml
+reviewed: 2026-11-03
+review_scope: November3 focused local source correction; original verified date retained; no fresh live transaction or hosted knowledge update
 ---
 
 ## Short answer
@@ -25,13 +36,13 @@ Most problems on the One Flame Records site fall into three groups: a page that 
 
 ## Details
 
-**A page says it cannot be found.** The site's sitemap currently lists a news article that is not actually published, so a search-engine link can lead to a missing page. Known site issue. Navigate from the main menu instead, or use the search icon in the header.
+**A page says it cannot be found.** A search-engine result or old bookmark may point to content that is no longer public. Open the main navigation or site search. Do not assume an old sitemap finding still describes the current site.
 
-**A page looks empty.** Releases and News have nothing published yet, and the Lounge photo gallery is marked "photos coming soon". That is not a fault. See [[releases-and-videos]].
+**A page looks empty.** An empty list can mean nothing is currently published in that section. Check the current page; historical roster and release counts are not a live inventory. See [[releases-and-videos]].
 
-**No signup or invitation email arrived.** Check spam and promotions folders first. If the address is already registered you will be told so; use the login page's password reset instead.
+**No signup or invitation email arrived.** Check spam and promotions folders first. Use password recovery only for your own existing account, and ask the label about an application or invitation. Do not infer whether somebody else has an account from a form response.
 
-**The contact form will not send.** Name, email address and message are all required, and the email address must be valid. If it still fails you will see "Failed to send your message. Please try again." — the message did not reach the label, so try again shortly or use the published email address.
+**The contact form will not send.** Name, email address and message are all required, and the email address must be valid. If it still fails you will see "Failed to send your message. Please try again." — delivery is not confirmed. An error or interrupted response does not prove whether the provider accepted it. Use the published email address for help and avoid repeatedly sending the same message.
 
 **An application link says "Link expired."** Those links are deactivated after a while. Ask the label for a current code.
 
@@ -41,7 +52,7 @@ Most problems on the One Flame Records site fall into three groups: a page that 
 
 **Is the site down?** The assistant cannot check. If pages will not load at all, try again shortly and then report it through the contact form.
 
-**Why did my newsletter signup seem to do nothing?** If your address was already subscribed the site accepts it quietly rather than telling you. You are on the list.
+**Why did my newsletter signup seem to do nothing?** Check for the confirmation email, open its secure link and press Confirm subscription within 24 hours. Opening the page alone does not subscribe you. A quiet response does not confirm that you are subscribed or that mail arrived. Check spam, request a fresh confirmation if needed, or contact the label for help.
 
 ## Escalate
 
