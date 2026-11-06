@@ -1,5 +1,9 @@
 # Resume one flame app — November 3, 2026
 
+The approved November3 security update is live. Start with the [release receipt](audits/2026-11-03-security-release.md) and [handoff](session-handoffs/2026-11-03-security-release.md). Frozen release source is `work/security-release-20261103/stage/`, not the dirty parent or older candidates. All Fola work is preserved. Exact source, rollback, safe live checks, native registration and separate acceptance are recorded in the receipt. Earlier proposal-only notes are historical.
+
+Knight Rida mixing is parked by Frank. To resume on request, use the [mix restart note](../mix-exports/KNIGHT-RIDA-RESUME.md); preserve both passes and original Logic project.
+
 Read `CLAUDE.md`, any `AGENTS.md`, [project memory](project-memory.md) and the relevant
 operating guide, then inspect Git and preserve unrelated peer work.
 
@@ -17,4 +21,4 @@ review state and authorization. Dated handoffs do not restart completed work or
 authorize new releases, migrations, messages, account changes or paid operations.
 Current package/source files own local configuration. Before any new release,
 compare the actual serving baseline and exact source/recovery evidence.
-This documentation review performed no application repair or hosted operation.
+The earlier documentation review was read-only; the later November3 security release and bounded hosted checks are recorded above.

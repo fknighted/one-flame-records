@@ -4,8 +4,18 @@ title: Flames Lounge
 product: one-flame-records
 domain: oneflamerecords.com
 audience: customer
-intent: [venue, lounge, food, events, studio]
-keywords: [flames lounge, bar, where can I eat, fritters, live events, open mic, private hire, outdoor studio]
+intent: [ venue, lounge, food, events, studio ]
+keywords:
+  [
+    flames lounge,
+    bar,
+    where can I eat,
+    fritters,
+    live events,
+    open mic,
+    private hire,
+    outdoor studio
+  ]
 answers:
   - "What is Flames Lounge?"
   - "What food do you serve?"
@@ -17,7 +27,11 @@ voice_safe: true
 sources:
   - https://www.oneflamerecords.com/flames-lounge
   - Projects/one flame app/src/app/(public)/flames-lounge/page.tsx
-  - Owner confirmation (Frank), 2026-10-05 — label handles; About-page timeline not true
+  - Owner confirmation (Frank), 2026-10-05 — label handles; About-page timeline
+    not true
+reviewed: 2026-10-18
+review_scope: local repository reconciliation; original verified dates retain their evidence
+  scope; no fresh live transaction
 ---
 
 ## Short answer
@@ -66,3 +80,7 @@ Hand to a human for private-hire bookings, event enquiries, catering questions, 
 - Do not give a street address, phone number, or directions. Only "Montego Bay, Jamaica" is published.
 - Do not quote food or drink prices. They are held in the venue's own till system and are not on the website.
 - Do not promise a specific event date, performer or DJ. No events are listed.
+
+## Owner-confirmed operation — October 18, 2026
+
+Frank confirmed that food service, the physical outdoor recording studio and live events are all operating. This does not establish today’s opening hours, a particular menu item, a future event date, available capacity or a studio booking. Ask the Lounge for those details. The physical studio is separate from the retired AI production software.

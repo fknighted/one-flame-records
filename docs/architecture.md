@@ -302,3 +302,17 @@ See `.env.example`. Phase notes:
 | `INNGEST_SIGNING_KEY` | 4 | |
 | Retired generation-provider variables | Historical | Not required by the current application |
 | `NEXT_PUBLIC_SITE_URL` | 1 | `https://oneflamerecords.com` in prod, `http://localhost:3000` local |
+
+## Customer Email Studio — October 18, 2026 (local candidate)
+
+`/admin/email-studio` uses the existing administrator and second-step sign-in guards. `email_studio_templates` contains plain subject/opening/body overrides, version, editor and timestamp. The service-only `save_email_studio_template` routine checks the actor’s current administrator role and expected version; stale writes fail. Direct anonymous/authenticated table access and routine calls are denied. Live application approval/rejection, staff invitation resend and subscription confirmation/unsubscribe senders load overrides through `renderManagedEmail`; missing rows use defaults, lookup errors stop the send. Secure app links, names and required expiry notices are rendered separately and escaped.
+
+`email_studio_tests` keeps fixed administrator recipient, payload and attempt identity. A trigger protects identity/content/creation time and accepted receipts. The service-only preparation routine checks the administrator and their own sign-in email, rate limits new tests, and quarantines unresolved retries after 23 hours. Server code also checks verified sign-in email and current sign-in assurance. Provider acceptance requires a receipt ID; retries use the same provider idempotency key. The test renders synthetic details/non-working sample links. No provider-managed authentication template is changed.
+
+Newsletters keep the existing immutable run/recipient snapshot and resume functions. Preview sanitizes the unsaved Markdown; review signing binds exact subject/body to the current administrator. The send action requires that proof plus explicit review approval. Editing invalidates client approval, and crafted stale proofs fail server-side before creating a run. Subject/body whitespace is preserved consistently. Test sends use the same fixed-attempt mechanism and synthetic unsubscribe links. Existing saved sends remain read-only; their prior receipts are not relabelled as delivery.
+
+Release dependency: apply `20261018000006_email_studio.sql` with separate approved migration/release steps before deploying sender changes. Migration has only new tables/routines/triggers and leaves existing historical customer records intact. Until applied, saved-template lookups fail closed. No remote migration was applied for this candidate.
+
+## Fola Village (26 October 2026)
+
+`src/app/(public)/fola-village/page.tsx` is the village landing page inside the existing public layout. Assets and route-specific icons/share metadata use `public/brand/fola-village/`. Shared header/footer and sitemap expose the page. No new database, form, runtime package or visitor booking system is introduced.

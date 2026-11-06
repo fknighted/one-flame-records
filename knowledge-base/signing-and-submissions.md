@@ -4,8 +4,16 @@ title: Signing and artist submissions
 product: one-flame-records
 domain: oneflamerecords.com
 audience: customer
-intent: [signing, submissions, demo, artists]
-keywords: [how do I get signed, send my demo, submit music, sign with us, a and r, do you take demos]
+intent: [ signing, submissions, demo, artists ]
+keywords:
+  [
+    how do I get signed,
+    send my demo,
+    submit music,
+    sign with us,
+    a and r,
+    do you take demos
+  ]
 answers:
   - "How do I get signed to One Flame Records?"
   - "How do I submit my music?"
@@ -17,18 +25,21 @@ sources:
   - https://www.oneflamerecords.com/sign
   - https://www.oneflamerecords.com/contact
   - Projects/one flame app/src/app/(public)/signup/[code]/actions.ts
+reviewed: 2026-10-18
+review_scope: local repository reconciliation; original verified dates retain their evidence
+  scope; no fresh live transaction
 ---
 
 ## Short answer
 
-Send a message through the contact page on the website, choosing "Artist submission" as the reason, and include a short bio, a description of your sound, and links to your best work. No attachments are needed at that stage. The label says every submission is listened to by the team and that they will get back to you within two weeks. If the music fits, the next step is a call — not paperwork.
+Send a message through the contact page on the website, choosing "Artist submission" as the reason, and include a short bio, a description of your sound, and links to your best work. No attachments are needed at that stage. The label says every submission is listened to by the team and that they aim to get back to you within two weeks. If the music fits, the next step is a call — not paperwork.
 
 ## Details
 
 The site sets out three steps under the heading "Simple. Three steps.":
 
 1. **Get in touch.** Send a message through the contact page with a brief biography, your sound, and links to your best work. No attachments at this stage.
-2. **We review your music.** Every submission is listened to by the label team. They look for originality, craft and cultural rootedness. They will get back to you within two weeks.
+2. **We review your music.** Every submission is listened to by the label team. They look for originality, craft and cultural rootedness. They aim to get back to you within two weeks; the terms do not guarantee a response or signing offer.
 3. **Conversation, not a contract.** If the music fits, they set up a call — "no pressure, no paperwork yet."
 
 **Genres the label works with**, as listed on the site: roots reggae, dancehall, conscious music, rocksteady, ska, and Afrobeats or Afrodancehall. The page adds: "If your sound doesn't fit a neat category but feels connected to Caribbean music culture, reach out anyway."

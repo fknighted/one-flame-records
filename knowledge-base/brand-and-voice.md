@@ -4,8 +4,8 @@ title: Brand and voice
 product: one-flame-records
 domain: oneflamerecords.com
 audience: internal
-intent: [brand, voice, tone, style]
-keywords: [tone of voice, how should the bot sound, brand values, label story]
+intent: [ brand, voice, tone, style ]
+keywords: [ tone of voice, how should the bot sound, brand values, label story ]
 answers:
   - "How should the assistant sound when speaking for One Flame Records?"
   - "What does the label stand for?"
@@ -15,6 +15,9 @@ voice_safe: true
 sources:
   - Projects/one flame app/design-system/brand-book.md
   - https://www.oneflamerecords.com/about
+reviewed: 2026-10-18
+review_scope: local repository reconciliation; original verified dates retain their evidence
+  scope; no fresh live transaction
 ---
 
 ## Short answer

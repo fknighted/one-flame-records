@@ -42,3 +42,7 @@ Legacy files, kept for pages not yet rebuilt and not for new work: `logo.png` (f
 Rules: never redraw, recolour, stretch, add effects to, or separate the flame from its inner flame. Never put the logo on a solid circle. Minimum size 32px tall; clear space of half the flame's width on every side.
 
 The files themselves are in this repository (see each note for its path) and in the claude.ai design system linked from `README.md`.
+
+## Fola Village
+
+Official scalable, transparent, print, social and drum-only icon files: `brand/fola-village/official/`. Web copies: `public/brand/fola-village/`. Approval and application rules: [Fola Village](fola-village.md).

@@ -4,8 +4,16 @@ title: Glossary
 product: one-flame-records
 domain: oneflamerecords.com
 audience: internal
-intent: [glossary, vocabulary, terminology]
-keywords: [what does that mean, flames lounge, fritters, roster, sync licensing, bashment]
+intent: [ glossary, vocabulary, terminology ]
+keywords:
+  [
+    what does that mean,
+    flames lounge,
+    fritters,
+    roster,
+    sync licensing,
+    bashment
+  ]
 answers:
   - "What do One Flame Records' own terms mean?"
   - "What is a fritter, a roster, or sync licensing?"
@@ -16,7 +24,11 @@ sources:
   - https://www.oneflamerecords.com/flames-lounge
   - https://www.oneflamerecords.com/sign
   - Projects/one flame app/CLAUDE.md
-  - Owner confirmation (Frank), 2026-10-05 — label handles; About-page timeline not true
+  - Owner confirmation (Frank), 2026-10-05 — label handles; About-page timeline
+    not true
+reviewed: 2026-10-18
+review_scope: local repository reconciliation; original verified dates retain their evidence
+  scope; no fresh live transaction
 ---
 
 ## Short answer
@@ -47,7 +59,7 @@ These are the words visitors and staff use around One Flame Records. Recognise t
 
 **Artist portal** — the private area signed artists log into. Not open to the public.
 
-**Bashment** — Jamaican dancehall party culture; also one of the video style options in the artist portal.
+**Bashment** — Jamaican dancehall party culture. The former artist-video style selector is retired.
 
 **Lovers rock, rocksteady, roots reggae, conscious music, ska, Afrodancehall** — genres the label works with.
 

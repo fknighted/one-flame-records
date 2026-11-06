@@ -18,3 +18,5 @@ The One Flame Records brand, written down so people and coding agents build and 
 Search tips: token names are in backticks (for example `grep -rn "surface-" design-system/`); every hex value appears in `tokens.md`.
 
 To change the system, edit these files and the claude.ai version together, in the same change.
+
+Fola Village has an approved related identity: [Fola Village](fola-village.md).

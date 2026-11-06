@@ -4,8 +4,17 @@ title: Accounts, login and access
 product: one-flame-records
 domain: oneflamerecords.com
 audience: customer
-intent: [accounts, login, access, roles]
-keywords: [log in, sign in, password, forgot password, artist portal, my account, create account]
+intent: [ accounts, login, access, roles ]
+keywords:
+  [
+    log in,
+    sign in,
+    password,
+    forgot password,
+    artist portal,
+    my account,
+    create account
+  ]
 answers:
   - "How do I log in?"
   - "Can anyone create an account?"
@@ -17,24 +26,27 @@ sources:
   - Projects/one flame app/src/app/login/page.tsx
   - Projects/one flame app/src/proxy.ts
   - Projects/one flame app/CLAUDE.md
+reviewed: 2026-10-18
+review_scope: local repository reconciliation; original verified dates retain their evidence
+  scope; no fresh live transaction
 ---
 
 ## Short answer
 
-Most of the One Flame Records website is open to everyone with no account at all. Accounts exist only for signed artists, label staff, and Lounge staff, and they are created by invitation. There are no gaming accounts. If you have an account you sign in from the login page with your email address and password, and there is a "forgot password" link there if you need a reset link sent to you.
+Most of the One Flame Records website is open to everyone with no account at all. Artist applications require label approval. Label and Lounge staff access is assigned by the label. There are no gaming accounts. If you have an account you sign in from the login page with your email address and password, and there is a "forgot password" link there if you need a reset link sent to you.
 
 ## Details
 
 There are three kinds of account, and each lands on its own area after signing in:
 
-- **Signed artist** — an artist portal with a dashboard, releases, uploaded assets, generated videos and a profile page. See [[artist-portal]].
+- **Signed artist** — an artist portal with a dashboard, releases, uploaded assets, completed saved videos and a profile page. See [[artist-portal]].
 - **Label administrator** — the label's own management tools.
 - **Lounge staff** — the till and gaming system used inside Flames Lounge.
 Gaming at the Lounge is walk-in and needs no account. See [[gaming-at-flames-lounge]].
 
 The site routes you automatically to the right area based on your account, so there is one login page for everyone.
 
-**Getting an account.** Artist and staff accounts are created by the label and sent as an email invitation. Gaming accounts and memberships were removed on 9 October 2026. There is no general public sign-up, and browsing the site does not need one.
+**Getting an account.** Artists can apply using a current label-issued application link; submission alone does not grant a portal login. The label reviews applications and arranges approved account access and staff invitations. Gaming accounts and memberships were removed on 9 October 2026. There is no general public sign-up, and browsing the site does not need one.
 
 **Setting a password.** Invitations and password resets both send an email containing a link. Following that link opens a page where you set your password, and you are then taken to the area your account belongs to.
 

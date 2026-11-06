@@ -687,3 +687,17 @@ and the ×100 shims must be deleted, not left as no-ops.
 **Alternatives considered:** Keeping the portal for existing members: rejected because there are none.
 
 **Consequences:** No schema change: the `gamer_members`, balance tables, `gamer` role constraint, migrations and `src/types/supabase.ts` are untouched. To restore, revert the removal commit or restore the deleted folders and edits from git history, then re-add the proxy route and nav links.
+
+## 2026-10-18 — App-managed email wording controls (local candidate)
+
+Keep the existing Resend/Supabase providers and One Flame studio design. Store versioned plain subject/opening/body overrides in service-only tables; protect names, secure links and required notices in the renderer. Template database errors stop a send instead of silently reverting to defaults. Staff first invites and other provider-managed authentication wording remain outside these app controls. The unused standalone artist welcome stays inactive.
+
+Newsletters retain their immutable saved-send model. Signed review proof binds the current administrator to the exact previewed wording; it does not replace the existing sending/recipient checks. Self-tests use fixed attempt/content/recipient records with protected receipts and bounded provider-idempotency retries, and never contain customer access/unsubscribe links. Provider acceptance and inbox delivery remain distinct. No external release or migration was authorized by this local implementation decision.
+
+## 2026-10-26 — Fola Village identity and website
+
+Frank approved option 11 with a green rim as Fola Village's official logo, retaining the black drum/lettering, gold river and red/gold/green dots. Favicon uses only the drum, removing dots and text. The village page is within One Flame at `/fola-village`, using the existing shared website design. Publish only supplied village facts, label future projects as plans and wait for real village photographs. Official files and guidance are in `brand/fola-village/official/` and `design-system/fola-village.md`. This session prepared a local build, without publishing it.
+
+## 2026-10-27 — Publish Fola Village and incorporate supporting illustration
+
+Frank explicitly authorized publishing the reviewed Fola page on One Flame, then supplied community/drumming artwork with instructions to match site fonts. It is incorporated as supporting artwork with native Big Shoulders lettering, preserving the official logo/favicon. Final checked build was promoted to the existing production domains. See `docs/fola-village/release-2026-10-27/report.md`; no commit, push, database or provider change was needed.

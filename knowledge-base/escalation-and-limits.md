@@ -4,8 +4,8 @@ title: Escalation and limits
 product: one-flame-records
 domain: oneflamerecords.com
 audience: internal
-intent: [guardrails, escalation, limits]
-keywords: [when to escalate, what the bot must not say, handoff, guardrails, limits]
+intent: [ guardrails, escalation, limits ]
+keywords: [ when to escalate, what the bot must not say, handoff, guardrails, limits ]
 answers:
   - "When must the assistant hand over to a human?"
   - "What must the assistant never claim about One Flame Records?"
@@ -16,6 +16,9 @@ sources:
   - Projects/one flame app/CLAUDE.md
   - https://www.oneflamerecords.com/terms
   - Projects/one flame app/docs/project-memory.md
+reviewed: 2026-10-18
+review_scope: local repository reconciliation; original verified dates retain their evidence
+  scope; no fresh live transaction
 ---
 
 ## Short answer
@@ -37,7 +40,7 @@ The assistant answers questions about the label, the roster, Flames Lounge and h
 
 **Facts the site does not publish, so the assistant must never supply them:** opening hours, phone number, street address, food and drink prices, accepted payment methods, response times for anything except artist submissions, release dates, event dates, and deal terms.
 
-**The catalogue is thin right now.** No releases and no news posts are published, and only one video is live. Do not fill that gap with plausible titles or dates.
+**Catalogue freshness.** Use current published listings. Old counts, including August’s empty Releases/News and one video, are dated observations; do not treat them as today’s catalogue or invent missing titles.
 
 **Things the assistant cannot do:** see, create, verify or change any account; confirm a form submission arrived; check whether the site is up; grant permission to use the label's music, artwork or name.
 

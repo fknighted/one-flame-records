@@ -1,56 +1,65 @@
 ---
 slug: releases-and-videos
-title: Releases, videos and news
+title: Finding releases, videos and news
 product: one-flame-records
 domain: oneflamerecords.com
 audience: customer
-intent: [catalog, releases, videos, music, news]
-keywords: [discography, new music, albums, singles, where can I listen, watch videos, latest news]
+intent: [ catalog, releases, videos, music, news ]
+keywords:
+  [
+    discography,
+    new music,
+    albums,
+    singles,
+    where can I listen,
+    watch videos,
+    latest news
+  ]
 answers:
   - "What releases does One Flame Records have out?"
   - "Where can I watch One Flame videos?"
   - "Do you have any news posts?"
-verified: 2026-08-11
+verified: 2026-10-18
 confidence: verified
 voice_safe: true
 sources:
-  - https://www.oneflamerecords.com/releases
-  - https://www.oneflamerecords.com/videos
-  - https://www.oneflamerecords.com/news
-  - Owner confirmation (Frank), 2026-10-05 — label handles; About-page timeline not true
+  - src/app/(public)/releases/page.tsx
+  - src/app/(public)/videos/page.tsx
+  - src/app/(public)/news/page.tsx
+  - src/app/portal/videos/page.tsx
+  - docs/project-memory.md
+verification_scope: local repository source and dated release evidence; no new live transaction
+reviewed: 2026-10-18
+review_scope: local repository reconciliation; original verified dates retain their evidence
+  scope; no fresh live transaction
 ---
 
 ## Short answer
 
-The Releases page is the label's discography, and as of the eleventh of August 2026 it is still empty — the page reads "Releases coming soon." The Videos page currently carries one video, "Speechless" by Kahlic. The News section has no published posts yet. All three pages fill automatically as the label publishes, so it is worth checking the site directly for the latest.
+Use Releases for the current discography, Videos for published clips, and News for label announcements. These pages change as the label publishes. Historical counts and old screenshots do not establish today’s catalogue or next release date.
 
 ## Details
 
-**Releases.** The Releases page supports filtering by type — single, EP, album or mixtape — and by artist, and sorting by newest, oldest or alphabetically. A release page can carry cover art, a release date, a description and links out to streaming services. None are published yet.
+Release pages can show cover art, type, release date, description and streaming links. The listing supports artist/type filters and sorting. Videos can be linked from YouTube or uploaded by the label; use the actual published page for the available player and artist. News lists published articles.
 
-**Videos.** The Videos page filters by artist and by kind: music video, lyric, live, or behind the scenes. Videos may be hosted on YouTube or uploaded directly by the label.
+The August 11 survey saw no published releases or news and one video, Speechless by Kahlic. That is historical evidence, not a current inventory. Follow the current listings instead of answering “none yet” from that survey. An old search link can point to an unpublished or removed article; try the navigation or site search before reporting a persistent problem.
 
-**News.** The News section is paginated and shows label posts with a title, excerpt and body. Nothing is published at the moment; the page reads "No posts yet — check back soon."
-
-**Newsletter.** Every public page has a "Stay in the loop" box: enter an email address to receive new releases, events and label news. Subscribing takes only an email address. See [[contact-and-support]] for how to unsubscribe.
-
-**A known quirk.** The site's sitemap currently lists one news article that is not published, so a search engine or a shared link may lead to a page that cannot be found. That is a site issue, not a mistake by the visitor. See [[troubleshooting]].
+Some artist pages expose audio that the artist and label made public, including a playback or download control. That is not a general download licence. Newsletter signup requests label news; neither signup nor an assistant response announces a release or confirms an email arrived.
 
 ## Common questions
 
-**When is the next release out?** No release date has been announced publicly. The Releases page says releases are coming soon. Subscribe to the newsletter to be told when something lands.
+**When is the next release?** Use a current published announcement or ask the label; do not infer a date from a draft or an old count.
 
-**Where can I stream One Flame music?** Release pages carry streaming links when a release is published. No specific platform links are live yet. The label's YouTube channel is @oneflamerecords.
+**Where can I stream the music?** Follow streaming links on the actual release or artist page. The label’s recorded YouTube handle is @oneflamerecords.
 
-**Can I download music from the site?** Some artist pages include audio the artist has chosen to make public, with a download control. That is at the artist's and label's discretion, not a general download service.
+**Can I download or reuse a track?** Use an offered public download if present. Reuse or licensing still requires the rights holder’s permission.
 
 ## Escalate
 
-Escalate any request for promotional copies, press assets, embargo dates or release schedules to the label through the contact form, choosing "Press & media".
+Contact the label for press assets, embargoes, promotional copies, licensing or a release schedule.
 
 ## Do not say
 
-- Do not announce a release, title, tracklist or release date. None are published.
-- Do not name streaming platforms the label is on. The site does not list any yet.
-- Do not give any stream, sales or chart figure, for a single record or for the whole catalogue. The label has confirmed none. A "ten million combined streams" line once appeared on the About page; the owner confirmed on 2026-10-05 that it was not true, and it has been removed.
-- Do not give a founding year or a release history. None has been confirmed.
+- Do not announce unpublished titles, dates, streaming availability or catalogue totals from historical surveys.
+- Do not invent sales, streams or chart positions.
+- Do not repeat the removed ten-million-streams or founding-year story; the owner said it was untrue.

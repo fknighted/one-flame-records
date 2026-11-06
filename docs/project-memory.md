@@ -1,6 +1,16 @@
 # Current project summary — November 3, 2026
 
-Status: Fola Village released October 27; Email Studio and October 18 audit repairs released; October 26 security candidate local.
+## Security update released — November3
+
+The approved refreshed update is live at `dpl_3rRQ3L8qWvoFGhSHAXagYYSSnyru` on both existing domains. All Fola source/artwork remains exact. [Release receipt](audits/2026-11-03-security-release.md) owns exact463-file source, retained Gj2 rollback, safe live page/access/asset/font checks, native background-job registration and separate acceptance. Production dependency audit reports zero warnings;25 existing lint style warnings remain disclosed. Hosted build passed with original configuration.
+
+Released frozen source is `work/security-release-20261103/stage/`. Parent application/dependency source and earlier candidates remain untouched. Earlier proposal-only/not-deployed statements below are dated history, superseded by this release.
+
+## Historical first Fola-preserving security proposal — November 3, 2026
+
+The first local proposal at `work/security-release-proposal-20261103/candidate/` preserved the complete Fola Village release and applied only the four original security files. It was superseded as proposed source by the newer-warning refresh above. Its locked install, tests, types and build passed, with then-outstanding dependency warnings recorded in its dated receipt. [Proposal receipt](session-handoffs/2026-11-03-security-release-proposal.md) links the exact cross-project plan and existing ledger. No release approved/performed.
+
+Status: November3 security update released over the complete Fola Village baseline; Email Studio/audit repairs retained.
 
 Phase: Operating label, bar and village site; Studio/gamer tools retired.
 
@@ -16,8 +26,12 @@ provider delivery and monitoring limits in the receipts remain separate.
 Current customer knowledge and related memory were rechecked against local source. [Documentation renewal](session-handoffs/2026-11-03-documentation-renewal.md) records the corrections, source/serving boundaries and independent-review evidence; no live business outcome was newly tested.
 
 Newer relevant receipts supersede earlier local-only and pending-release notes below.
-This is a local documentation reconciliation, not a fresh service/provider check.
+The later November3 security receipt adds bounded live checks; the earlier documentation renewal itself was read-only.
 Current work and independent acceptance stay in Claude OS Delegations.
+
+## Knight Rida mix parked — November 3, 2026
+
+Frank parked the two mix passes and authorized archiving their chat. [Restart note](../mix-exports/KNIGHT-RIDA-RESUME.md) links both passes, all three Logic projects and preservation limits; [receipt](session-handoffs/2026-11-03-knight-rida-mix-parked.md). No finished-mix approval or new mixing scope.
 
 ## Dated evidence and earlier summaries
 

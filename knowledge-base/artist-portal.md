@@ -1,61 +1,65 @@
 ---
 slug: artist-portal
-title: The artist portal
+title: Artist portal and saved videos
 product: one-flame-records
 domain: oneflamerecords.com
 audience: customer
-intent: [accounts, artists, portal, video]
-keywords: [artist portal, upload demo, upload instrumental, request a video, my releases, artist dashboard]
+intent: [ accounts, artists, portal, video ]
+keywords:
+  [
+    artist portal,
+    upload demo,
+    upload instrumental,
+    request a video,
+    my releases,
+    artist dashboard
+  ]
 answers:
   - "What do signed artists get access to?"
   - "How does an artist request a music video?"
   - "Where do artists upload their demos?"
-verified: 2026-08-11
+verified: 2026-10-18
 confidence: verified
 voice_safe: true
 sources:
-  - Projects/one flame app/CLAUDE.md
-  - Projects/one flame app/src/components/InkShell.tsx
-  - Projects/one flame app/src/components/VideoRequestForm.tsx
-  - Projects/one flame app/src/app/portal/videos/[job_id]/actions.ts
+  - src/app/portal/videos/page.tsx
+  - src/app/portal/videos/new/page.tsx
+  - src/app/portal/videos/[job_id]/page.tsx
+  - src/app/portal/videos/[job_id]/actions.ts
+  - src/app/(public)/signup/[code]/actions.ts
+  - docs/session-handoffs/2026-10-08-total-studio-removal.md
+verification_scope: local repository source and dated release evidence; no new live transaction
+reviewed: 2026-10-18
+review_scope: local repository reconciliation; original verified dates retain their evidence
+  scope; no fresh live transaction
 ---
 
 ## Short answer
 
-Signed artists get a private portal on the One Flame Records site. It has a dashboard, a view of their releases, a place to upload demos and instrumentals, a profile they can edit, and a tool for requesting an automatically generated music video. The portal is only for artists the label has signed and invited; it is not open to the public.
+Artist accounts have a private dashboard, releases, assets, profile and saved-video library. You can watch completed saved videos and manage their visibility. New automatic video requests and the old AI Studio were retired in October 2026.
 
 ## Details
 
-The portal has five areas:
+The portal retains demos, instrumentals and other supported uploads, profile editing and the artist’s recorded releases. Its Videos area lists completed saved videos; a detail page offers playback and download when a video file is available. Visibility controls remain subject to your account permissions.
 
-- **Dashboard** — an overview of the artist's activity.
-- **Releases** — the artist's own releases as the label has them recorded.
-- **Assets** — uploads. An artist can add instrumentals, demos, reference videos and reference images, give each a title and notes, play audio back in the browser, and edit or delete their own uploads.
-- **Videos** — video requests and their results.
-- **Profile** — the artist's own details.
+The old new-video request address redirects to Saved videos. There is no current scene-generation queue or sixteen-style video-request workflow. Removing those tools did not delete stored songs, videos or database history. The physical recording studio is a separate business service; ask the label about availability.
 
-**Requesting a video.** From the Videos area an artist picks one of their uploaded audio assets, chooses a visual style and a format, and submits. Sixteen styles are offered, from vintage roots reggae performance and modern dancehall energy through Kingston street life, lovers rock romance, VHS nostalgia and abstract visualiser. Formats are landscape, vertical for reels, and square.
-
-The request is then processed in the background, moving through analysis, scene writing, clip generation and assembly. The artist sees the status on the request's page and gets a watch link and a download when it finishes.
-
-**Publishing a generated video.** Once a video is complete the artist can switch it between private and public. Public videos can appear on the label's public video pages.
-
-Artists who also work behind the bar at Flames Lounge get an extra link to the till system from their portal.
+Artists who are also authorized bar staff can use the Lounge till. Staff access must be assigned by the label. An application is not a signed contract or approved portal account.
 
 ## Common questions
 
-**Can I request a video as an unsigned artist?** No. The portal is for signed artists only. See [[signing-and-submissions]].
+**Can I request a new AI music video here?** No. Use the portal for finished saved videos and contact the label about new production work.
 
-**How long does a video take?** No turnaround time is published. It depends on the length of the track and how busy the pipeline is. Watch the status on the request page.
+**Can I still watch an older video?** Completed saved videos remain in the library if your account can access them and the stored file is available.
 
-**Who can hear my uploaded demo?** Uploads are private to the artist and the label unless the label publishes them.
+**Can anyone create an artist account?** No. Artist applications need label approval; staff permissions are assigned separately.
 
 ## Escalate
 
-Escalate a video request that has failed, stalled, or produced a result the artist is unhappy with, and any question about how many videos an artist may request. Only the label can retry, cancel or re-run a request.
+Contact the label for missing assets, unavailable saved files, incorrect visibility, account access or a request for new recording/video work. Support cannot promise restoration, production capacity or publication.
 
 ## Do not say
 
-- Do not quote a turnaround time, a cost, or a monthly limit on video requests. None are published to artists.
-- Do not promise a generated video will be released, promoted or posted to social media.
-- Do not describe the portal as something a fan or an unsigned artist can sign up for.
+- Do not promise new automatic video generation, scene styles, a production turnaround or an AI Studio.
+- Do not promise every historical job is visible: the library shows completed videos.
+- Do not grant account access or publication rights through a chat.
