@@ -1,3 +1,7 @@
+## Personal Ops Work connection checked — November 6, 2026
+
+Personal Ops now connects `/project one-flame ...` to this existing folder. A real app request, full preview and approval added only [the local help note](personal-ops-work.md); its bytes and one successful apply were verified. The full npm test script passed, including the nested Partner checks. Telegram accepted result and apply notices; phone receipt remains unknown. Older local review files were preserved. [Execution and preservation receipt](session-handoffs/2026-11-06-personal-ops-work.md). The source commit is local only until a separate decision about automatic website deployment.
+
 # Resume One Flame Records — November 6, 2026
 
 Flames Partner has since been approved and published. Both migrations and the protected daily job passed hosted checks. Existing administrators retain control. Read the latest project memory entry and root ledger for final retirement/serving identities; the local-candidate notes below describe preparation, not the current release authority. Static legacy routing is maintained in `ops/legacy-partner-redirect/`.

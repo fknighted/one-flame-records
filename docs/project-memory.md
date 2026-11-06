@@ -1,3 +1,7 @@
+## Personal Ops Work connection checked — November 6, 2026
+
+Personal Ops now connects `/project one-flame ...` to this existing folder. A real app request, full preview and approval added only [the local help note](personal-ops-work.md); its bytes and one successful apply were verified. The full npm test script passed, including the nested Partner checks. Telegram accepted result and apply notices; phone receipt remains unknown. Older local review files were preserved. [Execution and preservation receipt](session-handoffs/2026-11-06-personal-ops-work.md). The source commit is local only until a separate decision about automatic website deployment.
+
 # Current project summary — November 3, 2026
 
 ## Security update released — November3
