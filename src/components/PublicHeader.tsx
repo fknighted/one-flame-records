@@ -10,6 +10,7 @@ const NAV = [
   { href: "/videos",        label: "Videos" },
   { href: "/news",          label: "News" },
   { href: "/flames-lounge", label: "Flames Lounge" },
+  { href: "/fola-village", label: "Fola Village" },
   { href: "/about",         label: "About" },
   { href: "/contact",       label: "Contact" },
 ];
@@ -36,7 +37,7 @@ export default function PublicHeader() {
         </Link>
 
         {/* Desktop nav */}
-        <nav className="hidden lg:flex items-center gap-x-5" aria-label="Main">
+        <nav className="hidden xl:flex items-center gap-x-4" aria-label="Main">
           {NAV.map(({ href, label }) => (
             <Link key={href} href={href} className={LINK}>
               {label}
@@ -56,7 +57,7 @@ export default function PublicHeader() {
         {/* Phone: outlined yellow Menu button */}
         <button
           type="button"
-          className="lg:hidden min-h-[46px] px-3 border-2 border-yellow text-yellow type-label hover:bg-yellow hover:text-black focus-on-black"
+          className="xl:hidden min-h-[46px] px-3 border-2 border-yellow text-yellow type-label hover:bg-yellow hover:text-black focus-on-black"
           onClick={() => setOpen((v) => !v)}
           aria-expanded={open}
           aria-controls="mobile-menu"
@@ -69,7 +70,7 @@ export default function PublicHeader() {
       {open && (
         <nav
           id="mobile-menu"
-          className="lg:hidden bg-black border-t-2 border-line px-4 sm:px-6 pt-2 pb-6 max-h-[calc(100dvh-78px)] overflow-y-auto"
+          className="xl:hidden bg-black border-t-2 border-line px-4 sm:px-6 pt-2 pb-6 max-h-[calc(100dvh-78px)] overflow-y-auto"
           aria-label="Mobile"
         >
           {[...NAV, { href: "/search", label: "Search" }].map(({ href, label }) => (

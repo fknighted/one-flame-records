@@ -4,6 +4,7 @@ import LogoMark from "@/components/LogoMark";
 
 const LABEL_LINKS = [
   { href: "/about",   label: "About" },
+  { href: "/fola-village", label: "Fola Village" },
   { href: "/sign",    label: "Sign with us" },
   { href: "/contact", label: "Contact" },
 ];

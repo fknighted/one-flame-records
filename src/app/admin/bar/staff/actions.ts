@@ -3,12 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { createServiceClient } from "@/lib/supabase/server";
 import { requireAdmin } from "@/lib/auth";
-import {
-  emailButton,
-  emailLayout,
-  emailParagraph,
-  emailSmallPrint,
-} from "@/lib/email/layout";
+import { renderManagedEmail } from "@/lib/email/managed";
 
 export type ActionState = { error: string } | null;
 
@@ -82,16 +77,7 @@ export async function resendBartenderInvite(
     const link = data.properties.action_link;
     const { error: emailError } = await sendEmail({
       to: email,
-      subject: "Set up your One Flame bar account",
-      text: `You've been invited to the One Flame bar system. Click the link below to set your password:\n\n${link}\n\nThis link expires in 24 hours.`,
-      html: emailLayout({
-        title: "Set up your One Flame bar account",
-        body: [
-          emailParagraph("You've been invited to the One Flame bar system.", { last: true }),
-          emailButton(link, "Set your password"),
-          emailSmallPrint("This link expires in 24 hours."),
-        ].join("\n"),
-      }),
+      ...await renderManagedEmail("staff-invitation", {url:link}),
     });
 
     if (emailError) return { error: `Link generated but email failed: ${emailError}` };

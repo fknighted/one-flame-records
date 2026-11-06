@@ -35,6 +35,7 @@ const ADMIN_NAV: NavGroup[] = [
     items: [
       { href: "/admin/events",      label: "Events" },
       { href: "/admin/subscribers", label: "Subscribers" },
+      { href: "/admin/email-studio", label: "Email Studio" },
     ],
   },
   {

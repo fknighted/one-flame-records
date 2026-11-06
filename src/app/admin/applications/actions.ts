@@ -5,8 +5,7 @@ import { redirect } from "next/navigation";
 import { createClient, createServiceClient } from "@/lib/supabase/server";
 import { requireAdmin } from "@/lib/auth";
 import { sendEmail } from "@/lib/email/send";
-import { renderApplicationApproved } from "@/lib/email/templates/applicationApproved";
-import { renderApplicationRejected } from "@/lib/email/templates/applicationRejected";
+import { renderManagedEmail } from "@/lib/email/managed";
 
 export type ActionState = { error: string } | { success: true } | { link: string } | null;
 
@@ -74,9 +73,8 @@ export async function resendInvite(
     .eq("id", id)
     .single();
 
-  const template = renderApplicationApproved({
-    stageName: appData?.stage_name ?? "Artist",
-    portalInviteUrl,
+  const template = await renderManagedEmail("application-approved", {
+    name: appData?.stage_name ?? "Artist", url: portalInviteUrl,
   });
 
   const { error: emailError } = await sendEmail({ to: app.email, ...template });
@@ -125,7 +123,7 @@ export async function rejectApplication(
   }
 
   // Send rejection email — fire and forget (don't fail the action if email fails)
-  const template = renderApplicationRejected({ stageName: app.stage_name });
+  const template = await renderManagedEmail("application-rejected", { name: app.stage_name });
   await sendEmail({ to: app.email, ...template });
 
   revalidatePath("/admin/applications");

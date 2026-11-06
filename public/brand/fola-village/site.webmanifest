@@ -1,0 +1,23 @@
+{
+  "name": "Fola Village",
+  "short_name": "Fola",
+  "start_url": "/fola-village",
+  "scope": "/fola-village",
+  "display": "browser",
+  "background_color": "#FFF7E6",
+  "theme_color": "#0F0D0B",
+  "icons": [
+    {
+      "src": "/brand/fola-village/app-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/brand/fola-village/app-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

@@ -39,6 +39,19 @@ export type Database = {
   }
   public: {
     Tables: {
+      email_studio_templates: {
+        Row: { key: string; subject: string; opening: string; body: string; version: number; updated_at: string; updated_by: string }
+        Insert: { key: string; subject: string; opening: string; body: string; version?: number; updated_at?: string; updated_by: string }
+        Update: { subject?: string; opening?: string; body?: string; version?: number; updated_at?: string; updated_by?: string }
+        Relationships: []
+      }
+      email_studio_tests: {
+        Row: { id: string; actor: string; recipient: string; payload: Json; created_at: string; status: string; provider_id: string | null }
+        Insert: { id: string; actor: string; recipient: string; payload: Json; status?: string; provider_id?: string | null }
+        Update: { status?: string; provider_id?: string | null }
+        Relationships: []
+      }
+
       youtube_upload_requests: { Row: { source:string;record_id:string;request_id:string;status:string;youtube_id:string|null;created_at:string }; Insert: { source:string;record_id:string;request_id?:string;status?:string;youtube_id?:string|null;created_at?:string }; Update: { request_id?:string;status?:string;youtube_id?:string|null }; Relationships:[] }
 
       newsletter_deliveries: { Row: { run_id: string; subscriber_id: string; email: string; status: string; first_attempt_at: string | null; claimed_at: string | null; provider_id: string | null }; Insert: { run_id?: string; subscriber_id?: string; email?: string; status?: string; first_attempt_at?: string | null; claimed_at?: string | null; provider_id?: string | null }; Update: { run_id?: string; subscriber_id?: string; email?: string; status?: string; first_attempt_at?: string | null; claimed_at?: string | null; provider_id?: string | null }; Relationships: [] }
@@ -1211,6 +1224,9 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      save_email_studio_template: { Args: { p_key: string; p_subject: string; p_opening: string; p_body: string; p_version: number; p_actor: string }; Returns: number }
+      prepare_email_studio_test: { Args: { p_id: string; p_actor: string; p_recipient: string; p_payload: Json }; Returns: Json }
+
       newsletter_progress: { Args:{p_actor:string;p_run?:string|null}; Returns:{run_id:string;subject:string;created_at:string;sent:number;remaining:number;uncertain:number}[] }
 
       bar_open_tab: { Args:{p_request_id:string;p_actor:string;p_name:string;p_notes:string|null;p_regular:string|null}; Returns:string }

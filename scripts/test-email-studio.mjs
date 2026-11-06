@@ -1,0 +1,60 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import ts from 'typescript';
+function load(file, imports={}) {
+ const m={exports:{}};new Function('require','module','exports','process',ts.transpileModule(fs.readFileSync(file,'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS}}).outputText)(name=>{if(!(name in imports))throw Error(name);return imports[name]},m,m.exports,{env:{NEXT_PUBLIC_SITE_URL:'https://example.invalid',RESEND_API_KEY:'isolated-not-a-key',SUPABASE_SERVICE_ROLE_KEY:'isolated-review-fixture'}});return m.exports;
+}
+const escape=load('src/lib/email/escape.ts');
+const layout=load('src/lib/email/layout.ts',{'./escape':escape});
+const studio=load('src/lib/email/studio.ts',{'./escape':escape,'./layout':layout});
+const draft={subject:'Edited subject',opening:'Hello <script>bad</script>',body:'New wording\n\nSecond paragraph'};
+const email=studio.renderEmailDraft('application-approved',draft,{name:'Sample <Artist>',url:'https://example.invalid/secure?x=1&y=2'});
+assert.equal(email.subject,'Edited subject');
+assert(email.html.includes('New wording'));
+assert(!email.html.includes('<script>'));
+assert(email.html.includes('Sample &lt;Artist&gt;'));
+assert(email.html.includes('https://example.invalid/secure?x=1&amp;y=2'));
+assert(email.text.includes('This link expires in 24 hours.'));
+assert.throws(()=>studio.validateEmailDraft({...draft,subject:'Bad\r\nBcc: victim'}));
+assert.throws(()=>studio.validateEmailDraft({...draft,body:'Click https://phishing.invalid'}));
+assert.throws(()=>studio.renderEmailDraft('application-approved',draft,{name:'A',url:'javascript:alert(1)'}));
+console.log('PASS: unsaved wording renders; HTML/header/link injection blocked; secure links and expiry stay locked');
+let savedError=null,saved=null;
+const db={from:()=>({select(){return this},eq(){return this},maybeSingle:async()=>({data:saved,error:savedError})})};
+const managed=load('src/lib/email/managed.ts',{'server-only':{},'@/lib/supabase/server':{createServiceClient:()=>db},'./studio':studio});
+saved={subject:'Owner wording',opening:'Owner opening',body:'Owner message'};
+assert.equal((await managed.renderManagedEmail('application-approved',{url:'https://example.invalid/secure'})).subject,'Owner wording');
+savedError={message:'database unavailable'};
+await assert.rejects(()=>managed.renderManagedEmail('application-approved',{url:'https://example.invalid/secure'}),/Could not load/);
+savedError=null;saved=null;assert.equal((await managed.renderManagedEmail('application-rejected')).subject,'One Flame Records — Application Update');
+console.log('PASS: real saved wording is used; defaults only for missing override; database failure prevents rendering/sending');
+let admin=true,verified=true,providerReceipt=true,providerCalls=0,preparedStatus='prepared',storedPayload=null;const receipts=[];
+const testDb={rpc:async(_name,args)=>{if(storedPayload&&JSON.stringify(storedPayload)!==JSON.stringify(args.p_payload))return {error:{message:'Test content changed'}};storedPayload=args.p_payload;return {data:{status:preparedStatus}}},from:()=>({update(value){receipts.push(value);return this},eq(){return this},then(resolve){resolve({error:null})}})};
+const testSend=load('src/lib/email/admin-test.ts',{'server-only':{},resend:{Resend:class{emails={send:async(data,options)=>{providerCalls++;assert.equal(data.to,'admin@example.invalid');assert.equal(options.idempotencyKey,'email-studio-test/11111111-1111-4111-8111-111111111111');return {data:providerReceipt?{id:'provider-fixture'}:null,error:null}}}}},'@/lib/auth':{requireAdmin:async()=>{if(!admin)throw Error('Forbidden')}},'@/lib/supabase/server':{createClient:async()=>({auth:{getUser:async()=>({data:{user:{id:'admin',email:'admin@example.invalid',email_confirmed_at:verified?'fixture':null}}})}}),createServiceClient:()=>testDb}});
+// The loader intentionally exposes no production environment values.
+
+const request='11111111-1111-4111-8111-111111111111';const payload={subject:'Draft',html:'<p>Sample only</p>'};
+admin=false;await assert.rejects(()=>testSend.sendAdminEmailTest(request,payload),/Forbidden/);assert.equal(providerCalls,0);
+admin=true;verified=false;await assert.rejects(()=>testSend.sendAdminEmailTest(request,payload),/verified/);assert.equal(providerCalls,0);
+verified=true;providerReceipt=false;await assert.rejects(()=>testSend.sendAdminEmailTest(request,payload),/receipt|interrupted/);assert.equal(receipts.length,0);
+providerReceipt=true;await testSend.sendAdminEmailTest(request,payload);assert.equal(receipts[0].provider_id,'provider-fixture');
+preparedStatus='accepted';const calls=providerCalls;await testSend.sendAdminEmailTest(request,payload);assert.equal(providerCalls,calls);
+await assert.rejects(()=>testSend.sendAdminEmailTest(request,{...payload,subject:'Changed'}),/content changed/);
+console.log('PASS: admin/verified recipient, immutable retries, real receipt required, accepted attempt never sent twice');
+const {Marked}=await import('marked');const crypto=await import('node:crypto');
+const markdown=load('src/lib/email/markdown.ts',{'marked':{Marked},'./escape':escape});
+const preview=load('src/lib/email/newsletter-preview.ts',{'./layout':layout,'./markdown':markdown});
+const review=load('src/lib/email/newsletter-review.ts',{'server-only':{},'node:crypto':crypto});
+let newsletterAdmin=true,preparations=0;
+const newsDb={rpc:async()=>{preparations++;return {data:[]}},from:()=>({select(){return this},eq(){return this},then(resolve){resolve({count:0})}})};
+const news=load('src/app/admin/subscribers/actions.ts',{resend:{Resend:class{emails={send:async()=>{throw Error('No real send allowed')}}}},'@/lib/email/newsletter-preview':preview,'@/lib/email/newsletter-review':review,'@/lib/email/admin-test':testSend,'@/lib/supabase/server':{createServiceClient:()=>newsDb},'@/lib/auth':{requireAdmin:async()=>{if(!newsletterAdmin)throw Error('Forbidden')},currentUserId:async()=>'admin'},'@/lib/email/layout':layout,'@/lib/email/markdown':markdown,'@/lib/email/newsletter-token':{newsletterToken:()=>{throw Error('No customer links in tests')}}});
+newsletterAdmin=false;await assert.rejects(()=>news.previewNewsletter('Subject','Body'),/Forbidden/);newsletterAdmin=true;
+const newsletterDraft=await news.previewNewsletter('Subject','**Draft** <script>bad</script>');
+assert(newsletterDraft.html.includes('<strong'));assert(!newsletterDraft.html.includes('<script>'));assert(newsletterDraft.html.includes('https://example.invalid/preview-only'));
+const sendData=new FormData();sendData.set('run_id',request);sendData.set('subject','Subject');sendData.set('body','Changed after preview');sendData.set('review_token',newsletterDraft.token);sendData.set('review_confirmed','yes');
+assert.match((await news.sendNewsletter(null,sendData)).error,/Preview this exact/);assert.equal(preparations,0);
+sendData.set('body','**Draft** <script>bad</script>');const outcome=await news.sendNewsletter(null,sendData);assert.equal(outcome.runId,request);assert.equal(preparations,2);
+console.log('PASS: admin-only newsletter preview sanitizes drafts; stale review blocks every send side effect; exact approved snapshot proceeds');
+
+const spaced=await news.previewNewsletter('  Subject  ','Body\n');sendData.set('subject','  Subject  ');sendData.set('body','Body\n');sendData.set('review_token',spaced.token);assert.equal((await news.sendNewsletter(null,sendData)).runId,request);
+console.log('PASS: review and sending preserve the exact subject/body including surrounding whitespace');

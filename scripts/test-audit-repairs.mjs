@@ -116,4 +116,25 @@ await db.query("UPDATE newsletter_deliveries SET status='pending',claimed_at=nul
 assert.equal((await db.query('SELECT * FROM claim_newsletter_batch($1)',[run])).rows.length,0);
 assert.equal(await scalar('SELECT status FROM newsletter_deliveries WHERE run_id=$1',[run]),'uncertain');
 console.log('PASS: recipient confirmation/reactivation, replay denial, snapshot without duplication, claim exclusion, expired retry quarantine');
+// Email Studio: assert actual PostgreSQL permissions and retry invariants.
+await db.query('SELECT save_email_studio_template($1,$2,$3,$4,$5,$6)',['application-approved','Ordinary newsletter','Opening','Body',0,actor]);
+await assert.rejects(()=>db.query('SELECT save_email_studio_template($1,$2,$3,$4,$5,$6)',['application-approved','Changed','Opening','Body',0,actor]),/changed/);
+await assert.rejects(()=>db.query('SELECT save_email_studio_template($1,$2,$3,$4,$5,$6)',['welcome','Subject','Opening','Body',0,artistUser]),/Administrator required/);
+await assert.rejects(()=>db.query('SELECT save_email_studio_template($1,$2,$3,$4,$5,$6)',['welcome','Bad\nSubject','Opening','Body',0,actor]),/check constraint/);
+const testId=id();const testPayload={subject:'Fixture test',html:'<p>Fixture</p>'};
+await db.query('SELECT prepare_email_studio_test($1,$2,$3,$4)',[testId,actor,'staff@example.invalid',testPayload]);
+await db.query('SELECT prepare_email_studio_test($1,$2,$3,$4)',[testId,actor,'staff@example.invalid',testPayload]);
+assert.equal(await scalar('SELECT count(*)::int FROM email_studio_tests WHERE id=$1',[testId]),1);
+await assert.rejects(()=>db.query('SELECT prepare_email_studio_test($1,$2,$3,$4)',[testId,actor,'staff@example.invalid',{subject:'Changed'}]),/content changed/);
+await assert.rejects(()=>db.query('SELECT prepare_email_studio_test($1,$2,$3,$4)',[id(),actor,'customer@example.invalid',testPayload]),/own sign-in/);
+await assert.rejects(()=>db.query('UPDATE email_studio_tests SET payload=$1 WHERE id=$2',[{subject:'Altered'},testId]),/immutable/);
+for(const role of ['anon','authenticated']){
+ await db.exec(`SET ROLE ${role}`);
+ await assert.rejects(()=>db.query('SELECT * FROM email_studio_templates'),/permission denied/);
+ await assert.rejects(()=>db.query('SELECT * FROM email_studio_tests'),/permission denied/);
+ await assert.rejects(()=>db.query('SELECT save_email_studio_template($1,$2,$3,$4,$5,$6)',['welcome','Subject','Opening','Body',0,actor]),/permission denied/);
+ await assert.rejects(()=>db.query('SELECT prepare_email_studio_test($1,$2,$3,$4)',[id(),actor,'staff@example.invalid',testPayload]),/permission denied/);
+ await db.exec('RESET ROLE');
+}
+console.log('PASS: Email Studio ordinary/newline subjects, stale saves, admin-only SQL, fixed test recipients/content and immutable attempts');
 await db.close();

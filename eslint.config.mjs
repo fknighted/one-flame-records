@@ -9,6 +9,7 @@ const eslintConfig = defineConfig([
   globalIgnores([
     // Default ignores of eslint-config-next:
     ".next/**",
+    "work/**", // independent checkouts keep their own verification scope
     "out/**",
     "build/**",
     "next-env.d.ts",

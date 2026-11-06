@@ -11,3 +11,8 @@ mix-exports
 coverage
 docs/audits
 docs/session-handoffs
+
+# Email studio local review evidence is not runtime source.
+.email-studio-baseline.*
+docs/evidence
+work
