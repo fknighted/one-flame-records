@@ -143,7 +143,7 @@ export default function WelcomePage() {
         </Link>
         <p className="mt-4 text-sm text-muted">
           Already a member?{' '}
-          <Link href="/login?next=/flames-partner/dashboard" className="text-yellow hover:underline">
+          <Link href="/flames-partner/login" className="text-yellow hover:underline">
             Sign in
           </Link>
         </p>

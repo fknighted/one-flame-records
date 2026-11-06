@@ -59,7 +59,7 @@ export default async function DashboardPage() {
           <h1 className="text-lg font-bold text-paper">Flames Partner</h1>
           <p className="text-xs text-muted">{member.display_id} · {tier.displayName}</p>
         </div>
-        <LogoutButton />
+        <LogoutButton returnTo="/flames-partner/login" />
       </header>
 
       <div className="max-w-2xl mx-auto px-4 py-8 space-y-6">

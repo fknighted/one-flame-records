@@ -1,7 +1,13 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import '@/app/studio.css';
-export const metadata:Metadata={title:'Flames Partner',description:'The rotating savings programme.'};
+export const metadata:Metadata={
+  title:{absolute:'Flames Partner'},
+  description:'The rotating savings programme.',
+  applicationName:'Flames Partner',
+  openGraph:{title:'Flames Partner',siteName:'Flames Partner',description:'The rotating savings programme.'},
+  twitter:{card:'summary_large_image',title:'Flames Partner',description:'The rotating savings programme.'},
+};
 export default function PartnerLayout({children}:{children:React.ReactNode}) {
   return <div className="partner-section studio-shell">
     <nav aria-label="Flames Partner" className="mx-auto flex max-w-6xl flex-wrap items-center gap-4 border-b border-line px-4 py-4 text-sm sm:px-6">

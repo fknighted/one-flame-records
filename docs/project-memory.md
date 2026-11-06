@@ -626,3 +626,10 @@ Type checking and affected lint passed. The local full build reached catalog gen
 
 
 Frank then requested removal of the entire shared One Flame footer and newsletter from Flames Partner pages. The same existing route-aware wrapper now excludes the whole public footer on `/flames-partner` and its child routes. Other public pages keep the shared footer and newsletter. Type checking and affected lint passed; the hosting build and live page provide release verification with production connection settings.
+
+
+## Flames Partner page branding sweep — November 6, 2026
+
+Frank requested removal of all remaining One Flame branding/mentions from Flames Partner pages. The source sweep found inherited browser titles, browser/touch icons and social previews, two failure messages and the shared sign-in screen. Partner now has an absolute title, its own FP icons and text share image, Partner-specific help wording, and a dedicated sign-in/reset-form presentation using the same account operations. Member sign-in and sign-out links stay within the Partner section. The main One Flame sign-in keeps its existing appearance and role routing. Public signup, tiers, consent result screens and member dashboard source were included in the sweep. Email templates and internal connection identifiers are separate from page copy and were not changed.
+
+The existing full offline test suite passed, including security, financial and delivery checks; type checking and affected lint passed. Public/member page presentation is checked against the published production build; no credentials, database rules or provider configuration were changed for this branding work.

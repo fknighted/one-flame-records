@@ -14,7 +14,7 @@ export async function submitSignup(memberData:unknown,guarantorData:unknown,tier
   if(m.data.email===g.data.email)return {error:'Your guarantor must use a different email address.'};
   const db=createAdminClient();
   const {data:memberId,error}=await db.rpc('partner_apply_application',{p_member:{...m.data,tier},p_guarantor:{...g.data,approval_token:randomBytes(32).toString('hex')},p_request_id:requestId});
-  if(error)return {error:'The application could not be saved. If you already applied, contact One Flame Records. Otherwise check your details and try again later.'};
+  if(error)return {error:'The application could not be saved. If you already applied, contact Flames Partner. Otherwise check your details and try again later.'};
   // The queue was written in the same transaction as the application. A mail
   // failure must not make a saved application appear lost or invite duplicates.
   try{await dispatchPartnerMail(memberId);}catch{/* Saved queue remains recoverable. */}

@@ -184,7 +184,7 @@ export default async function TierPage({ params }: { params: Promise<{ tier: str
             </Link>
             <p className="mt-4 text-sm text-muted">
               Already a member?{' '}
-              <Link href="/login?next=/flames-partner/dashboard" className={`${cfg.color.accent} hover:underline`}>Sign in</Link>
+              <Link href="/flames-partner/login" className={`${cfg.color.accent} hover:underline`}>Sign in</Link>
             </p>
           </>
         ) : (
