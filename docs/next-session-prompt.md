@@ -1,5 +1,7 @@
 # Resume One Flame Records — November 6, 2026
 
+Flames Partner has since been approved and published. Both migrations and the protected daily job passed hosted checks. Existing administrators retain control. Read the latest project memory entry and root ledger for final retirement/serving identities; the local-candidate notes below describe preparation, not the current release authority. Static legacy routing is maintained in `ops/legacy-partner-redirect/`.
+
 The Flames Partner integration is a reviewed local candidate in `work/flames-partner-integration`, branch `codex/flames-partner-integration`. Read [its handoff](session-handoffs/2026-11-06-flames-partner-integration.md) and the root ledger `/Users/frankknight/Claude OS/Delegations/fold-the-existing-flames-partner-app-into-one-flame-records.md` for the actual release state and authority. Frank chose existing One Flame administrators only. No hosted release or standalone deletion occurred during local preparation. GitHub push is gated because Vercel automatic deployments are enabled.
 
 Read project instructions, memory and Git state before editing. Preserve other agents' work and the parent checkout's historical untracked evidence. Use the isolated feature checkout for implementation. The local preview at `http://127.0.0.1:3180/flames-partner` uses fictional local data and disabled mail; it is not production.

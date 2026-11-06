@@ -1,0 +1,89 @@
+{
+  "version": 2,
+  "framework": null,
+  "buildCommand": "",
+  "installCommand": "",
+  "outputDirectory": "public",
+  "crons": [],
+  "routes": [
+    {
+      "src": "/api(?:/.*)?",
+      "status": 410
+    },
+    {
+      "src": "/auth/signout/?",
+      "status": 410
+    },
+    {
+      "src": "/login/?",
+      "status": 307,
+      "headers": {
+        "Location": "https://www.oneflamerecords.com/login?next=%2Fflames-partner%2Fdashboard#"
+      },
+      "methods": [
+        "GET",
+        "HEAD"
+      ]
+    },
+    {
+      "src": "/auth(?:/.*)?",
+      "status": 307,
+      "headers": {
+        "Location": "https://www.oneflamerecords.com/login?next=%2Fflames-partner%2Fdashboard#"
+      },
+      "methods": [
+        "GET",
+        "HEAD"
+      ]
+    },
+    {
+      "src": "/admin/?",
+      "status": 307,
+      "dest": "https://www.oneflamerecords.com/admin/partner#",
+      "methods": [
+        "GET",
+        "HEAD"
+      ]
+    },
+    {
+      "src": "/admin/(.*)",
+      "status": 307,
+      "dest": "https://www.oneflamerecords.com/admin/partner/$1#",
+      "methods": [
+        "GET",
+        "HEAD"
+      ]
+    },
+    {
+      "src": "/(?:dashboard|documents)/?",
+      "status": 307,
+      "dest": "https://www.oneflamerecords.com/flames-partner/dashboard#",
+      "methods": [
+        "GET",
+        "HEAD"
+      ]
+    },
+    {
+      "src": "/(signup|tiers|guarantor)(/.*)?",
+      "status": 307,
+      "dest": "https://www.oneflamerecords.com/flames-partner/$1$2#",
+      "methods": [
+        "GET",
+        "HEAD"
+      ]
+    },
+    {
+      "src": "/.*",
+      "status": 307,
+      "dest": "https://www.oneflamerecords.com/flames-partner#",
+      "methods": [
+        "GET",
+        "HEAD"
+      ]
+    },
+    {
+      "src": "/.*",
+      "status": 410
+    }
+  ]
+}

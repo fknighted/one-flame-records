@@ -1,4 +1,12 @@
-# Flames Partner integration — local candidate, November 6, 2026
+# Flames Partner integration — November 6, 2026
+
+## Approved release supersedes local-only status
+
+Frank subsequently approved the hosted migrations, publication, emails/daily job and conditional deletion of the old Supabase project. Both migrations were applied with exact SQL recorded in migration history. An independent reviewer confirmed unchanged original profile identities/roles, row permissions, hidden guarantor contacts/tokens and service-only operations. GitHub main contains functional release `2dd6867c`; production `dpl_CpiZ4EU9NK4hMkw22izLQF2owQvn` serves the public Partner page and existing administrator area. The protected daily job returned success. Application, guarantor request and approved-account emails were accepted once each using Resend simulation recipients and one explicit test membership; these checks do not prove a real customer inbox. The saved approved link uses One Flame Auth and the canonical callback.
+
+`ops/legacy-partner-redirect/` contains independently reviewed static routing for the old addresses, with no functions or scheduled jobs. It blocks APIs/non-reading methods and clears old authentication fragments. The sole ledger linked below owns final live routing, deletion acceptance, cleanup and current serving identities. The following sections retain the original local evidence and its limits.
+
+## Local preparation record
 
 Frank authorized building the full existing savings app inside One Flame Records. He chose existing One Flame administrators only and conditionally authorized retiring the standalone app/database after verified cutover. No hosted data, settings, email or deployment was changed during implementation. The sole remaining-work record is `/Users/frankknight/Claude OS/Delegations/fold-the-existing-flames-partner-app-into-one-flame-records.md`.
 
