@@ -78,3 +78,10 @@ Retire the standalone runtime and daily job only after the integrated release wo
 
 
 November 6 release note: Frank subsequently approved this release, and both migrations, explicit Resend transport, canonical site URL and private production cron secret are configured. The daily endpoint passed its authenticated hosted check; missing credentials are refused. Legacy redirect source is maintained in `ops/legacy-partner-redirect/`; retain only static routing, disconnect its old Git runtime and remove historical application deployments before source database deletion. Current identities and the final retirement receipt belong to the linked root ledger. The earlier candidate boundary records the authority at preparation time.
+
+
+## Flames Partner email branding and recovery
+
+Partner mail reuses the verified address/API key but replaces its display name with Flames Partner. `src/lib/partner/email.ts` owns the programme shell, header/footer and trusted-link rendering. The main label layout is separate. Do not change a payload that might already have been accepted by the provider; only never-attempted legacy-brand payloads refresh automatically. Earlier sent history stays historical.
+
+The Partner sign-in reset form uses `requestPartnerPasswordReset`: private global/IP/email limits run before a uniform response; linked-account/Auth identity checks and one email attempt run afterward. Codes and recipient details are not logged. This recovery request is not a durable queued programme notice; if a mailbox receives nothing, the member can request another code within the limits. Account setup and recovery pages use the existing Supabase eight-digit one-use codes (current expiry3600seconds), not URL credentials. Keep the configured length in sync if it is deliberately changed later. Test with fictional data/provider simulation addresses, never real members merely for verification.

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
+import { requestPartnerPasswordReset } from "@/lib/partner/password-reset";
 import LogoMark from "@/components/LogoMark";
 import "@/app/studio.css";
 
@@ -46,6 +47,12 @@ export default function SignInForm({partnerBranding=false}:{partnerBranding?:boo
     const form = new FormData(e.currentTarget);
     const email = form.get("email") as string;
 
+    if(partnerBranding){
+      try{await requestPartnerPasswordReset(email);setResetSuccess(true);}
+      catch{setError("The request could not connect. Please try again.");}
+      finally{setPending(false);}
+      return;
+    }
     const supabase = createClient();
     const { error: resetError } = await supabase.auth.resetPasswordForEmail(email, {
       redirectTo: `${window.location.origin}/auth/set-password`,
@@ -138,7 +145,7 @@ export default function SignInForm({partnerBranding=false}:{partnerBranding?:boo
             {resetSuccess ? (
               <div className="space-y-4">
                 <p className="text-[15px] text-paper text-center">
-                  Check your email — a reset link is on its way.
+                  {partnerBranding ? "If this email matches a Flames Partner account, check your inbox for a reset code." : "Check your email — a reset link is on its way."}
                 </p>
                 <button
                   type="button"

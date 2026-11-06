@@ -710,3 +710,8 @@ Frank chose to fold the implemented Flames Partner app into One Flame Records an
 Frank explicitly selected existing One Flame administrators only. The old Partner administrator who is a One Flame artist keeps that artist role. Savings-only accounts receive the neutral `partner` role; existing account roles are preserved. Member access is tied to an approved membership and enforced by database row permissions. Administrative pages/actions retain One Flame administrator and authenticator checks.
 
 Spark is the public application tier. Blaze and Inferno retain their coming-soon interest forms and administrator test support. Test money and queues remain separate from real memberships. Durable email jobs retain approved consent and payment history through retries. This decision authorizes local implementation; hosted migration, publishing, credentials and customer delivery retain the separate release boundary.
+
+
+## 2026-11-06 — Flames Partner email identity
+
+Frank requested independent programme branding in every programme email and chose the existing technical sending/hosting domain. Keep One Flame's shared accounts/provider while giving programme notices and password reset their own display sender, wording and shell. Use the existing Supabase email codes on programme setup/recovery pages so the shared label password page does not reintroduce its branding. Preserve account roles, service-only limits and attempted-mail payload identities; do not rewrite historical sent messages or provision a domain.

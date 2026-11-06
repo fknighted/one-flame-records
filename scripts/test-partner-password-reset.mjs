@@ -1,0 +1,18 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import ts from 'typescript';
+import crypto from 'node:crypto';
+import {z} from 'zod';
+function action({eligible=true,limit=true,limitError=false,authMismatch=false,transport=true,sendFailure=false}={}){
+ const tasks=[],sends=[],keys=[];let links=0,lookups=0;
+ const db={rpc:async(name,args)=>{assert.equal(name,'consume_form_limit');keys.push(args.p_key);return {data:limit,error:limitError?{}:null};},from:()=>{const q={select(){return q;},eq(){return q;},is(){return q;},maybeSingle:async()=>{lookups++;return {data:eligible?{user_id:'fixture-user',partner_members:{email:'member@example.invalid'}}:null,error:null};}};return q;},auth:{admin:{getUserById:async()=>({data:{user:{id:'fixture-user',email:authMismatch?'different@example.invalid':'member@example.invalid'}},error:null}),generateLink:async()=>{links++;return {data:{user:{id:'fixture-user'},properties:{email_otp:'12345678'}},error:null};}}}};
+ const imports={'zod':{z},'node:crypto':crypto,'next/headers':{headers:async()=>new Headers({'x-forwarded-for':'192.0.2.40'})},'next/server':{after:fn=>tasks.push(fn)},'./database':{createAdminClient:()=>db},'./email':{partnerSender:()=> 'Flames Partner <fixture@example.invalid>',renderPartnerEmail:(_s,t)=>t},'resend':{Resend:class{emails={send:async mail=>{sends.push(mail);return {error:sendFailure?{}:null};}}}}};
+ const code=ts.transpileModule(fs.readFileSync('src/lib/partner/password-reset.ts','utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS}}).outputText;const mod={exports:{}};
+ new Function('require','module','exports','process',code)(name=>{if(!(name in imports))throw Error('Unexpected import '+name);return imports[name];},mod,mod.exports,{env:{PARTNER_EMAIL_TRANSPORT:transport?'resend':'disabled',RESEND_API_KEY:'fixture-only',RESEND_FROM_EMAIL:'Fixture <fixture@example.invalid>',SUPABASE_SERVICE_ROLE_KEY:'fixture-only-key',NEXT_PUBLIC_SITE_URL:'https://example.invalid'}});
+ return {run:email=>mod.exports.requestPartnerPasswordReset(email),finish:async()=>{for(const task of tasks)await task();},state:()=>({tasks:tasks.length,sends,keys,links,lookups})};
+}
+let a=action();const expected=await a.run('member@example.invalid');assert.deepEqual(expected,{ok:true});assert.equal(a.state().sends.length,0);assert.equal(a.state().lookups,0);assert.equal(a.state().tasks,1);await a.finish();assert.equal(a.state().sends.length,1);assert.equal(a.state().links,1);assert.ok(a.state().sends[0].text.includes('12345678'));assert.ok(a.state().sends[0].text.includes('https://example.invalid/flames-partner/reset-password'));assert.ok(!a.state().sends[0].text.includes('token_hash'));assert.ok(!/One Flame Records/.test(JSON.stringify(a.state().sends[0])));assert.equal(a.state().keys.length,3);assert.ok(a.state().keys.every(k=>!k.includes('member@example.invalid')&&!k.includes('192.0.2.40')));
+for(const opts of [{eligible:false},{authMismatch:true},{limit:false},{limitError:true},{transport:false}]){a=action(opts);assert.deepEqual(await a.run('member@example.invalid'),expected);await a.finish();assert.equal(a.state().sends.length,0);assert.equal(a.state().links,0);}
+a=action({sendFailure:true});assert.deepEqual(await a.run('member@example.invalid'),expected);await a.finish();assert.equal(a.state().sends.length,1);
+a=action();assert.deepEqual(await a.run('invalid'),expected);assert.equal(a.state().tasks,0);assert.equal(a.state().links,0);
+console.log('PASS: Partner recovery is deferred/non-enumerating, persistently rate-limited, linked-account scoped, disabled/failure safe, uses Partner copy and an email-only recovery code without a bearer URL');

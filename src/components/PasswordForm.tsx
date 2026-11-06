@@ -1,0 +1,112 @@
+"use client";
+
+import { useState } from "react";
+import { createBrowserClient } from "@supabase/ssr";
+import "@/app/studio.css";
+
+export default function PasswordForm({partnerBranding=false}:{partnerBranding?:boolean}) {
+  const [password, setPassword] = useState("");
+  const [confirm, setConfirm] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setError(null);
+
+    if (password.length < 8) {
+      setError("Password must be at least 8 characters.");
+      return;
+    }
+    if (password !== confirm) {
+      setError("Passwords don't match.");
+      return;
+    }
+
+    setLoading(true);
+    const supabase = createBrowserClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    );
+
+    const { error: updateError } = await supabase.auth.updateUser({ password });
+    if (updateError) {
+      setError(updateError.message);
+      setLoading(false);
+      return;
+    }
+
+    const { data: { user } } = await supabase.auth.getUser();
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("role, is_bartender")
+      .eq("id", user!.id)
+      .single();
+
+    const role = profile?.role;
+    if (partnerBranding) window.location.href = "/flames-partner/dashboard";
+    else if (role === "admin") window.location.href = "/admin";
+    else if (role === "bartender" || profile?.is_bartender) window.location.href = "/bar";
+    else if (role === "partner") window.location.href = "/flames-partner/dashboard";
+    else if (role === "artist") window.location.href = "/portal";
+    else window.location.href = "/login";
+  }
+
+  return (
+    <div className="studio-shell min-h-screen bg-black text-paper font-text flex items-center justify-center px-4 py-12">
+      <div className="w-full max-w-sm">
+        <div className="mb-8 text-center">
+          <h1 className="studio-page-title mb-3">
+            {partnerBranding ? "Flames Partner" : "One Flame Records"}
+          </h1>
+          <p className="text-[15px] text-muted">{partnerBranding ? "Set a password to access your savings account" : "Set a password to access your portal"}</p>
+        </div>
+
+        <form onSubmit={handleSubmit} className="space-y-4">
+          {error && (
+            <div className="studio-error">
+              {error}
+            </div>
+          )}
+
+          <div>
+            <label className="studio-field-label">
+              New Password
+            </label>
+            <input
+              type="password"
+              required
+              minLength={8}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="studio-field"
+              placeholder="At least 8 characters"
+            />
+          </div>
+
+          <div>
+            <label className="studio-field-label">
+              Confirm Password
+            </label>
+            <input
+              type="password"
+              required
+              value={confirm}
+              onChange={(e) => setConfirm(e.target.value)}
+              className="studio-field"
+              placeholder="Repeat password"
+            />
+          </div>
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="studio-btn studio-btn-primary w-full"
+          >
+            {loading ? "Saving…" : partnerBranding ? "Set password & view savings" : "Set Password & Enter Portal"}
+          </button>
+        </form>
+      </div>
+    </div>
+  );
+}
