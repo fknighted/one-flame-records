@@ -21,7 +21,7 @@ export default function WelcomePage() {
       <section className="border-b-4 border-yellow bg-black px-6 py-16 text-center">
         <h1 className="font-poster text-5xl uppercase tracking-tight text-yellow sm:text-7xl">Flames Partner</h1>
         <p className="mt-4 text-lg text-yellow max-w-xl mx-auto">
-          A rotating savings programme at One Flame Records. Contribute weekly and receive a draw when your turn comes.
+          A rotating savings programme. Contribute weekly and receive a draw when your turn comes.
         </p>
         <Link
           href="/flames-partner/signup?tier=spark"
