@@ -1,4 +1,10 @@
-# Resume one flame app — November 3, 2026
+# Resume One Flame Records — November 6, 2026
+
+The Flames Partner integration is a reviewed local candidate in `work/flames-partner-integration`, branch `codex/flames-partner-integration`. Read [its handoff](session-handoffs/2026-11-06-flames-partner-integration.md) and the root ledger `/Users/frankknight/Claude OS/Delegations/fold-the-existing-flames-partner-app-into-one-flame-records.md` for the actual release state and authority. Frank chose existing One Flame administrators only. No hosted release or standalone deletion occurred during local preparation. GitHub push is gated because Vercel automatic deployments are enabled.
+
+Read project instructions, memory and Git state before editing. Preserve other agents' work and the parent checkout's historical untracked evidence. Use the isolated feature checkout for implementation. The local preview at `http://127.0.0.1:3180/flames-partner` uses fictional local data and disabled mail; it is not production.
+
+# Previous production baseline — November 3, 2026
 
 The approved November3 security update is live. Start with the [release receipt](audits/2026-11-03-security-release.md) and [handoff](session-handoffs/2026-11-03-security-release.md). Frozen release source is `work/security-release-20261103/stage/`, not the dirty parent or older candidates. All Fola work is preserved. Exact source, rollback, safe live checks, native registration and separate acceptance are recorded in the receipt. Earlier proposal-only notes are historical.
 

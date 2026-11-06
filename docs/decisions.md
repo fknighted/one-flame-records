@@ -701,3 +701,12 @@ Frank approved option 11 with a green rim as Fola Village's official logo, retai
 ## 2026-10-27 — Publish Fola Village and incorporate supporting illustration
 
 Frank explicitly authorized publishing the reviewed Fola page on One Flame, then supplied community/drumming artwork with instructions to match site fonts. It is incorporated as supporting artwork with native Big Shoulders lettering, preserving the official logo/favicon. Final checked build was promoted to the existing production domains. See `docs/fola-village/release-2026-10-27/report.md`; no commit, push, database or provider change was needed.
+
+
+## 2026-11-06 — Integrate Flames Partner into One Flame Records (local candidate)
+
+Frank chose to fold the implemented Flames Partner app into One Flame Records and its existing database, then retire the standalone service only after verified cutover. Preserve the existing stack, providers, Sound System design and whole-Jamaican-dollar amounts. Savings records use namespaced `partner_` tables and transaction functions; they do not replace artist/bar data or identity tables.
+
+Frank explicitly selected existing One Flame administrators only. The old Partner administrator who is a One Flame artist keeps that artist role. Savings-only accounts receive the neutral `partner` role; existing account roles are preserved. Member access is tied to an approved membership and enforced by database row permissions. Administrative pages/actions retain One Flame administrator and authenticator checks.
+
+Spark is the public application tier. Blaze and Inferno retain their coming-soon interest forms and administrator test support. Test money and queues remain separate from real memberships. Durable email jobs retain approved consent and payment history through retries. This decision authorizes local implementation; hosted migration, publishing, credentials and customer delivery retain the separate release boundary.

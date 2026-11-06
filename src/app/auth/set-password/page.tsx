@@ -46,6 +46,7 @@ export default function SetPasswordPage() {
     const role = profile?.role;
     if (role === "admin") window.location.href = "/admin";
     else if (role === "bartender" || profile?.is_bartender) window.location.href = "/bar";
+    else if (role === "partner") window.location.href = "/flames-partner/dashboard";
     else if (role === "artist") window.location.href = "/portal";
     else window.location.href = "/login";
   }

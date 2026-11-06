@@ -35,7 +35,8 @@ export default function LoginPage() {
 
     // Proxy handles role-based routing with service role — just go to /admin.
     // Non-admin users are redirected to /portal by the proxy.
-    window.location.href = "/admin";
+    const next=new URLSearchParams(window.location.search).get('next');
+    window.location.href=next==='/flames-partner/dashboard'?next:'/admin';
   }
 
   async function handleReset(e: React.FormEvent<HTMLFormElement>) {

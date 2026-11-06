@@ -316,3 +316,14 @@ Release dependency: apply `20261018000006_email_studio.sql` with separate approv
 ## Fola Village (26 October 2026)
 
 `src/app/(public)/fola-village/page.tsx` is the village landing page inside the existing public layout. Assets and route-specific icons/share metadata use `public/brand/fola-village/`. Shared header/footer and sitemap expose the page. No new database, form, runtime package or visitor booking system is introduced.
+
+
+## Flames Partner integration — local candidate, November 6, 2026
+
+Public section `/flames-partner` contains tiers, Spark applications, guarantor response and the member dashboard. `/admin/partner` contains member administration, weekly payments, tier/test queues, draw scheduling/payment and audit history. Shared `/login` and `/auth/callback` handle account access; savings-only accounts cannot enter artist or bar areas. Existing artists with approved savings memberships can use both their artist area and savings dashboard.
+
+Migrations `20261106000001_flames_partner.sql` and `20261106000002_partner_delivery.sql` add namespaced savings data, service-only transactional operations, immutable audit/operation receipts and a private durable email queue. Member reads use the authenticated Supabase client and owner-only row permissions; private guarantor tokens are not exposed to members. Monetary amounts are whole JMD and derived server-side. Queue order and draw funds are isolated by tier and test status.
+
+`src/lib/partner/delivery.ts` reuses One Flame Resend, email layout and Auth. Delivery requires explicit `PARTNER_EMAIL_TRANSPORT=resend`; local verification uses disabled transport. Saved payloads and provider identities support bounded retries. Each claimed job has a lease identity, so a stale worker cannot overwrite a newer result. Ambiguous old sends stop for reconciliation. Approved new accounts recover interrupted provisioning without elevating existing artists.
+
+`GET /api/partner/daily` requires the standard private Vercel `CRON_SECRET` bearer header before any database work. `vercel.json` retains the standalone daily schedule, `0 11 * * *` (06:00 Jamaica), to run late/default/expiry maintenance and retry saved mail. Existing Inngest workers are unchanged. Hosted configuration has not been applied.

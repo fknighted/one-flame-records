@@ -50,6 +50,14 @@ const ADMIN_NAV: NavGroup[] = [
     ],
   },
   {
+    label: "Flames Partner",
+    items: [
+      { href: "/admin/partner", label: "Overview" },
+      { href: "/admin/partner/members", label: "Members" },
+      { href: "/admin/partner/queue", label: "Queues & Draws" },
+    ],
+  },
+  {
     label: "Onboarding",
     items: [
       { href: "/admin/applications", label: "Applications" },
@@ -88,6 +96,7 @@ const PORTAL_NAV: NavGroup[] = [
       { href: "/portal/assets", label: "Assets" },
       { href: "/portal/videos", label: "Videos" },
       { href: "/portal/profile", label: "Profile" },
+      { href: "/flames-partner/dashboard", label: "My savings" },
     ],
   },
 ];

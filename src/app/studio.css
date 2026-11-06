@@ -408,3 +408,11 @@
     max-width: 60ch;
   }
 }
+
+/* Flames Partner inherits the existing One Flame palette and flat controls. */
+.partner-section input:not([type="checkbox"]), .partner-section select, .partner-section textarea { background: var(--color-panel); color: var(--color-paper); min-height: 44px; }
+.partner-section button, .partner-section a { touch-action: manipulation; }
+.partner-section button { min-height: 44px; }
+.partner-section :is(button,a,input,select,textarea):focus-visible { outline: 3px solid var(--color-yellow); outline-offset: 3px; }
+.partner-section :is(th,td) { overflow-wrap: anywhere; }
+.partner-section :is(h1,h2,h3) { font-family: var(--font-big-shoulders), Impact, sans-serif; }

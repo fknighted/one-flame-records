@@ -8,11 +8,12 @@
     "start": "next start",
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
-    "test": "node scripts/test-audit-repairs.mjs && node scripts/test-security-boundaries.mjs && node scripts/test-studio-retirement.mjs && node scripts/test-email-studio.mjs",
+    "test": "node scripts/test-audit-repairs.mjs && node scripts/test-security-boundaries.mjs && node scripts/test-studio-retirement.mjs && node scripts/test-email-studio.mjs && npm run test:partner",
     "postinstall": "node scripts/patch-zod-compat.mjs",
     "test:runtime-security": "node --test scripts/runtime-security-check.mjs",
     "check:runtime-security": "node scripts/patch-zod-compat.mjs --check && npm audit --omit=dev --audit-level=low",
-    "test:transitive-security": "node --test scripts/transitive-security.test.mjs"
+    "test:transitive-security": "node --test scripts/transitive-security.test.mjs",
+    "test:partner": "node scripts/test-flames-partner.mjs && node scripts/test-partner-actions.mjs && node scripts/test-partner-delivery.mjs && node scripts/test-partner-mail-worker.mjs"
   },
   "dependencies": {
     "@sentry/nextjs": "^10.56.0",

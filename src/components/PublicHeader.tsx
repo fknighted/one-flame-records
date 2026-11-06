@@ -10,6 +10,7 @@ const NAV = [
   { href: "/videos",        label: "Videos" },
   { href: "/news",          label: "News" },
   { href: "/flames-lounge", label: "Flames Lounge" },
+  { href: "/flames-partner", label: "Flames Partner" },
   { href: "/fola-village", label: "Fola Village" },
   { href: "/about",         label: "About" },
   { href: "/contact",       label: "Contact" },

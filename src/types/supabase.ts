@@ -39,6 +39,430 @@ export type Database = {
   }
   public: {
     Tables: {
+      partner_accounts: {
+        Row: {
+          created_at: string
+          member_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          member_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          member_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "partner_accounts_member_id_fkey"
+            columns: ["member_id"]
+            referencedRelation: "partner_members"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      partner_agreements: {
+        Row: {
+          created_at: string
+          document_url: string
+          id: string
+          member_id: string
+          signed_date: string
+          version: string
+        }
+        Insert: {
+          created_at?: string
+          document_url: string
+          id?: string
+          member_id: string
+          signed_date: string
+          version: string
+        }
+        Update: {
+          created_at?: string
+          document_url?: string
+          id?: string
+          member_id?: string
+          signed_date?: string
+          version?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "partner_agreements_member_id_fkey"
+            columns: ["member_id"]
+            referencedRelation: "partner_members"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      partner_audit_log: {
+        Row: {
+          action: string
+          actor_id: string | null
+          created_at: string
+          details: Json | null
+          id: string
+          target_id: string | null
+          target_type: string
+        }
+        Insert: {
+          action: string
+          actor_id?: string | null
+          created_at?: string
+          details?: Json | null
+          id?: string
+          target_id?: string | null
+          target_type: string
+        }
+        Update: {
+          action?: string
+          actor_id?: string | null
+          created_at?: string
+          details?: Json | null
+          id?: string
+          target_id?: string | null
+          target_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "partner_audit_log_actor_id_fkey"
+            columns: ["actor_id"]
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      partner_delivery_jobs: {
+        Row: {
+          attempts: number
+          created_at: string
+          first_send_at: string | null
+          id: string
+          kind: string
+          last_error: string | null
+          lease_id: string | null
+          lease_until: string | null
+          member_id: string
+          payload: Json | null
+          prepared_at: string | null
+          recipient: string
+          sent_at: string | null
+          status: string
+        }
+        Insert: {
+          attempts?: number
+          created_at?: string
+          first_send_at?: string | null
+          id?: string
+          kind: string
+          last_error?: string | null
+          lease_id?: string | null
+          lease_until?: string | null
+          member_id: string
+          payload?: Json | null
+          prepared_at?: string | null
+          recipient: string
+          sent_at?: string | null
+          status?: string
+        }
+        Update: {
+          attempts?: number
+          created_at?: string
+          first_send_at?: string | null
+          id?: string
+          kind?: string
+          last_error?: string | null
+          lease_id?: string | null
+          lease_until?: string | null
+          member_id?: string
+          payload?: Json | null
+          prepared_at?: string | null
+          recipient?: string
+          sent_at?: string | null
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "partner_delivery_jobs_member_id_fkey"
+            columns: ["member_id"]
+            referencedRelation: "partner_members"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      partner_draws: {
+        Row: {
+          amount: number
+          created_at: string
+          id: string
+          member_id: string
+          paid_date: string | null
+          scheduled_week: string
+          status: Database["public"]["Enums"]["partner_draw_status"]
+          updated_at: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          id?: string
+          member_id: string
+          paid_date?: string | null
+          scheduled_week: string
+          status?: Database["public"]["Enums"]["partner_draw_status"]
+          updated_at?: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          id?: string
+          member_id?: string
+          paid_date?: string | null
+          scheduled_week?: string
+          status?: Database["public"]["Enums"]["partner_draw_status"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "partner_draws_member_id_fkey"
+            columns: ["member_id"]
+            referencedRelation: "partner_members"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      partner_guarantors: {
+        Row: {
+          address: string
+          approval_token: string
+          created_at: string
+          display_id: string
+          email: string
+          employer: string
+          full_name: string
+          id: string
+          member_id: string
+          phone: string
+          relationship_to_member: string
+          responded_at: string | null
+          status: Database["public"]["Enums"]["partner_guarantor_status"]
+          updated_at: string
+        }
+        Insert: {
+          address: string
+          approval_token: string
+          created_at?: string
+          display_id?: string
+          email: string
+          employer: string
+          full_name: string
+          id?: string
+          member_id: string
+          phone: string
+          relationship_to_member: string
+          responded_at?: string | null
+          status?: Database["public"]["Enums"]["partner_guarantor_status"]
+          updated_at?: string
+        }
+        Update: {
+          address?: string
+          approval_token?: string
+          created_at?: string
+          display_id?: string
+          email?: string
+          employer?: string
+          full_name?: string
+          id?: string
+          member_id?: string
+          phone?: string
+          relationship_to_member?: string
+          responded_at?: string | null
+          status?: Database["public"]["Enums"]["partner_guarantor_status"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "partner_guarantors_member_id_fkey"
+            columns: ["member_id"]
+            referencedRelation: "partner_members"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      partner_members: {
+        Row: {
+          address: string
+          completion_date: string | null
+          created_at: string
+          deleted_at: string | null
+          deposit_status: Database["public"]["Enums"]["partner_deposit_status"]
+          display_id: string
+          draw_date: string | null
+          email: string
+          employer: string
+          enrollment_date: string
+          full_name: string
+          id: string
+          is_test: boolean
+          payment_day: number
+          phone: string
+          status: Database["public"]["Enums"]["partner_member_status"]
+          tier: string
+          updated_at: string
+          weeks_paid: number
+        }
+        Insert: {
+          address: string
+          completion_date?: string | null
+          created_at?: string
+          deleted_at?: string | null
+          deposit_status?: Database["public"]["Enums"]["partner_deposit_status"]
+          display_id: string
+          draw_date?: string | null
+          email: string
+          employer: string
+          enrollment_date?: string
+          full_name: string
+          id?: string
+          is_test?: boolean
+          payment_day: number
+          phone: string
+          status?: Database["public"]["Enums"]["partner_member_status"]
+          tier?: string
+          updated_at?: string
+          weeks_paid?: number
+        }
+        Update: {
+          address?: string
+          completion_date?: string | null
+          created_at?: string
+          deleted_at?: string | null
+          deposit_status?: Database["public"]["Enums"]["partner_deposit_status"]
+          display_id?: string
+          draw_date?: string | null
+          email?: string
+          employer?: string
+          enrollment_date?: string
+          full_name?: string
+          id?: string
+          is_test?: boolean
+          payment_day?: number
+          phone?: string
+          status?: Database["public"]["Enums"]["partner_member_status"]
+          tier?: string
+          updated_at?: string
+          weeks_paid?: number
+        }
+        Relationships: []
+      }
+      partner_operation_receipts: {
+        Row: {
+          actor_id: string | null
+          created_at: string
+          operation: string
+          payload: Json
+          request_id: string
+          result: Json
+        }
+        Insert: {
+          actor_id?: string | null
+          created_at?: string
+          operation: string
+          payload: Json
+          request_id: string
+          result: Json
+        }
+        Update: {
+          actor_id?: string | null
+          created_at?: string
+          operation?: string
+          payload?: Json
+          request_id?: string
+          result?: Json
+        }
+        Relationships: []
+      }
+      partner_payments: {
+        Row: {
+          amount: number
+          created_at: string
+          due_date: string
+          id: string
+          late_fee: number
+          member_id: string
+          method: string | null
+          received_date: string | null
+          recorded_by: string | null
+          status: Database["public"]["Enums"]["partner_payment_status"]
+          updated_at: string
+          week_number: number
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          due_date: string
+          id?: string
+          late_fee?: number
+          member_id: string
+          method?: string | null
+          received_date?: string | null
+          recorded_by?: string | null
+          status?: Database["public"]["Enums"]["partner_payment_status"]
+          updated_at?: string
+          week_number: number
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          due_date?: string
+          id?: string
+          late_fee?: number
+          member_id?: string
+          method?: string | null
+          received_date?: string | null
+          recorded_by?: string | null
+          status?: Database["public"]["Enums"]["partner_payment_status"]
+          updated_at?: string
+          week_number?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "partner_payments_member_id_fkey"
+            columns: ["member_id"]
+            referencedRelation: "partner_members"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "partner_payments_recorded_by_fkey"
+            columns: ["recorded_by"]
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      partner_tier_interest: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          tier: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          tier: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          tier?: string
+        }
+        Relationships: []
+      }
       email_studio_templates: {
         Row: { key: string; subject: string; opening: string; body: string; version: number; updated_at: string; updated_by: string }
         Insert: { key: string; subject: string; opening: string; body: string; version?: number; updated_at?: string; updated_by: string }
@@ -1224,6 +1648,76 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      partner_admin_operation: {
+        Args: {
+          p_actor: string
+          p_operation: string
+          p_payload: Json
+          p_request_id: string
+        }
+        Returns: Json
+      }
+      partner_apply_application: {
+        Args: { p_guarantor: Json; p_member: Json; p_request_id: string }
+        Returns: string
+      }
+      partner_capture_interest: {
+        Args: { p_email: string; p_tier: string }
+        Returns: undefined
+      }
+      partner_claim_mail: {
+        Args: { p_member?: string }
+        Returns: {
+          attempts: number
+          created_at: string
+          first_send_at: string | null
+          id: string
+          kind: string
+          last_error: string | null
+          lease_id: string | null
+          lease_until: string | null
+          member_id: string
+          payload: Json | null
+          prepared_at: string | null
+          recipient: string
+          sent_at: string | null
+          status: string
+        }[]
+        SetofOptions: {
+          from: "*"
+          to: "partner_delivery_jobs"
+          isOneToOne: false
+          isSetofReturn: true
+        }
+      }
+      partner_current_member_id: { Args: never; Returns: string }
+      partner_daily_maintenance: { Args: never; Returns: Json }
+      partner_link_account: {
+        Args: { p_member: string; p_user: string }
+        Returns: undefined
+      }
+      partner_lookup_account: { Args: { p_email: string }; Returns: string }
+      partner_queue_position: { Args: { p_member: string }; Returns: Json }
+      partner_respond_guarantor: {
+        Args: { p_response: string; p_token: string }
+        Returns: Json
+      }
+      partner_tier_config: { Args: { p_tier: string }; Returns: Json }
+      partner_tier_summary: {
+        Args: { include_test?: boolean }
+        Returns: {
+          active_members: number
+          buffer_balance: number
+          queue_length: number
+          tier: string
+          total_contributions_received: number
+          total_draws_paid: number
+        }[]
+      }
+      partner_validate_person: {
+        Args: { p_guarantor?: boolean; p_person: Json }
+        Returns: undefined
+      }
       save_email_studio_template: { Args: { p_key: string; p_subject: string; p_opening: string; p_body: string; p_version: number; p_actor: string }; Returns: number }
       prepare_email_studio_test: { Args: { p_id: string; p_actor: string; p_recipient: string; p_payload: Json }; Returns: Json }
 
@@ -1312,7 +1806,19 @@ export type Database = {
       is_bar_staff: { Args: never; Returns: boolean }
     }
     Enums: {
-      [_ in never]: never
+      partner_deposit_status: "pending" | "held" | "refunded" | "forfeited"
+      partner_draw_status: "scheduled" | "paid" | "cancelled"
+      partner_guarantor_status: "pending" | "approved" | "declined" | "timeout"
+      partner_member_status:
+        | "pending_guarantor"
+        | "active"
+        | "eligible"
+        | "drew"
+        | "completed"
+        | "defaulted_predraw"
+        | "defaulted_postdraw"
+        | "withdrawn"
+      partner_payment_status: "pending" | "paid" | "late" | "defaulted"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -1442,6 +1948,12 @@ export const Constants = {
     Enums: {},
   },
   public: {
-    Enums: {},
+    Enums: {
+      partner_deposit_status: ["pending", "held", "refunded", "forfeited"],
+      partner_draw_status: ["scheduled", "paid", "cancelled"],
+      partner_guarantor_status: ["pending", "approved", "declined", "timeout"],
+      partner_member_status: ["pending_guarantor", "active", "eligible", "drew", "completed", "defaulted_predraw", "defaulted_postdraw", "withdrawn"],
+      partner_payment_status: ["pending", "paid", "late", "defaulted"],
+    },
   },
 } as const

@@ -14,6 +14,7 @@ function serviceClient() {
 function roleHome(role: string | undefined): string {
   if (role === "admin")      return "/admin";
   if (role === "bartender")  return "/bar";
+  if (role === "partner")    return "/flames-partner/dashboard";
   if (role === "artist")     return "/portal";
   // No profiles row or unrecognised role (including the retired "gamer" role) — send to login to break any redirect loop
   return "/login";

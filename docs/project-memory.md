@@ -602,3 +602,10 @@ Completion and any follow-up: `/Users/frankknight/Claude OS/Delegations/reconcil
 ## ACE Studio research chat closed — October 19, 2026
 
 Research and the suggested private vocal experiment are preserved in [the closeout](session-handoffs/2026-10-19-ace-studio-research-closeout.md). No build or purchase was authorized; this does not revive the retired website Studio or change current priorities.
+
+
+## Flames Partner local integration — November 6, 2026
+
+Frank requested the whole implemented savings app inside One Flame Records and chose existing One Flame administrators only. The reviewed local candidate is on `codex/flames-partner-integration` in `work/flames-partner-integration`; the parent checkout and pre-existing peer evidence were preserved. It uses One Flame identity, branding and database, with namespaced savings records and separate test funds. No customer financial data or files existed in the source inventory. No hosted migration, deployment, email or deletion was performed.
+
+[The dated handoff](session-handoffs/2026-11-06-flames-partner-integration.md) records implementation and actual verification. The [root ledger](/Users/frankknight/Claude OS/Delegations/fold-the-existing-flames-partner-app-into-one-flame-records.md) alone owns remaining release/retirement commitments and authorization. The November 3 release remains the live baseline; local preparation does not supersede its production receipt.
