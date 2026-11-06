@@ -12,6 +12,6 @@ The full npm test script passed, including the nested Partner checks. Telegram a
 
 Personal Ops' fixed folder map and necessary nested-npm runner compatibility fix passed independent review and the full suite (308 passed, one existing skip). The runner still blocks network access, outside writes, private reads and unrelated system programs. The first failed-check One Flame proposal was rejected without applying; a fresh successful request supplied its accepted result.
 
-No hosted database, business account, live website, customer communication, paid provider or spending setting was changed. One Flame source push is held: the existing GitHub integration automatically deploys main and creates branch deployments. A source-save request is not separate release approval; its local commit remains reviewable until Frank decides.
+No hosted database, business account, live website, customer communication, paid provider or spending setting was changed. Frank separately authorized the automatic website deployment on November 6 after the reviewed local commit was prepared. The source push uses the existing GitHub integration, which automatically deploys main. Actual deployment identity and serving verification are recorded in the root Work-connection ledger. No hosting settings were changed.
 
 Current commitments and independent verification remain in root `Delegations/connect-yardworks-one-flame-and-frankly-being-to-personal-op.md`.
