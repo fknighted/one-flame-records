@@ -1,3 +1,7 @@
+## Personal Ops Work connection checked — November 6, 2026
+
+Personal Ops now connects `/project one-flame ...` to this existing folder. A real app request, full preview and approval added only [the local help note](personal-ops-work.md); its bytes and one successful apply were verified. The full npm test script passed, including the nested Partner checks. Telegram accepted result and apply notices; phone receipt remains unknown. Older local review files were preserved. [Execution and preservation receipt](session-handoffs/2026-11-06-personal-ops-work.md). Frank has now separately authorized pushing the checked source and its automatic website deployment. The root Work-connection ledger records the actual push and serving verification.
+
 # Resume One Flame Records — November 6, 2026
 
 Latest email branding/recovery source is in the feature worktree. The owning record is `/Users/frankknight/Claude OS/Delegations/remove-one-flame-branding-from-flames-partner-notifications.md`; use its current release state. Programme email copy, sender display name and code-entry screens are separate from main-app branding; the verified domain and account roles stay shared.
