@@ -1,5 +1,6 @@
 import Link from "next/link";
 import SubscribeForm from "@/components/SubscribeForm";
+import OneFlamePublicBranding from "@/components/OneFlamePublicBranding";
 import LogoMark from "@/components/LogoMark";
 
 const LABEL_LINKS = [
@@ -63,9 +64,11 @@ export default function PublicFooter() {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-10">
           {/* Brand: light stacked logo on black */}
           <div className="col-span-2 md:col-span-1">
-            <Link href="/" className="inline-block focus-on-black">
-              <LogoMark variant="stacked" ground="black" height={112} className="h-24 w-auto sm:h-28" />
-            </Link>
+            <OneFlamePublicBranding>
+              <Link href="/" className="inline-block focus-on-black">
+                <LogoMark variant="stacked" ground="black" height={112} className="h-24 w-auto sm:h-28" />
+              </Link>
+            </OneFlamePublicBranding>
             <p className="type-small text-muted mt-4">Montego Bay, Jamaica</p>
           </div>
 

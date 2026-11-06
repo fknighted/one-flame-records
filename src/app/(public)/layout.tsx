@@ -1,3 +1,4 @@
+import OneFlamePublicBranding from "@/components/OneFlamePublicBranding";
 import PublicHeader from "@/components/PublicHeader";
 import PublicFooter from "@/components/PublicFooter";
 import PrintFilters from "@/components/PrintFilters";
@@ -15,7 +16,7 @@ export default function PublicLayout({
       <PrintFilters />
 
       <a href="#main-content" className="sr-only focus:not-sr-only focus:block focus:bg-paper focus:text-black focus:p-4">Skip to main content</a>
-      <PublicHeader />
+      <OneFlamePublicBranding><PublicHeader /></OneFlamePublicBranding>
       <main id="main-content" tabIndex={-1} className="flex-1">{children}</main>
       <PublicFooter />
     </div>

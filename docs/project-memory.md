@@ -616,3 +616,10 @@ Frank requested the whole implemented savings app inside One Flame Records and c
 Frank explicitly approved the database changes, publication, emails and daily job, then deletion of the old Supabase project after verified cutover. Both reviewed migrations are applied to One Flame. Existing account identities/roles were preserved and independently checked. Functional release source `2dd6867c` was pushed to GitHub main and Vercel published it as `dpl_CpiZ4EU9NK4hMkw22izLQF2owQvn`. The public page and existing administrator session work live. The protected daily job and all three mail types passed using one clearly marked test membership and Resend simulation addresses; no customer mail was used. Provider acceptance is not real inbox proof.
 
 Static retirement routing source lives in `ops/legacy-partner-redirect/`. It preserves legacy addresses without the old database/runtime/cron. Current serving identities, final retirement evidence and remaining limits are owned by the [root ledger](/Users/frankknight/Claude OS/Delegations/fold-the-existing-flames-partner-app-into-one-flame-records.md); the earlier local-only record above is historical.
+
+
+## Flames Partner branding adjustment — November 6, 2026
+
+At Frank’s request, Flames Partner public routes omit the shared One Flame header/navigation and One Flame footer logo. The section retains its own Flames Partner navigation. Other public routes retain the existing One Flame header and logos. This is a presentation change with no database, account or mail changes.
+
+Type checking and affected lint passed. The local full build reached catalog generation but could not load the catalog because its disposable local database was stopped after the integration checks. The hosted build uses the existing production configuration; no production settings were changed for this edit.
