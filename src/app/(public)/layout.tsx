@@ -18,7 +18,7 @@ export default function PublicLayout({
       <a href="#main-content" className="sr-only focus:not-sr-only focus:block focus:bg-paper focus:text-black focus:p-4">Skip to main content</a>
       <OneFlamePublicBranding><PublicHeader /></OneFlamePublicBranding>
       <main id="main-content" tabIndex={-1} className="flex-1">{children}</main>
-      <PublicFooter />
+      <OneFlamePublicBranding><PublicFooter /></OneFlamePublicBranding>
     </div>
   );
 }

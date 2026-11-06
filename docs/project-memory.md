@@ -623,3 +623,6 @@ Static retirement routing source lives in `ops/legacy-partner-redirect/`. It pre
 At Frank’s request, Flames Partner public routes omit the shared One Flame header/navigation and One Flame footer logo. The section retains its own Flames Partner navigation. Other public routes retain the existing One Flame header and logos. This is a presentation change with no database, account or mail changes.
 
 Type checking and affected lint passed. The local full build reached catalog generation but could not load the catalog because its disposable local database was stopped after the integration checks. The hosted build uses the existing production configuration; no production settings were changed for this edit.
+
+
+Frank then requested removal of the entire shared One Flame footer and newsletter from Flames Partner pages. The same existing route-aware wrapper now excludes the whole public footer on `/flames-partner` and its child routes. Other public pages keep the shared footer and newsletter. Type checking and affected lint passed; the hosting build and live page provide release verification with production connection settings.
