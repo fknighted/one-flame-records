@@ -12,7 +12,7 @@ Read project instructions, memory and Git state before editing. Preserve other a
 
 # Previous production baseline — November 3, 2026
 
-The approved November3 security update is live. Start with the [release receipt](audits/2026-11-03-security-release.md) and [handoff](session-handoffs/2026-11-03-security-release.md). Frozen release source is `work/security-release-20261103/stage/`, not the dirty parent or older candidates. All Fola work is preserved. Exact source, rollback, safe live checks, native registration and separate acceptance are recorded in the receipt. Earlier proposal-only notes are historical.
+The approved November3 security update is live. Start with the [release receipt](../work/review-files-preserved-20261106/docs/audits/2026-11-03-security-release.md) and [handoff](../work/review-files-preserved-20261106/docs/session-handoffs/2026-11-03-security-release.md). Frozen release source is `work/security-release-20261103/stage/`, not the dirty parent or older candidates. All Fola work is preserved. Exact source, rollback, safe live checks, native registration and separate acceptance are recorded in the receipt. Earlier proposal-only notes are historical.
 
 Knight Rida mixing is parked by Frank. To resume on request, use the [mix restart note](../mix-exports/KNIGHT-RIDA-RESUME.md); preserve both passes and original Logic project.
 

@@ -6,13 +6,13 @@ Personal Ops now connects `/project one-flame ...` to this existing folder. A re
 
 ## Security update released — November3
 
-The approved refreshed update is live at `dpl_3rRQ3L8qWvoFGhSHAXagYYSSnyru` on both existing domains. All Fola source/artwork remains exact. [Release receipt](audits/2026-11-03-security-release.md) owns exact463-file source, retained Gj2 rollback, safe live page/access/asset/font checks, native background-job registration and separate acceptance. Production dependency audit reports zero warnings;25 existing lint style warnings remain disclosed. Hosted build passed with original configuration.
+The approved refreshed update is live at `dpl_3rRQ3L8qWvoFGhSHAXagYYSSnyru` on both existing domains. All Fola source/artwork remains exact. [Release receipt](../work/review-files-preserved-20261106/docs/audits/2026-11-03-security-release.md) owns exact463-file source, retained Gj2 rollback, safe live page/access/asset/font checks, native background-job registration and separate acceptance. Production dependency audit reports zero warnings;25 existing lint style warnings remain disclosed. Hosted build passed with original configuration.
 
 Released frozen source is `work/security-release-20261103/stage/`. Parent application/dependency source and earlier candidates remain untouched. Earlier proposal-only/not-deployed statements below are dated history, superseded by this release.
 
 ## Historical first Fola-preserving security proposal — November 3, 2026
 
-The first local proposal at `work/security-release-proposal-20261103/candidate/` preserved the complete Fola Village release and applied only the four original security files. It was superseded as proposed source by the newer-warning refresh above. Its locked install, tests, types and build passed, with then-outstanding dependency warnings recorded in its dated receipt. [Proposal receipt](session-handoffs/2026-11-03-security-release-proposal.md) links the exact cross-project plan and existing ledger. No release approved/performed.
+The first local proposal at `work/security-release-proposal-20261103/candidate/` preserved the complete Fola Village release and applied only the four original security files. It was superseded as proposed source by the newer-warning refresh above. Its locked install, tests, types and build passed, with then-outstanding dependency warnings recorded in its dated receipt. [Proposal receipt](../work/review-files-preserved-20261106/docs/session-handoffs/2026-11-03-security-release-proposal.md) links the exact cross-project plan and existing ledger. No release approved/performed.
 
 Status: November3 security update released over the complete Fola Village baseline; Email Studio/audit repairs retained.
 
@@ -35,7 +35,7 @@ Current work and independent acceptance stay in Claude OS Delegations.
 
 ## Knight Rida mix parked — November 3, 2026
 
-Frank parked the two mix passes and authorized archiving their chat. [Restart note](../mix-exports/KNIGHT-RIDA-RESUME.md) links both passes, all three Logic projects and preservation limits; [receipt](session-handoffs/2026-11-03-knight-rida-mix-parked.md). No finished-mix approval or new mixing scope.
+Frank parked the two mix passes and authorized archiving their chat. [Restart note](../mix-exports/KNIGHT-RIDA-RESUME.md) links both passes, all three Logic projects and preservation limits; [receipt](../work/review-files-preserved-20261106/docs/session-handoffs/2026-11-03-knight-rida-mix-parked.md). No finished-mix approval or new mixing scope.
 
 ## Dated evidence and earlier summaries
 
@@ -69,13 +69,13 @@ Separate source/script and phone/desktop sample reviews passed. The guarded appl
 
 ## Email Studio production release — October 18, 2026
 
-Email Studio is live at https://www.oneflamerecords.com/admin/email-studio. The required database update was applied. Live owner previews, edit/save/restoration and newsletter review checks passed; the original empty override state was restored. No email was sent. [Release receipt](audits/2026-10-18-email-studio/release.md). Earlier local-only notes below describe the pre-release state. Root has already communicated these changes to Frank, satisfying the project rule against silent changes. Independent release acceptance remains recorded only in the root Delegations ledger. No commit or push was made.
+Email Studio is live at https://www.oneflamerecords.com/admin/email-studio. The required database update was applied. Live owner previews, edit/save/restoration and newsletter review checks passed; the original empty override state was restored. No email was sent. [Release receipt](../work/review-files-preserved-20261106/docs/audits/2026-10-18-email-studio/release.md). Earlier local-only notes below describe the pre-release state. Root has already communicated these changes to Frank, satisfying the project rule against silent changes. Independent release acceptance remains recorded only in the root Delegations ledger. No commit or push was made.
 
-The reviewed email editing, preview and sender changes are integrated into this main local checkout. Separate review and tested feature-file matching completed; earlier awaiting-review notes below describe preparation. No email-studio migration, production deployment, real email, commit or push occurred. See [docs/audits/2026-10-18-email-studio/independent-review.md](</Users/frankknight/Claude OS/Projects/one flame app/docs/audits/2026-10-18-email-studio/independent-review.md>) for evidence and release limits. The root Delegations record owns completion state. Existing unrelated work is preserved.
+The reviewed email editing, preview and sender changes are integrated into this main local checkout. Separate review and tested feature-file matching completed; earlier awaiting-review notes below describe preparation. No email-studio migration, production deployment, real email, commit or push occurred. See [docs/audits/2026-10-18-email-studio/independent-review.md](<../work/review-files-preserved-20261106/docs/audits/2026-10-18-email-studio/independent-review.md>) for evidence and release limits. The root Delegations record owns completion state. Existing unrelated work is preserved.
 
 # Customer Email Studio — October 18, 2026 (local candidate)
 
-Customer email wording controls, live draft previews and safe self-tests are implemented in the isolated email-studio candidate. Newsletters now require exact-draft review and preserve saved-send recovery. No hosted changes or real emails occurred. Evidence and release dependencies are in [the implementation report](audits/2026-10-18-email-studio/report.md). Current work status is recorded only in [the delegation](</Users/frankknight/Claude OS/Delegations/build-customer-email-studio-controls-in-one-flame-app.md>). Earlier release entries below describe prior work.
+Customer email wording controls, live draft previews and safe self-tests are implemented in the isolated email-studio candidate. Newsletters now require exact-draft review and preserve saved-send recovery. No hosted changes or real emails occurred. Evidence and release dependencies are in [the implementation report](../work/review-files-preserved-20261106/docs/audits/2026-10-18-email-studio/report.md). Current work status is recorded only in [the delegation](</Users/frankknight/Claude OS/Delegations/build-customer-email-studio-controls-in-one-flame-app.md>). Earlier release entries below describe prior work.
 
 # Security release — October 18, 2026
 
@@ -111,7 +111,7 @@ Five high development-tool warnings and seven pre-existing lint errors remain. T
 
 Recorded release: Vercel dpl_BM8C1XY7GTeB8ybot9jrry9Gtdfs. No commit or push was made for this release. Previous release recovery instructions are saved in the release receipt.
 
-[Release and rollback receipt](audits/2026-10-06-security-release.md) · [Independent live review](audits/2026-10-06-security-release-independent-review.md)
+[Release and rollback receipt](../work/review-files-preserved-20261106/docs/audits/2026-10-06-security-release.md) · [Independent live review](../work/review-files-preserved-20261106/docs/audits/2026-10-06-security-release-independent-review.md)
 
 Completion and any continuing commitments belong only in [Delegations](</Users/frankknight/Claude OS/Delegations/deploy-the-independently-reviewed-october-6-security-fixes-f-2.md>). This release does not renew authorization for later deployments or business actions.
 
@@ -168,7 +168,7 @@ _Done 2026-07-17 (see session log): session-41 code-review bugs; whole-dollar mo
 
 ### Historical October 6 release-preparation receipt — superseded by confirmed release above
 
-Frank authorized production deployment. Reviewed dependency patches were released directly through Vercel; website aliases now serve the Ready release recorded in [security release receipt](audits/2026-10-06-security-release.md). Public pages and sharing image respond; signed-out admin/bar/portal redirect to login. No payment, generation, messaging or database operation was tested. Existing lint errors and unpatched development tooling warnings remain. No commit or push; deployed package provenance is recorded by manifest hashes. Root release delegation owns separate review and completion.
+Frank authorized production deployment. Reviewed dependency patches were released directly through Vercel; website aliases now serve the Ready release recorded in [security release receipt](../work/review-files-preserved-20261106/docs/audits/2026-10-06-security-release.md). Public pages and sharing image respond; signed-out admin/bar/portal redirect to login. No payment, generation, messaging or database operation was tested. Existing lint errors and unpatched development tooling warnings remain. No commit or push; deployed package provenance is recorded by manifest hashes. Root release delegation owns separate review and completion.
 
 
 ### Historical October 6 local candidate — superseded by confirmed release above
@@ -605,7 +605,7 @@ Completion and any follow-up: `/Users/frankknight/Claude OS/Delegations/reconcil
 
 ## ACE Studio research chat closed — October 19, 2026
 
-Research and the suggested private vocal experiment are preserved in [the closeout](session-handoffs/2026-10-19-ace-studio-research-closeout.md). No build or purchase was authorized; this does not revive the retired website Studio or change current priorities.
+Research and the suggested private vocal experiment are preserved in [the closeout](../work/review-files-preserved-20261106/docs/session-handoffs/2026-10-19-ace-studio-research-closeout.md). No build or purchase was authorized; this does not revive the retired website Studio or change current priorities.
 
 
 ## Flames Partner local integration — November 6, 2026
