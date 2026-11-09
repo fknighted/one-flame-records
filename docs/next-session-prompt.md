@@ -1,3 +1,9 @@
+## Local installation restored — November 9, 2026
+
+The audit found installed Zod copies differing from this repository's existing lockfile. A script-enabled `npm ci` restored the locked installation without changing package files or application source. SDK and root now resolve Zod 4.6.7; the parser safeguard and all six runtime-safety tests pass. Full application/Partner tests, types and production build pass; lint has zero errors and 24 existing warnings. A different reviewer confirmed the local repair. This is not a live release or verification of deployed installed libraries.
+
+Evidence and current work: root `Audits/evidence/2026-11-09-live-project-repairs/one-flame-independent-review.md` and `Delegations/fix-november-9-live-project-audit-findings-starting-with-one.md`. No dependency upgrade, database write, customer communication or deployment occurred.
+
 ## Personal Ops Work connection checked — November 6, 2026
 
 Personal Ops now connects `/project one-flame ...` to this existing folder. A real app request, full preview and approval added only [the local help note](personal-ops-work.md); its bytes and one successful apply were verified. The full npm test script passed, including the nested Partner checks. Telegram accepted result and apply notices; phone receipt remains unknown. Older local review files were preserved. [Execution and preservation receipt](session-handoffs/2026-11-06-personal-ops-work.md). Frank has now separately authorized pushing the checked source and its automatic website deployment. The root Work-connection ledger records the actual push and serving verification.
