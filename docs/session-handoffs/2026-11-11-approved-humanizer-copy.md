@@ -1,3 +1,7 @@
+## Nine-decision Humanizer release — live November 11, 2026
+
+Frank approved publishing H22/H27/H29 contract qualification, Spark application and submission response wording. Exact serving source `ce58f57fe3eb`, release `dpl_8DaD2DWgtJ59mxGZdwebKPzkwCdx`. Live wording and independent checks passed. No customer-data or behaviour change. [Central release receipt and limits](</Users/frankknight/Claude OS/Sessions/2026-11-11-nine-humanizer-live-releases.md>); acceptance stays in the root release task. Earlier local-only notes below are historical.
+
 # Approved Humanizer wording — November 11, 2026
 
 Frank approved H22, H27, H29 from the portfolio copy review.
