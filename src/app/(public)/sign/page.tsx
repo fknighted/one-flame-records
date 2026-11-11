@@ -21,7 +21,7 @@ const PROCESS = [
   {
     step: "02",
     title: "We review your music",
-    body: "Every submission is listened to by the label team. We look for originality, craft, and cultural rootedness. We'll get back to you within two weeks.",
+    body: "The label team reviews submissions for originality, musicianship and a connection to Jamaican music. Sending music does not guarantee a response or signing offer.",
   },
   {
     step: "03",
