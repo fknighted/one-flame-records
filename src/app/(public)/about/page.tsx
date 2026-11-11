@@ -46,11 +46,7 @@ export default function AboutPage() {
               come from the artist, not be handed to them.
             </p>
             <p>
-              Production, mixing, and video work happen in-house at our Montego Bay
-              studio. We don&apos;t outsource the creative process to a facility in Kingston
-              or Miami and call it a Jamaican record. Everything that leaves this label
-              was made here, by people who live here, for an audience that deserves
-              the real thing.
+              Production, mixing and video work happen in-house at our Montego Bay studio.
             </p>
             <p>
               Rights stay where they belong — with the artists. We take a cut of
