@@ -1,3 +1,7 @@
+## Remaining Humanizer wording — live November 11, 2026
+
+5 approved interface wording proposals (H23, H24, H25, H26, H28) are published on the existing service/site. Behavior, prices and safeguards are preserved. [Release, checks and limits](</Users/frankknight/Claude OS/Projects/campaign-workbench/docs/session-handoffs/2026-11-11-remaining-humanizer-live-release.md>). The root Humanizer release work record owns acceptance. Preserve unrelated work.
+
 ## Personal Ops Work connection checked — November 6, 2026
 
 Personal Ops now connects `/project one-flame ...` to this existing folder. A real app request, full preview and approval added only [the local help note](personal-ops-work.md); its bytes and one successful apply were verified. The full npm test script passed, including the nested Partner checks. Telegram accepted result and apply notices; phone receipt remains unknown. Older local review files were preserved. [Execution and preservation receipt](session-handoffs/2026-11-06-personal-ops-work.md). Frank has now separately authorized pushing the checked source and its automatic website deployment. The root Work-connection ledger records the actual push and serving verification.
