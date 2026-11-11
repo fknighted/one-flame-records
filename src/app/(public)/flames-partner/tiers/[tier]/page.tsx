@@ -28,7 +28,7 @@ const TIER_CONFIG: Record<TierKey, {
   },
   blaze: {
     tagline: 'Step up your savings. Serious money for serious savers.',
-    description: 'Blaze is our mid-tier — for members ready to commit at a higher level. A J$10,000 weekly contribution across 20 weeks earns you a J$190,000 draw payout. The same 20-week structure as Spark, just with bigger numbers and bigger results.',
+    description: 'Blaze is our mid-tier — for members ready to commit at a higher level. A J$10,000 weekly contribution across 20 weeks earns you a J$190,000 draw payout. The same 20-week structure as Spark, with higher contributions and a larger draw.',
     color: {
       accent: 'text-yellow', badge: 'bg-raised text-yellow',
       button: 'bg-paper hover:bg-paper', border: 'border-line',

@@ -1,3 +1,7 @@
+## Remaining Humanizer wording — live November 11, 2026
+
+5 approved interface wording proposals (H23, H24, H25, H26, H28) are published on the existing service/site. Behavior, prices and safeguards are preserved. [Release, checks and limits](</Users/frankknight/Claude OS/Projects/campaign-workbench/docs/session-handoffs/2026-11-11-remaining-humanizer-live-release.md>). The root Humanizer release work record owns acceptance. Preserve unrelated work.
+
 ## Nine-decision Humanizer release — live November 11, 2026
 
 Frank approved publishing H22/H27/H29 contract qualification, Spark application and submission response wording. Exact serving source `ce58f57fe3eb`, release `dpl_8DaD2DWgtJ59mxGZdwebKPzkwCdx`. Live wording and independent checks passed. No customer-data or behaviour change. [Central release receipt and limits](</Users/frankknight/Claude OS/Sessions/2026-11-11-nine-humanizer-live-releases.md>); acceptance stays in the root release task. Earlier local-only notes below are historical.

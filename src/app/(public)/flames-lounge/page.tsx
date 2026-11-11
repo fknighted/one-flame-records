@@ -96,7 +96,7 @@ const PILLARS = [
   {
     icon: <StudioIcon />,
     title: "Outdoor Recording Studio",
-    body: "A full professional studio setup in the open air. Mics, monitors, mixing — all the gear, none of the four walls. Record under Montego Bay skies with acoustics designed to carry.",
+    body: "Record outdoors in Montego Bay, with microphones, monitors and mixing equipment. Ask about the equipment and arrangements for your session.",
   },
   {
     icon: <GameIcon />,
@@ -249,9 +249,7 @@ export default async function FlamesLoungePage() {
             </div>
             <div className="min-w-0">
               <p className="type-body text-paper max-w-[66ch]">
-                Flames Lounge is the creative and social hub connected to One Flame Records.
-                It&apos;s where artists come to record, decompress, eat well, and connect —
-                and where the community comes to be part of something real. Walk in, feel it, stay a while.
+                Flames Lounge brings outdoor recording, gaming, Jamaican food and a bar together in Montego Bay. Come through to record, eat or spend time with friends.
               </p>
               <p className="type-body-sm text-muted mt-4">
                 Part of the One Flame Records family.{" "}
@@ -286,10 +284,7 @@ export default async function FlamesLoungePage() {
           <div className="min-w-0">
             <SectionHeader title="A full studio. Open skies." variant="light" />
             <p className="type-body max-w-[66ch]">
-              Professional microphones, studio monitors, and mixing capability —
-              all set up outdoors in Montego Bay. There&apos;s nothing like recording
-              with the Caribbean air and the sounds of the city around you.
-              Come make something real.
+              Microphones, studio monitors and mixing equipment, set up outdoors in Montego Bay. Bring your session idea and ask what can be arranged.
             </p>
           </div>
           {/* Red block where a studio photo will go. */}
