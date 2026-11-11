@@ -27,7 +27,7 @@ export default function WelcomePage() {
           href="/flames-partner/signup?tier=spark"
           className="studio-btn studio-btn-primary mt-6"
         >
-          Join Spark — Start Today
+          Apply to join Spark
         </Link>
       </section>
 

@@ -33,11 +33,10 @@ export default function AboutPage() {
         <div className="mx-auto max-w-6xl px-4 sm:px-6 py-14 sm:py-[88px]">
           <div className="type-body space-y-6 max-w-[66ch]">
             <p>
-              The label was built on a straightforward premise: Jamaican music has been
-              shaping the world&apos;s ear for sixty years, and the people making it should
-              own the results. Too many artists from this island have signed deals that
-              handed their catalogues to companies headquartered in cities that couldn&apos;t
-              place Montego Bay on a map. One Flame exists to be the alternative.
+              One Flame was built around a simple idea: the people making the music
+              should keep ownership of their work. Ownership, royalties and signing
+              terms are set out in a separate written contract between each artist
+              and the label.
             </p>
             <p>
               We work across the full spectrum of Jamaican sound — roots, dancehall,

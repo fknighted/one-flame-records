@@ -1,3 +1,7 @@
+## Approved Humanizer wording — November 11, local only
+
+About preserves the artist-ownership principle and explicitly refers ownership, royalties and signing to a separate written contract, matching public Terms. No signed artist agreement was inspected or certified. Spark says Apply to join Spark. Music submissions no longer promise a reply within two weeks. No release or production-data change. [Checks and limits](session-handoffs/2026-11-11-approved-humanizer-copy.md); acceptance remains in the linked root work record. Preserve unrelated work.
+
 ## Development parser dependency repair — November 11, 2026
 
 A targeted @typescript-eslint/typescript-estree matcher override removes the development warning chain. Every production lock version/integrity is unchanged. Locked installation, full existing tests, types and lint pass (24 existing lint warnings); a separate reviewer confirmed them. The current package scan has zero warnings. This is local source only, not a new release. Root work: Delegations/repair-shared-moderate-development-dependency-warnings-in-bu.md.

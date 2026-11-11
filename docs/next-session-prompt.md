@@ -1,3 +1,7 @@
+## Approved Humanizer wording — November 11, local only
+
+About preserves the artist-ownership principle and explicitly refers ownership, royalties and signing to a separate written contract, matching public Terms. No signed artist agreement was inspected or certified. Spark says Apply to join Spark. Music submissions no longer promise a reply within two weeks. No release or production-data change. [Checks and limits](session-handoffs/2026-11-11-approved-humanizer-copy.md); acceptance remains in the linked root work record. Preserve unrelated work.
+
 ## Local installation restored — November 9, 2026
 
 The audit found installed Zod copies differing from this repository's existing lockfile. A script-enabled `npm ci` restored the locked installation without changing package files or application source. SDK and root now resolve Zod 4.6.7; the parser safeguard and all six runtime-safety tests pass. Full application/Partner tests, types and production build pass; lint has zero errors and 24 existing warnings. A different reviewer confirmed the local repair. This is not a live release or verification of deployed installed libraries.
