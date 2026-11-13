@@ -24,7 +24,9 @@ Evidence and current work: root `Audits/evidence/2026-11-09-live-project-repairs
 
 Personal Ops now connects `/project one-flame ...` to this existing folder. A real app request, full preview and approval added only [the local help note](personal-ops-work.md); its bytes and one successful apply were verified. The full npm test script passed, including the nested Partner checks. Telegram accepted result and apply notices; phone receipt remains unknown. Older local review files were preserved. [Execution and preservation receipt](session-handoffs/2026-11-06-personal-ops-work.md). Frank has now separately authorized pushing the checked source and its automatic website deployment. The root Work-connection ledger records the actual push and serving verification.
 
-# Current project summary — November 3, 2026
+# Project summary as of November 3, 2026 — history
+
+Superseded: the November 11 Humanizer release named at the top of this file and in `docs/next-session-prompt.md` is serving now. The deployment IDs below are history and rollback context, not the current release.
 
 ## Security update released — November3
 
