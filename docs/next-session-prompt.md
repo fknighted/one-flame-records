@@ -22,6 +22,8 @@ Personal Ops now connects `/project one-flame ...` to this existing folder. A re
 
 # Resume One Flame Records — November 6, 2026
 
+Latest email branding/recovery source is in the feature worktree. The owning record is `/Users/frankknight/Claude OS/Delegations/remove-one-flame-branding-from-flames-partner-notifications.md`; use its current release state. Programme email copy, sender display name and code-entry screens are separate from main-app branding; the verified domain and account roles stay shared.
+
 Flames Partner has since been approved and published. Both migrations and the protected daily job passed hosted checks. Existing administrators retain control. Read the latest project memory entry and root ledger for final retirement/serving identities; the local-candidate notes below describe preparation, not the current release authority. Static legacy routing is maintained in `ops/legacy-partner-redirect/`.
 
 The Flames Partner integration is a reviewed local candidate in `work/flames-partner-integration`, branch `codex/flames-partner-integration`. Read [its handoff](session-handoffs/2026-11-06-flames-partner-integration.md) and the root ledger `/Users/frankknight/Claude OS/Delegations/fold-the-existing-flames-partner-app-into-one-flame-records.md` for the actual release state and authority. Frank chose existing One Flame administrators only. No hosted release or standalone deletion occurred during local preparation. GitHub push is gated because Vercel automatic deployments are enabled.

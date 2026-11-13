@@ -13,7 +13,7 @@
     "test:runtime-security": "node --test scripts/runtime-security-check.mjs",
     "check:runtime-security": "node scripts/patch-zod-compat.mjs --check && npm audit --omit=dev --audit-level=low",
     "test:transitive-security": "node --test scripts/transitive-security.test.mjs",
-    "test:partner": "node scripts/test-flames-partner.mjs && node scripts/test-partner-actions.mjs && node scripts/test-partner-delivery.mjs && node scripts/test-partner-mail-worker.mjs"
+    "test:partner": "node scripts/test-flames-partner.mjs && node scripts/test-partner-actions.mjs && node scripts/test-partner-delivery.mjs && node scripts/test-partner-mail-worker.mjs && node scripts/test-partner-password-reset.mjs"
   },
   "dependencies": {
     "@sentry/nextjs": "^10.56.0",
