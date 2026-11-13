@@ -327,3 +327,21 @@ Migrations `20261106000001_flames_partner.sql` and `20261106000002_partner_deliv
 `src/lib/partner/delivery.ts` reuses One Flame Resend, email layout and Auth. Delivery requires explicit `PARTNER_EMAIL_TRANSPORT=resend`; local verification uses disabled transport. Saved payloads and provider identities support bounded retries. Each claimed job has a lease identity, so a stale worker cannot overwrite a newer result. Ambiguous old sends stop for reconciliation. Approved new accounts recover interrupted provisioning without elevating existing artists.
 
 `GET /api/partner/daily` requires the standard private Vercel `CRON_SECRET` bearer header before any database work. `vercel.json` retains the standalone daily schedule, `0 11 * * *` (06:00 Jamaica), to run late/default/expiry maintenance and retry saved mail. Existing Inngest workers are unchanged. The approved hosted migrations, configuration and daily job were applied on November 6; see `project-memory.md` and `operations.md` for the dated release, account boundaries and remaining delivery limits. Earlier local-disabled verification is not evidence of a real customer email.
+
+## Database guards on privileged columns (carried from chat memory, November 13, 2026)
+
+Migration `20260716000007_lock_privileged_columns.sql` adds `BEFORE UPDATE` triggers
+(`guard_*_privileged_columns`) that refuse changes unless the caller is the service role or
+an admin. Without them, any signed-in user could patch their own row through the public API and
+make themselves admin.
+
+- `profiles`: `role`, `is_bartender` and `artist_id` are frozen.
+- `artists`: `status` and `slug` are frozen; bio, socials, streaming and photo stay self-editable.
+- `video_jobs`: everything except `is_public` is frozen.
+
+Code that must change these columns uses `createServiceClient()` in a server action or runs as
+admin. Never loosen the triggers to make a user-scoped update work.
+
+Migrations go straight to the live database (there is no staging database). Apply an approved
+migration and verify it **before** pushing code that reads new columns, because a push to `main`
+deploys.
