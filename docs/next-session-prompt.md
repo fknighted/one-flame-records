@@ -1,3 +1,7 @@
+## Substantial local homepage candidate — November 14
+
+Use [the newer design study](audits/2026-11-14-design-trial/v2/report.md), which supersedes the conservative first candidate below. Compare New design/First trial against the original at the local comparison. Frank expressly requested local only before publishing. Preserve the candidate and follow [the current work record](../../../Delegations/create-a-substantial-local-one-flame-homepage-redesign-while.md) for acceptance; no release is authorized.
+
 ## Homepage design comparison — November 14, local only
 
 [The design trial report](audits/2026-11-14-design-trial/report.md) owns screenshots, checks and limits. The homepage candidate is independently reviewed and not published. The [root work record](../../../Delegations/try-updated-design-skills-on-the-one-flame-homepage-with-a-l.md) owns acceptance and continuation. Preserve the local candidate; this note does not authorize a release.

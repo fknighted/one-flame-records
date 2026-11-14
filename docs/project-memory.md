@@ -1,3 +1,7 @@
+## Substantial homepage redesign — November 14, 2026, local only
+
+Frank requested a stronger exploration after the first trial. The local homepage now uses a large black/yellow location masthead, red music feature, typographic artist line-up and yellow/red Lounge split. Existing brand, real content and public/business logic remain. [Design intent, comparison and checks](audits/2026-11-14-design-trial/v2/report.md). The comparison retains the original and first trial. Frank explicitly requested local only; do not push or publish this candidate. Current acceptance belongs to [the root work record](../../../Delegations/create-a-substantial-local-one-flame-homepage-redesign-while.md).
+
 ## Updated design skills trial — November 14, 2026, local only
 
 The homepage candidate brings the published Speechless video ahead of the roster, uses a real still from that upload, and keeps all nine artist links in a compact keyboard-accessible row. Sound System branding and public-data logic remain. Independent review, types/lint and six-width image/overflow checks passed. This is a local design comparison, not a release or a measured listening improvement. [Report and comparison](audits/2026-11-14-design-trial/report.md). Acceptance and any continuation remain in [the root ledger](../../../Delegations/try-updated-design-skills-on-the-one-flame-homepage-with-a-l.md). Main pushes deploy; the trial's project source checkpoint is local only.

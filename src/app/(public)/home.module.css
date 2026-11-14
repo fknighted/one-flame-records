@@ -1,0 +1,43 @@
+/* Local homepage composition study. Existing Sound System colours and fonts stay. */
+.masthead {
+  font-variation-settings: "opsz" 72;
+  font-size: clamp(64px, 12vw, 176px);
+  line-height: .82;
+  letter-spacing: -.015em;
+  margin-bottom: 36px;
+}
+.intro {
+  display: block;
+  font-size: clamp(44px, 6vw, 80px);
+  margin-bottom: 12px;
+}
+.heroBody {
+  display: grid;
+  gap: 32px;
+  align-items: end;
+}
+.rosterName {
+  font-variation-settings: "opsz" 72;
+  font-size: clamp(24px, 3vw, 42px);
+  line-height: .95;
+  overflow-wrap: anywhere;
+}
+.loungeTitle {
+  font-variation-settings: "opsz" 72;
+  font-size: clamp(72px, 9vw, 128px);
+  line-height: .82;
+  letter-spacing: -.01em;
+}
+.joinTitle {
+  font-variation-settings: "opsz" 72;
+  font-size: clamp(56px, 8vw, 112px);
+  line-height: .85;
+  overflow-wrap: anywhere;
+}
+@media (min-width: 768px) {
+  .heroBody { grid-template-columns: .8fr 1.4fr; }
+}
+@media (min-width: 1024px) {
+  .loungeLeft { max-width: 576px; margin-left: auto; padding-right: 48px; }
+  .loungeRight { max-width: 576px; margin-right: auto; padding-left: 48px; }
+}

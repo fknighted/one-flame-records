@@ -1,14 +1,14 @@
 import { assertPublicReads } from "@/lib/public-data";
 import Link from "next/link";
 import { createServiceClient } from "@/lib/supabase/server";
-import ArtistCard from "@/components/ArtistCard";
 import ReleaseCard from "@/components/ReleaseCard";
 import VideoEmbed from "@/components/VideoEmbed";
 import SectionHeader from "@/components/SectionHeader";
 import LinkButton from "@/components/LinkButton";
 import PrintedPhoto from "@/components/PrintedPhoto";
 import GrilleBand from "@/components/GrilleBand";
-import SpeakerRings from "@/components/SpeakerRings";
+import { tooLong } from "@/lib/sound-system";
+import styles from "./home.module.css";
 import type { Tables } from "@/types/supabase";
 
 type ReleaseRow = Tables<"releases"> & {
@@ -94,121 +94,112 @@ export default async function HomePage() {
   assertPublicReads(...results);
   const [{data:featuredArtists},{data:releases},{data:videos},{data:newsPosts}]=results;
 
+  const leadVideo = videos?.[0];
+  const moreVideos = videos?.slice(1) ?? [];
+
   return (
     <>
-      {/* ── Hero: yellow poster block, grille band, printed live-room photo ── */}
-      <section className="grid md:grid-cols-[1.15fr_1fr]">
-        <div className="relative min-w-0 bg-yellow text-black px-4 sm:px-7 pt-10 pb-[82px] sm:pt-14 md:pr-[92px] md:pb-14">
-          <h1 className="type-poster">
-            Pressed in <span className="text-red">Montego</span> Bay.
+      <section className="bg-black text-paper border-b-4 border-yellow" aria-labelledby="home-title">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 pt-10 sm:pt-14 pb-10 sm:pb-14">
+          <h1 id="home-title" className={`font-poster font-black uppercase ${styles.masthead}`}>
+            <span className={styles.intro}>Pressed in</span>
+            <span className="block text-yellow">Montego Bay.</span>
           </h1>
-          <p className="type-lead mt-5 max-w-[30ch]">
-            Independent reggae and dancehall. We sign artists, not sounds.
-          </p>
-          <LinkButton href="/artists" variant="outline" ground="yellow" className="mt-8">
-            Hear the roster
-          </LinkButton>
-          <GrilleBand className="absolute left-0 right-0 bottom-0 h-[42px] md:left-auto md:top-0 md:w-[60px] md:h-auto" />
-        </div>
-        <div className="relative min-h-[220px] sm:min-h-[260px] overflow-hidden">
-          <PrintedPhoto
-            tone="yellow"
-            src="/hero-bg.jpg"
-            alt="Live performance at an outdoor venue in Montego Bay"
-            fill
-            priority
-            className="object-cover object-center"
-            sizes="(max-width: 768px) 100vw, 50vw"
-          />
-          <SpeakerRings ground="photo" size={120} className="absolute right-2 top-2" />
+          <div className={styles.heroBody}>
+            <div className="min-w-0">
+              <p className="type-lead max-w-[28ch]">Independent reggae and dancehall.</p>
+              <p className="type-body text-muted mt-3 max-w-[28ch]">We sign artists, not sounds.</p>
+              <LinkButton href="/artists" variant="primary" ground="black" className="mt-7">
+                Hear the roster
+              </LinkButton>
+            </div>
+            <figure className="min-w-0">
+              <div className="relative aspect-[16/8] sm:aspect-[16/7] bg-yellow">
+                <PrintedPhoto
+                  tone="yellow"
+                  src="/hero-bg.jpg"
+                  alt="Live performance at an outdoor venue in Montego Bay"
+                  fill
+                  priority
+                  className="object-cover object-[50%_58%]"
+                  sizes="(max-width: 767px) 100vw, 750px"
+                />
+              </div>
+              <figcaption className="type-small text-muted mt-3">One Flame Records. Montego Bay, Jamaica.</figcaption>
+            </figure>
+          </div>
         </div>
       </section>
 
-      {/* Real music leads discovery; thumbnails stay unprinted. */}
-      {videos && videos.length > 0 && (
-        <section className="bg-black">
-          <div className="mx-auto max-w-6xl px-4 sm:px-6 py-14 sm:py-[88px]">
-            <div className={videos.length === 1 ? "grid gap-8 lg:grid-cols-[0.65fr_1.35fr] lg:items-center" : ""}>
+      {leadVideo && (
+        <section id="music" className="bg-red text-paper" aria-labelledby="featured-video-title">
+          <div className="mx-auto max-w-6xl px-4 sm:px-6 py-12 sm:py-16">
+            <div className="grid gap-8 lg:grid-cols-[0.8fr_1.4fr] lg:items-center">
               <div className="min-w-0">
-                <SectionHeader
-                  title="Latest videos"
-                  action={
-                    <Link href="/videos" className="type-label text-yellow underline underline-offset-4 focus-on-black">
-                      All videos
-                    </Link>
+                <p className="type-label mb-5">Latest video</p>
+                <h2 id="featured-video-title" className={`${tooLong(leadVideo.title) ? "type-title" : "type-headline"} [overflow-wrap:anywhere]`}>
+                  {leadVideo.title}
+                </h2>
+                {leadVideo.artists?.stage_name && <p className="type-lead mt-5">{leadVideo.artists.stage_name}</p>}
+                <Link href="/videos" className="inline-flex items-center min-h-[46px] mt-6 type-label underline underline-offset-4 focus-on-red hover:decoration-yellow hover:decoration-2">
+                  All videos
+                </Link>
+              </div>
+              <div className="min-w-0 border-4 border-black bg-black">
+                <VideoEmbed
+                  youtube_id={leadVideo.youtube_id}
+                  storage_url={leadVideo.storage_url}
+                  title={leadVideo.title}
+                  artist_name={leadVideo.artists?.stage_name ?? ""}
+                  priority
+                  showCaption={false}
+                  poster={
+                    leadVideo.storage_url?.endsWith("/videos/ac45c5ce-9554-45cc-9c4f-cbe756dd47cb.mp4")
+                      ? "/speechless-kahlic-poster.jpg"
+                      : undefined
                   }
                 />
-                {videos.length === 1 && (
-                  <div className="mt-6 border-l-4 border-yellow pl-4">
-                    <p className="type-title text-paper [overflow-wrap:anywhere]">{videos[0].title}</p>
-                    <p className="type-body text-muted mt-2">{videos[0].artists?.stage_name ?? ""}</p>
-                  </div>
-                )}
-              </div>
-              <div
-                className={`grid grid-cols-1 gap-2 md:gap-4 ${
-                  videos.length === 1
-                    ? "w-full min-w-0"
-                    : videos.length === 2
-                      ? "md:grid-cols-2"
-                      : "md:grid-cols-3"
-                }`}
-              >
-                {videos.map((video, i) => (
-                  <VideoEmbed
-                    key={video.id}
-                    youtube_id={video.youtube_id}
-                    storage_url={video.storage_url}
-                    title={video.title}
-                    artist_name={video.artists?.stage_name ?? ""}
-                    priority={i === 0}
-                    showCaption={videos.length !== 1}
-                    poster={
-                      video.storage_url?.endsWith("/videos/ac45c5ce-9554-45cc-9c4f-cbe756dd47cb.mp4")
-                        ? "/speechless-kahlic-poster.jpg"
-                        : undefined
-                    }
-                  />
-                ))}
               </div>
             </div>
+            {moreVideos.length > 0 && (
+              <div className="grid sm:grid-cols-2 gap-6 mt-10 p-4 bg-black">
+                {moreVideos.map(video => (
+                  <VideoEmbed key={video.id} youtube_id={video.youtube_id} storage_url={video.storage_url}
+                    title={video.title} artist_name={video.artists?.stage_name ?? ""} />
+                ))}
+              </div>
+            )}
           </div>
         </section>
       )}
 
-      {/* The complete featured roster remains available in one native scroller. */}
       {featuredArtists && featuredArtists.length > 0 && (
-        <section className="bg-black">
-          <div className="mx-auto max-w-6xl px-4 sm:px-6 py-14 sm:py-[88px]">
-            <SectionHeader
-              title="The roster"
-              action={
-                <Link href="/artists" className="type-label text-yellow underline underline-offset-4 focus-on-black">
-                  All artists
-                </Link>
-              }
-            />
-            <p id="roster-help" className="type-body-sm text-muted mb-4">
-              Scroll through the roster, or open All artists for the full line-up.
-            </p>
-            <div
-              role="region"
-              aria-label="Featured artists"
-              aria-describedby="roster-help"
-              tabIndex={0}
-              className="grid grid-flow-col auto-cols-[calc((100%_-_0.5rem)/2)] lg:auto-cols-[calc((100%_-_1.5rem)/4)] gap-2 overflow-x-auto pb-4 focus-on-black"
-            >
-              {featuredArtists.map((artist, i) => (
-                <ArtistCard
-                  key={artist.id}
-                  index={i}
-                  slug={artist.slug}
-                  stage_name={artist.stage_name}
-                  photo_url={artist.photo_url}
-                  hometown={artist.hometown}
-                />
-              ))}
+        <section className="bg-black text-paper" aria-labelledby="roster-title">
+          <div className="mx-auto max-w-6xl px-4 sm:px-6 py-14 sm:py-[88px] grid gap-8 lg:grid-cols-[0.65fr_1.55fr]">
+            <div className="min-w-0">
+              <h2 id="roster-title" className="type-headline">The roster</h2>
+              <span className="section-bar mt-3" aria-hidden="true" />
+              <Link href="/artists" className="inline-flex items-center min-h-[46px] mt-5 type-label text-yellow underline underline-offset-4 focus-on-black hover:text-paper">
+                All artists
+              </Link>
             </div>
+            <ul className="grid min-[375px]:grid-cols-2 gap-x-5 sm:gap-x-8 min-w-0" aria-label="Featured artists">
+              {featuredArtists.map(artist => (
+                <li key={artist.id} className="min-w-0 border-t-2 border-line">
+                  <Link href={`/artists/${artist.slug}`} className="group flex min-h-[88px] sm:min-h-[104px] items-center gap-4 py-4 focus-on-black hover:text-yellow">
+                    {artist.photo_url && (
+                      <div className="relative w-16 h-16 shrink-0 bg-yellow">
+                        <PrintedPhoto tone="yellow" src={artist.photo_url} alt="" fill className="object-cover" sizes="64px" />
+                      </div>
+                    )}
+                    <span className="block min-w-0">
+                      <span className={`block font-poster font-extrabold uppercase ${styles.rosterName}`}>{artist.stage_name}</span>
+                      {artist.hometown && <span className="block type-small text-muted mt-2">{artist.hometown}</span>}
+                    </span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
           </div>
         </section>
       )}
@@ -298,40 +289,36 @@ export default async function HomePage() {
         </section>
       )}
 
-      {/* ── Flames Lounge: red block. No real Lounge photos yet, so type and rings only ── */}
       <GrilleBand orientation="horizontal" holes="yellow" />
-      <section className="bg-red text-paper">
-        <div className="mx-auto max-w-6xl grid md:grid-cols-2">
-          <div className="min-w-0 px-4 sm:px-6 py-14 sm:py-[88px] grid gap-4 content-start">
-            <h2 className="type-headline [overflow-wrap:anywhere]">Flames Lounge</h2>
-            <p className="type-body font-medium max-w-[46ch]">
-              Outdoor studio, gaming, Jamaican food and a bar. Walk-in welcome, no reservation needed.
-            </p>
-            <div>
-              <LinkButton href="/flames-lounge" variant="primary" ground="red" className="mt-2">
-                Visit the Lounge
-              </LinkButton>
-            </div>
+      <section aria-labelledby="lounge-title" className="grid lg:grid-cols-2">
+        <div className="bg-yellow text-black">
+          <div className={`px-4 sm:px-6 py-12 sm:py-16 ${styles.loungeLeft}`}>
+            <h2 id="lounge-title" className={`font-poster font-black uppercase ${styles.loungeTitle}`}>
+              <span className="block">Flames</span><span className="block">Lounge.</span>
+            </h2>
+            <p className="type-body mt-6 max-w-[30ch]">Walk-in welcome, no reservation needed.</p>
+            <LinkButton href="/flames-lounge" variant="outline" ground="yellow" className="mt-7">Visit the Lounge</LinkButton>
           </div>
-          <div className="hidden md:grid place-items-center px-6 py-10">
-            <SpeakerRings ground="red" size={190} />
+        </div>
+        <div className="bg-red text-paper">
+          <div className={`px-4 sm:px-6 py-10 sm:py-16 ${styles.loungeRight}`}>
+            <ul aria-label="At Flames Lounge" className="divide-y-2 divide-paper/30">
+              {["Outdoor studio", "Gaming", "Jamaican food", "Bar"].map(offering => (
+                <li key={offering} className="py-5 first:pt-0 last:pb-0 type-title">{offering}</li>
+              ))}
+            </ul>
           </div>
         </div>
       </section>
 
-      {/* ── Sign with One Flame: the form block on paper ── */}
-      <section className="bg-paper text-black border-b-4 border-black">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 py-14 sm:py-[88px] grid gap-6 md:grid-cols-2 md:items-end">
-          <div className="min-w-0">
-            <h2 className="type-headline [overflow-wrap:anywhere]">Sign with One Flame.</h2>
-            <span aria-hidden="true" className="section-bar mt-2" />
-            <p className="type-body mt-4 max-w-[46ch]">
-              You keep your publishing. We handle the platform.
-            </p>
-          </div>
-          <div className="min-w-0 md:justify-self-end">
-            {/* The footer directly below carries the newsletter form, so this block holds only the sign-up action. */}
-            <LinkButton href="/sign" variant="dark" ground="paper">Sign with us</LinkButton>
+      <section className="bg-black text-paper" aria-labelledby="join-title">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 py-14 sm:py-[88px] grid gap-8 md:grid-cols-[1.3fr_0.7fr] md:items-end">
+          <h2 id="join-title" className={`font-poster font-black uppercase ${styles.joinTitle}`}>
+            Sign with<br /><span className="text-yellow">One Flame.</span>
+          </h2>
+          <div className="min-w-0 md:pb-2">
+            <p className="type-lead max-w-[28ch]">You keep your publishing. We handle the platform.</p>
+            <LinkButton href="/sign" variant="primary" ground="black" className="mt-7">Sign with us</LinkButton>
           </div>
         </div>
       </section>
