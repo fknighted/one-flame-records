@@ -1,3 +1,7 @@
+## Updated design skills trial — November 14, 2026, local only
+
+The homepage candidate brings the published Speechless video ahead of the roster, uses a real still from that upload, and keeps all nine artist links in a compact keyboard-accessible row. Sound System branding and public-data logic remain. Independent review, types/lint and six-width image/overflow checks passed. This is a local design comparison, not a release or a measured listening improvement. [Report and comparison](audits/2026-11-14-design-trial/report.md). Acceptance and any continuation remain in [the root ledger](../../../Delegations/try-updated-design-skills-on-the-one-flame-homepage-with-a-l.md). Main pushes deploy; the trial's project source checkpoint is local only.
+
 ## Remaining Humanizer wording — live November 11, 2026
 
 5 approved interface wording proposals (H23, H24, H25, H26, H28) are published on the existing service/site. Behavior, prices and safeguards are preserved. [Release, checks and limits](</Users/frankknight/Claude OS/Projects/campaign-workbench/docs/session-handoffs/2026-11-11-remaining-humanizer-live-release.md>). The root Humanizer release work record owns acceptance. Preserve unrelated work.

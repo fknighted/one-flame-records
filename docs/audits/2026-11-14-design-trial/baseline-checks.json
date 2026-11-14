@@ -1,0 +1,63 @@
+{
+  "findings": [],
+  "fonts": "loaded",
+  "images": [
+    {
+      "box": {
+        "height": 40,
+        "left": 16,
+        "right": 105,
+        "top": 15,
+        "width": 89
+      },
+      "element": "img",
+      "state": "loaded"
+    },
+    {
+      "box": {
+        "height": 220,
+        "left": 0,
+        "right": 390,
+        "top": 440,
+        "width": 390
+      },
+      "element": "img",
+      "state": "loaded"
+    },
+    {
+      "box": {
+        "height": 32,
+        "left": 43,
+        "right": 62,
+        "top": 492,
+        "width": 19
+      },
+      "element": "img",
+      "state": "loaded"
+    },
+    {
+      "box": {
+        "height": 96,
+        "left": 16,
+        "right": 89,
+        "top": 3131,
+        "width": 73
+      },
+      "element": "img",
+      "state": "loaded"
+    }
+  ],
+  "limits": [
+    "Current document only; no shadow roots or iframe contents.",
+    "No background-image, canvas, video, contrast, overlap, keyboard or screen-reader test.",
+    "Pending and lazy images need another check after scrolling and loading.",
+    "Overflow candidates require inspection; intentional off-canvas content may appear."
+  ],
+  "overflowCandidates": [],
+  "overflowCandidatesTruncated": false,
+  "readyState": "complete",
+  "viewport": {
+    "height": 844,
+    "width": 390
+  }
+}

@@ -1,0 +1,424 @@
+[
+  {
+    "findings": [],
+    "fonts": "loaded",
+    "images": [
+      {
+        "box": {
+          "height": 40,
+          "left": 16,
+          "right": 105,
+          "top": 15,
+          "width": 89
+        },
+        "element": "img",
+        "state": "loaded"
+      },
+      {
+        "box": {
+          "height": 220,
+          "left": 0,
+          "right": 320,
+          "top": -2041,
+          "width": 320
+        },
+        "element": "img",
+        "state": "loaded"
+      },
+      {
+        "box": {
+          "height": 32,
+          "left": 43,
+          "right": 62,
+          "top": -1989,
+          "width": 19
+        },
+        "element": "img",
+        "state": "loaded"
+      },
+      {
+        "box": {
+          "height": 96,
+          "left": 16,
+          "right": 89,
+          "top": 188,
+          "width": 73
+        },
+        "element": "img",
+        "state": "loaded"
+      }
+    ],
+    "limits": [
+      "Current document only; no shadow roots or iframe contents.",
+      "No background-image, canvas, video, contrast, overlap, keyboard or screen-reader test.",
+      "Pending and lazy images need another check after scrolling and loading.",
+      "Overflow candidates require inspection; intentional off-canvas content may appear."
+    ],
+    "overflowCandidates": [],
+    "overflowCandidatesTruncated": false,
+    "readyState": "complete",
+    "viewport": {
+      "height": 844,
+      "width": 320
+    }
+  },
+  {
+    "findings": [],
+    "fonts": "loaded",
+    "images": [
+      {
+        "box": {
+          "height": 40,
+          "left": 16,
+          "right": 105,
+          "top": 15,
+          "width": 89
+        },
+        "element": "img",
+        "state": "loaded"
+      },
+      {
+        "box": {
+          "height": 220,
+          "left": 0,
+          "right": 390,
+          "top": -2002,
+          "width": 390
+        },
+        "element": "img",
+        "state": "loaded"
+      },
+      {
+        "box": {
+          "height": 32,
+          "left": 43,
+          "right": 62,
+          "top": -1950,
+          "width": 19
+        },
+        "element": "img",
+        "state": "loaded"
+      },
+      {
+        "box": {
+          "height": 96,
+          "left": 16,
+          "right": 89,
+          "top": 134,
+          "width": 73
+        },
+        "element": "img",
+        "state": "loaded"
+      }
+    ],
+    "limits": [
+      "Current document only; no shadow roots or iframe contents.",
+      "No background-image, canvas, video, contrast, overlap, keyboard or screen-reader test.",
+      "Pending and lazy images need another check after scrolling and loading.",
+      "Overflow candidates require inspection; intentional off-canvas content may appear."
+    ],
+    "overflowCandidates": [],
+    "overflowCandidatesTruncated": false,
+    "readyState": "complete",
+    "viewport": {
+      "height": 844,
+      "width": 390
+    }
+  },
+  {
+    "findings": [],
+    "fonts": "loaded",
+    "images": [
+      {
+        "box": {
+          "height": 40,
+          "left": 24,
+          "right": 113,
+          "top": 15,
+          "width": 89
+        },
+        "element": "img",
+        "state": "loaded"
+      },
+      {
+        "box": {
+          "height": 434,
+          "left": 411,
+          "right": 768,
+          "top": -2279,
+          "width": 357
+        },
+        "element": "img",
+        "state": "loaded"
+      },
+      {
+        "box": {
+          "height": 32,
+          "left": 453,
+          "right": 472,
+          "top": -2228,
+          "width": 19
+        },
+        "element": "img",
+        "state": "loaded"
+      },
+      {
+        "box": {
+          "height": 75,
+          "left": 554,
+          "right": 598,
+          "top": -191,
+          "width": 44
+        },
+        "element": "img",
+        "state": "loaded"
+      },
+      {
+        "box": {
+          "height": 112,
+          "left": 24,
+          "right": 109,
+          "top": 663,
+          "width": 85
+        },
+        "element": "img",
+        "state": "loaded"
+      }
+    ],
+    "limits": [
+      "Current document only; no shadow roots or iframe contents.",
+      "No background-image, canvas, video, contrast, overlap, keyboard or screen-reader test.",
+      "Pending and lazy images need another check after scrolling and loading.",
+      "Overflow candidates require inspection; intentional off-canvas content may appear."
+    ],
+    "overflowCandidates": [],
+    "overflowCandidatesTruncated": false,
+    "readyState": "complete",
+    "viewport": {
+      "height": 1024,
+      "width": 768
+    }
+  },
+  {
+    "findings": [],
+    "fonts": "loaded",
+    "images": [
+      {
+        "box": {
+          "height": 48,
+          "left": 88,
+          "right": 195,
+          "top": 12,
+          "width": 107
+        },
+        "element": "img",
+        "state": "loaded"
+      },
+      {
+        "box": {
+          "height": 540,
+          "left": 685,
+          "right": 1280,
+          "top": -2277,
+          "width": 595
+        },
+        "element": "img",
+        "state": "loaded"
+      },
+      {
+        "box": {
+          "height": 32,
+          "left": 727,
+          "right": 746,
+          "top": -2226,
+          "width": 19
+        },
+        "element": "img",
+        "state": "loaded"
+      },
+      {
+        "box": {
+          "height": 75,
+          "left": 906,
+          "right": 950,
+          "top": -359,
+          "width": 44
+        },
+        "element": "img",
+        "state": "loaded"
+      },
+      {
+        "box": {
+          "height": 112,
+          "left": 88,
+          "right": 173,
+          "top": 485,
+          "width": 85
+        },
+        "element": "img",
+        "state": "loaded"
+      }
+    ],
+    "limits": [
+      "Current document only; no shadow roots or iframe contents.",
+      "No background-image, canvas, video, contrast, overlap, keyboard or screen-reader test.",
+      "Pending and lazy images need another check after scrolling and loading.",
+      "Overflow candidates require inspection; intentional off-canvas content may appear."
+    ],
+    "overflowCandidates": [],
+    "overflowCandidatesTruncated": false,
+    "readyState": "complete",
+    "viewport": {
+      "height": 800,
+      "width": 1280
+    }
+  },
+  {
+    "findings": [],
+    "fonts": "loaded",
+    "images": [
+      {
+        "box": {
+          "height": 48,
+          "left": 168,
+          "right": 275,
+          "top": 12,
+          "width": 107
+        },
+        "element": "img",
+        "state": "loaded"
+      },
+      {
+        "box": {
+          "height": 448,
+          "left": 770,
+          "right": 1440,
+          "top": -2131,
+          "width": 670
+        },
+        "element": "img",
+        "state": "loaded"
+      },
+      {
+        "box": {
+          "height": 32,
+          "left": 813,
+          "right": 832,
+          "top": -2079,
+          "width": 19
+        },
+        "element": "img",
+        "state": "loaded"
+      },
+      {
+        "box": {
+          "height": 75,
+          "left": 986,
+          "right": 1030,
+          "top": -305,
+          "width": 44
+        },
+        "element": "img",
+        "state": "loaded"
+      },
+      {
+        "box": {
+          "height": 112,
+          "left": 168,
+          "right": 253,
+          "top": 539,
+          "width": 85
+        },
+        "element": "img",
+        "state": "loaded"
+      }
+    ],
+    "limits": [
+      "Current document only; no shadow roots or iframe contents.",
+      "No background-image, canvas, video, contrast, overlap, keyboard or screen-reader test.",
+      "Pending and lazy images need another check after scrolling and loading.",
+      "Overflow candidates require inspection; intentional off-canvas content may appear."
+    ],
+    "overflowCandidates": [],
+    "overflowCandidatesTruncated": false,
+    "readyState": "complete",
+    "viewport": {
+      "height": 900,
+      "width": 1440
+    }
+  },
+  {
+    "findings": [],
+    "fonts": "loaded",
+    "images": [
+      {
+        "box": {
+          "height": 48,
+          "left": 408,
+          "right": 515,
+          "top": 12,
+          "width": 107
+        },
+        "element": "img",
+        "state": "loaded"
+      },
+      {
+        "box": {
+          "height": 448,
+          "left": 1027,
+          "right": 1920,
+          "top": -1951,
+          "width": 893
+        },
+        "element": "img",
+        "state": "loaded"
+      },
+      {
+        "box": {
+          "height": 32,
+          "left": 1069,
+          "right": 1088,
+          "top": -1899,
+          "width": 19
+        },
+        "element": "img",
+        "state": "loaded"
+      },
+      {
+        "box": {
+          "height": 75,
+          "left": 1226,
+          "right": 1270,
+          "top": -125,
+          "width": 44
+        },
+        "element": "img",
+        "state": "loaded"
+      },
+      {
+        "box": {
+          "height": 112,
+          "left": 408,
+          "right": 493,
+          "top": 719,
+          "width": 85
+        },
+        "element": "img",
+        "state": "loaded"
+      }
+    ],
+    "limits": [
+      "Current document only; no shadow roots or iframe contents.",
+      "No background-image, canvas, video, contrast, overlap, keyboard or screen-reader test.",
+      "Pending and lazy images need another check after scrolling and loading.",
+      "Overflow candidates require inspection; intentional off-canvas content may appear."
+    ],
+    "overflowCandidates": [],
+    "overflowCandidatesTruncated": false,
+    "readyState": "complete",
+    "viewport": {
+      "height": 1080,
+      "width": 1920
+    }
+  }
+]

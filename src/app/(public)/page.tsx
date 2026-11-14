@@ -124,7 +124,59 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ── The roster: colour tiles ── */}
+      {/* Real music leads discovery; thumbnails stay unprinted. */}
+      {videos && videos.length > 0 && (
+        <section className="bg-black">
+          <div className="mx-auto max-w-6xl px-4 sm:px-6 py-14 sm:py-[88px]">
+            <div className={videos.length === 1 ? "grid gap-8 lg:grid-cols-[0.65fr_1.35fr] lg:items-center" : ""}>
+              <div className="min-w-0">
+                <SectionHeader
+                  title="Latest videos"
+                  action={
+                    <Link href="/videos" className="type-label text-yellow underline underline-offset-4 focus-on-black">
+                      All videos
+                    </Link>
+                  }
+                />
+                {videos.length === 1 && (
+                  <div className="mt-6 border-l-4 border-yellow pl-4">
+                    <p className="type-title text-paper [overflow-wrap:anywhere]">{videos[0].title}</p>
+                    <p className="type-body text-muted mt-2">{videos[0].artists?.stage_name ?? ""}</p>
+                  </div>
+                )}
+              </div>
+              <div
+                className={`grid grid-cols-1 gap-2 md:gap-4 ${
+                  videos.length === 1
+                    ? "w-full min-w-0"
+                    : videos.length === 2
+                      ? "md:grid-cols-2"
+                      : "md:grid-cols-3"
+                }`}
+              >
+                {videos.map((video, i) => (
+                  <VideoEmbed
+                    key={video.id}
+                    youtube_id={video.youtube_id}
+                    storage_url={video.storage_url}
+                    title={video.title}
+                    artist_name={video.artists?.stage_name ?? ""}
+                    priority={i === 0}
+                    showCaption={videos.length !== 1}
+                    poster={
+                      video.storage_url?.endsWith("/videos/ac45c5ce-9554-45cc-9c4f-cbe756dd47cb.mp4")
+                        ? "/speechless-kahlic-poster.jpg"
+                        : undefined
+                    }
+                  />
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* The complete featured roster remains available in one native scroller. */}
       {featuredArtists && featuredArtists.length > 0 && (
         <section className="bg-black">
           <div className="mx-auto max-w-6xl px-4 sm:px-6 py-14 sm:py-[88px]">
@@ -136,7 +188,16 @@ export default async function HomePage() {
                 </Link>
               }
             />
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 [&>*:last-child:nth-child(odd)]:col-span-2 [&>*:last-child:nth-child(odd)]:aspect-[2/1] lg:[&>*:last-child:nth-child(odd)]:col-span-1 lg:[&>*:last-child:nth-child(odd)]:aspect-square">
+            <p id="roster-help" className="type-body-sm text-muted mb-4">
+              Scroll through the roster, or open All artists for the full line-up.
+            </p>
+            <div
+              role="region"
+              aria-label="Featured artists"
+              aria-describedby="roster-help"
+              tabIndex={0}
+              className="grid grid-flow-col auto-cols-[calc((100%_-_0.5rem)/2)] lg:auto-cols-[calc((100%_-_1.5rem)/4)] gap-2 overflow-x-auto pb-4 focus-on-black"
+            >
               {featuredArtists.map((artist, i) => (
                 <ArtistCard
                   key={artist.id}
@@ -181,42 +242,6 @@ export default async function HomePage() {
                   </div>
                 ))}
               </div>
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* ── Videos: thumbnails stay unprinted ── */}
-      {videos && videos.length > 0 && (
-        <section className="bg-black">
-          <div className="mx-auto max-w-6xl px-4 sm:px-6 py-14 sm:py-[88px] [.bg-black+.bg-black_&]:pt-0 sm:[.bg-black+.bg-black_&]:pt-0">
-            <SectionHeader
-              title="Latest videos"
-              action={
-                <Link href="/videos" className="type-label text-yellow underline underline-offset-4 focus-on-black">
-                  All videos
-                </Link>
-              }
-            />
-            <div
-              className={`grid grid-cols-1 gap-2 md:gap-4 ${
-                videos.length === 1
-                  ? "max-w-3xl"
-                  : videos.length === 2
-                    ? "md:grid-cols-2"
-                    : "md:grid-cols-3"
-              }`}
-            >
-              {videos.map((video, i) => (
-                <VideoEmbed
-                  key={video.id}
-                  youtube_id={video.youtube_id}
-                  storage_url={video.storage_url}
-                  title={video.title}
-                  artist_name={video.artists?.stage_name ?? ""}
-                  priority={i === 0}
-                />
-              ))}
             </div>
           </div>
         </section>

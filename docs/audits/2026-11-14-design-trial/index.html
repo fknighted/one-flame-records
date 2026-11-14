@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>One Flame — before and after</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#0f0d0b;color:#fff7e6;font:16px/1.5 system-ui,sans-serif}main{max-width:1600px;margin:auto;padding:24px}h1{font-size:clamp(26px,4vw,42px);line-height:1.1;margin:8px 0 16px}p{max-width:76ch;color:#d8ccb4}button,a{font:inherit}button{padding:10px 18px;background:transparent;color:#fff7e6;border:2px solid #f2c230;cursor:pointer}button[aria-pressed=true]{background:#f2c230;color:#0f0d0b}a{color:#f2c230}button:focus-visible,a:focus-visible,.view:focus-visible{outline:3px solid #fff7e6;outline-offset:4px}.controls{display:flex;gap:8px;flex-wrap:wrap;margin:22px 0}.comparison{display:grid;grid-template-columns:1fr 1fr;gap:20px}.comparison h2{font-size:18px;margin:0 0 8px}.view{height:70vh;overflow:auto;border:1px solid #d8ccb4;background:#16130f}img{display:block;width:100%;height:auto}.phone img{max-width:390px;margin:auto}.note{font-size:14px;margin-top:8px}.status{color:#f2c230}@media(max-width:650px){main{padding:16px}.comparison{grid-template-columns:1fr}.view{height:60vh}}
+</style>
+<main>
+<p class="status">LOCAL DESIGN TRIAL · NOT PUBLISHED</p>
+<h1>One Flame, with the music up front.</h1>
+<p>The same brand and public catalogue. The trial moves the published video ahead of the roster, adds a real still from “Speechless”, and keeps all nine artists in a compact browsing row.</p>
+<div class="controls" aria-label="Comparison size"><button id="desktop" aria-pressed="true">Desktop</button><button id="phone" aria-pressed="false">Phone</button><a href="http://127.0.0.1:3196/" style="padding:12px">Open the working preview</a></div>
+<div class="comparison" id="comparison">
+<section><h2>Before</h2><div class="view" tabindex="0" role="region" aria-label="Before screenshot"><img id="before" src="before-desktop.jpg" alt="Original One Flame homepage, with the artist grid before the video" width="1440" height="3701"></div></section>
+<section><h2>After</h2><div class="view" tabindex="0" role="region" aria-label="After screenshot"><img id="after" src="after-1440.jpg" alt="Trial One Flame homepage, with Speechless featured before a compact artist row" width="1440" height="3107"></div></section>
+</div>
+<p class="note" id="size-note">Both screenshots were captured at 1440 pixels wide. Scroll each panel to compare the complete pages.</p>
+<p class="note">The roster remains keyboard accessible. Image and page-overflow checks passed at 320, 390, 768, 1280, 1440 and 1920 pixels. This is a design trial, not a measured improvement in listening or sign-ups.</p>
+</main>
+<script>
+const before=document.getElementById('before'),after=document.getElementById('after');
+for(const mode of ['desktop','phone']) document.getElementById(mode).addEventListener('click',()=>{
+ const phone=mode==='phone';document.getElementById('comparison').classList.toggle('phone',phone);
+ before.src=phone?'before-phone.jpg':'before-desktop.jpg';after.src=phone?'after-390.jpg':'after-1440.jpg';
+ before.width=after.width=phone?390:1440;before.height=phone?3840:3701;after.height=phone?3285:3107;
+ document.getElementById('desktop').setAttribute('aria-pressed',String(!phone));document.getElementById('phone').setAttribute('aria-pressed',String(phone));
+ for(const panel of document.querySelectorAll('.view')) panel.scrollTop=0;
+ document.getElementById('size-note').textContent=`Both screenshots were captured at ${phone?'390':'1440'} pixels wide. Scroll each panel to compare the complete pages.`;
+});
+</script>
+</html>

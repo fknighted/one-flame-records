@@ -9,9 +9,13 @@ type Props = {
   title: string;
   artist_name: string;
   priority?: boolean;
+  /** Optional still from this exact uploaded video; never an unrelated photo. */
+  poster?: string;
+  /** Editorial layouts may put the same title and artist beside the player. */
+  showCaption?: boolean;
 };
 
-export default function VideoEmbed({ youtube_id, storage_url, title, artist_name, priority = false }: Props) {
+export default function VideoEmbed({ youtube_id, storage_url, title, artist_name, priority = false, poster, showCaption = true }: Props) {
   const [playing, setPlaying] = useState(false);
 
   // Direct upload — native video element
@@ -22,15 +26,18 @@ export default function VideoEmbed({ youtube_id, storage_url, title, artist_name
           <video
             aria-label={`${title} — ${artist_name}`}
             src={storage_url}
+            poster={poster}
             controls
             preload="metadata"
             className="w-full h-full focus-on-black"
           />
         </div>
-        <div className="mt-2.5">
-          <p className="type-title-sm text-paper line-clamp-2 [overflow-wrap:anywhere]">{title}</p>
-          <p className="mt-1 type-small text-muted">{artist_name}</p>
-        </div>
+        {showCaption && (
+          <div className="mt-2.5">
+            <p className="type-title-sm text-paper line-clamp-2 [overflow-wrap:anywhere]">{title}</p>
+            <p className="mt-1 type-small text-muted">{artist_name}</p>
+          </div>
+        )}
       </div>
     );
   }
@@ -76,10 +83,12 @@ export default function VideoEmbed({ youtube_id, storage_url, title, artist_name
             </button>
           )}
         </div>
-        <div className="mt-2.5">
-          <p className="type-title-sm text-paper line-clamp-2 [overflow-wrap:anywhere]">{title}</p>
-          <p className="mt-1 type-small text-muted">{artist_name}</p>
-        </div>
+        {showCaption && (
+          <div className="mt-2.5">
+            <p className="type-title-sm text-paper line-clamp-2 [overflow-wrap:anywhere]">{title}</p>
+            <p className="mt-1 type-small text-muted">{artist_name}</p>
+          </div>
+        )}
       </div>
     );
   }
