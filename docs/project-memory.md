@@ -66,7 +66,7 @@ Released frozen source is `work/security-release-20261103/stage/`. Parent applic
 
 The first local proposal at `work/security-release-proposal-20261103/candidate/` preserved the complete Fola Village release and applied only the four original security files. It was superseded as proposed source by the newer-warning refresh above. Its locked install, tests, types and build passed, with then-outstanding dependency warnings recorded in its dated receipt. [Proposal receipt](../work/review-files-preserved-20261106/docs/session-handoffs/2026-11-03-security-release-proposal.md) links the exact cross-project plan and existing ledger. No release approved/performed.
 
-Status: November3 security update released over the complete Fola Village baseline; Email Studio/audit repairs retained.
+Status: November 15 approved combined homepage is live; the later public-page consistency candidate is independently reviewed locally only and not published. Current release and candidate receipts above own the exact source and verification limits.
 
 Phase: Operating label, bar and village site; Studio/gamer tools retired.
 
