@@ -60,3 +60,31 @@ was introduced. I found no blocking source or visible layout defect for this tri
 
 The comparison is suitable to show Frank as a local candidate. Publishing and
 production readiness remain separate.
+
+## Final native diagnostic read
+
+The earlier pending-output limitation is superseded for the final raw consistency
+report only: I subsequently read stable `taste-consistency.json` and checked its
+findings against `report.md`. It records 34 failures/13 warnings at 1440px and five
+failures/two warnings at 390px. The separate 320px narrow check adds one fold-cut
+warning, giving aggregate totals of 39 failures/16 warnings. No font findings or
+runtime errors remained. The intermediate-width sweep records no findings.
+
+The report accurately preserves the failed native result. Most findings demand
+Taste's screen-height grid, fixed container lines, visual quotas, motion or common
+button treatment rather than identifying blocked behavior in this brand-adapted
+trial. The 6px footer alignment finding is retained and concerns unchanged shared
+footer content. The disconnected snapshot's unresponsive menu cannot establish a
+failure in the live interactive page.
+
+I also checked the `focus-ring` finding against the source. It matches a shared
+`.focus:outline-none` stylesheet rule, but the homepage and its header, footer and
+player do not use that class. The Partner components containing it also declare
+replacement focus rings. Homepage controls use the existing `focus-on-*` utilities,
+which provide 3px outlines on keyboard focus. This particular static rule match is
+not evidence of a homepage focus defect; it is not a broad accessibility
+certification of Partner or the rest of the app.
+
+This final read does not change the scoped acceptance or remove the performance,
+production-build, screen-reader, delivery and conversion limits above. No native
+Taste gate pass is claimed.
