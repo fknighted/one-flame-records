@@ -1,6 +1,6 @@
 import { createServiceClient } from "@/lib/supabase/server";
 import ArtistCard from "@/components/ArtistCard";
-import SectionHeader from "@/components/SectionHeader";
+import PublicPageIntro from "@/components/PublicPageIntro";
 import EmptyState from "@/components/EmptyState";
 
 export const metadata = {
@@ -26,40 +26,32 @@ export default async function ArtistsPage() {
   const count = artists?.length ?? 0;
 
   return (
-    <section className="bg-black">
-      <div className={`mx-auto max-w-6xl px-4 sm:px-6 py-14 ${count > 0 ? "sm:py-[88px]" : ""}`}>
-        <SectionHeader
-          as="h1"
-          title="The roster"
-          action={
-            count > 0 ? (
-              <p className="type-label text-muted">
-                {count} artist{count !== 1 ? "s" : ""}
-              </p>
-            ) : undefined
-          }
-        />
-        {artists && artists.length > 0 ? (
-          <div className="grid grid-cols-2 gap-2 md:grid-cols-3 lg:grid-cols-4 [&>*:last-child:nth-child(odd)]:col-span-2 [&>*:last-child:nth-child(odd)]:aspect-[2/1] md:[&>*:last-child:nth-child(odd)]:col-span-1 md:[&>*:last-child:nth-child(odd)]:aspect-square">
-            {artists.map((artist, i) => (
-              <ArtistCard
-                key={artist.id}
-                index={i}
-                slug={artist.slug}
-                stage_name={artist.stage_name}
-                photo_url={artist.photo_url}
-                hometown={artist.hometown}
-              />
-            ))}
-          </div>
-        ) : (
-          <EmptyState
-            title="No artists yet."
-            body="We sign artists, not sounds. If the music is rooted, honest and built to last, we want to hear it."
-            action={{ href: "/sign", label: "Sign with us" }}
-          />
-        )}
-      </div>
-    </section>
+    <>
+      <PublicPageIntro title="The roster" action={count > 0 ? <p>{count} artist{count !== 1 ? "s" : ""}</p> : undefined} />
+      <section className="bg-black">
+        <div className={`mx-auto max-w-6xl px-4 sm:px-6 py-14 ${count > 0 ? "sm:py-[88px]" : ""}`}>
+          {artists && artists.length > 0 ? (
+            <div className="grid grid-cols-2 gap-2 md:grid-cols-3 lg:grid-cols-4 [&>*:last-child:nth-child(odd)]:col-span-2 [&>*:last-child:nth-child(odd)]:aspect-[2/1] md:[&>*:last-child:nth-child(odd)]:col-span-1 md:[&>*:last-child:nth-child(odd)]:aspect-square">
+              {artists.map((artist, i) => (
+                <ArtistCard
+                  key={artist.id}
+                  index={i}
+                  slug={artist.slug}
+                  stage_name={artist.stage_name}
+                  photo_url={artist.photo_url}
+                  hometown={artist.hometown}
+                />
+              ))}
+            </div>
+          ) : (
+            <EmptyState
+              title="No artists yet."
+              body="We sign artists, not sounds. If the music is rooted, honest and built to last, we want to hear it."
+              action={{ href: "/sign", label: "Sign with us" }}
+            />
+          )}
+        </div>
+      </section>
+    </>
   );
 }

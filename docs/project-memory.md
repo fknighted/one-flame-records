@@ -1,3 +1,7 @@
+## Public-page design alignment — November 15, 2026, local only
+
+The local candidate aligns six public page openings and the Lounge hero with the approved combined homepage, adds the genuine known-video poster across player uses, and fixes the public confirmation button styling. Existing copy, queries, forms, cards and Fola/Partner/staff identities remain. [Scope, before/after review, checks and limits](audits/2026-11-15-public-consistency/report.md). Local comparison: http://127.0.0.1:3198/. The approved homepage is still live; these further changes are NOT published. Do not push main without publishing authority. [The sole work record](../../../Delegations/match-the-remaining-one-flame-public-pages-to-the-approved-h.md) owns acceptance and continuation.
+
 ## Combined homepage published — November 15, 2026
 
 Frank approved and published the selected combination: first-trial hero/video/artist cards with poster Lounge/signing sections; existing Stay in the Loop form remains. Approved runtime source `02f9eeb8` is saved in GitHub and live at https://www.oneflamerecords.com/. Hosted Node24 build/checks and desktop/phone safe browser checks passed. [Release evidence and limits](audits/2026-11-15-combined-release/report.md); [sole release work record](../../../Delegations/publish-the-approved-combined-one-flame-homepage-and-verify.md). The earlier local-only notes below are history for those trial stages; publishing this approved combination does not approve later redesigns or customer-data changes.

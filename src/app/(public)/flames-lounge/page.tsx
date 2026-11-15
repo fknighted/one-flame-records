@@ -3,7 +3,6 @@ import Link from "next/link";
 import LinkButton from "@/components/LinkButton";
 import LogoMark from "@/components/LogoMark";
 import SectionHeader from "@/components/SectionHeader";
-import SpeakerRings from "@/components/SpeakerRings";
 import EmptyState from "@/components/EmptyState";
 import { buttonClasses } from "@/lib/sound-system";
 import { createServiceClient } from "@/lib/supabase/server";
@@ -202,41 +201,33 @@ export default async function FlamesLoungePage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "<") }}
       />
 
-      {/* Hero: black panel with a yellow rule, red block where a photo will go.
-          No real Lounge photo exists yet; never a stock or generated image. */}
-      <section className="grid lg:grid-cols-[1.1fr_1fr] bg-black">
-        <div className="min-w-0 px-4 sm:px-6 py-10 sm:py-14 grid gap-5 content-start border-b-4 border-yellow lg:border-b-0 lg:border-r-4">
-          <h1 className="type-poster text-paper">
-            Flames
-            <span className="block text-yellow">Lounge</span>
-          </h1>
-          <p className="type-lead text-paper max-w-[40ch]">
-            Montego Bay&apos;s creative space, part of One Flame Records. Walk-in welcome, no reservation needed.
-          </p>
-          <div>
-            {HERO_LIST.map(({ name, note }) => (
-              <div
-                key={name}
-                className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1 py-3 border-b-2 border-line"
-              >
-                <span className="type-title-sm text-paper">{name}</span>
-                <span className="type-small text-muted">{note}</span>
-              </div>
-            ))}
-          </div>
-          <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
-            <a
-              href="https://instagram.com/flamesmobay"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex min-h-[46px] items-center type-label text-yellow underline underline-offset-4 focus-on-black"
-            >
+      {/* Match the approved homepage Lounge: yellow title, red offerings, no invented venue photo. */}
+      <section className="grid lg:grid-cols-2" aria-labelledby="lounge-page-title">
+        <div className="bg-yellow text-black">
+          <div className="min-w-0 px-4 sm:px-6 py-12 sm:py-16 lg:max-w-xl lg:ml-auto lg:pr-12">
+            <h1 id="lounge-page-title" className="font-poster font-black uppercase text-[clamp(72px,9vw,128px)] leading-[0.82] tracking-[-0.01em]">
+              <span className="block">Flames</span><span className="block">Lounge</span>
+            </h1>
+            <p className="type-lead mt-6 max-w-[40ch]">
+              Montego Bay&apos;s creative space, part of One Flame Records. Walk-in welcome, no reservation needed.
+            </p>
+            <a href="https://instagram.com/flamesmobay" target="_blank" rel="noopener noreferrer"
+              className="inline-flex min-h-[46px] items-center mt-6 type-label underline underline-offset-4 focus-on-yellow">
               Follow @flamesmobay on Instagram
             </a>
           </div>
         </div>
-        <div aria-hidden="true" className="relative min-h-[260px] bg-red grid place-items-center overflow-hidden">
-          <SpeakerRings ground="red" size={190} />
+        <div className="bg-red text-paper">
+          <div className="min-w-0 px-4 sm:px-6 py-10 sm:py-16 lg:max-w-xl lg:mr-auto lg:pl-12">
+            <ul className="divide-y-2 divide-paper/30" aria-label="At Flames Lounge">
+              {HERO_LIST.map(({ name, note }) => (
+                <li key={name} className="py-5 first:pt-0 last:pb-0">
+                  <p className="type-title">{name}</p>
+                  <p className="type-body-sm mt-2">{note}</p>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
       </section>
 

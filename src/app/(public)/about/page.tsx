@@ -1,3 +1,4 @@
+import PublicPageIntro from "@/components/PublicPageIntro";
 import type { Metadata } from "next";
 import PosterHeadline from "@/components/PosterHeadline";
 import LinkButton from "@/components/LinkButton";
@@ -12,21 +13,14 @@ export const metadata: Metadata = {
 export default function AboutPage() {
   return (
     <>
-      {/* Opening statement on black */}
-      <section className="bg-black">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 pt-14 pb-10 sm:pt-[88px] sm:pb-14">
-          <PosterHeadline as="h1" size="headline" className="text-paper">
-            One flame is enough.
-          </PosterHeadline>
-          <span aria-hidden="true" className="section-bar mt-2" />
-          <p className="type-lead text-paper mt-6 max-w-[60ch]">
+      <PublicPageIntro title="One flame is enough.">
+        <p>
             One Flame Records is an independent reggae and dancehall label based in
             Montego Bay, Jamaica. We record, release, and represent artists who have
             something real to say — and we do it without asking them to compromise
             what makes them worth hearing.
-          </p>
-        </div>
-      </section>
+        </p>
+      </PublicPageIntro>
 
       {/* Long reading sits on paper */}
       <section className="bg-paper text-black">

@@ -26,7 +26,7 @@ export default function VideoEmbed({ youtube_id, storage_url, title, artist_name
           <video
             aria-label={`${title} — ${artist_name}`}
             src={storage_url}
-            poster={poster}
+            poster={poster ?? (storage_url.endsWith("/videos/ac45c5ce-9554-45cc-9c4f-cbe756dd47cb.mp4") ? "/speechless-kahlic-poster.jpg" : undefined)}
             controls
             preload="metadata"
             className="w-full h-full focus-on-black"

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import ContactForm from "@/components/ContactForm";
-import PosterHeadline from "@/components/PosterHeadline";
+import PublicPageIntro from "@/components/PublicPageIntro";
 
 export const metadata: Metadata = {
   alternates: { canonical: "/contact" },
@@ -11,22 +11,17 @@ export const metadata: Metadata = {
 
 export default function ContactPage() {
   return (
-    <section className="bg-black">
-      <div className="mx-auto max-w-2xl px-4 sm:px-6 py-14 sm:py-[88px]">
-        <div className="mb-10 min-w-0">
-          <PosterHeadline as="h1" size="headline" className="text-paper">
-            Contact
-          </PosterHeadline>
-          <span aria-hidden="true" className="section-bar mt-2" />
-          <p className="type-lead text-paper mt-6 max-w-[60ch]">
+    <>
+      <PublicPageIntro title="Contact"><p>
             For press, sync licensing, or artist submissions — use the form below.
             No attachments needed to start a conversation.
-          </p>
-        </div>
-
+      </p></PublicPageIntro>
+      <section className="bg-black">
+        <div className="mx-auto max-w-2xl px-4 sm:px-6 py-14 sm:py-[88px]">
         {/* ContactForm draws its own paper block */}
         <ContactForm />
       </div>
-    </section>
+      </section>
+    </>
   );
 }

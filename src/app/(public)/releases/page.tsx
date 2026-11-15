@@ -1,10 +1,10 @@
+import PublicPageIntro from "@/components/PublicPageIntro";
 import { assertPublicReads, readAllRows } from "@/lib/public-data";
 import { Suspense } from "react";
 import { unstable_cache } from "next/cache";
 import { createServiceClient } from "@/lib/supabase/server";
 import ReleaseCard from "@/components/ReleaseCard";
 import ReleasesFilter from "@/components/ReleasesFilter";
-import SectionHeader from "@/components/SectionHeader";
 import EmptyState from "@/components/EmptyState";
 import type { Tables } from "@/types/supabase";
 
@@ -70,21 +70,9 @@ export default async function ReleasesPage({ searchParams }: { searchParams: Sea
   return (
     <>
       {/* ── Page banner ── */}
-      <section className="bg-black">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 pt-14 sm:pt-[88px] pb-2">
-          <SectionHeader
-            as="h1"
-            title="Releases"
-            action={
-              <p className="type-small text-muted">
-                {isFiltered
-                  ? `${filteredCount} of ${totalCount}`
-                  : `${totalCount} release${totalCount !== 1 ? "s" : ""}`}
-              </p>
-            }
-          />
-        </div>
-      </section>
+      <PublicPageIntro title="Releases" action={
+        <p>{isFiltered ? `${filteredCount} of ${totalCount}` : `${totalCount} release${totalCount !== 1 ? "s" : ""}`}</p>
+      } />
 
       {/* ── Filter bar ── */}
       <section className="bg-black border-y border-line md:sticky md:top-[76px] z-20">

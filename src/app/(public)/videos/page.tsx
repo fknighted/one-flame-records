@@ -1,3 +1,4 @@
+import PublicPageIntro from "@/components/PublicPageIntro";
 import { assertPublicReads, readAllRows } from "@/lib/public-data";
 import { Suspense } from "react";
 import { unstable_cache } from "next/cache";
@@ -80,11 +81,7 @@ export default async function VideosPage({
   return (
     <>
       {/* ── Page banner ── */}
-      <section className="bg-black">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 pt-14 sm:pt-[88px] pb-2">
-          <SectionHeader as="h1" title="Videos" />
-        </div>
-      </section>
+      <PublicPageIntro title="Videos" />
 
       {/* ── Filter bar ── */}
       <section className="bg-black border-y border-line md:sticky md:top-[76px] z-20">
@@ -102,7 +99,7 @@ export default async function VideosPage({
           <div>
             {jobsWithUrls.length > 0 && <SectionHeader title="Music Videos" />}
             {videos && videos.length > 0 ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-2 gap-y-8">
+              <div className={`grid grid-cols-1 gap-x-2 gap-y-8 ${videos.length === 1 ? "max-w-3xl" : "sm:grid-cols-2 lg:grid-cols-3"}`} >
                 {videos.map((video, i) => (
                   <VideoEmbed
                     key={video.id}

@@ -1,9 +1,9 @@
+import PublicPageIntro from "@/components/PublicPageIntro";
 import { assertPublicReads } from "@/lib/public-data";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { unstable_cache } from "next/cache";
 import { createServiceClient } from "@/lib/supabase/server";
-import SectionHeader from "@/components/SectionHeader";
 import EmptyState from "@/components/EmptyState";
 import LinkButton from "@/components/LinkButton";
 import LogoMark from "@/components/LogoMark";
@@ -64,11 +64,7 @@ export default async function NewsPage({
   return (
     <>
       {/* ── Page banner ── */}
-      <section className="bg-black">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 pt-14 sm:pt-[88px] pb-2">
-          <SectionHeader as="h1" title="News" />
-        </div>
-      </section>
+      <PublicPageIntro title="News" />
 
       {/* ── Posts grid ── */}
       <section className="bg-black">
