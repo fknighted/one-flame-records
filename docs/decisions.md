@@ -719,3 +719,7 @@ Frank requested independent programme branding in every programme email and chos
 ## 2026-11-14 — Shared direction: people helping people to help themselves
 
 Frank: "this is exactly where we're going." One Flame is the creative and community pillar and the media house. Kids' media comes out under **One Flame Studios**, kept apart from bar, venue and gaming branding. Flames Partner should read as members helping each other save, not a product sold to customers. Prefer "member" over "customer" in new wording. Public copy changes still need Frank's exact approval and the normal release step. Record: `/Users/frankknight/Claude OS/Decisions/2026-11-14-people-helping-people-help-themselves.md`.
+
+## 2026-11-14 (later) — One Flame Studios is the production house
+
+Frank: One Flame Studios and KnightOps produce and create the videos for all the businesses. Little Moonhead stays under Frankly Being as its kids' section. This replaces the earlier same-day line that kids' media comes out under One Flame Studios. Flames Partner wording is to be left alone for now.

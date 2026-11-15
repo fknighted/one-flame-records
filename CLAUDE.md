@@ -11,7 +11,7 @@ A web platform for One Flame Records, a Jamaican record label based in Montego B
 3. **The label (admin)** — manage artists, releases, videos, news, and approve new signups via QR application.
 4. **Bartenders** — log in to `/bar` to run the Flames Lounge POS (tabs, menu items, game sessions). Artists can also be bartenders via `profiles.is_bartender = true` flag.
 
-> **Owner direction, 2026-11-14:** One Flame is the creative and community pillar of Frank's shared philosophy, people helping people to help themselves, and his media house. Flames Partner is its clearest example: members helping each other save. Kids' media uses the separate One Flame Studios label (chosen, not yet applied). See `docs/decisions.md` (2026-11-14). No public wording change is approved by this note.
+> **Owner direction, 2026-11-14:** One Flame is the creative and community pillar of Frank's shared philosophy, people helping people to help themselves, and his media house. Flames Partner is its clearest example: members helping each other save. One Flame Studios and KnightOps produce and create the videos for all the businesses. Little Moonhead belongs to Frankly Being as its kids' section. See `docs/decisions.md` (2026-11-14). No public wording change is approved by this note.
 
 > Gamer accounts, the gamer portal and member screens were removed on 2026-10-09 (`docs/decisions.md`). Gaming is walk-in only; the database tables stay.
 
