@@ -1,3 +1,7 @@
+## Combined homepage published — November 15, 2026
+
+Frank approved and published the selected combination: first-trial hero/video/artist cards with poster Lounge/signing sections; existing Stay in the Loop form remains. Approved runtime source `02f9eeb8` is saved in GitHub and live at https://www.oneflamerecords.com/. Hosted Node24 build/checks and desktop/phone safe browser checks passed. [Release evidence and limits](audits/2026-11-15-combined-release/report.md); [sole release work record](../../../Delegations/publish-the-approved-combined-one-flame-homepage-and-verify.md). The earlier local-only notes below are history for those trial stages; publishing this approved combination does not approve later redesigns or customer-data changes.
+
 ## Owner-selected homepage combination — November 15, 2026, local only
 
 The current local candidate uses the exact FIRST TRIAL upper page, video placement and artist-card scroller, plus only the POSTER REDESIGN Lounge and Sign with One Flame sections. Stay in the Loop is the same shared footer/form in both saved versions and remains untouched. Full Taste is not the base. Earlier candidates remain available. [Exact sources, checks and limits](audits/2026-11-14-design-trial/combined/report.md). Actual preview: http://127.0.0.1:3196/; comparison: http://127.0.0.1:3197/. Do not push or publish. The [sole work record](../../../Delegations/combine-one-flame-first-trial-homepage-with-the-selected-pos.md) owns acceptance and continuation. Earlier candidate entries below are historical.
