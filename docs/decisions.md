@@ -715,3 +715,7 @@ Spark is the public application tier. Blaze and Inferno retain their coming-soon
 ## 2026-11-06 — Flames Partner email identity
 
 Frank requested independent programme branding in every programme email and chose the existing technical sending/hosting domain. Keep One Flame's shared accounts/provider while giving programme notices and password reset their own display sender, wording and shell. Use the existing Supabase email codes on programme setup/recovery pages so the shared label password page does not reintroduce its branding. Preserve account roles, service-only limits and attempted-mail payload identities; do not rewrite historical sent messages or provision a domain.
+
+## 2026-11-14 — Shared direction: people helping people to help themselves
+
+Frank: "this is exactly where we're going." One Flame is the creative and community pillar and the media house. Kids' media comes out under **One Flame Studios**, kept apart from bar, venue and gaming branding. Flames Partner should read as members helping each other save, not a product sold to customers. Prefer "member" over "customer" in new wording. Public copy changes still need Frank's exact approval and the normal release step. Record: `/Users/frankknight/Claude OS/Decisions/2026-11-14-people-helping-people-help-themselves.md`.
