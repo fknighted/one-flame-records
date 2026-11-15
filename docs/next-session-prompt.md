@@ -1,3 +1,7 @@
+## Full Taste homepage trial — November 14, 2026, local only
+
+The current local homepage is the fourth design, using the installed Taste film layout and native tools while preserving the One Flame brand. Video leads, the roster sits beside a real performance photo and the Lounge has four offering rows. All earlier versions remain in the local comparison at http://127.0.0.1:3197/; working preview is http://127.0.0.1:3196/. [Results and limits](audits/2026-11-14-design-trial/v3/report.md). Taste’s house-style checker is not green; brand exceptions and diagnostic limits are explicit. Do not push or publish this candidate. Acceptance is owned by [the root work record](../../../Delegations/build-and-compare-a-local-one-flame-version-using-the-full-i.md). Earlier design entries below are history.
+
 ## Substantial local homepage candidate — November 14
 
 Use [the newer design study](audits/2026-11-14-design-trial/v2/report.md), which supersedes the conservative first candidate below. Compare New design/First trial against the original at the local comparison. Frank expressly requested local only before publishing. Preserve the candidate and follow [the current work record](../../../Delegations/create-a-substantial-local-one-flame-homepage-redesign-while.md) for acceptance; no release is authorized.

@@ -8,34 +8,35 @@
 </style>
 <main>
 <p class="status">LOCAL DESIGN TRIAL · NOT PUBLISHED</p>
-<h1>One Flame. A new poster composition.</h1>
-<p>The same colours, lettering, logo and real catalogue. A new location-led opening, red music feature, typographic artist line-up and a split yellow-and-red Lounge section.</p>
-<div class="controls" aria-label="Comparison size"><button id="desktop" aria-pressed="true">Desktop</button><button id="phone" aria-pressed="false">Phone</button><button id="new-design" aria-pressed="true">New design</button><button id="first-trial" aria-pressed="false">First trial</button><a href="http://127.0.0.1:3196/" style="padding:12px">Open the working preview</a></div>
+<h1>One Flame. Four local versions.</h1>
+<p>Compare the original with the first trial, the poster redesign and the full Taste trial. The new Taste version leads with the actual music video, pairs the roster with a real performance photo and gives the Lounge a clear four-part offering.</p>
+<div class="controls" aria-label="Comparison size"><button id="desktop" aria-pressed="true">Desktop</button><button id="phone" aria-pressed="false">Phone</button><button id="taste" aria-pressed="true">Full Taste</button><button id="new-design" aria-pressed="false">Poster redesign</button><button id="first-trial" aria-pressed="false">First trial</button><a href="http://127.0.0.1:3196/" style="padding:12px">Open the working preview</a></div>
 <div class="comparison" id="comparison">
 <section><h2>Before</h2><div class="view" tabindex="0" role="region" aria-label="Before screenshot"><img id="before" src="before-desktop.jpg" alt="Original One Flame homepage, with the artist grid before the video" width="1440" height="3701"></div></section>
-<section><h2 id="after-title">New design</h2><div class="view" tabindex="0" role="region" aria-label="After screenshot"><img id="after" src="v2/after-1440.jpg" alt="New One Flame homepage poster composition with large location lettering, red music feature and typographic roster" width="1440"></div></section>
+<section><h2 id="after-title">Full Taste</h2><div class="view" tabindex="0" role="region" aria-label="After screenshot"><img id="after" src="v3/after-1440.jpg" alt="One Flame Taste film layout with video opening and roster beside a performance photo" width="1440"></div></section>
 </div>
 <p class="note" id="size-note">Both screenshots were captured at 1440 pixels wide. Scroll each panel to compare the complete pages.</p>
-<p class="note">All nine artist links remain available with keyboard access. Image and page-overflow checks passed at 320, 390, 768, 1280, 1440 and 1920 pixels. This is a design trial, not a measured improvement in listening or sign-ups.</p>
+<p class="note">All nine artist links remain available with keyboard access. Image and page-overflow checks passed at 320, 390, 768, 1024, 1280, 1440 and 1920 pixels. This is a design trial, not a measured improvement in listening or sign-ups.</p>
 </main>
 <script>
 const before=document.getElementById('before'),after=document.getElementById('after');
-let phone=false,version='new';
+let phone=false,version='taste';
 function render(){
  document.getElementById('comparison').classList.toggle('phone',phone);
  before.src=phone?'before-phone.jpg':'before-desktop.jpg';
- after.src=version==='new'?`v2/after-${phone?'390':'1440'}.jpg`:(phone?'after-390.jpg':'after-1440.jpg');
+ after.src=version==='taste'?`v3/after-${phone?'390':'1440'}.jpg`:version==='new'?`v2/after-${phone?'390':'1440'}.jpg`:(phone?'after-390.jpg':'after-1440.jpg');
  before.width=after.width=phone?390:1440;before.removeAttribute('height');after.removeAttribute('height');
  document.getElementById('desktop').setAttribute('aria-pressed',String(!phone));
  document.getElementById('phone').setAttribute('aria-pressed',String(phone));
+ document.getElementById('taste').setAttribute('aria-pressed',String(version==='taste'));
  document.getElementById('new-design').setAttribute('aria-pressed',String(version==='new'));
  document.getElementById('first-trial').setAttribute('aria-pressed',String(version==='first'));
- document.getElementById('after-title').textContent=version==='new'?'New design':'First trial';
- after.alt=version==='new'?'New One Flame poster composition':'Earlier conservative One Flame layout trial';
+ document.getElementById('after-title').textContent=version==='taste'?'Full Taste':version==='new'?'Poster redesign':'First trial';
+ after.alt=version==='taste'?'One Flame Taste film layout with video opening and roster beside a performance photo':version==='new'?'New One Flame poster composition':'Earlier conservative One Flame layout trial';
  for(const panel of document.querySelectorAll('.view')) panel.scrollTop=0;
  document.getElementById('size-note').textContent=`Both screenshots were captured at ${phone?'390':'1440'} pixels wide. Scroll each panel to compare the complete pages.`;
 }
 for(const mode of ['desktop','phone'])document.getElementById(mode).addEventListener('click',()=>{phone=mode==='phone';render()});
-for(const [id,value] of [['new-design','new'],['first-trial','first']])document.getElementById(id).addEventListener('click',()=>{version=value;render()});
+for(const [id,value] of [['taste','taste'],['new-design','new'],['first-trial','first']])document.getElementById(id).addEventListener('click',()=>{version=value;render()});
 </script>
 </html>
