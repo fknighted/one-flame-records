@@ -11,3 +11,7 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 ## Brand and design
 
 For brand, colours, type, copy rules and social posts, read `design-system/README.md`. `docs/brand.md` is a short pointer to it.
+
+## Chief of Staff coordination
+
+Read `CLAUDE.md` for this project’s operating rules and the [Chief of Staff coordination procedure](../../Operations/SOPs/chief-of-staff-coordination.md) for cross-project decisions, delegation and chat continuity.

@@ -1,3 +1,5 @@
+> Coordination: [Chief of Staff procedure](../../../Operations/SOPs/chief-of-staff-coordination.md). This project’s current documents own its facts; the root `Delegations/` ledger owns commitments.
+
 ## Public-page design alignment — November 15, 2026, local only
 
 The local candidate aligns six public page openings and the Lounge hero with the approved combined homepage, adds the genuine known-video poster across player uses, and fixes the public confirmation button styling. Existing copy, queries, forms, cards and Fola/Partner/staff identities remain. [Scope, before/after review, checks and limits](audits/2026-11-15-public-consistency/report.md). Local comparison: http://127.0.0.1:3198/. The approved homepage is still live; these further changes are NOT published. Do not push main without publishing authority. [The sole work record](../../../Delegations/match-the-remaining-one-flame-public-pages-to-the-approved-h.md) owns acceptance and continuation.

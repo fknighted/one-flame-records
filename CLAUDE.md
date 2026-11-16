@@ -216,3 +216,7 @@ Current status lives in `docs/next-session-prompt.md`, `docs/project-memory.md` 
 2. Refresh `docs/next-session-prompt.md` with the top priorities for next time.
 3. If a non-obvious architectural decision was made, append an entry to `docs/decisions.md`.
 4. Leave a reviewable diff. Commit, push, hosted migrations and deployment require Frank’s explicit release approval.
+
+## Chief of Staff coordination
+
+Follow the [Chief of Staff coordination procedure](../../Operations/SOPs/chief-of-staff-coordination.md) when coordinating owner decisions, delegations and chat handoffs. Project facts remain in this project’s current owner documents; open commitments remain in the root `Delegations/` ledger.
