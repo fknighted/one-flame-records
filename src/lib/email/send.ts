@@ -7,6 +7,8 @@ interface SendEmailOptions {
   subject: string;
   html: string;
   text: string;
+  /** Provider-side guard: a repeated request with the same key is not sent twice. */
+  idempotencyKey?: string;
 }
 
 export async function sendEmail(
@@ -26,7 +28,7 @@ export async function sendEmail(
       subject: opts.subject,
       html: opts.html,
       text: opts.text,
-    });
+    }, opts.idempotencyKey ? { idempotencyKey: opts.idempotencyKey } : undefined);
 
     if (error) return { error: error.message };
     return {};

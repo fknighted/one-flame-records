@@ -3,6 +3,7 @@
 import { useActionState } from "react";
 import { submitContact, type ContactState } from "@/app/(public)/contact/actions";
 import { FIELD_CLASS, FIELD_LABEL_CLASS, buttonClasses } from "@/lib/sound-system";
+import { ENQUIRY_TYPES } from "@/lib/contact-enquiries";
 
 export default function ContactForm() {
   const [state, action, pending] = useActionState<ContactState, FormData>(
@@ -78,10 +79,9 @@ export default function ContactForm() {
           defaultValue="general"
           className={FIELD_CLASS}
         >
-          <option value="general">General enquiry</option>
-          <option value="press">Press &amp; media</option>
-          <option value="sync">Sync licensing</option>
-          <option value="artist_submission">Artist submission</option>
+          {Object.entries(ENQUIRY_TYPES).map(([value, label]) => (
+            <option key={value} value={value}>{label}</option>
+          ))}
         </select>
       </div>
 

@@ -476,6 +476,13 @@ export type Database = {
         Relationships: []
       }
 
+      contact_enquiries: {
+        Row: { id: string; enquiry_type: string; name: string; email: string; message: string; admin_email_status: string; reply_email_status: string; created_at: string }
+        Insert: { id?: string; enquiry_type: string; name: string; email: string; message: string; admin_email_status?: string; reply_email_status?: string; created_at?: string }
+        Update: { admin_email_status?: string; reply_email_status?: string }
+        Relationships: []
+      }
+
       youtube_upload_requests: { Row: { source:string;record_id:string;request_id:string;status:string;youtube_id:string|null;created_at:string }; Insert: { source:string;record_id:string;request_id?:string;status?:string;youtube_id?:string|null;created_at?:string }; Update: { request_id?:string;status?:string;youtube_id?:string|null }; Relationships:[] }
 
       newsletter_deliveries: { Row: { run_id: string; subscriber_id: string; email: string; status: string; first_attempt_at: string | null; claimed_at: string | null; provider_id: string | null }; Insert: { run_id?: string; subscriber_id?: string; email?: string; status?: string; first_attempt_at?: string | null; claimed_at?: string | null; provider_id?: string | null }; Update: { run_id?: string; subscriber_id?: string; email?: string; status?: string; first_attempt_at?: string | null; claimed_at?: string | null; provider_id?: string | null }; Relationships: [] }

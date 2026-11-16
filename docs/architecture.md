@@ -345,3 +345,11 @@ admin. Never loosen the triggers to make a user-scoped update work.
 Migrations go straight to the live database (there is no staging database). Apply an approved
 migration and verify it **before** pushing code that reads new columns, because a push to `main`
 deploys.
+
+## Contact enquiries — November 16, 2026 (local candidate, not released)
+
+`/contact` offers General enquiry, Studio session, Event, Private hire, Press & media, Sync licensing and Artist submission (`src/lib/contact-enquiries.ts`). After the existing honeypot, validation and per-IP/per-email rate limit, `submitContact` saves the enquiry to `contact_enquiries` with the service client. If the save fails, the sender sees the existing "Failed to send your message" error and no email is sent. After a save, the existing label notification goes to `ADMIN_EMAIL` and one automatic confirmation goes to the sender through `sendEmail` and the editable Email Studio template `contact-confirmation`. Both use provider idempotency keys tied to the enquiry ID. The confirmation never repeats the sender's name or message, so the form cannot be used to relay content to another address. Email results are recorded in `admin_email_status` and `reply_email_status` (`pending`, `sent` = accepted by the provider, `failed`); a failed email after saving does not ask the sender to resend.
+
+Access: row-level security is on. Anonymous users have no table rights. Authenticated users have `SELECT` only, limited by the `contact_enquiries_admin_read` policy to `is_admin()` (administrator role plus the second sign-in step when an authenticator is enrolled). Nobody but the service role can insert, update or delete. The app is single-tenant, so there is no workspace column. `/admin/enquiries` (Community → Enquiries) calls `requireAdmin()` and reads through the signed-in session, so the database rule applies as well.
+
+Release dependency: apply `20261116000001_contact_enquiries.sql` with separate approved migration/release steps **before** deploying the code, otherwise every contact submission fails at the save step. The migration adds one table, two indexes, one policy, and widens the Email Studio template key check; it changes no existing rows. Tests: `scripts/test-contact-enquiries.mjs` (isolated database and mocked provider).
