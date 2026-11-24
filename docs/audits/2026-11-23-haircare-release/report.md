@@ -14,6 +14,10 @@ Node24 type generation, typecheck, full lint and full existing `npm test` passed
 
 ## Publication and verification
 
-At source commit time: prepared for authorized production push; production outcome remains pending. Exact pushed SHA, hosting build/deployment identity, canonical route checks and independent live check will be added to the owning project release receipt after deployment. Git-triggered main push provides the exact GitHub source checkpoint before the host builds it. No extra source-copy/backup workflow or manual database backup was performed.
+Both pages are published. Runtime source `71d9cd72cdc018593b32ab5fc26fd83ee7850e7c` was pushed to owner GitHub main and the remote ref read back. Existing Vercel project produced READY production deployment `dpl_2xGRXGTwEBs8zJD5p3SJqZiPDiXS`; canonical/apex aliases map to that exact Git source. Hosted clean production build passed in51seconds. GitHub checks45299860926 passed clean Node24 install, type generation, types, lint and full existing tests.
+
+Actual public routes https://www.oneflamerecords.com/haircare and https://www.oneflamerecords.com/haircare/styles return200 and render the approved gallery and family page. Desktop1440 and phone390 captures show loaded photos, no overflow and no One Flame body/title/share-site wording. Confirmed services, from-J$3,000 price, phone and address remain. Separate reviewer confirmed loaded images, anchors and contact targets across320/390/768/1440. [Independent live review](independent-review.md). No calls or forms were submitted. Real map-pin accuracy, customer phone delivery, full screen-reader use and field performance remain unverified.
+
+This report and release notes are a documentation-only follow-up. Their runtime source is identical to the reviewed71d9cd72 deployment; the root release ledger records the final documentation build identity after its automatic deployment. No extra backup, manual database export or unrelated runtime release was made.
 
 The sole work record is `/Users/frankknight/Claude OS/Delegations/publish-the-approved-petttrice-hair-care-pages-and-verify-li.md`.

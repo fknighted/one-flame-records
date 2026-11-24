@@ -1,8 +1,8 @@
 > Coordination: [Chief of Staff procedure](../../../Operations/SOPs/chief-of-staff-coordination.md). This project’s current documents own its facts; the root `Delegations/` ledger owns commitments.
 
-## Petttrice publication — November 23, 2026
+## Petttrice pages published — November 23, 2026
 
-Frank authorized publishing both hair-care pages. The scoped release is based on the verified serving source and excludes the unrelated local main-navigation change. [Release preparation/checks](audits/2026-11-23-haircare-release/report.md). Publication outcome is pending at this source checkpoint; the sole [release work record](../../../Delegations/publish-the-approved-petttrice-hair-care-pages-and-verify-li.md) owns final source/deployment/live evidence. Earlier local-only haircare notes are historical once release is confirmed; other project holds remain.
+Both Petttrice pages are live at `https://www.oneflamerecords.com/haircare` and `/haircare/styles`. Runtime source71d9cd72 is saved in owner GitHub; Vercel READY production build and full GitHub checks passed. A different reviewer confirmed actual phone/desktop designs, loaded images, facts/contact targets and no One Flame body/title/share-site wording. The unrelated local main-navigation change is excluded. [Release and limits](audits/2026-11-23-haircare-release/report.md). The sole [release work record](../../../Delegations/publish-the-approved-petttrice-hair-care-pages-and-verify-li.md) owns final serving identity. Earlier local-only haircare notes are history; other holds remain.
 
 ## Petttrice Hair Care — November 23, 2026, local only
 
