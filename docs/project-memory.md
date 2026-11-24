@@ -1,5 +1,19 @@
 > Coordination: [Chief of Staff procedure](../../../Operations/SOPs/chief-of-staff-coordination.md). This project’s current documents own its facts; the root `Delegations/` ledger owns commitments.
 
+## Petttrice publication — November 23, 2026
+
+Frank authorized publishing both hair-care pages. The scoped release is based on the verified serving source and excludes the unrelated local main-navigation change. [Release preparation/checks](audits/2026-11-23-haircare-release/report.md). Publication outcome is pending at this source checkpoint; the sole [release work record](../../../Delegations/publish-the-approved-petttrice-hair-care-pages-and-verify-li.md) owns final source/deployment/live evidence. Earlier local-only haircare notes are historical once release is confirmed; other project holds remain.
+
+## Petttrice Hair Care — November 23, 2026, local only
+
+Frank requested removal of One Flame Records from **both** hair-care pages. Both now use Petttrice-only visible branding, absolute browser titles and share-site names; brand/home links stay within the hair-care pages. No publication.
+
+Frank clarified that `/haircare/styles` should be a full page, keeping the 12-look family collage. It now includes a Petttrice header/navigation, family braiding introduction, services, from J$3,000 pricing, phone booking, Creek Street address/directions and footer. The original `/haircare` gallery page remains unchanged. [Full-page result and checks](audits/2026-11-23-haircare/family-page-report.md). [Sole work record](../../../Delegations/turn-separate-hairstyle-collage-into-a-complete-petttrice-ha.md).
+
+Frank supplied the exact desired screenshot after rejecting the cream editorial interpretation. The selected design is **FIND YOUR NEXT LOOK**: black gallery page, cream name strip, red braids left, two curl photos center, yellow twists right, cream LET’S PLAN YOUR LOOK contact panel. The screenshot, saved locally as `docs/audits/2026-11-23-haircare/owner-gallery-reference.png`, overrides earlier option-number assumptions and earlier visual-acceptance claims. Current implementation follows that gallery reference, not the cream editorial version.
+
+Confirmed services: adult/kids braiding, extensions, washing/blow-drying. Prices from J$3,000. Booking: 876-782-2736. Address: 5 Creek Street, Montego Bay. Four illustrative images reconstructed from the reference are clearly disclosed. Social profiles remain uncreated and postponed. [Current gallery report and checks](audits/2026-11-23-haircare/gallery-report.md). Preview: http://127.0.0.1:3203/haircare . No publishing or main push authorized. [Sole work record](../../../Delegations/build-petttrice-hair-care-at-haircare-using-owner-selected-s.md).
+
 ## Contact enquiries saved, with types and auto-reply — November 16, 2026, local only
 
 Frank approved the build. `/contact` now offers Studio session, Event and Private hire alongside the existing choices. Each valid message is saved in the new `contact_enquiries` table (admin-only read) and listed at `/admin/enquiries`; the label email still sends and the sender gets one editable Email Studio confirmation. Tests, types, lint (0 errors, 25 existing warnings) and build pass. Not released: migration `20261116000001_contact_enquiries.sql` must be applied before the code is deployed. Details in `docs/architecture.md`; acceptance and release in [the work record](../../../Delegations/save-one-flame-contact-enquiries-add-studio-event-private-hi.md).

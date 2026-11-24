@@ -1,0 +1,62 @@
+.page { width: min(100%, 1182px); margin-inline: auto; padding: 0 24px; }
+.header { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 24px 0; border-bottom: 5px solid var(--color-yellow); }
+.brand, .intro h1, .page h2, .page h3, .button { font-family: var(--font-poster); font-variation-settings: "opsz" 72; font-weight: 900; text-transform: uppercase; }
+.brand { font-size: clamp(28px, 3.4vw, 42px); line-height: 1; text-decoration: none; }
+.header nav { display: flex; align-items: center; gap: 30px; }
+.header nav a { display: inline-flex; min-height: 44px; align-items: center; font-size: 16px; text-decoration: none; }
+.header nav a:hover, .footer a:hover { text-decoration: underline; text-underline-offset: 5px; }
+.page a:focus-visible { outline: 3px solid var(--color-yellow); outline-offset: 5px; }
+.intro { display: grid; grid-template-columns: 1.15fr 1fr; gap: 48px; align-items: center; padding-block: 48px; }
+.intro h1 { font-size: clamp(58px, 6.8vw, 90px); line-height: .94; letter-spacing: -.015em; max-width: 11ch; }
+.introDetails > p:first-child { font-size: 19px; line-height: 1.5; max-width: 38ch; }
+.price { font-size: 19px; font-weight: 600; margin-block: 20px; }
+.button { display: inline-flex; min-height: 58px; align-items: center; justify-content: center; padding: 14px 24px; background: var(--color-yellow); color: var(--color-black); font-size: 27px; line-height: 1.1; text-align: center; text-decoration: none; }
+.button:hover { background: var(--color-paper); color: var(--color-black); }
+.stylesSection, .servicesSection, .visit { scroll-margin-top: 24px; }
+.sectionHeading { display: flex; align-items: baseline; justify-content: space-between; gap: 24px; padding: 22px 24px; background: var(--color-paper); color: var(--color-black); }
+.page h2 { font-size: clamp(34px, 4vw, 52px); line-height: 1; letter-spacing: -.01em; }
+.sectionHeading p { font-size: 16px; line-height: 1.5; }
+.figure { margin: 20px auto 0; max-width: 1086px; }
+.collage { display: block; width: 100%; height: auto; }
+.figure figcaption { padding-top: 10px; font-size: 12px; line-height: 1.5; color: var(--color-muted); }
+.servicesSection { padding-block: 44px; }
+.serviceList { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 26px; margin-top: 28px; }
+.serviceList > div { border-top: 3px solid var(--color-yellow); padding-top: 18px; }
+.page h3 { font-size: 30px; line-height: 1; }
+.serviceList p { margin-top: 12px; font-size: 16px; line-height: 1.6; max-width: 27ch; }
+.priceNote { margin-top: 24px; color: var(--color-muted); font-size: 15px; line-height: 1.6; }
+.visit { display: grid; grid-template-columns: 1.1fr 1fr; gap: 48px; align-items: center; padding: 32px; background: var(--color-paper); color: var(--color-black); }
+.visit address { font-size: 20px; line-height: 1.5; font-style: normal; margin-top: 22px; }
+.directions { display: inline-flex; align-items: center; min-height: 44px; margin-top: 8px; text-decoration: underline; text-underline-offset: 4px; }
+.booking p { font-size: 18px; line-height: 1.5; max-width: 32ch; margin-bottom: 20px; }
+.visit .button:hover { background: var(--color-black); color: var(--color-paper); }
+.visit a:focus-visible { outline-color: var(--color-red); }
+.footer { display: flex; justify-content: space-between; gap: 20px; padding-block: 28px; margin-top: 24px; border-top: 4px solid var(--color-yellow); color: var(--color-muted); font-size: 14px; line-height: 1.5; }
+.footer a { display: inline-flex; align-items: center; min-height: 44px; margin-top: -12px; }
+@media (max-width: 850px) {
+  .intro { gap: 28px; }
+  .intro h1 { font-size: 66px; }
+  .introDetails > p:first-child { font-size: 17px; }
+  .serviceList { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
+  .sectionHeading { align-items: flex-start; flex-direction: column; gap: 10px; }
+  .visit { gap: 28px; padding: 28px; }
+}
+@media (max-width: 600px) {
+  .page { padding-inline: 16px; }
+  .header { flex-wrap: wrap; gap: 12px; padding-block: 20px 12px; }
+  .header nav { gap: 28px; }
+  .brand { font-size: 32px; }
+  .intro { grid-template-columns: 1fr; gap: 24px; padding-block: 32px; }
+  .intro h1 { font-size: clamp(58px, 14vw, 74px); max-width: 13ch; }
+  .introDetails > p:first-child { font-size: 18px; }
+  .button { font-size: 26px; padding-inline: 20px; }
+  .sectionHeading { padding: 22px 20px; }
+  .servicesSection { padding-block: 32px; }
+  .page h2 { font-size: 36px; }
+  .serviceList { column-gap: 20px; }
+  .page h3 { font-size: 26px; }
+  .serviceList p { font-size: 15px; }
+  .visit { grid-template-columns: 1fr; gap: 20px; padding: 24px 20px; }
+  .visit address { margin-top: 18px; }
+  .footer { align-items: flex-start; flex-direction: column; gap: 16px; }
+}

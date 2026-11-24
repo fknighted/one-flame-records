@@ -30,6 +30,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${base}/news`,               lastModified: new Date(), changeFrequency: "weekly",  priority: 0.8 },
     { url: `${base}/flames-lounge`,      lastModified: new Date(), changeFrequency: "monthly", priority: 0.8 },
     { url: `${base}/fola-village`,       lastModified: new Date(), changeFrequency: "monthly", priority: 0.8 },
+    { url: `${base}/haircare`,           lastModified: new Date(), changeFrequency: "monthly", priority: 0.7 },
+    { url: `${base}/haircare/styles`,    lastModified: new Date(), changeFrequency: "monthly", priority: 0.5 },
     { url: `${base}/about`,              lastModified: new Date(), changeFrequency: "monthly", priority: 0.6 },
     { url: `${base}/contact`,            lastModified: new Date(), changeFrequency: "yearly",  priority: 0.5 },
     { url: `${base}/sign`,               lastModified: new Date(), changeFrequency: "yearly",  priority: 0.5 },
